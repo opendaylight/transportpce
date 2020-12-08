@@ -16,7 +16,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -38,7 +38,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -60,7 +60,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -75,7 +75,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -207,7 +207,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -229,7 +229,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -251,7 +251,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -266,7 +266,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -391,7 +391,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -413,7 +413,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -435,7 +435,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -450,7 +450,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -575,7 +575,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -597,7 +597,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -619,7 +619,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -634,7 +634,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -759,7 +759,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -781,7 +781,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -803,7 +803,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -818,7 +818,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -943,7 +943,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -965,7 +965,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -987,7 +987,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1002,7 +1002,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAP////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////8AAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -1127,7 +1127,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1149,7 +1149,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1171,7 +1171,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1186,7 +1186,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -1311,7 +1311,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>s>
         </degree-attributes>
@@ -1333,7 +1333,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1355,7 +1355,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1370,7 +1370,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAA/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////AAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -1495,7 +1495,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1517,7 +1517,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1539,7 +1539,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1554,7 +1554,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
@@ -1679,7 +1679,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1701,7 +1701,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1723,7 +1723,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </degree-attributes>
@@ -1738,7 +1738,7 @@
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
                 <effective-bits>768</effective-bits>
-                <freq-map>AAAAAAAAAAD/////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                <freq-map>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////wAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>

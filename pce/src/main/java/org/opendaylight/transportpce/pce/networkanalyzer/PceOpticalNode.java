@@ -9,6 +9,8 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,24 +39,26 @@ public class PceOpticalNode implements PceNode {
     private NodeId nodeId;
     private OpenroadmNodeType nodeType;
 
-    // wavelength calculation per node type
-    private List<Long> availableWLindex = new ArrayList<>();
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<>();
     private List<String> usedXpndrNWTps = new ArrayList<>();
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+    private BitSet frequenciesBitSet;
     private String version;
 
     public PceOpticalNode(Node node, OpenroadmNodeType nodeType, String version) {
-        if (node != null && node.getNodeId() != null && nodeType != null && version != null) {
+        if (node != null
+                && node.getNodeId() != null
+                && nodeType != null
+                && version != null) {
             this.node = node;
             this.nodeId = node.getNodeId();
             this.nodeType = nodeType;
             this.version = version;
         } else {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, version");
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
     }
@@ -96,9 +100,7 @@ public class PceOpticalNode implements PceNode {
                 case SRGTXPP:
                 case SRGTXRXPP:
                     LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
-                    if (nttp1 == null || nttp1.getPpAttributes() == null
-                            || nttp1.getPpAttributes().getUsedWavelength() == null
-                            || nttp1.getPpAttributes().getUsedWavelength().values().isEmpty()) {
+                    if (isTerminationPointAvailable(nttp1)) {
                         LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                         this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     } else {
@@ -118,48 +120,52 @@ public class PceOpticalNode implements PceNode {
             this.availableSrgPp.size(), this.availableSrgCp.size(), this);
     }
 
-    public void initWLlist() {
-        this.availableWLindex.clear();
+    private boolean isTerminationPointAvailable(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1 nttp1) {
+        byte[] availableByteArray = new byte[GridConstant.NB_OCTECTS];
+        Arrays.fill(availableByteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        return nttp1 == null || nttp1.getPpAttributes() == null
+                || nttp1.getPpAttributes().getAvailFreqMaps() == null
+                || !nttp1.getPpAttributes().getAvailFreqMaps().containsKey(freqMapKey)
+                || nttp1.getPpAttributes().getAvailFreqMaps().get(freqMapKey).getFreqMap() == null
+                || Arrays.equals(nttp1.getPpAttributes().getAvailFreqMaps().get(freqMapKey).getFreqMap(),
+                        availableByteArray);
+    }
+
+    public void initFrequenciesBitSet() {
         if (!isValid()) {
             return;
         }
         Node1 node1 = this.node.augmentation(Node1.class);
-        byte[] freqMap;
-
         switch (this.nodeType) {
             case SRG :
                 if (!node1.getSrgAttributes().nonnullAvailFreqMaps().containsKey(freqMapKey)) {
-                    LOG.error("initWLlist: SRG no cband available freq maps for node  {}", this);
+                    LOG.error("initFrequenciesBitSet: SRG no cband available freq maps for node  {}", this);
                     this.valid = false;
                     return;
                 }
-                freqMap = node1.getSrgAttributes().nonnullAvailFreqMaps().get(freqMapKey).getFreqMap();
-                updateAvailableWlIndex(freqMap);
+                this.frequenciesBitSet = BitSet.valueOf(node1.getSrgAttributes()
+                        .nonnullAvailFreqMaps().get(freqMapKey).getFreqMap());
                 break;
             case DEGREE :
                 if (!node1.getDegreeAttributes().nonnullAvailFreqMaps().containsKey(freqMapKey)) {
-                    LOG.error("initWLlist: DEG no cband available freq maps for node  {}", this);
+                    LOG.error("initFrequenciesBitSet: DEG no cband available freq maps for node  {}", this);
                     this.valid = false;
                     return;
                 }
-                freqMap = node1.getDegreeAttributes().nonnullAvailFreqMaps().get(freqMapKey).getFreqMap();
-                updateAvailableWlIndex(freqMap);
+                this.frequenciesBitSet = BitSet.valueOf(node1.getDegreeAttributes()
+                        .nonnullAvailFreqMaps().get(freqMapKey).getFreqMap());
                 break;
             case XPONDER :
-                // HARD CODED 96
-                for (long i = 1; i <= GridConstant.NB_OCTECTS; i++) {
-                    this.availableWLindex.add(i);
-                }
+                // at init all bits are set to false (unavailable)
+                this.frequenciesBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
+                //set all bits to true (available)
+                this.frequenciesBitSet.set(0, GridConstant.EFFECTIVE_BITS);
                 break;
             default:
-                LOG.error("initWLlist: unsupported node type {} in node {}", this.nodeType, this);
+                LOG.error("initFrequenciesBitSet: unsupported node type {} in node {}", this.nodeType, this);
                 break;
         }
-        if (this.availableWLindex.isEmpty()) {
-            LOG.debug("initWLlist: There are no available wavelengths in node {}", this);
-            this.valid = false;
-        }
-        LOG.debug("initWLlist: availableWLindex size = {} in {}", this.availableWLindex.size(), this);
     }
 
     public void initXndrTps(ServiceFormat serviceFormat) {
@@ -287,11 +293,6 @@ public class PceOpticalNode implements PceNode {
         return !this.usedXpndrNWTps.contains(tp);
     }
 
-    @Override
-    public boolean checkWL(long index) {
-        return (this.availableWLindex.contains(index));
-    }
-
     public boolean isValid() {
         if (node == null || nodeId == null || nodeType == null || this.getSupNetworkNodeId() == null
             || this.getSupClliNodeId() == null) {
@@ -351,24 +352,14 @@ public class PceOpticalNode implements PceNode {
         return null;
     }
 
-    /**
-     * Get available wave length from frequency map array.
-     * @param freqMap byte[]
-     */
-    private void updateAvailableWlIndex(byte[] freqMap) {
-        if (freqMap == null) {
-            LOG.warn("No frequency map for node {}", node);
-            this.valid = false;
-            return;
-        }
-        long wlIndex = 1;
-        for (int i = 0; i < freqMap.length; i++) {
-            if (freqMap[i] == (byte)GridConstant.AVAILABLE_SLOT_VALUE) {
-                LOG.debug("Adding channel {} to available wave length index",wlIndex);
-                this.availableWLindex.add(wlIndex);
-            }
-            wlIndex++;
-        }
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getBitSetData()
+    */
+    @Override
+    public BitSet getBitSetData() {
+        return this.frequenciesBitSet;
     }
 
     /*
@@ -380,4 +371,5 @@ public class PceOpticalNode implements PceNode {
     public String getVersion() {
         return this.version;
     }
+
 }

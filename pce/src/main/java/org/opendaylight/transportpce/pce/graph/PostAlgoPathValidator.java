@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +19,11 @@ import java.util.Map;
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
+import org.opendaylight.transportpce.pce.model.SpectrumAssignment;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
@@ -31,7 +36,6 @@ public class PostAlgoPathValidator {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PostAlgoPathValidator.class);
 
-    private static final int MAX_WAWELENGTH = 96;
     private static final double MIN_OSNR_W100G = 17;
     private static final double TRX_OSNR = 33;
     private static final double ADD_OSNR = 30;
@@ -49,23 +53,29 @@ public class PostAlgoPathValidator {
             pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
             return pceResult;
         }
-
         int tribSlotNb = 1;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
 
             case StringConstants.SERVICE_TYPE_100GE:
             case StringConstants.SERVICE_TYPE_OTU4:
-                // choose wavelength available in all nodes of the path
-                Long waveL = chooseWavelength(path, allPceNodes);
+                int spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
+                    .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
+                SpectrumAssignment spectrumAssignment = getSpectrumAssignment(path,
+                        allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
-                if (waveL < 0) {
+                if (spectrumAssignment.getBeginIndex() == 0 && spectrumAssignment.getStopIndex() == 0) {
                     pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
                 }
-                pceResult.setResultWavelength(waveL);
-                LOG.info("In PostAlgoPathValidator: chooseWavelength WL found {} {}", waveL, path);
+                //TODO: until change to manage connection name, logical connection point name and service path
+                // keep set wavelength number
+                pceResult.setResultWavelength(
+                      GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()));
+                pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex()));
+                pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex()));
+                LOG.info("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
 
                 // Check the OSNR
                 if (!checkOSNR(path)) {
@@ -129,28 +139,6 @@ public class PostAlgoPathValidator {
         }
 
         return pceResult;
-    }
-
-    // Choose the first available wavelength from the source to the destination
-    private Long chooseWavelength(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes) {
-        Long wavelength = -1L;
-        for (long i = 1; i <= MAX_WAWELENGTH; i++) {
-            boolean completed = true;
-            LOG.debug("In chooseWavelength: {} {}", path.getLength(), path);
-            for (PceGraphEdge edge : path.getEdgeList()) {
-                LOG.debug("In chooseWavelength: source {} ", edge.link().getSourceId());
-                PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
-                if (!pceNode.checkWL(i)) {
-                    completed = false;
-                    break;
-                }
-            }
-            if (completed) {
-                wavelength = i;
-                break;
-            }
-        }
-        return wavelength;
     }
 
     // Check the latency
@@ -387,6 +375,76 @@ public class PostAlgoPathValidator {
         linkOsnrLu = Math.pow(10, (linkOsnrDb / 10.0));
         LOG.debug("In retrieveosnr: the inverse of link osnr is {} (Linear Unit)", linkOsnrLu);
         return (CONST_OSNR / linkOsnrLu);
+    }
+
+    /**
+     * Get spectrum assignment for path.
+     *
+     * @param path                    the path for which we get spectrum assignment.
+     * @param allPceNodes             all optical nodes.
+     * @param spectralWidthSlotNumber number of slot for spectral width. Depends on
+     *                                service type.
+     * @return a spectrum assignment object which contains begin and end index. If
+     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     */
+    private SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber) {
+        byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
+        Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        BitSet result = BitSet.valueOf(freqMap);
+        boolean isFlexGrid = true;
+        LOG.debug("Processing path {} with length {}", path, path.getLength());
+        BitSet pceNodeFreqMap;
+        for (PceGraphEdge edge : path.getEdgeList()) {
+            LOG.debug("Processing source {} ", edge.link().getSourceId());
+            if (allPceNodes.containsKey(edge.link().getSourceId())) {
+                PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
+                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNode.getVersion())) {
+                    LOG.info("Node {} is 1.2.1 node", pceNode.getNodeId());
+                    isFlexGrid = false;
+                }
+                pceNodeFreqMap = pceNode.getBitSetData();
+                LOG.debug("Pce node bitset {}", pceNodeFreqMap);
+                if (pceNodeFreqMap != null) {
+                    result.and(pceNodeFreqMap);
+                    LOG.debug("intermediate bitset {}", result);
+                }
+            }
+        }
+        LOG.debug("Bitset result {}", result);
+        return computeBestSpectrumAssignment(result, spectralWidthSlotNumber, isFlexGrid);
+    }
+
+    /**
+     * Compute spectrum assignment from spectrum occupation for spectral width.
+     *
+     * @param spectrumOccupation      the spectrum occupation BitSet.
+     * @param spectralWidthSlotNumber the nb slots for spectral width.
+     * @param isFlexGrid              true if flexible grid, false otherwise.
+     * @return a spectrum assignment object which contains begin and stop index. If
+     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     */
+    private SpectrumAssignment computeBestSpectrumAssignment(BitSet spectrumOccupation, int spectralWidthSlotNumber,
+            boolean isFlexGrid) {
+        SpectrumAssignment spectrumAssignment = new SpectrumAssignment(0, 0);
+        spectrumAssignment.setFlexGrid(isFlexGrid);
+        BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
+        referenceBitSet.set(0, spectralWidthSlotNumber);
+        int nbSteps = 1;
+        if (isFlexGrid) {
+            nbSteps = spectralWidthSlotNumber;
+        }
+        //higher is the frequency, smallest is the wavelength number
+        //in operational, the allocation is done through wavelength starting from the smallest
+        //so we have to loop from the last element of the spectrum occupation
+        for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber; i -= nbSteps) {
+            if (spectrumOccupation.get(i - spectralWidthSlotNumber, i).equals(referenceBitSet)) {
+                spectrumAssignment.setBeginIndex(i - spectralWidthSlotNumber);
+                spectrumAssignment.setStopIndex(i - 1);
+                break;
+            }
+        }
+        return spectrumAssignment;
     }
 
 }

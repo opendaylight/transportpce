@@ -109,8 +109,10 @@ public class PceGraph {
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
             if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
                     || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
-                LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
-                        pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ);
+                LOG.info("In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
+                        + " hops {}, distance per metrics {}, path AtoZ {}",
+                        pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
+                        pathAtoZ.size(), path.getWeight(), pathAtoZ);
                 break;
             } else {
                 // Service is at OTN layer and is relying on a supporting wavelength service
@@ -122,8 +124,9 @@ public class PceGraph {
         }
 
         if (shortestPathAtoZ != null) {
-            LOG.info("In calcPath CHOOSEN PATH for wl [{}], hops {}, path AtoZ {}",
-                    pceResult.getResultWavelength(), shortestPathAtoZ.size(), shortestPathAtoZ);
+            LOG.info("In calcPath CHOOSEN PATH for wl [{}], min freq {}, max freq {}, hops {}, path AtoZ {}",
+                    pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
+                    shortestPathAtoZ.size(), shortestPathAtoZ);
         }
         LOG.info("In calcPath : pceResult {}", pceResult);
         return (pceResult.getStatus());
