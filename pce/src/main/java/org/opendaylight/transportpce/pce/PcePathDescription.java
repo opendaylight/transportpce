@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.atoz.direction.AToZ;
@@ -84,23 +87,32 @@ public class PcePathDescription {
     private AToZDirectionBuilder buildAtoZDirection(Map<AToZKey, AToZ> atozMap) {
         AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
             .setRate(Uint32.valueOf(rc.getRate()))
+            .setModulationFormat(GridConstant.RATE_MODULATION_FORMAT_MAP
+                    .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
             .setAToZ(atozMap);
-        if (StringConstants.SERVICE_TYPE_100GE.equals(rc.getServiceType())
-                || StringConstants.SERVICE_TYPE_OTU4.equals(rc.getServiceType())) {
-            atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
-        } else if (StringConstants.SERVICE_TYPE_10GE.equals(rc.getServiceType())
-                || StringConstants.SERVICE_TYPE_1GE.equals(rc.getServiceType())
-            || StringConstants.SERVICE_TYPE_ODU4.equals(rc.getServiceType())) {
-            if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
-                @SuppressWarnings("unchecked")
-                List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
-                atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
-                    .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
-                    .setTribSlotNumber(tribSlotList.get(0));
-            } else {
-                LOG.error("Trib port and trib slot number should be present");
-                atoZDirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
-            }
+        switch (rc.getServiceType()) {
+            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_OTU4:
+                atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
+                atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(rc.getMinFreq()));
+                atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
+                break;
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+            case StringConstants.SERVICE_TYPE_ODU4:
+                if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
+                    @SuppressWarnings("unchecked")
+                    List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
+                    atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
+                            .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
+                            .setTribSlotNumber(tribSlotList.get(0));
+                } else {
+                    LOG.error("Trib port and trib slot number should be present");
+                    atoZDirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
+                }
+                break;
+            default:
+                break;
         }
         return atoZDirectionBldr;
     }
@@ -111,25 +123,33 @@ public class PcePathDescription {
      * @return a builder for ZtoADirection object
      */
     private ZToADirectionBuilder buildZtoADirection(Map<ZToAKey, ZToA> ztoaMap) {
-        ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder()
-            .setRate(Uint32.valueOf(rc.getRate()))
-            .setZToA(ztoaMap);
-        if (StringConstants.SERVICE_TYPE_100GE.equals(rc.getServiceType())
-                || StringConstants.SERVICE_TYPE_OTU4.equals(rc.getServiceType())) {
-            ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
-        } else if (StringConstants.SERVICE_TYPE_10GE.equals(rc.getServiceType())
-                || StringConstants.SERVICE_TYPE_1GE.equals(rc.getServiceType())
-            || StringConstants.SERVICE_TYPE_ODU4.equals(rc.getServiceType())) {
-            if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
-                @SuppressWarnings("unchecked")
-                List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
-                ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
-                    .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
-                    .setTribSlotNumber(tribSlotList.get(0));
-            } else {
-                LOG.error("Trib port and trib slot number should be present");
-                ztoADirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
-            }
+        ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder().setRate(Uint32.valueOf(rc.getRate()))
+                .setModulationFormat(GridConstant.RATE_MODULATION_FORMAT_MAP
+                        .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
+                .setZToA(ztoaMap);
+        switch (rc.getServiceType()) {
+            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_OTU4:
+                ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
+                ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(rc.getMinFreq()));
+                ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
+                break;
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+            case StringConstants.SERVICE_TYPE_ODU4:
+                if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
+                    @SuppressWarnings("unchecked")
+                    List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
+                    ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
+                            .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
+                            .setTribSlotNumber(tribSlotList.get(0));
+                } else {
+                    LOG.error("Trib port and trib slot number should be present");
+                    ztoADirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
+                }
+                break;
+            default:
+                break;
         }
         return ztoADirectionBldr;
     }
