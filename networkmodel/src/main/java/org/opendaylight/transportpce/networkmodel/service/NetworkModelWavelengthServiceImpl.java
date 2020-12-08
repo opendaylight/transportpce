@@ -8,6 +8,8 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -25,14 +27,10 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.NodeIdPair;
 import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev200529.degree.used.wavelengths.UsedWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev200529.degree.used.wavelengths.UsedWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev200529.degree.used.wavelengths.UsedWavelengthsKey;
+import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1;
@@ -51,34 +49,21 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev20052
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.RxTtpAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.TxTtpAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.TxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrClientAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrPortAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrPortAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.pp.attributes.UsedWavelength;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.pp.attributes.UsedWavelengthKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.port.connection.attributes.Wavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.port.connection.attributes.WavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,47 +78,359 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     }
 
     @Override
-    public void useWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection) {
-        if (atoZDirection != null && atoZDirection.getAToZWavelengthNumber() != null) {
-            LOG.info("Update wavelength for a to z direction {}", atoZDirection);
-            List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
-            atozTpIds.removeIf(Objects::isNull);
-            deleteAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                    atoZDirection.getAToZWavelengthNumber().toJava());
-            addUsedWL(atoZDirection.getAToZWavelengthNumber().toJava(), atozTpIds);
-        }
-        if (ztoADirection != null && ztoADirection.getZToAWavelengthNumber() != null) {
-            LOG.info("Update wavelength for z to a direction {}", ztoADirection);
-            List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
-            ztoaTpIds.removeIf(Objects::isNull);
-            deleteAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                    ztoADirection.getZToAWavelengthNumber().toJava());
-
-            addUsedWL(ztoADirection.getZToAWavelengthNumber().toJava(), ztoaTpIds);
-        }
+    public void allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
+        updateFrequencies(atoZDirection, ztoADirection, true);
     }
 
 
     @Override
-    public void freeWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection) {
-        if (atoZDirection != null && atoZDirection.getAToZWavelengthNumber() != null) {
-            LOG.info("Free wavelength for a to z direction {}", atoZDirection);
+    public void releaseFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
+        updateFrequencies(atoZDirection, ztoADirection, false);
+    }
+
+    /**
+     * Update frequency map for nodes and tp in atozDirection and ztoadirection.
+     * @param atoZDirection AToZDirection
+     * @param ztoADirection ZToADirection
+     * @param used used boolean true if frequencies are used, false otherwise.
+     */
+    private void updateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection, boolean used) {
+        if (atoZDirection != null && atoZDirection.getAToZMinFrequency() != null) {
+            LOG.info("Update frequencies for a to z direction {}, used {}", atoZDirection, used);
             List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
-            atozTpIds.removeIf(Objects::isNull);
-            deleteUsedWL(atoZDirection.getAToZWavelengthNumber().toJava(), atozTpIds);
-            addAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                    atoZDirection.getAToZWavelengthNumber().toJava());
+            BigDecimal atozMinFrequency = atoZDirection.getAToZMinFrequency().getValue();
+            BigDecimal atozMaxFrequency = atoZDirection.getAToZMaxFrequency().getValue();
+            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
+                    .forName(atoZDirection.getModulationFormat());
+            if (!optionalModulationFormat.isPresent()) {
+                LOG.error("Unknown modulation format {} for a to z direction, frequencies not updated",
+                        atoZDirection.getModulationFormat());
+                return;
+            }
+            setFrequencies4Tps(atozMinFrequency, atozMaxFrequency, atoZDirection.getRate(),
+                    optionalModulationFormat.get(), atozTpIds, used);
+            setFrequencies4Nodes(atozMinFrequency,
+                    atozMaxFrequency,
+                    atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    used);
         }
-        if (ztoADirection != null && ztoADirection.getZToAWavelengthNumber() != null) {
-            LOG.info("Free wave length for z to a direction {}", ztoADirection);
+        if (ztoADirection != null && ztoADirection.getZToAMinFrequency() != null) {
+            LOG.info("Update frequencies for z to a direction {}, used {}", ztoADirection, used);
             List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
-            ztoaTpIds.removeIf(Objects::isNull);
-            deleteUsedWL(ztoADirection.getZToAWavelengthNumber().toJava(), ztoaTpIds);
-            addAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                    ztoADirection.getZToAWavelengthNumber().toJava());
+            BigDecimal ztoaMinFrequency = ztoADirection.getZToAMinFrequency().getValue();
+            BigDecimal ztoaMaxFrequency = ztoADirection.getZToAMaxFrequency().getValue();
+            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
+                    .forName(ztoADirection.getModulationFormat());
+            if (!optionalModulationFormat.isPresent()) {
+                LOG.error("Unknown modulation format {} for z to a direction, frequencies not updated",
+                        ztoADirection.getModulationFormat());
+                return;
+            }
+            setFrequencies4Tps(ztoaMinFrequency, ztoaMaxFrequency, ztoADirection.getRate(),
+                    optionalModulationFormat.get(), ztoaTpIds, used);
+            setFrequencies4Nodes(ztoaMinFrequency,
+                    ztoaMaxFrequency,
+                    ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    used);
         }
     }
 
+    /**
+     * Get network node with nodeId from datastore.
+     * @param nodeId String
+     * @return Node1, null otherwise.
+     */
+    private Node1 getNetworkNodeFromDatastore(String nodeId) {
+        InstanceIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
+        try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Node1> optionalNode = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            if (optionalNode.isPresent()) {
+                return optionalNode.get();
+            } else {
+                LOG.error("Unable to get network node for node id {}from topology {}", nodeId,
+                        NetworkUtils.OVERLAY_NETWORK_ID);
+                return null;
+            }
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting network node for node id {} from {} topology", nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            return null;
+        } catch (InterruptedException e) {
+            LOG.warn("Getting network node for node id {} from {} topology was interrupted", nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            Thread.currentThread().interrupt();
+            return null;
+        }
+    }
+
+    /**
+     * Get common network node with nodeId from datastore.
+     * @param nodeId String
+     * @return Node1, null otherwise.
+     */
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1
+        getCommonNetworkNodeFromDatastore(String nodeId) {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1> nodeIID =
+                OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
+        try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1> optionalNode =
+                    nodeReadTx
+                    .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            if (optionalNode.isPresent()) {
+                return optionalNode.get();
+            } else {
+                LOG.error("Unable to get common network node for node id {} from topology {}", nodeId,
+                        NetworkUtils.OVERLAY_NETWORK_ID);
+                return null;
+            }
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting common network node for node id {} from {} topology", nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            return null;
+        } catch (InterruptedException e) {
+            LOG.warn("Getting common network node for node id {} from {} topology was interrupted", nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            Thread.currentThread().interrupt();
+            return null;
+        }
+    }
+
+    /**
+     * Set frequency map for nodes in nodeIds.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param nodeIds List of node id
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     */
+    private void setFrequencies4Nodes(BigDecimal minFrequency, BigDecimal maxFrequency,
+            List<String> nodeIds, boolean used) {
+        updateFreqMaps4Nodes(nodeIds, minFrequency, maxFrequency, used);
+    }
+
+
+    /**
+     * Get a network termination point for nodeId and tpId.
+     * @param nodeId String
+     * @param tpId String
+     * @return network termination point, null otherwise
+     */
+    private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
+        InstanceIdentifier<TerminationPoint1> tpIID = OpenRoadmTopology
+                .createNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<TerminationPoint1> optionalTerminationPoint = readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, tpIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            if (optionalTerminationPoint.isPresent()) {
+                return optionalTerminationPoint.get();
+            } else {
+                return null;
+            }
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting termination {} for node id {} point from {} topology", tpId, nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            return null;
+        } catch (InterruptedException e) {
+            LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted", tpId, nodeId,
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            Thread.currentThread().interrupt();
+            return null;
+        }
+    }
+
+    /**
+     * Get a common network termination point for nodeId and tpId.
+     * @param nodeId String
+     * @param tpId String
+     * @return common network termination point, null otherwise
+     */
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+        getCommonNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1>
+            tpIID = OpenRoadmTopology.createCommonNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1>
+                optionalTerminationPoint = readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, tpIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            if (optionalTerminationPoint.isPresent()) {
+                return optionalTerminationPoint.get();
+            } else {
+                LOG.error("Unable to get common-network termination point {} for node id {}from topology {}", tpId,
+                        nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+                return null;
+            }
+
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting common-network termination {} for node id {} point from {} topology",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+            return null;
+        } catch (InterruptedException e) {
+            LOG.warn("Getting common-network termination {} for node id {} point from {} topology was interrupted",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+            Thread.currentThread().interrupt();
+            return null;
+        }
+    }
+
+    /**
+     * Update availFreqMapsMap for min and max frequencies for termination point in tpIds.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param rate Uint32
+     * @param modulationFormat ModulationFormat
+     * @param tpIds List of NodeIdPair
+     * @param sed boolean true if min and max frequencies are used, false otherwise.
+     */
+    private void setFrequencies4Tps(BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate,
+            ModulationFormat modulationFormat, List<NodeIdPair> tpIds, boolean used) {
+        String strTpIdsList = String.join(", ", tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList()));
+        LOG.debug("Update frequencies for termination points {}, rate {}, modulation format {},"
+                + "min frequency {}, max frequency {}, used {}", strTpIdsList, rate, modulationFormat,
+                minFrequency, maxFrequency, used);
+        WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
+        for (NodeIdPair idPair : tpIds) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+                commonNetworkTerminationPoint = getCommonNetworkTerminationPointFromDatastore(idPair.getNodeID(),
+                    idPair.getTpID());
+            if (commonNetworkTerminationPoint == null) {
+                LOG.warn("Cannot update frequencies for termination point {}, node id {}", idPair.getTpID(),
+                        idPair.getNodeID());
+                continue;
+            }
+            TerminationPoint1 networkTerminationPoint =
+                    getNetworkTerminationPointFromDatastore(idPair.getNodeID(), idPair.getTpID());
+            TerminationPoint1Builder networkTerminationPointBuilder;
+            if (networkTerminationPoint != null) {
+                networkTerminationPointBuilder = new TerminationPoint1Builder(networkTerminationPoint);
+            } else {
+                networkTerminationPointBuilder = new TerminationPoint1Builder();
+            }
+            switch (commonNetworkTerminationPoint.getTpType()) {
+                case DEGREETXTTP:
+                case DEGREETXRXTTP:
+                    networkTerminationPointBuilder.setTxTtpAttributes(updateTxTtpAttributes(networkTerminationPoint,
+                            minFrequency,maxFrequency,used));
+                    break;
+                case DEGREERXTTP:
+                    networkTerminationPointBuilder.setRxTtpAttributes(updateRxTtpAttributes(networkTerminationPoint,
+                            minFrequency,maxFrequency,used));
+                    break;
+                case DEGREETXCTP:
+                case DEGREERXCTP:
+                case DEGREETXRXCTP:
+                    networkTerminationPointBuilder.setCtpAttributes(updateCtpAttributes(networkTerminationPoint,
+                            minFrequency,maxFrequency,used));
+                    break;
+                case SRGTXCP:
+                case SRGRXCP:
+                case SRGTXRXCP:
+                    networkTerminationPointBuilder.setCpAttributes(updateCpAttributes(networkTerminationPoint,
+                            minFrequency,maxFrequency,used));
+                    break;
+                case SRGTXRXPP:
+                case SRGRXPP:
+                case SRGTXPP:
+                    networkTerminationPointBuilder.setPpAttributes(updatePpAttributes(networkTerminationPoint,
+                            minFrequency,maxFrequency,used));
+                    break;
+                case XPONDERNETWORK:
+                    networkTerminationPointBuilder.setXpdrNetworkAttributes(
+                            updateXpdrNetworkAttributes(networkTerminationPoint,
+                                    minFrequency, maxFrequency, rate, modulationFormat, used)).build();
+                    break;
+                case XPONDERCLIENT:
+                    break;
+                case XPONDERPORT:
+                    networkTerminationPointBuilder.setXpdrPortAttributes(
+                            updateXpdrPortAttributes(networkTerminationPoint,
+                                    minFrequency, maxFrequency, rate, modulationFormat, used)).build();
+                    break;
+                default:
+                    LOG.warn("Termination point type {} not managed", commonNetworkTerminationPoint.getTpType());
+                    return;
+            }
+            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION, OpenRoadmTopology
+                    .createNetworkTerminationPointIIDBuilder(idPair.getNodeID(),
+                            idPair.getTpID()).build(), networkTerminationPointBuilder.build());
+        }
+        try {
+            updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error(
+                    "Something went wrong for frequencies update (min frequency {}, max frequency {},"
+                            + "used {} for TPs {}",
+                    minFrequency, maxFrequency, used,
+                    strTpIdsList, e);
+        } catch (InterruptedException e) {
+            LOG.error("Frequencies update (min frequency {}, max frequency {}, used {} for TPs {} was interrupted",
+                    minFrequency, maxFrequency, used,
+                    strTpIdsList, e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Update availFreqMapsMap for min and max frequencies for nodes in nodeIds.
+     * @param nodeIds  List of node id
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     */
+    private void updateFreqMaps4Nodes(List<String> nodeIds, BigDecimal minFrequency, BigDecimal maxFrequency,
+            boolean used) {
+        String strNodesList = String.join(", ", nodeIds);
+        LOG.debug("Update frequencies for nodes {}, min frequency {}, max frequency {}, used {}",
+                strNodesList, minFrequency, maxFrequency, used);
+        WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
+        for (String nodeId : nodeIds) {
+            Node1 networkNode = getNetworkNodeFromDatastore(nodeId);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 commonNetworkNode =
+                    getCommonNetworkNodeFromDatastore(nodeId);
+            if (networkNode == null || commonNetworkNode == null) {
+                LOG.warn(
+                        "From topology {} for node id {} -> Get common-network : {} "
+                                + "Get network-topology : {}. Skipping frequencies update for this node.",
+                        NetworkUtils.OVERLAY_NETWORK_ID, nodeId, commonNetworkNode, networkNode);
+                continue;
+            }
+            Node1Builder networkNodeBuilder = new Node1Builder(networkNode);
+            switch (commonNetworkNode.getNodeType()) {
+                case DEGREE:
+                    networkNodeBuilder.setDegreeAttributes(
+                            updateDegreeAttributes(networkNode.getDegreeAttributes(), minFrequency,
+                                    maxFrequency, used));
+                    break;
+                case SRG:
+                    networkNodeBuilder.setSrgAttributes(
+                            updateSrgAttributes(networkNode.getSrgAttributes(), minFrequency, maxFrequency, used));
+                    break;
+                default:
+                    LOG.warn("Node type not managed {}", commonNetworkNode.getNodeType());
+                    break;
+            }
+            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION,
+                    OpenRoadmTopology.createNetworkNodeIID(nodeId), networkNodeBuilder.build());
+        }
+        try {
+            updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.error("Cannot update frequencies {} {} for nodes {}", minFrequency, maxFrequency,
+                    strNodesList, e);
+        } catch (InterruptedException e) {
+            LOG.error("Update of frequencies {} {} for nodes {} was interrupted", minFrequency, maxFrequency,
+                    strNodesList, e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Get list of NodeIdPair from atoZDirection.
+     * @param atoZDirection AToZDirection
+     * @return List of NodeIdPair
+     */
     private List<NodeIdPair> getAToZTpList(AToZDirection atoZDirection) {
         Collection<AToZ> atozList = atoZDirection.nonnullAToZ().values();
         return atozList.stream()
@@ -151,9 +448,15 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         return null;
                     }
                     return new NodeIdPair(tp.getTpNodeId(), tp.getTpId());
-                }).collect(Collectors.toList());
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Get list of NodeIdPair from ztoADirection.
+     * @param ztoADirection ZToADirection
+     * @return List of NodeIdPair
+     */
     private List<NodeIdPair> getZToATpList(ZToADirection ztoADirection) {
         Collection<ZToA> ztoaList = ztoADirection.nonnullZToA().values();
         return ztoaList.stream()
@@ -171,497 +474,259 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         return null;
                     }
                     return new NodeIdPair(tp.getTpNodeId(), tp.getTpId());
-                }).collect(Collectors.toList());
-    }
-
-    private InstanceIdentifier<Node1> createNode1IID(String nodeId) {
-        return InstanceIdentifier
-                .builder(Networks.class).child(Network.class, new NetworkKey(
-                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
-                .Node.class, new NodeKey(new NodeId(nodeId))).augmentation(Node1.class).build();
-    }
-
-    private InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-        .Node1> createNode2IID(String nodeId) {
-        return InstanceIdentifier
-                .builder(Networks.class).child(Network.class, new NetworkKey(
-                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
-                .Node.class, new NodeKey(new NodeId(nodeId))).augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.network.rev200529.Node1.class).build();
-    }
-
-    private Optional<Node1> getNode1FromDatastore(String nodeId) {
-        InstanceIdentifier<Node1>
-                nodeIID = createNode1IID(nodeId);
-        Optional<Node1> nodeOpt;
-        try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
-            nodeOpt = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting node from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID, e);
-            nodeOpt = Optional.empty();
-        }
-        return nodeOpt;
-    }
-
-    private Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-        .Node1> getNode2FromDatastore(String nodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1>
-                nodeIID = createNode2IID(nodeId);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1> nodeOpt;
-        try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
-            nodeOpt = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting node from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID, e);
-            nodeOpt = Optional.empty();
-        }
-        return nodeOpt;
-    }
-
-    private void addAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
-        updateFreqMaps4Nodes(nodeIds, wavelengthNumber, true);
-    }
-
-
-
-
-
-    private void deleteAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
-        updateFreqMaps4Nodes(nodeIds, wavelengthNumber, false);
-    }
-
-    private InstanceIdentifierBuilder<TerminationPoint1> createTerminationPoint1IIDBuilder(String nodeId, String tpId) {
-        return InstanceIdentifier
-                .builder(Networks.class).child(Network.class, new NetworkKey(
-                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml
-                .ns.yang.ietf.network.rev180226.networks.network.Node.class, new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .Node1.class).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
-                .rev180226.networks.network.node.TerminationPoint.class, new TerminationPointKey(new TpId(tpId)))
-                .augmentation(TerminationPoint1.class);
-    }
-
-    private InstanceIdentifierBuilder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-        .TerminationPoint1> createTerminationPoint2IIDBuilder(String nodeId, String tpId) {
-        return InstanceIdentifier
-                .builder(Networks.class).child(Network.class, new NetworkKey(
-                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml
-                .ns.yang.ietf.network.rev180226.networks.network.Node.class, new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                .Node1.class).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
-                .rev180226.networks.network.node.TerminationPoint.class, new TerminationPointKey(new TpId(tpId)))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-                    .TerminationPoint1.class);
-    }
-
-    private Optional<TerminationPoint1> getTerminationPoint1FromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = createTerminationPoint1IIDBuilder(nodeId, tpId).build();
-        Optional<TerminationPoint1> tpOpt;
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            tpOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, tpIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting termination point from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID,
-                    e);
-            tpOpt = Optional.empty();
-        }
-        return tpOpt;
-    }
-
-    private Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-        .TerminationPoint1> getTerminationPoint2FromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-            .TerminationPoint1> tpIID = createTerminationPoint2IIDBuilder(nodeId, tpId).build();
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1> tpOpt;
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            tpOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, tpIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting termination point from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID,
-                    e);
-            tpOpt = Optional.empty();
-        }
-        return tpOpt;
-    }
-
-    private void deleteUsedWL(long wavelengthIndex, List<NodeIdPair> tpIds) {
-        WriteTransaction deleteUsedWlTx = this.dataBroker.newWriteOnlyTransaction();
-        for (NodeIdPair idPair : tpIds) {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-                .TerminationPoint1> tp2Opt = getTerminationPoint2FromDatastore(idPair.getNodeID(), idPair.getTpID());
-
-            OpenroadmTpType tpType;
-            if (tp2Opt.isPresent()) {
-                tpType = tp2Opt.get().getTpType();
-            } else {
-                LOG.error("Unable to get termination point {} from topology {}! Skipping removal of used wavelength"
-                        + " for this node.", idPair.getTpID(), NetworkUtils.OVERLAY_NETWORK_ID);
-                continue;
-            }
-            Optional<TerminationPoint1> tp1Opt = getTerminationPoint1FromDatastore(idPair.getNodeID(),
-                    idPair.getTpID());
-            InstanceIdentifier.InstanceIdentifierBuilder<TerminationPoint1> usedWlIIDBuilder =
-                    createTerminationPoint1IIDBuilder(idPair.getNodeID(), idPair.getTpID());
-            switch (tpType) {
-                case DEGREETXTTP:
-                case DEGREETXRXTTP:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(TxTtpAttributes.class).child(UsedWavelengths.class,
-                                    new UsedWavelengthsKey((int)wavelengthIndex)).build());
-                    break;
-
-                case DEGREERXTTP:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(RxTtpAttributes.class).child(UsedWavelengths.class,
-                                    new UsedWavelengthsKey((int)wavelengthIndex)).build());
-                    break;
-
-                case DEGREETXCTP:
-                case DEGREERXCTP:
-                case DEGREETXRXCTP:
-                    if (tp1Opt.isPresent()) {
-                        TerminationPoint1 tp1 = tp1Opt.get();
-                        TerminationPoint1Builder tp1Builder = new TerminationPoint1Builder(tp1);
-                        CtpAttributesBuilder ctpAttributesBuilder;
-                        if (tp1Builder.getCtpAttributes() != null) {
-                            ctpAttributesBuilder = new CtpAttributesBuilder(tp1Builder.getCtpAttributes());
-                            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = tp1Builder.getCtpAttributes()
-                                    .nonnullAvailFreqMaps();
-                            ctpAttributesBuilder
-                                    .setAvailFreqMaps(updateFreqMaps(wavelengthIndex, availFreqMapsMap, true));
-                            deleteUsedWlTx.merge(LogicalDatastoreType.CONFIGURATION,
-                                    createTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                                            idPair.getTpID()).build(), tp1Builder.build());
-                        }
-                    }
-                    break;
-
-                case SRGTXCP:
-                case SRGRXCP:
-                case SRGTXRXCP:
-                    if (tp1Opt.isPresent()) {
-                        TerminationPoint1 tp1 = tp1Opt.get();
-                        TerminationPoint1Builder tp1Builder = new TerminationPoint1Builder(tp1);
-                        CpAttributesBuilder cpAttributesBuilder;
-                        if (tp1Builder.getCpAttributes() != null) {
-                            cpAttributesBuilder = new CpAttributesBuilder(tp1Builder.getCpAttributes());
-                            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = tp1Builder.getCpAttributes()
-                                    .nonnullAvailFreqMaps();
-                            cpAttributesBuilder
-                                    .setAvailFreqMaps(updateFreqMaps(wavelengthIndex, availFreqMapsMap, true));
-                            deleteUsedWlTx.merge(LogicalDatastoreType.CONFIGURATION,
-                                    createTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                                            idPair.getTpID()).build(), tp1Builder.build());
-                        }
-                    }
-                    break;
-
-                case SRGTXRXPP:
-                case SRGRXPP:
-                case SRGTXPP:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(PpAttributes.class).child(UsedWavelength.class,
-                                    new UsedWavelengthKey((int)wavelengthIndex)).build());
-                    break;
-
-                case XPONDERNETWORK:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(XpdrNetworkAttributes.class).child(Wavelength.class).build());
-                    break;
-                case XPONDERCLIENT:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(XpdrClientAttributes.class).child(Wavelength.class).build());
-                    break;
-                case XPONDERPORT:
-                    deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION,
-                            usedWlIIDBuilder.child(XpdrPortAttributes.class).child(Wavelength.class).build());
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        try {
-            deleteUsedWlTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            List<String> tpIdsString = tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList());
-            LOG.error("Unable to delete used WL {} from TPs {}!", wavelengthIndex, String.join(", ", tpIdsString), e);
-        }
-    }
-
-    private void addUsedWL(long wavelengthIndex, List<NodeIdPair> tpIds) {
-        WriteTransaction addUsedWlTx = this.dataBroker.newWriteOnlyTransaction();
-        FixedFlexImpl fixedFlex = new FixedFlexImpl(wavelengthIndex);
-        FrequencyTHz centralTHz = new FrequencyTHz(new BigDecimal(fixedFlex.getCenterFrequency()));
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
-        for (NodeIdPair idPair : tpIds) {
-            Optional<TerminationPoint1> tp1Opt =
-                getTerminationPoint1FromDatastore(idPair.getNodeID(), idPair.getTpID());
-            TerminationPoint1 tp1 = null;
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
-                .TerminationPoint1> tp2Opt = getTerminationPoint2FromDatastore(idPair.getNodeID(), idPair.getTpID());
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 tp2;
-            if (tp2Opt.isPresent()) {
-                tp2 = tp2Opt.get();
-            } else {
-                LOG.error(
-                    "Unable to get common-network termination point {} from topology {}! Skip removal of used"
-                    + "wavelength for the node", idPair.getTpID(), NetworkUtils.OVERLAY_NETWORK_ID);
-                continue;
-            }
-            TerminationPoint1Builder tp1Builder;
-            if (tp1Opt.isPresent()) {
-                tp1 = tp1Opt.get();
-                tp1Builder = new TerminationPoint1Builder(tp1);
-            } else {
-                tp1Builder = new TerminationPoint1Builder();
-            }
-
-            UsedWavelengths usedWaveLength = new UsedWavelengthsBuilder().setIndex((int)wavelengthIndex)
-                .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build();
-            switch (tp2.getTpType()) {
-                case DEGREETXTTP:
-                case DEGREETXRXTTP:
-                    TxTtpAttributes txTtpAttributes = null;
-                    Map<UsedWavelengthsKey,UsedWavelengths> usedDegreeTxTtpWls;
-                    if (tp1 != null) {
-                        txTtpAttributes = tp1.getTxTtpAttributes();
-                    }
-                    TxTtpAttributesBuilder txTtpAttributesBuilder;
-                    usedDegreeTxTtpWls = new HashMap<>();
-                    if (txTtpAttributes == null) {
-                        txTtpAttributesBuilder = new TxTtpAttributesBuilder();
-                    } else {
-                        txTtpAttributesBuilder = new TxTtpAttributesBuilder(txTtpAttributes);
-                        usedDegreeTxTtpWls.putAll(txTtpAttributesBuilder.getUsedWavelengths());
-                    }
-                    usedDegreeTxTtpWls.put(usedWaveLength.key(),usedWaveLength);
-                    txTtpAttributesBuilder.setUsedWavelengths(usedDegreeTxTtpWls);
-                    tp1Builder.setTxTtpAttributes(txTtpAttributesBuilder.build());
-                    break;
-
-                case DEGREERXTTP:
-                    RxTtpAttributes rxTtpAttributes = null;
-                    Map<UsedWavelengthsKey,UsedWavelengths> usedDegreeRxTtpWls;
-                    if (tp1 != null) {
-                        rxTtpAttributes = tp1.getRxTtpAttributes();
-                    }
-                    RxTtpAttributesBuilder rxTtpAttributesBuilder;
-                    usedDegreeRxTtpWls = new HashMap<>();
-                    if (rxTtpAttributes == null) {
-                        rxTtpAttributesBuilder = new RxTtpAttributesBuilder();
-                    } else {
-                        rxTtpAttributesBuilder = new RxTtpAttributesBuilder(rxTtpAttributes);
-                        usedDegreeRxTtpWls.putAll(rxTtpAttributesBuilder.getUsedWavelengths());
-                    }
-                    usedDegreeRxTtpWls.put(usedWaveLength.key(),usedWaveLength);
-                    rxTtpAttributesBuilder.setUsedWavelengths(usedDegreeRxTtpWls);
-                    tp1Builder.setRxTtpAttributes(rxTtpAttributesBuilder.build());
-                    break;
-
-                case DEGREETXCTP:
-                case DEGREERXCTP:
-                case DEGREETXRXCTP:
-                    CtpAttributes ctpAttributes = null;
-                    if (tp1 != null) {
-                        ctpAttributes = tp1.getCtpAttributes();
-                    }
-                    CtpAttributesBuilder ctpAttributesBuilder;
-                    if (ctpAttributes == null) {
-                        ctpAttributesBuilder = new CtpAttributesBuilder();
-                    } else {
-                        ctpAttributesBuilder = new CtpAttributesBuilder(ctpAttributes);
-                    }
-                    availFreqMapsMap = ctpAttributesBuilder.getAvailFreqMaps();
-                    ctpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(wavelengthIndex, availFreqMapsMap, false));
-                    tp1Builder.setCtpAttributes(ctpAttributesBuilder.build());
-                    break;
-
-                case SRGTXCP:
-                case SRGRXCP:
-                case SRGTXRXCP:
-                    CpAttributes cpAttributes = null;
-                    if (tp1 != null) {
-                        cpAttributes = tp1.getCpAttributes();
-                    }
-                    CpAttributesBuilder cpAttributesBuilder;
-                    if (cpAttributes == null) {
-                        cpAttributesBuilder = new CpAttributesBuilder();
-                    } else {
-                        cpAttributesBuilder = new CpAttributesBuilder(cpAttributes);
-                    }
-                    availFreqMapsMap = cpAttributesBuilder.getAvailFreqMaps();
-                    cpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(wavelengthIndex, availFreqMapsMap, false));
-                    tp1Builder.setCpAttributes(cpAttributesBuilder.build());
-                    break;
-
-                case SRGTXRXPP:
-                case SRGRXPP:
-                case SRGTXPP:
-                    PpAttributes ppAttributes = null;
-                    Map<UsedWavelengthKey, UsedWavelength> usedDegreePpWls;
-                    if (tp1 != null) {
-                        ppAttributes = tp1.getPpAttributes();
-                    }
-                    PpAttributesBuilder ppAttributesBuilder;
-                    usedDegreePpWls = new HashMap<>();
-                    if (ppAttributes == null) {
-                        ppAttributesBuilder = new PpAttributesBuilder();
-                    } else {
-                        ppAttributesBuilder = new PpAttributesBuilder(ppAttributes);
-                        usedDegreePpWls.putAll(ppAttributesBuilder.getUsedWavelength());
-                    }
-                    UsedWavelength usedDegreeWaveLength = new UsedWavelengthBuilder()
-                            .setIndex((int)wavelengthIndex)
-                            .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build();
-                    usedDegreePpWls.put(usedDegreeWaveLength.key(),usedDegreeWaveLength);
-                    ppAttributesBuilder.setUsedWavelength(usedDegreePpWls);
-                    tp1Builder.setPpAttributes(ppAttributesBuilder.build());
-                    break;
-
-                case XPONDERNETWORK:
-                    XpdrNetworkAttributes xpdrNetworkAttributes = null;
-                    if (tp1 != null) {
-                        xpdrNetworkAttributes = tp1.getXpdrNetworkAttributes();
-                    }
-                    XpdrNetworkAttributesBuilder xpdrNetworkAttributesBuilder;
-                    if (xpdrNetworkAttributes == null) {
-                        xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder();
-                    } else {
-                        xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder(xpdrNetworkAttributes);
-                    }
-                    Wavelength usedXpdrNetworkWl = new WavelengthBuilder()
-                        .setWidth(FrequencyGHz.getDefaultInstance("40")).setFrequency(centralTHz).build();
-                    tp1Builder.setXpdrNetworkAttributes(xpdrNetworkAttributesBuilder.setWavelength(usedXpdrNetworkWl)
-                        .build());
-                    break;
-                case XPONDERCLIENT:
-                    break;
-                case XPONDERPORT:
-                    XpdrPortAttributes xpdrPortAttributes = null;
-                    if (tp1 != null) {
-                        xpdrPortAttributes = tp1.getXpdrPortAttributes();
-                    }
-                    XpdrPortAttributesBuilder xpdrPortAttributesBuilder;
-                    if (xpdrPortAttributes == null) {
-                        xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder();
-                    } else {
-                        xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder(xpdrPortAttributes);
-                    }
-                    Wavelength usedXpdrPortWl = new WavelengthBuilder().setWidth(FrequencyGHz.getDefaultInstance("40"))
-                        .setFrequency(centralTHz).build();
-                    tp1Builder.setXpdrPortAttributes(xpdrPortAttributesBuilder.setWavelength(usedXpdrPortWl)
-                        .build());
-                    break;
-
-                default:
-                    // TODO skip for now
-                    continue;
-            }
-            addUsedWlTx.put(LogicalDatastoreType.CONFIGURATION, createTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                    idPair.getTpID()).build(), tp1Builder.build());
-        }
-        try {
-            addUsedWlTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            List<String> tpIdsString = tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList());
-            LOG.error("Unable to add used WL {} for TPs {}!", wavelengthIndex, String.join(", ", tpIdsString), e);
-        }
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     /**
-     * Update availFreqMapsMap for wavelengthNumber for nodes in nodeIds.
-     * @param nodeIds List of node id.
-     * @param wavelengthNumber Long
-     * @param isSlotAvailable boolean true if waveLength is available, false otherwise.
+     * Update Wavelength for xpdr port attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param rate Uint32
+     * @param modulationFormat ModulationFormat
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return XpdrPortAttributes with Wavelength updated
      */
-    //TODO: reduce its Cognitive Complexity from 21 to the 15
-    private void updateFreqMaps4Nodes(List<String> nodeIds, Long wavelengthNumber, boolean isSlotAvailable) {
-        WriteTransaction nodeWriteTx = this.dataBroker.newWriteOnlyTransaction();
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
-        String action = isSlotAvailable ? "addition" : "deletion";
-        for (String nodeId : nodeIds) {
-            Optional<Node1> node1Opt = getNode1FromDatastore(nodeId);
-            Optional<org.opendaylight.yang.gen.v1
-                .http.org.openroadm.common.network.rev200529.Node1> node2Opt = getNode2FromDatastore(nodeId);
-            if (!node1Opt.isPresent() || !node2Opt.isPresent()) {
-                LOG.error(
-                        "From topology {} for node id {} -> Get common-network : {} ! "
-                                + "Get network-topology : {} ! Skipping {} of available wavelength for this node.",
-                        NetworkUtils.OVERLAY_NETWORK_ID, nodeId, node1Opt.isPresent(), node2Opt.isPresent(), action);
-                continue;
-            }
-            Node1 node1 = node1Opt.get();
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node2 = node2Opt.get();
-            Node1Builder node1Builder = new Node1Builder(node1);
-            switch (node2.getNodeType()) {
-                case DEGREE:
-                    DegreeAttributes degreeAttributes = node1.getDegreeAttributes();
-                    DegreeAttributesBuilder degreeAttributesBuilder;
-                    if (degreeAttributes == null) {
-                        degreeAttributesBuilder = new DegreeAttributesBuilder();
-                    } else {
-                        degreeAttributesBuilder = new DegreeAttributesBuilder(degreeAttributes);
-                    }
-                    availFreqMapsMap = degreeAttributesBuilder.getAvailFreqMaps();
-                    degreeAttributesBuilder
-                    .setAvailFreqMaps(updateFreqMaps(wavelengthNumber, availFreqMapsMap, isSlotAvailable));
-                    node1Builder.setDegreeAttributes(degreeAttributesBuilder.build());
-                    break;
-                case SRG:
-                    SrgAttributes srgAttributes = node1.getSrgAttributes();
-                    SrgAttributesBuilder srgAttributesBuilder;
-                    if (srgAttributes == null) {
-                        srgAttributesBuilder = new SrgAttributesBuilder();
-                    } else {
-                        srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
-                    }
-                    availFreqMapsMap = srgAttributesBuilder.getAvailFreqMaps();
-                    srgAttributesBuilder
-                    .setAvailFreqMaps(updateFreqMaps(wavelengthNumber, availFreqMapsMap, isSlotAvailable));
-                    node1Builder.setSrgAttributes(srgAttributesBuilder.build());
-                    break;
-                default:
-                    LOG.warn("Node type not managed {}", node2.getNodeType());
-                    break;
-            }
-            nodeWriteTx.put(LogicalDatastoreType.CONFIGURATION, createNode1IID(nodeId), node1Builder.build());
+    private XpdrPortAttributes updateXpdrPortAttributes(TerminationPoint1 networkTerminationPoint,
+            BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate, ModulationFormat modulationFormat,
+            boolean used) {
+        LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        XpdrPortAttributesBuilder xpdrPortAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder(networkTerminationPoint.getXpdrPortAttributes());
+        } else {
+            xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder();
         }
-        try {
-            nodeWriteTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-        } catch (ExecutionException | TimeoutException e) {
-            LOG.error("Cannot perform {} WL {} for nodes {}!", action, wavelengthNumber, String.join(", ", nodeIds), e);
-        } catch (InterruptedException e) {
-            LOG.error("{} interrupted  WL {} for nodes {}!", action, wavelengthNumber, String.join(", ", nodeIds), e);
-            Thread.currentThread().interrupt();
+        WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
+        if (used) {
+            waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                    .setFrequency(GridUtils.getCentralFrequency(minFrequency, maxFrequency));
         }
+        return xpdrPortAttributesBuilder.setWavelength(waveLengthBuilder.build()).build();
     }
 
     /**
-     * Update availFreqMapsMap for wavelengthNumber.
-     * @param wavelengthNumber Long
+     * Update Wavelength for xpdr network attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param rate Uint32
+     * @param modulationFormat ModulationFormat
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return XpdrNetworkAttributes with Wavelength updated
+     */
+    private XpdrNetworkAttributes updateXpdrNetworkAttributes(TerminationPoint1 networkTerminationPoint,
+            BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate, ModulationFormat modulationFormat,
+            boolean used) {
+        LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        XpdrNetworkAttributesBuilder xpdrNetworkAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder(
+                    networkTerminationPoint.getXpdrNetworkAttributes());
+        } else {
+            xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder();
+        }
+        WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
+        if (used) {
+            waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                    .setFrequency(GridUtils.getCentralFrequency(minFrequency, maxFrequency));
+        }
+        return xpdrNetworkAttributesBuilder.setWavelength(waveLengthBuilder.build()).build();
+    }
+
+    /**
+     * Update freqMaps for pp attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return PpAttributes with frequency map updated
+     */
+    private PpAttributes updatePpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        LOG.debug("Update pp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        PpAttributesBuilder ppAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            ppAttributesBuilder = new PpAttributesBuilder(networkTerminationPoint.getPpAttributes());
+        } else {
+            ppAttributesBuilder = new PpAttributesBuilder();
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ppAttributesBuilder.getAvailFreqMaps();
+        return ppAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
+                .build();
+    }
+
+    /**
+     * Update freqMaps for cp attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return CpAttributes with frequency map updated
+     */
+    private CpAttributes updateCpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        LOG.debug("Update cp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        CpAttributesBuilder cpAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            cpAttributesBuilder = new CpAttributesBuilder(networkTerminationPoint.getCpAttributes());
+        } else {
+            cpAttributesBuilder = new CpAttributesBuilder();
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = cpAttributesBuilder.getAvailFreqMaps();
+        return cpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
+                .build();
+    }
+
+    /**
+     * Update freqMaps for ctp attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return CtpAttributes with frequency map updated
+     */
+    private CtpAttributes updateCtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        LOG.debug("Update ctp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        CtpAttributesBuilder ctpAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            ctpAttributesBuilder = new CtpAttributesBuilder(networkTerminationPoint.getCtpAttributes());
+        } else {
+            ctpAttributesBuilder = new CtpAttributesBuilder();
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ctpAttributesBuilder.getAvailFreqMaps();
+        return ctpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
+                .build();
+    }
+
+    /**
+     * Update freqMaps for rxtp attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return RxTtpAttributes with frequency map updated
+     */
+    private RxTtpAttributes updateRxTtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        LOG.debug("Update rx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        RxTtpAttributesBuilder rxTtpAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            rxTtpAttributesBuilder = new RxTtpAttributesBuilder(networkTerminationPoint.getRxTtpAttributes());
+        } else {
+            rxTtpAttributesBuilder = new RxTtpAttributesBuilder();
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = rxTtpAttributesBuilder.getAvailFreqMaps();
+        return rxTtpAttributesBuilder
+                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+    }
+
+    /**
+     * Update freqMaps for txtp attributes.
+     * @param networkTerminationPoint TerminationPoint1
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return TxTtpAttributes with frequency map updated
+     */
+    private TxTtpAttributes updateTxTtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        LOG.debug("Update tx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
+                networkTerminationPoint, minFrequency, maxFrequency, used);
+        TxTtpAttributesBuilder txTtpAttributesBuilder;
+        if (networkTerminationPoint != null) {
+            txTtpAttributesBuilder = new TxTtpAttributesBuilder(networkTerminationPoint.getTxTtpAttributes());
+        } else {
+            txTtpAttributesBuilder = new TxTtpAttributesBuilder();
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = txTtpAttributesBuilder.getAvailFreqMaps();
+        return txTtpAttributesBuilder
+                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+    }
+
+    /**
+     * Update freqMaps for srg attributes of srgAttributes.
+     * @param srgAttributes SrgAttributes
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return SrgAttributes with frequency map updated
+     */
+    private SrgAttributes updateSrgAttributes(SrgAttributes srgAttributes, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
+        SrgAttributesBuilder srgAttributesBuilder;
+        if (srgAttributes == null) {
+            srgAttributesBuilder = new SrgAttributesBuilder();
+        } else {
+            srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
+        }
+        availFreqMapsMap = srgAttributesBuilder.getAvailFreqMaps();
+        return srgAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
+                .build();
+    }
+
+    /**
+     * Update freqMaps for degree attributes of degreeAttributes.
+     * @param degreeAttributes DegreeAttributes
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param used boolean true if min and max frequencies are used, false otherwise.
+     * @return DegreeAttributes with frequency map updated
+     */
+    private DegreeAttributes updateDegreeAttributes(DegreeAttributes degreeAttributes, BigDecimal minFrequency,
+            BigDecimal maxFrequency, boolean used) {
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
+        DegreeAttributesBuilder degreeAttributesBuilder;
+        if (degreeAttributes == null) {
+            degreeAttributesBuilder = new DegreeAttributesBuilder();
+        } else {
+            degreeAttributesBuilder = new DegreeAttributesBuilder(degreeAttributes);
+        }
+        availFreqMapsMap = degreeAttributesBuilder.getAvailFreqMaps();
+        return degreeAttributesBuilder
+                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+    }
+
+    /**
+     * Update availFreqMapsMap for min and max frequencies for cband AvailFreqMaps.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
      * @param availFreqMapsMap Map
-     * @param isSlotAvailable boolean
-     * @return availFreqMapsMap updated for wavelengthNumber.
+     * @param used boolean
+     * @return updated Update availFreqMapsMap for min and max frequencies for cband AvailFreqMaps.
      */
-    private Map<AvailFreqMapsKey, AvailFreqMaps> updateFreqMaps(Long wavelengthNumber,
-            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap, boolean isSlotAvailable) {
-        byte slotValue = (byte)GridConstant.USED_SLOT_VALUE;
-        if (isSlotAvailable) {
-            slotValue = (byte)GridConstant.AVAILABLE_SLOT_VALUE;
-        }
+    private Map<AvailFreqMapsKey, AvailFreqMaps> updateFreqMaps(BigDecimal minFrequency, BigDecimal maxFrequency,
+            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap, boolean used) {
+        int beginIndex = GridUtils.getIndexFromFrequency(minFrequency);
+        int endIndex = GridUtils.getIndexFromFrequency(maxFrequency);
         if (availFreqMapsMap == null) {
             availFreqMapsMap = GridUtils.initFreqMaps4FixedGrid2Available();
         }
         AvailFreqMaps availFreqMaps = availFreqMapsMap.get(availFreqMapKey);
         if (availFreqMaps != null && availFreqMaps.getFreqMap() != null) {
-            int intWlNumber = wavelengthNumber.intValue();
-            if (intWlNumber > 0 && intWlNumber <= availFreqMaps.getFreqMap().length) {
-                availFreqMaps.getFreqMap()[intWlNumber - 1] = slotValue;
-            }
+            BitSet bitSetFreq = BitSet.valueOf(availFreqMaps.getFreqMap());
+            LOG.debug("Update frequency map from index {}, to index {}, min frequency {}, max frequency {},"
+                    + "available {} {}", beginIndex, endIndex, minFrequency, maxFrequency, !used, bitSetFreq);
+            //if used = true then bit must be set to false to indicate the slot is no more available
+            bitSetFreq.set(beginIndex, endIndex, !used);
+            LOG.debug("Updated frequency map from index {}, to index {}, min frequency {}, max frequency {},"
+                    + "available {} {}", beginIndex, endIndex, minFrequency, maxFrequency, !used, bitSetFreq);
+            Map<AvailFreqMapsKey, AvailFreqMaps> updatedFreqMaps = new HashMap<>();
+            byte[] frequenciesByteArray = bitSetFreq.toByteArray();
+            AvailFreqMaps updatedAvailFreqMaps = new AvailFreqMapsBuilder(availFreqMaps)
+                    .setFreqMap(Arrays.copyOf(frequenciesByteArray,GridConstant.NB_OCTECTS))
+                    .build();
+            updatedFreqMaps.put(availFreqMaps.key(), updatedAvailFreqMaps);
+            return updatedFreqMaps;
         }
         return availFreqMapsMap;
     }
