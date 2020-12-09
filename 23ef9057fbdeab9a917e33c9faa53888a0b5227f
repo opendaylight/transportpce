@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "be4f2c79_47528630",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23f41a39_63f7dc12",
+      "range": {
+        "startLine": 1722,
+        "startChar": 1,
+        "endLine": 1722,
+        "endChar": 3
+      },
+      "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ef63155_9cf72f33",
         "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRA.xml",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f969ede0_8ae43d42",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ef63155_9cf72f33",
+      "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc25b2f_0a69b93d",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRC.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d596a1d_7ebb48d7",
+      "range": {
+        "startLine": 15,
+        "startChar": 17,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
