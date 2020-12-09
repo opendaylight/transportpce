@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a647ac2_c2fd6118",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "004b3102_516d2699",
+      "range": {
+        "startLine": 575,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 19
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf2557e8_612e05f7",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1c9149_1d4e2cf0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf2557e8_612e05f7",
+      "range": {
+        "startLine": 605,
+        "startChar": 15,
+        "endLine": 605,
+        "endChar": 74
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0b24e290_479b8952",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad9aca49_45b4aa65",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 47
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e51d2b4_6a64a878",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "0382a8b4_24659392",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e51d2b4_6a64a878",
+      "range": {
+        "startLine": 628,
+        "startChar": 8,
+        "endLine": 628,
+        "endChar": 112
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84b274ea_02388a17",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fdca08c_40a89c2e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-09T15:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84b274ea_02388a17",
+      "range": {
+        "startLine": 642,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 112
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
