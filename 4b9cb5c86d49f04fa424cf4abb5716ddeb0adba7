@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "601f0819_37e8fc92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-10T14:23:36Z",
+      "side": 1,
+      "message": "No it is not a problem. It was just a proposal to keep a trace of its Nokia origin.\nAs long as someone puts a sign-off to guarantee that the charter has been read and approved, it is fine for me.\nhttps://www.opendaylight.org/wp-content/uploads/sites/14/2018/01/ODL-Technical-Charter-LF-Projects-LLC-FINAL.pdf",
+      "parentUuid": "af623000_9a77c390",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "4b9cb5c86d49f04fa424cf4abb5716ddeb0adba7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "800d030f_62da8e4b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
