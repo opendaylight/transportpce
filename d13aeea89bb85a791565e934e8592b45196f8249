@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138cad50_aaa5af48",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-10T09:40:06Z",
+      "side": 1,
+      "message": "I wonder whether or not a LOG.warning would be needed here.",
+      "range": {
+        "startLine": 521,
+        "startChar": 1,
+        "endLine": 522,
+        "endChar": 29
+      },
+      "revId": "d13aeea89bb85a791565e934e8592b45196f8249",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
