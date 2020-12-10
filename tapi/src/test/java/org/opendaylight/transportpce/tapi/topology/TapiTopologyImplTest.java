@@ -28,8 +28,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.tapi.utils.TopologyDataUtils;
+import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.CapacityUnit;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
@@ -64,17 +65,18 @@ public class TapiTopologyImplTest extends AbstractTest {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
+                TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
-        TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil());
+                TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
+        TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
+                TapiTopologyDataUtils.PORTMAPPING_FILE);
         LOG.info("setup done");
     }
 
     @Test
     public void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
             throws ExecutionException, InterruptedException {
-        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.TPDR_100G);
+        GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.TPDR_100G);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
@@ -119,7 +121,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     @Test
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
         throws ExecutionException, InterruptedException {
-        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
+        GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
