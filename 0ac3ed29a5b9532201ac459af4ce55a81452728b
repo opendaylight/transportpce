@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "403de3a3_b9b60bab",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_topology.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-10T09:43:23Z",
+      "side": 1,
+      "message": "reversing the if and the else conditions would be more efficient here",
+      "range": {
+        "startLine": 116,
+        "startChar": 20,
+        "endLine": 116,
+        "endChar": 54
+      },
+      "revId": "0ac3ed29a5b9532201ac459af4ce55a81452728b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
