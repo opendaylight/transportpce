@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "4f540742_0e6c1787",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-10T09:51:46Z",
+      "side": 1,
+      "message": "Nope. Can we put at least a TODO comment ?",
+      "parentUuid": "0b24e290_479b8952",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 47
+      },
+      "revId": "e1f51808d1b2174fec050a83d9ee3634e32f64af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e51d2b4_6a64a878",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
