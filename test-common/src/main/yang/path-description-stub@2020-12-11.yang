@@ -1,0 +1,24 @@
+module pathdescription-stub {
+  yang-version 1;
+  namespace "pathdescription-stub";
+  prefix pathdescription-stub;
+
+  import transportpce-pathDescription {
+    prefix transportpce-pathDescription;
+	revision-date 2020-11-26;
+  }
+
+  description
+    "YANG model for providing path-description through data container for testing purpose";
+
+  revision 2020-12-11 {
+    description
+      "first version";
+    reference
+      "YANG model for providing path-description through data container for testing purpose";
+  }
+
+  container path-description {
+    uses transportpce-pathDescription:path-description;
+  }
+}
