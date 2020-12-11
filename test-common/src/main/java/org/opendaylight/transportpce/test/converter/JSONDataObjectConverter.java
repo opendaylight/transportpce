@@ -54,7 +54,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      */
     public static DataObjectConverter createWithDataStoreUtil(@Nonnull DataStoreContext dataStoreContextUtil) {
         return new JSONDataObjectConverter(dataStoreContextUtil.getSchemaContext(),
-                dataStoreContextUtil.getBindingToNormalizedNodeCodec());
+                dataStoreContextUtil.getBindingDOMCodecServices());
     }
 
     /**
@@ -132,7 +132,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
             JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
-                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.getShared(getSchemaContext()),
+                JSONCodecFactorySupplier.RFC7951.getShared(getSchemaContext()),
                 getSchemaContext())) {
             jsonParser.parse(reader);
         } catch (IOException e) {
