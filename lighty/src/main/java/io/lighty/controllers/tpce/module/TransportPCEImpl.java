@@ -37,8 +37,8 @@ import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthServiceImpl;
+import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
+import org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl;
 import org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl;
 import org.opendaylight.transportpce.olm.OlmProvider;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
@@ -123,8 +123,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMapping portMapping = initPortMapping(lightyServices, openRoadmInterfaces);
         NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
                 portMapping);
-        NetworkModelWavelengthService networkModelWavelengthService =
-                new NetworkModelWavelengthServiceImpl(lightyServices.getBindingDataBroker());
+        FrequenciesService networkModelWavelengthService =
+                new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),

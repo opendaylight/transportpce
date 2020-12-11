@@ -46,8 +46,8 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NetworkModelWavelengthServiceTest extends AbstractTest {
-    private static final Logger LOG = LoggerFactory.getLogger(NetworkModelWavelengthServiceTest.class);
+public class FrequenciesServiceTest extends AbstractTest {
+    private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceTest.class);
     private static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";
     private static final String PATH_DESCRIPTION_FILE = "src/test/resources/path_description.json";
     private static PathDescription pathDescription;
@@ -76,7 +76,7 @@ public class NetworkModelWavelengthServiceTest extends AbstractTest {
 
     @Test
     public void allocateFrequenciesTest() throws IOException {
-        NetworkModelWavelengthService service = new NetworkModelWavelengthServiceImpl(getDataBroker());
+        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
         assertEquals("Lambda 1 should not be available for ctp-attributes",
@@ -95,7 +95,7 @@ public class NetworkModelWavelengthServiceTest extends AbstractTest {
 
     @Test
     public void releaseFrequenciesTest() throws IOException {
-        NetworkModelWavelengthService service = new NetworkModelWavelengthServiceImpl(getDataBroker());
+        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         service.releaseFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
