@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 
@@ -26,10 +26,10 @@ public interface DataStoreContext {
 
     EffectiveModelContext getSchemaContext();
 
-    BindingNormalizedNodeSerializer getBindingToNormalizedNodeCodec();
-
     NotificationService getNotificationService();
 
     NotificationPublishService getNotificationPublishService();
+
+    BindingDOMCodecServices getBindingDOMCodecServices();
 
 }
