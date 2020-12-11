@@ -28,7 +28,7 @@
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
         <argument ref="notificationService" />
-        <argument ref="networkModelWavelengthService" />
+        <argument ref="frequenciesService" />
     </bean>
 
     <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
@@ -47,12 +47,12 @@
         <argument ref="networkTransactionImpl" />
    </bean>
 
-    <bean id="networkModelWavelengthService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthServiceImpl">
+    <bean id="frequenciesService" class="org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl">
         <argument ref="dataBroker" />
     </bean>
 
     <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
 
-    <service ref="networkModelWavelengthService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService" />
+    <service ref="frequenciesService" interface="org.opendaylight.transportpce.networkmodel.service.FrequenciesService" />
 
 </blueprint>
