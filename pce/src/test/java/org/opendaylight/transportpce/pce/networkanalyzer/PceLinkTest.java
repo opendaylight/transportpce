@@ -282,8 +282,8 @@ public class PceLinkTest extends AbstractTest {
         TerminationPoint xpdr = xpdrTpBldr.build();
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 node11 = new org.opendaylight
-                .yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node11 = new org.opendaylight
+                .yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
 
 

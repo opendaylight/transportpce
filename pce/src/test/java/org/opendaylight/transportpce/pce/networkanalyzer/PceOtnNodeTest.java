@@ -233,7 +233,7 @@ public class PceOtnNodeTest extends AbstractTest {
                         .Node1Builder()
                         .setTerminationPoint(Map.of(xpdr.key(),xpdr))
                         .build();
-        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
 
         return new NodeBuilder()
@@ -260,7 +260,7 @@ public class PceOtnNodeTest extends AbstractTest {
                 new Node1Builder()
                         .setTerminationPoint(Map.of(xpdr.key(),xpdr))
                         .build();
-        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
 
 

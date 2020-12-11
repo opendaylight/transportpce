@@ -85,9 +85,9 @@ public class PceOtnNode implements PceNode {
         this.usedXpdrClientTps.clear();
         this.availableXpdrClientTps = new ArrayList<>();
         this.usableXpdrClientTps = new ArrayList<>();
-        this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .Node1.class).getAdministrativeState();
-        this.state = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        this.state = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .Node1.class).getOperationalState();
         this.tpAvailableTribPort.clear();
         checkAvailableTribPort();
