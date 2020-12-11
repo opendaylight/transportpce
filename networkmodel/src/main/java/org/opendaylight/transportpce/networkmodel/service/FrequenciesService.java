@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel.service;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirection;
 
-public interface NetworkModelWavelengthService {
+public interface FrequenciesService {
 
     /**
      * Allocate frequency in network topology.
