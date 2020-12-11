@@ -72,7 +72,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      */
     public static XMLDataObjectConverter createWithDataStoreUtil(@Nonnull DataStoreContext dataStoreContextUtil) {
         BindingNormalizedNodeSerializer bindingToNormalizedNodeCodec =
-                dataStoreContextUtil.getBindingToNormalizedNodeCodec();
+                dataStoreContextUtil.getBindingDOMCodecServices();
         return new XMLDataObjectConverter(dataStoreContextUtil.getSchemaContext(), bindingToNormalizedNodeCodec);
     }
 
