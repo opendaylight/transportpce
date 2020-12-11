@@ -63,9 +63,9 @@ public class PceOpticalNode implements PceNode {
         this.pceNodeType = pceNodeType;
         if (node != null) {
             this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev181130.Node1.class).getAdministrativeState();
+                    .org.openroadm.common.network.rev200529.Node1.class).getAdministrativeState();
             this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev181130.Node1.class).getOperationalState();
+                    .org.openroadm.common.network.rev200529.Node1.class).getOperationalState();
         }
 
         if ((node == null) || (nodeId == null) || (nodeType == null) || (adminStates == null) || state == null) {
@@ -152,7 +152,9 @@ public class PceOpticalNode implements PceNode {
             return;
         }
         Node1 node1 = this.node.augmentation(Node1.class);
-<<<<<<< HEAD
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node11 =
+                this.node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1
+                        .class);
         byte[] freqMap;
 
         switch (this.nodeType) {
