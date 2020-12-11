@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
 
 public class ServiceHandlerListener implements TransportpceServicehandlerListener {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerListener.class);
-    private final NetworkModelWavelengthService service;
+    private final FrequenciesService service;
 
-    public ServiceHandlerListener(NetworkModelWavelengthService service) {
+    public ServiceHandlerListener(FrequenciesService service) {
         LOG.info("Init service handler listener for network");
         this.service = service;
     }
