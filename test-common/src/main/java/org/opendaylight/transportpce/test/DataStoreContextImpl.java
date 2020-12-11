@@ -19,7 +19,6 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingAdapterFactory;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
-import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.mdsal.binding.runtime.spi.BindingRuntimeHelpers;
@@ -90,11 +89,6 @@ public class DataStoreContextImpl implements DataStoreContext {
     }
 
     @Override
-    public BindingNormalizedNodeSerializer getBindingToNormalizedNodeCodec() {
-        return bindingDOMCodecServices;
-    }
-
-    @Override
     public NotificationService getNotificationService() {
         return notificationService;
     }
@@ -127,6 +121,11 @@ public class DataStoreContextImpl implements DataStoreContext {
     private DOMStore createOperationalDatastore() {
         return InMemoryDOMDataStoreFactory.create("OPER",
                 FixedDOMSchemaService.of(bindingDOMCodecServices.getRuntimeContext()));
+    }
+
+    @Override
+    public BindingDOMCodecServices getBindingDOMCodecServices() {
+        return bindingDOMCodecServices;
     }
 
 
