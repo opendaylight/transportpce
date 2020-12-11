@@ -23,7 +23,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 
@@ -40,7 +40,7 @@ public class NetworkModelProviderTest extends AbstractTest {
     @Mock
     private NotificationService notificationService;
     @Mock
-    private NetworkModelWavelengthService networkModelWavelengthService;
+    private FrequenciesService networkModelWavelengthService;
 
 
     @Test
