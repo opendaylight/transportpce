@@ -22,6 +22,30 @@
       "revId": "0ac3ed29a5b9532201ac459af4ce55a81452728b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33902989_5beab5a5",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_topology.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-12-11T17:34:00Z",
+      "side": 1,
+      "message": "I prefer to keep as it is written for readibility reason.",
+      "parentUuid": "403de3a3_b9b60bab",
+      "range": {
+        "startLine": 116,
+        "startChar": 20,
+        "endLine": 116,
+        "endChar": 54
+      },
+      "revId": "0ac3ed29a5b9532201ac459af4ce55a81452728b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
