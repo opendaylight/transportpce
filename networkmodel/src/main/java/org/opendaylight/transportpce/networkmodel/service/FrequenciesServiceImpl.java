@@ -67,13 +67,13 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelengthService {
+public class FrequenciesServiceImpl implements FrequenciesService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NetworkModelWavelengthServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceImpl.class);
     private final DataBroker dataBroker;
     private final AvailFreqMapsKey availFreqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-    public NetworkModelWavelengthServiceImpl(DataBroker dataBroker) {
+    public FrequenciesServiceImpl(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 

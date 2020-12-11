@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.listeners.ServiceHandlerListener;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
@@ -39,12 +39,12 @@ public class NetworkModelProvider {
     private TpceNetwork tpceNetwork;
     private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
     private NotificationService notificationService;
-    private NetworkModelWavelengthService networkModelWavelengthService;
+    private FrequenciesService networkModelWavelengthService;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
         final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
         final NetConfTopologyListener topologyListener, NotificationService notificationService,
-        NetworkModelWavelengthService networkModelWavelengthService) {
+        FrequenciesService networkModelWavelengthService) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
