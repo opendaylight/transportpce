@@ -9,7 +9,7 @@ module transportpce-networkmodel {
 
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
   }
 
   organization

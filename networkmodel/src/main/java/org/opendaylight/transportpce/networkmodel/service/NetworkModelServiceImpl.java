@@ -767,7 +767,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             abstractNodeId = Objects.requireNonNull(node.getNodeId()).getValue();
             // Checking if the node is operationally inService
             if (abstractNodeId.contains(nodeId) && node.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev181130.Node1.class)
+                    .org.openroadm.common.network.rev200529.Node1.class)
                     .getOperationalState().equals(State.InService)) {
                 /* 2. Check if the state of the termination points from the topology shard are equal to the state of
                 the termination points in the previously created map. */
@@ -777,7 +777,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 for (TerminationPoint tp : tpList) {
                     String tpId = Objects.requireNonNull(tp.getTpId()).getValue();
                     State tpState = Objects.requireNonNull(tp.augmentation(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.common.network.rev181130.TerminationPoint1.class)).getOperationalState();
+                            .org.openroadm.common.network.rev200529.TerminationPoint1.class)).getOperationalState();
                     if (this.terminationPointsChanged.containsKey(tpId) && !this.terminationPointsChanged.get(tpId)
                             .equals(tpState)) {
                         // The state of a termination point has changed... updating
@@ -851,8 +851,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String dstTp = link.getDestination().getDestTp().toString();
             String srcNode = link.getSource().getSourceNode().getValue();
             String dstNode = link.getDestination().getDestNode().getValue();
-            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-                    .rev181130.Link1.class).getOperationalState();
+            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.network.rev200529.Link1.class).getOperationalState();
             /* 1. Check the current state of the source and dest tps of the link. If these tps exist on the links Map
             and the states are different, then we need to update the link state accordingly.
             There are several cases depending on the current link state:
@@ -920,8 +920,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .augmentation(Node1.class)).getTerminationPoint()).values());
                 for (TerminationPoint tp : tpList) {
                     if (Objects.requireNonNull(tp.getTpId()).getValue().equals(tpId)) {
-                        if (State.InService.equals(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
-                                .common.network.rev181130.TerminationPoint1.class).getOperationalState())) {
+                        if (State.InService.equals(tp.augmentation(org.opendaylight.yang.gen.v1.http
+                                .org.openroadm.common.network.rev200529.TerminationPoint1.class)
+                                .getOperationalState())) {
                             // The second TP is also inService
                             return true;
                         }
@@ -938,7 +939,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         // Update topology change list
         this.topologyChanges.put(new OrdTopologyChangesKey(link.getLinkId().getValue()),
                 new OrdTopologyChangesBuilder().setId(link.getLinkId().getValue()).setState(state).build());
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 link1 = new Link1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1 link1 = new Link1Builder()
                 .setOperationalState(state).setAdministrativeState(adminStates).build();
         Link updLink = new LinkBuilder().withKey(link.key()).addAugmentation(link1).build();
         InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)

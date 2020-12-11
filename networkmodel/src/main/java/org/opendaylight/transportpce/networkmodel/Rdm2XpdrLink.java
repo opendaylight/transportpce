@@ -150,9 +150,9 @@ final class Rdm2XpdrLink {
                 .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
         // If both TPs of the Xpdr2Rdm link are inService --> link inService. Otherwise outOfService
         if (State.InService.equals(xpdrTp.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                .org.openroadm.common.network.rev200529.TerminationPoint1.class)
                 .getOperationalState()) && State.InService.equals(rdmTp.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev181130.TerminationPoint1.class).getOperationalState())) {
+                .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState())) {
             lnk2bldr.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
         } else {
             lnk2bldr.setOperationalState(State.OutOfService).setAdministrativeState(AdminStates.OutOfService);

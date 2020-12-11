@@ -146,9 +146,9 @@ public class NodeUtils {
         //update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder();
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1Builder tp11Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                .network.rev181130.TerminationPoint1Builder().setAdministrativeState(AdminStates.InService)
+                .network.rev200529.TerminationPoint1Builder().setAdministrativeState(AdminStates.InService)
                 .setOperationalState(State.InService);
 
         tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
@@ -157,7 +157,7 @@ public class NodeUtils {
         TerminationPoint xpdr = xpdrTpBldr.build();
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
-        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
                 .setAdministrativeState(AdminStates.InService).setOperationalState(State.InService).build();
 
 
