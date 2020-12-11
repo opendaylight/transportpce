@@ -851,8 +851,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String dstTp = link.getDestination().getDestTp().toString();
             String srcNode = link.getSource().getSourceNode().getValue();
             String dstNode = link.getDestination().getDestNode().getValue();
-            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-                    .rev200529.Link1.class).getOperationalState();
+            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.network.rev200529.Link1.class).getOperationalState();
             /* 1. Check the current state of the source and dest tps of the link. If these tps exist on the links Map
             and the states are different, then we need to update the link state accordingly.
             There are several cases depending on the current link state:
@@ -920,8 +920,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .augmentation(Node1.class)).getTerminationPoint()).values());
                 for (TerminationPoint tp : tpList) {
                     if (Objects.requireNonNull(tp.getTpId()).getValue().equals(tpId)) {
-                        if (State.InService.equals(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
-                                .common.network.rev200529.TerminationPoint1.class).getOperationalState())) {
+                        if (State.InService.equals(tp.augmentation(org.opendaylight.yang.gen.v1.http
+                                .org.openroadm.common.network.rev200529.TerminationPoint1.class)
+                                .getOperationalState())) {
                             // The second TP is also inService
                             return true;
                         }
