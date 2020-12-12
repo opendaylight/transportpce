@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "8021dd77_2ce85aa4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-12T17:10:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80405d0e_5d94449e",
+      "range": {
+        "startLine": 250,
+        "startChar": 24,
+        "endLine": 250,
+        "endChar": 107
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9efb50d_b4d00e50",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
         "patchSetId": 4
@@ -62,6 +86,30 @@
       "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2089342_6f2ff38a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-12T17:10:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9efb50d_b4d00e50",
+      "range": {
+        "startLine": 61,
+        "startChar": 83,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "586755e4_39a3da0d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-12T17:10:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0b995ad_2f1d2c0e",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 174,
+        "endChar": 17
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77d0ec72_5e2e9f2a",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
         "patchSetId": 4
@@ -99,6 +171,24 @@
       "writtenOn": "2020-12-03T14:42:30Z",
       "side": 1,
       "message": "many nested if-blocks here",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0da9ac6_ea4f10f2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-12T17:10:29Z",
+      "side": 1,
+      "message": "Any suggestions?? Maybe grouping some ifs with \u0026\u0026??",
+      "parentUuid": "77d0ec72_5e2e9f2a",
       "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true

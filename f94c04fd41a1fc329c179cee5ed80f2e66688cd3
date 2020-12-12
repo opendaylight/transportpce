@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f4dd54a_a6a4b76a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-12T17:10:29Z",
+      "side": 1,
+      "message": "Totally true... I forgot to update the OTN topology...",
+      "revId": "f94c04fd41a1fc329c179cee5ed80f2e66688cd3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
