@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "5aff4c4c_94694206",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2020-06-29.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1daf260_5be94cf3",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 7
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8c84acd_3dea7922",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
         "patchSetId": 2
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "1565eec9_acb9bec7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "I guess it was just a comment for me to remind something... I will remove it",
+      "parentUuid": "a8c84acd_3dea7922",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 116
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9de3136_6add232c",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 2
@@ -76,6 +124,30 @@
       "writtenOn": "2020-12-03T14:48:41Z",
       "side": 1,
       "message": "reversing the logic would ease indentation",
+      "range": {
+        "startLine": 83,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 9
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "175e4c80_201d7bc1",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "Same structure as PceListenerImpl.java :-)",
+      "parentUuid": "d9de3136_6add232c",
       "range": {
         "startLine": 83,
         "startChar": 9,
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "c0e58437_a689efa9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edecf0aa_d00dfb4e",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 9
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd8bbc52_a86f50d0",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 2
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "8a1f13ad_75089a91",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd8bbc52_a86f50d0",
+      "range": {
+        "startLine": 123,
+        "startChar": 14,
+        "endLine": 126,
+        "endChar": 13
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e424547f_24973722",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 2
@@ -154,6 +274,30 @@
       "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d6504a5_659209ca",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e424547f_24973722",
+      "range": {
+        "startLine": 171,
+        "startChar": 22,
+        "endLine": 173,
+        "endChar": 21
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
