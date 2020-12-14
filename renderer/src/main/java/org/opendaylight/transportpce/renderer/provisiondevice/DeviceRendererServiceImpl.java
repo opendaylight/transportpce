@@ -66,10 +66,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.node.interfaces.NodeInterface;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.node.interfaces.NodeInterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.node.interfaces.NodeInterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -135,21 +135,21 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     // TODO: need to update transportpce-common-types accordingly, to a more, generic-term
                     Long waveNumber = input.getWaveNumber().toJava();
                     BigDecimal centerFreq = null;
-                    BigDecimal slotWidth = null;
+                    BigDecimal width = null;
                     if (input.getCenterFreq() != null) {
                         centerFreq = input.getCenterFreq().getValue();
                     }
-                    if (input.getSlotWidth() != null) {
-                        slotWidth = input.getSlotWidth().getValue();
+                    if (input.getWidth() != null) {
+                        width = input.getWidth().getValue();
                     }
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         String supportingOchInterface;
-                        if ((centerFreq != null) && (slotWidth != null)) {
+                        if ((centerFreq != null) && (width != null)) {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, slotWidth);
+                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, width);
                         }
                         else {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
@@ -186,9 +186,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface;
-                        if ((centerFreq != null) && (slotWidth != null)) {
+                        if ((centerFreq != null) && (width != null)) {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, slotWidth);
+                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, width);
                         }
                         else {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
@@ -219,10 +219,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && (srcTp.contains(StringConstants.TTP_TOKEN)
                             || srcTp.contains(StringConstants.PP_TOKEN))) {
-                        if ((centerFreq != null) && (slotWidth != null)) {
+                        if ((centerFreq != null) && (width != null)) {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, centerFreq, slotWidth));
+                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, centerFreq, width));
                         }
                         else {
                             createdOchInterfaces.addAll(
@@ -233,10 +233,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     if ((destTp != null) && (destTp.contains(StringConstants.TTP_TOKEN)
                             || destTp.contains(StringConstants.PP_TOKEN))) {
 
-                        if ((centerFreq != null) && (slotWidth != null)) {
+                        if ((centerFreq != null) && (width != null)) {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, centerFreq, slotWidth));
+                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, centerFreq, width));
                         }
                         else {
                             createdOchInterfaces.addAll(
