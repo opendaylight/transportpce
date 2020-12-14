@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b97ee485_6e7fb99d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-14T11:42:24Z",
+      "side": 1,
+      "message": "ah OK, there was 2 topics indeed.\n\nYou\u0027re probably true but I think that the removal of these checks deserves a separate change.\nThe purpose here is not to change the initial logic but to optimize it.\nThis way, we can have a separate debate if someone thinks we need to keep them for protection.",
+      "parentUuid": "4a6bffa8_432b1b8c",
+      "range": {
+        "startLine": 617,
+        "startChar": 0,
+        "endLine": 619,
+        "endChar": 17
+      },
+      "revId": "db6727f8b92fa3b683383af5fee1b2e33e0319d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a83c1e6_7199759e",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
         "patchSetId": 18
