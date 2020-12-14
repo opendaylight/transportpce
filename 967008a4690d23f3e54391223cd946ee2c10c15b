@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "73cb2961_5dd7c7e3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-14T14:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dafe387e_6fd481d7",
+      "range": {
+        "startLine": 153,
+        "startChar": 89,
+        "endLine": 154,
+        "endChar": 34
+      },
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d0fbcf9_ddb724ec",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 1
@@ -62,6 +86,30 @@
       "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d00fd7_c7273689",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-14T14:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d0fbcf9_ddb724ec",
+      "range": {
+        "startLine": 964,
+        "startChar": 7,
+        "endLine": 964,
+        "endChar": 44
+      },
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
