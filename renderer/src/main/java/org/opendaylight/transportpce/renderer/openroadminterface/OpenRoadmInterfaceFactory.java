@@ -51,14 +51,14 @@ public class OpenRoadmInterfaceFactory {
     }
 
     public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            BigDecimal centerFreq, BigDecimal slotWidth)
+            BigDecimal centerFreq, BigDecimal width)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
-                    centerFreq, slotWidth);
+                    centerFreq, width);
             default:
                 return null;
         }
@@ -87,14 +87,14 @@ public class OpenRoadmInterfaceFactory {
     }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            OchAttributes.ModulationFormat format, BigDecimal centerFreq, BigDecimal slotWidth)
+            OchAttributes.ModulationFormat format, BigDecimal centerFreq, BigDecimal width)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber, format);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
-                   centerFreq, slotWidth);
+                   centerFreq, width);
             default:
                 return null;
         }

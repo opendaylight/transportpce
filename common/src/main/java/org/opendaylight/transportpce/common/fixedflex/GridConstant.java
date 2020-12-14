@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.fixedflex;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import java.math.BigDecimal;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -32,6 +33,11 @@ public final class GridConstant {
     public static final double CENTRAL_FREQUENCY = 193.1;
     public static final int NB_SLOTS_100G = 8;
     public static final int NB_SLOTS_400G = 14;
+    public static final BigDecimal WIDTH_80 = BigDecimal.valueOf(80);
+    public static final BigDecimal WIDTH_40 = BigDecimal.valueOf(40);
+    public static final BigDecimal SLOT_WIDTH_50 = BigDecimal.valueOf(50);
+    public static final BigDecimal SLOT_WIDTH_87_5 = BigDecimal.valueOf(87.5);
+
     /**
      * Map for associate service type with nb slots.
      */
@@ -54,15 +60,22 @@ public final class GridConstant {
 
     public static final long IRRELEVANT_WAVELENGTH_NUMBER = 0;
 
+    /**
+     * Map to associate width format to slot width.
+     */
+    public static final Map<BigDecimal, BigDecimal> WIDTH_SLOT_WIDTH_MAP = Map.of(
+            WIDTH_40, SLOT_WIDTH_50,
+            WIDTH_80, SLOT_WIDTH_87_5);
+
     private GridConstant() {
     }
 
     private static Table<Uint32, ModulationFormat, String> initFrequencyWidthTable() {
         Table<Uint32, ModulationFormat, String> frequencyWidthTable = HashBasedTable.create();
-        frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, "40");
-        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, "80");
-        frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, "80");
-        frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, "80");
+        frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, String.valueOf(WIDTH_40));
+        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, String.valueOf(WIDTH_80));
+        frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, String.valueOf(WIDTH_80));
+        frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, String.valueOf(WIDTH_80));
         return frequencyWidthTable;
     }
 }
