@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4a6bffa8_432b1b8c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-14T11:14:11Z",
+      "side": 1,
+      "message": "Sorry if my comment was not clear. What I was just saying is that normally, at line 616 we should never have a mapping at null, and thus, we could simply remove these 3 lines...",
+      "parentUuid": "539ea95c_3c8ddb35",
+      "range": {
+        "startLine": 617,
+        "startChar": 0,
+        "endLine": 619,
+        "endChar": 17
+      },
+      "revId": "db6727f8b92fa3b683383af5fee1b2e33e0319d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a83c1e6_7199759e",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
         "patchSetId": 18
