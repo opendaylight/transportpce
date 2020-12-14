@@ -18,11 +18,11 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
 import org.opendaylight.transportpce.common.fixedflex.FlexGridInterface;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -114,7 +114,7 @@ public class OpenRoadmInterface221 {
     }
 
     public List<String> createFlexOCH(String nodeId, String logicalConnPoint, Long bitmapIndex,
-        BigDecimal centerFreq, BigDecimal slotWidth)
+        BigDecimal centerFreq, BigDecimal width)
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -125,10 +125,10 @@ public class OpenRoadmInterface221 {
         List<String> interfacesCreated = new ArrayList<>();
 
         if (logicalConnPoint.contains("DEG")) {
-            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, centerFreq, slotWidth, bitmapIndex);
+            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, centerFreq, width, bitmapIndex);
             interfacesCreated.add(mcInterfaceCreated);
         }
-        String mcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, centerFreq, slotWidth, bitmapIndex);
+        String mcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, centerFreq, width, bitmapIndex);
         interfacesCreated.add(mcInterfaceCreated);
         return interfacesCreated;
     }
@@ -203,12 +203,12 @@ public class OpenRoadmInterface221 {
     }
 
     public String createMCInterface(String nodeId, String logicalConnPoint,
-        BigDecimal centerFrequency, BigDecimal slotWidth, Long bitmapIndex)
+        BigDecimal centerFrequency, BigDecimal width, Long bitmapIndex)
         throws OpenRoadmInterfaceException {
 
         // TODO : Check this method
-
-        flexGrid = flexGrid.getFlexWaveMapping(centerFrequency.floatValue(), slotWidth.floatValue());
+        flexGrid = flexGrid.getFlexWaveMapping(centerFrequency.floatValue(),
+                GridConstant.WIDTH_SLOT_WIDTH_MAP.get(width).floatValue());
 
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -277,50 +277,27 @@ public class OpenRoadmInterface221 {
     }
 
     public String createNMCInterface(String nodeId, String logicalConnPoint,
-        BigDecimal centerFrequency, BigDecimal slotWidth, Long bitmapIndex)
+        BigDecimal centerFrequency, BigDecimal width, Long bitmapIndex)
         throws OpenRoadmInterfaceException {
         LOG.info("This is the central frequency {}", centerFrequency.floatValue());
-        LOG.info("This is the slot-width {}", slotWidth.floatValue());
+        LOG.info("This is the nmc width {}", width.floatValue());
         // TODO : Check this method
-        flexGrid = flexGrid.getFlexWaveMapping(centerFrequency.floatValue(), slotWidth.floatValue());
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
 
-        LOG.info("Freq Start {} and Freq End {} and center-Freq {}", flexGrid.getStart(),
-            flexGrid.getStop(),centerFrequency);
         //TODO : Check this method
         InterfaceBuilder nmcInterfaceBldr = createGenericInterfaceBuilder(portMap,
             NetworkMediaChannelConnectionTerminationPoint.class, logicalConnPoint + "-nmc" + "-" + bitmapIndex);
         if (logicalConnPoint.contains("DEG")) {
             nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc" + "-" + bitmapIndex);
         }
-        NmcCtpBuilder nmcCtpIfBuilder;
 
-        // From the logicalConnPoint, get the substring and for that associated substring find the mc-cap
-        String mcLcp = "";
-        if (logicalConnPoint.contains("-PP")) {
-            mcLcp = logicalConnPoint.substring(0, logicalConnPoint.indexOf("-")) + "-PP";
-        }
-        else if (logicalConnPoint.contains("-TTP")) {
-            mcLcp = logicalConnPoint.substring(0, logicalConnPoint.indexOf("-")) + "-TTP";
-        }
-        McCapabilities mcCapabilities = portMapping.getMcCapbilities(nodeId, mcLcp);
-        if (mcCapabilities == null || mcCapabilities.getSlotWidthGranularity() == null
-                || mcCapabilities.getSlotWidthGranularity().getValue() == null) {
-            LOG.warn("Port mapping could not find {}", mcLcp);
-            LOG.warn("Check the port mapping to verify {}", mcLcp);
-            return nmcInterfaceBldr.getName();
-        }
-        double slotWidthGran = mcCapabilities.getSlotWidthGranularity().getValue().doubleValue();
-        // Dead-band is constant (Ref: WP) In GHz
-        double deadBand = 8;
-        double guardBand = Math.ceil(deadBand / slotWidthGran) * slotWidthGran;
-        nmcCtpIfBuilder = new NmcCtpBuilder()
+        NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
                 .setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(centerFrequency)))
-                .setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(slotWidth.doubleValue() - guardBand)));
+                .setWidth(new FrequencyGHz(width));
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.Interface1Builder
