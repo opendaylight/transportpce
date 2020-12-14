@@ -119,7 +119,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "transportpce-device-renderer:service-name": "testNMC-MC",
             "transportpce-device-renderer:wave-number": "2",
             "transportpce-device-renderer:center-freq": "196.05",
-            "transportpce-device-renderer:slot-width": "87.5",
+            "transportpce-device-renderer:width": "80",
             "transportpce-device-renderer:nodes": [
               {
                 "transportpce-device-renderer:node-id": "ROADM-D1",
@@ -183,7 +183,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         # Check the mc-ttp max and min-freq
         self.assertEqual({
           "frequency": 196.05,
-          "width": 75
+          "width": 80
         },
         res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
         time.sleep(3)
@@ -202,7 +202,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                   "supporting-port": "C1",
                   "type": "org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint"},
                  **res['interface'][0]), res['interface'][0])
-        self.assertEqual({"frequency": 196.05, "width": 75},
+        self.assertEqual({"frequency": 196.05, "width": 80},
                          res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
         time.sleep(3)
 
