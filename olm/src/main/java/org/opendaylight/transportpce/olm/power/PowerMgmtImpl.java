@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.util.OlmUtils;
@@ -266,10 +267,10 @@ public class PowerMgmtImpl implements PowerMgmt {
                         }
                         BigDecimal powerValue = spanLossTx.subtract(BigDecimal.valueOf(9));
                         powerValue = powerValue.min(BigDecimal.valueOf(2));
-                        // If slot-width is other than 50GHz then calculate PSD power value
-                        if (input.getSlotWidth() != null && input.getSlotWidth().getValue().doubleValue() != 50) {
-                            Double psdPower = 10 * Math.log(input.getSlotWidth().getValue().doubleValue() / 50);
-                            powerValue = powerValue.add(new BigDecimal(psdPower));
+                        //we work at constant power spectral density (50 GHz channel width @-20dBm=37.5GHz)
+                        // 87.5 GHz channel width @-20dBm=75GHz
+                        if (input.getWidth() != null && GridConstant.WIDTH_80.equals(input.getWidth().getValue())) {
+                            powerValue = powerValue.add(BigDecimal.valueOf(3));
                         }
                         LOG.info("Power Value is {}", powerValue);
                         try {

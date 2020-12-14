@@ -15,6 +15,12 @@ module transportpce-common-types {
     revision-date 2018-10-19;
   }
 
+  revision 2020-12-11 {
+    description
+      "Update grouping olm-renderer-input, adding min, max frequencies
+        lower spectral slot number and higher spectral slot number
+         fix center-freq unit";
+  }
   revision 2020-06-15 {
     description
       "Updated grouping olm-renderer-input to enable support for flex-grid";
@@ -419,10 +425,24 @@ module transportpce-common-types {
       type uint32;
     }
     leaf center-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf width {
+      description
+       " Width of nmc";
       type org-openroadm-common-types:frequency-GHz;
     }
-    leaf slot-width {
-      type org-openroadm-common-types:frequency-GHz;
+    leaf min-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf max-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf lower-spectral-slot-number {
+      type uint32;
+    }
+    leaf higher-spectral-slot-number {
+      type uint32;
     }
     list nodes {
       key "node-id";
