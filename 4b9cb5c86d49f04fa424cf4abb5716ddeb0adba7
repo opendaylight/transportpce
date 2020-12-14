@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "46007c09_9370043e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-14T14:42:44Z",
+      "side": 1,
+      "message": "Okay, I will read the charter and talk to Dominique as well 😊",
+      "parentUuid": "601f0819_37e8fc92",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "4b9cb5c86d49f04fa424cf4abb5716ddeb0adba7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "800d030f_62da8e4b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
