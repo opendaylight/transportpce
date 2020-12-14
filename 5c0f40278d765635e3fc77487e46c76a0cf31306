@@ -22,6 +22,30 @@
       "revId": "5c0f40278d765635e3fc77487e46c76a0cf31306",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d836617_44358cce",
+        "filename": "features/odl-transportpce-inventory/pom.xml",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-14T13:46:10Z",
+      "side": 1,
+      "message": "The platform documentation is still referencing 8.0.0\nhttps://docs.opendaylight.org/projects/integration-distribution/en/latest/platform-versions.html\nIf an email has been sent in that sense, the documentation is no more up-to-date.",
+      "parentUuid": "451b937f_b707316c",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "5c0f40278d765635e3fc77487e46c76a0cf31306",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
