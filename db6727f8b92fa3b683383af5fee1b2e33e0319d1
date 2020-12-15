@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "6285efbe_48b62708",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-15T14:23:32Z",
+      "side": 1,
+      "message": "I propose a new change to simply remove these cheks at https://git.opendaylight.org/gerrit/c/transportpce/+/94249 and pursue the talk.\nI wonder whether an annotation or an exception handler wouldn\u0027t be useful.",
+      "parentUuid": "b97ee485_6e7fb99d",
+      "range": {
+        "startLine": 617,
+        "startChar": 0,
+        "endLine": 619,
+        "endChar": 17
+      },
+      "revId": "db6727f8b92fa3b683383af5fee1b2e33e0319d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a83c1e6_7199759e",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
         "patchSetId": 18
