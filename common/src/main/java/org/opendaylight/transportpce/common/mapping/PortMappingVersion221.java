@@ -268,9 +268,7 @@ public class PortMappingVersion221 {
                             // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
                             //      Some code alignment must be considered.
 
-                            if (port.getPartnerPort() == null
-                                || port.getPartnerPort().getCircuitPackName() == null
-                                || port.getPartnerPort().getPortName() == null) {
+                            if (!checkPartnerPortNotNull(port)) {
                                 LOG.warn("Error in the configuration of port {} of {} for {}",
                                     port.getPortName(), circuitPackName, nodeId);
                                 continue;
@@ -397,9 +395,7 @@ public class PortMappingVersion221 {
                             // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
                             //      Some code alignment must be considered.
 
-                            if (port.getPartnerPort() == null
-                                || port.getPartnerPort().getCircuitPackName() == null
-                                || port.getPartnerPort().getPortName() == null) {
+                            if (!checkPartnerPortNotNull(port)) {
                                 LOG.warn("Error in the configuration of port {} of {} for {}",
                                     port.getPortName(), circuitPackName, nodeId);
                                 continue;
@@ -531,12 +527,26 @@ public class PortMappingVersion221 {
         return true;
     }
 
-    private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        if (port2.getPartnerPort() == null
-            || port2.getPartnerPort().getCircuitPackName() == null
-            || port2.getPartnerPort().getPortName() == null
+    private boolean checkPartnerPortNotNull(Ports port) {
+        if (port.getPartnerPort() == null
+            || port.getPartnerPort().getCircuitPackName() == null
+            || port.getPartnerPort().getPortName() == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkPartnerPortNoDir(String circuitPackName, Ports port1, Ports port2) {
+        if (!checkPartnerPortNotNull(port2)
             || !port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())
+            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
+        if (!checkPartnerPortNoDir(circuitPackName, port1, port2)
             || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
                     || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
                 &&
@@ -628,8 +638,8 @@ public class PortMappingVersion221 {
 
                         case Rx:
                         case Tx:
-                            if (port.getPartnerPort() == null) {
-                                LOG.info("{} : port {} on {} is unidirectional but has no partnerPort"
+                            if (!checkPartnerPortNotNull(port)) {
+                                LOG.info("{} : port {} on {} is unidirectional but has no valid partnerPort"
                                     + " - cannot assign  logicalConnectionPoint.",
                                     nodeId, port.getPortName(), circuitPackName);
                                 continue;
@@ -1135,8 +1145,8 @@ public class PortMappingVersion221 {
                             port2.getPortName(), cp2Name, port1.getPortName(), cp1Name);
                         continue;
                     }
-                    // TODO this second checkPartnerPort call has overlap checkings with the first one (Directions)
-                    if (!checkPartnerPort(cp2Name, port2, port1)) {
+                    // Directions checks are the same for cp1 and cp2, no need to check them twice.
+                    if (!checkPartnerPortNoDir(cp2Name, port2, port1)) {
                         LOG.error("port {} on {} is not a correct partner port of {} on  {}",
                             port1.getPortName(), cp1Name, port2.getPortName(), cp2Name);
                         continue;
