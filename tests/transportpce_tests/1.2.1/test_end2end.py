@@ -17,7 +17,7 @@ import unittest
 
 import requests
 from common import test_utils
-from common.test_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP
+from common.flexgrid_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP, check_freq_map
 
 
 class TransportPCEFulltesting(unittest.TestCase):
@@ -594,7 +594,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         freq_map = base64.b64decode(
             res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
-        self.assertTrue(test_utils.check_freq_map(freq_map), "Index 1 and 2 should be available")
+        self.assertTrue(check_freq_map(freq_map), "Index 1 and 2 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
@@ -606,7 +606,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         freq_map = base64.b64decode(
             res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
-        self.assertTrue(test_utils.check_freq_map(freq_map), "Index 1 and 2 should be available")
+        self.assertTrue(check_freq_map(freq_map), "Index 1 and 2 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
