@@ -95,4 +95,12 @@ public class GridUtilsTest {
                 new FrequencyTHz(BigDecimal.valueOf(191.35).setScale(3)),
                 GridUtils.getCentralFrequency(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375)));
     }
+
+    @Test
+    public void getCentralFrequencyWithPrecisionTest() {
+        assertEquals("Central frequency should be 191.3500",
+                new FrequencyTHz(BigDecimal.valueOf(191.35).setScale(4)),
+                GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.325),
+                        BigDecimal.valueOf(191.375), 4));
+    }
 }
