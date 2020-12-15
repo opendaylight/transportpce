@@ -17,7 +17,7 @@ import unittest
 import time
 import requests
 from common import test_utils
-from common.test_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP
+from common.flexgrid_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP
 
 
 class TransportPCEtesting(unittest.TestCase):
