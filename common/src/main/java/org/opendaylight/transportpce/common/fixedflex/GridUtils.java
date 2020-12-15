@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.fixedflex;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,7 +108,7 @@ public final class GridUtils {
         if (width == null) {
             LOG.warn("No width found for service rate {} and modulation format {}, set width to 40", rate,
                     modulationFormat);
-            width = "40";
+            width = String.valueOf(GridConstant.WIDTH_40);
         }
         return FrequencyGHz.getDefaultInstance(width);
     }
@@ -119,8 +120,32 @@ public final class GridUtils {
      * @return central frequency in THz
      */
     public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
-        return new FrequencyTHz(minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2)));
+        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency));
 
+    }
+
+    /**
+     * Get central frequency of spectrum with precision.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param precision int
+     * @return central frequency in THz with precision
+     */
+    public static FrequencyTHz getCentralFrequencyWithPrecision(BigDecimal minFrequency,
+            BigDecimal maxFrequency, int precision) {
+        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency)
+                .setScale(precision, RoundingMode.HALF_EVEN));
+
+    }
+
+    /**
+     * Compute central frequency from min and max frequency.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @return central frequency
+     */
+    private static BigDecimal computeCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
+        return minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2));
     }
 
 }
