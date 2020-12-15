@@ -843,20 +843,16 @@ public class PortMappingVersion221 {
         }
         if (portMapList != null) {
             Map<MappingKey, Mapping> mappingMap = new HashMap<>();
+            // No element in the list below should be null at this stage
             for (Mapping mapping: portMapList) {
-                if (mapping == null) {
-                    continue;
-                }
                 mappingMap.put(mapping.key(), mapping);
             }
             nodesBldr.setMapping(mappingMap);
         }
         if (cp2DegreeList != null) {
             Map<CpToDegreeKey, CpToDegree> cpToDegreeMap = new HashMap<>();
+            // No element in the list below should be null at this stage
             for (CpToDegree cp2Degree: cp2DegreeList) {
-                if (cp2Degree == null) {
-                    continue;
-                }
                 cpToDegreeMap.put(cp2Degree.key(), cp2Degree);
             }
             nodesBldr.setCpToDegree(cpToDegreeMap);
@@ -864,10 +860,8 @@ public class PortMappingVersion221 {
 
         if (splList != null) {
             Map<SwitchingPoolLcpKey,SwitchingPoolLcp> splMap = new HashMap<>();
+            // No element in the list below should be null at this stage
             for (SwitchingPoolLcp spl: splList) {
-                if (spl == null) {
-                    continue;
-                }
                 splMap.put(spl.key(), spl);
             }
             nodesBldr.setSwitchingPoolLcp(splMap);
