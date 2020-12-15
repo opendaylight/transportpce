@@ -77,14 +77,14 @@ public class GridUtilsTest {
 
     @Test
     public void getWidthFromRateAndModulationFormatTest() {
-        assertEquals("Width should be 80", FrequencyGHz.getDefaultInstance("80"),
+        assertEquals("Width should be 80", new FrequencyGHz(GridConstant.WIDTH_80),
                 GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_400,
                         ModulationFormat.DpQam16));
     }
 
     @Test
     public void getWidthFromRateAndModulationFormatNotFoundTest() {
-        assertEquals("As not found width should be 40", FrequencyGHz.getDefaultInstance("40"),
+        assertEquals("As not found width should be 40", new FrequencyGHz(GridConstant.WIDTH_40),
                 GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_100,
                         ModulationFormat.DpQam16));
     }
@@ -94,5 +94,21 @@ public class GridUtilsTest {
         assertEquals("Central frequency should be 191.350",
                 new FrequencyTHz(BigDecimal.valueOf(191.35).setScale(3)),
                 GridUtils.getCentralFrequency(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375)));
+    }
+
+    @Test
+    public void getCentralFrequencyWithPrecisionTest() {
+        assertEquals("Central frequency should be 191.3500",
+                new FrequencyTHz(BigDecimal.valueOf(191.35).setScale(4)),
+                GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.325),
+                        BigDecimal.valueOf(191.375), 4));
+    }
+
+    @Test
+    public void getCentralFrequencyWithPrecisionAndRoundTest() {
+        assertEquals("Central frequency should be 191.3499",
+                new FrequencyTHz(BigDecimal.valueOf(191.3499)),
+                GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.3244445),
+                        BigDecimal.valueOf(191.3754457788), 4));
     }
 }
