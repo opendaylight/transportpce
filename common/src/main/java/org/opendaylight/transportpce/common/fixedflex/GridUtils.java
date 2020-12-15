@@ -119,8 +119,31 @@ public final class GridUtils {
      * @return central frequency in THz
      */
     public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
-        return new FrequencyTHz(minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2)));
+        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency));
 
+    }
+
+    /**
+     * Get central frequency of spectrum with precision.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param precision int
+     * @return central frequency in THz with precision
+     */
+    public static FrequencyTHz getCentralFrequencyWithPrecision(BigDecimal minFrequency,
+            BigDecimal maxFrequency, int precision) {
+        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency).setScale(precision));
+
+    }
+
+    /**
+     * Compute central frequency from min and max frequency.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @return central frequency
+     */
+    private static BigDecimal computeCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
+        return minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2));
     }
 
 }
