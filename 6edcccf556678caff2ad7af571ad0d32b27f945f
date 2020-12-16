@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "90f4322a_2d289b21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T20:51:28Z",
+      "side": 1,
+      "message": "OK so it concerns only the file TopologyDataUtils.java and mainly the exceptions displayed in log messages, I guess.",
+      "parentUuid": "8ba2c52b_045cd8da",
+      "range": {
+        "startLine": 11,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60d8f5f2_dbe8fd49",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiTopologyDataUtils.java",
         "patchSetId": 4
