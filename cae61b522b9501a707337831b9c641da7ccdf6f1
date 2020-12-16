@@ -2,6 +2,109 @@
   "comments": [
     {
       "key": {
+        "uuid": "1c0c1248_a00ca032",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:44:59Z",
+      "side": 1,
+      "message": "redundancy",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71525c7_2d7fc13b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:44:59Z",
+      "side": 1,
+      "message": "indent -4 would avoid LF",
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28c1402b_a59e6974",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:44:59Z",
+      "side": 1,
+      "message": "LOG.debug(\n                \"Update frequency map from index {}, to index {}, min frequency {}, max frequency {} available {} {}\",\n                beginIndex, endIndex, minFrequency, maxFrequency, !used, bitSetFreq);",
+      "range": {
+        "startLine": 717,
+        "startChar": 0,
+        "endLine": 718,
+        "endChar": 110
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34f23e46_6237fcca",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:44:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 721,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 110
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99880f24_09337407",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:44:59Z",
+      "side": 1,
+      "message": "many NS split here",
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd622f48_f7bdc641",
         "filename": "networkmodel/src/test/resources/openroadm-topology.xml",
         "patchSetId": 4
