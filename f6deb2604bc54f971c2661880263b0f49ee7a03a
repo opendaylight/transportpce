@@ -46,6 +46,30 @@
       "revId": "f6deb2604bc54f971c2661880263b0f49ee7a03a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceea1c86_073588d8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T20:42:58Z",
+      "side": 1,
+      "message": "yes there is a lot to refactor in the others files modified here too.\nI don\u0027t know if there is a JIRA item for that. We need let this comment open until we check that.",
+      "parentUuid": "904fe06c_e5673159",
+      "range": {
+        "startLine": 114,
+        "startChar": 15,
+        "endLine": 114,
+        "endChar": 22
+      },
+      "revId": "f6deb2604bc54f971c2661880263b0f49ee7a03a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
