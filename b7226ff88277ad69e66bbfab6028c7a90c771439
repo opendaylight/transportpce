@@ -285,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "c9e3fa9f_f69a2f15",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/test/PathDescriptionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T21:56:05Z",
+      "side": 1,
+      "message": "It\u0027s a temporary copy of src/test/java/org/opendaylight/transportpce/renderer/utils/ServiceDeleteDataUtils in order to still have unit test on networkmodelwavelengthservice working. \nThis class is deleted in https://git.opendaylight.org/gerrit/c/transportpce/+/94238 following refactoring of networkmodelwavelengthservice and replacement of \"java code creation\" of path description object with json file reading.",
+      "parentUuid": "816db043_e2fe2d55",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3dc8976c_eb0a89ac",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 4
