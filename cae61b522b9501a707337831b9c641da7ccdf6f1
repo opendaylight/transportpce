@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd622f48_f7bdc641",
+        "filename": "networkmodel/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T14:44:46Z",
+      "side": 1,
+      "message": "trailing space",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f112d3f_3cdd4b73",
+        "filename": "networkmodel/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T14:44:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 138,
+        "startChar": 22,
+        "endLine": 138,
+        "endChar": 23
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93c53859_97170293",
+        "filename": "networkmodel/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T14:44:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 407,
+        "startChar": 22,
+        "endLine": 407,
+        "endChar": 23
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7045b40_07267e84",
+        "filename": "networkmodel/src/test/resources/path_description.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T14:44:46Z",
+      "side": 1,
+      "message": "would be preferable to replace tab by spaces...",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f05c3f32_044327b2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceResultTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T14:44:46Z",
+      "side": 1,
+      "message": "Not sure to understand the interest of such a test...",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 65
+      },
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
