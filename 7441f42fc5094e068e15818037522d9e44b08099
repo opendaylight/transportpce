@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb6befdf_2cbfe807",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridConstant.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:19:31Z",
+      "side": 1,
+      "message": "I like the french touch here.",
+      "range": {
+        "startLine": 23,
+        "startChar": 28,
+        "endLine": 23,
+        "endChar": 38
+      },
+      "revId": "7441f42fc5094e068e15818037522d9e44b08099",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
