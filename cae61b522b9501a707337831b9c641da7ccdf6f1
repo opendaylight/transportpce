@@ -213,6 +213,24 @@
     },
     {
       "key": {
+        "uuid": "f6d37c70_1eaa4a2b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T20:58:36Z",
+      "side": 1,
+      "message": "OK thx, now it\u0027s pretty clear that the indentation must be fixed too.",
+      "parentUuid": "31ebb470_3e34b8b8",
+      "revId": "cae61b522b9501a707337831b9c641da7ccdf6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd622f48_f7bdc641",
         "filename": "networkmodel/src/test/resources/openroadm-topology.xml",
         "patchSetId": 4
