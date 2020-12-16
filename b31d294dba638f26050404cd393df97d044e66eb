@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2918b524_d282abe2",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2020-11-26.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T09:40:23Z",
+      "side": 1,
+      "message": "Why renaming this file by changing its revision in its name but without any change inside the yang file in this change?",
+      "revId": "b31d294dba638f26050404cd393df97d044e66eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
