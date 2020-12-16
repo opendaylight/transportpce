@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "159f19a3_87eb3508",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:25:09Z",
+      "side": 1,
+      "message": "assignment",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "a95e232bc80f0cbfb9a1175475dd32ab373e3aaa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c365fe2_6d68f2a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:25:09Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 11,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "a95e232bc80f0cbfb9a1175475dd32ab373e3aaa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e24a50_f1116c52",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:25:09Z",
+      "side": 1,
+      "message": "blank needed",
+      "range": {
+        "startLine": 481,
+        "startChar": 10,
+        "endLine": 481,
+        "endChar": 12
+      },
+      "revId": "a95e232bc80f0cbfb9a1175475dd32ab373e3aaa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
