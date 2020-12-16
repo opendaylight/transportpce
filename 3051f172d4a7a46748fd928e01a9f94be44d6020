@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9871c9b0_84f33e03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T10:17:16Z",
+      "side": 1,
+      "message": "Service handler already listens on renderer notification. Service handler send a notification which is listened by network model and network model will update topology with freqmap. I can update this line with \n\"Replace renderer call to NetworkModelWavelengthService by a\nnotification sent by service handler for network model.\"",
+      "parentUuid": "c756838b_3be0df8b",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b991038_4b03f9f7",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65178ac6_797ee748",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T10:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b991038_4b03f9f7",
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
