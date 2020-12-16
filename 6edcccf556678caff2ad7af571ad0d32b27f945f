@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cd7ceee_0c9ce52b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T14:37:30Z",
+      "side": 1,
+      "message": "which ones ?\nwere they present before ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60d8f5f2_dbe8fd49",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiTopologyDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T14:37:30Z",
+      "side": 1,
+      "message": "2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
