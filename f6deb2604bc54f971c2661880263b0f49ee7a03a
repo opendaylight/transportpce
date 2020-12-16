@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8240812_d9e32d80",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:34:50Z",
+      "side": 1,
+      "message": "in common with the else-block -\u003e it can be outsourced.\nswitch/case might also be used here.",
+      "range": {
+        "startLine": 114,
+        "startChar": 15,
+        "endLine": 114,
+        "endChar": 22
+      },
+      "revId": "f6deb2604bc54f971c2661880263b0f49ee7a03a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
