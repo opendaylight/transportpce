@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea83e3e0_6fc84ed2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T14:41:32Z",
+      "side": 1,
+      "message": "blank missing",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 2
+      },
+      "revId": "b1875b40a5224732a8dc66e6acec7c30a07b2a83",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c2bb73a_35335e8a",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T14:41:32Z",
+      "side": 1,
+      "message": "many NS splits here",
+      "revId": "b1875b40a5224732a8dc66e6acec7c30a07b2a83",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
