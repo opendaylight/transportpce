@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8ba2c52b_045cd8da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:34:28Z",
+      "side": 1,
+      "message": "Before this class was in src/test/java and I suppose that spotbug analysis was not run on test classes. So there was no spotbug issues reported. But now this class is in src/main/java and spotbugs analysis was run and discovered some bugs I fixed otherwise the build failed.",
+      "parentUuid": "2cd7ceee_0c9ce52b",
+      "range": {
+        "startLine": 11,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60d8f5f2_dbe8fd49",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiTopologyDataUtils.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf7e4998_9a3c70a0",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiTopologyDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:34:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60d8f5f2_dbe8fd49",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "6edcccf556678caff2ad7af571ad0d32b27f945f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
