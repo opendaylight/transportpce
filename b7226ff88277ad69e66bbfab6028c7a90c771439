@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65e63f60_67516b51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "100c09b6_e31fa153",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "145c6bef_05b76fa3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c963bc_1a5f0911",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "145c6bef_05b76fa3",
+      "range": {
+        "startLine": 16,
+        "startChar": 22,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0962325f_dfaeac42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5854bbe3_22b3fe5d",
+      "range": {
+        "startLine": 17,
+        "startChar": 16,
+        "endLine": 17,
+        "endChar": 17
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84c79c1a_4755c370",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthService.java",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2020-12-16T15:04:22Z",
       "side": 1,
       "message": "2020 Orange?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 25
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ba57cc_3ac35752",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "no because it was originally the classes from renderer module",
+      "parentUuid": "84c79c1a_4755c370",
       "range": {
         "startLine": 2,
         "startChar": 15,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "543b3cfc_c3b014b8",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/test/PathDescriptionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "no because it\u0027s an extract of another class which was created by Orange in 2018. the code is not new.",
+      "parentUuid": "041c896c_42e9a232",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3dc8976c_eb0a89ac",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 4
@@ -137,6 +257,30 @@
       "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fdf8d69_72cbaaa6",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-16T19:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc8976c_eb0a89ac",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 9
+      },
+      "revId": "b7226ff88277ad69e66bbfab6028c7a90c771439",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
