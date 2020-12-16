@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c027f523_4d5ca8b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-16T15:48:00Z",
+      "side": 1,
+      "message": "instantiate",
+      "range": {
+        "startLine": 14,
+        "startChar": 16,
+        "endLine": 14,
+        "endChar": 27
+      },
+      "revId": "9a4dad4ce02726e5c3d239275d36e376e782abec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53e96c6e_c24f9a05",
         "filename": "networkmodel/src/test/resources/path_description.json",
         "patchSetId": 4
