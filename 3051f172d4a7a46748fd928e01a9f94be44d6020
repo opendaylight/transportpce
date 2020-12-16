@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c756838b_3be0df8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "to ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b991038_4b03f9f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "May be you could also mention the moving of the MountPointStub to test-common to homogenize its use?",
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d225ab5_f3e6752e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "wavelength",
+      "range": {
+        "startLine": 98,
+        "startChar": 29,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3965d541_434a34d7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "wavelength",
+      "range": {
+        "startLine": 106,
+        "startChar": 29,
+        "endLine": 106,
+        "endChar": 40
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1afa9b19_ce27cdc1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 120,
+        "startChar": 27,
+        "endLine": 120,
+        "endChar": 38
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6a3b8c_5ebfaa3a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-16T08:52:46Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 128,
+        "startChar": 27,
+        "endLine": 128,
+        "endChar": 38
+      },
+      "revId": "3051f172d4a7a46748fd928e01a9f94be44d6020",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
