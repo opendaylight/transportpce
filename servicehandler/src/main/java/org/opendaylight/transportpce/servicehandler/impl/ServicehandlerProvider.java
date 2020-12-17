@@ -75,7 +75,7 @@ public class ServicehandlerProvider {
         networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImpl);
         final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                networkModelListenerImpl);
+                networkModelListenerImpl, "ServiceHandler");
         rpcRegistration =
             rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
