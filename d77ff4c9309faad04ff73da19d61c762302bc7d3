@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a30e991_3ce86138",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-17T09:42:05Z",
+      "side": 1,
+      "message": "better please add the JIRA ticket too",
+      "parentUuid": "3e1fa40a_387b9568",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80405d0e_5d94449e",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 4
@@ -189,6 +207,24 @@
       "side": 1,
       "message": "Any suggestions?? Maybe grouping some ifs with \u0026\u0026??",
       "parentUuid": "77d0ec72_5e2e9f2a",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb48f284_db682fd4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-17T09:42:05Z",
+      "side": 1,
+      "message": "not immediate and th appreciation depends on people\nPersonnaly I\u0027ll use guard clause / early return style in such cases.",
+      "parentUuid": "f0da9ac6_ea4f10f2",
       "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
