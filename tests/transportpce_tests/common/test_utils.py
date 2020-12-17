@@ -45,6 +45,7 @@ URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
 URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network/"
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
 URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
+URL_GET_NBINOTIFICATIONS_SERV = "{}/operations/nbi-notifications:get-notifications-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
 URL_SERV_DELETE = "{}/operations/org-openroadm-service:service-delete"
 URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
@@ -334,6 +335,10 @@ def del_node_request(node: str):
 def portmapping_request(suffix: str):
     url = URL_PORTMAPPING + suffix
     return get_request(url)
+
+
+def get_notifications_service_request(attr):
+    return post_request(URL_GET_NBINOTIFICATIONS_SERV, attr)
 
 
 def get_service_list_request(suffix: str):
