@@ -80,6 +80,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -106,13 +110,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
     private NetworkModelListenerImpl networkModelListenerImpl;
+    private NotificationPublishService notificationPublishService;
+    private final String topic;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations) {
+            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations,
+            String topic) {
         this.db = databroker;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
@@ -120,6 +127,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
+        this.notificationPublishService =  notificationPublishService;
+        this.topic = topic;
     }
 
 
@@ -169,6 +178,17 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
+        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("")
+                .setMessage("ServiceCreate request received ...")
+                .setOperationalState(State.OutOfService)
+                .setTopic(topic)
+                .build();
+        sendNbiNotification(nbiNotification);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
@@ -179,6 +199,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);
+            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setMessage("ServiceCreate request failed ...")
+                    .setOperationalState(State.Degraded)
+                    .build();
+            sendNbiNotification(nbiNotification);
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
@@ -219,6 +245,17 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
         service = serviceOpt.get();
+        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
+                .setMessage("ServiceDelete request received ...")
+                .setOperationalState(State.OutOfService)
+                .setResponseFailed("")
+                .setTopic(topic)
+                .build();
+        sendNbiNotification(nbiNotification);
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -235,6 +272,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
+            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+                    .setMessage("ServiceCreate request failed ...")
+                    .setOperationalState(State.OutOfService)
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .build();
+            sendNbiNotification(nbiNotification);
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);
@@ -625,4 +668,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         return null;
     }
 
+    /**
+     * Send notification to NBI notification in order to publish message.
+     * @param service PublishNotificationService
+     */
+    private void sendNbiNotification(PublishNotificationService service) {
+        try {
+            notificationPublishService.putNotification(service);
+        } catch (InterruptedException e) {
+            LOG.warn("Cannot send notification to nbi", e);
+            Thread.currentThread().interrupt();
+        }
+    }
 }
