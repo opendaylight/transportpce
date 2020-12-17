@@ -23,15 +23,21 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
+    private static final String TOPIC = "PceListener";
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
@@ -41,6 +47,7 @@ public class PceListenerImpl implements TransportpcePceListener {
     private Boolean serviceReconfigure;
     private Boolean tempService;
     private Boolean serviceFeasiblity;
+    private NotificationPublishService notificationPublishService;
 
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
             PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
@@ -52,6 +59,7 @@ public class PceListenerImpl implements TransportpcePceListener {
         setInput(null);
         setTempService(false);
         setServiceFeasiblity(false);
+        this.notificationPublishService = notificationPublishService;
     }
 
     @Override
@@ -82,17 +90,35 @@ public class PceListenerImpl implements TransportpcePceListener {
     private void onPathComputationResult(ServicePathRpcResult notification) {
         LOG.info("PCE '{}' Notification received : {}",servicePathRpcResult.getNotificationType().getName(),
                 notification);
+        PublishNotificationService nbiNotification = getPublishNotificationService(notification);
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.error("PCE path computation failed !");
+            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed("PCE path computation failed !")
+                    .setOperationalState(State.Degraded)
+                    .build();
+            sendNbiNotification(nbiNotification);
             return;
         } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Pending) {
             LOG.warn("PCE path computation returned a Penging RpcStatusEx code!");
             return;
         } else if (servicePathRpcResult.getStatus() != RpcStatusEx.Successful) {
             LOG.error("PCE path computation returned an unknown RpcStatusEx code!");
+            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed("PCE path computation returned an unknown RpcStatusEx code!")
+                    .setOperationalState(State.Degraded)
+                    .build();
+            sendNbiNotification(nbiNotification);
             return;
         }
-
+        nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+                .setMessage("PCE calculation done OK !")
+                .setResponseFailed("")
+                .setOperationalState(State.OutOfService)
+                .build();
+        sendNbiNotification(nbiNotification);
         LOG.info("PCE calculation done OK !");
         if (servicePathRpcResult.getPathDescription() == null) {
             LOG.error("'PathDescription' parameter is null ");
@@ -124,10 +150,9 @@ public class PceListenerImpl implements TransportpcePceListener {
             }
         }
         ResponseParameters responseParameters = new ResponseParametersBuilder()
-                .setPathDescription(new org.opendaylight.yang.gen.v1.http.org
-                        .transportpce.b.c._interface.service.types.rev200128
-                        .response.parameters.sp.response.parameters
-                        .PathDescriptionBuilder(pathDescription).build())
+                .setPathDescription(new org.opendaylight.yang.gen.v1.http
+                        .org.transportpce.b.c._interface.service.types.rev200128
+                        .response.parameters.sp.response.parameters.PathDescriptionBuilder(pathDescription).build())
                 .build();
         PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()
                 .setResponseParameters(responseParameters).build();
@@ -140,6 +165,20 @@ public class PceListenerImpl implements TransportpcePceListener {
                 .createServiceImplementationRequest(input, pathDescription);
         LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
         this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
+    }
+
+    private PublishNotificationService getPublishNotificationService(ServicePathRpcResult notification) {
+        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder();
+        if (input != null) {
+            nbiNotificationBuilder.setServiceName(input.getServiceName())
+                    .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                    .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                    .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType());
+        } else {
+            nbiNotificationBuilder.setServiceName(notification.getServiceName());
+        }
+        nbiNotificationBuilder.setTopic(TOPIC);
+        return nbiNotificationBuilder.build();
     }
 
     /**
@@ -228,4 +267,16 @@ public class PceListenerImpl implements TransportpcePceListener {
         this.serviceFeasiblity = serviceFeasiblity;
     }
 
+    /**
+     * Send notification to NBI notification in order to publish message.
+     * @param service PublishNotificationService
+     */
+    private void sendNbiNotification(PublishNotificationService service) {
+        try {
+            notificationPublishService.putNotification(service);
+        } catch (InterruptedException e) {
+            LOG.warn("Cannot send notification to nbi", e);
+            Thread.currentThread().interrupt();
+        }
+    }
 }
