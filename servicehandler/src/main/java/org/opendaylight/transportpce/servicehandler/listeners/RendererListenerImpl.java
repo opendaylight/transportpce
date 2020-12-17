@@ -21,6 +21,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.serviceha
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RendererListenerImpl implements TransportpceRendererListener {
 
+    private static final String TOPIC = "RendererListener";
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
     private RendererRpcResultSp serviceRpcResultSp;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -91,6 +97,21 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 LOG.error("Renderer service delete returned an unknown RpcStatusEx code!");
                 return;
         }
+        Services service = serviceDataStoreOperations.getService(notification.getServiceName()).get();
+        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId())
+                .setConnectionType(service.getConnectionType())
+                .setResponseFailed("")
+                .setMessage("Service deleted !")
+                .setOperationalState(org.opendaylight.yang.gen.v1.http
+                        .org.openroadm.common.state.types.rev181130.State.Degraded)
+                .setTopic(TOPIC)
+                .build();
+        sendNbiNotification(nbiNotification);
+        LOG.info("Service '{}' deleted !", notification.getServiceName());
         if (this.input == null) {
             LOG.error("ServiceInput parameter is null !");
             return;
@@ -128,6 +149,18 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onSuccededServiceImplementation(RendererRpcResultSp notification) {
         LOG.info("Service implemented !");
+        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("")
+                .setMessage("Service implemented !")
+                .setOperationalState(org.opendaylight.yang.gen.v1.http
+                        .org.openroadm.common.state.types.rev181130.State.InService)
+                .setTopic(TOPIC)
+                .build();
+        sendNbiNotification(nbiNotification);
         if (serviceDataStoreOperations == null) {
             LOG.debug("serviceDataStoreOperations is null");
             return;
@@ -141,9 +174,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             }
         } else {
             operationResult = this.serviceDataStoreOperations.modifyService(
-                    serviceRpcResultSp.getServiceName(),
-                    State.InService,
-                    AdminStates.InService);
+                    serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             if (!operationResult.isSuccess()) {
                 LOG.warn("Service status not updated in datastore !");
             } else {
@@ -235,5 +266,18 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     public void setTempService(Boolean tempService) {
         this.tempService = tempService;
+    }
+
+    /**
+     * Send notification to NBI notification in order to publish message.
+     * @param service PublishNotificationService
+     */
+    private void sendNbiNotification(PublishNotificationService service) {
+        try {
+            notificationPublishService.putNotification(service);
+        } catch (InterruptedException e) {
+            LOG.warn("Cannot send notification to nbi", e);
+            Thread.currentThread().interrupt();
+        }
     }
 }
