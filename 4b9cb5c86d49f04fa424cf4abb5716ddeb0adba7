@@ -197,6 +197,24 @@
     },
     {
       "key": {
+        "uuid": "55cdb04e_c87bf435",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-17T12:25:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19ceb1e7_4b191719",
+      "revId": "4b9cb5c86d49f04fa424cf4abb5716ddeb0adba7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0101fdf_c094d71d",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
         "patchSetId": 3
