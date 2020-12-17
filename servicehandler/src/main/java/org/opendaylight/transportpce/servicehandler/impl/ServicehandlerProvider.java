@@ -47,7 +47,6 @@ public class ServicehandlerProvider {
     private NetworkModelListenerImpl networkModelListenerImpl;
     private ServicehandlerImpl servicehandler;
 
-
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, ServiceDataStoreOperations serviceDataStoreOperations,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
