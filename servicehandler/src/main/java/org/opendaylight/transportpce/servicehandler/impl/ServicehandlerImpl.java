@@ -16,6 +16,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
@@ -36,7 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
@@ -81,6 +82,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -107,13 +111,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
     private NetworkModelListenerImpl networkModelListenerImpl;
+    private Publisher publisher;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl) {
+            NetworkModelListenerImpl networkModelListenerImpl, Publisher publisher) {
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
         this.serviceDataStoreOperations.initialize();
@@ -122,6 +127,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
+        this.publisher = publisher;
     }
 
 
@@ -171,6 +177,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("ServiceCreate request received ...")
+                .setOperationalState(State.OutOfService)
+                .build());
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
@@ -181,6 +197,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setOperationalState(State.Degraded)
+                    .build());
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
@@ -221,6 +242,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
         service = serviceOpt.get();
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("ServiceDelete request received ...")
+                .setOperationalState(State.OutOfService)
+                .build());
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -237,6 +268,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setOperationalState(State.Degraded)
+                    .build());
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);
@@ -343,9 +379,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         }
 
         Services service = servicesObject.get();
-        State state = service.getOperationalState();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State state =
+                service.getOperationalState();
 
-        if (state == State.InService) {
+        if (state == org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State.InService) {
             LOG.error(SERVICE_RESTORATION_MSG, LogMessages.serviceInService(serviceName));
             return ModelMappingUtils.createRestoreServiceReply(
                     LogMessages.serviceInService(serviceName), RpcStatus.Failed);
