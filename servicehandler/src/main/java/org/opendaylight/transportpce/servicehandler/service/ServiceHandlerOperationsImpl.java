@@ -36,7 +36,8 @@ public class ServiceHandlerOperationsImpl implements ServiceHandlerOperations {
         PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
         NetworkModelListenerImpl networkModelListenerImpl) {
         this.serviceHandler = new ServicehandlerImpl(databroker, pathComputationService, rendererServiceOperations,
-            notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl);
+            notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+            "ServiceHandlerOperations");
     }
 
     @Override
