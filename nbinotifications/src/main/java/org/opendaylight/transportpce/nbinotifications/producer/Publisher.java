@@ -48,6 +48,15 @@ public class Publisher {
         this.id = id;
     }
 
+    // Exist for tests only
+    public Publisher(String id, KafkaProducer<String, String> producer, AdminClient client,
+            JsonStringConverter<NotificationService> serializer) {
+        this.producer = producer;
+        this.client = client;
+        this.id = id;
+        this.serializer = serializer;
+    }
+
     public void createTopic(String topicName, int numberPartitions) {
         LOG.info("CreateTopic request '{}' ", topicName);
         CreateTopicsResult createTopicsResult =
