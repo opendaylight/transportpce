@@ -30,6 +30,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-nbinotifications</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>

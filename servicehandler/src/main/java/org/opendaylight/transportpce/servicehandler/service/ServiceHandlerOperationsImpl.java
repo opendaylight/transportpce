@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
@@ -36,7 +37,8 @@ public class ServiceHandlerOperationsImpl implements ServiceHandlerOperations {
         PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
         NetworkModelWavelengthService networkModelWavelengthService) {
         this.serviceHandler = new ServicehandlerImpl(databroker, pathComputationService, rendererServiceOperations,
-            notificationPublishService, pceListenerImpl, rendererListenerImpl,networkModelWavelengthService);
+            notificationPublishService, pceListenerImpl, rendererListenerImpl,networkModelWavelengthService,
+                new Publisher("ServiceHandlerOperations"));
     }
 
     @Override

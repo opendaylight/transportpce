@@ -12,6 +12,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
@@ -45,6 +46,7 @@ public class ServicehandlerProvider {
     private ObjectRegistration<OrgOpenroadmServiceService> rpcRegistration;
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
+    private Publisher publisher;
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, PathComputationService pathComputationService,
@@ -58,6 +60,7 @@ public class ServicehandlerProvider {
         this.rendererServiceOperations = rendererServiceOperations;
         this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
+        this.publisher = new Publisher("ServiceHandler");
     }
 
     /**
@@ -73,7 +76,7 @@ public class ServicehandlerProvider {
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
         final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                networkModelWavelengthService);
+                networkModelWavelengthService, publisher);
         rpcRegistration =
             rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
@@ -86,6 +89,7 @@ public class ServicehandlerProvider {
         pcelistenerRegistration.close();
         rendererlistenerRegistration.close();
         rpcRegistration.close();
+        publisher.close();
     }
 
 }
