@@ -35,6 +35,10 @@ public class Subscriber {
         consumer = new KafkaConsumer<>(propsConsumer);
     }
 
+    public Subscriber(KafkaConsumer<String, String> consumer) {
+        this.consumer = consumer;
+    }
+
     public List<NotificationService> subscribeService(String topicName) {
         LOG.info("Subscribe request to topic '{}' ", topicName);
         consumer.subscribe(Collections.singleton(topicName));
