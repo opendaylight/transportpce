@@ -67,6 +67,11 @@
             <artifactId>transportpce-tapi</artifactId>
             <version>${transportpce.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-nbinotifications</artifactId>
+            <version>${transportpce.version}</version>
+        </dependency>
         <!-- TPCE bundles - END -->
 
         <dependency>

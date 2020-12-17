@@ -31,6 +31,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
@@ -97,6 +98,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final TapiProvider tapiProvider;
     // service-handler beans
     private final ServicehandlerProvider servicehandlerProvider;
+    // nbi-notifications beans
+    private final NbiNotificationsProvider nbiNotificationsProvider;
 
     public TransportPCEImpl(LightyServices lightyServices) {
         LOG.info("Initializing transaction providers ...");
@@ -160,6 +163,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService());
         tapiProvider = initTapi(lightyServices, rendererServiceOperations, networkModelWavelengthService,
                 pathComputationService);
+
+        LOG.info("Creating nbi-notifications beans ...");
+        nbiNotificationsProvider = new NbiNotificationsProvider(lightyServices.getBindingDataBroker(),
+                lightyServices.getRpcProviderService());
     }
 
     @Override
@@ -176,12 +183,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.init();
         LOG.info("Initializing tapi provider ...");
         tapiProvider.init();
+        LOG.info("Initializing nbi-notifications provider ...");
+        nbiNotificationsProvider.init();
         LOG.info("Init done.");
         return true;
     }
 
     @Override
     protected boolean stopProcedure() {
+        nbiNotificationsProvider.close();
+        LOG.info("Shutting down nbi-notifications provider ...");
         tapiProvider.close();
         LOG.info("Shutting down service-handler provider ...");
         servicehandlerProvider.close();
