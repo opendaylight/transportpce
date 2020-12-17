@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.servicehandler.listeners;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -23,9 +24,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +46,7 @@ public class PceListenerImpl implements TransportpcePceListener {
     private Boolean serviceReconfigure;
     private Boolean tempService;
     private Boolean serviceFeasiblity;
+    private Publisher publisher;
 
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
             PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
@@ -48,6 +54,7 @@ public class PceListenerImpl implements TransportpcePceListener {
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
+        this.publisher = new Publisher("PceListener");
         setServiceReconfigure(false);
         setInput(null);
         setTempService(false);
@@ -82,17 +89,36 @@ public class PceListenerImpl implements TransportpcePceListener {
     private void onPathComputationResult(ServicePathRpcResult notification) {
         LOG.info("PCE '{}' Notification received : {}",servicePathRpcResult.getNotificationType().getName(),
                 notification);
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("");
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.error("PCE path computation failed !");
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed("PCE path computation failed !")
+                    .setOperationalState(State.Degraded)
+                    .build());
             return;
         } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Pending) {
             LOG.warn("PCE path computation returned a Penging RpcStatusEx code!");
             return;
         } else if (servicePathRpcResult.getStatus() != RpcStatusEx.Successful) {
             LOG.error("PCE path computation returned an unknown RpcStatusEx code!");
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed("PCE path computation returned an unknown RpcStatusEx code!")
+                    .setOperationalState(State.Degraded)
+                    .build());
             return;
         }
-
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("PCE calculation done OK !")
+                .setOperationalState(State.OutOfService)
+                .build());
         LOG.info("PCE calculation done OK !");
         if (servicePathRpcResult.getPathDescription() == null) {
             LOG.error("'PathDescription' parameter is null ");

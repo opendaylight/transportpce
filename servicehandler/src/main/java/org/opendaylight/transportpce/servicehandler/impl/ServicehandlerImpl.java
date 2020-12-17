@@ -16,6 +16,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
@@ -81,6 +82,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -106,13 +110,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererServiceWrapper rendererServiceWrapper;
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
+    private Publisher publisher;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelWavelengthService networkModelWavelengthService) {
+            NetworkModelWavelengthService networkModelWavelengthService, Publisher publisher) {
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
         this.serviceDataStoreOperations.initialize();
@@ -120,6 +125,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
+        this.publisher = publisher;
     }
 
 
@@ -169,6 +175,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("ServiceCreate request received ...")
+                .setOperationalState(State.OutOfService)
+                .build());
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
@@ -178,6 +194,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setOperationalState(State.Degraded)
+                    .build());
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
@@ -218,6 +239,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
         service = serviceOpt.get();
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("ServiceDelete request received ...")
+                .setOperationalState(State.OutOfService)
+                .build());
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -233,6 +264,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
+            publisher.sendEvent(notificationServiceBuilder
+                    .setMessage("ServiceCreate request failed ...")
+                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setOperationalState(State.Degraded)
+                    .build());
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);

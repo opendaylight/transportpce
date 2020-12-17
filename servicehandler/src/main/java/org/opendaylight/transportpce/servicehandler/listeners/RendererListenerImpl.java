@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.servicehandler.listeners;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
@@ -19,7 +20,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +42,14 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private ServiceInput input;
     private PCEServiceWrapper pceServiceWrapper;
     private Boolean tempService;
+    private Publisher publisher;
 
     public RendererListenerImpl(PathComputationService pathComputationService,
             NotificationPublishService notificationPublishService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         setServiceInput(null);
         setTempService(false);
+        this.publisher = new Publisher("RendererListener");
     }
 
     @Override
@@ -85,6 +92,18 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.error("Renderer service delete returned an unknown RpcStatusEx code!");
             return;
         }
+        Services service = serviceDataStoreOperations.getService(serviceName).get();
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId())
+                .setConnectionType(service.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("Service deleted !")
+                .setOperationalState(State.Degraded)
+                .build());
         LOG.info("Service '{}' deleted !", serviceName);
         if (this.input == null) {
             LOG.error("ServiceInput parameter is null !");
@@ -118,6 +137,16 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onSuccededServiceImplementation() {
         LOG.info("Service implemented !");
+        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setResponseFailed("");
+        publisher.sendEvent(notificationServiceBuilder
+                .setMessage("Service implemented !")
+                .setOperationalState(State.InService)
+                .build());
         if (serviceDataStoreOperations == null) {
             LOG.debug("serviceDataStoreOperations is null");
             return;
