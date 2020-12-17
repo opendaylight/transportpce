@@ -228,6 +228,24 @@
       "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65b96437_f1411054",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2020-12-17T17:04:31Z",
+      "side": 1,
+      "message": "Will fix it.",
+      "parentUuid": "fb48f284_db682fd4",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
