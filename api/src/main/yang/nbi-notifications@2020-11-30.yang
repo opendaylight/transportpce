@@ -1,0 +1,120 @@
+module nbi-notifications {
+  yang-version 1;
+  namespace "nbi-notifications";
+  prefix nbinotifications;
+
+  import org-openroadm-service {
+    prefix oor-service;
+    revision-date 2019-05-31;
+  }
+  import org-openroadm-common-service-types {
+    prefix org-openroadm-common-service-types;
+    revision-date 2019-05-31;
+  }
+  import org-openroadm-common-state-types {
+    prefix org-openroadm-common-state-types;
+    revision-date 2018-11-30;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions for using REST API in NBI notifications module. Copyright
+     (c) 2020 ORANGE and others. All rights reserved.";
+
+  revision 2020-11-30 {
+    description
+      "Initial revision of NBI notifications";
+  }
+
+  grouping notification-service {
+    leaf message {
+      type string;
+      mandatory true;
+      description
+        "Message for the specified service";
+    }
+    leaf service-name {
+      type string;
+      mandatory true;
+      description
+        "Identifier for the service to be created in the ROADM network, e.g., CLFI, CLCI, etc.
+        This is reported against the service, but may not get reflected in the service in the network.";
+    }
+    leaf common-id {
+      type string;
+      description
+        "To be used by the ROADM controller to identify the routing constraints
+        received from planning application (PED).";
+    }
+    leaf connection-type {
+      type org-openroadm-common-service-types:connection-type;
+      mandatory true;
+    }
+    container service-a-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+    }
+    container service-z-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+    }
+    leaf response-failed {
+      type string;
+      description
+        "Response of the error if the service request encountered an anomaly";
+    }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+      config false;
+      description
+        "Operational State: Actual state of service";
+    }
+  }
+
+  container notification-service {
+    description
+      "Model used to send a notification from a service request";
+    uses notification-service;
+  }
+
+  rpc get-notifications-service {
+    description "Get the notifications service send by ServiceHandler by filtering through connection type";
+    input {
+      leaf connection-type {
+        type org-openroadm-common-service-types:connection-type;
+        mandatory true;
+        description
+          "Type connection of the service ";
+      }
+      leaf id-consumer {
+        type string;
+        mandatory true;
+        description
+          "Unique ID for the consumer";
+      }
+      leaf group-id {
+        type string;
+        mandatory true;
+        description
+          "ID Group for the consumer";
+      }
+    }
+    output {
+      list notification-service {
+        uses notification-service;
+      }
+    }
+  }
+
+  notification publish-notification-service {
+    description "Publish the notifications service for topic";
+    leaf topic {
+      type string;
+      mandatory true;
+      description
+        "Topic where to send the notification service";
+     }
+     uses notification-service;
+  }
+}
