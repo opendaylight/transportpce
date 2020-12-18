@@ -150,6 +150,7 @@ def get_request(url):
 
 def post_request(url, data):
     if data:
+        print(json.dumps(data))
         return requests.request(
             "POST", url.format(RESTCONF_BASE_URL),
             data=json.dumps(data),
@@ -359,13 +360,21 @@ def service_delete_request(servicename: str,
     return post_request(URL_SERV_DELETE, attr)
 
 
-def service_path_request(operation: str, servicename: str, wavenumber: str, nodes):
+def service_path_request(operation: str, servicename: str, wavenumber: str, nodes, centerfreq: str,
+                         slotwidth: int, minfreq: float, maxfreq: float, lowerslotnumber: int,
+                         higherslotnumber: int):
     attr = {"renderer:input": {
         "renderer:service-name": servicename,
         "renderer:wave-number": wavenumber,
-        "renderer:modulation-format": "qpsk",
+        "renderer:modulation-format": "dp-qpsk",
         "renderer:operation": operation,
-        "renderer:nodes": nodes}}
+        "renderer:nodes": nodes,
+        "renderer:center-freq": centerfreq,
+        "renderer:width": slotwidth,
+        "renderer:min-freq": minfreq,
+        "renderer:max-freq": maxfreq,
+        "renderer:lower-spectral-slot-number": lowerslotnumber,
+        "renderer:higher-spectral-slot-number": higherslotnumber}}
     return post_request(URL_SERVICE_PATH, attr)
 
 

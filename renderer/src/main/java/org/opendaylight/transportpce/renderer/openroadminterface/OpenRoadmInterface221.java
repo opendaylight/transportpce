@@ -67,6 +67,7 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class OpenRoadmInterface221 {
     private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
             "Unable to get mapping from PortMapping for node % and logical connection port %s";
@@ -113,8 +114,8 @@ public class OpenRoadmInterface221 {
         return ethInterfaceBldr.getName();
     }
 
-    public List<String> createFlexOCH(String nodeId, String logicalConnPoint, Long bitmapIndex,
-        BigDecimal centerFreq, BigDecimal width)
+    public List<String> createFlexOCH(String nodeId, String logicalConnPoint, BigDecimal centerFreq,
+        BigDecimal width, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -125,10 +126,12 @@ public class OpenRoadmInterface221 {
         List<String> interfacesCreated = new ArrayList<>();
 
         if (logicalConnPoint.contains("DEG")) {
-            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, centerFreq, width, bitmapIndex);
+            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, centerFreq, width,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
             interfacesCreated.add(mcInterfaceCreated);
         }
-        String mcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, centerFreq, width, bitmapIndex);
+        String mcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, centerFreq, width,
+                lowerSpectralSlotNumber, higherSpectralSlotNumber);
         interfacesCreated.add(mcInterfaceCreated);
         return interfacesCreated;
     }
@@ -140,13 +143,15 @@ public class OpenRoadmInterface221 {
      * @param nodeId node ID
      * @param logicalConnPoint logical connection point
      * @param waveNumber wavelength number of the OCH interface.
-     *
+     * @param lowerSpectralSlotNumber int
+     * @param higherSpectralSlotNumber int
      * @return Name of the interface if successful, otherwise return null.
      *
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
 
-    public List<String> createFlexOCH(String nodeId, String logicalConnPoint, Long waveNumber)
+    public List<String> createFlexOCH(String nodeId, String logicalConnPoint, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -157,16 +162,19 @@ public class OpenRoadmInterface221 {
         List<String> interfacesCreated = new ArrayList<>();
 
         if (logicalConnPoint.contains("DEG")) {
-            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, waveNumber);
+            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, waveNumber,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
             interfacesCreated.add(mcInterfaceCreated);
         }
-        String nmcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, waveNumber);
+        String nmcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, waveNumber,
+                lowerSpectralSlotNumber, higherSpectralSlotNumber);
         interfacesCreated.add(nmcInterfaceCreated);
         return interfacesCreated;
     }
 
 
-    public String createMCInterface(String nodeId, String logicalConnPoint, Long waveNumber)
+    public String createMCInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
 
         // TODO : Check this method
@@ -180,9 +188,13 @@ public class OpenRoadmInterface221 {
         }
 
         // TODO : Check this method
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         InterfaceBuilder mcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-                MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc" + "-" + waveNumber)
+                MediaChannelTrailTerminationPoint.class, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                        logicalConnPoint,"mc",
+                        spectralSlotName))
             .setSupportingInterface(portMap.getSupportingOms());
 
         McTtpBuilder mcTtpBuilder = new McTtpBuilder()
@@ -203,7 +215,7 @@ public class OpenRoadmInterface221 {
     }
 
     public String createMCInterface(String nodeId, String logicalConnPoint,
-        BigDecimal centerFrequency, BigDecimal width, Long bitmapIndex)
+        BigDecimal centerFrequency, BigDecimal width, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
 
         // TODO : Check this method
@@ -215,12 +227,15 @@ public class OpenRoadmInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         // TODO : Check this method
         LOG.info("MC interface Freq Start {} and Freq End {} and center-Freq {}",
             flexGrid.getStart(), flexGrid.getStop(), centerFrequency);
         InterfaceBuilder mcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc" + "-" + bitmapIndex)
+            MediaChannelTrailTerminationPoint.class, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                    logicalConnPoint, "mc", spectralSlotName))
                 .setSupportingInterface(portMap.getSupportingOms());
 
         McTtpBuilder mcTtpBuilder = new McTtpBuilder()
@@ -240,7 +255,8 @@ public class OpenRoadmInterface221 {
         return mcInterfaceBldr.getName();
     }
 
-    public String createNMCInterface(String nodeId, String logicalConnPoint, Long waveNumber)
+    public String createNMCInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
 
         // TODO : Check this method
@@ -251,13 +267,18 @@ public class OpenRoadmInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         LOG.info("Freq Start {} and Freq End {} and center-Freq {}",
             fixedFlex.getStart(), fixedFlex.getStop(), fixedFlex.getCenterFrequency());
         //TODO : Check this method
         InterfaceBuilder nmcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            NetworkMediaChannelConnectionTerminationPoint.class, logicalConnPoint + "-nmc" + "-" + waveNumber);
+            NetworkMediaChannelConnectionTerminationPoint.class, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                    logicalConnPoint, "nmc", spectralSlotName));
         if (logicalConnPoint.contains("DEG")) {
-            nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc" + "-" + waveNumber);
+            nmcInterfaceBldr.setSupportingInterface(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                    logicalConnPoint, "mc", spectralSlotName));
         }
 
         NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
@@ -277,7 +298,7 @@ public class OpenRoadmInterface221 {
     }
 
     public String createNMCInterface(String nodeId, String logicalConnPoint,
-        BigDecimal centerFrequency, BigDecimal width, Long bitmapIndex)
+        BigDecimal centerFrequency, BigDecimal width, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
         LOG.info("This is the central frequency {}", centerFrequency.floatValue());
         LOG.info("This is the nmc width {}", width.floatValue());
@@ -287,12 +308,16 @@ public class OpenRoadmInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         //TODO : Check this method
+        String nmcName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,logicalConnPoint, "nmc",
+                spectralSlotName);
         InterfaceBuilder nmcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            NetworkMediaChannelConnectionTerminationPoint.class, logicalConnPoint + "-nmc" + "-" + bitmapIndex);
+            NetworkMediaChannelConnectionTerminationPoint.class, nmcName);
         if (logicalConnPoint.contains("DEG")) {
-            nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc" + "-" + bitmapIndex);
+            nmcInterfaceBldr.setSupportingInterface(nmcName);
         }
 
         NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
@@ -310,7 +335,8 @@ public class OpenRoadmInterface221 {
         return nmcInterfaceBldr.getName();
     }
 
-    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber)
+    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
         // TODO : Check this method
 
@@ -329,10 +355,12 @@ public class OpenRoadmInterface221 {
                 // TODO: Check if this the correct way to set modulation format here
                 .setModulationFormat(ModulationFormat.DpQpsk)
                 .setTransmitPower(new PowerDBm(new BigDecimal("-5")));
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
-            createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
+            createOpenRoadmOchInterfaceName(logicalConnPoint, spectralSlotName));
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
         org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.Interface1Builder
@@ -352,39 +380,36 @@ public class OpenRoadmInterface221 {
     }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
-        Long waveNumber, BigDecimal centerFrequency, BigDecimal slotWidth)
+        BigDecimal centerFrequency, int lowerSpectralSlotNumber, int higherSpectralSlotNumber, String format)
         throws OpenRoadmInterfaceException {
         // TODO : Check this method
-
+        if (centerFrequency == null) {
+            LOG.error("Center frequency cannot be null");
+            throw new OpenRoadmInterfaceException("Center frequency cannot be null");
+        }
+        ModulationFormat modulationFormat = ModulationFormat.DpQpsk;
+        Optional<ModulationFormat> optionalModulationFormat = ModulationFormat.forName(format);
+        if (optionalModulationFormat.isPresent()) {
+            modulationFormat =  optionalModulationFormat.get();
+        }
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder()
             .setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(centerFrequency)))
             .setRate(R100G.class)
             .setTransmitPower(new PowerDBm(new BigDecimal("-5")))
-            .setModulationFormat(ModulationFormat.DpQpsk);
-
-        // In Flex-grid, slot-width could be other than 50 GHz
-        if ((centerFrequency != null) && (slotWidth != null)) {
-            ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(centerFrequency)));
-            ocIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(slotWidth)));
-        }
-        else {
-            // Use fixed grid to find the
-            fixedFlex = fixedFlex.getFixedFlexWaveMapping(waveNumber.shortValue());
-            ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        }
+            .setModulationFormat(modulationFormat);
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
                 String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
-
-
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
-            createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
+            createOpenRoadmOchInterfaceName(logicalConnPoint, spectralSlotName));
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
         org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.Interface1Builder
@@ -553,8 +578,8 @@ public class OpenRoadmInterface221 {
 
     }
 
-    public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
-        return logicalConnectionPoint + "-" + waveNumber;
+    public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, String spectralSlotName) {
+        return String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,logicalConnectionPoint, spectralSlotName);
     }
 
     private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, Class<? extends InterfaceType> type,

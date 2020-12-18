@@ -82,7 +82,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_04_service_path_create_OCH_OTU4(self):
         response = test_utils.service_path_request("create", "service_OCH_OTU4", "1",
-                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}])
+                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}],
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                    768)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -91,7 +93,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'SPDR-SA1',
              'otu-interface-id': ['XPDR1-NETWORK1-OTU'],
-             'och-interface-id': ['XPDR1-NETWORK1-1']}, res["output"]['node-interface'])
+             'och-interface-id': ['XPDR1-NETWORK1-761:768']}, res["output"]['node-interface'])
 
     def test_05_get_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
@@ -111,11 +113,11 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_06_check_interface_och(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-1")
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
 
-        self.assertDictEqual(dict(res['interface'][0], **{'name': 'XPDR1-NETWORK1-1',
+        self.assertDictEqual(dict(res['interface'][0], **{'name': 'XPDR1-NETWORK1-761:768',
                                                           'administrative-state': 'inService',
                                                           'supporting-circuit-pack-name': 'CP1-CFP0',
                                                           'type': 'org-openroadm-interfaces:opticalChannel',
@@ -135,7 +137,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
-                        'supporting-interface': 'XPDR1-NETWORK1-1',
+                        'supporting-interface': 'XPDR1-NETWORK1-761:768',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
@@ -365,7 +367,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_23_service_path_delete_OCH_OTU4(self):
         response = test_utils.service_path_request("delete", "service_OCH_OTU4", "1",
-                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}])
+                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}],
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                    768)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
