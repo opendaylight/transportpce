@@ -634,7 +634,7 @@ public class PceCalculation {
         }
 
         if (!pceNode.isValid()) {
-            LOG.error("validateNode : there are no availaible wavelengths in node {}", pceNode.getNodeId().getValue());
+            LOG.error("validateNode : there are no available frequencies in node {}", pceNode.getNodeId().getValue());
             return false;
         }
         return true;
