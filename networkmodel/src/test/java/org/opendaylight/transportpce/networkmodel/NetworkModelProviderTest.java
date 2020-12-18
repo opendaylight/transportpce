@@ -40,14 +40,14 @@ public class NetworkModelProviderTest extends AbstractTest {
     @Mock
     private NotificationService notificationService;
     @Mock
-    private FrequenciesService networkModelWavelengthService;
+    private FrequenciesService frequenciesService;
 
 
     @Test
     public void networkmodelProviderInitTest() {
         NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
             rpcProviderService, networkutilsService, topologyListener, notificationService,
-            networkModelWavelengthService);
+            frequenciesService);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
             @Override

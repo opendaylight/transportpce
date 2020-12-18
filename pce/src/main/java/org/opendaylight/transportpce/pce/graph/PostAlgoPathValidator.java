@@ -69,10 +69,14 @@ public class PostAlgoPathValidator {
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
                 }
-                //TODO: until change to manage connection name, logical connection point name and service path
-                // keep set wavelength number
-                pceResult.setResultWavelength(
-                      GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()));
+                if (spectrumAssignment.isFlexGrid()) {
+                    LOG.info("Spectrum assignment flexgrid mode");
+                    pceResult.setResultWavelength(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER);
+                } else {
+                    LOG.info("Spectrum assignment fixedgrid mode");
+                    pceResult.setResultWavelength(
+                            GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()));
+                }
                 pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex()));
                 pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex()));
                 LOG.info("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);

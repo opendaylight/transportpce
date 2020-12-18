@@ -92,12 +92,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="crossConnect221" />
     </bean>
 
-    <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl" >
-    </bean>
-
-    <bean id="FlexGridImpl" class="org.opendaylight.transportpce.common.fixedflex.FlexGridImpl" >
-    </bean>
-
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
 
     <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
@@ -109,9 +103,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <service ref="crossConnectImpl" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
 
     <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
-
-    <service ref="FixedFlexImpl" interface="org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface"/>
-
-    <service ref="FlexGridImpl" interface="org.opendaylight.transportpce.common.fixedflex.FlexGridInterface"/>
 
 </blueprint>
