@@ -342,7 +342,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbElmPath = len(res['output']['response-parameters']['path-description']
                         ['aToZ-direction']['aToZ'])
         self.assertEqual(31, nbElmPath)
-        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2"}
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state":"inService"}
         find = False
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
@@ -372,7 +372,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbElmPath = len(res['output']['response-parameters']['path-description']
                         ['aToZ-direction']['aToZ'])
         self.assertEqual(47, nbElmPath)
-        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2"}
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state":"inService"}
         find = False
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
