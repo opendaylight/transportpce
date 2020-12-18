@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,10 @@ public interface PceNode {
      * @return BitSet.
      */
     BitSet getBitSetData();
+
+    /**
+     * For optical node the slot width granularity from mc capabilities.
+     * @return BigDecimal.
+     */
+    BigDecimal getSlotWidthGranularity();
 }
