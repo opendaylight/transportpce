@@ -62,7 +62,12 @@ public class PowerMgmtImpl implements PowerMgmt {
     //TODO Need to Case Optical Power mode/NodeType in case of 2.2 devices
     //@SuppressFBwarnings("DM_CONVERT_CASE")
     public Boolean setPower(ServicePowerSetupInput input) {
-        LOG.info("Olm-setPower initiated");
+        LOG.info("Olm-setPower initiated for input {}", input);
+        int lowerSpectralSlotNumber = input.getLowerSpectralSlotNumber().intValue();
+        int higherSpectralSlotNumber = input.getHigherSpectralSlotNumber().intValue();
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         for (int i = 0; i < input.getNodes().size(); i++) {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
@@ -130,7 +135,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                                     powerValue = rxSRGPowerRangeMap.get("MaxRx");
                                 }
                                 LOG.info("Calculated Transponder Power value is {}" , powerValue);
-                                String interfaceName = destTpId + "-" + input.getWaveNumber();
+                                String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                                        destTpId, spectralSlotName);
                                 if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(powerValue),
                                         openroadmVersion)) {
                                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
@@ -145,7 +151,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 }
                             } else {
                                 LOG.info("SRG Power Range not found, setting the Transponder range to default");
-                                String interfaceName = destTpId + "-" + input.getWaveNumber();
+                                String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                                        destTpId, spectralSlotName);
                                 if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(-5),
                                     openroadmVersion)) {
                                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
@@ -161,7 +168,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                             }
                         } else {
                             LOG.info("Tranponder range not available setting to default power for nodeId: {}", nodeId);
-                            String interfaceName = destTpId + "-" + input.getWaveNumber();
+                            String interfaceName = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                                    destTpId, spectralSlotName);
                             if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(-5),openroadmVersion)) {
                                 LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                                 try {
@@ -188,7 +196,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                 Nodes inputNode = inputNodeOptional.get();
                 OpenroadmVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
                 LOG.info("This is a roadm {} device", openroadmVersion.getName());
-                String connectionNumber = srcTpId + "-" + destTpId + "-" + input.getWaveNumber();
+                String connectionNumber = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,srcTpId, destTpId,
+                        spectralSlotName);
                 LOG.info("Connection number is {}", connectionNumber);
                 if (destTpId.toLowerCase().contains("deg")) {
                     Optional<Mapping> mappingObjectOptional = inputNode.nonnullMapping()
@@ -328,15 +337,20 @@ public class PowerMgmtImpl implements PowerMgmt {
      * @return true/false based on status of operation
      */
     public Boolean powerTurnDown(ServicePowerTurndownInput input) {
-        LOG.info("Olm-powerTurnDown initiated");
+        LOG.info("Olm-powerTurnDown initiated for input {}", input);
         /*Starting with last element into the list Z -> A for
           turning down A -> Z */
+        int lowerSpectralSlotNumber = input.getLowerSpectralSlotNumber().intValue();
+        int higherSpectralSlotNumber = input.getHigherSpectralSlotNumber().intValue();
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         for (int i = input.getNodes().size() - 1; i >= 0; i--) {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
             String destTpId = input.getNodes().get(i).getDestTp();
-            Long wlNumber = input.getWaveNumber().toJava();
-            String connectionNumber =  srcTpId + "-" + destTpId + "-" + wlNumber;
+            String connectionNumber =  String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,srcTpId, destTpId,
+                    spectralSlotName);
             if (destTpId.toLowerCase().contains("srg")) {
                 crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null, connectionNumber);
             } else if (destTpId.toLowerCase().contains("deg")) {
