@@ -1,0 +1,78 @@
+{
+    "transportpce-portmapping:network": {
+        "nodes": [
+            {
+                "node-id": "ROADM-A1",
+                "node-info": {
+                    "node-type": "rdm",
+                    "openroadm-version": "2.2.1",
+                    "node-clli": "nodeA",
+                    "node-vendor": "vendorA",
+                    "node-model": "modelA",
+                    "node-ip-address": "127.0.0.1"
+                },
+                "mapping": [],
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "DEG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 50
+                    },
+                    {
+                        "mc-node-name": "SRG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 50
+                    }
+                ]
+            },
+            {
+                "node-id": "ROADM-B1",
+                "node-info": {
+                    "node-type": "rdm",
+                    "openroadm-version": "2.2.1",
+                    "node-clli": "nodeB",
+                    "node-vendor": "vendorB",
+                    "node-model": "modelB",
+                    "node-ip-address": "127.0.0.2"
+                },
+                "mapping": [],
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "DEG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 12.5
+                    },
+                    {
+                        "mc-node-name": "SRG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 12.5
+                    }
+                ]
+            },
+            {
+                "node-id": "ROADM-C1",
+                "node-info": {
+                    "node-type": "rdm",
+                    "openroadm-version": "1.2.1",
+                    "node-clli": "nodeC",
+                    "node-vendor": "vendorC",
+                    "node-model": "modelC",
+                    "node-ip-address": "127.0.0.3"
+                },
+                "mapping": [],
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "DEG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 50
+                    },
+                    {
+                        "mc-node-name": "SRG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 50
+                    }
+                ]
+            }
+        ]
+    }
+}
