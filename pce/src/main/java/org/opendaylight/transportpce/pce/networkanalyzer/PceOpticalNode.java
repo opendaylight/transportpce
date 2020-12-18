@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -47,18 +48,21 @@ public class PceOpticalNode implements PceNode {
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
     private BitSet frequenciesBitSet;
     private String version;
+    private BigDecimal slotWidthGranularity;
 
-    public PceOpticalNode(Node node, OpenroadmNodeType nodeType, String version) {
+    public PceOpticalNode(Node node, OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity) {
         if (node != null
                 && node.getNodeId() != null
                 && nodeType != null
-                && version != null) {
+                && version != null
+                && slotWidthGranularity != null) {
             this.node = node;
             this.nodeId = node.getNodeId();
             this.nodeType = nodeType;
             this.version = version;
+            this.slotWidthGranularity = slotWidthGranularity;
         } else {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, slot width granularity");
             this.valid = false;
         }
     }
@@ -370,6 +374,16 @@ public class PceOpticalNode implements PceNode {
     @Override
     public String getVersion() {
         return this.version;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
+    */
+    @Override
+    public BigDecimal getSlotWidthGranularity() {
+        return slotWidthGranularity;
     }
 
 }
