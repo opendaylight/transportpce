@@ -37,6 +37,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -102,6 +103,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
+        LOG.info("setup service path for input {} and direction {}", input, direction);
         List<Nodes> nodes = new ArrayList<>();
         if (input.getNodes() != null) {
             nodes.addAll(input.getNodes());
@@ -131,8 +133,13 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             try {
                 // if the node is currently mounted then proceed
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                    // TODO: In the case of flex-grid, the wave-number becomes bitmap index
-                    // TODO: need to update transportpce-common-types accordingly, to a more, generic-term
+                    int lowerSpectralSlotNumber = input.getLowerSpectralSlotNumber().intValue();
+                    int higherSpectralSlotNumber = input.getHigherSpectralSlotNumber().intValue();
+                    ModulationFormat modulationFormat = ModulationFormat.DpQpsk;
+                    if (input.getModulationFormat() != null
+                            && ModulationFormat.forName(input.getModulationFormat()).isPresent()) {
+                        modulationFormat = ModulationFormat.forName(input.getModulationFormat()).get();
+                    }
                     Long waveNumber = input.getWaveNumber().toJava();
                     BigDecimal centerFreq = null;
                     BigDecimal width = null;
@@ -145,15 +152,22 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
+                        LOG.info("Adding supporting OCH interface for node {}, dest tp {}, wave number {},"
+                                + "center freq {}, slot width {}, lower spectral number {},"
+                                + "higher spectral number {}",
+                                nodeId, destTp, waveNumber, centerFreq, width, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         crossConnectFlag++;
                         String supportingOchInterface;
                         if ((centerFreq != null) && (width != null)) {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, width);
+                                nodeId, destTp, waveNumber, modulationFormat, centerFreq, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         }
                         else {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk);
+                                nodeId, destTp, waveNumber, modulationFormat, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         }
                         createdOchInterfaces.add(supportingOchInterface);
                         // Here we pass logical connection-point of z-end to set SAPI and DAPI
@@ -177,22 +191,30 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
+                        LOG.info("Adding supporting EThernet interface for node {}, src tp {}", nodeId, srcTp);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(
                             this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId, srcTp));
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
+                        LOG.info("Adding supporting OCH interface for node {}, src tp {}, wave number {},"
+                                + "center freq {}, slot width {}, lower spectral number {},"
+                                + "higher spectral number {}",
+                                nodeId, srcTp, waveNumber, centerFreq, width, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface;
                         if ((centerFreq != null) && (width != null)) {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, width);
+                                nodeId, srcTp, waveNumber, modulationFormat, centerFreq, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         }
                         else {
                             supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk);
+                                nodeId, srcTp, waveNumber,modulationFormat, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         }
                         createdOchInterfaces.add(supportingOchInterface);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
@@ -212,6 +234,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         }
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
+                        LOG.info("Adding supporting EThernet interface for node {}, dest tp {}", nodeId, destTp);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(
@@ -219,29 +242,42 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && (srcTp.contains(StringConstants.TTP_TOKEN)
                             || srcTp.contains(StringConstants.PP_TOKEN))) {
+                        LOG.info("Adding supporting OCH interface for node {}, src tp {}, wave number {},"
+                                + "center freq {}, slot width {}, lower spectral number {},"
+                                + "higher spectral number {}",
+                                nodeId, srcTp, waveNumber, centerFreq, width, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         if ((centerFreq != null) && (width != null)) {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, centerFreq, width));
+                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, centerFreq, width,
+                                            lowerSpectralSlotNumber, higherSpectralSlotNumber));
                         }
                         else {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber));
+                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, lowerSpectralSlotNumber,
+                                            higherSpectralSlotNumber));
                         }
                     }
                     if ((destTp != null) && (destTp.contains(StringConstants.TTP_TOKEN)
                             || destTp.contains(StringConstants.PP_TOKEN))) {
-
+                        LOG.info("Adding supporting OCH interface for node {}, dest tp {}, wave number {},"
+                                + "center freq {}, slot width {}, lower spectral number {},"
+                                + "higher spectral number {}",
+                                nodeId, destTp, waveNumber, centerFreq, width, lowerSpectralSlotNumber,
+                                higherSpectralSlotNumber);
                         if ((centerFreq != null) && (width != null)) {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, centerFreq, width));
+                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, centerFreq, width,
+                                            lowerSpectralSlotNumber, higherSpectralSlotNumber));
                         }
                         else {
                             createdOchInterfaces.addAll(
                                 this.openRoadmInterfaceFactory
-                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber));
+                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, lowerSpectralSlotNumber,
+                                            higherSpectralSlotNumber));
                         }
 
                     }
@@ -249,7 +285,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         LOG.info("Creating cross connect between source {} and destination {} for node {}", srcTp,
                                 destTp, nodeId);
                         Optional<String> connectionNameOpt =
-                                this.crossConnect.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
+                                this.crossConnect.postCrossConnect(nodeId, waveNumber, srcTp, destTp,
+                                        lowerSpectralSlotNumber,
+                                        higherSpectralSlotNumber);
                         if (connectionNameOpt.isPresent()) {
                             nodesProvisioned.add(nodeId);
                             createdConnections.add(connectionNameOpt.get());
@@ -344,7 +382,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp, waveNumber));
+                interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp, waveNumber,
+                        input.getLowerSpectralSlotNumber().intValue(),
+                        input.getHigherSpectralSlotNumber().intValue()));
             } else {
                 String result = nodeId + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
                 results.add(result);
@@ -385,7 +425,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     }
 
     private List<String>  getInterfaces2delete(
-            String nodeId, String srcTp, String destTp, Long waveNumber) {
+            String nodeId, String srcTp, String destTp, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         List<String> interfacesToDelete = new LinkedList<>();
         if (destTp.contains(StringConstants.NETWORK_TOKEN)
                 || srcTp.contains(StringConstants.CLIENT_TOKEN)
@@ -405,13 +449,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 }
                 interfacesToDelete.add(destTp + "-OTU");
                 interfacesToDelete.add(
-                        this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
+                        this.openRoadmInterfaceFactory
+                        .createOpenRoadmOchInterfaceName(destTp,spectralSlotName));
             }
             if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                 interfacesToDelete.add(srcTp + "-ODU");
                 interfacesToDelete.add(srcTp + "-OTU");
                 interfacesToDelete
-                        .add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
+                        .add(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOchInterfaceName(srcTp,spectralSlotName));
             }
             if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
                 interfacesToDelete.add(srcTp + "-ETHERNET");
@@ -420,9 +466,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 interfacesToDelete.add(destTp + "-ETHERNET");
             }
         } else {
-            String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
+            String connectionNumber = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, destTp,
+                    spectralSlotName);
             List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, false);
-            connectionNumber = destTp + "-" + srcTp + "-" + waveNumber;
+            connectionNumber = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, srcTp, spectralSlotName);
             if (intToDelete != null) {
                 for (String interf : intToDelete) {
                     if (!this.openRoadmInterfaceFactory.isUsedByXc(nodeId, interf, connectionNumber,

@@ -64,10 +64,10 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         Mockito.when(fixedFlex.getStart()).thenReturn(12d);
         Mockito.when(fixedFlex.getStop()).thenReturn(12d);
         Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
-        Long waveNumber = 1000L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber),
-                Arrays.asList(logicalConnPoint + "-nmc-" + waveNumber));
+        Long waveNumber = 1L;
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768),
+                Arrays.asList(logicalConnPoint + "-nmc-761:768"));
     }
 
     @Test
@@ -79,10 +79,10 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         Mockito.when(fixedFlex.getStart()).thenReturn(12d);
         Mockito.when(fixedFlex.getStop()).thenReturn(12d);
         Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
-        Long waveNumber = 1000L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber),
-                Arrays.asList(logicalConnPoint + "-mc-" + waveNumber, logicalConnPoint + "-nmc-" + waveNumber));
+        Long waveNumber = 1L;
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768),
+                Arrays.asList(logicalConnPoint + "-mc-" + waveNumber, logicalConnPoint + "-nmc-761:768"));
     }
 
     @Test
@@ -93,9 +93,9 @@ public class OpenRoadMInterface221Test extends AbstractTest {
                 .thenReturn(new MappingBuilder().setLogicalConnectionPoint(logicalConnPoint).build());
         Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
         Mockito.when(fixedFlex.getFixedFlexWaveMapping(Mockito.anyLong())).thenReturn(new FixedFlexImpl());
-        Long waveNumber = 1000L;
-        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber),
-                logicalConnPoint + "-" + waveNumber);
+        Long waveNumber = 1L;
+        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
+                761, 768), logicalConnPoint + "-761:768");
     }
 
     @Test
@@ -115,9 +115,8 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     public void testCreateOpenRoadmOchInterfaceName() {
 
         String logicalConnPoint = "logicalConnPoint";
-        Long waveNumber = 1000L;
-        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber),
-                logicalConnPoint + "-" + waveNumber);
+        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterfaceName(logicalConnPoint, "761:768"),
+                logicalConnPoint + "-761:768");
 
     }
 

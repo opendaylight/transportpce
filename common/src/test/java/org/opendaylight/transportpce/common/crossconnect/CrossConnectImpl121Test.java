@@ -76,8 +76,8 @@ public class CrossConnectImpl121Test {
         Mockito.when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
-        Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", 100L, "srcTp", "destTp");
-        Assert.assertEquals(res.get(), "srcTp-destTp-100");
+        Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", 100L, "srcTp", "destTp", 1, 8);
+        Assert.assertEquals(res.get(), "srcTp-destTp-1:8");
     }
 
     // TODO : fix commit
