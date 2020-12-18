@@ -52,7 +52,10 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Uint32.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1"))
+            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+            .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+            .build();
         return input;
     }
 
@@ -64,7 +67,9 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Uint32.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1"))
+            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+            .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
         return input;
     }
 
@@ -76,7 +81,9 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Uint32.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1"))
+            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+            .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
         return input;
     }
 
@@ -88,7 +95,9 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Uint32.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1"))
+            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+            .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
         return input;
     }
 
@@ -101,7 +110,9 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
 
         return input;
     }
@@ -115,7 +126,9 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
 
         return input;
     }
@@ -129,7 +142,9 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
 
         return input;
     }
@@ -143,7 +158,9 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
 
         return input;
     }
