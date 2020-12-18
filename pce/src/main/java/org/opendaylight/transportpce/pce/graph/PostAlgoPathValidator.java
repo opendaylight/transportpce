@@ -393,14 +393,17 @@ public class PostAlgoPathValidator {
         Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         BitSet result = BitSet.valueOf(freqMap);
         boolean isFlexGrid = true;
-        LOG.debug("Processing path {} with length {}", path, path.getLength());
+        LOG.info("Processing path {} with length {}", path, path.getLength());
         BitSet pceNodeFreqMap;
         for (PceGraphEdge edge : path.getEdgeList()) {
-            LOG.debug("Processing source {} ", edge.link().getSourceId());
+            LOG.info("Processing source {} ", edge.link().getSourceId());
             if (allPceNodes.containsKey(edge.link().getSourceId())) {
                 PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
-                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNode.getVersion())) {
-                    LOG.info("Node {} is 1.2.1 node", pceNode.getNodeId());
+                LOG.info("Processing PCE node {}", pceNode);
+                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNode.getVersion())
+                        || pceNode.getSlotWidthGranularity().compareTo(GridConstant.SLOT_WIDTH_50) == 0) {
+                    LOG.info("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
+                            pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity());
                     isFlexGrid = false;
                 }
                 pceNodeFreqMap = pceNode.getBitSetData();
