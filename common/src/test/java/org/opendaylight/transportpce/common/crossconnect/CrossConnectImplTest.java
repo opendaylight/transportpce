@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,8 +19,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class CrossConnectImplTest {
 
@@ -61,14 +62,18 @@ public class CrossConnectImplTest {
 
     @Test
     public void postCrossConnect() {
-        Optional<?> res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp", 1, 8);
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setLowerSpectralSlotNumber(761);
+        spectrumInformation.setHigherSpectralSlotNumber(768);
+        Optional<?> res = crossConnectImpl.postCrossConnect("100", "srcTp", "destTp", spectrumInformation);
         Assert.assertFalse("Optional object should be empty",res.isPresent());
 
         String devV121 = "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device";
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(devV121);
-        when(crossConnectImpl121.postCrossConnect(any(), any(), any(), any(), eq(1), eq(8)))
+        when(crossConnectImpl121.postCrossConnect(any(), any(), any(), any()))
                 .thenReturn(Optional.of("Value"));
-        res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp", 1, 8);
+        res = crossConnectImpl.postCrossConnect("100", "srcTp", "destTp", spectrumInformation);
         Assert.assertTrue("Optional object should have a value",res.isPresent());
     }
 
