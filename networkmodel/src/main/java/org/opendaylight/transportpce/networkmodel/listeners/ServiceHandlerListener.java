@@ -57,7 +57,7 @@ public class ServiceHandlerListener implements TransportpceServicehandlerListene
     }
 
     /**
-     * Allocate wavelength in topology.
+     * Allocate frequencies in topology.
      * @param notification ServiceRpcResultSh
      */
     private void onServiceCreation(ServiceRpcResultSh notification) {
@@ -68,7 +68,7 @@ public class ServiceHandlerListener implements TransportpceServicehandlerListene
     }
 
     /**
-     * Release wavelength in topology.
+     * Release frequencies in topology.
      * @param notification ServiceRpcResultSh
      */
     private void onServiceDeletion(ServiceRpcResultSh notification) {

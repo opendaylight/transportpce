@@ -112,6 +112,7 @@ public final class ModelMappingUtils {
 
     public static ServicePathInputData rendererCreateServiceInputAToZ(String serviceName,
             PathDescription pathDescription) {
+        int scale = GridConstant.FIXED_GRID_FREQUENCY_PRECISION;
         AToZDirection atoZDirection = pathDescription.getAToZDirection();
         LOG.info("Building ServicePathInputData for a to z direction {}", atoZDirection);
         NodeLists nodeLists = getNodesListAToZ(atoZDirection.nonnullAToZ().values().iterator());
@@ -123,6 +124,10 @@ public final class ModelMappingUtils {
         if (atoZDirection.getAToZWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(atoZDirection.getAToZWavelengthNumber());
+        }
+        if (Uint32.valueOf(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER)
+                .equals(atoZDirection.getAToZWavelengthNumber())) {
+            scale = GridConstant.FLEX_GRID_FREQUENCY_PRECISION;
         }
         if (atoZDirection.getAToZMinFrequency() != null) {
             servicePathInputBuilder.setMinFreq(new FrequencyTHz(atoZDirection.getAToZMinFrequency().getValue()));
@@ -139,7 +144,7 @@ public final class ModelMappingUtils {
         if (atoZDirection.getAToZMinFrequency() != null && atoZDirection.getAToZMaxFrequency() != null) {
             servicePathInputBuilder.setCenterFreq(
                     GridUtils.getCentralFrequencyWithPrecision(atoZDirection.getAToZMinFrequency().getValue(),
-                            atoZDirection.getAToZMaxFrequency().getValue(), GridConstant.FREQUENCY_PRECISION));
+                            atoZDirection.getAToZMaxFrequency().getValue(), scale));
         }
         if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
@@ -159,6 +164,7 @@ public final class ModelMappingUtils {
 
     public static ServicePathInputData rendererCreateServiceInputZToA(String serviceName,
             PathDescription pathDescription) {
+        int scale = GridConstant.FIXED_GRID_FREQUENCY_PRECISION;
         ZToADirection ztoADirection = pathDescription.getZToADirection();
         LOG.info("Building ServicePathInputData for z to a direction {}", ztoADirection);
         NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
@@ -170,6 +176,10 @@ public final class ModelMappingUtils {
         if (ztoADirection.getZToAWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(ztoADirection.getZToAWavelengthNumber());
+        }
+        if (Uint32.valueOf(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER)
+                .equals(ztoADirection.getZToAWavelengthNumber())) {
+            scale = GridConstant.FLEX_GRID_FREQUENCY_PRECISION;
         }
         if (ztoADirection.getZToAMinFrequency() != null) {
             servicePathInputBuilder.setMinFreq(new FrequencyTHz(ztoADirection.getZToAMinFrequency().getValue()));
@@ -186,7 +196,7 @@ public final class ModelMappingUtils {
         if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
             servicePathInputBuilder.setCenterFreq(
                     GridUtils.getCentralFrequencyWithPrecision(ztoADirection.getZToAMinFrequency().getValue(),
-                            ztoADirection.getZToAMaxFrequency().getValue(), GridConstant.FREQUENCY_PRECISION));
+                            ztoADirection.getZToAMaxFrequency().getValue(), scale));
         }
         if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
