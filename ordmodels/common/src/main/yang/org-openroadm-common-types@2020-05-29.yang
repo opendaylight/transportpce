@@ -338,7 +338,7 @@ module org-openroadm-common-types {
     description
       "FEC Off";
   }
-
+/*
   // Staircase FEC (duplications for backwards compatibility)
   identity sc-fec {
     status deprecated;
@@ -377,7 +377,7 @@ module org-openroadm-common-types {
     description
       "OpenROADM FEC identification";
   }
-
+*/
   // G.975.1 I.4
   identity efec {
     base fec-identity;
