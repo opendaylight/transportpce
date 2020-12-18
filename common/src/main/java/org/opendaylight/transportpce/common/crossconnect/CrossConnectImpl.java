@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
@@ -52,19 +53,18 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public Optional<String> postCrossConnect(String nodeId, Long waveNumber, String srcTp, String destTp,
-            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
+    public Optional<String> postCrossConnect(String nodeId, String srcTp, String destTp,
+            SpectrumInformation spectrumInformation) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Cross Connect post request received for node {} with version {}",nodeId,openRoadmVersion);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 1.2.1");
-            return crossConnectImpl121.postCrossConnect(nodeId, waveNumber, srcTp, destTp,
-                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
+            return crossConnectImpl121.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
         }
         else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 2.2");
             return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp,
-                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
+                    spectrumInformation);
         }
         LOG.info("Device Version not found");
         return Optional.empty();
@@ -84,8 +84,8 @@ public class CrossConnectImpl implements CrossConnect {
         return null;
     }
 
-    public List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp,
-            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
+    public List<?> getConnectionPortTrail(String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber,
+            int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {

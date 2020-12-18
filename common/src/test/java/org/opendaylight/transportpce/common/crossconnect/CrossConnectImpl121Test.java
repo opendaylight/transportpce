@@ -28,6 +28,7 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPortsBuilder;
@@ -36,6 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class CrossConnectImpl121Test {
     private CrossConnectImpl121 crossConnectImpl121 = null;
@@ -76,8 +78,12 @@ public class CrossConnectImpl121Test {
         Mockito.when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
-        Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", 100L, "srcTp", "destTp", 1, 8);
-        Assert.assertEquals(res.get(), "srcTp-destTp-1:8");
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setLowerSpectralSlotNumber(761);
+        spectrumInformation.setHigherSpectralSlotNumber(768);
+        Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
+        Assert.assertEquals(res.get(), "srcTp-destTp-761:768");
     }
 
     // TODO : fix commit
