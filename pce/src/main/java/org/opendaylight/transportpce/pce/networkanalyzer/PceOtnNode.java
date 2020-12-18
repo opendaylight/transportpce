@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
@@ -542,6 +543,16 @@ public class PceOtnNode implements PceNode {
     @Override
     public BitSet getBitSetData() {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
+    */
+    @Override
+    public BigDecimal getSlotWidthGranularity() {
         return null;
     }
 }
