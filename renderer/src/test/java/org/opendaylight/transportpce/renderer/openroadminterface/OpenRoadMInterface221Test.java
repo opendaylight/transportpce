@@ -13,21 +13,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
-import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
-import org.opendaylight.transportpce.common.fixedflex.FlexGridImpl;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 @Ignore
 public class OpenRoadMInterface221Test extends AbstractTest {
 
     private final PortMapping portMapping = Mockito.mock(PortMapping.class);
-    private final FixedFlexInterface fixedFlex = Mockito.spy(FixedFlexInterface.class);
-    private final FlexGridImpl flexGrid = Mockito.spy(FlexGridImpl.class);
     private OpenRoadmInterface221 openRoadMInterface221;
     private final String nodeId = "node1";
 
@@ -35,7 +32,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     public void setup() {
 
         OpenRoadmInterfaces openRoadmInterfaces = Mockito.spy(OpenRoadmInterfaces.class);
-        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex, flexGrid);
+        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
     }
 
     @Test
@@ -60,13 +57,12 @@ public class OpenRoadMInterface221Test extends AbstractTest {
 
         String logicalConnPoint = "logicalConnPoint";
         Mockito.when(portMapping.getMapping(nodeId, logicalConnPoint)).thenReturn(new MappingBuilder().build());
-        Mockito.when(fixedFlex.getFixedFlexWaveMapping(Mockito.anyLong())).thenReturn(new FixedFlexImpl());
-        Mockito.when(fixedFlex.getStart()).thenReturn(12d);
-        Mockito.when(fixedFlex.getStop()).thenReturn(12d);
-        Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
-        Long waveNumber = 1L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768),
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setLowerSpectralSlotNumber(761);
+        spectrumInformation.setHigherSpectralSlotNumber(768);
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation),
                 Arrays.asList(logicalConnPoint + "-nmc-761:768"));
     }
 
@@ -75,14 +71,13 @@ public class OpenRoadMInterface221Test extends AbstractTest {
 
         String logicalConnPoint = "logicalConnPointDEG";
         Mockito.when(portMapping.getMapping(nodeId, logicalConnPoint)).thenReturn(new MappingBuilder().build());
-        Mockito.when(fixedFlex.getFixedFlexWaveMapping(Mockito.anyLong())).thenReturn(new FixedFlexImpl());
-        Mockito.when(fixedFlex.getStart()).thenReturn(12d);
-        Mockito.when(fixedFlex.getStop()).thenReturn(12d);
-        Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
-        Long waveNumber = 1L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber, 761, 768),
-                Arrays.asList(logicalConnPoint + "-mc-" + waveNumber, logicalConnPoint + "-nmc-761:768"));
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setLowerSpectralSlotNumber(761);
+        spectrumInformation.setHigherSpectralSlotNumber(768);
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint,spectrumInformation));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation),
+                Arrays.asList(logicalConnPoint + "-mc-761:768", logicalConnPoint + "-nmc-761:768"));
     }
 
     @Test
@@ -91,11 +86,12 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         String logicalConnPoint = "logicalConnPoint";
         Mockito.when(portMapping.getMapping(nodeId, logicalConnPoint))
                 .thenReturn(new MappingBuilder().setLogicalConnectionPoint(logicalConnPoint).build());
-        Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
-        Mockito.when(fixedFlex.getFixedFlexWaveMapping(Mockito.anyLong())).thenReturn(new FixedFlexImpl());
-        Long waveNumber = 1L;
-        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
-                761, 768), logicalConnPoint + "-761:768");
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setLowerSpectralSlotNumber(761);
+        spectrumInformation.setHigherSpectralSlotNumber(768);
+        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
+                spectrumInformation), logicalConnPoint + "-761:768");
     }
 
     @Test

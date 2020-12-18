@@ -14,8 +14,6 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
-import org.opendaylight.transportpce.common.fixedflex.FlexGridImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -252,8 +250,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
             OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
-        OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces,
-                new FixedFlexImpl(), new FlexGridImpl());
+        OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
         OpenRoadmOtnInterface221 openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping,
                 openRoadmInterfaces);
         return new OpenRoadmInterfaceFactory(mappingUtils, openRoadmInterface121, openRoadmInterface221,
