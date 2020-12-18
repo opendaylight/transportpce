@@ -8,15 +8,14 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.math.BigDecimal;
 import java.util.List;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,74 +50,40 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
-    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            BigDecimal centerFreq, BigDecimal width, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
+    public List<String> createOpenRoadmOchInterfaces(String nodeId, String logicalConnPoint,
+            SpectrumInformation spectrumInformation)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
+                return openRoadmInterface121.createOpenRoadmOchInterfaces(nodeId, logicalConnPoint,
+                        spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, centerFreq,
-                        width, lowerSpectralSlotNumber, higherSpectralSlotNumber);
+                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation);
             default:
                 return null;
         }
     }
 
+
     /**
-     * This methods creates an OCH interface on the given termination point on
-     * Roadm.
+     * This methods creates an OCH interface on the given termination point on Roadm.
      *
      * @param nodeId           node ID
      * @param logicalConnPoint logical connection point
-     * @param waveNumber       wavelength number of the OCH interface.
-     * @param lowerSpectralSlotNumber int
-     * @param higherSpectralSlotNumber int
+     * @param spectrumInformation spectrum information.
      * @return Name of the interface if successful, otherwise return null.
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
-    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
-            throws OpenRoadmInterfaceException {
+    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
+            SpectrumInformation spectrumInformation) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
+                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
+                        spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
-            default:
-                return null;
-        }
-    }
+                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
+                        spectrumInformation);
 
-    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            OchAttributes.ModulationFormat format, BigDecimal centerFreq, int lowerSpectralSlotNumber,
-            int higherSpectralSlotNumber)
-            throws OpenRoadmInterfaceException {
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber, format,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, centerFreq,
-                   lowerSpectralSlotNumber, higherSpectralSlotNumber, format.getName());
-            default:
-                return null;
-        }
-    }
-
-    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-            OchAttributes.ModulationFormat format, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
-            throws OpenRoadmInterfaceException {
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber, format,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
-                        lowerSpectralSlotNumber, higherSpectralSlotNumber);
             default:
                 return null;
         }

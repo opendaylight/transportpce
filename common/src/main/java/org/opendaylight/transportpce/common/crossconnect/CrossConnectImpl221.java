@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
@@ -71,25 +72,16 @@ public class CrossConnectImpl221 {
     }
 
     public Optional<String> postCrossConnect(String deviceId, String srcTp, String destTp,
-            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
-        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
-                String.valueOf(lowerSpectralSlotNumber),
-                String.valueOf(higherSpectralSlotNumber));
-        String connectionNumber = generateConnectionName(srcTp, destTp, spectralSlotName);
+            SpectrumInformation spectrumInformation) {
+        String connectionNumber = spectrumInformation.getIdentifierFromParams(srcTp, destTp);
         RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder()
                 .setConnectionName(connectionNumber)
                 .setOpticalControlMode(OpticalControlMode.Off)
                 .setSource(new SourceBuilder()
-                        .setSrcIf(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
-                                srcTp,
-                                "nmc",
-                                spectralSlotName))
+                        .setSrcIf(spectrumInformation.getIdentifierFromParams(srcTp,"nmc"))
                         .build())
                 .setDestination(new DestinationBuilder()
-                        .setDstIf(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
-                                destTp,
-                                "nmc",
-                                spectralSlotName))
+                        .setDstIf(spectrumInformation.getIdentifierFromParams(destTp,"nmc"))
                         .build());
 
         InstanceIdentifier<RoadmConnections> rdmConnectionIID =
@@ -117,8 +109,9 @@ public class CrossConnectImpl221 {
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Roadm-connection successfully created: {}-{}-{}-{}", srcTp, destTp, lowerSpectralSlotNumber,
-                    higherSpectralSlotNumber);
+            LOG.info("Roadm-connection successfully created: {}-{}-{}-{}", srcTp, destTp,
+                    spectrumInformation.getLowerSpectralSlotNumber(),
+                    spectrumInformation.getHigherSpectralSlotNumber());
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}. Exception: ", rdmConnBldr.build(), e);
