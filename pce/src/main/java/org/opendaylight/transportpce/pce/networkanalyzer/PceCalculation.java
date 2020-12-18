@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +22,13 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
@@ -490,7 +493,8 @@ public class PceCalculation {
             deviceNodeId = node.getNodeId().getValue();
         }
         LOG.info("Device node id {} for {}", deviceNodeId, node);
-        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, mappingUtils.getOpenRoadmVersion(deviceNodeId));
+        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, mappingUtils.getOpenRoadmVersion(deviceNodeId),
+                getSlotWidthGranularity(deviceNodeId, node.getNodeId()));
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initFrequenciesBitSet();
 
@@ -665,5 +669,27 @@ public class PceCalculation {
             LOG.info("In printNodes in node {} : outgoing links {} ", pceNode.getNodeId().getValue(),
                     pceNode.getOutgoingLinks());
         }));
+    }
+
+    /**
+     * Get mc capability slot width granularity for device.
+     * @param deviceNodeId String
+     * @param nodeId NodeId
+     * @return slot width granularity
+     */
+    private BigDecimal getSlotWidthGranularity(String deviceNodeId, NodeId nodeId) {
+        // nodeId: openroadm-topology level node
+        // deviceNodeId: openroadm-network level node
+        List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
+        String[] params = nodeId.getValue().split("-");
+        // DEGX or SRGX
+        String rdmModuleName = params[params.length-1];
+        for (McCapabilities mcCapabitility : mcCapabilities) {
+            if (mcCapabitility.getMcNodeName().contains(rdmModuleName)
+                    && mcCapabitility.getSlotWidthGranularity() != null) {
+                return mcCapabitility.getSlotWidthGranularity().getValue();
+            }
+        }
+        return GridConstant.SLOT_WIDTH_50;
     }
 }

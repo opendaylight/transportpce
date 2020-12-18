@@ -7,6 +7,9 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import java.util.List;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
+
 public interface MappingUtils {
 
     /*
@@ -14,4 +17,11 @@ public interface MappingUtils {
         supported by the device.
      */
     String getOpenRoadmVersion(String nodeId);
+
+    /**
+     * Get list of mc capabilities for node with nodeId.
+     * @param nodeId String
+     * @return the list of McCapabilities for the node.
+     */
+    List<McCapabilities> getMcCapabilitiesForNode(String nodeId);
 }
