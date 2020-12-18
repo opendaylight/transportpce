@@ -119,7 +119,9 @@ class TransportPCEtesting(unittest.TestCase):
                                     "tp-id": ""
                                 }
                             }
-                        ]
+                        ],
+                        "transportpce-renderer:aToZ-min-frequency": 196.075,
+                        "transportpce-renderer:aToZ-max-frequency": 196.125
                     },
                     "transportpce-renderer:zToA-direction": {
                         "transportpce-renderer:zToA-wavelength-number": "1",
@@ -154,13 +156,16 @@ class TransportPCEtesting(unittest.TestCase):
                                     "tp-id": ""
                                 }
                             }
-                        ]
+                        ],
+                        "transportpce-renderer:zToA-min-frequency": 196.075,
+                        "transportpce-renderer:zToA-max-frequency": 196.125
                     }
                 }
             }
         }
         response = test_utils.post_request(url, data)
         time.sleep(3)
+        print(response.json())
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Operation Successful',
@@ -168,10 +173,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test OCH-OTU interfaces on SPDR-A1
     def test_04_check_interface_och(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-1")
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-1',
+        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-761:768',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP1-CFP0',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -211,7 +216,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test OCH-OTU interfaces on SPDR-C1
     def test_06_check_interface_och(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-1")
+        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-1',

@@ -41,9 +41,12 @@ public interface CrossConnect {
      *            Name of source termination point.
      * @param destTp
      *            Name of destination termination point.
+     * @param lowerSpectralSlotNumber Value of lower spectral slot number.
+     * @param higherSpectralSlotNumber Value of higher spectral slot number.
      * @return optional of connection number
      */
-    Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp);
+    Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber);
 
     /**
      * This method does a delete(edit-config) on roadm connection subtree for a
@@ -73,13 +76,15 @@ public interface CrossConnect {
      *            Source logical connection point.
      * @param destTp
      *            Destination logical connection point.
-     *
+     * @param lowerSpectralSlotNumber Value of lower spectral slot number.
+     * @param higherSpectralSlotNumber Value of higher spectral slot number.
      * @return list of Ports object type.
      *
      * @throws OpenRoadmInterfaceException
      *            an exception at OpenRoadm interface.
      */
-    List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
+    List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException;
 
     /**
