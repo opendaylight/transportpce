@@ -16,6 +16,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -196,24 +197,28 @@ public class OpenRoadmInterface121 {
      * @param nodeId node ID
      * @param logicalConnPoint logical connection point
      * @param waveNumber wavelength number of the OCH interface.
-     *
+     * @param lowerSpectralSlotNumber int
+     * @param higherSpectralSlotNumber int
      * @return Name of the interface if successful, otherwise return null.
      *
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
 
-    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber)
+    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
         throws OpenRoadmInterfaceException {
-
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
                 "Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
-            createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
+            createOpenRoadmOchInterfaceName(logicalConnPoint, spectralSlotName));
 
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder().setWavelengthNumber(Uint32.valueOf(waveNumber));
@@ -237,14 +242,17 @@ public class OpenRoadmInterface121 {
     }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-        OchAttributes.ModulationFormat format) throws OpenRoadmInterfaceException {
+        OchAttributes.ModulationFormat format, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
+                throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
                 "Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
-
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder()
                 .setWavelengthNumber(Uint32.valueOf(waveNumber))
@@ -259,7 +267,7 @@ public class OpenRoadmInterface121 {
                 .interfaces.rev161014.Interface1Builder();
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
-            createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
+            createOpenRoadmOchInterfaceName(logicalConnPoint, spectralSlotName));
         ochInterfaceBldr.addAugmentation(ochIf1Builder.setOch(ocIfBuilder.build()).build());
 
         // Post interface on the device
@@ -272,8 +280,8 @@ public class OpenRoadmInterface121 {
         return ochInterfaceBldr.getName();
     }
 
-    public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
-        return logicalConnectionPoint + "-" + waveNumber;
+    public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, String spectralSlotName) {
+        return String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,logicalConnectionPoint, spectralSlotName);
     }
 
     public String createOpenRoadmOmsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {

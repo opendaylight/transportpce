@@ -244,13 +244,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_check_xc1_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
@@ -258,21 +258,21 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP1-TXRX-1'},
+            {'src-if': 'SRG1-PP1-TXRX-761:768'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG1-TTP-TXRX-1'},
+            {'dst-if': 'DEG1-TTP-TXRX-761:768'},
             res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
     def test_14_check_xc1_ROADMC(self):
-        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
+        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': 2.0
@@ -280,10 +280,10 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP1-TXRX-1'},
+            {'src-if': 'SRG1-PP1-TXRX-761:768'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG2-TTP-TXRX-1'},
+            {'dst-if': 'DEG2-TTP-TXRX-761:768'},
             res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
@@ -406,23 +406,23 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_check_xc2_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/DEG1-TTP-TXRX-SRG1-PP2-TXRX-2")
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/DEG1-TTP-TXRX-SRG1-PP2-TXRX-753:760")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-2',
+                'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-753:760',
                 'wavelength-number': 2,
                 'opticalControlMode': 'power'
             }, **res['roadm-connections'][0]),
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'DEG1-TTP-TXRX-2'},
+            {'src-if': 'DEG1-TTP-TXRX-753:760'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'SRG1-PP2-TXRX-2'},
+            {'dst-if': 'SRG1-PP2-TXRX-753:760'},
             res['roadm-connections'][0]['destination'])
 
     def test_25_check_topo_XPDRA(self):
@@ -655,13 +655,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_check_xc1_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
@@ -669,21 +669,21 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP1-TXRX-1'},
+            {'src-if': 'SRG1-PP1-TXRX-761:768'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG1-TTP-TXRX-1'},
+            {'dst-if': 'DEG1-TTP-TXRX-761:768'},
             res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
     def test_39_check_xc1_ROADMC(self):
-        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
+        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': 2.0
@@ -691,10 +691,10 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP1-TXRX-1'},
+            {'src-if': 'SRG1-PP1-TXRX-761:768'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG2-TTP-TXRX-1'},
+            {'dst-if': 'DEG2-TTP-TXRX-761:768'},
             res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
@@ -729,13 +729,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_42_check_xc2_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP2-TXRX-DEG1-TTP-TXRX-2")
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP2-TXRX-DEG1-TTP-TXRX-753:760")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-2',
+                'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-753:760',
                 'wavelength-number': 2,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
@@ -743,10 +743,10 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP2-TXRX-2'},
+            {'src-if': 'SRG1-PP2-TXRX-753:760'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG1-TTP-TXRX-2'},
+            {'dst-if': 'DEG1-TTP-TXRX-753:760'},
             res['roadm-connections'][0]['destination'])
         time.sleep(2)
 

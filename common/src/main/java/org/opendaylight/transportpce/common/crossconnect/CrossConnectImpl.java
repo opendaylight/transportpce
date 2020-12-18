@@ -52,16 +52,19 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public Optional<String> postCrossConnect(String nodeId, Long waveNumber, String srcTp, String destTp) {
+    public Optional<String> postCrossConnect(String nodeId, Long waveNumber, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Cross Connect post request received for node {} with version {}",nodeId,openRoadmVersion);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 1.2.1");
-            return crossConnectImpl121.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
+            return crossConnectImpl121.postCrossConnect(nodeId, waveNumber, srcTp, destTp,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
         }
         else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 2.2");
-            return crossConnectImpl221.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
+            return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
         }
         LOG.info("Device Version not found");
         return Optional.empty();
@@ -81,14 +84,17 @@ public class CrossConnectImpl implements CrossConnect {
         return null;
     }
 
-    public List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
+    public List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl121.getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
+            return crossConnectImpl121.getConnectionPortTrail(nodeId, srcTp, destTp,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
         }
         else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221.getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
+            return crossConnectImpl221
+                    .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
         }
         return null;
     }

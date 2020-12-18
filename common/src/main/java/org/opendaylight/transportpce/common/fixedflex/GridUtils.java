@@ -131,10 +131,11 @@ public final class GridUtils {
      * @param precision int
      * @return central frequency in THz with precision
      */
-    public static FrequencyTHz getCentralFrequencyWithPrecision(BigDecimal minFrequency,
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz
+        getCentralFrequencyWithPrecision(BigDecimal minFrequency,
             BigDecimal maxFrequency, int precision) {
-        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency)
-                .setScale(precision, RoundingMode.HALF_EVEN));
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
+                computeCentralFrequency(minFrequency, maxFrequency).setScale(precision, RoundingMode.HALF_EVEN));
 
     }
 
@@ -146,6 +147,24 @@ public final class GridUtils {
      */
     private static BigDecimal computeCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
         return minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2));
+    }
+
+    /**
+     * Get the lower spectral index for the frequency.
+     * @param frequency BigDecimal
+     * @return the lower spectral index
+     */
+    public static int getLowerSpectralIndexFromFrequency(BigDecimal frequency) {
+        return getIndexFromFrequency(frequency) + 1;
+    }
+
+    /**
+     * Get the higher spectral index for the frequency.
+     * @param frequency BigDecimal
+     * @return the lower spectral index
+     */
+    public static int getHigherSpectralIndexFromFrequency(BigDecimal frequency) {
+        return getIndexFromFrequency(frequency);
     }
 
 }
