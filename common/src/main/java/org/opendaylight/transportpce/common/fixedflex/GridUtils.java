@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -165,6 +166,50 @@ public final class GridUtils {
      */
     public static int getHigherSpectralIndexFromFrequency(BigDecimal frequency) {
         return getIndexFromFrequency(frequency);
+    }
+
+    /**
+     * Create spectrum information from service path input.
+     * @param input ServicePathInput
+     * @return SpectrumInformation
+     */
+    public static SpectrumInformation initSpectrumInformationFromServicePathInput(ServicePathInput input) {
+        if (input.getLowerSpectralSlotNumber() == null || input.getHigherSpectralSlotNumber() == null) {
+            LOG.error("low and higher spectral slot numbers cannot be null");
+            throw new IllegalArgumentException("low and higher spectral slot numbers cannot be null");
+        }
+        SpectrumInformation spectrumInformation = new SpectrumInformation();
+        spectrumInformation.setLowerSpectralSlotNumber(input.getLowerSpectralSlotNumber().intValue());
+        spectrumInformation.setHigherSpectralSlotNumber(input.getHigherSpectralSlotNumber().intValue());
+        if (input.getWaveNumber() != null) {
+            spectrumInformation.setWaveLength(input.getWaveNumber());
+        }
+        if (input.getMinFreq() != null) {
+            spectrumInformation.setMinFrequency(input.getMinFreq().getValue());
+        } else {
+            spectrumInformation.setMinFrequency(
+                    GridUtils.getStartFrequencyFromIndex(input.getLowerSpectralSlotNumber().intValue() - 1));
+        }
+        if (input.getMaxFreq() != null) {
+            spectrumInformation.setMaxFrequency(input.getMaxFreq().getValue());
+        } else {
+            spectrumInformation.setMaxFrequency(
+                    GridUtils.getStopFrequencyFromIndex(input.getHigherSpectralSlotNumber().intValue() - 1));
+        }
+        if (input.getCenterFreq() != null) {
+            spectrumInformation.setCenterFrequency(input.getCenterFreq().getValue());
+        } else {
+            spectrumInformation.setCenterFrequency(GridUtils
+                    .getCentralFrequency(spectrumInformation.getMinFrequency(),
+                            spectrumInformation.getMaxFrequency()).getValue());
+        }
+        if (input.getWidth() != null) {
+            spectrumInformation.setWidth(input.getWidth().getValue());
+        }
+        if (input.getModulationFormat() != null) {
+            spectrumInformation.setModulationFormat(input.getModulationFormat());
+        }
+        return spectrumInformation;
     }
 
 }

@@ -39,19 +39,19 @@ public class NetworkModelProvider {
     private TpceNetwork tpceNetwork;
     private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
     private NotificationService notificationService;
-    private FrequenciesService networkModelWavelengthService;
+    private FrequenciesService frequenciesService;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
         final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
         final NetConfTopologyListener topologyListener, NotificationService notificationService,
-        FrequenciesService networkModelWavelengthService) {
+        FrequenciesService frequenciesService) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
         this.topologyListener = topologyListener;
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
         this.notificationService = notificationService;
-        this.networkModelWavelengthService = networkModelWavelengthService;
+        this.frequenciesService = frequenciesService;
     }
 
     /**
@@ -69,7 +69,7 @@ public class NetworkModelProvider {
         networkutilsServiceRpcRegistration =
             rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
         TransportpceServicehandlerListener serviceHandlerListner =
-                new ServiceHandlerListener(networkModelWavelengthService);
+                new ServiceHandlerListener(frequenciesService);
         serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
     }
 
