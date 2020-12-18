@@ -265,10 +265,10 @@ class TransportPCEtesting(unittest.TestCase):
     # Check correct configuration of devices
     def test_14_check_interface_och_spdra(self):
         response = test_utils.check_netconf_node_request(
-            "SPDR-SA1", "interface/XPDR1-NETWORK1-1")
+            "SPDR-SA1", "interface/XPDR1-NETWORK1-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-1',
+        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-761:768',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP1-CFP0',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -289,7 +289,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
-                        'supporting-interface': 'XPDR1-NETWORK1-1',
+                        'supporting-interface': 'XPDR1-NETWORK1-761:768',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
@@ -307,10 +307,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_16_check_interface_och_spdrc(self):
         response = test_utils.check_netconf_node_request(
-            "SPDR-SC1", "interface/XPDR1-NETWORK1-1")
+            "SPDR-SC1", "interface/XPDR1-NETWORK1-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-1',
+        self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-761:768',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP1-CFP0',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -331,7 +331,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
-                        'supporting-interface': 'XPDR1-NETWORK1-1',
+                        'supporting-interface': 'XPDR1-NETWORK1-761:768',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }

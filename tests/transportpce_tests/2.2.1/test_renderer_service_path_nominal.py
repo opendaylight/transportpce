@@ -82,19 +82,21 @@ class TransportPCERendererTesting(unittest.TestCase):
                                                      "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDR-A1",
                                                      "renderer:src-tp": "XPDR1-CLIENT1",
-                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}],
+                                                   195.8, 40, 195.775, 195.825, 713,
+                                                   720)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
 
     def test_06_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'name': 'DEG1-TTP-TXRX-nmc-7',
+                 'name': 'DEG1-TTP-TXRX-nmc-713:720',
                  'administrative-state': 'inService',
                  'supporting-circuit-pack-name': '1/0',
                  'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
@@ -107,7 +109,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     def test_07_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -126,13 +128,13 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
 
     def test_08_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'name': 'SRG1-PP3-TXRX-nmc-7',
+                 'name': 'SRG1-PP3-TXRX-nmc-713:720',
                  'administrative-state': 'inService',
                  'supporting-circuit-pack-name': '3/0',
                  'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
@@ -146,7 +148,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     # -mc supporting interfaces must not be created for SRG, only degrees
     def test_09_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
@@ -155,32 +157,32 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_10_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'connection-name': 'SRG1-PP3-TXRX-DEG1-TTP-TXRX-7',
+                 'connection-name': 'SRG1-PP3-TXRX-DEG1-TTP-TXRX-713:720',
                  'opticalControlMode': 'off'
                  }, **res['roadm-connections'][0]),
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP3-TXRX-nmc-7'},
+            {'src-if': 'SRG1-PP3-TXRX-nmc-713:720'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-            {'dst-if': 'DEG1-TTP-TXRX-nmc-7'},
+            {'dst-if': 'DEG1-TTP-TXRX-nmc-713:720'},
             res['roadm-connections'][0]['destination'])
 
     def test_11_service_path_create_xpdr_check(self):
-        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-7")
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'name': 'XPDR1-NETWORK1-7',
+                 'name': 'XPDR1-NETWORK1-713:720',
                  'administrative-state': 'inService',
                  'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
                  'type': 'org-openroadm-interfaces:opticalChannel',
@@ -282,13 +284,15 @@ class TransportPCERendererTesting(unittest.TestCase):
                                                      "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDR-A1",
                                                      "renderer:src-tp": "XPDR1-CLIENT1",
-                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}],
+                                                   195.8, 40, 195.775, 195.825, 713,
+                                                   720)
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed', 'success': True}})
 
     def test_18_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
@@ -297,7 +301,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_19_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
@@ -306,7 +310,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_20_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
@@ -316,7 +320,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_21_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
@@ -326,7 +330,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_22_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7")
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
@@ -336,7 +340,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_23_service_path_delete_xpdr_check(self):
-        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-7")
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
