@@ -23,6 +23,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
@@ -57,14 +58,21 @@ public class CrossConnectImpl121 {
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
-    public Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp) {
+    public Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) {
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber),
+                String.valueOf(higherSpectralSlotNumber));
         RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder();
-        String connectionNumber = generateConnectionNumber(srcTp, destTp, waveNumber);
+        String connectionNumber = generateConnectionNumber(srcTp, destTp, spectralSlotName);
         rdmConnBldr.setConnectionNumber(connectionNumber);
         rdmConnBldr.setWavelengthNumber(Uint32.valueOf(waveNumber));
         rdmConnBldr.setOpticalControlMode(OpticalControlMode.Off);
-        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-" + waveNumber.toString()).build());
-        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-" + waveNumber.toString()).build());
+        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,
+                srcTp, spectralSlotName)).build());
+        rdmConnBldr.setDestination(new DestinationBuilder()
+                .setDstIf(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, spectralSlotName))
+                .build());
         InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionNumber()));
 
@@ -89,7 +97,8 @@ public class CrossConnectImpl121 {
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Roadm-connection successfully created: {}-{}-{}", srcTp, destTp, waveNumber);
+            LOG.info("Roadm-connection successfully created: {}-{}-{}-{}", srcTp, destTp,
+                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}. Exception: ", rdmConnBldr.build(), e);
@@ -138,9 +147,11 @@ public class CrossConnectImpl121 {
     }
 
 
-    public List<Ports> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
-            throws OpenRoadmInterfaceException {
-        String connectionName = generateConnectionNumber(srcTp, destTp, waveNumber);
+    public List<Ports> getConnectionPortTrail(String nodeId, String srcTp, String destTp,
+            int lowerSpectralSlotNumber, int higherSpectralSlotNumber) throws OpenRoadmInterfaceException {
+        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber), String.valueOf(higherSpectralSlotNumber));
+        String connectionName = generateConnectionNumber(srcTp, destTp, spectralSlotName);
         Optional<MountPoint> mountPointOpt = deviceTransactionManager.getDeviceMountPoint(nodeId);
         List<Ports> ports = null;
         MountPoint mountPoint;
@@ -186,8 +197,8 @@ public class CrossConnectImpl121 {
                 .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
     }
 
-    private String generateConnectionNumber(String srcTp, String destTp, Long waveNumber) {
-        return srcTp + "-" + destTp + "-" + waveNumber;
+    private String generateConnectionNumber(String srcTp, String destTp, String spectralSlotName) {
+        return String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, destTp, spectralSlotName);
     }
 
     public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctNumber) {
