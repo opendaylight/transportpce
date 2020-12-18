@@ -46,6 +46,30 @@
       "revId": "5c0f40278d765635e3fc77487e46c76a0cf31306",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0f248a_4826a2cb",
+        "filename": "features/odl-transportpce-inventory/pom.xml",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-18T11:06:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d836617_44358cce",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "5c0f40278d765635e3fc77487e46c76a0cf31306",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
