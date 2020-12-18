@@ -117,7 +117,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "transportpce-device-renderer:modulation-format": "dp-qpsk",
             "transportpce-device-renderer:operation": "create",
             "transportpce-device-renderer:service-name": "testNMC-MC",
-            "transportpce-device-renderer:wave-number": "2",
+            "transportpce-device-renderer:wave-number": "0",
             "transportpce-device-renderer:center-freq": "196.05",
             "transportpce-device-renderer:width": "80",
             "transportpce-device-renderer:nodes": [
@@ -127,10 +127,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                 "transportpce-device-renderer:dest-tp": "DEG1-TTP-TXRX"
               }
             ],
-            "transportpce-device-renderer:min-freq": 196.95625,
-            "transportpce-device-renderer:max-freq": 196.04375,
-            "transportpce-device-renderer:lower-spectral-slot-number": 741,
-            "transportpce-device-renderer:higher-spectral-slot-number": 754
+            "transportpce-device-renderer:min-freq": 196.00625,
+            "transportpce-device-renderer:max-freq": 196.09375,
+            "transportpce-device-renderer:lower-spectral-slot-number": 749,
+            "transportpce-device-renderer:higher-spectral-slot-number": 763
           }
         }
         url = test_utils.RESTCONF_BASE_URL + \
@@ -145,11 +145,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # Get Degree MC interface and check
     def test_08_degree_mc_interface(self):
         response = test_utils.check_netconf_node_request("ROADM-D1",
-                                                         "interface/DEG1-TTP-TXRX-mc-741:754")
+                                                         "interface/DEG1-TTP-TXRX-mc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictEqual(
-            dict({"name": "DEG1-TTP-TXRX-mc-741:754",
+            dict({"name": "DEG1-TTP-TXRX-mc-749:763",
                   "supporting-interface": "OMS-DEG1-TTP-TXRX",
                   "supporting-circuit-pack-name": "1/0",
                   "circuit-id": "TBD",
@@ -170,12 +170,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # get DEG-NMC interface and check
     def test_09_degree_nmc_interface(self):
         response = test_utils.check_netconf_node_request("ROADM-D1",
-                                                         "interface/DEG1-TTP-TXRX-nmc-741:754")
+                                                         "interface/DEG1-TTP-TXRX-nmc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictEqual(
-            dict({"name": "DEG1-TTP-TXRX-nmc-741:754",
-                  "supporting-interface": "DEG1-TTP-TXRX-mc-741:754",
+            dict({"name": "DEG1-TTP-TXRX-nmc-749:763",
+                  "supporting-interface": "DEG1-TTP-TXRX-mc-749:763",
                   "supporting-circuit-pack-name": "1/0",
                   "circuit-id": "TBD",
                   "description": "TBD",
@@ -195,11 +195,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # get SRG-NMC interface
     def test_10_srg_nmc_interface(self):
         response = test_utils.check_netconf_node_request("ROADM-D1",
-                                                         "interface/SRG1-PP1-TXRX-nmc-741:754")
+                                                         "interface/SRG1-PP1-TXRX-nmc-749:763")
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(
-            dict({"name": "SRG1-PP1-TXRX-nmc-741:754",
+            dict({"name": "SRG1-PP1-TXRX-nmc-749:763",
                   "supporting-circuit-pack-name": "3/0",
                   "circuit-id": "TBD",
                   "description": "TBD",
@@ -213,14 +213,14 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # Create ROADM-connection
     def test_11_roadm_connection(self):
         response = test_utils.check_netconf_node_request("ROADM-D1",
-                                          "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-741:754")
+                                          "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual("SRG1-PP1-TXRX-DEG1-TTP-TXRX-741:754",
+        self.assertEqual("SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763",
                          res['roadm-connections'][0]['connection-name'])
-        self.assertEqual("SRG1-PP1-TXRX-nmc-741:754",
+        self.assertEqual("SRG1-PP1-TXRX-nmc-749:763",
                          res['roadm-connections'][0]['source']['src-if'])
-        self.assertEqual("DEG1-TTP-TXRX-nmc-741:754",
+        self.assertEqual("DEG1-TTP-TXRX-nmc-749:763",
                          res['roadm-connections'][0]['destination']['dst-if'])
         time.sleep(3)
 
@@ -231,7 +231,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
                    "node/ROADM-D1/yang-ext:mount/" +
                    "org-openroadm-device:org-openroadm-device/" +
-                   "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-741:754")
+                   "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -240,7 +240,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
                                            "node/ROADM-D1/yang-ext:mount/" +
                                            "org-openroadm-device:org-openroadm-device/" +
-                                           "interface/SRG1-PP1-TXRX-nmc-741:754")
+                                           "interface/SRG1-PP1-TXRX-nmc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -249,7 +249,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
                                              "node/ROADM-D1/yang-ext:mount/" +
                                              "org-openroadm-device:org-openroadm-device/" +
-                                             "interface/DEG1-TTP-TXRX-nmc-741:754")
+                                             "interface/DEG1-TTP-TXRX-nmc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -258,7 +258,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
                                              "node/ROADM-D1/yang-ext:mount/" +
                                              "org-openroadm-device:org-openroadm-device/" +
-                                             "interface/DEG1-TTP-TXRX-mc-741:754")
+                                             "interface/DEG1-TTP-TXRX-mc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
