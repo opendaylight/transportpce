@@ -67,7 +67,9 @@ public final class GridConstant {
             WIDTH_40, SLOT_WIDTH_50,
             WIDTH_80, SLOT_WIDTH_87_5);
 
-    public static final int FREQUENCY_PRECISION = 4;
+    public static final int FIXED_GRID_FREQUENCY_PRECISION = 4;
+
+    public static final int FLEX_GRID_FREQUENCY_PRECISION = 5;
 
     /**
      * Map to associate service rate and modulation format to frequency slot width.
