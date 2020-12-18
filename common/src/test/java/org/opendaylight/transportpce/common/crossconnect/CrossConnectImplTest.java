@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -60,14 +61,14 @@ public class CrossConnectImplTest {
 
     @Test
     public void postCrossConnect() {
-        Optional<?> res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp");
+        Optional<?> res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp", 1, 8);
         Assert.assertFalse("Optional object should be empty",res.isPresent());
 
         String devV121 = "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device";
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(devV121);
-        when(crossConnectImpl121.postCrossConnect(any(), any(), any(), any()))
+        when(crossConnectImpl121.postCrossConnect(any(), any(), any(), any(), eq(1), eq(8)))
                 .thenReturn(Optional.of("Value"));
-        res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp");
+        res = crossConnectImpl.postCrossConnect("100", 100L, "srcTp", "destTp", 1, 8);
         Assert.assertTrue("Optional object should have a value",res.isPresent());
     }
 

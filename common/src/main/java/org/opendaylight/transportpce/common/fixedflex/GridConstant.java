@@ -67,6 +67,16 @@ public final class GridConstant {
             WIDTH_40, SLOT_WIDTH_50,
             WIDTH_80, SLOT_WIDTH_87_5);
 
+    public static final int FREQUENCY_PRECISION = 4;
+
+    /**
+     * Map to associate service rate and modulation format to frequency slot width.
+     */
+    public static final Table<Uint32, ModulationFormat, BigDecimal> FREQUENCY_SLOT_WIDTH_TABLE =
+            initFrequencySlotWidthTable();
+    public static final String SPECTRAL_SLOT_SEPARATOR = ":";
+    public static final String NAME_PARAMETERS_SEPARATOR = "-";
+
     private GridConstant() {
     }
 
@@ -76,6 +86,15 @@ public final class GridConstant {
         frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, String.valueOf(WIDTH_80));
         frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, String.valueOf(WIDTH_80));
         frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, String.valueOf(WIDTH_80));
+        return frequencyWidthTable;
+    }
+
+    private static Table<Uint32, ModulationFormat, BigDecimal> initFrequencySlotWidthTable() {
+        Table<Uint32, ModulationFormat, BigDecimal> frequencyWidthTable = HashBasedTable.create();
+        frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, SLOT_WIDTH_50);
+        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, SLOT_WIDTH_87_5);
+        frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, SLOT_WIDTH_87_5);
+        frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, SLOT_WIDTH_87_5);
         return frequencyWidthTable;
     }
 }

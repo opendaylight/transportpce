@@ -63,6 +63,7 @@ public class GridUtilsTest {
         assertEquals("Index should be 767", 767, GridUtils.getIndexFromFrequency(BigDecimal.valueOf(196.11875)));
         assertEquals("Index should be 8", 8, GridUtils.getIndexFromFrequency(BigDecimal.valueOf(191.375)));
         assertEquals("Index should be 15", 15, GridUtils.getIndexFromFrequency(BigDecimal.valueOf(191.41875)));
+        assertEquals("Index should be 768", 768, GridUtils.getIndexFromFrequency(BigDecimal.valueOf(196.125)));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -99,7 +100,8 @@ public class GridUtilsTest {
     @Test
     public void getCentralFrequencyWithPrecisionTest() {
         assertEquals("Central frequency should be 191.3500",
-                new FrequencyTHz(BigDecimal.valueOf(191.35).setScale(4)),
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
+                        BigDecimal.valueOf(191.35).setScale(4)),
                 GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.325),
                         BigDecimal.valueOf(191.375), 4));
     }
@@ -107,7 +109,8 @@ public class GridUtilsTest {
     @Test
     public void getCentralFrequencyWithPrecisionAndRoundTest() {
         assertEquals("Central frequency should be 191.3499",
-                new FrequencyTHz(BigDecimal.valueOf(191.3499)),
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
+                        BigDecimal.valueOf(191.3499)),
                 GridUtils.getCentralFrequencyWithPrecision(BigDecimal.valueOf(191.3244445),
                         BigDecimal.valueOf(191.3754457788), 4));
     }
