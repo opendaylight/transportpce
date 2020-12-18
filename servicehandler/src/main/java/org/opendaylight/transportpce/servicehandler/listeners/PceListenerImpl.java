@@ -56,22 +56,22 @@ public class PceListenerImpl implements TransportpcePceListener {
 
     @Override
     public void onServicePathRpcResult(ServicePathRpcResult notification) {
-        if (!compareServicePathRpcResult(notification)) {
-            servicePathRpcResult = notification;
-            switch (servicePathRpcResult.getNotificationType().getIntValue()) {
-                /* path-computation-request. */
-                case 1:
-                    onPathComputationResult(notification);
-                    break;
-                /* cancel-resource-reserve. */
-                case 2:
-                    onCancelResourceResult();
-                    break;
-                default:
-                    break;
-            }
-        } else {
+        if (compareServicePathRpcResult(notification)) {
             LOG.warn("ServicePathRpcResult already wired !");
+            return;
+        }
+        servicePathRpcResult = notification;
+        switch (servicePathRpcResult.getNotificationType().getIntValue()) {
+            /* path-computation-request. */
+            case 1:
+                onPathComputationResult(notification);
+                break;
+            /* cancel-resource-reserve. */
+            case 2:
+                onCancelResourceResult();
+                break;
+            default:
+                break;
         }
     }
 
