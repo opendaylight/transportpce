@@ -212,4 +212,13 @@ public final class GridUtils {
         return spectrumInformation;
     }
 
+    /**
+     * Get the N value of range -284 +484 from frequency index array.
+     * @param frequencyIndex the frequency index f range 0 768.
+     * @return the N value
+     */
+    public static int getNFromFrequencyIndex(int frequencyIndex) {
+        return frequencyIndex - 284;
+    }
+
 }
