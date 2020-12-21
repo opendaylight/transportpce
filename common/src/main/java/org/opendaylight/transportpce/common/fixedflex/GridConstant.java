@@ -45,6 +45,7 @@ public final class GridConstant {
             StringConstants.SERVICE_TYPE_100GE, NB_SLOTS_100G,
             StringConstants.SERVICE_TYPE_400GE, NB_SLOTS_400G,
             StringConstants.SERVICE_TYPE_OTU4, NB_SLOTS_100G);
+
     /**
      * Map to associate service rate to modulation format.
      */
@@ -53,6 +54,7 @@ public final class GridConstant {
             ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk,
             ServiceRateConstant.RATE_300, ModulationFormat.DpQam8,
             ServiceRateConstant.RATE_400, ModulationFormat.DpQam16);
+
     /**
      * Map to associate service rate and modulation format to frequency width.
      */
@@ -78,6 +80,15 @@ public final class GridConstant {
             initFrequencySlotWidthTable();
     public static final String SPECTRAL_SLOT_SEPARATOR = ":";
     public static final String NAME_PARAMETERS_SEPARATOR = "-";
+
+    /**
+     * Map for associate service rate with nb slots.
+     */
+    public static final Map<Uint32, Integer> RATE_SPECTRAL_WIDTH_SLOT_NUMBER_MAP = Map.of(
+            ServiceRateConstant.RATE_100, NB_SLOTS_100G,
+            ServiceRateConstant.RATE_200, NB_SLOTS_100G,
+            ServiceRateConstant.RATE_300, NB_SLOTS_100G,
+            ServiceRateConstant.RATE_400, NB_SLOTS_400G);
 
     private GridConstant() {
     }
