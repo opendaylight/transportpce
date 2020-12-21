@@ -18,8 +18,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.gnpy.utils.AToZComparator;
@@ -52,6 +55,8 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.Syn
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.synchronization.Svec;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.synchronization.SvecBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.atoz.direction.AToZ;
@@ -71,18 +76,6 @@ import org.slf4j.LoggerFactory;
 
 public class GnpyServiceImpl {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyServiceImpl.class);
-  //Fix-grid channel width (THz)
-    private static final double FIX_CH = 0.05;
-  //Number of slot in 50GHz channel (THz)
-    private static final int NB_SLOT_BW = 4;
-  //Nominal central frequency granularity (THz)
-    private static final double SLOT_BW = 0.00625;
-  //Minimum channel center frequency (openRoadm spec) (THz)
-    private static final double MAX_CENTRAL_FREQ = 196.1;
-  //Flex-grid reference channel frequency (THz)
-    private static final double FLEX_CENTRAL_FREQ = 193.1;
-  //Convert THz to Hz
-    private static final double CONVERT_TH_HZ = 1e12;
     private static final Comparator<RouteObjectIncludeExclude> ROUTE_OBJECT_COMPARATOR =
             Comparator.comparing(RouteObjectIncludeExclude::getIndex);
 
@@ -158,11 +151,10 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        Long atozWavelength = null;
-        if (atoz.getAToZWavelengthNumber() != null) {
-            atozWavelength = atoz.getAToZWavelengthNumber().toJava();
-        }
-        PathConstraints pathConstraints = createPathConstraints(atoz.getRate().toJava(), atozWavelength);
+        PathConstraints pathConstraints = createPathConstraints(atoz.getRate().toJava(),
+                atoz.getModulationFormat(),
+                atoz.getAToZMinFrequency(),
+                atoz.getAToZMaxFrequency());
 
         // Create the path request
         Map<PathRequestKey, PathRequest> pathRequestMap = new HashMap<>();
@@ -198,11 +190,10 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        Long ztoaWavelength = null;
-        if (ztoa.getZToAWavelengthNumber() != null) {
-            ztoaWavelength = ztoa.getZToAWavelengthNumber().toJava();
-        }
-        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate().toJava(), ztoaWavelength);
+        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate().toJava(),
+                ztoa.getModulationFormat(),
+                ztoa.getZToAMinFrequency(),
+                ztoa.getZToAMaxFrequency());
 
         // Create the path request
         Map<PathRequestKey, PathRequest> pathRequestMap = new HashMap<>();
@@ -213,7 +204,7 @@ public class GnpyServiceImpl {
             .setBidirectional(false).setPathConstraints(pathConstraints)
             .setExplicitRouteObjects(explicitRouteObjects).build();
         pathRequestMap.put(pathRequestEl.key(),pathRequestEl);
-        LOG.debug("In GnpyServiceImpl: path request ZToA is extracted");
+        LOG.debug("In GnpyServiceImpl: path request ZToA is extracted is extracted");
         return pathRequestMap;
     }
 
@@ -358,19 +349,36 @@ public class GnpyServiceImpl {
     }
 
     //Create the path constraints
-    private PathConstraints createPathConstraints(Long rate, Long wavelengthNumber) {
-        // Create EffectiveFreqSlot
-        int freqNdex = 0;
-        if (wavelengthNumber != null) {
-            double freq = (MAX_CENTRAL_FREQ - FIX_CH * (wavelengthNumber - 1));
-            freqNdex = (int) Math.round((freq - FLEX_CENTRAL_FREQ) / SLOT_BW);
+    private PathConstraints createPathConstraints(Long rate, String modulationFormat, FrequencyTHz minFrequency,
+            FrequencyTHz maxFrequency) {
+        BigDecimal spacing = GridConstant.SLOT_WIDTH_50;
+        int mvalue = GridConstant.NB_SLOTS_100G;
+        int nvalue = 0;
+        if (minFrequency != null && maxFrequency != null && modulationFormat != null) {
+            LOG.info("Creating path constraints for rate {}, modulationFormat {}, min freq {}, max freq {}", rate,
+                    modulationFormat, minFrequency, maxFrequency);
+            FrequencyTHz centralFrequency = GridUtils
+                    .getCentralFrequency(minFrequency.getValue(), maxFrequency.getValue());
+            int centralFrequencyBitSetIndex = GridUtils.getIndexFromFrequency(centralFrequency.getValue());
+            mvalue = GridConstant.RATE_SPECTRAL_WIDTH_SLOT_NUMBER_MAP.getOrDefault(Uint32.valueOf(rate),
+                    GridConstant.NB_SLOTS_100G);
+            nvalue = GridUtils.getNFromFrequencyIndex(centralFrequencyBitSetIndex);
+            ModulationFormat mformat = ModulationFormat.DpQpsk;
+            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat.forName(modulationFormat);
+            if (optionalModulationFormat.isPresent()) {
+                mformat = optionalModulationFormat.get();
+            }
+            spacing = GridConstant.FREQUENCY_SLOT_WIDTH_TABLE.get(Uint32.valueOf(rate), mformat);
+
         }
-        EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(NB_SLOT_BW).setN(freqNdex).build();
-        // Create Te-Bandwidth
-        TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
-            .setTechnology("flexi-grid").setTrxType("openroadm-beta1")
-            .setTrxMode("W100G").setEffectiveFreqSlot(Map.of(effectiveFreqSlot1.key(),effectiveFreqSlot1))
-            .setSpacing(BigDecimal.valueOf(FIX_CH * CONVERT_TH_HZ)).build();
+        LOG.info("Creating path constraints for rate {}, mvalue {}, nvalue {}, spacing {}", rate,
+                mvalue, nvalue, spacing);
+        EffectiveFreqSlot effectiveFreqSlot = new EffectiveFreqSlotBuilder().setM(mvalue / 2).setN(nvalue).build();
+        // TODO : TrxMode is today hardcoded to W100G.
+        TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(BigDecimal.valueOf(rate))
+                .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
+                .setEffectiveFreqSlot(Map.of(effectiveFreqSlot.key(), effectiveFreqSlot))
+                .setSpacing(spacing.multiply(BigDecimal.valueOf(1e9))).build();
         return new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
     }
 
