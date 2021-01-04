@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c54c7191_e97e75dc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a30e991_3ce86138",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80405d0e_5d94449e",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 4
