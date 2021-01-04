@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "02b62e06_1b96fe2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f10d909_73981d24",
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1daf260_5be94cf3",
         "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2020-06-29.yang",
         "patchSetId": 2
@@ -148,6 +166,30 @@
       "side": 1,
       "message": "Same structure as PceListenerImpl.java :-)",
       "parentUuid": "d9de3136_6add232c",
+      "range": {
+        "startLine": 83,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 9
+      },
+      "revId": "60dc12e052c70aa648185ef2de9a1a49febf093f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a8d56fa_66793b21",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "if so, it should be done there in the adequate change too",
+      "parentUuid": "175e4c80_201d7bc1",
       "range": {
         "startLine": 83,
         "startChar": 9,

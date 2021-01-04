@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51b77323_f3f70b8d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "LF no more needed (or use one getter per line).",
+      "revId": "9d40a665e471c4a3f0c94e65500b2cc1b339ea9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba1a4a38_05d61aa3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "LF no more needed (or use one setter per line).",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 28
+      },
+      "revId": "9d40a665e471c4a3f0c94e65500b2cc1b339ea9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eb57b24_6e04a539",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "9d40a665e471c4a3f0c94e65500b2cc1b339ea9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0091cf1b_c2cc736a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "9d40a665e471c4a3f0c94e65500b2cc1b339ea9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922d8962_3d81f7fe",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:15:37Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "9d40a665e471c4a3f0c94e65500b2cc1b339ea9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
