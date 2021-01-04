@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "addeeedd_23d8963d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "indentation",
+      "range": {
+        "startLine": 362,
+        "startChar": 12,
+        "endLine": 362,
+        "endChar": 47
+      },
+      "revId": "900416a9bbcb69df00c06d8697a5db228d2c2fe4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3c5bd5_f61ab9e4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "indent -4\n.filter and .findFirst are at the same level than .augmentation which is below than .ietf",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 103
+      },
+      "revId": "900416a9bbcb69df00c06d8697a5db228d2c2fe4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06875435_d2213322",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 476,
+        "startChar": 1,
+        "endLine": 478,
+        "endChar": 103
+      },
+      "revId": "900416a9bbcb69df00c06d8697a5db228d2c2fe4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

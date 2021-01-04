@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "08965b18_b68ef005",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61c87c5b_ab548687",
+      "revId": "2d2a2d5f424176e9d15b8dbf73c4391b08a460aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58fa8740_ffbd203f",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
         "patchSetId": 4
@@ -128,6 +146,30 @@
       "revId": "2d2a2d5f424176e9d15b8dbf73c4391b08a460aa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d0050f_8e9471ce",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff1f4524_65f639ea",
+      "range": {
+        "startLine": 198,
+        "startChar": 97,
+        "endLine": 199,
+        "endChar": 45
+      },
+      "revId": "2d2a2d5f424176e9d15b8dbf73c4391b08a460aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -633,6 +675,24 @@
       "revId": "2d2a2d5f424176e9d15b8dbf73c4391b08a460aa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c0638a6_77d605da",
+        "filename": "ordmodels/network/src/main/yang/org-openroadm-common-network@2018-11-30.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:26:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3694106_4a77c2ca",
+      "revId": "2d2a2d5f424176e9d15b8dbf73c4391b08a460aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
