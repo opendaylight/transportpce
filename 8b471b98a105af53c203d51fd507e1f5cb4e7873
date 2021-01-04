@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1525becd_ae6554da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:54:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "604c422d_fc9a3a1e",
+      "revId": "8b471b98a105af53c203d51fd507e1f5cb4e7873",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7b91452_c2d15660",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "8b471b98a105af53c203d51fd507e1f5cb4e7873",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa3d4f4_970db0fe",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T09:54:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7b91452_c2d15660",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "8b471b98a105af53c203d51fd507e1f5cb4e7873",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
