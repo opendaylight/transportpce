@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52e14be9_8f21c5aa",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:48:57Z",
+      "side": 1,
+      "message": "now 7.0.3 but it is broken - I forward your email to Thierry.\n\nThierry, FYI, latest dev versions are constinuously evolving and are normally kept up-to-date at this URL\nhttps://docs.opendaylight.org/projects/integration-distribution/en/latest/platform-versions.html",
+      "parentUuid": "952a3918_954e22d8",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "a5634ba41cb71d87a8fc2b491299d5f672caaed3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e715fa2_7df746ce",
         "filename": "nbinotifications/pom.xml",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "05f597dc_e9773ddb",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:48:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e715fa2_7df746ce",
+      "range": {
+        "startLine": 49,
+        "startChar": 14,
+        "endLine": 49,
+        "endChar": 21
+      },
+      "revId": "a5634ba41cb71d87a8fc2b491299d5f672caaed3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57699fd5_3d0326a3",
         "filename": "nbinotifications/pom.xml",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "a5634ba41cb71d87a8fc2b491299d5f672caaed3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba6d7ff3_4193e6b1",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:48:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57699fd5_3d0326a3",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 109,
+        "endChar": 10
+      },
+      "revId": "a5634ba41cb71d87a8fc2b491299d5f672caaed3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
