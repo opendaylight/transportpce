@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "2c93c06e_e6752939",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-04T16:17:18Z",
+      "side": 1,
+      "message": "That is what is happening. Let see if now it is solved",
+      "parentUuid": "85ba80b1_9283ee91",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 44
+      },
+      "revId": "563471668e043a36c793e3592c103a692b3cce6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c46d65d2_1c5f7193",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 2
@@ -176,6 +200,30 @@
       "revId": "563471668e043a36c793e3592c103a692b3cce6f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460fb326_09b06d20",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-04T16:17:18Z",
+      "side": 1,
+      "message": "Again, this is because of my editor... tried to fix it manually",
+      "parentUuid": "9078dd58_c85b5ba9",
+      "range": {
+        "startLine": 85,
+        "startChar": 2,
+        "endLine": 85,
+        "endChar": 99
+      },
+      "revId": "563471668e043a36c793e3592c103a692b3cce6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
