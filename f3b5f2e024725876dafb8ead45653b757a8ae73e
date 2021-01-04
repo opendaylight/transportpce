@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91e8ab1a_cd5b38d4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:00:41Z",
+      "side": 1,
+      "message": "there is no such method.\nupdateOpenRoadmNetworkTopology rather ?",
+      "range": {
+        "startLine": 961,
+        "startChar": 75,
+        "endLine": 961,
+        "endChar": 94
+      },
+      "revId": "f3b5f2e024725876dafb8ead45653b757a8ae73e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

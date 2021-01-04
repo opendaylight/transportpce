@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "79861c7a_7eb6f7b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-04T10:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79adc359_81e74a38",
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dafe387e_6fd481d7",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
         "patchSetId": 1
