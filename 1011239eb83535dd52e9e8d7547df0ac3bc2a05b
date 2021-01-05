@@ -22,6 +22,30 @@
       "revId": "1011239eb83535dd52e9e8d7547df0ac3bc2a05b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88c06903_fc825ea2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-05T13:02:58Z",
+      "side": 1,
+      "message": "looks better but ican be improved\n\nproposal to ease reading and reduce the nbr of lines\n\n        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder tp11Bldr \u003d\n            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder()\n                .setAdministrativeState(AdminStates.InService)\n                .setOperationalState(State.InService);",
+      "parentUuid": "3c7ebfeb_c464008c",
+      "range": {
+        "startLine": 152,
+        "startChar": 91,
+        "endLine": 153,
+        "endChar": 35
+      },
+      "revId": "1011239eb83535dd52e9e8d7547df0ac3bc2a05b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
