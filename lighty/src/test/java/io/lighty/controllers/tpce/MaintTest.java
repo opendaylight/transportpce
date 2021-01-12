@@ -48,7 +48,7 @@ public class MaintTest {
 
     @Test
     public void startNoConfigFileTest() throws Exception {
-        main.start(new String[0], true);
+        main.start(null, false, true);
         ContentResponse response = client.GET("http://localhost:8181/restconf/config/ietf-network:networks/network/openroadm-topology");
         assertEquals("Response code should be 200", 200, response.getStatus());
     }
@@ -56,8 +56,7 @@ public class MaintTest {
     @Test
     public void startConfigFileTest() throws Exception {
         File configFile = new File("src/test/resources/config.json");
-        String[] args = {configFile.getAbsolutePath()};
-        main.start(args, true);
+        main.start(configFile.getAbsolutePath(), false, true);
         ContentResponse response = client.GET("http://localhost:8888/restconfCustom/config/ietf-network:networks/network/openroadm-topology");
         assertEquals("Response code should be 200", 200, response.getStatus());
     }
