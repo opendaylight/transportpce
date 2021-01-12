@@ -13,14 +13,14 @@
                interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
     <reference id="notificationService"
-                interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
+                  interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
 
-    <bean id="nbiNotificationsImpl"
+    <bean id="provider"
         class="org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider"
         init-method="init" destroy-method="close">
         <argument ref="dataBroker" />
         <argument>
-            <list>
+            <list value-type="java.lang.String">
                 <value>PceListener</value>
                 <value>ServiceHandlerOperations</value>
                 <value>ServiceHandler</value>
