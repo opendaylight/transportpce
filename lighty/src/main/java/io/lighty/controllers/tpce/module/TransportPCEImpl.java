@@ -9,6 +9,10 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -29,6 +33,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
@@ -96,8 +101,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final TapiProvider tapiProvider;
     // service-handler beans
     private final ServicehandlerProvider servicehandlerProvider;
+    // nbi-notifications beans
+    private NbiNotificationsProvider nbiNotificationsProvider;
+    /**
+     * List of publisher topics.
+     */
+    private final List<String> publisherTopicList =
+            Arrays.asList("PceListener", "ServiceHandlerOperations", "ServiceHandler", "RendererListener");
 
-    public TransportPCEImpl(LightyServices lightyServices) {
+    public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification) {
         LOG.info("Initializing transaction providers ...");
         deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(),
                 MAX_DURATION_TO_SUBMIT_TRANSACTION);
@@ -158,6 +170,12 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(), pathComputationService,
                 rendererServiceOperations, lightyServices.getBindingNotificationPublishService());
         tapiProvider = initTapi(lightyServices, rendererServiceOperations, pathComputationService);
+        if(activateNbiNotification) {
+            LOG.info("Creating nbi-notifications beans ...");
+            nbiNotificationsProvider = new NbiNotificationsProvider(lightyServices.getBindingDataBroker(),
+                    publisherTopicList, lightyServices.getRpcProviderService(),
+                    lightyServices.getNotificationService());
+        }
     }
 
     @Override
@@ -174,12 +192,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.init();
         LOG.info("Initializing tapi provider ...");
         tapiProvider.init();
+        LOG.info("Initializing nbi-notifications provider ...");
+        nbiNotificationsProvider.init();
         LOG.info("Init done.");
         return true;
     }
 
     @Override
     protected boolean stopProcedure() {
+        nbiNotificationsProvider.close();
+        LOG.info("Shutting down nbi-notifications provider ...");
         tapiProvider.close();
         LOG.info("Shutting down service-handler provider ...");
         servicehandlerProvider.close();
