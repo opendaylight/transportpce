@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f05bd01_73df6d20",
+        "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:57:47Z",
+      "side": 1,
+      "message": "tab must be removed",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
