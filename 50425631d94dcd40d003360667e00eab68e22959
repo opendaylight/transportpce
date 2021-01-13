@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dcfc0b2_fda31850",
+        "filename": "servicehandler/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T11:09:04Z",
+      "side": 1,
+      "message": "I think that to do so, nbinotifications should be built before SH in the root pom.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 17
+      },
+      "revId": "50425631d94dcd40d003360667e00eab68e22959",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
