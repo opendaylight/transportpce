@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe647154_f22a4e85",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T11:06:07Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be before Karaf ?",
+      "range": {
+        "startLine": 47,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 41
+      },
+      "revId": "db7602868501e9f8efde7f33440f8cafe933d1f5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
