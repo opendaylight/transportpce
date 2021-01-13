@@ -22,6 +22,75 @@
       "revId": "077414b930380b9821b5ba861aa4489bd8535443",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d8c97b_81a9460e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:23:16Z",
+      "side": 1,
+      "message": "this should not be indented at the same level than setters.",
+      "range": {
+        "startLine": 255,
+        "startChar": 20,
+        "endLine": 255,
+        "endChar": 47
+      },
+      "revId": "077414b930380b9821b5ba861aa4489bd8535443",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c02f912_dae21edb",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:23:16Z",
+      "side": 1,
+      "message": "misleading indentation\n\nsolution proposal\n\nnodes.get(i)\n    .augmentation(\n         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)\n    .nonnullTerminationPoint().values().stream()",
+      "range": {
+        "startLine": 435,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 81
+      },
+      "revId": "077414b930380b9821b5ba861aa4489bd8535443",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf1ba01d_52fd912b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:23:16Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 37
+      },
+      "revId": "077414b930380b9821b5ba861aa4489bd8535443",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
