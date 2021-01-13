@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00af0aa9_3acc47a9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:43:20Z",
+      "side": 1,
+      "message": "what about\n\n        if (State.InService.equals(xpdrTp.augmentation(org.opendaylight.yang.gen.v1.http\n                .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState())\n            \u0026\u0026 State.InService.equals(rdmTp.augmentation(org.opendaylight.yang.gen.v1.http\n                .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState())) {\n\n\n?",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 106
+      },
+      "revId": "81ddb365b55cc0f7af85040520719f63e8fc7ff0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e1fe46_f49b9efd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:43:20Z",
+      "side": 1,
+      "message": "what about\n\n                                this.topologyChanges.put(\n                                        new OrdTopologyChangesKey(node.getNodeId().getValue() + \"-\" + tpId),\n                                        new OrdTopologyChangesBuilder()\n                                            .setId(node.getNodeId().getValue() + \"-\" + tpId)\n                                            .setState(newTpOperationalState)\n                                            .build());\n\n?",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 786,
+        "endChar": 119
+      },
+      "revId": "81ddb365b55cc0f7af85040520719f63e8fc7ff0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e963f28d_094fd981",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:43:20Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 793,
+        "startChar": 0,
+        "endLine": 796,
+        "endChar": 119
+      },
+      "revId": "81ddb365b55cc0f7af85040520719f63e8fc7ff0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
