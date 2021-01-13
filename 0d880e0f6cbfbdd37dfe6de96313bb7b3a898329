@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e4176d8c_ebd8437c",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-common-service-types@2019-05-31.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T13:00:51Z",
+      "side": 1,
+      "message": "I am not the specialist of the models by themselves and I am not sure of what the new version brings.\nyou can give a try by backpedaling but maybe ask advices to Olivier and Gilles and Christophe before.",
+      "parentUuid": "17678eff_8601d163",
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f05bd01_73df6d20",
         "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
         "patchSetId": 26
