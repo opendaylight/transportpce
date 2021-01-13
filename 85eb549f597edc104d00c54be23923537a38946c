@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "41f487f6_40c2296e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-13T13:08:26Z",
+      "side": 1,
+      "message": "Sure, I will add his comment",
+      "parentUuid": "e5862bf7_3b3f40ba",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 90
+      },
+      "revId": "85eb549f597edc104d00c54be23923537a38946c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5424b9d_80167911",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener.java",
         "patchSetId": 15
