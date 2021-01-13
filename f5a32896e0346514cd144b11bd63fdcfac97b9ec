@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64ed6fe6_5370f69f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:27:41Z",
+      "side": 1,
+      "message": "line length \u003e 72 char",
+      "range": {
+        "startLine": 9,
+        "startChar": 45,
+        "endLine": 9,
+        "endChar": 73
+      },
+      "revId": "f5a32896e0346514cd144b11bd63fdcfac97b9ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30034505_b9b6959d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-13T10:27:41Z",
+      "side": 1,
+      "message": "misleading indentation\nInstanceIdentifier.builder(Networks.class) should not be at the same level than .child( and .augmentation",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 46
+      },
+      "revId": "f5a32896e0346514cd144b11bd63fdcfac97b9ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
