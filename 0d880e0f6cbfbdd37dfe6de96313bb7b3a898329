@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "796a038e_cbc81a9b",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-common-service-types@2019-05-31.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-13T18:09:32Z",
+      "side": 1,
+      "message": "Talked with Olivier. Need to go back to previous version. I will adapt the code and push it",
+      "parentUuid": "e4176d8c_ebd8437c",
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f05bd01_73df6d20",
         "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
         "patchSetId": 26
