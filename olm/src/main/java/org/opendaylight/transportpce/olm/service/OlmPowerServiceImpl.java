@@ -126,16 +126,23 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     @Override
     public GetPmOutput getPm(GetPmInput pmInput) {
         OpenroadmVersion openroadmVersion;
-        if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())
-            .equals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1)) {
-            LOG.info("Device version is 1.2.1");
-            openroadmVersion = OpenroadmVersion._121;
-        } else {
-            openroadmVersion = OpenroadmVersion._221;
-            LOG.info("Device version is 2.2.1");
+        GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
+        switch (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                openroadmVersion = OpenroadmVersion._121;
+                break;
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                openroadmVersion = OpenroadmVersion._221;
+                break;
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                openroadmVersion = OpenroadmVersion._710;
+                break;
+            default:
+                LOG.error("Unknown device version");
+                return pmOutputBuilder.build();
         }
         LOG.info("Now calling get pm data");
-        GetPmOutputBuilder pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
+        pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
             openroadmVersion);
         return pmOutputBuilder.build();
     }
@@ -355,13 +362,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             .build();
         GetPmOutput otsPmOutput = getPm(getPmInput);
 
-        if (otsPmOutput == null) {
+        if (otsPmOutput == null || otsPmOutput.getMeasurements() == null) {
             LOG.info("OTS PM not found for NodeId: {} TP Id:{} PMName:{}", realNodeId, tpID, pmName);
             return null;
         }
         try {
             for (Measurements measurement : otsPmOutput.getMeasurements()) {
-                if (pmName.equals(measurement.getPmparameterName())) {
+                if (pmName.equalsIgnoreCase(measurement.getPmparameterName())) {
                     return new OtsPmHolder(pmName, Double.parseDouble(measurement.getPmparameterValue()),
                         mapping.getSupportingOts());
                 }
@@ -521,7 +528,14 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             String destNodeId = link.getDestNodeId();
             String destTpId = link.getDestTpid();
             OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
+            if (srcOtsPmHoler == null) {
+                srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
+            }
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
+            if (destOtsPmHoler == null) {
+                destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
+            }
+
             if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
                 LOG.warn("OTS is not present for the link {}", link);
                 continue;
@@ -532,6 +546,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 spanLoss, srcOtsPmHoler.getOtsParameterVal(), destOtsPmHoler.getOtsParameterVal());
             if (spanLoss.doubleValue() > 28) {
                 LOG.warn("Span Loss is out of range of OpenROADM specifications");
+            }
+            if (spanLoss.intValue() <= 0) {
+                spanLoss = BigDecimal.valueOf(0);
             }
             if (!setSpanLoss(sourceNodeId, srcOtsPmHoler.getOtsInterfaceName(), spanLoss, "TX")) {
                 LOG.info("Setting spanLoss failed for {}", sourceNodeId);

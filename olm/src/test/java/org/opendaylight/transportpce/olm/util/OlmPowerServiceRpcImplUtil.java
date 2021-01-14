@@ -175,7 +175,6 @@ public final class OlmPowerServiceRpcImplUtil {
 
     public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInputAll() {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
-                .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
                 .setSrcType(CalculateSpanlossBaseInput.SrcType.All)
                 .build();
         return input;

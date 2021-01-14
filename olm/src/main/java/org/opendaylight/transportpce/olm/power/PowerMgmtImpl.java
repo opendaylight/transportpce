@@ -94,34 +94,61 @@ public class PowerMgmtImpl implements PowerMgmt {
                         String circuitPackName = mappingObject.get().getSupportingCircuitPackName();
                         String portName = mappingObject.get().getSupportingPort();
                         Map<String, Double> txPowerRangeMap = new HashMap<>();
-                        if (openroadmVersion.getIntValue() == 1) {
-                            txPowerRangeMap = PowerMgmtVersion121.getXponderPowerRange(circuitPackName, portName,
+                        switch (openroadmVersion.getIntValue()) {
+                            case 1:
+                                txPowerRangeMap = PowerMgmtVersion121.getXponderPowerRange(circuitPackName, portName,
                                     nodeId, deviceTransactionManager);
-                        } else if (openroadmVersion.getIntValue() == 2) {
-                            txPowerRangeMap = PowerMgmtVersion221.getXponderPowerRange(circuitPackName, portName,
+                                break;
+                            case 2:
+                                txPowerRangeMap = PowerMgmtVersion221.getXponderPowerRange(circuitPackName, portName,
                                     nodeId, deviceTransactionManager);
+                                break;
+                            case 3:
+                                txPowerRangeMap = PowerMgmtVersion710.getXponderPowerRange(circuitPackName, portName,
+                                    nodeId, deviceTransactionManager);
+                                break;
+                            default:
+                                LOG.error("Unrecognized OpenRoadm version");
                         }
                         if (!txPowerRangeMap.isEmpty()) {
                             LOG.info("Transponder range exists for nodeId: {}", nodeId);
+                            OpenroadmVersion rdmOpenroadmVersion = openroadmVersion;
                             String srgId =  input.getNodes().get(i + 1).getSrcTp();
                             String nextNodeId = input.getNodes().get(i + 1).getNodeId();
+                            Optional<Nodes> inputNextOptional = OlmUtils.getNode(nextNodeId, this.db);
+                            if (inputNextOptional.isPresent()) {
+                                rdmOpenroadmVersion = inputNextOptional.get()
+                                        .getNodeInfo().getOpenroadmVersion();
+                            }
                             Map<String, Double> rxSRGPowerRangeMap = new HashMap<>();
                             Optional<Mapping> mappingObjectSRG = OlmUtils.getNode(nextNodeId, db)
                                     .flatMap(node -> node.nonnullMapping().values()
                                             .stream().filter(o -> o.key()
                                                     .equals(new MappingKey(srgId))).findFirst());
-                            if (mappingObjectSRG.isPresent()) {
 
-                                if (openroadmVersion.getIntValue() == 1) {
-                                    rxSRGPowerRangeMap = PowerMgmtVersion121.getSRGRxPowerRange(nextNodeId, srgId,
-                                            deviceTransactionManager, mappingObjectSRG.get()
-                                            .getSupportingCircuitPackName(),
-                                            mappingObjectSRG.get().getSupportingPort());
-                                } else if (openroadmVersion.getIntValue() == 2) {
-                                    rxSRGPowerRangeMap = PowerMgmtVersion221.getSRGRxPowerRange(nextNodeId, srgId,
-                                            deviceTransactionManager, mappingObjectSRG.get()
-                                            .getSupportingCircuitPackName(),
-                                            mappingObjectSRG.get().getSupportingPort());
+                            if (mappingObjectSRG.isPresent()) {
+                                switch (rdmOpenroadmVersion.getIntValue()) {
+                                    case 1:
+                                        rxSRGPowerRangeMap = PowerMgmtVersion121.getSRGRxPowerRange(nextNodeId, srgId,
+                                                deviceTransactionManager, mappingObjectSRG.get()
+                                                        .getSupportingCircuitPackName(),
+                                                mappingObjectSRG.get().getSupportingPort());
+                                        break;
+                                    case 2:
+                                        rxSRGPowerRangeMap = PowerMgmtVersion221.getSRGRxPowerRange(nextNodeId, srgId,
+                                                deviceTransactionManager, mappingObjectSRG.get()
+                                                        .getSupportingCircuitPackName(),
+                                                mappingObjectSRG.get().getSupportingPort());
+                                        break;
+                                    case 3:
+                                        rxSRGPowerRangeMap = PowerMgmtVersion710.getSRGRxPowerRange(nextNodeId, srgId,
+                                                deviceTransactionManager, mappingObjectSRG.get()
+                                                        .getSupportingCircuitPackName(),
+                                                mappingObjectSRG.get().getSupportingPort());
+                                        break;
+                                    default:
+                                        LOG.error("Unrecognized OpenRoadm version");
+                                        return false;
                                 }
                             }
                             double powerValue = 0;
@@ -507,27 +534,42 @@ public class PowerMgmtImpl implements PowerMgmt {
                                             OpenroadmVersion openroadmVersion) {
         boolean powerSetupResult = false;
         try {
-            if (openroadmVersion.getIntValue() == 1) {
-                Optional<Interface> interfaceOptional;
-                interfaceOptional = openRoadmInterfaces.getInterface(nodeId, interfaceName);
-                if (interfaceOptional.isPresent()) {
+            switch (openroadmVersion.getIntValue()) {
+                case 1:
+                    Optional<Interface> interfaceOptional121;
+                    interfaceOptional121 = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+                    if (!interfaceOptional121.isPresent()) {
+                        LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+                        return false;
+                    }
                     powerSetupResult = PowerMgmtVersion121.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional.get());
-                } else {
-                    LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
-                    return false;
-                }
-            } else if (openroadmVersion.getIntValue() == 2) {
-                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp
-                        .Interface> interfaceOptional;
-                interfaceOptional = openRoadmInterfaces.getInterface(nodeId, interfaceName);
-                if (interfaceOptional.isPresent()) {
+                                txPower, deviceTransactionManager, interfaceOptional121.get());
+                    break;
+                case 2:
+                    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp
+                            .Interface> interfaceOptional221;
+                    interfaceOptional221 = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+                    if (!interfaceOptional221.isPresent()) {
+                        LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+                        return false;
+                    }
                     powerSetupResult = PowerMgmtVersion221.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional.get());
-                } else {
-                    LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+                                txPower, deviceTransactionManager, interfaceOptional221.get());
+                    break;
+                case 3:
+                    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp
+                            .Interface> interfaceOptional710;
+                    interfaceOptional710 = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+                    if (!interfaceOptional710.isPresent()) {
+                        LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+                        return false;
+                    }
+                    powerSetupResult = PowerMgmtVersion710.setTransponderPower(nodeId, interfaceName,
+                            txPower, deviceTransactionManager, interfaceOptional710.get());
+                    break;
+                default:
+                    LOG.error("Unrecognized OpenRoadm version");
                     return false;
-                }
             }
         } catch (OpenRoadmInterfaceException ex) {
             LOG.error("Failed to get interface {} from node {}!", interfaceName, nodeId, ex);
@@ -536,12 +578,11 @@ public class PowerMgmtImpl implements PowerMgmt {
         if (powerSetupResult) {
             LOG.debug("Transponder power set up completed successfully for nodeId {} and interface {}",
                     nodeId,interfaceName);
-            return powerSetupResult;
         } else {
             LOG.debug("Transponder power setup failed for nodeId {} on interface {}",
                     nodeId, interfaceName);
-            return powerSetupResult;
         }
+        return powerSetupResult;
     }
 
     /*
