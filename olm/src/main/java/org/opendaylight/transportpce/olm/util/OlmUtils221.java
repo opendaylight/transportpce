@@ -56,9 +56,9 @@ import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class OlmUtils22 {
+final class OlmUtils221 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils22.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils221.class);
 
     /**
      * This method retrieves list of current PMs for given nodeId,
@@ -76,73 +76,75 @@ final class OlmUtils22 {
      *
      * @return Result of the request list of PM readings
      */
-    //LOG.info message length is >120 char and can be difficultly shortened
     @SuppressWarnings("checkstyle:linelength")
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
         LOG.info("Getting PM Data for 2.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
-            input.getResourceType(), input.getResourceIdentifier());
+                input.getResourceType(), input.getResourceIdentifier());
 
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
 
         InstanceIdentifier<?> resourceKeyIID =
-            findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
+                findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
         CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
-            convertResourceTypeEnum(input.getResourceType()), "");
-
+                convertResourceTypeEnum(input.getResourceType()),"");
         InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
 
         Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
-            LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (currentPmListOpt.isPresent()) {
-            CurrentPmList  currentPmList = currentPmListOpt.get();
-
+            CurrentPmList currentPmList = currentPmListOpt.get();
             @NonNull
-            Map<CurrentPmEntryKey, CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
+            Map<CurrentPmEntryKey,CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
             LOG.info("Current PM list exists for node {} and contains {} entries.", input.getNodeId(),
-                currentPmEntryList.size());
+                    currentPmEntryList.size());
             for (Map.Entry<CurrentPmEntryKey, CurrentPmEntry> entry : currentPmEntryList.entrySet()) {
                 CurrentPmEntry cpe = entry.getValue();
                 CurrentPmEntryKey cpek = new CurrentPmEntryKey(cpe.getPmResourceInstance(), cpe.getPmResourceType(),
-                    cpe.getPmResourceTypeExtension());
+                        "");
                 if (resourceKey.equals(cpek)) {
                     List<CurrentPm> currentPMList = new ArrayList<>(cpe.nonnullCurrentPm().values());
                     Stream<CurrentPm> currentPMStream = currentPMList.stream();
                     if (input.getPmNameType() != null) {
                         currentPMStream = currentPMStream.filter(pm -> pm.getType().getIntValue()
-                            == PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getIntValue());
+                                == PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getIntValue());
                     }
                     if (input.getPmExtension() != null) {
                         currentPMStream = currentPMStream.filter(pm -> pm.getExtension()
-                            .equals(input.getPmExtension()));
+                                .equals(input.getPmExtension()));
                     }
                     if (input.getLocation() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> Location.forValue(pm.getLocation().getIntValue())
-                            .equals(Location.forValue(input.getLocation().getIntValue())));
+                        currentPMStream = currentPMStream.filter(pm -> Location.forValue(pm.getLocation()
+                                .getIntValue())
+                                .equals(Location.forValue(input.getLocation().getIntValue())));
                     }
                     if (input.getDirection() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection().getIntValue())
-                            .equals(Direction.forValue((input.getDirection().getIntValue()))));
+                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection()
+                                .getIntValue())
+                                .equals(Direction.forValue((input.getDirection().getIntValue()))));
                     }
                     List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
                     List<Measurements> measurements = extractWantedMeasurements(filteredPMs,input.getGranularity());
                     if (measurements.isEmpty()) {
                         LOG.error(
-                            "No Matching PM data found for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
-                            input.getNodeId(), input.getResourceType(),
-                            getResourceIdentifierAsString(input.getResourceIdentifier()),
-                            input.getPmNameType(),input.getPmExtension(),input.getLocation(),
-                            input.getDirection());
+                                "No Matching PM data found for node: {}, resource type: {}, resource name: {}, "
+                                        + "pm type: {}, extention: {}, location: {} and direction: {}",
+                                input.getNodeId(), input.getResourceType(),
+                                getResourceIdentifierAsString(input.getResourceIdentifier()),
+                                input.getPmNameType(),input.getPmExtension(),input.getLocation(),
+                                input.getDirection());
                     } else {
                         pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
-                            .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
-                            .setMeasurements(measurements);
+                                .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input
+                                .getGranularity())
+                                .setMeasurements(measurements);
                         LOG.info(
-                            "PM data found successfully for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
-                            input.getNodeId(), input.getResourceType(),
-                            getResourceIdentifierAsString(input.getResourceIdentifier()),
-                            input.getPmNameType(),input.getPmExtension(),input.getLocation(),
-                            input.getDirection());
+                                "PM data found successfully for node: {}, resource type: {}, resource name: {}, "
+                                        + "pm type: {}, extention: {}, location: {} and direction: {}",
+                                input.getNodeId(), input.getResourceType(),
+                                getResourceIdentifierAsString(input.getResourceIdentifier()),
+                                input.getPmNameType(),input.getPmExtension(),input.getLocation(),
+                                input.getDirection());
                     }
                 }
             }
@@ -157,7 +159,7 @@ final class OlmUtils22 {
             return resourceIdentifier.getResourceName();
         } else {
             return resourceIdentifier.getResourceName() + ", circuit pack name: "
-                + resourceIdentifier.getCircuitPackName();
+                    + resourceIdentifier.getCircuitPackName();
         }
     }
 
@@ -166,8 +168,9 @@ final class OlmUtils22 {
         List<Measurements> olmMeasurements = new ArrayList<>();
         for (CurrentPm pm : currentPmList) {
             for (Measurement measurements: pm.nonnullMeasurement().values()) {
-                if (measurements.getGranularity().getIntValue() == org.opendaylight.yang.gen.v1.http.org.openroadm.pm
-                    .types.rev171215.PmGranularity.forValue(wantedGranularity.getIntValue()).getIntValue()) {
+                if (measurements.getGranularity().getIntValue()
+                        == org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmGranularity.forValue(
+                                wantedGranularity.getIntValue()).getIntValue()) {
                     MeasurementsBuilder pmMeasureBuilder = new MeasurementsBuilder();
                     pmMeasureBuilder.setPmparameterName(pm.getType().name());
                     pmMeasureBuilder.setPmparameterValue(measurements.getPmParameterValue().stringValue());
@@ -185,33 +188,34 @@ final class OlmUtils22 {
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class);
             case Degree:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Degree.class, new DegreeKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
+                        .child(Degree.class, new DegreeKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
             case SharedRiskGroup:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(SharedRiskGroup.class,
-                        new SharedRiskGroupKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
+                        .child(SharedRiskGroup.class,
+                                new SharedRiskGroupKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
             case Connection:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(wantedResourceIdentifier.getResourceName()));
+                        .child(RoadmConnections.class, new RoadmConnectionsKey(wantedResourceIdentifier
+                                .getResourceName()));
             case CircuitPack:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getResourceName()));
+                        .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getResourceName()));
             case Port:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getCircuitPackName()))
-                    .child(Ports.class, new PortsKey(wantedResourceIdentifier.getResourceName()));
+                        .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getCircuitPackName()))
+                        .child(Ports.class, new PortsKey(wantedResourceIdentifier.getResourceName()));
             case Interface:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Interface.class, new InterfaceKey(wantedResourceIdentifier.getResourceName()));
+                        .child(Interface.class, new InterfaceKey(wantedResourceIdentifier.getResourceName()));
             case InternalLink:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(InternalLink.class, new InternalLinkKey(wantedResourceIdentifier.getResourceName()));
+                        .child(InternalLink.class, new InternalLinkKey(wantedResourceIdentifier.getResourceName()));
             case PhysicalLink:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(PhysicalLink.class, new PhysicalLinkKey(wantedResourceIdentifier.getResourceName()));
+                        .child(PhysicalLink.class, new PhysicalLinkKey(wantedResourceIdentifier.getResourceName()));
             case Shelf:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Shelves.class, new ShelvesKey(wantedResourceIdentifier.getResourceName()));
+                        .child(Shelves.class, new ShelvesKey(wantedResourceIdentifier.getResourceName()));
             default:
                 LOG.error("Unknown resource type {}", wantedResourceType);
                 return null;
@@ -227,24 +231,24 @@ final class OlmUtils22 {
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Degree;
             case SharedRiskGroup:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.SharedRiskGroup;
+                        .ResourceTypeEnum.SharedRiskGroup;
             case Connection:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.Connection;
+                        .ResourceTypeEnum.Connection;
             case CircuitPack:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.CircuitPack;
+                        .ResourceTypeEnum.CircuitPack;
             case Port:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Port;
             case Interface:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.Interface;
+                        .ResourceTypeEnum.Interface;
             case InternalLink:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.InternalLink;
+                        .ResourceTypeEnum.InternalLink;
             case PhysicalLink:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
-                    .ResourceTypeEnum.PhysicalLink;
+                        .ResourceTypeEnum.PhysicalLink;
             case Shelf:
                 return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Shelf;
             default:
@@ -253,7 +257,7 @@ final class OlmUtils22 {
         }
     }
 
-    private OlmUtils22() {
+    private OlmUtils221() {
     }
 
 }

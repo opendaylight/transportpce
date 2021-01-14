@@ -117,13 +117,14 @@ public class OpenRoadmInterface221 {
         }
 
         List<String> interfacesCreated = new ArrayList<>();
-
+        String mcInterfaceCreated = "";
         if (logicalConnPoint.contains("DEG")) {
-            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, spectrumInformation);
+            mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, spectrumInformation);
             interfacesCreated.add(mcInterfaceCreated);
         }
-        String mcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, spectrumInformation);
-        interfacesCreated.add(mcInterfaceCreated);
+        String nmcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, spectrumInformation,
+                mcInterfaceCreated);
+        interfacesCreated.add(nmcInterfaceCreated);
         return interfacesCreated;
     }
 
@@ -162,7 +163,7 @@ public class OpenRoadmInterface221 {
     }
 
     public String createNMCInterface(String nodeId, String logicalConnPoint,
-        SpectrumInformation spectrumInformation)
+        SpectrumInformation spectrumInformation, String mcName)
         throws OpenRoadmInterfaceException {
         LOG.info("This is the central frequency {}", spectrumInformation.getCenterFrequency());
         LOG.info("This is the nmc width {}", spectrumInformation.getWidth());
@@ -177,7 +178,7 @@ public class OpenRoadmInterface221 {
         InterfaceBuilder nmcInterfaceBldr = createGenericInterfaceBuilder(portMap,
             NetworkMediaChannelConnectionTerminationPoint.class, nmcName);
         if (logicalConnPoint.contains("DEG")) {
-            nmcInterfaceBldr.setSupportingInterface(nmcName);
+            nmcInterfaceBldr.setSupportingInterface(mcName);
         }
 
         NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
