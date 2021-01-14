@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AT&T and others.  All rights reserved.
+ * Copyright © 2020 AT&T and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -22,30 +22,30 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.MeasurementsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacksKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.internal.links.InternalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.internal.links.InternalLinkKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.Degree;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.DegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.physical.links.PhysicalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.physical.links.PhysicalLinkKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.shelves.Shelves;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.shelves.ShelvesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPm;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntry;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.Measurement;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.PortsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacksKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.internal.links.InternalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.internal.links.InternalLinkKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.Degree;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.DegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.physical.links.PhysicalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.physical.links.PhysicalLinkKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.shelves.Shelves;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.shelves.ShelvesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.CurrentPmList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.group.CurrentPm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.list.CurrentPmEntry;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.list.CurrentPmEntryKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.val.group.Measurement;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.Direction;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.Location;
@@ -56,9 +56,9 @@ import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class OlmUtils22 {
+final class OlmUtils710 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils22.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils710.class);
 
     /**
      * This method retrieves list of current PMs for given nodeId,
@@ -76,73 +76,73 @@ final class OlmUtils22 {
      *
      * @return Result of the request list of PM readings
      */
-    //LOG.info message length is >120 char and can be difficultly shortened
-    @SuppressWarnings("checkstyle:linelength")
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
-        LOG.info("Getting PM Data for 2.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
-            input.getResourceType(), input.getResourceIdentifier());
+        LOG.info("Getting PM Data for 7.1.0 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
+                input.getResourceType(), input.getResourceIdentifier());
 
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
 
         InstanceIdentifier<?> resourceKeyIID =
-            findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
+                findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
         CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
-            convertResourceTypeEnum(input.getResourceType()), "");
+                convertResourceTypeEnum(input.getResourceType()), "");
 
         InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
 
         Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
-            LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (currentPmListOpt.isPresent()) {
             CurrentPmList  currentPmList = currentPmListOpt.get();
-
             @NonNull
             Map<CurrentPmEntryKey, CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
             LOG.info("Current PM list exists for node {} and contains {} entries.", input.getNodeId(),
-                currentPmEntryList.size());
+                    currentPmEntryList.size());
             for (Map.Entry<CurrentPmEntryKey, CurrentPmEntry> entry : currentPmEntryList.entrySet()) {
                 CurrentPmEntry cpe = entry.getValue();
                 CurrentPmEntryKey cpek = new CurrentPmEntryKey(cpe.getPmResourceInstance(), cpe.getPmResourceType(),
-                    cpe.getPmResourceTypeExtension());
+                        "");
                 if (resourceKey.equals(cpek)) {
                     List<CurrentPm> currentPMList = new ArrayList<>(cpe.nonnullCurrentPm().values());
                     Stream<CurrentPm> currentPMStream = currentPMList.stream();
                     if (input.getPmNameType() != null) {
                         currentPMStream = currentPMStream.filter(pm -> pm.getType().getIntValue()
-                            == PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getIntValue());
+                                == PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getIntValue());
                     }
                     if (input.getPmExtension() != null) {
                         currentPMStream = currentPMStream.filter(pm -> pm.getExtension()
-                            .equals(input.getPmExtension()));
+                                .equals(input.getPmExtension()));
                     }
                     if (input.getLocation() != null) {
                         currentPMStream = currentPMStream.filter(pm -> Location.forValue(pm.getLocation().getIntValue())
-                            .equals(Location.forValue(input.getLocation().getIntValue())));
+                                .equals(Location.forValue(input.getLocation().getIntValue())));
                     }
                     if (input.getDirection() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection().getIntValue())
-                            .equals(Direction.forValue((input.getDirection().getIntValue()))));
+                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection()
+                                .getIntValue())
+                                .equals(Direction.forValue((input.getDirection().getIntValue()))));
                     }
                     List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
                     List<Measurements> measurements = extractWantedMeasurements(filteredPMs,input.getGranularity());
                     if (measurements.isEmpty()) {
                         LOG.error(
-                            "No Matching PM data found for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
-                            input.getNodeId(), input.getResourceType(),
-                            getResourceIdentifierAsString(input.getResourceIdentifier()),
-                            input.getPmNameType(),input.getPmExtension(),input.getLocation(),
-                            input.getDirection());
+                                "No Matching PM data found for node: {}, resource type: {}, resource name: {}, "
+                                        + "pm type: {}, extention: {}, location: {} and direction: {}",
+                                input.getNodeId(), input.getResourceType(),
+                                getResourceIdentifierAsString(input.getResourceIdentifier()),
+                                input.getPmNameType(),input.getPmExtension(),input.getLocation(),
+                                input.getDirection());
                     } else {
                         pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
-                            .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
-                            .setMeasurements(measurements);
+                                .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input
+                                .getGranularity()).setMeasurements(measurements);
                         LOG.info(
-                            "PM data found successfully for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
-                            input.getNodeId(), input.getResourceType(),
-                            getResourceIdentifierAsString(input.getResourceIdentifier()),
-                            input.getPmNameType(),input.getPmExtension(),input.getLocation(),
-                            input.getDirection());
+                                "PM data found successfully for node: {}, resource type: {}, resource name: {}, "
+                                        + "pm type: {}, extention: {}, location: {} and direction: {}",
+                                input.getNodeId(), input.getResourceType(),
+                                getResourceIdentifierAsString(input.getResourceIdentifier()),
+                                input.getPmNameType(),input.getPmExtension(),input.getLocation(),
+                                input.getDirection());
                     }
                 }
             }
@@ -218,42 +218,42 @@ final class OlmUtils22 {
         }
     }
 
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129.ResourceTypeEnum
         convertResourceTypeEnum(ResourceTypeEnum wantedResourceType) {
         switch (wantedResourceType) {
             case Device:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Device;
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129.ResourceTypeEnum.Device;
             case Degree:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Degree;
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129.ResourceTypeEnum.Degree;
             case SharedRiskGroup:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.SharedRiskGroup;
             case Connection:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.Connection;
             case CircuitPack:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.CircuitPack;
             case Port:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Port;
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129.ResourceTypeEnum.Port;
             case Interface:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.Interface;
             case InternalLink:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.InternalLink;
             case PhysicalLink:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129
                     .ResourceTypeEnum.PhysicalLink;
             case Shelf:
-                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Shelf;
+                return org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev191129.ResourceTypeEnum.Shelf;
             default:
                 LOG.error("Unknown resource type {}", wantedResourceType);
                 return null;
         }
     }
 
-    private OlmUtils22() {
+    private OlmUtils710() {
     }
 
 }
