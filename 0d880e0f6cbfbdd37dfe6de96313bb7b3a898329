@@ -159,6 +159,30 @@
       "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b64ffd11_4dc1830d",
+        "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-14T09:24:57Z",
+      "side": 1,
+      "message": "I dont have this tab in my IDE. Strange. I hope it is solved now...",
+      "parentUuid": "b98bcfad_485b3ac2",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }

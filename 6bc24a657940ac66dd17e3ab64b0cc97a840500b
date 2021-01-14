@@ -16,6 +16,24 @@
       "revId": "6bc24a657940ac66dd17e3ab64b0cc97a840500b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca51a4e_2d9e8695",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-14T09:24:57Z",
+      "side": 1,
+      "message": "I forgot to remove the /* */. Will do... sorry",
+      "parentUuid": "47e42745_9102aa46",
+      "revId": "6bc24a657940ac66dd17e3ab64b0cc97a840500b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
