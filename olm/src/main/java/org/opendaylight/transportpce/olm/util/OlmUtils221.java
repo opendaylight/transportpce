@@ -10,11 +10,9 @@ package org.opendaylight.transportpce.olm.util;
 import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -56,9 +54,9 @@ import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class OlmUtils22 {
+final class OlmUtils221 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils22.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils221.class);
 
     /**
      * This method retrieves list of current PMs for given nodeId,
@@ -87,64 +85,53 @@ final class OlmUtils22 {
         InstanceIdentifier<?> resourceKeyIID =
             findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
         CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
-            convertResourceTypeEnum(input.getResourceType()), "");
+            convertResourceTypeEnum(input.getResourceType()),"notApplicable");
+        InstanceIdentifier<CurrentPmEntry> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class)
+                .child(CurrentPmEntry.class, resourceKey);
 
-        InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
-
-        Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
+        Optional<CurrentPmEntry> currentPmEntryOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
             LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (currentPmListOpt.isPresent()) {
-            CurrentPmList  currentPmList = currentPmListOpt.get();
-
-            @NonNull
-            Map<CurrentPmEntryKey, CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
-            LOG.info("Current PM list exists for node {} and contains {} entries.", input.getNodeId(),
-                currentPmEntryList.size());
-            for (Map.Entry<CurrentPmEntryKey, CurrentPmEntry> entry : currentPmEntryList.entrySet()) {
-                CurrentPmEntry cpe = entry.getValue();
-                CurrentPmEntryKey cpek = new CurrentPmEntryKey(cpe.getPmResourceInstance(), cpe.getPmResourceType(),
-                    cpe.getPmResourceTypeExtension());
-                if (resourceKey.equals(cpek)) {
-                    List<CurrentPm> currentPMList = new ArrayList<>(cpe.nonnullCurrentPm().values());
-                    Stream<CurrentPm> currentPMStream = currentPMList.stream();
-                    if (input.getPmNameType() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> pm.getType().getIntValue()
-                            == PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getIntValue());
-                    }
-                    if (input.getPmExtension() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> pm.getExtension()
-                            .equals(input.getPmExtension()));
-                    }
-                    if (input.getLocation() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> Location.forValue(pm.getLocation().getIntValue())
-                            .equals(Location.forValue(input.getLocation().getIntValue())));
-                    }
-                    if (input.getDirection() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection().getIntValue())
-                            .equals(Direction.forValue((input.getDirection().getIntValue()))));
-                    }
-                    List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
-                    List<Measurements> measurements = extractWantedMeasurements(filteredPMs,input.getGranularity());
-                    if (measurements.isEmpty()) {
-                        LOG.error(
-                            "No Matching PM data found for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
+        if (currentPmEntryOpt.isPresent()) {
+            CurrentPmEntry  currentPmEntry = currentPmEntryOpt.get();
+            List<CurrentPm> currentPmList = new ArrayList<>();
+            currentPmList.addAll(currentPmEntry.getCurrentPm().values());
+            Stream<CurrentPm> currentPMStream = currentPmList.stream();
+            if (input.getPmNameType() != null) {
+                currentPMStream = currentPMStream.filter(pm -> pm.getType().getName()
+                        .equals(PmNamesEnum.forValue(input.getPmNameType().getIntValue()).getName()));
+            }
+            if (input.getPmExtension() != null) {
+                currentPMStream = currentPMStream.filter(pm -> pm.getExtension()
+                        .equals(input.getPmExtension()));
+            }
+            if (input.getLocation() != null) {
+                currentPMStream = currentPMStream.filter(pm -> pm.getLocation().getName()
+                        .equals(Location.forValue(input.getLocation().getIntValue()).getName()));
+            }
+            if (input.getDirection() != null) {
+                currentPMStream = currentPMStream.filter(pm -> pm.getDirection().getName()
+                        .equals(Direction.forValue((input.getDirection().getIntValue())).getName()));
+            }
+            List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
+            List<Measurements> measurements = extractWantedMeasurements(filteredPMs,input.getGranularity());
+            if (measurements.isEmpty()) {
+                LOG.error("No Matching PM data found for node: {}, resource type: {}, resource name: {}, pm type: {}, "
+                                +  "extention: {}, location: {} and direction: {}",
                             input.getNodeId(), input.getResourceType(),
                             getResourceIdentifierAsString(input.getResourceIdentifier()),
                             input.getPmNameType(),input.getPmExtension(),input.getLocation(),
                             input.getDirection());
-                    } else {
-                        pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
-                            .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
-                            .setMeasurements(measurements);
-                        LOG.info(
-                            "PM data found successfully for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
+            } else {
+                pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
+                        .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
+                        .setMeasurements(measurements);
+                LOG.info("PM data found successfully for node: {}, resource type: {}, resource name: {}, pm type: {}, "
+                                + "extention: {}, location: {} and direction: {}",
                             input.getNodeId(), input.getResourceType(),
-                            getResourceIdentifierAsString(input.getResourceIdentifier()),
+                        getResourceIdentifierAsString(input.getResourceIdentifier()),
                             input.getPmNameType(),input.getPmExtension(),input.getLocation(),
                             input.getDirection());
-                    }
-                }
             }
         } else {
             LOG.error("Unable to get CurrentPmList for node {}", input.getNodeId());
@@ -253,7 +240,7 @@ final class OlmUtils22 {
         }
     }
 
-    private OlmUtils22() {
+    private OlmUtils221() {
     }
 
 }

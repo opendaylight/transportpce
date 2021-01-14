@@ -29,8 +29,8 @@ public final class OlmUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils.class);
     private static long DATABROKER_READ_TIMEOUT_SECONDS = 120;
-    public static final long OLM_TIMER_1 = 120000; //#FUNCTESTVAL= 3000;
-    public static final long OLM_TIMER_2 = 20000;  //#FUNCTESTVAL= 2000;
+    public static final long OLM_TIMER_1 = 3000;
+    public static final long OLM_TIMER_2 = 2000;
 
     /**
      * This static method returns the port mapping {@link Nodes} for node.
@@ -79,7 +79,7 @@ public final class OlmUtils {
         if (openRoadmVersion.getIntValue() == 1) {
             pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
         } else {
-            pmOutputBuilder = OlmUtils22.pmFetch(input, deviceTransactionManager);
+            pmOutputBuilder = OlmUtils221.pmFetch(input, deviceTransactionManager);
         }
         return pmOutputBuilder;
     }
