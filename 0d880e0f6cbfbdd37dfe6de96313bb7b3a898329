@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "7f95d64c_e62b8274",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-common-service-types@2019-05-31.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T09:07:56Z",
+      "side": 1,
+      "message": "it\u0027s OK here but you move the problem to another model.",
+      "parentUuid": "796a038e_cbc81a9b",
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f05bd01_73df6d20",
         "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
         "patchSetId": 26
@@ -117,6 +135,30 @@
       "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b98bcfad_485b3ac2",
+        "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T09:07:56Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "4ba6ff5f_05af3414",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "0d880e0f6cbfbdd37dfe6de96313bb7b3a898329",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }

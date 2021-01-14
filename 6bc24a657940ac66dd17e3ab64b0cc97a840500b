@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47e42745_9102aa46",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T09:07:56Z",
+      "side": 1,
+      "message": "no more the original ORM model here now.\nThis must be stated clearly. \n\ncf previous comments to Bala at\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/92431/16..23/ordmodels/common/src/main/yang/org-openroadm-common-types%25402020-05-29.yang",
+      "revId": "6bc24a657940ac66dd17e3ab64b0cc97a840500b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
