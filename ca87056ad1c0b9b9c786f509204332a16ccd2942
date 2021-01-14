@@ -22,6 +22,30 @@
       "revId": "ca87056ad1c0b9b9c786f509204332a16ccd2942",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0691ec19_7f256add",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 29
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-14T13:16:09Z",
+      "side": 1,
+      "message": "Will fix the commit message",
+      "parentUuid": "912631ef_5b4f8055",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 57
+      },
+      "revId": "ca87056ad1c0b9b9c786f509204332a16ccd2942",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
