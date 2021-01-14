@@ -355,13 +355,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             .build();
         GetPmOutput otsPmOutput = getPm(getPmInput);
 
-        if (otsPmOutput == null) {
+        if (otsPmOutput == null || otsPmOutput.getMeasurements() == null) {
             LOG.info("OTS PM not found for NodeId: {} TP Id:{} PMName:{}", realNodeId, tpID, pmName);
             return null;
         }
         try {
             for (Measurements measurement : otsPmOutput.getMeasurements()) {
-                if (pmName.equals(measurement.getPmparameterName())) {
+                if (pmName.equalsIgnoreCase(measurement.getPmparameterName())) {
                     return new OtsPmHolder(pmName, Double.parseDouble(measurement.getPmparameterValue()),
                         mapping.getSupportingOts());
                 }
@@ -521,7 +521,14 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             String destNodeId = link.getDestNodeId();
             String destTpId = link.getDestTpid();
             OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
+            if (srcOtsPmHoler == null) {
+                srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
+            }
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
+            if (destOtsPmHoler == null) {
+                destOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerInputOSC");
+            }
+
             if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
                 LOG.warn("OTS is not present for the link {}", link);
                 continue;

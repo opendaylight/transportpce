@@ -100,6 +100,9 @@ public class PowerMgmtImpl implements PowerMgmt {
                         } else if (openroadmVersion.getIntValue() == 2) {
                             txPowerRangeMap = PowerMgmtVersion221.getXponderPowerRange(circuitPackName, portName,
                                     nodeId, deviceTransactionManager);
+                        } else if (openroadmVersion.getIntValue() == 3) {
+                            txPowerRangeMap = PowerMgmtVersion710.getXponderPowerRange(circuitPackName, portName,
+                                    nodeId, deviceTransactionManager);
                         }
                         if (!txPowerRangeMap.isEmpty()) {
                             LOG.info("Transponder range exists for nodeId: {}", nodeId);
@@ -122,6 +125,11 @@ public class PowerMgmtImpl implements PowerMgmt {
                                             deviceTransactionManager, mappingObjectSRG.get()
                                             .getSupportingCircuitPackName(),
                                             mappingObjectSRG.get().getSupportingPort());
+                                } else if (openroadmVersion.getIntValue() == 3) {
+                                    rxSRGPowerRangeMap = PowerMgmtVersion710.getSRGRxPowerRange(nextNodeId, srgId,
+                                        deviceTransactionManager, mappingObjectSRG.get()
+                                                .getSupportingCircuitPackName(),
+                                        mappingObjectSRG.get().getSupportingPort());
                                 }
                             }
                             double powerValue = 0;
@@ -524,6 +532,17 @@ public class PowerMgmtImpl implements PowerMgmt {
                 if (interfaceOptional.isPresent()) {
                     powerSetupResult = PowerMgmtVersion221.setTransponderPower(nodeId, interfaceName,
                             txPower, deviceTransactionManager, interfaceOptional.get());
+                } else {
+                    LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+                    return false;
+                }
+            } else if (openroadmVersion.getIntValue() == 3) {
+                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp
+                    .Interface> interfaceOptional;
+                interfaceOptional = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+                if (interfaceOptional.isPresent()) {
+                    powerSetupResult = PowerMgmtVersion710.setTransponderPower(nodeId, interfaceName,
+                        txPower, deviceTransactionManager, interfaceOptional.get());
                 } else {
                     LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
                     return false;

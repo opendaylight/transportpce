@@ -50,6 +50,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.Ots;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntry;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -94,18 +96,27 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         Mockito.when(this.portMapping.getMapping("ROADM-C1", "DEG1-TTP-TXRX"))
                 .thenReturn(OlmTransactionUtils.getMapping2());
 
-        InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
+        InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"));
+        CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(interfacesIIDA,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                        .ResourceTypeEnum.Interface,"notApplicable");
+        InstanceIdentifier<CurrentPmEntry> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class)
+                .child(CurrentPmEntry.class, resourceKey);
         Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.OPERATIONAL,
                 iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListA());
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.OPERATIONAL,
-                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListC());
-
-        InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"));
         InstanceIdentifier<Interface> interfacesIIDC = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"));
+        CurrentPmEntryKey resourceKeyC = new CurrentPmEntryKey(interfacesIIDC,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019
+                        .ResourceTypeEnum.Interface,"notApplicable");
+        InstanceIdentifier<CurrentPmEntry> iidCurrentPmListC = InstanceIdentifier.create(CurrentPmList.class)
+                .child(CurrentPmEntry.class, resourceKeyC);
+        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.OPERATIONAL,
+                iidCurrentPmListC, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListC());
+
         Optional<Interface> interfaceA = Optional.of(new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").build());
         Optional<Interface> interfaceC = Optional.of(new InterfaceBuilder().setName("OTS-DEG1-TTP-TXRX").build());
         Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.CONFIGURATION,
