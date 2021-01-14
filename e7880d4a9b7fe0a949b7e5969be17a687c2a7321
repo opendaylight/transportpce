@@ -1,0 +1,297 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00ad115b_9574efaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "colon not needed",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8413c58e_dc4de70c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "missing LF\n\nJIRA ticket is usualy with the Change-Id/sign-off group",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe770605_9f3fcec9",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "switch/case structures are probably more indicated now.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 25
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7d303e9_18db9204",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 33
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c02477f7_70a96cdd",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "what about this ? (guard-clause style)\n\n            if (!interfaceOptional.isPresent()) {\n                LOG.error(\"Interface {} on node {} is not present!\", interfaceName, nodeId);\n                return false;\n            }\n            powerSetupResult \u003d PowerMgmtVersion710\n                .setTransponderPower(nodeId, interfaceName, txPower, deviceTransactionManager, interfaceOptional.get());\n\n\nI guess this was inspired from the code above and that the whole file should be reworked this way.\nI can take care of that in a next change if you prefer.",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 17
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "664f226d_c15d0418",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "can be put about of the block since common with line 563",
+      "range": {
+        "startLine": 558,
+        "startChar": 12,
+        "endLine": 558,
+        "endChar": 36
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e42abc_d77c6d29",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "2020 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2419bc_e36727a1",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "I think guard clause style would be more indicated here and in the rest of the file. I can take care of that if needed",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 29
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb4c923a_529183be",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "LF and + not needed",
+      "range": {
+        "startLine": 172,
+        "startChar": 85,
+        "endLine": 173,
+        "endChar": 28
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b5e9090_dd538d89",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 177,
+        "startChar": 88,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fc87d37_3efe4be2",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "I guess the patch from Functests was not reversed",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 48
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "465b3cb9_1f68b549",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "is there a particular reason to rename this class ?\nI can\u0027t see it in the commit message",
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3ac9db8_41f5f3ab",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-14T19:29:31Z",
+      "side": 1,
+      "message": "this can be removed now since you have taken care of the log messages.",
+      "range": {
+        "startLine": 78,
+        "startChar": 1,
+        "endLine": 78,
+        "endChar": 46
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
