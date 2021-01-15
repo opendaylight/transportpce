@@ -148,7 +148,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             if (optionalNode.isPresent()) {
                 return optionalNode.get();
             } else {
-                LOG.error("Unable to get network node for node id {}from topology {}", nodeId,
+                LOG.error("Unable to get network node for node id {} from topology {}", nodeId,
                         NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
@@ -531,8 +531,11 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         if (used) {
             waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
                     .setFrequency(GridUtils.getCentralFrequency(minFrequency, maxFrequency));
+            xpdrNetworkAttributesBuilder.setWavelength(waveLengthBuilder.build());
+        } else {
+            xpdrNetworkAttributesBuilder.setWavelength(null);
         }
-        return xpdrNetworkAttributesBuilder.setWavelength(waveLengthBuilder.build()).build();
+        return xpdrNetworkAttributesBuilder.build();
     }
 
     /**
