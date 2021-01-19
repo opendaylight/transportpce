@@ -60,6 +60,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="pceListener" />
         <argument ref="rendererListener" />
         <argument ref="networkModelListener" />
+        <argument ref="serviceDatastoreOperation" />
     </bean>
 
     <bean id="provider"
@@ -71,6 +72,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="notificationPublishService" />
         <argument ref="pathComputationService" />
         <argument ref="rendererServiceOperations" />
+        <argument ref="serviceDatastoreOperation" />
     </bean>
 
     <service ref="serviceHandlerImpl"
