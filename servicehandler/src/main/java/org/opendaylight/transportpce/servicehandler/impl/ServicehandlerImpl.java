@@ -27,7 +27,6 @@ import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerIm
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.RendererServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
@@ -119,10 +118,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, String topic) {
+            NetworkModelListenerImpl networkModelListenerImpl, String topic,
+            ServiceDataStoreOperations serviceDataStoreOperations) {
         this.db = databroker;
-        this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
-        this.serviceDataStoreOperations.initialize();
+        this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
