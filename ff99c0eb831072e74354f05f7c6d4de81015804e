@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c2d02a0_2b9b9fc7",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/consumer/Subscriber.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-20T13:50:24Z",
+      "side": 1,
+      "message": "Is this really necessary?",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 59
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8d9fe40_6eaf3dca",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/producer/Publisher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-20T13:50:24Z",
+      "side": 1,
+      "message": "Is this really necessary?",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c38677_dddf4510",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-20T13:50:24Z",
+      "side": 1,
+      "message": "Would not be possible to use converter from mdsal toolkit instead to manage serialization/deserialization of notifications?",
+      "range": {
+        "startLine": 35,
+        "startChar": 19,
+        "endLine": 35,
+        "endChar": 40
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
