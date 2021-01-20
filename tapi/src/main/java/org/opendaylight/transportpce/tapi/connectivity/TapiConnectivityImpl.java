@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.tapi.impl;
+package org.opendaylight.transportpce.tapi.connectivity;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
@@ -13,9 +13,10 @@ import java.util.Map;
 import java.util.UUID;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
+import org.opendaylight.transportpce.tapi.utils.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.MappingUtils;
-import org.opendaylight.transportpce.tapi.utils.TapiUtils;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
@@ -54,15 +55,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Top level service interface providing main TAPI Connectivity services.
  */
-public class TapiImpl implements TapiConnectivityService {
+public class TapiConnectivityImpl implements TapiConnectivityService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiImpl.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImpl.class);
+    private final TapiContext tapiContext;
     private ServiceHandlerOperations serviceHandler;
 
-    public TapiImpl(ServiceHandlerOperations serviceHandler) {
+    public TapiConnectivityImpl(ServiceHandlerOperations serviceHandler, TapiContext tapiContext) {
         LOG.info("inside TapiImpl constructor");
-        this.serviceHandler = serviceHandler;
+        this.serviceHandler = serviceHandler; // TODO: change for serviceHandlerImpl
+        this.tapiContext = tapiContext;
     }
 
     @Override
@@ -81,7 +83,7 @@ public class TapiImpl implements TapiConnectivityService {
                 && map.containsKey(input.getEndPoint().values().stream().skip(1).findFirst().get()
                     .getServiceInterfacePoint()
                     .getServiceInterfacePointUuid())) {
-                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(
+                ServiceCreateInput sci = ConnectivityUtils.buildServiceCreateInput(
                     map.get(input.getEndPoint().values().stream().findFirst().get()
                         .getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()),

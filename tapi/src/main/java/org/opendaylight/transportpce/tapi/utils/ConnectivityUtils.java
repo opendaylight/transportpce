@@ -7,10 +7,14 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.equipment.types.rev181130.OpticTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.Service;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
@@ -23,16 +27,37 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEndBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.network.topology.AToZ;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.network.topology.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.PathDescription;
+//import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description
+// .ztoa.direction.ZToA;
+//import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description
+// .ztoa.direction.ZToAKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-public final class TapiUtils {
+public final class ConnectivityUtils {
 
     private static final String LGX_PORT_NAME = "Some lgx-port-name";
     private static final String PORT_TYPE = "some port type";
     private static final String LGX_DEVICE_NAME = "Some lgx-device-name";
     private static final String PORT_RACK_VALUE = "000000.00";
+    private static final String DSR = "DSR";
+    private static final String OTSI = "OTSi";
+    private static final String E_OTSI = "eOTSi";
+    private static final String I_OTSI = "iOTSi";
+    private static final String RDM_INFRA = "ROADM-infra";
+    private static final String PHTNC_MEDIA = "Photonic Media";
+    private final ServiceHandlerOperations serviceHandler;
 
-    private TapiUtils() {
+    public ConnectivityUtils(ServiceHandlerOperations serviceHandler) {
+        this.serviceHandler = serviceHandler;
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
@@ -155,4 +180,60 @@ public final class TapiUtils {
             return null;
         }
     }
+
+    public ConnectivityService mapORServiceToTapiConnectivity(Service service) {
+        // Get service path with the description in OR based models.
+        ServicePaths servicePaths = this.serviceHandler.getServicePathDescription(service.getServiceName());
+        PathDescription pathDescription = servicePaths.getPathDescription();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd serviceAEnd
+                = service.getServiceAEnd();
+        EndPoint endPoint1 = mapServiceAEndPoint(serviceAEnd, pathDescription);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd serviceZEnd
+                = service.getServiceZEnd();
+        EndPoint endPoint2 = mapServiceZEndPoint(serviceZEnd, pathDescription);
+        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
+        endPointMap.put(endPoint1.key(), endPoint1);
+        endPointMap.put(endPoint2.key(), endPoint2);
+        // Start of connectivity Service builder
+        ConnectivityServiceBuilder conSerBldr = new ConnectivityServiceBuilder().setEndPoint(endPointMap);
+
+        return conSerBldr.build();
+    }
+
+    private EndPoint mapServiceZEndPoint(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd
+                    serviceZEnd, PathDescription pathDescription) {
+        EndPointBuilder endPointBuilder = new EndPointBuilder();
+        // 1. Service Format: ODU, OTU, ETH
+        // ServiceFormat serviceFormat = serviceZEnd.getServiceFormat();
+        // 2. Path description: get the z end point complete id and build the corresponding TAPI conversion
+        // 3. Build the SIP name
+        // String sipId = getSipIdFromZend(pathDescription.getZToADirection().getZToA());
+
+        // SIP recognition --> need to match SIP name. SIP name =
+
+        return endPointBuilder.build();
+    }
+
+    private EndPoint mapServiceAEndPoint(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd
+                    serviceAEnd, PathDescription pathDescription) {
+        EndPointBuilder endPointBuilder = new EndPointBuilder();
+        // SIP recognition --> need to match SIP name
+
+        return endPointBuilder.build();
+    }
+/*
+    private String getSipIdFromZend(Map<ZToAKey, ZToA> mapztoa) {
+
+
+        return null;
+    }
+
+    private String getSipIdFromAend(Map<AToZKey, AToZ> mapatoz) {
+
+        return null;
+    }
+
+ */
 }

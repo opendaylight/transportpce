@@ -62,6 +62,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckBulkOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteConfirmInput;
@@ -81,6 +82,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -123,7 +125,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
     }
-
 
     // This is class is public so that these messages can be accessed from Junit (avoid duplications).
     public static final class LogMessages {
@@ -625,6 +626,26 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceFeasibilityCheckBulkInput input) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    // This method is used to retrieve the existing OR services in the TAPI module
+    public ServiceList getServices() {
+        ServiceList serviceList = null;
+        Optional<ServiceList> optionalServiceList = this.serviceDataStoreOperations.getServices();
+        if (optionalServiceList.isPresent()) {
+            serviceList = optionalServiceList.get();
+        }
+        return serviceList;
+    }
+
+    // This method is used to retrieve the path description of an OR services
+    public ServicePaths getServicePathDescription(String servicename) {
+        ServicePaths servicePaths = null;
+        Optional<ServicePaths> optionalServicePaths = this.serviceDataStoreOperations.getServicePath(servicename);
+        if (optionalServicePaths.isPresent()) {
+            servicePaths = optionalServicePaths.get();
+        }
+        return servicePaths;
     }
 
 }

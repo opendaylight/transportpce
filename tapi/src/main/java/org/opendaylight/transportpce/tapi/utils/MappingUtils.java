@@ -30,16 +30,16 @@ public final class MappingUtils {
 
     private static GenericServiceEndpoint createMapEntry(ServiceEndPoint sep) {
         if (sep.getEndPoint().getServiceEndPointType().equals(EndPointType.Aend)) {
-            ServiceAEnd sepG = TapiUtils.buildServiceAEnd(sep.getEndPoint().getNodeId().getValue(), sep.getEndPoint()
-                .getClli(), sep.getEndPoint().getTxDirection().getPort().getPortDeviceName(), sep.getEndPoint()
-                    .getTxDirection().getPort().getPortName(),
+            ServiceAEnd sepG = ConnectivityUtils.buildServiceAEnd(sep.getEndPoint().getNodeId().getValue(),
+                sep.getEndPoint().getClli(), sep.getEndPoint().getTxDirection().getPort().getPortDeviceName(),
+                sep.getEndPoint().getTxDirection().getPort().getPortName(),
                 sep.getEndPoint().getRxDirection().getPort().getPortDeviceName(), sep.getEndPoint().getRxDirection()
                     .getPort().getPortName());
             return new GenericServiceEndpoint(sepG, ServiceEndpointType.SERVICEAEND);
         } else {
-            ServiceZEnd sepG = TapiUtils.buildServiceZEnd(sep.getEndPoint().getNodeId().getValue(), sep.getEndPoint()
-                .getClli(), sep.getEndPoint().getTxDirection().getPort().getPortDeviceName(), sep.getEndPoint()
-                    .getTxDirection().getPort().getPortName(),
+            ServiceZEnd sepG = ConnectivityUtils.buildServiceZEnd(sep.getEndPoint().getNodeId().getValue(),
+                sep.getEndPoint().getClli(), sep.getEndPoint().getTxDirection().getPort().getPortDeviceName(),
+                sep.getEndPoint().getTxDirection().getPort().getPortName(),
                 sep.getEndPoint().getRxDirection().getPort().getPortDeviceName(), sep.getEndPoint().getRxDirection()
                     .getPort().getPortName());
             return new GenericServiceEndpoint(sepG, ServiceEndpointType.SERVICEZEND);

@@ -12,9 +12,16 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
+import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
+import org.opendaylight.transportpce.tapi.utils.TopologyUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.ServiceInterfacePoints;
@@ -51,10 +58,19 @@ public class TapiProvider {
      * Method called when the blueprint container is created.
      */
     public void init() {
+        NetworkTransactionService networkTransactionService =
+                new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
         LOG.info("TapiProvider Session Initiated");
-        TapiImpl tapi = new TapiImpl(this.serviceHandler);
-        TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker);
-        rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
+        TapiContext tapiContext = new TapiContext(networkTransactionService);
+        TopologyUtils topologyUtils = new TopologyUtils(networkTransactionService, this.dataBroker);
+        TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, tapiContext,
+                serviceHandler);
+        tapiInitialORMapping.performTopoInitialMapping();
+        // tapiInitialORMapping.performServInitialMapping();
+        TapiConnectivityImpl conn = new TapiConnectivityImpl(this.serviceHandler, tapiContext);
+        TapiTopologyImpl topo = new TapiTopologyImpl(networkTransactionService, tapiContext,
+                this.dataBroker, topologyUtils);
+        rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, conn);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
         @NonNull
         InstanceIdentifier<ServiceInterfacePoints> sipIID = InstanceIdentifier.create(ServiceInterfacePoints.class);

@@ -17,11 +17,18 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
+import org.opendaylight.transportpce.tapi.utils.TopologyUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology;
@@ -30,15 +37,31 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class TapiTopologyImplExceptionTest {
+    @Mock
+    NetworkTransactionService networkTransactionService;
+    @Mock
+    TapiContext tapiContext;
+    @Mock
+    TopologyUtils topologyUtils;
 
     @Test
     public void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
         DataBroker dataBroker = Mockito.mock(DataBroker.class);
         when(dataBroker.newReadOnlyTransaction())
             .thenReturn(new ReadTransactionMock());
+        Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
+
+            @Override
+            public FluentFuture<CommitInfo> answer(InvocationOnMock invocation) throws Throwable {
+                return CommitInfo.emptyFluentFuture();
+            }
+
+        };
+        when(networkTransactionService.commit()).then(answer);
 
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(dataBroker);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext,
+                dataBroker, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         Topology topology = rpcResult.getResult().getTopology();

@@ -21,6 +21,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,18 @@ public class ServiceHandlerOperationsImpl implements ServiceHandlerOperations {
     @Override
     public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
         return null;
+    }
+
+    @Override
+    public ServiceList getORServices() {
+
+        return this.serviceHandler.getServices();
+    }
+
+    @Override
+    public ServicePaths getServicePathDescription(String servicename) {
+
+        return this.serviceHandler.getServicePathDescription(servicename);
     }
 
     public void init() {
