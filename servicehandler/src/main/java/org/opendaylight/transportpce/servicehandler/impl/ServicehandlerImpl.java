@@ -118,8 +118,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, String topic,
-            ServiceDataStoreOperations serviceDataStoreOperations) {
+            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations) {
         this.db = databroker;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
@@ -128,7 +127,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
         this.notificationPublishService =  notificationPublishService;
-        this.topic = topic;
+        this.topic = "initial topic";
     }
 
 

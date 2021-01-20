@@ -20,7 +20,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
           interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
     <reference id="serviceHandlerService"
-          interface="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations" />
+          interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService" />
 
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
