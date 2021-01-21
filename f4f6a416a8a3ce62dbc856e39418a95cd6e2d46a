@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4263c215_93e520ba",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/utils/ServiceDataUtils.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-21T11:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6056f4ce_3309c9f4",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 46
+      },
+      "revId": "f4f6a416a8a3ce62dbc856e39418a95cd6e2d46a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a7c294c_54b6b2e1",
         "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
         "patchSetId": 36
@@ -45,6 +69,30 @@
       "revId": "f4f6a416a8a3ce62dbc856e39418a95cd6e2d46a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7c633cf_af204134",
+        "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
+        "patchSetId": 36
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-21T11:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a7c294c_54b6b2e1",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "f4f6a416a8a3ce62dbc856e39418a95cd6e2d46a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
