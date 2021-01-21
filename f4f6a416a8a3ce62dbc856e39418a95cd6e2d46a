@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6056f4ce_3309c9f4",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/utils/ServiceDataUtils.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-21T09:23:31Z",
+      "side": 1,
+      "message": "now it\u0027s pretty clear that node1 and node2 are similar and there is a possible refactoring here...\n\u003d\u003e can be addressed in another change.",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 46
+      },
+      "revId": "f4f6a416a8a3ce62dbc856e39418a95cd6e2d46a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a7c294c_54b6b2e1",
+        "filename": "test-common/src/main/yang/path-description-stub@2020-12-11.yang",
+        "patchSetId": 36
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-21T09:23:31Z",
+      "side": 1,
+      "message": "tab reintroduced here",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "f4f6a416a8a3ce62dbc856e39418a95cd6e2d46a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
