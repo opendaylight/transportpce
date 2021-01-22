@@ -484,7 +484,7 @@ public class ConvertORTopoToTapiTopo {
             .setLayerProtocolName(nepProtocol)
             .setName(nepNames);
         if (withSip) {
-            onepBldr.setMappedServiceInterfacePoint(createSIP(1));
+            onepBldr.setMappedServiceInterfacePoint(createSIP(this.uuidMap.get(key), 1));
         }
         onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedCepLayerProtocolQualifier(oorTp, nodeProtocol));
         onepBldr.setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
@@ -551,11 +551,13 @@ public class ConvertORTopoToTapiTopo {
         return nodeRuleGroupMap;
     }
 
-    private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createSIP(int nb) {
+    private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createSIP(Uuid nepUuid, int nb) {
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
         for (int i = 0; i < nb; i++) {
             MappedServiceInterfacePoint msip = new MappedServiceInterfacePointBuilder()
-                .setServiceInterfacePointUuid(new Uuid(UUID.randomUUID().toString())).build();
+                .setServiceInterfacePointUuid(new Uuid(UUID.nameUUIDFromBytes(nepUuid.getValue()
+                    .getBytes(Charset.forName("UTF-8"))).toString()))
+                .build();
             msipl.put(msip.key(), msip);
         }
         return msipl;
