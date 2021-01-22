@@ -110,7 +110,9 @@ public class TapiImpl implements TapiConnectivityService {
         endPointList.put(endpoint2.key(), endpoint2);
         Connection connection = new ConnectionBuilder().setConnectionUuid(new Uuid(UUID.randomUUID().toString()))
             .build();
-        ConnectivityService service = new ConnectivityServiceBuilder().build();
+        ConnectivityService service = new ConnectivityServiceBuilder()
+            .setUuid(new Uuid(UUID.randomUUID().toString()))
+            .build();
         Name serviceName = new NameBuilder().setValueName("Service Name").setValue("SENDATE Service 1").build();
         CreateConnectivityServiceOutput output = new CreateConnectivityServiceOutputBuilder()
             .setService(new ServiceBuilder(service)
