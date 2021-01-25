@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c146189e_ab71c140",
+        "filename": "features/odl-transportpce-nbinotifications/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-25T08:43:25Z",
+      "side": 1,
+      "message": "tabs should be avoided",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "23cbda6cf2f0d4430fced3b64c62a41843bcc85e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2136bd54_b18c40bb",
+        "filename": "nbinotifications/src/main/resources/OSGI-INF/blueprint/nobinotifications-blueprint.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-25T08:43:25Z",
+      "side": 1,
+      "message": "indentation not coherent with lines 10 and 13",
+      "range": {
+        "startLine": 16,
+        "startChar": 15,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "23cbda6cf2f0d4430fced3b64c62a41843bcc85e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
