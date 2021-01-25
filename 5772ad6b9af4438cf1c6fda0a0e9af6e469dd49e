@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c7510db_c2252c42",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-25T08:49:07Z",
+      "side": 1,
+      "message": "if not set in dependency mgt BOMs, I think it would better be put in properties such as {kafka.version}",
+      "range": {
+        "startLine": 67,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "5772ad6b9af4438cf1c6fda0a0e9af6e469dd49e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
