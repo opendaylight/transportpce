@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea20f4b7_6ff7baa8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-25T09:01:55Z",
+      "side": 1,
+      "message": "I think it is worth mentionning it in the commit message.",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 130,
+        "endChar": 37
+      },
+      "revId": "c059f190188867acccdb70208ff7d7edb0eb24eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
