@@ -98,6 +98,7 @@ import org.slf4j.LoggerFactory;
 
 // FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
 // some mutualization would be helpful
+@SuppressWarnings("CPD-START")
 public class PortMappingVersion221 {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion221.class);
 
