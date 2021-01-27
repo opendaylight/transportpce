@@ -52,7 +52,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="serviceDatastoreOperation" />
     </bean>
 
-    <bean id="serviceHandlerImpl" class="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperationsImpl">
+    <bean id="serviceHandlerImpl" class="org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl">
         <argument ref="dataBroker"/>
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
@@ -60,6 +60,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="pceListener" />
         <argument ref="rendererListener" />
         <argument ref="networkModelListener" />
+        <argument value="initial topic" />
         <argument ref="serviceDatastoreOperation" />
     </bean>
 
@@ -69,13 +70,14 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="rpcService" />
         <argument ref="dataBroker" />
         <argument ref="notificationService" />
-        <argument ref="notificationPublishService" />
-        <argument ref="pathComputationService" />
-        <argument ref="rendererServiceOperations" />
         <argument ref="serviceDatastoreOperation" />
+        <argument ref="pceListener" />
+        <argument ref="rendererListener" />
+        <argument ref="networkModelListener" />
+        <argument ref="serviceHandlerImpl" />
     </bean>
 
     <service ref="serviceHandlerImpl"
-        interface="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations"/>
+        interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService"/>
 
 </blueprint>

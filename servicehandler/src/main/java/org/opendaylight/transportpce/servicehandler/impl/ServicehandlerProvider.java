@@ -9,11 +9,8 @@
 package org.opendaylight.transportpce.servicehandler.impl;
 
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -40,28 +37,30 @@ public class ServicehandlerProvider {
     private final DataBroker dataBroker;
     private final RpcProviderService rpcService;
     private final NotificationService notificationService;
-    private final NotificationPublishService notificationPublishService;
     private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
     private ListenerRegistration<TransportpceNetworkmodelListener> networkmodellistenerRegistration;
     private ObjectRegistration<OrgOpenroadmServiceService> rpcRegistration;
-    private PathComputationService pathComputationService;
-    private RendererServiceOperations rendererServiceOperations;
     private ServiceDataStoreOperations serviceDataStoreOperations;
+    private PceListenerImpl pceListenerImpl;
+    private RendererListenerImpl rendererListenerImpl;
+    private NetworkModelListenerImpl networkModelListenerImpl;
+    private ServicehandlerImpl servicehandler;
+
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
-            NotificationService notificationService, PathComputationService pathComputationService,
-            RendererServiceOperations rendererServiceOperations,
-            NotificationPublishService notificationPublishService,
-            ServiceDataStoreOperations serviceDataStoreOperations) {
+            NotificationService notificationService, ServiceDataStoreOperations serviceDataStoreOperations,
+            PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
+            NetworkModelListenerImpl networkModelListenerImpl, ServicehandlerImpl servicehandler) {
         this.dataBroker = dataBroker;
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
-        this.pathComputationService = pathComputationService;
-        this.rendererServiceOperations = rendererServiceOperations;
-        this.notificationPublishService = notificationPublishService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.serviceDataStoreOperations.initialize();
+        this.pceListenerImpl = pceListenerImpl;
+        this.rendererListenerImpl = rendererListenerImpl;
+        this.networkModelListenerImpl = networkModelListenerImpl;
+        this.servicehandler = servicehandler;
     }
 
     /**
@@ -69,20 +68,10 @@ public class ServicehandlerProvider {
      */
     public void init() {
         LOG.info("ServicehandlerProvider Session Initiated");
-        final PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations,
-                pathComputationService, notificationPublishService, serviceDataStoreOperations);
-        final RendererListenerImpl rendererListenerImpl =
-                new RendererListenerImpl(pathComputationService, notificationPublishService);
-        final NetworkModelListenerImpl networkModelListenerImpl =
-                new NetworkModelListenerImpl(notificationPublishService, serviceDataStoreOperations);
         pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
         networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImpl);
-        final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
-                rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                networkModelListenerImpl, "ServiceHandler", serviceDataStoreOperations);
-        rpcRegistration =
-            rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
+        rpcRegistration = rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
 
     /**

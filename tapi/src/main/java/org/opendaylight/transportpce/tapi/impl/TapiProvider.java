@@ -12,9 +12,9 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.ServiceInterfacePoints;
@@ -36,14 +36,14 @@ public class TapiProvider {
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
-    private final ServiceHandlerOperations serviceHandler;
+    private final OrgOpenroadmServiceService serviceHandler;
     private final TapiListener tapiListener;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
-            ServiceHandlerOperations serviceHanlder, TapiListener tapiListener) {
+        OrgOpenroadmServiceService serviceHandler, TapiListener tapiListener) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
-        this.serviceHandler = serviceHanlder;
+        this.serviceHandler = serviceHandler;
         this.tapiListener = tapiListener;
     }
 

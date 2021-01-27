@@ -15,29 +15,32 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 public class ServicehandlerProviderTest  extends AbstractTest {
 
     @Mock
-    private PathComputationService pathComputationService;
-
-    @Mock
-    private RendererServiceOperations rendererServiceOperations;
-
-    @Mock
-    private NotificationPublishService notificationPublishService;
-
-    @Mock
     RpcProviderService rpcProviderRegistry;
 
     @Mock
     ServiceDataStoreOperations serviceDataStoreOperations;
+
+    @Mock
+    PceListenerImpl pceListenerImpl;
+
+    @Mock
+    RendererListenerImpl rendererListenerImpl;
+
+    @Mock
+    NetworkModelListenerImpl networkModelListenerImpl;
+
+    @Mock
+    ServicehandlerImpl servicehandler;
 
     @Before
     public void init() {
@@ -49,8 +52,8 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     public void testInitRegisterServiceHandlerToRpcRegistry() {
         ServicehandlerProvider provider =  new ServicehandlerProvider(
                 getDataBroker(), rpcProviderRegistry,
-                getNotificationService() , pathComputationService,
-                rendererServiceOperations, notificationPublishService, serviceDataStoreOperations);
+                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl, servicehandler);
 
         provider.init();
 
