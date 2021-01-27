@@ -46,6 +46,30 @@
       "revId": "c059f190188867acccdb70208ff7d7edb0eb24eb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96ca3ad2_0cfe67ea",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-01-27T09:26:32Z",
+      "side": 1,
+      "message": "One question I have here. I guess the variable \"topic\" is introduced for the nbi notification module developed by Thierry right?? Haven had the time to look at all his code yet",
+      "parentUuid": "a9f48c4b_82a3cf45",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 130,
+        "endChar": 37
+      },
+      "revId": "c059f190188867acccdb70208ff7d7edb0eb24eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
