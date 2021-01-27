@@ -12,12 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.MappingUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiUtils;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
@@ -58,9 +59,9 @@ public class TapiImpl implements TapiConnectivityService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiImpl.class);
 
-    private ServiceHandlerOperations serviceHandler;
+    private OrgOpenroadmServiceService serviceHandler;
 
-    public TapiImpl(ServiceHandlerOperations serviceHandler) {
+    public TapiImpl(OrgOpenroadmServiceService serviceHandler) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
     }
@@ -88,7 +89,10 @@ public class TapiImpl implements TapiConnectivityService {
                     map.get(input.getEndPoint().values().stream().skip(1).findFirst().get()
                         .getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()));
-                this.serviceHandler.serviceCreate(sci);
+                ListenableFuture<RpcResult<ServiceCreateOutput>> output = this.serviceHandler.serviceCreate(sci);
+                if (!output.isDone()) {
+                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().buildFuture();
+                }
             } else {
                 LOG.error("Unknown UUID");
             }
@@ -123,7 +127,6 @@ public class TapiImpl implements TapiConnectivityService {
                 .setConnection(Map.of(connection.key(), connection))
                 .build())
             .build();
-
         return RpcResultBuilder.success(output).buildFuture();
     }
 
