@@ -22,6 +22,30 @@
       "revId": "c059f190188867acccdb70208ff7d7edb0eb24eb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f48c4b_82a3cf45",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-27T09:02:09Z",
+      "side": 1,
+      "message": "Modified to inject this constant directly from the blueprint",
+      "parentUuid": "ea20f4b7_6ff7baa8",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 130,
+        "endChar": 37
+      },
+      "revId": "c059f190188867acccdb70208ff7d7edb0eb24eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
