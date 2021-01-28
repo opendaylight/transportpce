@@ -248,6 +248,7 @@ public class PortMappingVersion221 {
                     switch (port.getPortQual()) {
 
                         case XpdrClient:
+                        case SwitchClient:
                             String lcp0 = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
                             lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                             mappingMap.put(lcp0,
@@ -257,38 +258,47 @@ public class PortMappingVersion221 {
                             break;
 
                         case XpdrNetwork:
-                            if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                                String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
-                                lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                                mappingMap.put(lcp,
-                                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null, null)
-                                );
-                                line++;
-                                continue;
-                            }
+                        case SwitchNetwork:
+                            switch (port.getPortDirection()) {
                             // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
                             //      Some code alignment must be considered.
 
+                                case Bidirectional:
+                                    String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
+                                    lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                                    mappingMap.put(lcp,
+                                        createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null,
+                                            null)
+                                    );
+                                    line++;
+                                    break;
 
-                            StringBuilder circuitPackName2 = new StringBuilder();
-                            Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
-                                circuitPackList, lcpMap);
+                                case Rx:
+                                case Tx:
+                                    StringBuilder circuitPackName2 = new StringBuilder();
+                                    Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
+                                        circuitPackList, lcpMap);
 
-                            if (port2 == null) {
-                                //key already present or an error occured and was logged
-                                continue;
+                                    if (port2 == null) {
+                                        //key already present or an error occured and was logged
+                                        continue;
+                                    }
+
+                                    putXpdrLcpsInMaps(line, nodeId, 1, null,
+                                            circuitPackName, circuitPackName2.toString(), port, port2,
+                                            lcpMap, mappingMap);
+                                    line += 2;
+                                    break;
+
+                                default:
+                                    LOG.error("{} : port {} on {} - unsupported Direction {}",
+                                        nodeId, port.getPortName(), circuitPackName, port.getPortDirection());
                             }
-
-                            putXpdrLcpsInMaps(line, nodeId, 1, null,
-                                    circuitPackName, circuitPackName2.toString(), port, port2,
-                                    lcpMap, mappingMap);
-                            line += 2;
                             break;
 
                         default:
-                            LOG.warn(
-                                "Error in the configuration of port {} of {} for {} - unsupported PortQual {}",
-                                port.getPortName(), circuitPackName, nodeId, port.getPortQual().getIntValue());
+                            LOG.error("{} : port {} on {} - unsupported PortQual {}",
+                                nodeId, port.getPortName(), circuitPackName, port.getPortQual());
                     }
                 }
             }
@@ -346,37 +356,45 @@ public class PortMappingVersion221 {
 
                         case XpdrNetwork:
                         case SwitchNetwork:
-                            if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                                String lcp = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
-                                lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                                mappingMap.put(lcp,
-                                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null,
-                                        xponderType));
-                                line++;
-                                continue;
-                            }
+                            switch (port.getPortDirection()) {
                             // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
                             //      Some code alignment must be considered.
 
-                            StringBuilder circuitPackName2 = new StringBuilder();
-                            Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
-                                circuitPackList, lcpMap);
+                                case Bidirectional:
+                                    String lcp = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+                                    lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                                    mappingMap.put(lcp,
+                                        createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null,
+                                            xponderType));
+                                    line++;
+                                    break;
 
-                            if (port2 == null) {
-                                //key already present or an error occured and was logged
-                                continue;
+                                case Rx:
+                                case Tx:
+                                    StringBuilder circuitPackName2 = new StringBuilder();
+                                    Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
+                                        circuitPackList, lcpMap);
+
+                                    if (port2 == null) {
+                                        //key already present or an error occured and was logged
+                                        continue;
+                                    }
+
+                                    putXpdrLcpsInMaps(line, nodeId, xponderNb, xponderType,
+                                            circuitPackName, circuitPackName2.toString(), port, port2,
+                                            lcpMap, mappingMap);
+                                    line += 2;
+                                    break;
+
+                                default:
+                                    LOG.error("{} : port {} on {} - unsupported Direction {}",
+                                        nodeId, port.getPortName(), circuitPackName, port.getPortDirection());
                             }
-
-                            putXpdrLcpsInMaps(line, nodeId, xponderNb, xponderType,
-                                    circuitPackName, circuitPackName2.toString(), port, port2,
-                                    lcpMap, mappingMap);
-                            line += 2;
                             break;
 
                         default:
-                            LOG.warn(
-                                "Error in the configuration of port {} of {} for {} - unsupported PortQual {}",
-                                port.getPortName(), circuitPackName, nodeId, port.getPortQual().getIntValue());
+                            LOG.error("{} : port {} on {} - unsupported PortQual {}",
+                                nodeId, port.getPortName(), circuitPackName, port.getPortQual());
                     }
                 }
             }
@@ -603,9 +621,9 @@ public class PortMappingVersion221 {
                             break;
 
                         default:
-                            LOG.info("{} : port {} on {} - unsupported Direction"
+                            LOG.error("{} : port {} on {} - unsupported Direction {}"
                                     + " - cannot assign  logicalConnectionPoint.",
-                                nodeId, port.getPortName(), circuitPackName);
+                                nodeId, port.getPortName(), circuitPackName, port.getPortDirection());
 
                     }
                 }
