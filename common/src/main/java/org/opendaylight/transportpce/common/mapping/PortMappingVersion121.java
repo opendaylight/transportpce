@@ -282,19 +282,9 @@ public class PortMappingVersion121 {
                                 circuitPackName);
                             continue;
                         }
-                        String lcp1 = createXpdrLogicalConnectionPort(1, line, StringConstants.NETWORK_TOKEN);
-                        String lcp2 = createXpdrLogicalConnectionPort(1, line + 1, StringConstants.NETWORK_TOKEN);
-                        if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
-                            LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
-                            line += 2;
-                            continue;
-                        }
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
-                        lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
-                        mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName, lcp1,
-                            lcp2, null, null));
-                        mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2,
-                            cpOpt.get().getCircuitPackName(), lcp2, lcp1, null, null));
+                        putXpdrLcpsInMaps(line, nodeId, 1,
+                                circuitPackName, cpOpt.get().getCircuitPackName(), port, port2,
+                                lcpMap, mappingMap);
                         line += 2;
                         break;
 
@@ -724,6 +714,26 @@ public class PortMappingVersion121 {
 
         return mpBldr.build();
     }
+
+    private void putXpdrLcpsInMaps(int line, String nodeId,
+            Integer xponderNb,
+            String circuitPackName, String circuitPackName2, Ports port, Ports port2,
+            Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
+        String lcp1 = createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+        String lcp2 = createXpdrLogicalConnectionPort(xponderNb, line + 1, StringConstants.NETWORK_TOKEN);
+        if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
+            LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
+            return;
+        }
+        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
+        lcpMap.put(circuitPackName2 + '+' + port2.getPortName(), lcp2);
+        mappingMap.put(lcp1,
+                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null));
+        mappingMap.put(lcp2,
+                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null));
+        return;
+    }
+
 
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
