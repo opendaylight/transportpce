@@ -274,41 +274,18 @@ public class PortMappingVersion221 {
                                 continue;
                             }
 
-                            if (!checkPartnerPortNotNull(port)) {
-                                LOG.warn("Error in the configuration of port {} of {} for {}",
-                                    port.getPortName(), circuitPackName, nodeId);
+
+                            StringBuilder circuitPackName2 = new StringBuilder();
+                            Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
+                                circuitPackList, lcpMap);
+
+                            if (port2 == null) {
+                                //key already present or an error occured and was logged
                                 continue;
                             }
 
-                            if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
-                                continue;
-                            }
-                            Optional<CircuitPacks> cpOpt = circuitPackList.stream()
-                                .filter(
-                                    cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
-                                .findFirst();
-                            if (!cpOpt.isPresent()) {
-                                LOG.error("Error fetching circuit-pack {} for {}",
-                                    port.getPartnerPort().getCircuitPackName(), nodeId);
-                                continue;
-                            }
-                            Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
-                                .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
-                                .findFirst();
-                            if (!poOpt.isPresent()) {
-                                LOG.error("Error fetching port {} on {} for {}", port.getPartnerPort().getPortName(),
-                                    port.getPartnerPort().getCircuitPackName(), nodeId);
-                                continue;
-                            }
-                            Ports port2 = poOpt.get();
-                            if (!checkPartnerPort(circuitPackName, port, port2)) {
-                                LOG.error("port {} on {} is not a correct partner port of {} on  {}",
-                                    port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
-                                    circuitPackName);
-                                continue;
-                            }
                             putXpdrLcpsInMaps(line, nodeId, 1, null,
-                                    circuitPackName, cpOpt.get().getCircuitPackName(), port, port2,
+                                    circuitPackName, circuitPackName2.toString(), port, port2,
                                     lcpMap, mappingMap);
                             line += 2;
                             break;
@@ -386,43 +363,17 @@ public class PortMappingVersion221 {
                                 continue;
                             }
 
-                            if (!checkPartnerPortNotNull(port)) {
-                                LOG.warn("Error in the configuration of port {} of {} for {}",
-                                    port.getPortName(), circuitPackName, nodeId);
+                            StringBuilder circuitPackName2 = new StringBuilder();
+                            Ports port2 = getPort2(port, nodeId, circuitPackName, circuitPackName2,
+                                circuitPackList, lcpMap);
+
+                            if (port2 == null) {
+                                //key already present or an error occured and was logged
                                 continue;
                             }
 
-                            if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
-                                continue;
-                            }
-
-                            Optional<CircuitPacks> cpOpt = circuitPackList.stream()
-                                .filter(
-                                    cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
-                                .findFirst();
-                            if (!cpOpt.isPresent()) {
-                                LOG.error("Error fetching circuit-pack {} for {}",
-                                    port.getPartnerPort().getCircuitPackName(), nodeId);
-                                continue;
-                            }
-
-                            Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
-                                .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
-                                .findFirst();
-                            if (!poOpt.isPresent()) {
-                                LOG.error("Error fetching port {} on {} for {}", port.getPartnerPort().getPortName(),
-                                    port.getPartnerPort().getCircuitPackName(), nodeId);
-                                continue;
-                            }
-                            Ports port2 = poOpt.get();
-                            if (!checkPartnerPort(circuitPackName, port, port2)) {
-                                LOG.error("port {} on {} is not a correct partner port of {} on  {}",
-                                    port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
-                                    circuitPackName);
-                                continue;
-                            }
                             putXpdrLcpsInMaps(line, nodeId, xponderNb, xponderType,
-                                    circuitPackName, cpOpt.get().getCircuitPackName(), port, port2,
+                                    circuitPackName, circuitPackName2.toString(), port, port2,
                                     lcpMap, mappingMap);
                             line += 2;
                             break;
@@ -1000,6 +951,45 @@ public class PortMappingVersion221 {
         }
         return mpBldr.build();
     }
+
+    private Ports getPort2(Ports port, String nodeId, String circuitPackName, StringBuilder circuitPackName2,
+            //circuitPackName2 will be updated by reference contrary to circuitPackName
+            List<CircuitPacks> circuitPackList, Map<String, String> lcpMap) {
+        if (!checkPartnerPortNotNull(port)) {
+            LOG.warn("Error in the configuration of port {} of {} for {}",
+                port.getPortName(), circuitPackName, nodeId);
+            return null;
+        }
+        if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
+            return null;
+        }
+        Optional<CircuitPacks> cpOpt = circuitPackList.stream()
+            .filter(
+                cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
+            .findFirst();
+        if (!cpOpt.isPresent()) {
+            LOG.error("Error fetching circuit-pack {} for {}",
+                port.getPartnerPort().getCircuitPackName(), nodeId);
+            return null;
+        }
+        Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
+            .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
+            .findFirst();
+        if (!poOpt.isPresent()) {
+            LOG.error("Error fetching port {} on {} for {}",
+                port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName(), nodeId);
+            return null;
+        }
+        Ports port2 = poOpt.get();
+        circuitPackName2.append(cpOpt.get().getCircuitPackName());
+        if (!checkPartnerPort(circuitPackName, port, port2)) {
+            LOG.error("port {} on {} is not a correct partner port of {} on  {}",
+                port2.getPortName(), circuitPackName2, port.getPortName(), circuitPackName);
+            return null;
+        }
+        return port2;
+    }
+
 
     private void putXpdrLcpsInMaps(int line, String nodeId,
             Integer xponderNb, XpdrNodeTypes xponderType,
