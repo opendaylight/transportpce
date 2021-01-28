@@ -290,6 +290,24 @@
     },
     {
       "key": {
+        "uuid": "a57fe48d_b74c1ccc",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-01-28T17:01:41Z",
+      "side": 1,
+      "message": "It\u0027s a good idea to stick with the convention\nYou can add it in the commit message or you can also create a separate change for that.\nUsually it is a better option, this avoids git problem to detect file renames.",
+      "parentUuid": "f21dae45_b6243e2a",
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ac9db8_41f5f3ab",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
         "patchSetId": 2
