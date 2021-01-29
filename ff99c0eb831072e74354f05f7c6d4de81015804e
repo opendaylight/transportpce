@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "58ed1f92_d60c389b",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/consumer/Subscriber.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-29T08:51:02Z",
+      "side": 1,
+      "message": "... seemingly, yes...",
+      "parentUuid": "8c2d02a0_2b9b9fc7",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 59
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8d9fe40_6eaf3dca",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/producer/Publisher.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c8165f3_701a240b",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/producer/Publisher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-29T08:51:02Z",
+      "side": 1,
+      "message": "... seemingly, yes...",
+      "parentUuid": "a8d9fe40_6eaf3dca",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
