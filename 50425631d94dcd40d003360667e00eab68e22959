@@ -22,6 +22,30 @@
       "revId": "50425631d94dcd40d003360667e00eab68e22959",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f45e0de6_d3ec332c",
+        "filename": "servicehandler/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-29T08:51:19Z",
+      "side": 1,
+      "message": "removed with PS4.",
+      "parentUuid": "9dcfc0b2_fda31850",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 17
+      },
+      "revId": "50425631d94dcd40d003360667e00eab68e22959",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ffd56567_801ff43f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-29T08:51:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3cc2087_bef56fb3",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 18
+      },
+      "revId": "1ee4aaecf4d3cb06232962b204a0d35a3b3ff3d5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "291a814c_c7d8b853",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "1ee4aaecf4d3cb06232962b204a0d35a3b3ff3d5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc512baf_ea4e583b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-01-29T08:51:19Z",
+      "side": 1,
+      "message": "set to \"OutOfService\"",
+      "parentUuid": "291a814c_c7d8b853",
+      "range": {
+        "startLine": 278,
+        "startChar": 47,
+        "endLine": 278,
+        "endChar": 55
+      },
+      "revId": "1ee4aaecf4d3cb06232962b204a0d35a3b3ff3d5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
