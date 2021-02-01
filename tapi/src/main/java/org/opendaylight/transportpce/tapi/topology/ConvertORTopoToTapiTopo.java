@@ -139,15 +139,14 @@ public class ConvertORTopoToTapiTopo {
             .collect(Collectors.toList());
         } else {
             this.oorOduSwitchingPool = createOduSwitchingPoolForTp100G();
-            List<TpId> toto = this.oorOduSwitchingPool.getNonBlockingList().values().stream()
+            List<TpId> tpList = this.oorOduSwitchingPool.getNonBlockingList().values().stream()
                 .flatMap(nbl -> nbl.getTpList().stream())
                 .collect(Collectors.toList());
-            LOG.info("toto = {}", toto);
             this.oorClientPortList = ietfNode.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
                 .getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-                    == OpenroadmTpType.XPONDERCLIENT.getIntValue() && toto.contains(tp.getTpId()))
+                    == OpenroadmTpType.XPONDERCLIENT.getIntValue() && tpList.contains(tp.getTpId()))
                 .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
                 .collect(Collectors.toList());
             this.oorClientPortList.forEach(tp -> LOG.info("tp = {}", tp.getTpId()));
