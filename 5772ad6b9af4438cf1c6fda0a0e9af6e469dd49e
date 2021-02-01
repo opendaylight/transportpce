@@ -46,6 +46,30 @@
       "revId": "5772ad6b9af4438cf1c6fda0a0e9af6e469dd49e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80cbb6be_21cb0e54",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-01T11:22:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5ce5394_ea397be3",
+      "range": {
+        "startLine": 67,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "5772ad6b9af4438cf1c6fda0a0e9af6e469dd49e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }

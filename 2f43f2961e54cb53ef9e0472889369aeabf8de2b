@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "de347c2f_8f12a5d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-01T11:22:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12398916_e0360e70",
+      "range": {
+        "startLine": 16,
+        "startChar": 25,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "2f43f2961e54cb53ef9e0472889369aeabf8de2b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d01d34d_72d08a68",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProviderTest.java",
         "patchSetId": 5
