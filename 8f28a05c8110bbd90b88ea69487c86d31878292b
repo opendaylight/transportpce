@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45e78d65_8691b92e",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-01T14:26:19Z",
+      "side": 1,
+      "message": "wrongly cut/pasted\nshould be at line 69",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 17
+      },
+      "revId": "8f28a05c8110bbd90b88ea69487c86d31878292b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
