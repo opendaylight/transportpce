@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29d858d4_a8518d8f",
+        "filename": "features/odl-transportpce-nbinotifications/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-01T11:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c146189e_ab71c140",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "23cbda6cf2f0d4430fced3b64c62a41843bcc85e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2136bd54_b18c40bb",
         "filename": "nbinotifications/src/main/resources/OSGI-INF/blueprint/nobinotifications-blueprint.xml",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "23cbda6cf2f0d4430fced3b64c62a41843bcc85e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d102c399_45f6f0c3",
+        "filename": "nbinotifications/src/main/resources/OSGI-INF/blueprint/nobinotifications-blueprint.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-01T11:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2136bd54_b18c40bb",
+      "range": {
+        "startLine": 16,
+        "startChar": 15,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "23cbda6cf2f0d4430fced3b64c62a41843bcc85e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
