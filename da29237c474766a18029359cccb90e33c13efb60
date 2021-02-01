@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d964f0f6_78cd4fac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-01T13:10:13Z",
+      "side": 1,
+      "message": "dependencies\n\nsince we are already in Silicon, and this is only newer dependencies, \nI think \"bump odlparent to 8.1.0 and mdsal to 7.0.5\" would be more adequate",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "da29237c474766a18029359cccb90e33c13efb60",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
