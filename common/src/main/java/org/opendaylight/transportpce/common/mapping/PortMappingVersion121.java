@@ -515,8 +515,8 @@ public class PortMappingVersion121 {
         return lcp;
     }
 
-    private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
-        List<Degree> degrees = new ArrayList<>();
+    private Map<Integer, Degree> getDegreesMap(String deviceId, Info ordmInfo) {
+        Map<Integer, Degree> degrees = new HashMap<>();
 
         // Get value for max degree from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
@@ -530,30 +530,21 @@ public class PortMappingVersion121 {
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
-                degrees.add(ordmDegreeObject.get());
+                degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
         LOG.info("Device {} has {} degree", deviceId, degrees.size());
         return degrees;
     }
 
+    private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
+        return new ArrayList<Degree>(getDegreesMap(deviceId, ordmInfo).values());
+    }
+
     private Map<Integer, List<ConnectionPorts>> getPerDegreePorts(String deviceId, Info ordmInfo) {
         Map<Integer, List<ConnectionPorts>> conPortMap = new HashMap<>();
-        Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
-
-        for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
-            LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
-            Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (ordmDegreeObject.isPresent()) {
-                conPortMap.put(degreeCounter, new ArrayList<>(ordmDegreeObject.get()
-                        .nonnullConnectionPorts().values()));
-            }
-        }
-        LOG.info("Device {} has {} degree", deviceId, conPortMap.size());
+        getDegreesMap(deviceId, ordmInfo).forEach(
+            (index, degree) -> conPortMap.put(index, new ArrayList<>(degree.nonnullConnectionPorts().values())));
         return conPortMap;
     }
 
