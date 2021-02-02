@@ -515,8 +515,8 @@ public class PortMappingVersion121 {
         return lcp;
     }
 
-    private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
-        List<Degree> degrees = new ArrayList<>();
+    private Map<Integer, Degree> getDegreesMap(String deviceId, Info ordmInfo) {
+        Map<Integer, Degree> degrees = new HashMap<>();
 
         // Get value for max degree from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
@@ -530,7 +530,7 @@ public class PortMappingVersion121 {
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
-                degrees.add(ordmDegreeObject.get());
+                degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
         LOG.info("Device {} has {} degree", deviceId, degrees.size());
@@ -539,21 +539,8 @@ public class PortMappingVersion121 {
 
     private Map<Integer, List<ConnectionPorts>> getPerDegreePorts(String deviceId, Info ordmInfo) {
         Map<Integer, List<ConnectionPorts>> conPortMap = new HashMap<>();
-        Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
-
-        for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
-            LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
-            Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (ordmDegreeObject.isPresent()) {
-                conPortMap.put(degreeCounter, new ArrayList<>(ordmDegreeObject.get()
-                        .nonnullConnectionPorts().values()));
-            }
-        }
-        LOG.info("Device {} has {} degree", deviceId, conPortMap.size());
+        getDegreesMap(deviceId, ordmInfo).forEach(
+            (index, degree) -> conPortMap.put(index, new ArrayList<>(degree.nonnullConnectionPorts().values())));
         return conPortMap;
     }
 
@@ -601,17 +588,13 @@ public class PortMappingVersion121 {
         return cpToInterfaceMap;
     }
 
-    private List<CpToDegree> getCpToDegreeList(List<Degree> degrees, String nodeId,
-            Map<String, String> interfaceList) {
+    private List<CpToDegree> getCpToDegreeList(Map<Integer, Degree> degrees, Map<String, String> interfaceList) {
         List<CpToDegree> cpToDegreeList = new ArrayList<>();
-        for (Degree degree : degrees) {
-            if (degree.getCircuitPacks() == null) {
-                continue;
-            }
+        for (Degree degree : degrees.values()) {
             LOG.info("Inside CP to degree list");
             cpToDegreeList.addAll(degree.nonnullCircuitPacks().values().stream()
                 .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(),
-                    degree.getDegreeNumber().toString(), nodeId, interfaceList))
+                    degree.getDegreeNumber().toString(), interfaceList))
                 .collect(Collectors.toList()));
         }
         return cpToDegreeList;
@@ -659,7 +642,7 @@ public class PortMappingVersion121 {
         }
     }
 
-    private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber, String nodeId,
+    private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber,
             Map<String, String> interfaceList) {
         return new CpToDegreeBuilder()
             .withKey(new CpToDegreeKey(circuitPackName))
@@ -736,9 +719,9 @@ public class PortMappingVersion121 {
 
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
-        List<Degree> degrees = getDegrees(nodeId, deviceInfo);
+        Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
-        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, nodeId, interfaceList);
+        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, interfaceList);
         LOG.info("Map looks like this {}", interfaceList);
         postPortMapping(nodeId, null, null, cpToDegreeList);
 
