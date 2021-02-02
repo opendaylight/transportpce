@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!-- Copyright © 2020 Orange and others. All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution,
+    and is available at http://www.eclipse.org/legal/epl-v10.html -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+ xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    odl:use-default-for-reference-types="true">
+    <cm:property-placeholder persistent-id="org.opendaylight.transportpce.dmaap">
+        <cm:default-properties>
+            <cm:property name="dmaap.baseUrl" value="http://localhost:8080" />
+            <cm:property name="dmaap.username" value="" />
+             <cm:property name="dmaap.password" value="" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
+
+    <bean id="provider"
+        class="org.opendaylight.transportpce.dmaap.client.impl.DmaapClientProvider"
+        init-method="init" destroy-method="close">
+        <argument ref="notificationService" />
+        <argument value="${dmaap.baseUrl}"></argument>
+        <argument value="${dmaap.username}"></argument>
+        <argument value="${dmaap.password}"></argument>
+    </bean>
+</blueprint>
