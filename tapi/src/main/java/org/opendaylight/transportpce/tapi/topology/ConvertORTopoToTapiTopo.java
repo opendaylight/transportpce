@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
@@ -52,6 +54,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROMS;
@@ -565,7 +568,7 @@ public class ConvertORTopoToTapiTopo {
 
     private List<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedCepLayerProtocolQualifier(TerminationPoint tp,
         LayerProtocolName lpn) {
-        List<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new ArrayList<>();
+        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
         List<SupportedInterfaceCapability> sicList = new ArrayList<>(
             tp.augmentation(org.opendaylight.yang.gen.v1.http
                     .org.openroadm.otn.network.topology.rev200529.TerminationPoint1.class).getTpSupportedInterfaces()
@@ -574,21 +577,28 @@ public class ConvertORTopoToTapiTopo {
             switch (lpn.getName()) {
                 case "DSR":
                     if (sic.getIfCapType().getSimpleName().equals("If10GEODU2e")) {
-                        sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
-                        sclpqList.add(ODUTYPEODU2E.class);
-                    } else if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")) {
-                        sclpqList.add(ODUTYPEODU4.class);
+                        sclpqSet.add(ODUTYPEODU2E.class);
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                    } else if (sic.getIfCapType().getSimpleName().equals("If10GEODU2")) {
+                        sclpqSet.add(ODUTYPEODU2.class);
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                    } else if (sic.getIfCapType().getSimpleName().equals("If10GE")) {
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
                     } else if (sic.getIfCapType().getSimpleName().equals("If100GEODU4")) {
-                        sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
-                        sclpqList.add(ODUTYPEODU4.class);
+                        sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                        sclpqSet.add(ODUTYPEODU4.class);
                     } else if (sic.getIfCapType().getSimpleName().equals("If100GE")) {
-                        sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
+                        sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                    } else if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
+                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                        sclpqSet.add(ODUTYPEODU4.class);
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")) {
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
+                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
                     }
                     break;
                 default:
@@ -596,7 +606,7 @@ public class ConvertORTopoToTapiTopo {
                     break;
             }
         }
-        return sclpqList;
+        return new ArrayList<>(sclpqSet);
     }
 
     private void createTapiTransitionalLinks() {

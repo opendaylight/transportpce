@@ -61,6 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROMS;
@@ -544,11 +545,11 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
             portName, name.getValue());
         assertEquals("value-name of client nep for '" + portName + "' should be '" + nepName + "'",
             nepName, name.getValueName());
-        assertEquals("Client nep should support 2 kind of cep",
-            2, nep.getSupportedCepLayerProtocolQualifier().size());
-        assertThat("client nep should support 2 kind of cep",
+        assertEquals("Client nep should support 3 kind of cep",
+            3, nep.getSupportedCepLayerProtocolQualifier().size());
+        assertThat("client nep should support 3 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
+            hasItems(ODUTYPEODU2.class, ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
@@ -559,7 +560,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         Name name = nameList.get(0);
         assertEquals("value of network nep should be '" + portName + "'",
             portName, name.getValue());
-        assertEquals("value-name of client nep for '" + portName + "' should be '" + nepName + "'",
+        assertEquals("value-name of network nep for '" + portName + "' should be '" + nepName + "'",
             nepName, name.getValueName());
         assertEquals("Network nep should support 1 kind of cep",
             1, nep.getSupportedCepLayerProtocolQualifier().size());
