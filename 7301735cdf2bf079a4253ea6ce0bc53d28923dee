@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8ce5f45_beb46c98",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "problem here\nit should be:\n\nif (!portObject.isPresent()) {\n     LOG.info(\"Port not found\");\n     return powerRangeMap;\n}\n\nPorts port \u003d portObject.get();\nif (port.getRoadmPort() !\u003d null) {\n...",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 38
+      },
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "464753a5_8e7b9947",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "NS broken and less readable than in PS2\n\nI think this is due to the IDE.",
+      "range": {
+        "startLine": 169,
+        "startChar": 53,
+        "endLine": 169,
+        "endChar": 113
+      },
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d9e237_e60f36b0",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "should stay sticked",
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db6cb1ef_711fec5f",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 186,
+        "startChar": 64,
+        "endLine": 186,
+        "endChar": 83
+      },
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fabbcd3e_63fa90a0",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "no more needed here",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 1
+      },
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "698877ec_ad3aed5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00ad115b_9574efaa",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8413c58e_dc4de70c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b88c86b4_3c4921e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8413c58e_dc4de70c",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f57d7138_80aae2bd",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe770605_9f3fcec9",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 25
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7d303e9_18db9204",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58c80e05_70b75772",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7d303e9_18db9204",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 33
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "05647889_610ca19a",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca2419bc_e36727a1",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 29
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb4c923a_529183be",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
         "patchSetId": 2
@@ -206,6 +326,30 @@
       "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f085c4a_f6bc1507",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb4c923a_529183be",
+      "range": {
+        "startLine": 172,
+        "startChar": 85,
+        "endLine": 173,
+        "endChar": 28
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "47e171d4_01bcef7a",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b5e9090_dd538d89",
+      "range": {
+        "startLine": 177,
+        "startChar": 88,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fc87d37_3efe4be2",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
         "patchSetId": 2
@@ -252,6 +420,30 @@
       "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "595b1d87_c0b44fa7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-02T20:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fc87d37_3efe4be2",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 48
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
