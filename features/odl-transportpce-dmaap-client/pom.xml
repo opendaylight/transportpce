@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright © 2021 Orange and others. All rights reserved. This program
+    and the accompanying materials are made available under the terms of the
+    Eclipse Public License v1.0 which accompanies this distribution, and is available
+    at http://www.eclipse.org/legal/epl-v10.html INTERNAL -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.opendaylight.odlparent</groupId>
+        <artifactId>single-feature-parent</artifactId>
+        <version>8.1.0</version>
+        <relativePath />
+    </parent>
+    <groupId>org.opendaylight.transportpce</groupId>
+    <artifactId>odl-transportpce-dmaap-client</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+    <packaging>feature</packaging>
+
+    <name>OpenDaylight :: transportpce :: dmaap-client</name>
+    <properties>
+    <!-- skipped because we are using config file as artifact and it is not installed before running test -->
+        <skip.karaf.featureTest>true</skip.karaf.featureTest>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>odl-transportpce</artifactId>
+            <version>${project.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-dmaap-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-dmaap-artifact</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${basedir}/src/main/resources/org.opendaylight.transportpce.dmaap.cfg</file>
+                                    <type>cfg</type>
+                                    <classifier>config</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
