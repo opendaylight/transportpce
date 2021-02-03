@@ -12,6 +12,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
 
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -41,6 +42,7 @@ public class PortMappingImpl implements PortMapping {
     private final PortMappingVersion710 portMappingVersion710;
     private final PortMappingVersion221 portMappingVersion22;
     private final PortMappingVersion121 portMappingVersion121;
+    private CountDownLatch latch;
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
         PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121) {
@@ -49,6 +51,7 @@ public class PortMappingImpl implements PortMapping {
         this.portMappingVersion710 = portMappingVersion710;
         this.portMappingVersion22 = portMappingVersion22;
         this.portMappingVersion121 = portMappingVersion121;
+        this.latch = new CountDownLatch(1);
     }
 
     @Override
@@ -214,5 +217,14 @@ public class PortMappingImpl implements PortMapping {
         return null;
     }
 
+    @Override
+    public synchronized CountDownLatch getLatch() {
+        return this.latch;
+    }
+
+    @Override
+    public synchronized void resetLatch() {
+        this.latch = new CountDownLatch(1);
+    }
 
 }
