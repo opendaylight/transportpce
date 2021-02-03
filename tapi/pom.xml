@@ -78,6 +78,14 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Sodium bump: javax.annotation.Nullable and friends -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+      <optional>true</optional>
+    </dependency>
+
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>junit</groupId>
