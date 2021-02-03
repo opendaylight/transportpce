@@ -1,0 +1,76 @@
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<networks xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
+<network>
+  <network-id>openroadm-network</network-id>
+  <network-types>
+    <openroadm-common-network xmlns="http://org/openroadm/common/network"/>
+  </network-types>
+  <node>
+    <node-id>ROADM-C1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">ROADM</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeC</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">127.0.0.11</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">model2</model>
+  </node>
+  <node>
+    <node-id>XPDR-C1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeC</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">1.2.3.4</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">model2</model>
+  </node>
+  <node>
+    <node-id>XPDR-A1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeA</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">1.2.3.4</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">model2</model>
+  </node>
+  <node>
+    <node-id>ROADM-A1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">ROADM</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeA</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">127.0.0.11</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">model2</model>
+  </node>
+  <node>
+    <node-id>SPDR-SA1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">SWITCH</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSA</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">1.2.3.4</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">universal-switchponder</model>
+  </node>
+  <node>
+    <node-id>SPDR-SC1</node-id>
+    <node-type xmlns="http://org/openroadm/common/network">SWITCH</node-type>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSC</node-ref>
+    </supporting-node>
+    <ip xmlns="http://org/openroadm/network">1.2.3.4</ip>
+    <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+    <model xmlns="http://org/openroadm/network">universal-switchponder</model>
+  </node>
+</network>
+</networks>
+</data>
