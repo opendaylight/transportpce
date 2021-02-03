@@ -24,8 +24,22 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.NwTopologyServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
@@ -158,6 +172,75 @@ public class TapiContext {
             LOG.info("TAPI SIPs merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI SIPs", e);
+        }
+    }
+
+    public void updateConnectivityContext(Map<ConnectivityServiceKey, ConnectivityService> connServMap,
+                                          Map<ConnectionKey, Connection> connectionFullMap) {
+        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
+        try {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext
+                    connectivityContext = new ConnectivityContextBuilder()
+                    .setConnectivityService(connServMap)
+                    .setConnection(connectionFullMap)
+                    .build();
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> connectivitycontextIID =
+                    InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                            .child(org.opendaylight.yang.gen.v1.urn
+                                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                            .build();
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID,
+                    connectivityContext);
+            this.networkTransactionService.commit().get();
+            LOG.info("TAPI connectivity merged successfully.");
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to merge TAPI connectivity", e);
+        }
+    }
+
+    public void updateTopologyWithCep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, ConnectionEndPoint cep) {
+        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
+        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+                    new NodeKey(nodeUuid))
+            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+            .build();
+        try {
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (!optionalOnep.isPresent()) {
+                LOG.error("ONEP is not present in datastore");
+                return;
+            }
+            OwnedNodeEdgePoint onep = optionalOnep.get();
+            LOG.info("ONEP found = {}", onep);
+            // TODO -> If cep exists -> skip merging to datasore
+            OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
+            if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null) {
+                if (onep1.getCepList().getConnectionEndPoint().containsKey(new ConnectionEndPointKey(cep.key()))) {
+                    LOG.info("CEP already in topology, skipping merge");
+                    return;
+                }
+            }
+            // Updated ONEP
+            CepList cepList = new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build();
+            OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+            OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder(onep)
+                    .addAugmentation(onep1Bldr)
+                    .build();
+            LOG.info("New ONEP is {}", newOnep);
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID,
+                    newOnep);
+            this.networkTransactionService.commit().get();
+            LOG.info("CEP added successfully.");
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt update cep in topology", e);
         }
     }
 }
