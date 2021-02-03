@@ -174,12 +174,19 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node dsrNode = tapiFactory
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
-        Uuid networkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+        Uuid enetworkNepUuid = new Uuid(
+            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
             .toString());
-        OwnedNodeEdgePoint nepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(networkNepUuid));
-        assertNull("Administrative State should not be present", nepN.getAdministrativeState());
-        assertNull("Operational State should not be present", nepN.getOperationalState());
+        Uuid inetworkNepUuid = new Uuid(
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+        OwnedNodeEdgePoint inepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(inetworkNepUuid));
+        assertNull("Administrative State should not be present", inepN.getAdministrativeState());
+        assertNull("Operational State should not be present", inepN.getOperationalState());
+
+        OwnedNodeEdgePoint enepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(enetworkNepUuid));
+        assertNull("Administrative State should not be present", enepN.getAdministrativeState());
+        assertNull("Operational State should not be present", enepN.getOperationalState());
 
         Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
@@ -219,14 +226,23 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node dsrNode = tapiFactory
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
-        Uuid networkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+        Uuid enetworkNepUuid = new Uuid(
+            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
             .toString());
-        OwnedNodeEdgePoint nepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(networkNepUuid));
+        Uuid inetworkNepUuid = new Uuid(
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+        OwnedNodeEdgePoint enepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(enetworkNepUuid));
         assertEquals("Administrative State should be Locked",
-            AdministrativeState.LOCKED, nepN.getAdministrativeState());
+            AdministrativeState.LOCKED, enepN.getAdministrativeState());
         assertEquals("Operational State should be Disabled",
-            OperationalState.DISABLED, nepN.getOperationalState());
+            OperationalState.DISABLED, enepN.getOperationalState());
+
+        OwnedNodeEdgePoint inepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(inetworkNepUuid));
+        assertEquals("Administrative State should be Locked",
+                AdministrativeState.LOCKED, inepN.getAdministrativeState());
+        assertEquals("Operational State should be Disabled",
+                OperationalState.DISABLED, inepN.getOperationalState());
 
         Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
@@ -270,14 +286,23 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node dsrNode = tapiFactory
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
-        Uuid networkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
-            .toString());
-        OwnedNodeEdgePoint nepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(networkNepUuid));
+        Uuid enetworkNepUuid = new Uuid(
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+        Uuid inetworkNepUuid = new Uuid(
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+        OwnedNodeEdgePoint enepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(enetworkNepUuid));
         assertEquals("Administrative State should be Locked",
-            AdministrativeState.LOCKED, nepN.getAdministrativeState());
+            AdministrativeState.LOCKED, enepN.getAdministrativeState());
         assertEquals("Operational State should be Disabled",
-            OperationalState.DISABLED, nepN.getOperationalState());
+            OperationalState.DISABLED, enepN.getOperationalState());
+
+        OwnedNodeEdgePoint inepN = dsrNode.nonnullOwnedNodeEdgePoint().get(new OwnedNodeEdgePointKey(inetworkNepUuid));
+        assertEquals("Administrative State should be Locked",
+                AdministrativeState.LOCKED, inepN.getAdministrativeState());
+        assertEquals("Operational State should be Disabled",
+                OperationalState.DISABLED, inepN.getOperationalState());
 
         Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
@@ -332,12 +357,13 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         List<Link> tapiLinks = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(tapiLinks.toString());
         assertNull("Administrative State should not be present", tapiLinks.get(0).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(3).getAdministrativeState());
         assertNull("Operational State should not be present", tapiLinks.get(0).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(3).getOperationalState());
     }
 
     @Test
@@ -371,10 +397,10 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .collect(Collectors.toList());
         assertNull("Administrative State should not be present", tapiLinks.get(0).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(3).getAdministrativeState());
         assertNull("Operational State should not be present", tapiLinks.get(0).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(3).getOperationalState());
     }
 
     @Test
@@ -407,14 +433,15 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         List<Link> tapiLinks = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(tapiLinks.toString());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(2).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(2).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(3).getOperationalState());
     }
 
     @Test
@@ -448,13 +475,13 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(2).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(2).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(3).getOperationalState());
     }
 
     @Test
@@ -487,14 +514,15 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         List<Link> tapiLinks = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(tapiLinks.toString());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(2).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(2).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(3).getOperationalState());
     }
 
     @Test
@@ -526,7 +554,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         checkTransitionalLink(tapiLinks.get(1), dsrNodeUuid, otsiNodeUuid,
-            "XPDR-A1-XPDR1+DSR+XPDR1-NETWORK1", "XPDR-A1-XPDR1+iOTSi+XPDR1-NETWORK1", "XPDR-A1-XPDR1");
+            "XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1", "XPDR-A1-XPDR1+iOTSi+XPDR1-NETWORK1", "XPDR-A1-XPDR1");
     }
 
     @Test
@@ -543,6 +571,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             = tapiFactory.getTapiNodes().values().stream()
             .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(tapiNodes.toString());
 
         assertEquals("Node list size should be 2", 2, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be 1", 1, tapiFactory.getTapiLinks().size());
@@ -557,7 +586,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         checkTransitionalLink(tapiLinks.get(0), dsrNodeUuid, otsiNodeUuid,
-            "SPDR-SA1-XPDR1+DSR+XPDR1-NETWORK1", "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1", "SPDR-SA1-XPDR1");
+            "SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1", "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1", "SPDR-SA1-XPDR1");
     }
 
     @Test
@@ -588,8 +617,9 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         List<Link> tapiLinks = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkTransitionalLink(tapiLinks.get(0), dsrNodeUuid, otsiNodeUuid,
-            "SPDR-SA1-XPDR2+DSR+XPDR2-NETWORK4", "SPDR-SA1-XPDR2+iOTSi+XPDR2-NETWORK4", "SPDR-SA1-XPDR2");
+        LOG.info(tapiLinks.toString());
+        checkTransitionalLink(tapiLinks.get(1), dsrNodeUuid, otsiNodeUuid,
+            "SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK4", "SPDR-SA1-XPDR2+iOTSi+XPDR2-NETWORK4", "SPDR-SA1-XPDR2");
     }
 
     @Test
@@ -620,9 +650,9 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .toString());
         Uuid node4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR+XPDR1-NETWORK1"
+        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+DSR+XPDR1-NETWORK1"
+        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid tp3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
@@ -638,16 +668,17 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         List<Link> links = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkOtnLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
+        LOG.info(links.toString());
+        checkOtnLink(links.get(2), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
             "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
-        checkOtnLink(links.get(2), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
+        checkOtnLink(links.get(3), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
             "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
     }
 
     @Test
     public void convertRoadmInfrastructureWhenNoXponderAttached() {
         ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topologyUuid);
-        tapiFactory.convertRoadmInfrastructure();
+        tapiFactory.abstractRoadmInfrastructure();
 
         assertEquals("Node list size should be 1", 1, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be empty", 0, tapiFactory.getTapiLinks().size());
@@ -668,7 +699,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             }
         }
         tapiFactory.convertNode(otnMuxA, networkPortListA);
-        tapiFactory.convertRoadmInfrastructure();
+        tapiFactory.abstractRoadmInfrastructure();
 
         assertEquals("Node list size should be 3", 3, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be 2", 2, tapiFactory.getTapiLinks().size());
@@ -694,7 +725,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         Uuid linkUuid =
             new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1--XPDR1-NETWORK1 and ROADM-infra--NodeEdgePoint_1"
                 .getBytes(Charset.forName("UTF-8"))).toString());
-        checkOmsLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
+        LOG.info(links.toString());
+        checkOmsLink(links.get(1), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
             "SPDR-SA1-XPDR1--XPDR1-NETWORK1 and ROADM-infra--NodeEdgePoint_1");
     }
 
@@ -712,10 +744,16 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             2, node.getLayerProtocolName().size());
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
             node.getLayerProtocolName(), hasItems(LayerProtocolName.DSR, LayerProtocolName.ODU));
-        List<OwnedNodeEdgePoint> nepsN = node.nonnullOwnedNodeEdgePoint().values().stream()
-            .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_N")))
+        List<OwnedNodeEdgePoint> inepsN = node.nonnullOwnedNodeEdgePoint().values().stream()
+            .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint_N")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(inepsN.toString());
+        List<OwnedNodeEdgePoint> enepsN = node.nonnullOwnedNodeEdgePoint().values().stream()
+                .filter(n -> n.getName().containsKey(new NameKey("eNodeEdgePoint_N")))
+                .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
+                .collect(Collectors.toList());
+        LOG.info(enepsN.toString());
         List<OwnedNodeEdgePoint> nepsC;
         switch (dsrNodeType) {
             case "switch":
@@ -723,29 +761,36 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                     .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
                     .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
                     .collect(Collectors.toList());
-                assertEquals("Switch-DSR node should have 4 NEPs network", 4, nepsN.size());
+                assertEquals("Switch-DSR node should have 4 eNEPs network", 4, enepsN.size());
+                assertEquals("Switch-DSR node should have 4 iNEPs network", 4, inepsN.size());
                 assertEquals("Switch-DSR node should have 4 NEPs client", 4, nepsC.size());
                 OwnedNodeEdgePoint nep1 = nepsC.get(2);
                 Uuid client4NepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C");
-                OwnedNodeEdgePoint nep2 = nepsN.get(1);
-                Uuid networkNepUuid = new Uuid(
-                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                OwnedNodeEdgePoint enep2 = enepsN.get(3);
+                Uuid enetworkNepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(enep2, enetworkNepUuid, "XPDR2-NETWORK1", "eNodeEdgePoint_N");
+                OwnedNodeEdgePoint inep2 = inepsN.get(3);
+                Uuid inetworkNepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                                .toString());
+                checkNepNetworkODU4(inep2, inetworkNepUuid, "XPDR2-NETWORK1", "iNodeEdgePoint_N");
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
-                checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
+                checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, enetworkNepUuid, nodeUuid);
                 break;
             case "mux":
                 nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
                     .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
                     .sorted((nep3, nep4) -> nep3.getUuid().getValue().compareTo(nep4.getUuid().getValue()))
                     .collect(Collectors.toList());
-                assertEquals("Mux-DSR node should have 1 NEP network", 1, nepsN.size());
+                assertEquals("Mux-DSR node should have 1 eNEP network", 1, enepsN.size());
+                assertEquals("Mux-DSR node should have 1 iNEP network", 1, inepsN.size());
                 assertEquals("Mux-DSR node should have 4 NEPs client", 4, nepsC.size());
                 OwnedNodeEdgePoint nep3 = nepsC.get(2);
                 Uuid client3NepUuid = new Uuid(
@@ -753,22 +798,28 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                         .toString());
                 checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C");
 
-                OwnedNodeEdgePoint nep4 = nepsN.get(0);
-                Uuid networkNepUuid2 = new Uuid(
-                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                OwnedNodeEdgePoint enep4 = enepsN.get(0);
+                Uuid enetworkNepUuid2 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(enep4, enetworkNepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint_N");
+                OwnedNodeEdgePoint inep4 = inepsN.get(0);
+                Uuid inetworkNepUuid2 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                                .toString());
+                checkNepNetworkODU4(inep4, inetworkNepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint_N");
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
-                checkNodeRuleGroupForMuxDSR(nrgList2, client3NepUuid, networkNepUuid2, nodeUuid);
+                checkNodeRuleGroupForMuxDSR(nrgList2, client3NepUuid, enetworkNepUuid2, nodeUuid);
                 break;
             case "tpdr":
                 nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
                     .filter(n -> n.getName().containsKey(new NameKey("100G-tpdr")))
                     .sorted((nep5, nep6) -> nep5.getUuid().getValue().compareTo(nep6.getUuid().getValue()))
                     .collect(Collectors.toList());
-                assertEquals("Tpdr-DSR node should have 2 NEPs network", 2, nepsN.size());
+                assertEquals("Tpdr-DSR node should have 2 eNEPs network", 2, enepsN.size());
+                assertEquals("Tpdr-DSR node should have 2 iNEPs network", 2, inepsN.size());
                 assertEquals("Tpdr-DSR node should have 2 NEPs client", 2, nepsC.size());
                 OwnedNodeEdgePoint nep5 = nepsC.get(0);
                 Uuid client1NepUuid = new Uuid(
@@ -776,15 +827,22 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                         .toString());
                 checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr");
 
-                OwnedNodeEdgePoint nep6 = nepsN.get(0);
-                Uuid networkNepUuid3 = new Uuid(
-                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                OwnedNodeEdgePoint enep6 = enepsN.get(0);
+                Uuid enetworkNepUuid3 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(enep6, enetworkNepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint_N");
+                OwnedNodeEdgePoint inep6 = inepsN.get(1);
+                Uuid inetworkNepUuid3 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                                .toString());
+                LOG.info(inep6.getName().toString());
+                LOG.info("NEP name = {}", (nodeId + "+iODU+XPDR1-NETWORK1"));
+                checkNepNetworkODU4(inep6, inetworkNepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint_N");
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
-                checkNodeRuleGroupForTpdrDSR(nrgList3, client1NepUuid, networkNepUuid3, nodeUuid);
+                checkNodeRuleGroupForTpdrDSR(nrgList3, client1NepUuid, enetworkNepUuid3, nodeUuid);
                 break;
             default:
                 fail();
@@ -903,7 +961,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertThat("client nep should support 3 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
             hasItems(ODUTYPEODU2.class, ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
-        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
+        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
 
@@ -921,7 +979,9 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             nep.getSupportedCepLayerProtocolQualifier(),
             hasItem(ODUTYPEODU4.class));
         assertEquals("network nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
-        checkCommonPartOfNep(nep, false);
+        if (nepName.equals("eNodeEdgePoint_N")) {
+            checkCommonPartOfNep(nep, false);
+        }
     }
 
     private void checkNodeRuleGroupForTpdrDSR(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid,
@@ -988,10 +1048,11 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
                 .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
             .collect(Collectors.toList());
+        LOG.info(nrg.toString());
         assertEquals("in the sorted node-rule-group, nep number 2 should be XPDR2-NETWORK1",
-            networkNepUuid, nrg.get(4).getNodeEdgePointUuid());
+            networkNepUuid, nrg.get(7).getNodeEdgePointUuid());
         assertEquals("in the sorted node-rule-group, nep number 6 should be XPDR2-CLIENT4",
-            clientNepUuid, nrg.get(3).getNodeEdgePointUuid());
+            clientNepUuid, nrg.get(4).getNodeEdgePointUuid());
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
             nodeUuid, nrg.get(4).getNodeUuid());
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
@@ -1117,7 +1178,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
             hasItems(ODUTYPEODU4.class, DIGITALSIGNALTYPE100GigE.class));
-        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
+        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
 
@@ -1133,7 +1194,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
             hasItems(DIGITALSIGNALTYPE100GigE.class));
-        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
+        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
 
@@ -1151,8 +1212,10 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             hasItems(PHOTONICLAYERQUALIFIEROMS.class, PHOTONICLAYERQUALIFIEROTSi.class));
         assertEquals("OTSi nep should be of PHOTONIC_MEDIA protocol type",
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
-        assertEquals("OTSi nep should support one SIP", 1, nep.getMappedServiceInterfacePoint().size());
-        checkCommonPartOfNep(nep, false);
+        if (nepName.equals("iNodeEdgePoint")) {
+            assertEquals("OTSi nep should support one SIP", 1, nep.getMappedServiceInterfacePoint().size());
+            checkCommonPartOfNep(nep, false);
+        }
     }
 
     private void checkNepOtsiRdmNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
