@@ -169,7 +169,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
                 servicehandler);
-        tapiProvider = initTapi(lightyServices, servicehandler);
+        tapiProvider = initTapi(lightyServices, servicehandler, serviceDataStoreOperations);
     }
 
     @Override
@@ -217,9 +217,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
      * @param rendererServiceOperations RendererServiceOperations
      * @return TapiProvider instance
      */
-    private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler) {
+    private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
+                                  ServiceDataStoreOperations serviceDataStoreOperations) {
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
-                servicehandler, new TapiListener());
+                servicehandler, serviceDataStoreOperations, new TapiListener());
     }
 
     /**
