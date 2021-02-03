@@ -43,7 +43,7 @@ public class PortMappingImpl implements PortMapping {
     private final PortMappingVersion121 portMappingVersion121;
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
-        PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121) {
+                           PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121) {
 
         this.dataBroker = dataBroker;
         this.portMappingVersion710 = portMappingVersion710;
@@ -140,8 +140,8 @@ public class PortMappingImpl implements PortMapping {
                 return portMappingVersion121.updateMapping(nodeId, oldMapping);
             case 2:
                 MappingBuilder oldMapping2Bldr221 = new MappingBuilder()
-                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                        .setPortDirection(oldMapping.getPortDirection());
+                    .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
+                    .setPortDirection(oldMapping.getPortDirection());
                 if (oldMapping.getConnectionMapLcp() != null) {
                     oldMapping2Bldr221.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
                 }
@@ -166,8 +166,8 @@ public class PortMappingImpl implements PortMapping {
                 return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr221.build());
             case 3:
                 MappingBuilder oldMapping2Bldr710 = new MappingBuilder()
-                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                        .setPortDirection(oldMapping.getPortDirection());
+                    .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
+                    .setPortDirection(oldMapping.getPortDirection());
                 if (oldMapping.getConnectionMapLcp() != null) {
                     oldMapping2Bldr710.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
                 }
