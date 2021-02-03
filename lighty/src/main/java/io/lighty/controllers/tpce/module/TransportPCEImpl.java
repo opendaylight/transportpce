@@ -188,8 +188,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
                 servicehandler);
-        tapiProvider = initTapi(lightyServices, servicehandler);
-        if (activateNbiNotification) {
+
+        tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction);
+        if(activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
                     publisherTopicList, null, null, lightyServices.getRpcProviderService(),
@@ -248,9 +249,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
      * @param rendererServiceOperations RendererServiceOperations
      * @return TapiProvider instance
      */
-    private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler) {
+    private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
+                                  NetworkTransactionService networkTransaction) {
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
-                servicehandler, new TapiListener());
+                servicehandler, new TapiListener(), networkTransaction);
     }
 
     /**
