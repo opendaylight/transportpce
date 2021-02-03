@@ -126,8 +126,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 }
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
                         topology = topologyMap.get(new TopologyKey(topoUuid));
+                Topology outputTopo = this.topologyUtils.transformTopology(topology);
                 return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                        .setTopology(this.topologyUtils.transformTopology(topology))
+                        .setTopology(outputTopo)
                         .build())
                         .buildFuture();
             }

@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -31,6 +32,9 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
+import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
@@ -67,6 +71,8 @@ public class TapiTopologyImplTest extends AbstractTest {
     public static NetworkTransactionService networkTransactionService;
     public static TapiContext tapiContext;
     public static TopologyUtils topologyUtils;
+    public static ConnectivityUtils connectivityUtils;
+    public static ServiceDataStoreOperations serviceDataStoreOperations;
     public static TapiInitialORMapping tapiInitialORMapping;
 
     @BeforeClass
@@ -83,9 +89,12 @@ public class TapiTopologyImplTest extends AbstractTest {
                 TapiTopologyDataUtils.PORTMAPPING_FILE);
         networkTransactionService = new NetworkTransactionImpl(
                 new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker());
-        tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, tapiContext);
+        connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext);
+        tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
+                tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
         LOG.info("setup done");
     }
