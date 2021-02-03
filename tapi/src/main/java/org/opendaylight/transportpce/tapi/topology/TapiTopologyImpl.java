@@ -27,6 +27,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
@@ -44,6 +45,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
@@ -51,6 +53,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsOutput;
@@ -78,6 +81,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -89,9 +93,13 @@ public class TapiTopologyImpl implements TapiTopologyService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImpl.class);
     private final DataBroker dataBroker;
+    private final TapiContext tapiContext;
+    private final TopologyUtils topologyUtils;
 
-    public TapiTopologyImpl(DataBroker dataBroker) {
+    public TapiTopologyImpl(DataBroker dataBroker, TapiContext tapiContext, TopologyUtils topologyUtils) {
         this.dataBroker = dataBroker;
+        this.tapiContext = tapiContext;
+        this.topologyUtils = topologyUtils;
     }
 
     @Override
@@ -102,8 +110,27 @@ public class TapiTopologyImpl implements TapiTopologyService {
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
+        // TODO -> Add check for Full T0 Multilayer
         if (!TopologyUtils.T0_MULTILAYER.equals(input.getTopologyIdOrName())
-             && !TopologyUtils.TPDR_100G.equals(input.getTopologyIdOrName())) {
+            && !TopologyUtils.TPDR_100G.equals(input.getTopologyIdOrName())) {
+            if (TopologyUtils.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
+                Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName()
+                    .getBytes(Charset.forName("UTF-8"))).toString());
+                Context context = this.tapiContext.getTapiContext();
+                Map<TopologyKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology>
+                    topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
+                if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topoUuid)))) {
+                    LOG.error("Topology {} not found in datastore", input.getTopologyIdOrName());
+                    return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().build()).buildFuture();
+                }
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
+                    topology = topologyMap.get(new TopologyKey(topoUuid));
+                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                        .setTopology(this.topologyUtils.transformTopology(topology))
+                        .build())
+                    .buildFuture();
+            }
             LOG.error("Invalid TAPI topology name");
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().build()).buildFuture();
         }
@@ -122,12 +149,12 @@ public class TapiTopologyImpl implements TapiTopologyService {
     }
 
     private Topology createAbstracted100GTpdrTopology(Topology topology) {
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> dsrNodes
-            = topology.nonnullNode().values().stream()
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> dsrNodes =
+            topology.nonnullNode().values().stream()
                 .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
                 .collect(Collectors.toList());
         List<OwnedNodeEdgePoint> nep100GTpdrList = new ArrayList<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node2 : dsrNodes) {
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node2: dsrNodes) {
             List<OwnedNodeEdgePoint> nepList = node2.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))).collect(Collectors.toList());
             nep100GTpdrList.addAll(nepList);
@@ -135,8 +162,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
         Name topoName = new NameBuilder().setValue(TopologyUtils.TPDR_100G).setValueName("TAPI Topology Name").build();
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.TPDR_100G.getBytes(Charset.forName("UTF-8")))
             .toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node
-            = createTapiNode(nep100GTpdrList, topoUuid);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node =
+            createTapiNode(nep100GTpdrList, topoUuid);
         return new TopologyBuilder()
             .setName(Map.of(topoName.key(), topoName))
             .setUuid(topoUuid)
@@ -189,10 +216,10 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 .findFirst()
                 .get().getNodeRef().getValue();
             List<String> networkPortList = new ArrayList<>();
-            for (TerminationPoint tp : entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
+            for (TerminationPoint tp: entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
                 if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
-                    &&
-                    checkTp(entry.getKey().getValue(), portMappingNodeId, tp, xponderOutLinkList, xponderInLinkList)) {
+                        && checkTp(entry.getKey().getValue(), portMappingNodeId, tp, xponderOutLinkList,
+                        xponderInLinkList)) {
                     networkPortList.add(tp.getTpId().getValue());
                 }
             }
@@ -224,8 +251,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
             LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
         }
         if (otnTopo.augmentation(Network1.class) != null) {
-            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
+            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                    .ietf.network.topology.rev180226.networks.network.LinkKey, Link> otnLinkMap =
+                otnTopo.augmentation(Network1.class).getLink();
             tapiFactory.convertLinks(otnLinkMap);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
         }
@@ -260,7 +288,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
             createTapiNode(List<OwnedNodeEdgePoint> nepList, Uuid topoUuid) {
         Name name = new NameBuilder().setValueName("Tpdr100g node name").setValue("Tpdr100g over WDM node").build();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-        for (OwnedNodeEdgePoint ownedNodeEdgePoint : nepList) {
+        for (OwnedNodeEdgePoint ownedNodeEdgePoint: nepList) {
             onepMap.put(ownedNodeEdgePoint.key(), ownedNodeEdgePoint);
         }
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(name.getValue().getBytes(Charset.forName("UTF-8"))).toString());
@@ -276,8 +304,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 .build();
     }
 
-    private boolean checkTp(String nodeIdTopo, String nodeIdPortMap, TerminationPoint tp, List<Link> xpdOut, List<
-        Link> xpdIn) {
+    private boolean checkTp(String nodeIdTopo, String nodeIdPortMap, TerminationPoint tp, List<Link> xpdOut,
+                            List<Link> xpdIn) {
         String networkLcp;
         if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
             networkLcp = tp.augmentation(
@@ -298,7 +326,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
             try {
                 mapping = mappingOpt.get().get();
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error getting mapping for {}", networkLcp,e);
+                LOG.error("Error getting mapping for {}", networkLcp, e);
                 return false;
             }
         } else {
@@ -310,8 +338,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
         long count = 0;
         switch (networkPortDirection) {
             case "bidirectional":
-                count += xpdOut.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeIdTopo) && lk
-                    .getSource().getSourceTp().equals(networkLcp)).count();
+                count += xpdOut.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeIdTopo)
+                    && lk.getSource().getSourceTp().equals(networkLcp)).count();
                 count += xpdIn.stream().filter(lk -> lk.getDestination().getDestNode().getValue().equals(nodeIdTopo)
                     && lk.getDestination().getDestTp().equals(networkLcp)).count();
                 return (count == 2);
@@ -338,19 +366,20 @@ public class TapiTopologyImpl implements TapiTopologyService {
         }
     }
 
-    private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupFor100gTpdrNode(Uuid topoUuid, Uuid nodeUuid,
-        Collection<OwnedNodeEdgePoint> onepl) {
+    private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupFor100gTpdrNode(
+            Uuid topoUuid, Uuid nodeUuid, Collection<OwnedNodeEdgePoint> onepl) {
+
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
             nepMap = new HashMap<>();
-        for (OwnedNodeEdgePoint onep : onepl) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
-                nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
+        for (OwnedNodeEdgePoint onep: onepl) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint nep =
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
                     .NodeEdgePointBuilder()
-                .setTopologyUuid(topoUuid)
-                .setNodeUuid(nodeUuid)
-                .setNodeEdgePointUuid(onep.key().getUuid())
-                .build();
+                        .setTopologyUuid(topoUuid)
+                        .setNodeUuid(nodeUuid)
+                        .setNodeEdgePointUuid(onep.key().getUuid())
+                        .build();
             nepMap.put(nep.key(), nep);
         }
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();

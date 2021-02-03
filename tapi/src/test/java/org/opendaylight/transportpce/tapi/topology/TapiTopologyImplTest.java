@@ -28,6 +28,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
@@ -59,6 +64,10 @@ public class TapiTopologyImplTest extends AbstractTest {
     private static ListeningExecutorService executorService;
     private static CountDownLatch endSignal;
     private static final int NUM_THREADS = 3;
+    public static NetworkTransactionService networkTransactionService;
+    public static TapiContext tapiContext;
+    public static TopologyUtils topologyUtils;
+    public static TapiInitialORMapping tapiInitialORMapping;
 
     @BeforeClass
     public static void setUp() throws InterruptedException, ExecutionException {
@@ -67,9 +76,17 @@ public class TapiTopologyImplTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
+                TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
+        TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
                 TapiTopologyDataUtils.PORTMAPPING_FILE);
+        networkTransactionService = new NetworkTransactionImpl(
+                new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        tapiContext = new TapiContext(networkTransactionService);
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker());
+        tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, tapiContext);
+        tapiInitialORMapping.performTopoInitialMapping();
         LOG.info("setup done");
     }
 
@@ -77,7 +94,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     public void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
             throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.TPDR_100G);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -122,7 +139,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
         throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
