@@ -230,7 +230,7 @@ public class PortMappingVersion121 {
                 switch (port.getPortQual()) {
 
                     case XpdrClient:
-                        String lcp0 = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
+                        String lcp0 = createXpdrLogicalConnectionPort(1, client, StringConstants.CLIENT_TOKEN);
                         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                         mappingMap.put(lcp0,
                             createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null));
@@ -240,7 +240,7 @@ public class PortMappingVersion121 {
 
                     case XpdrNetwork:
                         if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                            String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
+                            String lcp = createXpdrLogicalConnectionPort(1, line, StringConstants.NETWORK_TOKEN);
                             lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                             mappingMap.put(lcp,
                                 createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null));
@@ -284,11 +284,8 @@ public class PortMappingVersion121 {
                                 circuitPackName);
                             continue;
                         }
-                        String lcp1 = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
-                        String lcp2 = new StringBuilder("XPDR1-")
-                            .append(StringConstants.NETWORK_TOKEN)
-                            .append(line + 1)
-                            .toString();
+                        String lcp1 = createXpdrLogicalConnectionPort(1, line, StringConstants.NETWORK_TOKEN);
+                        String lcp2 = createXpdrLogicalConnectionPort(1, line + 1, StringConstants.NETWORK_TOKEN);
                         if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
                             LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
                             line += 2;
@@ -511,6 +508,13 @@ public class PortMappingVersion121 {
         }
         LOG.error("port {} : Unsupported port direction {}", port, port.getPortDirection());
         return null;
+    }
+
+    private String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
+        return new StringBuilder("XPDR").append(xponderNb)
+                .append("-")
+                .append(token).append(lcpNb)
+                .toString();
     }
 
     private Map<Integer, Degree> getDegreesMap(String deviceId, Info ordmInfo) {
