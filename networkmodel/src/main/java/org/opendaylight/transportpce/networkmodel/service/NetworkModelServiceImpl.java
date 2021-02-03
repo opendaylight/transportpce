@@ -122,8 +122,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
             if (!portMapping.createMappingData(nodeId, openRoadmVersion)) {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
+                // to avoid a deadlock situation
+                portMapping.getLatch().countDown();
                 return;
             }
+            portMapping.getLatch().countDown();
             NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
             // node creation in clli-network
             Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);

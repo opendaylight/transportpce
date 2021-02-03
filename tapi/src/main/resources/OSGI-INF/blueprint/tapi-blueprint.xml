@@ -25,8 +25,20 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="serviceDatastoreOperation"
                interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations" />
 
+    <reference id="portMapping"
+               interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
+    </bean>
+
+    <bean id="tapiNetworkModelService" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl">
+        <argument ref="dataBroker" />
+        <argument ref="portMapping" />
+    </bean>
+
+    <bean id="tapiNetconfTopologyListener" class="org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener">
+        <argument ref="tapiNetworkModelService" />
     </bean>
 
     <bean id="tapiProvider"
@@ -37,6 +49,9 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="serviceHandlerService" />
         <argument ref="serviceDatastoreOperation" />
         <argument ref="tapiListener" />
+        <argument ref="tapiNetconfTopologyListener" />
     </bean>
+
+    <service ref="tapiNetworkModelService" interface="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService" />
 
 </blueprint>
