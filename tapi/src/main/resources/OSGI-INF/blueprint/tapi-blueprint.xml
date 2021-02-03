@@ -22,6 +22,9 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="serviceHandlerService"
           interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService" />
 
+    <reference id="networkTransactionImpl"
+          interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
+
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
     </bean>
@@ -33,6 +36,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="rpcProviderService" />
         <argument ref="serviceHandlerService" />
         <argument ref="tapiListener" />
+        <argument ref="networkTransactionImpl" />
     </bean>
 
 </blueprint>
