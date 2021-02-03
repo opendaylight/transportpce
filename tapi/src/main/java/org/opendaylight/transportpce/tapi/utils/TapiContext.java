@@ -20,11 +20,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Cont
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.NwTopologyServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,4 +120,44 @@ public class TapiContext {
 
     }
 
+    public void updateTopologyContext(Map<TopologyKey, Topology> topologyMap) {
+        // TODO: solve error when merging: Topology is not a valid child of topology context?
+        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
+        try {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext
+                    topologyContext = new TopologyContextBuilder()
+                    //.setNwTopologyService(new NwTopologyServiceBuilder().build())
+                    .setTopology(topologyMap)
+                    .build();
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext> topologycontextIID =
+                    InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
+                            .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+                            .child(org.opendaylight.yang.gen.v1.urn
+                                    .onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+                            .build();
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topologycontextIID,
+                    topologyContext);
+            this.networkTransactionService.commit().get();
+            LOG.info("TAPI topology merged successfully.");
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to merge TAPI topology", e);
+        }
+    }
+
+    public void updateSIPContext(Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap) {
+        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
+        try {
+            ContextBuilder contextBuilder = new ContextBuilder().setServiceInterfacePoint(sipMap);
+            InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, contextIID,
+                    contextBuilder.build());
+            this.networkTransactionService.commit().get();
+            LOG.info("TAPI SIPs merged successfully.");
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to merge TAPI SIPs", e);
+        }
+    }
 }
