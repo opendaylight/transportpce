@@ -17,7 +17,9 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
@@ -61,8 +63,13 @@ public class TapiProvider {
                 new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
         TapiContext tapiContext = new TapiContext(networkTransactionService);
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext().toString());
+
+        TopologyUtils topologyUtils = new TopologyUtils(networkTransactionService, this.dataBroker);
+        TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, tapiContext);
+        tapiInitialORMapping.performTopoInitialMapping();
+
         TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler);
-        TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker);
+        TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils);
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
         @NonNull
@@ -78,5 +85,4 @@ public class TapiProvider {
         LOG.info("TapiProvider Session Closed");
         rpcRegistration.close();
     }
-
 }
