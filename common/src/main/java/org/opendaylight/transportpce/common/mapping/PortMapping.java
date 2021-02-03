@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+import java.util.concurrent.CountDownLatch;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.McCapabilities;
@@ -121,4 +122,20 @@ public interface PortMapping {
      * @return node data if success otherwise null.
      */
     Nodes getNode(String nodeId);
+
+    /**
+     * Returns CountDownLatch used for synchronization between TAPI module and NetworkModel module.
+     * This will enable to create the port mapping for a new node only once, and make the topology population wait
+     * until the port mapping has finished
+     *
+     * @return CountDownLatch.
+     */
+    CountDownLatch getLatch();
+
+    /**
+     * Resets the CountDownLatch.
+     * When the port mapping for a one node is done, the Latch is reset to obtain the same behavior after a new node
+     * is connected again.
+     */
+    void resetLatch();
 }
