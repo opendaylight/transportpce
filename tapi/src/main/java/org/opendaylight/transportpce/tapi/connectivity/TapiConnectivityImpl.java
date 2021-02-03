@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.tapi.impl;
+package org.opendaylight.transportpce.tapi.connectivity;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
@@ -55,13 +55,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Top level service interface providing main TAPI Connectivity services.
  */
-public class TapiImpl implements TapiConnectivityService {
+public class TapiConnectivityImpl implements TapiConnectivityService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImpl.class);
 
     private OrgOpenroadmServiceService serviceHandler;
 
-    public TapiImpl(OrgOpenroadmServiceService serviceHandler) {
+    public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
     }
