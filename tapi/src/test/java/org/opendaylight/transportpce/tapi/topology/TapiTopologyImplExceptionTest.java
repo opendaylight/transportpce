@@ -17,10 +17,12 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
@@ -30,6 +32,10 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class TapiTopologyImplExceptionTest {
+    @Mock
+    TapiContext tapiContext;
+    @Mock
+    TopologyUtils topologyUtils;
 
     @Test
     public void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
@@ -38,7 +44,7 @@ public class TapiTopologyImplExceptionTest {
             .thenReturn(new ReadTransactionMock());
 
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(dataBroker);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         Topology topology = rpcResult.getResult().getTopology();

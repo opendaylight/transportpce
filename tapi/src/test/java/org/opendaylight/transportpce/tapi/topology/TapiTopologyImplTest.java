@@ -12,7 +12,10 @@ import static org.hamcrest.CoreMatchers.either;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -27,7 +30,12 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
@@ -59,6 +67,9 @@ public class TapiTopologyImplTest extends AbstractTest {
     private static ListeningExecutorService executorService;
     private static CountDownLatch endSignal;
     private static final int NUM_THREADS = 3;
+    private static NetworkTransactionService networkTransactionService;
+    private static TapiContext tapiContext;
+    private static TopologyUtils topologyUtils;
 
     @BeforeClass
     public static void setUp() throws InterruptedException, ExecutionException {
@@ -70,6 +81,18 @@ public class TapiTopologyImplTest extends AbstractTest {
                 TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
                 TapiTopologyDataUtils.PORTMAPPING_FILE);
+        networkTransactionService = mock(NetworkTransactionService.class);
+        Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
+
+            @Override
+            public FluentFuture<CommitInfo> answer(InvocationOnMock invocation) throws Throwable {
+                return CommitInfo.emptyFluentFuture();
+            }
+
+        };
+        when(networkTransactionService.commit()).then(answer);
+        tapiContext = new TapiContext(networkTransactionService);
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker());
         LOG.info("setup done");
     }
 
@@ -77,7 +100,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     public void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
             throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.TPDR_100G);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -122,7 +145,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
         throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
