@@ -14,7 +14,6 @@ import java.util.UUID;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.MappingUtils;
-import org.opendaylight.transportpce.tapi.utils.TapiUtils;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
@@ -82,7 +81,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                 && map.containsKey(input.getEndPoint().values().stream().skip(1).findFirst().get()
                     .getServiceInterfacePoint()
                     .getServiceInterfacePointUuid())) {
-                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(
+                ServiceCreateInput sci = ConnectivityUtils.buildServiceCreateInput(
                     map.get(input.getEndPoint().values().stream().findFirst().get()
                         .getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()),

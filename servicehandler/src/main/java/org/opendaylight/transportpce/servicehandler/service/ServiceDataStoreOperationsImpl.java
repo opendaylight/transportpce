@@ -127,8 +127,23 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-        .Services> getTempService(String serviceName) {
+    public Optional<ServiceList> getServices() {
+        try {
+            ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
+            InstanceIdentifier<ServiceList> iid =
+                    InstanceIdentifier.create(ServiceList.class);
+            Future<java.util.Optional<ServiceList>> future =
+                    readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
+            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.warn("Reading services failed:", e);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services>
+            getTempService(String serviceName) {
         try {
             ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
             InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
@@ -291,7 +306,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         return Optional.empty();
     }
 
-    private Optional<ServicePaths> getServicePath(String serviceName) {
+    @Override
+    public Optional<ServicePaths> getServicePath(String serviceName) {
         LOG.debug("Retrieving service path of service {}", serviceName);
         try {
             ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();

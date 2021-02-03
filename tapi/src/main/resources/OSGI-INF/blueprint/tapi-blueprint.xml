@@ -25,6 +25,9 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="networkTransactionImpl"
           interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
 
+    <reference id="serviceDatastoreOperation"
+               interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations" />
+
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
     </bean>
@@ -35,6 +38,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="dataBroker" />
         <argument ref="rpcProviderService" />
         <argument ref="serviceHandlerService" />
+        <argument ref="serviceDatastoreOperation" />
         <argument ref="tapiListener" />
         <argument ref="networkTransactionImpl" />
     </bean>

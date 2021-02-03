@@ -14,10 +14,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 
 /**
  * OpenROADM Service operations API providing basic operations on services.
@@ -37,6 +39,13 @@ public interface ServiceDataStoreOperations {
      * @return Optional of Services
      */
     Optional<Services> getService(String serviceName);
+
+    /**
+     * get all OR services.
+     *
+     * @return Optional of Services
+     */
+    Optional<ServiceList> getServices();
 
     /**
      * get temp service by common-id.
@@ -96,6 +105,8 @@ public interface ServiceDataStoreOperations {
      * @return result of createService operation
      */
     OperationResult createService(ServiceCreateInput serviceCreateInput);
+
+    Optional<ServicePaths> getServicePath(String serviceName);
 
     /**
      * create new servicePath entry.
