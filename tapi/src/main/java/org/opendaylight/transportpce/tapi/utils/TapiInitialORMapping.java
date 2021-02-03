@@ -1,0 +1,41 @@
+package org.opendaylight.transportpce.tapi.utils;
+
+import java.util.HashMap;
+import java.util.Map;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class TapiInitialORMapping {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TapiInitialORMapping.class);
+    private final TapiContext tapiContext;
+    private final TopologyUtils topologyUtils;
+
+    public TapiInitialORMapping(TopologyUtils topologyUtils, TapiContext tapiContext) {
+        this.topologyUtils = topologyUtils;
+        this.tapiContext = tapiContext;
+    }
+
+    public void performTopoInitialMapping() {
+        // creation of both topologies but with the fully roadm infrastructure.
+        try {
+            LOG.info("Performing initial mapping between OR and TAPI models.");
+            Topology t0MultiLayer = this.topologyUtils.createAbstractedOtnTopology();
+            Topology tpdr100GB = this.topologyUtils.createAbstracted100GTpdrTopology(t0MultiLayer);
+            Map<TopologyKey, Topology> topologyMap = new HashMap<>();
+            topologyMap.put(t0MultiLayer.key(), t0MultiLayer);
+            topologyMap.put(tpdr100GB.key(), tpdr100GB);
+            this.tapiContext.updateTopologyContext(topologyMap);
+            Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.topologyUtils.getSipMap();
+            this.tapiContext.updateSIPContext(sipMap);
+        } catch (TapiTopologyException e) {
+            LOG.error("error building TAPI topology", e);
+        }
+    }
+}
