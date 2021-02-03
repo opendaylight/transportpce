@@ -647,7 +647,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     @Test
     public void convertRoadmInfrastructureWhenNoXponderAttached() {
         ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topologyUuid);
-        tapiFactory.convertRoadmInfrastructure();
+        tapiFactory.abstractRoadmInfrastructure();
 
         assertEquals("Node list size should be 1", 1, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be empty", 0, tapiFactory.getTapiLinks().size());
@@ -668,7 +668,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             }
         }
         tapiFactory.convertNode(otnMuxA, networkPortListA);
-        tapiFactory.convertRoadmInfrastructure();
+        tapiFactory.abstractRoadmInfrastructure();
 
         assertEquals("Node list size should be 3", 3, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be 2", 2, tapiFactory.getTapiLinks().size());
