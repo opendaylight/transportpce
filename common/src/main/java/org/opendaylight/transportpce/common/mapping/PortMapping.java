@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2017 AT&T and others.  All rights reserved.
  *
@@ -5,7 +6,6 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.opendaylight.transportpce.common.mapping;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
