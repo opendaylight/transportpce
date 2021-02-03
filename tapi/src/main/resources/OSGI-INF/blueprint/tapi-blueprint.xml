@@ -16,6 +16,9 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="dataBroker"
           interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
 
+    <reference id="deviceTransactionManager"
+               interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
+
     <reference id="rpcProviderService"
           interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
@@ -32,6 +35,15 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
     </bean>
 
+    <bean id="tapiNetworkModelService" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl">
+        <argument ref="tapilinkDiscoveryImpl" />
+        <argument ref="networkTransactionImpl" />
+    </bean>
+
+    <bean id="tapiNetconfTopologyListener" class="org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener">
+        <argument ref="tapiNetworkModelService" />
+    </bean>
+
     <bean id="tapiProvider"
           class="org.opendaylight.transportpce.tapi.impl.TapiProvider"
           init-method="init" destroy-method="close">
@@ -41,6 +53,19 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="serviceDatastoreOperation" />
         <argument ref="tapiListener" />
         <argument ref="networkTransactionImpl" />
+        <argument ref="tapiNetconfTopologyListener" />
+        <argument ref="tapiPortMappingListener" />
     </bean>
+
+    <bean id="tapiPortMappingListener" class="org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener">
+        <argument ref="tapiNetworkModelService" />
+    </bean>
+
+    <bean id="tapilinkDiscoveryImpl" class="org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery">
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <service ref="tapiNetworkModelService" interface="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService" />
 
 </blueprint>
