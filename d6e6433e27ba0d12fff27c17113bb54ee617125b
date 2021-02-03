@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b47cb8ec_8861f027",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "no jira found in backlog",
+      "parentUuid": "bc5ab13f_32202b89",
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45c522f2_0ae607db",
         "filename": "dmaap-client/pom.xml",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc495e0_28ce6574",
+        "filename": "dmaap-client/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45c522f2_0ae607db",
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "cdfb52c3_3025d0ca",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/impl/DmaapClientProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbb5f8de_5b2eac8f",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0543af8_643acb80",
         "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/listener/NbiNotificationsListenerImpl.java",
         "patchSetId": 2
@@ -79,6 +139,30 @@
       "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a541618_a7b58160",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/listener/NbiNotificationsListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0543af8_643acb80",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "d207c00b_a84a6549",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/LgxSerializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6e6bb5d_2e7b43c2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 61
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20225c28_f70631aa",
         "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/PublishNotificationServiceSerializer.java",
         "patchSetId": 2
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "bc9229c4_f40fa628",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/PublishNotificationServiceSerializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "no need because if value is null, it will be not appear in json",
+      "parentUuid": "20225c28_f70631aa",
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "deb9771c_c2831951",
         "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/RxDirectionSerializer.java",
         "patchSetId": 2
@@ -133,6 +259,30 @@
       "writtenOn": "2021-02-03T10:26:31Z",
       "side": 1,
       "message": "idem etc",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 27,
+        "endChar": 28
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "882a3400_cb0f3948",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/RxDirectionSerializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "same as previous",
+      "parentUuid": "deb9771c_c2831951",
       "range": {
         "startLine": 27,
         "startChar": 7,
@@ -165,6 +315,30 @@
       "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8731be5_6e871101",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/model/CreatedEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-03T15:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8591172_73695320",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 52
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
