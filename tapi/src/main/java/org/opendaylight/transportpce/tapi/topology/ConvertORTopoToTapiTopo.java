@@ -1224,7 +1224,6 @@ public class ConvertORTopoToTapiTopo {
             .ietf.network.topology.rev180226.networks.network.Link> xpdrRdmLinkList) {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} xpdr to roadm links", xpdrRdmLinkList.size() / 2);
-        // LOG.info("Link list = {}", xpdrRdmLinkList.toString());
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                 .ietf.network.topology.rev180226.networks.network.Link link:xpdrRdmLinkList) {
             if (!linksToNotConvert.contains(link.getLinkId().getValue())) {
