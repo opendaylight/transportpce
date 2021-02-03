@@ -99,10 +99,18 @@ import org.slf4j.LoggerFactory;
 // some mutualization would be helpful
 public class PortMappingVersion710 {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion710.class);
+    private static final Map<Direction, String> SUFFIX;
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaces openRoadmInterfaces;
+
+    static {
+        SUFFIX =  Map.of(
+            Direction.Tx, "TX",
+            Direction.Rx, "RX",
+            Direction.Bidirectional, "TXRX");
+    }
 
     public PortMappingVersion710(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         OpenRoadmInterfaces openRoadmInterfaces) {
@@ -695,21 +703,11 @@ public class PortMappingVersion710 {
     }
 
     private String createLogicalConnectionPort(Ports port, int index, int portIndex) {
-        String lcp = null;
-        switch (port.getPortDirection()) {
-            case Tx:
-                lcp = "SRG" + index + "-PP" + portIndex + "-TX";
-                break;
-            case Rx:
-                lcp = "SRG" + index + "-PP" + portIndex + "-RX";
-                break;
-            case Bidirectional:
-                lcp = "SRG" + index + "-PP" + portIndex + "-TXRX";
-                break;
-            default:
-                LOG.error("Unsupported port direction for port {} : {}", port, port.getPortDirection());
+        if (SUFFIX.containsKey(port.getPortDirection())) {
+            return String.join("-", "SRG" + index, "PP" + portIndex, SUFFIX.get(port.getPortDirection()));
         }
-        return lcp;
+        LOG.error("port {} : Unsupported port direction {}", port, port.getPortDirection());
+        return null;
     }
 
     private Map<McCapabilityProfileKey, McCapabilityProfile> getMcCapabilityProfiles(String deviceId, Info ordmInfo) {
