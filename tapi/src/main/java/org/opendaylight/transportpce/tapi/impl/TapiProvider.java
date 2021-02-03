@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.impl;
 
+import java.util.HashMap;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
@@ -15,6 +16,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
@@ -44,13 +47,16 @@ public class TapiProvider {
     private final RpcProviderService rpcProviderService;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
     private final OrgOpenroadmServiceService serviceHandler;
+    private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiListener tapiListener;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
-        OrgOpenroadmServiceService serviceHandler, TapiListener tapiListener) {
+                        OrgOpenroadmServiceService serviceHandler,
+                        ServiceDataStoreOperations serviceDataStoreOperations, TapiListener tapiListener) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.serviceHandler = serviceHandler;
+        this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.tapiListener = tapiListener;
     }
 
@@ -65,8 +71,12 @@ public class TapiProvider {
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext().toString());
 
         TopologyUtils topologyUtils = new TopologyUtils(networkTransactionService, this.dataBroker);
-        TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, tapiContext);
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
+                tapiContext);
+        TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
+                tapiContext, this.serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
+        tapiInitialORMapping.performServInitialMapping();
 
         TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler);
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils);
