@@ -1,0 +1,107 @@
+module transportpce-tapinetworkutils {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/tapinetworkutils";
+  prefix "org-opendaylight-transportpce-tapinetworkutils";
+
+  import tapi-common {
+    prefix tapi-common;
+    revision-date 2018-12-10;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of TAPI link creation in TAPI topology (adapted from NetworkUtils yang model)
+     Copyright ©  2021 Nokia, Inc. and others.  All rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither Nokia nor the names of its contributors may be used to endorse or promote
+        products derived from this software without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY ITS AUTHORS AND NOKIA AND OTHER CONTRIBUTORS ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT ITS AUTHORS AND NOKIA AND OTHER CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision "2021-04-08" {
+    description
+      "Initial revision of tapi networkutils model. Used as the transportpce-networkutils model to
+      create tapi links between tapi nodes in the tapi topology. The inputs are base on OR naming but later
+      translated into tapi";
+  }
+
+  rpc init-roadm-roadm-tapi-link {
+    description "This rpc initiates a tapi roadm to roadm link";
+    input {
+      leaf rdm-a-node {
+        type string;
+      }
+      leaf deg-a-tp {
+        type string;
+      }
+      leaf rdm-z-node {
+        type string;
+      }
+      leaf deg-z-tp {
+        type string;
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
+
+  rpc init-xpdr-rdm-tapi-link {
+    description "This rpc initiates a tapi xponder to rdm link. Bidirectional";
+    input {
+      leaf xpdr-node {
+        type string;
+      }
+      leaf network-tp {
+        type string;
+      }
+      leaf rdm-node {
+        type string;
+      }
+      leaf add-drop-tp {
+        type string;
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
+
+  rpc delete-tapi-link {
+    description "This rpc deletes a given link in openroadm Topology layer";
+    input {
+      leaf uuid {
+        type tapi-common:uuid;
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
+}
