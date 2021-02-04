@@ -1,0 +1,630 @@
+{
+  "gnpy-api": {
+    "topology-file": {
+      "elements": [
+        {
+          "uid": "127.0.0.40",
+         "type": "gnpy-network-topology:Roadm",
+          "metadata": {
+            "location": {
+              "region": "OpenROADM-4",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "target_pch_out_db": -20
+          }
+        },
+        {
+          "uid": "127.0.0.50",
+         "type": "gnpy-network-topology:Roadm",
+          "metadata": {
+            "location": {
+              "region": "OpenROADM-5",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "target_pch_out_db": -20
+          }
+        },
+        {
+          "uid": "127.0.0.20",
+         "type": "gnpy-network-topology:Roadm",
+          "metadata": {
+            "location": {
+              "region": "OpenROADM-2",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "target_pch_out_db": -20
+          }
+        },
+        {
+          "uid": "127.0.0.10",
+         "type": "gnpy-network-topology:Roadm",
+          "metadata": {
+            "location": {
+              "region": "OpenROADM-1",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "target_pch_out_db": -20
+          }
+        },
+        {
+          "uid": "127.0.0.30",
+         "type": "gnpy-network-topology:Roadm",
+          "metadata": {
+            "location": {
+              "region": "OpenROADM-3",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "target_pch_out_db": -20
+          }
+        },
+        {
+          "uid": "127.0.0.11",
+          "type": "gnpy-network-topology:Transceiver",
+          "metadata": {
+            "location": {
+              "region": "XPONDER-1",
+              "latitude": 0,
+              "longitude": 0
+            }
+          }
+        },
+        {
+          "uid": "127.0.0.51",
+          "type": "gnpy-network-topology:Transceiver",
+          "metadata": {
+            "location": {
+              "region": "XPONDER-5",
+              "latitude": 0,
+              "longitude": 0
+            }
+          }
+        },
+        {
+          "uid": "127.0.0.41",
+          "type": "gnpy-network-topology:Transceiver",
+          "metadata": {
+            "location": {
+              "region": "XPONDER-4",
+              "latitude": 0,
+              "longitude": 0
+            }
+          }
+        },
+        {
+          "uid": "127.0.0.31",
+          "type": "gnpy-network-topology:Transceiver",
+          "metadata": {
+            "location": {
+              "region": "XPONDER-3",
+              "latitude": 0,
+              "longitude": 0
+            }
+          }
+        },
+        {
+          "uid": "127.0.0.21",
+          "type": "gnpy-network-topology:Transceiver",
+          "metadata": {
+            "location": {
+              "region": "XPONDER-2",
+              "latitude": 0,
+              "longitude": 0
+            }
+          }
+        },
+        {
+          "uid": "243.0.0.1",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.11999999999999999555910790149937383830547332763671875,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.2",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.3",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 60,
+            "loss_coef": 0.12,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.4",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.5",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 60,
+            "loss_coef": 0.12,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.6",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 140,
+            "loss_coef": 0.2127659574468085124099303584443987347185611724853515625,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.7",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.8",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.11999999999999999555910790149937383830547332763671875,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.9",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.10",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 60,
+            "loss_coef": 0.12,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.11",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 60,
+            "loss_coef": 0.12,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.12",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.13",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 140,
+            "loss_coef": 0.2127659574468085124099303584443987347185611724853515625,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        },
+        {
+          "uid": "243.0.0.14",
+          "type": "gnpy-network-topology:Fiber",
+          "type_variety": "SSMF",
+          "metadata": {
+            "location": {
+              "city": "N/A",
+              "region": "N/A",
+              "latitude": 0,
+              "longitude": 0
+            }
+          },
+          "params": {
+            "length": 100,
+            "loss_coef": 0.29,
+            "length_units": "gnpy-network-topology:km",
+            "att_in": 0,
+            "con_in": 0,
+            "con_out": 0
+          }
+        }
+      ],
+      "connections": [
+        {
+          "from_node": "127.0.0.51",
+          "to_node": "127.0.0.50"
+        },
+        {
+          "from_node": "127.0.0.30",
+          "to_node": "127.0.0.31"
+        },
+        {
+          "from_node": "127.0.0.10",
+          "to_node": "243.0.0.1"
+        },
+        {
+          "from_node": "243.0.0.1",
+          "to_node": "127.0.0.30"
+        },
+        {
+          "from_node": "127.0.0.20",
+          "to_node": "127.0.0.21"
+        },
+        {
+          "from_node": "127.0.0.20",
+          "to_node": "243.0.0.2"
+        },
+        {
+          "from_node": "243.0.0.2",
+          "to_node": "127.0.0.10"
+        },
+        {
+          "from_node": "127.0.0.20",
+          "to_node": "243.0.0.3"
+        },
+        {
+          "from_node": "243.0.0.3",
+          "to_node": "127.0.0.50"
+        },
+        {
+          "from_node": "127.0.0.40",
+          "to_node": "127.0.0.41"
+        },
+        {
+          "from_node": "127.0.0.40",
+          "to_node": "243.0.0.4"
+        },
+        {
+          "from_node": "243.0.0.4",
+          "to_node": "127.0.0.30"
+        },
+        {
+          "from_node": "127.0.0.50",
+          "to_node": "243.0.0.5"
+        },
+        {
+          "from_node": "243.0.0.5",
+          "to_node": "127.0.0.30"
+        },
+        {
+          "from_node": "127.0.0.31",
+          "to_node": "127.0.0.30"
+        },
+        {
+          "from_node": "127.0.0.50",
+          "to_node": "127.0.0.51"
+        },
+        {
+          "from_node": "127.0.0.20",
+          "to_node": "243.0.0.6"
+        },
+        {
+          "from_node": "243.0.0.6",
+          "to_node": "127.0.0.30"
+        },
+        {
+          "from_node": "127.0.0.30",
+          "to_node": "243.0.0.7"
+        },
+        {
+          "from_node": "243.0.0.7",
+          "to_node": "127.0.0.40"
+        },
+        {
+          "from_node": "127.0.0.11",
+          "to_node": "127.0.0.10"
+        },
+        {
+          "from_node": "127.0.0.30",
+          "to_node": "243.0.0.8"
+        },
+        {
+          "from_node": "243.0.0.8",
+          "to_node": "127.0.0.10"
+        },
+        {
+          "from_node": "127.0.0.40",
+          "to_node": "243.0.0.9"
+        },
+        {
+          "from_node": "243.0.0.9",
+          "to_node": "127.0.0.50"
+        },
+        {
+          "from_node": "127.0.0.30",
+          "to_node": "243.0.0.10"
+        },
+        {
+          "from_node": "243.0.0.10",
+          "to_node": "127.0.0.50"
+        },
+        {
+          "from_node": "127.0.0.50",
+          "to_node": "243.0.0.11"
+        },
+        {
+          "from_node": "243.0.0.11",
+          "to_node": "127.0.0.20"
+        },
+        {
+          "from_node": "127.0.0.50",
+          "to_node": "243.0.0.12"
+        },
+        {
+          "from_node": "243.0.0.12",
+          "to_node": "127.0.0.40"
+        },
+        {
+          "from_node": "127.0.0.21",
+          "to_node": "127.0.0.20"
+        },
+        {
+          "from_node": "127.0.0.41",
+          "to_node": "127.0.0.40"
+        },
+        {
+          "from_node": "127.0.0.30",
+          "to_node": "243.0.0.13"
+        },
+        {
+          "from_node": "243.0.0.13",
+          "to_node": "127.0.0.20"
+        },
+        {
+          "from_node": "127.0.0.10",
+          "to_node": "127.0.0.11"
+        },
+        {
+          "from_node": "127.0.0.10",
+          "to_node": "243.0.0.14"
+        },
+        {
+          "from_node": "243.0.0.14",
+          "to_node": "127.0.0.20"
+        }
+      ]
+    },
+    "service-file": {
+      "path-request": [
+        {
+          "request-id": 2,
+          "bidirectional": false,
+          "source": "127.0.0.11",
+          "destination": "127.0.0.41",
+          "src-tp-id": "c3JjVHBJZA==",
+          "dst-tp-id": "ZHN0VHBJZA==",
+          "explicit-route-objects": {
+            "route-object-include-exclude": [
+              {
+                "explicit-route-usage": "gnpy-path-computation-simplified:route-include-ero",
+                "index": 0,
+                "num-unnum-hop": {
+                  "node-id": "127.0.0.20",
+                  "link-tp-id": "1",
+                  "hop-type": "STRICT"
+                }
+              },
+              {
+                "explicit-route-usage": "gnpy-path-computation-simplified:route-include-ero",
+                "index": 1,
+                "num-unnum-hop": {
+                  "node-id": "127.0.0.30",
+                  "link-tp-id": "1",
+                  "hop-type": "STRICT"
+                }
+              }
+            ]
+          },
+          "path-constraints": {
+            "te-bandwidth": {
+              "technology": "flexi-grid",
+              "trx_type": "openroadm-beta1",
+              "trx_mode": "W100G",
+              "effective-freq-slot": [
+                {
+                  "N": 0,
+                  "M": 4
+                }
+              ],
+              "spacing": 50000000000,
+              "path_bandwidth": 100
+            }
+          }
+        }
+      ]
+    }
+  }
+}
