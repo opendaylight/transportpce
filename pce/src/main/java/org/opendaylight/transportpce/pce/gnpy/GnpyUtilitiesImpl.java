@@ -8,10 +8,12 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
@@ -30,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +52,7 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyZtoA;
     private Uint32 requestId;
     private BindingDOMCodecServices bindingDOMCodecServices;
+    private JsonStringConverter<GnpyApi> converter;
 
 
     public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input,
@@ -60,6 +64,7 @@ public class GnpyUtilitiesImpl {
         this.gnpyZtoA = null;
         this.requestId = Uint32.valueOf(0);
         this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.converter =  new JsonStringConverter<>(bindingDOMCodecServices);
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -137,18 +142,20 @@ public class GnpyUtilitiesImpl {
                         .collect(Collectors.toMap(PathRequest::key, pathRequest -> pathRequest)))
                 .build())
             .build();
-        InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
-        String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(bindingDOMCodecServices);
-        gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
-        LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
-        ConnectToGnpyServer connect = new ConnectToGnpyServer();
-        String gnpyJsonModified = gnpyJson
-            .replace("gnpy-eqpt-config:", "")
-            .replace("gnpy-path-computation-simplified:", "")
-            .replace("gnpy-network-topology:", "");
+        try {
+            InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
+            String gnpyJson = converter.createJsonStringFromDataObject(idGnpyApi, gnpyApi,
+                    JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
+            LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
+            ConnectToGnpyServer connect = new ConnectToGnpyServer();
+            String gnpyJsonModified = gnpyJson.replace("gnpy-eqpt-config:", "")
+                    .replace("gnpy-path-computation-simplified:", "").replace("gnpy-network-topology:", "");
 
-        return connect.returnGnpyResponse(gnpyJsonModified);
+            return connect.returnGnpyResponse(gnpyJsonModified);
+        } catch (IOException e) {
+            LOG.error("Cannot convert data object to json string {}", gnpyApi);
+            throw new GnpyException("Cannot convert data object to json string", e);
+        }
     }
 
     public GnpyResult getGnpyAtoZ() {
