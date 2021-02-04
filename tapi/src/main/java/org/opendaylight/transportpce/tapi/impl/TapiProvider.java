@@ -29,6 +29,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
@@ -56,6 +57,7 @@ public class TapiProvider {
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
+    private ObjectRegistration<TransportpceTapinetworkutilsService> tapiNetworkutilsServiceRpcRegistration;
     private ListenerRegistration<TapiNetconfTopologyListener> dataTreeChangeListenerRegistration;
     private ListenerRegistration<TapiPortMappingListener> mappingListenerListenerRegistration;
     private final OrgOpenroadmServiceService serviceHandler;
@@ -63,11 +65,13 @@ public class TapiProvider {
     private final TapiListener tapiListener;
     private final TapiNetconfTopologyListener topologyListener;
     private TapiPortMappingListener tapiPortMappingListener;
+    private final TransportpceTapinetworkutilsService tapiNetworkUtils;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
                         OrgOpenroadmServiceService serviceHandler,
                         ServiceDataStoreOperations serviceDataStoreOperations, TapiListener tapiListener,
-                        TapiNetconfTopologyListener topologyListener, TapiPortMappingListener tapiPortMappingListener) {
+                        TapiNetconfTopologyListener topologyListener, TapiPortMappingListener tapiPortMappingListener,
+                        TransportpceTapinetworkutilsService tapiNetworkUtils) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.serviceHandler = serviceHandler;
@@ -75,6 +79,7 @@ public class TapiProvider {
         this.tapiListener = tapiListener;
         this.topologyListener = topologyListener;
         this.tapiPortMappingListener = tapiPortMappingListener;
+        this.tapiNetworkUtils = tapiNetworkUtils;
     }
 
     /**
@@ -105,6 +110,9 @@ public class TapiProvider {
         mappingListenerListenerRegistration =
             dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION,
                 MAPPING_II), tapiPortMappingListener);
+        tapiNetworkutilsServiceRpcRegistration =
+                rpcProviderService.registerRpcImplementation(TransportpceTapinetworkutilsService.class,
+                        this.tapiNetworkUtils);
         @NonNull
         InstanceIdentifier<ServiceInterfacePoints> sipIID = InstanceIdentifier.create(ServiceInterfacePoints.class);
         dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(
@@ -121,6 +129,9 @@ public class TapiProvider {
         }
         if (mappingListenerListenerRegistration != null) {
             mappingListenerListenerRegistration.close();
+        }
+        if (tapiNetworkutilsServiceRpcRegistration != null) {
+            tapiNetworkutilsServiceRpcRegistration.close();
         }
         rpcRegistration.close();
     }
