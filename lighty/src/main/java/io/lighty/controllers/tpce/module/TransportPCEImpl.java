@@ -80,8 +80,10 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
+import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.slf4j.Logger;
@@ -197,6 +199,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Creating tapi beans ...");
         R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(lightyServices.getBindingDataBroker(),
             deviceTransactionManager);
+        TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
+                networkTransaction);
         TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
             tapilinkDiscoveryImpl, networkTransaction);
         TapiNetconfTopologyListener tapiNetConfTopologyListener =
@@ -204,7 +208,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         TapiPortMappingListener tapiPortMappingListener =
             new TapiPortMappingListener(tapiNetworkModelService);
         tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-                tapiNetConfTopologyListener, tapiPortMappingListener);
+                tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl);
         if(activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
@@ -268,10 +272,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                                   NetworkTransactionService networkTransaction,
                                   ServiceDataStoreOperations serviceDataStoreOperations,
                                   TapiNetconfTopologyListener tapiNetConfTopologyListener,
-                                  TapiPortMappingListener tapiPortMappingListener) {
+                                  TapiPortMappingListener tapiPortMappingListener,
+                                  TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl) {
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
             servicehandler, serviceDataStoreOperations, new TapiListener(), networkTransaction,
-            tapiNetConfTopologyListener, tapiPortMappingListener);
+            tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl);
     }
 
     /**
