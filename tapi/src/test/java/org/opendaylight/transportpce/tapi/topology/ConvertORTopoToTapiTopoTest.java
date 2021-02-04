@@ -92,8 +92,8 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoObjectToTapiTooObjectTest.class);
+public class ConvertORTopoToTapiTopoTest extends AbstractTest {
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToTapiTopoTest.class);
 
     private static Node otnMuxA;
     private static Node otnMuxC;
