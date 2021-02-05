@@ -62,8 +62,12 @@ public class TapiTopologyImplExceptionTest {
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(dataBroker, tapiContext, topologyUtils);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
-        Topology topology = rpcResult.getResult().getTopology();
-        assertNull("Topology should be null", topology);
+        if (rpcResult.isSuccessful()) {
+            Topology topology = rpcResult.getResult().getTopology();
+            assertNull("Topology should be null", topology);
+        } else {
+            assertNull("Topology should be null", null);
+        }
     }
 
     private class ReadTransactionMock implements ReadTransaction {
