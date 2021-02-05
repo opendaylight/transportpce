@@ -122,7 +122,7 @@ public class PortMappingVersion710 {
     public boolean createMappingData(String nodeId) {
         LOG.info("{} : OpenROADM version 7.1.0 node - Creating Mapping Data", nodeId);
         List<Mapping> portMapList = new ArrayList<>();
-        List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
@@ -155,7 +155,7 @@ public class PortMappingVersion710 {
                     return false;
                 }
                 // Get MC capabilities
-                if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilitiesList)) {
+                if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilities)) {
                     // return false if MC capabilites failed
                     LOG.warn("{} : Unable to create MC capabilities", nodeId);
                     return false;
@@ -172,7 +172,7 @@ public class PortMappingVersion710 {
                 break;
 
         }
-        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilitiesList);
+        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities);
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
@@ -774,23 +774,25 @@ public class PortMappingVersion710 {
         return cpToDegreeList;
     }
 
-    private List<McCapabilities> getMcCapabilitiesList(Map<Integer, Degree> degrees, List<SharedRiskGroup> srgs,
-            Info deviceInfo, String nodeId) {
+    private Map<McCapabilitiesKey, McCapabilities> getMcCapabilities(Map<Integer, Degree> degrees,
+            List<SharedRiskGroup> srgs, Info deviceInfo, String nodeId) {
         //TODO some divergences with 2.2.1 here
         LOG.info("{} : Getting the MC capabilities for degrees", nodeId);
         //Get all the mc-capability profiles from the device
         Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfiles =
             getMcCapabilityProfiles(nodeId, deviceInfo);
         // Add the DEG mc-capabilities
-        List<McCapabilities> mcCapabilitiesList = createMcCapDegreeObject(degrees, mcCapabilityProfiles, nodeId);
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilities = createMcCapDegreeObject(degrees, mcCapabilityProfiles,
+            nodeId);
         // Add the SRG mc-capabilities
         LOG.info("{} : Getting the MC capabilities for SRGs", nodeId);
-        mcCapabilitiesList.addAll(createMcCapSrgObject(srgs, mcCapabilityProfiles, nodeId));
-        return mcCapabilitiesList;
+        mcCapabilities.putAll(createMcCapSrgObject(srgs, mcCapabilityProfiles, nodeId));
+        return mcCapabilities;
     }
 
     private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
-            List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList, List<McCapabilities> mcCapList) {
+            List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList,
+            Map<McCapabilitiesKey, McCapabilities> mcCapMap) {
         NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey(nodeId)).setNodeId(nodeId);
         if (nodeInfo != null) {
             nodesBldr.setNodeInfo(nodeInfo);
@@ -820,8 +822,8 @@ public class PortMappingVersion710 {
             }
             nodesBldr.setSwitchingPoolLcp(splMap);
         }
-        if (mcCapList != null) {
-            nodesBldr.setMcCapabilities(mcCapList);
+        if (mcCapMap != null) {
+            nodesBldr.setMcCapabilities(mcCapMap);
         }
         Map<NodesKey,Nodes> nodesList = new HashMap<>();
         Nodes nodes = nodesBldr.build();
@@ -851,10 +853,10 @@ public class PortMappingVersion710 {
             .setInterfaceName(interfaceList.get(circuitPackName)).build();
     }
 
-    private List<McCapabilities> createMcCapDegreeObject(Map<Integer, Degree> degrees,
+    private Map<McCapabilitiesKey, McCapabilities> createMcCapDegreeObject(Map<Integer, Degree> degrees,
             Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
         //TODO some divergences here with 2.2.1
-        List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap = new HashMap<>();
         for (Degree degree : degrees.values()) {
 
             if ((degree.getMcCapabilityProfileName() == null) || (degree.getMcCapabilityProfileName().isEmpty())) {
@@ -868,7 +870,7 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                     .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
-                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 continue;
             }
 
@@ -882,17 +884,17 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
                     .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
-                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
             }
 
         }
-        return mcCapabilitiesList;
+        return mcCapabilitiesMap;
     }
 
-    private List<McCapabilities> createMcCapSrgObject(List<SharedRiskGroup> srgs,
+    private Map<McCapabilitiesKey, McCapabilities> createMcCapSrgObject(List<SharedRiskGroup> srgs,
             Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
 
-        List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap = new HashMap<>();
         for (SharedRiskGroup srg : srgs) {
 
             if ((srg.getMcCapabilityProfileName() == null) || (srg.getMcCapabilityProfileName().isEmpty())) {
@@ -906,7 +908,7 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                     .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
-                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 continue;
             }
 
@@ -920,10 +922,10 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
                     .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
-                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
             }
         }
-        return mcCapabilitiesList;
+        return mcCapabilitiesMap;
     }
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
@@ -1060,11 +1062,12 @@ public class PortMappingVersion710 {
         return;
     }
 
+    private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo,
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap) {
 
-    private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo, List<McCapabilities> mcCapabilitiesList) {
         Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
         List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
-        mcCapabilitiesList.addAll(getMcCapabilitiesList(degrees, srgs, deviceInfo, nodeId));
+        mcCapabilitiesMap.putAll(getMcCapabilities(degrees, srgs, deviceInfo, nodeId));
         return true;
     }
 
