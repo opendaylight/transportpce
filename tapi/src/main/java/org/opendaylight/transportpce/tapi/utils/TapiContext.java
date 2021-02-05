@@ -35,10 +35,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.NwTopologyServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
@@ -138,17 +143,14 @@ public class TapiContext {
         // TODO: solve error when merging: Topology is not a valid child of topology context?
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext
-                    topologyContext = new TopologyContextBuilder()
+            TopologyContext topologyContext = new TopologyContextBuilder()
                     //.setNwTopologyService(new NwTopologyServiceBuilder().build())
                     .setTopology(topologyMap)
                     .build();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext> topologycontextIID =
+            InstanceIdentifier<TopologyContext> topologycontextIID =
                     InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
                             .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-                            .child(org.opendaylight.yang.gen.v1.urn
-                                    .onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+                            .child(TopologyContext.class)
                             .build();
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topologycontextIID,
@@ -240,6 +242,116 @@ public class TapiContext {
             LOG.info("CEP added successfully.");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt update cep in topology", e);
+        }
+    }
+
+    public Node getTapiNode(Uuid topoUuid, Uuid nodeUuid) {
+        InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+                        new NodeKey(nodeUuid)).build();
+        try {
+            Optional<Node> optNode = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID)
+                    .get();
+            if (!optNode.isPresent()) {
+                LOG.error("Node is not present in datastore");
+                return null;
+            }
+            // TODO -> Need to remove CEPs from NEPs. If not error from get Topology details output
+            Node node = optNode.get();
+            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
+            for (OwnedNodeEdgePoint onep: node.getOwnedNodeEdgePoint().values()) {
+                if (onep.augmentation(OwnedNodeEdgePoint1.class) == null) {
+                    onepMap.put(onep.key(), onep);
+                    continue;
+                }
+                OwnedNodeEdgePointBuilder newOnepBuilder = new OwnedNodeEdgePointBuilder()
+                    .setUuid(onep.getUuid())
+                    .setLayerProtocolName(onep.getLayerProtocolName())
+                    .setName(onep.getName())
+                    .setSupportedCepLayerProtocolQualifier(onep.getSupportedCepLayerProtocolQualifier())
+                    .setAdministrativeState(onep.getAdministrativeState())
+                    .setOperationalState(onep.getOperationalState())
+                    .setLifecycleState(onep.getLifecycleState())
+                    .setTerminationDirection(onep.getTerminationDirection())
+                    .setTerminationState(onep.getTerminationState())
+                    .setLinkPortDirection(onep.getLinkPortDirection())
+                    .setLinkPortRole(onep.getLinkPortRole());
+                if (onep.getMappedServiceInterfacePoint() != null) {
+                    newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
+                }
+                onepMap.put(newOnepBuilder.key(), newOnepBuilder.build());
+            }
+            return new NodeBuilder(node)
+                .setOwnedNodeEdgePoint(onepMap)
+                .build();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read node in topology");
+            return null;
+        }
+    }
+
+    public OwnedNodeEdgePoint getTapiNEP(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid) {
+        InstanceIdentifier<OwnedNodeEdgePoint> nepIID = InstanceIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+                new NodeKey(nodeUuid)).child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid)).build();
+        try {
+            Optional<OwnedNodeEdgePoint> optNode = this.networkTransactionService
+                    .read(LogicalDatastoreType.OPERATIONAL, nepIID)
+                    .get();
+            if (!optNode.isPresent()) {
+                LOG.error("Node is not present in datastore");
+                return null;
+            }
+            return optNode.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read node in topology");
+            return null;
+        }
+    }
+
+    public Link getTapiLink(Uuid topoUuid, Uuid linkUuid) {
+        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(Link.class, new LinkKey(linkUuid)).build();
+        try {
+            Optional<Link> optLink = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, linkIID)
+                    .get();
+            if (!optLink.isPresent()) {
+                LOG.error("Node is not present in datastore");
+                return null;
+            }
+            return optLink.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read node in topology");
+            return null;
+        }
+    }
+
+    public Map<TopologyKey, Topology> getTopologyContext() {
+        InstanceIdentifier<TopologyContext> topologycontextIID =
+                InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+                        .child(TopologyContext.class)
+                        .build();
+        try {
+            Optional<TopologyContext> optTopoContext = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL, topologycontextIID).get();
+            if (!optTopoContext.isPresent()) {
+                LOG.error("Topology context is not present in datastore");
+                return null;
+            }
+            return optTopoContext.get().getTopology();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read node in topology");
+            return null;
         }
     }
 }
