@@ -333,5 +333,4 @@ public final class TopologyUtils {
         topologyBuilder.setNode(mapNode);
         return topologyBuilder.build();
     }
-
 }
