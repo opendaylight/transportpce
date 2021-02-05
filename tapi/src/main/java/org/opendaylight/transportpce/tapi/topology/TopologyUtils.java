@@ -329,5 +329,4 @@ public final class TopologyUtils {
         topologyBuilder.setLink(topology.getLink());
         return topologyBuilder.build();
     }
-
 }
