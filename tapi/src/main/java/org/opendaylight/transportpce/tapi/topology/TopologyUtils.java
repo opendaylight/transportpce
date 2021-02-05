@@ -353,20 +353,4 @@ public final class TopologyUtils {
         nodeRuleGroupMap.put(nodeRuleGroup.key(), nodeRuleGroup);
         return nodeRuleGroupMap;
     }
-
-    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology
-            transformTopology(Topology topology) {
-        org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder topologyBuilder =
-                new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder();
-        topologyBuilder.setUuid(topology.getUuid());
-        topologyBuilder.setName(topology.getName());
-        topologyBuilder.setLayerProtocolName(topology.getLayerProtocolName());
-        topologyBuilder.setNode(topology.getNode());
-        topologyBuilder.setLink(topology.getLink());
-
-        return topologyBuilder.build();
-    }
-
 }
