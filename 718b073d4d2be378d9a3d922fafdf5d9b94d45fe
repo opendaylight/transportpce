@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8b49af5_4ba9a727",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-05T09:19:22Z",
+      "side": 1,
+      "message": "switch / case structure would be more approiate",
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a4d081d_fdd916e1",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-05T09:19:22Z",
+      "side": 1,
+      "message": "redundancy ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 59
+      },
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f327d79a_76b56c74",
+        "filename": "tapi/src/test/resources/otn-topology.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-05T09:19:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 59
+      },
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
