@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa92b3d8_f87725c7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-05T17:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8b49af5_4ba9a727",
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4d081d_fdd916e1",
         "filename": "tapi/src/test/resources/openroadm-topology.xml",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "93754846_b33bf64f",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-05T17:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a4d081d_fdd916e1",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 59
+      },
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f327d79a_76b56c74",
         "filename": "tapi/src/test/resources/otn-topology.xml",
         "patchSetId": 1
@@ -62,6 +104,30 @@
       "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f85231_209286c6",
+        "filename": "tapi/src/test/resources/otn-topology.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-05T17:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f327d79a_76b56c74",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 59
+      },
+      "revId": "718b073d4d2be378d9a3d922fafdf5d9b94d45fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
