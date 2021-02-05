@@ -82,16 +82,16 @@ public final class TopologyUtils {
     public Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
         Network topology = null;
         ListenableFuture<Optional<Network>> topologyFuture =
-                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
+            this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
         try {
             topology = topologyFuture.get().get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
-                    .firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
-                    .firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
         } catch (NoSuchElementException e) {
             return null;
         }
@@ -161,14 +161,13 @@ public final class TopologyUtils {
         Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II);
         if (openroadmNet != null && openroadmNet.nonnullNode().values().stream().filter(nt ->
                 nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
-                        .getNodeType().equals(OpenroadmNodeType.ROADM)).count() > 0) {
+                    .getNodeType().equals(OpenroadmNodeType.ROADM)).count() > 0) {
             // map roadm nodes
             for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node
                     roadm:openroadmNet.nonnullNode().values().stream().filter(
-                            nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http
+                        nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http
                             .org.openroadm.common.network.rev200529.Node1.class)
-                            .getNodeType().equals(OpenroadmNodeType.ROADM))
-                    .collect(Collectors.toList())) {
+                            .getNodeType().equals(OpenroadmNodeType.ROADM)).collect(Collectors.toList())) {
                 tapiFactory.convertRoadmNode(roadm, openroadmTopo);
                 tapiNodeList.putAll(tapiFactory.getTapiNodes());
             }
@@ -177,8 +176,8 @@ public final class TopologyUtils {
         }
         // map roadm to roadm link
         List<Link> rdmTordmLinkList = linkList.stream()
-                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
-                .collect(Collectors.toList());
+            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
+            .collect(Collectors.toList());
         tapiFactory.convertRdmToRdmLinks(rdmTordmLinkList);
         tapiLinkList.putAll(tapiFactory.getTapiLinks());
         // map xpdr_input to roadm and xpdr_output to roadm links.
@@ -188,21 +187,21 @@ public final class TopologyUtils {
 
         if (otnTopo.augmentation(Network1.class) != null) {
             Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                    .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
+                .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
             tapiFactory.convertLinks(otnLinkMap);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
         }
         Name name = new NameBuilder().setValue(TopologyUtils.T0_FULL_MULTILAYER).setValueName("TAPI Topology Name")
-                .build();
+            .build();
         // Retrieve created sips map in TapiFactory when mapping all the nodes
         this.tapiSips = tapiFactory.getTapiSips();
         return new TopologyBuilder()
-                .setName(Map.of(name.key(), name))
-                .setUuid(topoUuid)
-                .setNode(tapiNodeList)
-                .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
-                        LayerProtocolName.DSR))
-                .setLink(tapiLinkList).build();
+            .setName(Map.of(name.key(), name))
+            .setUuid(topoUuid)
+            .setNode(tapiNodeList)
+            .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
+                LayerProtocolName.DSR))
+            .setLink(tapiLinkList).build();
     }
 
     public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
@@ -215,19 +214,19 @@ public final class TopologyUtils {
         String networkLcp;
         if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
             networkLcp = tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
-                    .getAssociatedConnectionMapPort();
+                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
+                .getAssociatedConnectionMapPort();
         } else {
             networkLcp = tp.getTpId().getValue();
         }
         LOG.info("Network LCP associated = {}", networkLcp);
         @NonNull
         KeyedInstanceIdentifier<Mapping, MappingKey> pmIID = InstanceIdentifier.create(
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.Network.class)
-                .child(Nodes.class, new NodesKey(nodeIdPortMap)).child(Mapping.class, new MappingKey(networkLcp));
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.Network.class)
+            .child(Nodes.class, new NodesKey(nodeIdPortMap)).child(Mapping.class, new MappingKey(networkLcp));
         @NonNull
         FluentFuture<Optional<Mapping>> mappingOpt = this.dataBroker.newReadOnlyTransaction().read(
-                LogicalDatastoreType.CONFIGURATION, pmIID);
+            LogicalDatastoreType.CONFIGURATION, pmIID);
         Mapping mapping = null;
         if (mappingOpt.isDone()) {
             try {
@@ -238,7 +237,7 @@ public final class TopologyUtils {
             }
         } else {
             LOG.error("Impossible to get mapping of associated network port {} of tp {}", networkLcp, tp.getTpId()
-                    .getValue());
+                .getValue());
             return false;
         }
         LOG.info("Mapping found = {}", mapping.toString());
@@ -286,9 +285,9 @@ public final class TopologyUtils {
     public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology
             transformTopology(Topology topology) {
         org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder topologyBuilder =
-                new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder();
+            .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder topologyBuilder =
+            new org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder();
         topologyBuilder.setUuid(topology.getUuid());
         topologyBuilder.setName(topology.getName());
         topologyBuilder.setLayerProtocolName(topology.getLayerProtocolName());
@@ -308,17 +307,17 @@ public final class TopologyUtils {
                     continue;
                 }
                 OwnedNodeEdgePointBuilder newOnepBuilder = new OwnedNodeEdgePointBuilder()
-                        .setUuid(onep.getUuid())
-                        .setLayerProtocolName(onep.getLayerProtocolName())
-                        .setName(onep.getName())
-                        .setSupportedCepLayerProtocolQualifier(onep.getSupportedCepLayerProtocolQualifier())
-                        .setAdministrativeState(onep.getAdministrativeState())
-                        .setOperationalState(onep.getOperationalState())
-                        .setLifecycleState(onep.getLifecycleState())
-                        .setTerminationDirection(onep.getTerminationDirection())
-                        .setTerminationState(onep.getTerminationState())
-                        .setLinkPortDirection(onep.getLinkPortDirection())
-                        .setLinkPortRole(onep.getLinkPortRole());
+                    .setUuid(onep.getUuid())
+                    .setLayerProtocolName(onep.getLayerProtocolName())
+                    .setName(onep.getName())
+                    .setSupportedCepLayerProtocolQualifier(onep.getSupportedCepLayerProtocolQualifier())
+                    .setAdministrativeState(onep.getAdministrativeState())
+                    .setOperationalState(onep.getOperationalState())
+                    .setLifecycleState(onep.getLifecycleState())
+                    .setTerminationDirection(onep.getTerminationDirection())
+                    .setTerminationState(onep.getTerminationState())
+                    .setLinkPortDirection(onep.getLinkPortDirection())
+                    .setLinkPortRole(onep.getLinkPortRole());
                 if (onep.getMappedServiceInterfacePoint() != null) {
                     newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
                 }
@@ -326,8 +325,8 @@ public final class TopologyUtils {
                 onepMap.put(nep.key(), nep);
             }
             Node newNode = new NodeBuilder(node)
-                    .setOwnedNodeEdgePoint(onepMap)
-                    .build();
+                .setOwnedNodeEdgePoint(onepMap)
+                .build();
             mapNode.put(newNode.key(), newNode);
         }
         topologyBuilder.setNode(mapNode);
