@@ -57,17 +57,23 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Co
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.link.details.output.LinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.node.edge.point.details.output.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
@@ -105,12 +111,25 @@ public class TapiTopologyImpl implements TapiTopologyService {
     @Override
     public ListenableFuture<RpcResult<GetNodeDetailsOutput>> getNodeDetails(GetNodeDetailsInput input) {
         // TODO Auto-generated method stub
-        return null;
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        // Node id: if roadm -> ROADM+PHOTONIC_MEDIA. if xpdr -> XPDR-XPDR+DSR/OTSi
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNodeIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node = this.tapiContext
+                .getTapiNode(topoUuid, nodeUuid);
+        if (node == null) {
+            LOG.error("Invalid TAPI node name");
+            return RpcResultBuilder.success(new GetNodeDetailsOutputBuilder().build()).buildFuture();
+        }
+        return RpcResultBuilder.success(new GetNodeDetailsOutputBuilder()
+                .setNode(new org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.topology.rev181210.get.node.details.output.NodeBuilder(node).build())
+                .build()).buildFuture();
     }
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
-        // TODO -> Add check for Full T0 Multilayer
         if (!TopologyUtils.T0_MULTILAYER.equals(input.getTopologyIdOrName())
                 && !TopologyUtils.TPDR_100G.equals(input.getTopologyIdOrName())) {
             if (TopologyUtils.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
@@ -268,19 +287,64 @@ public class TapiTopologyImpl implements TapiTopologyService {
     public ListenableFuture<RpcResult<GetNodeEdgePointDetailsOutput>> getNodeEdgePointDetails(
             GetNodeEdgePointDetailsInput input) {
         // TODO Auto-generated method stub
-        return null;
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        // Node id: if roadm -> ROADMid+PHOTONIC_MEDIA. if xpdr -> XPDRid-XPDRnbr+DSR/OTSi
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNodeIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        // NEP id: if roadm -> ROADMid+PHOTONIC_MEDIA/MC/OTSiMC+TPid.
+        // if xpdr -> XPDRid-XPDRnbr+DSR/eODU/iODU/iOTSi/eOTSi/PHOTONIC_MEDIA+TPid
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(input.getEpIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        OwnedNodeEdgePoint nep = this.tapiContext.getTapiNEP(topoUuid, nodeUuid, nepUuid);
+        if (nep == null) {
+            LOG.error("Invalid TAPI nep name");
+            return RpcResultBuilder.success(new GetNodeEdgePointDetailsOutputBuilder().build()).buildFuture();
+        }
+        return RpcResultBuilder.success(new GetNodeEdgePointDetailsOutputBuilder()
+                .setNodeEdgePoint(new NodeEdgePointBuilder(nep).build()).build()).buildFuture();
     }
 
     @Override
     public ListenableFuture<RpcResult<GetLinkDetailsOutput>> getLinkDetails(GetLinkDetailsInput input) {
         // TODO Auto-generated method stub
-        return null;
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        // Link id: same as OR link id
+        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes(input.getLinkIdOrName().getBytes(Charset.forName("UTF-8")))
+                .toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link link = this.tapiContext
+                .getTapiLink(topoUuid, linkUuid);
+        if (link == null) {
+            LOG.error("Invalid TAPI link name");
+            return RpcResultBuilder.success(new GetLinkDetailsOutputBuilder().build()).buildFuture();
+        }
+        return RpcResultBuilder.success(new GetLinkDetailsOutputBuilder().setLink(new LinkBuilder(link).build())
+                .build()).buildFuture();
     }
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyListOutput>> getTopologyList(GetTopologyListInput input) {
         // TODO Auto-generated method stub
-        return null;
+        Map<TopologyKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology>
+                topologyMap = this.tapiContext.getTopologyContext();
+        if (topologyMap.isEmpty()) {
+            LOG.error("No topologies exist in tapi context");
+            return RpcResultBuilder.success(new GetTopologyListOutputBuilder().build()).buildFuture();
+        }
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.list.output.TopologyKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.list.output.Topology>
+                newTopoMap = new HashMap<>();
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
+                topo:topologyMap.values()) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.list.output.Topology
+                newTopo = new org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.topology.rev181210.get.topology.list.output.TopologyBuilder(topo).build();
+            newTopoMap.put(newTopo.key(), newTopo);
+        }
+        return RpcResultBuilder.success(new GetTopologyListOutputBuilder().setTopology(newTopoMap).build())
+                .buildFuture();
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
