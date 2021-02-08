@@ -122,23 +122,23 @@ public class ConvertORTopoToTapiTopo {
     public void convertNode(Node ietfNode, List<String> networkPorts) {
         this.ietfNodeId = ietfNode.getNodeId().getValue();
         if (ietfNode.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
-            == null) {
+                == null) {
             return;
         }
         this.ietfNodeType = ietfNode.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class).getNodeType();
         this.ietfNodeAdminState = ietfNode.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
             .getAdministrativeState();
         this.ietfNodeOperState = ietfNode.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
             .getOperationalState();
         this.oorNetworkPortList = ietfNode.augmentation(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
             .getTerminationPoint().values().stream()
             .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-            == OpenroadmTpType.XPONDERNETWORK.getIntValue()
-            && networkPorts.contains(tp.getTpId().getValue()))
+                == OpenroadmTpType.XPONDERNETWORK.getIntValue()
+                && networkPorts.contains(tp.getTpId().getValue()))
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         if (!OpenroadmNodeType.TPDR.equals(this.ietfNodeType)) {
@@ -146,11 +146,11 @@ public class ConvertORTopoToTapiTopo {
                 .values().stream().findFirst().get();
             this.oorClientPortList = ietfNode.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().values().stream()
-            .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
-            == OpenroadmTpType.XPONDERCLIENT.getIntValue())
-            .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
-            .collect(Collectors.toList());
+                .getTerminationPoint().values().stream()
+                .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
+                    == OpenroadmTpType.XPONDERCLIENT.getIntValue())
+                .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
+                .collect(Collectors.toList());
         } else {
             this.oorOduSwitchingPool = createOduSwitchingPoolForTp100G();
             List<TpId> tpList = this.oorOduSwitchingPool.getNonBlockingList().values().stream()
@@ -205,13 +205,13 @@ public class ConvertORTopoToTapiTopo {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} otn links", otnLinkMap.size() / 2);
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .Link otnlink : otnLinkList) {
+                .Link otnlink : otnLinkList) {
             if (!linksToNotConvert.contains(otnlink.getLinkId().getValue())) {
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
                     .network.Link oppositeLink = otnLinkMap.get(new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns
                         .yang.ietf.network.topology.rev180226.networks.network.LinkKey(otnlink.augmentation(
-                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
-                            .getOppositeLink()));
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                    .getOppositeLink()));
                 Link tapiLink = createTapiLink(otnlink, oppositeLink);
                 linksToNotConvert.add(oppositeLink.getLinkId().getValue());
                 tapiLinks.put(tapiLink.key(), tapiLink);
@@ -261,7 +261,7 @@ public class ConvertORTopoToTapiTopo {
         for (TerminationPoint tp : this.oorNetworkPortList) {
             TpId tpid1 = tp.getTpId();
             TpId tpid2 = new TpId(tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
+                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
                 .getAssociatedConnectionMapPort());
             List<TpId> tpList = new ArrayList<>();
             tpList.add(tpid1);
@@ -280,7 +280,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
-        pruneTapiPhotonicNodes() {
+            pruneTapiPhotonicNodes() {
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
             prunedTapiPhotonicNodes = new ArrayList<>();
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiPhotonicNodes
@@ -288,12 +288,11 @@ public class ConvertORTopoToTapiTopo {
                 .filter(n -> LayerProtocolName.PHOTONICMEDIA.equals(n.getLayerProtocolName().get(0)))
                 .collect(Collectors.toList());
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node
-            : tapiPhotonicNodes) {
+                : tapiPhotonicNodes) {
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepM = new HashMap<>();
             for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
                 if (entry.getValue().getName().values().stream()
-                    .filter(name -> name.getValueName().startsWith("eNodeEdgePoint"))
-                    .count() > 0) {
+                        .filter(name -> name.getValueName().startsWith("eNodeEdgePoint")).count() > 0) {
                     onepM.put(entry.getKey(), entry.getValue());
                 }
             }
@@ -305,7 +304,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private Map<String, String> convertListNodeWithListNepToMapForUuidAndName(
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> nodes) {
+            List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> nodes) {
         Map<String, String> uuidNameMap = new HashMap<>();
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node : nodes) {
             for (OwnedNodeEdgePoint nep : node.nonnullOwnedNodeEdgePoint().values()) {
@@ -321,7 +320,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
-        createTapiNode(Map<NameKey, Name> nodeNames, List<LayerProtocolName> layerProtocols) {
+            createTapiNode(Map<NameKey, Name> nodeNames, List<LayerProtocolName> layerProtocols) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
@@ -341,23 +340,22 @@ public class ConvertORTopoToTapiTopo {
                 .getValueName(), nodeNames.get(nodeNames.keySet().iterator().next()).getValue());
         }
         return new NodeBuilder()
-                .setUuid(nodeUuid)
-                .setName(nodeNames)
-                .setLayerProtocolName(layerProtocols)
-                .setAdministrativeState(setTapiAdminState(this.ietfNodeAdminState))
-                .setOperationalState(setTapiOperationalState(this.ietfNodeOperState))
-                .setLifecycleState(LifecycleState.INSTALLED)
-                .setOwnedNodeEdgePoint(onepl)
-                .setNodeRuleGroup(nodeRuleGroupList)
-                .build();
+            .setUuid(nodeUuid)
+            .setName(nodeNames)
+            .setLayerProtocolName(layerProtocols)
+            .setAdministrativeState(setTapiAdminState(this.ietfNodeAdminState))
+            .setOperationalState(setTapiOperationalState(this.ietfNodeOperState))
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setOwnedNodeEdgePoint(onepl)
+            .setNodeRuleGroup(nodeRuleGroupList)
+            .build();
     }
 
     private AdministrativeState setTapiAdminState(AdminStates adminState) {
         if (adminState == null) {
             return null;
         }
-        return adminState.equals(AdminStates.InService)
-            ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
+        return adminState.equals(AdminStates.InService) ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
     private AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2) {
@@ -390,13 +388,13 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private Uuid getNodeUuid4Photonic(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList, Map<RuleKey, Rule> ruleList) {
+            Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList, Map<RuleKey, Rule> ruleList) {
         Uuid nodeUuid;
         nodeUuid = this.uuidMap.get(String.join("+", this.ietfNodeId, OTSI));
         // iNep creation on otsi node
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", this.ietfNodeId, I_OTSI, oorNetworkPortList.get(i).getTpId().getValue()))
+                (String.join("+", this.ietfNodeId, I_OTSI, oorNetworkPortList.get(i).getTpId().getValue()))
                     .getBytes(Charset.forName("UTF-8")))
                 .toString());
             this.uuidMap.put(String.join("+", this.ietfNodeId, I_OTSI, oorNetworkPortList.get(i).getTpId().getValue()),
@@ -414,7 +412,7 @@ public class ConvertORTopoToTapiTopo {
         // eNep creation on otsi node
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             Uuid nepUuid2 = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", this.ietfNodeId, E_OTSI, oorNetworkPortList.get(i).getTpId().getValue()))
+                (String.join("+", this.ietfNodeId, E_OTSI, oorNetworkPortList.get(i).getTpId().getValue()))
                     .getBytes(Charset.forName("UTF-8")))
                 .toString());
             this.uuidMap.put(String.join("+", this.ietfNodeId, E_OTSI, oorNetworkPortList.get(i).getTpId().getValue()),
@@ -455,8 +453,8 @@ public class ConvertORTopoToTapiTopo {
             nepList.put(enep.key(), enep);
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
-                        UUID.nameUUIDFromBytes(("otsi node rule group " + count).getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+                    UUID.nameUUIDFromBytes(("otsi node rule group " + count).getBytes(Charset.forName("UTF-8")))
+                        .toString()))
                 .setRule(ruleList)
                 .setNodeEdgePoint(nepList)
                 .build();
@@ -467,14 +465,14 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private Uuid getNodeUuid4Dsr(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList, Map<RuleKey, Rule> ruleList) {
+            Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList, Map<RuleKey, Rule> ruleList) {
         Uuid nodeUuid;
         nodeUuid = this.uuidMap.get(String.join("+", this.ietfNodeId, DSR));
         // client nep creation on DSR/ODU node
         for (int i = 0; i < oorClientPortList.size(); i++) {
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+", this.ietfNodeId, DSR, oorClientPortList.get(i).getTpId().getValue()))
-                .getBytes(Charset.forName("UTF-8"))).toString());
+                    .getBytes(Charset.forName("UTF-8"))).toString());
             this.uuidMap.put(String.join("+", this.ietfNodeId, DSR, oorClientPortList.get(i).getTpId().getValue()),
                 nepUuid);
             NameBuilder nameBldr = new NameBuilder().setValue(oorClientPortList.get(i).getTpId().getValue());
@@ -493,7 +491,7 @@ public class ConvertORTopoToTapiTopo {
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+", this.ietfNodeId, DSR, oorNetworkPortList.get(i).getTpId().getValue()))
-                .getBytes(Charset.forName("UTF-8"))).toString());
+                    .getBytes(Charset.forName("UTF-8"))).toString());
             this.uuidMap.put(String.join("+", this.ietfNodeId, DSR, oorNetworkPortList.get(i).getTpId().getValue()),
                 nepUuid);
             Name onedName = new NameBuilder()
@@ -525,8 +523,8 @@ public class ConvertORTopoToTapiTopo {
             }
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
-                        UUID.nameUUIDFromBytes(("dsr node rule group " + count).getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+                    UUID.nameUUIDFromBytes(("dsr node rule group " + count).getBytes(Charset.forName("UTF-8")))
+                        .toString()))
                 .setRule(ruleList)
                 .setNodeEdgePoint(nepList)
                 .build();
@@ -537,7 +535,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private OwnedNodeEdgePoint createNep(TerminationPoint oorTp, Map<NameKey, Name> nepNames,
-        LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword) {
+            LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword) {
         String key = String.join("+", keyword, oorTp.getTpId().getValue());
         OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
             .setUuid(this.uuidMap.get(key))
@@ -550,9 +548,9 @@ public class ConvertORTopoToTapiTopo {
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
             .setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(setTapiAdminState(
-                    oorTp.augmentation(TerminationPoint1.class).getAdministrativeState()))
+                oorTp.augmentation(TerminationPoint1.class).getAdministrativeState()))
             .setOperationalState(setTapiOperationalState(
-                    oorTp.augmentation(TerminationPoint1.class).getOperationalState()))
+                oorTp.augmentation(TerminationPoint1.class).getOperationalState()))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
             .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
@@ -584,7 +582,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(Uuid nodeUuid,
-        Collection<OwnedNodeEdgePoint> onepl) {
+            Collection<OwnedNodeEdgePoint> onepl) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
             nepMap = new HashMap<>();
@@ -629,12 +627,12 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private List<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedCepLayerProtocolQualifier(TerminationPoint tp,
-        LayerProtocolName lpn) {
+            LayerProtocolName lpn) {
         Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
         List<SupportedInterfaceCapability> sicList = new ArrayList<>(
             tp.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.otn.network.topology.rev200529.TerminationPoint1.class).getTpSupportedInterfaces()
-            .getSupportedInterfaceCapability().values());
+                .org.openroadm.otn.network.topology.rev200529.TerminationPoint1.class).getTpSupportedInterfaces()
+                .getSupportedInterfaceCapability().values());
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
@@ -668,7 +666,7 @@ public class ConvertORTopoToTapiTopo {
                     break;
                 case "PHOTONIC_MEDIA":
                     if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
                         sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
                         sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
                     }
@@ -705,9 +703,9 @@ public class ConvertORTopoToTapiTopo {
                 .build();
             Link transiLink = new LinkBuilder()
                 .setUuid(new Uuid(
-                        UUID.nameUUIDFromBytes((String.join("--", this.ietfNodeId, sourceKey, destKey))
-                            .getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+                    UUID.nameUUIDFromBytes((String.join("--", this.ietfNodeId, sourceKey, destKey))
+                        .getBytes(Charset.forName("UTF-8")))
+                        .toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setTransitionedLayerProtocolName(Arrays.asList(LayerProtocolName.ODU.getName(),
                     LayerProtocolName.PHOTONICMEDIA.getName()))
@@ -720,10 +718,10 @@ public class ConvertORTopoToTapiTopo {
         }
     }
 
-    private Link createTapiLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link link,
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            oppositeLink) {
+    private Link createTapiLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                                    .ietf.network.topology.rev180226.networks.network.Link link,
+                                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                                    .ietf.network.topology.rev180226.networks.network.Link oppositeLink) {
         String prefix = link.getLinkId().getValue().split("-")[0];
         String sourceNode = link.getSource().getSourceNode().getValue();
         String sourceTp = link.getSource().getSourceTp().toString();
@@ -810,9 +808,8 @@ public class ConvertORTopoToTapiTopo {
                     .setValue(link.getLinkId().getValue())
                     .build();
                 return new LinkBuilder()
-                    .setUuid(new Uuid(
-                        UUID.nameUUIDFromBytes((link.getLinkId().getValue())
-                            .getBytes(Charset.forName("UTF-8")))
+                    .setUuid(new Uuid(UUID.nameUUIDFromBytes((link.getLinkId().getValue())
+                        .getBytes(Charset.forName("UTF-8")))
                     .toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setLayerProtocolName(Arrays.asList(LayerProtocolName.ODU))
@@ -866,9 +863,9 @@ public class ConvertORTopoToTapiTopo {
                 .build();
             Link omsLink = new LinkBuilder()
                 .setUuid(new Uuid(
-                      UUID.nameUUIDFromBytes((String.join(" and ", photonicEntry.getValue(), rdmEntry.getValue()))
-                          .getBytes(Charset.forName("UTF-8")))
-                  .toString()))
+                    UUID.nameUUIDFromBytes((String.join(" and ", photonicEntry.getValue(), rdmEntry.getValue()))
+                        .getBytes(Charset.forName("UTF-8")))
+                        .toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA))
                 .setNodeEdgePoint(nepMap)
@@ -879,7 +876,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
-        getTapiNodes() {
+            getTapiNodes() {
         return tapiNodes;
     }
 
