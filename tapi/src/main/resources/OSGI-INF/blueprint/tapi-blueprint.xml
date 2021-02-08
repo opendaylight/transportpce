@@ -19,6 +19,9 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="deviceTransactionManager"
                interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
 
+    <reference id="notificationService"
+               interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
+
     <reference id="rpcProviderService"
           interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
@@ -33,6 +36,18 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
+    </bean>
+
+    <bean id="tapiPceListener" class="org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl">
+        <argument ref="dataBroker" />
+    </bean>
+
+    <bean id="tapiRendererListener" class="org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl">
+        <argument ref="dataBroker" />
+    </bean>
+
+    <bean id="tapiServiceHandlerListener" class="org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl">
+        <argument ref="dataBroker" />
     </bean>
 
     <bean id="tapiNetworkModelService" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl">
@@ -60,6 +75,10 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="tapiNetconfTopologyListener" />
         <argument ref="tapiPortMappingListener" />
         <argument ref="tapiNetworkUtilsImpl" />
+        <argument ref="tapiPceListener" />
+        <argument ref="tapiRendererListener" />
+        <argument ref="tapiServiceHandlerListener" />
+        <argument ref="notificationService" />
     </bean>
 
     <bean id="tapiPortMappingListener" class="org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener">
