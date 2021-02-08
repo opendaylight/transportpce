@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
@@ -20,12 +21,18 @@ import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210204.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
@@ -53,17 +60,27 @@ public class TapiProvider {
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
     private ObjectRegistration<TransportpceTapinetworkutilsService> tapiNetworkutilsServiceRpcRegistration;
     private ListenerRegistration<TapiNetconfTopologyListener> dataTreeChangeListenerRegistration;
+    private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
+    private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
+    private ListenerRegistration<TransportpceServicehandlerListener> servicehandlerlistenerRegistration;
     private final OrgOpenroadmServiceService serviceHandler;
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiListener tapiListener;
     private final TapiNetconfTopologyListener topologyListener;
     private final TransportpceTapinetworkutilsService tapiNetworkUtils;
+    private TapiPceListenerImpl pceListenerImpl;
+    private TapiRendererListenerImpl rendererListenerImpl;
+    private TapiServiceHandlerListenerImpl serviceHandlerListenerImpl;
+    private final NotificationService notificationService;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
                         OrgOpenroadmServiceService serviceHandler,
                         ServiceDataStoreOperations serviceDataStoreOperations, TapiListener tapiListener,
                         TapiNetconfTopologyListener topologyListener,
-                        TransportpceTapinetworkutilsService tapiNetworkUtils) {
+                        TransportpceTapinetworkutilsService tapiNetworkUtils,
+                        TapiPceListenerImpl pceListenerImpl, TapiRendererListenerImpl rendererListenerImpl,
+                        TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
+                        NotificationService notificationService) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.serviceHandler = serviceHandler;
@@ -71,6 +88,10 @@ public class TapiProvider {
         this.tapiListener = tapiListener;
         this.topologyListener = topologyListener;
         this.tapiNetworkUtils = tapiNetworkUtils;
+        this.pceListenerImpl = pceListenerImpl;
+        this.rendererListenerImpl = rendererListenerImpl;
+        this.serviceHandlerListenerImpl = serviceHandlerListenerImpl;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -91,7 +112,8 @@ public class TapiProvider {
         tapiInitialORMapping.performTopoInitialMapping();
         tapiInitialORMapping.performServInitialMapping();
 
-        TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler);
+        TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
+                pceListenerImpl, rendererListenerImpl, serviceHandlerListenerImpl);
         TapiTopologyImpl topo = new TapiTopologyImpl(tapiContext, topologyUtils);
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
@@ -105,6 +127,11 @@ public class TapiProvider {
         InstanceIdentifier<ServiceInterfacePoints> sipIID = InstanceIdentifier.create(ServiceInterfacePoints.class);
         dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(
             LogicalDatastoreType.CONFIGURATION, sipIID), tapiListener);
+        // Notification Listener
+        pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
+        rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
+        servicehandlerlistenerRegistration =
+                notificationService.registerNotificationListener(serviceHandlerListenerImpl);
     }
 
     /**
@@ -118,6 +145,9 @@ public class TapiProvider {
         if (tapiNetworkutilsServiceRpcRegistration != null) {
             tapiNetworkutilsServiceRpcRegistration.close();
         }
+        pcelistenerRegistration.close();
+        rendererlistenerRegistration.close();
+        servicehandlerlistenerRegistration.close();
         rpcRegistration.close();
     }
 
