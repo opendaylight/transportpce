@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb481675_8bb84cbd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-08T08:04:04Z",
+      "side": 1,
+      "message": "what about this ?\n\n            //case \"outOfService\":            \n            default:\n                return OperationalState.DISABLED;",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 32
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1098a0c1_0630052e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-08T08:04:04Z",
+      "side": 1,
+      "message": "please add a line after method declaration or ident + 4 parameters to separate them clearly from the method body",
+      "range": {
+        "startLine": 731,
+        "startChar": 0,
+        "endLine": 731,
+        "endChar": 36
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
