@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "c0887e3f_a5217003",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-08T10:37:38Z",
+      "side": 1,
+      "message": "Yes,sure, but here I prefer solution of PS4.",
+      "parentUuid": "990864b4_f488cb47",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 32
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1098a0c1_0630052e",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 3
