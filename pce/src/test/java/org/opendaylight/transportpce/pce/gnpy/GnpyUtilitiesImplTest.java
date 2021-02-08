@@ -25,6 +25,7 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -34,6 +35,9 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyStub;
 import org.opendaylight.transportpce.pce.utils.JsonUtil;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -65,9 +69,10 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     private GnpyUtilitiesImpl gnpyUtilitiesImpl;
     private NetworkTransactionImpl networkTransaction;
     private static HttpServer httpServer;
+    private GnpyConsumer gnpyConsumer;
 
     public GnpyUtilitiesImplTest() throws IOException {
-        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
+        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(getDataBroker()));
         JsonReader networkReader = null;
         JsonReader topoReader = null;
 
@@ -106,11 +111,17 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     }
 
+    @Before
+    public void initConsumer() {
+        gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998", "mylogin", "mypassword",
+                getDataStoreContextUtil().getBindingDOMCodecServices());
+    }
+
     @BeforeClass
     public static void init() {
         // here we cannot use JerseyTest as we already extends AbstractTest
         final ResourceConfig rc = new ResourceConfig(GnpyStub.class);
-        httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://127.0.0.1:8008"), rc);
+        httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:9998"), rc);
     }
 
     @AfterClass
@@ -122,7 +133,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
             throws InterruptedException, ExecutionException {
         InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(networkId))).build();
-        WriteTransaction dataWriteTransaction = this.getDataBroker().newWriteOnlyTransaction();
+        WriteTransaction dataWriteTransaction = getDataBroker().newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
         dataWriteTransaction.commit().get();
     }
@@ -131,7 +142,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     public void askNewPathFromGnpyNullResultTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                gnpyConsumer);
         assertNull("No hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(null));
 
     }
@@ -140,7 +151,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     public void askNewPathFromGnpyTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                gnpyConsumer);
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -158,7 +169,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                gnpyConsumer);
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();

@@ -17,12 +17,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveOutput;
@@ -61,15 +61,15 @@ public class PathComputationServiceImpl implements PathComputationService {
     private NetworkTransactionService networkTransactionService;
     private final ListeningExecutorService executor;
     private ServicePathRpcResult notification = null;
-    private BindingDOMCodecServices bindingDOMCodecServices;
+    private final GnpyConsumer gnpyConsumer;
 
     public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
                                       NotificationPublishService notificationPublishService,
-                                      BindingDOMCodecServices bindingDOMCodecServices) {
+                                      GnpyConsumer gnpyConsumer) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.gnpyConsumer = gnpyConsumer;
     }
 
     public void init() {
@@ -109,7 +109,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 String message = "";
                 sendNotifications(ServicePathNotificationTypes.CancelResourceReserve, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting cancelResourceReserve Request ...", null);
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs();
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer);
                 sendingPCE.cancelResourceReserve();
                 if (Boolean.TRUE.equals(sendingPCE.getSuccess())) {
                     message = "ResourceReserve cancelled !";
@@ -158,7 +158,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 String message = "";
                 String responseCode = "";
                 PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService,
-                        bindingDOMCodecServices);
+                        gnpyConsumer);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();
