@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "28b08219_8247cd12",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-08T10:55:31Z",
+      "side": 1,
+      "message": "So let\u0027s see if it triggers https://rules.sonarsource.com/java/RSPEC-1871 once merged",
+      "parentUuid": "c0887e3f_a5217003",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 32
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1098a0c1_0630052e",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 3
