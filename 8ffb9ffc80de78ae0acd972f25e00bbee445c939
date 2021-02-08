@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "990864b4_f488cb47",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-08T10:32:09Z",
+      "side": 1,
+      "message": "There are 3 cases here but 2 with identical operationals so they can be merged into default.\n\nIf you  want to absolutely deal explicitly with the OutOfService case, you can still remove the // and write\n\n            case \"inService\":\n                return OperationalState.ENABLED;\n            case \"outOfService\":\n            default:\n                return OperationalState.DISABLED;",
+      "parentUuid": "23b1c4b9_da13c816",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 32
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1098a0c1_0630052e",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 3
