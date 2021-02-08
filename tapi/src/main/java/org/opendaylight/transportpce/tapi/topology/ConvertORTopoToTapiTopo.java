@@ -444,16 +444,7 @@ public class ConvertORTopoToTapiTopo {
                     .setNodeEdgePointUuid(
                             this.uuidMap.get(String.join("+", this.ietfNodeId, I_OTSI, tp.getTpId().getValue())))
                     .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                    .NodeEdgePoint enep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-                    .node.rule.group.NodeEdgePointBuilder()
-                    .setTopologyUuid(tapiTopoUuid)
-                    .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, OTSI)))
-                    .setNodeEdgePointUuid(
-                            this.uuidMap.get(String.join("+", this.ietfNodeId, E_OTSI, tp.getTpId().getValue())))
-                    .build();
             nepList.put(inep.key(), inep);
-            nepList.put(enep.key(), enep);
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                     .setUuid(new Uuid(
                             UUID.nameUUIDFromBytes(("otsi node rule group " + count).getBytes(Charset.forName("UTF-8")))
