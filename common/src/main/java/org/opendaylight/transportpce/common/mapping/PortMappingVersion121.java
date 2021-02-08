@@ -84,10 +84,18 @@ import org.slf4j.LoggerFactory;
 public class PortMappingVersion121 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion121.class);
+    private static final Map<Direction, String> SUFFIX;
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaces openRoadmInterfaces;
+
+    static {
+        SUFFIX =  Map.of(
+            Direction.Tx, "TX",
+            Direction.Rx, "RX",
+            Direction.Bidirectional, "TXRX");
+    }
 
     public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         OpenRoadmInterfaces openRoadmInterfaces) {
@@ -222,7 +230,7 @@ public class PortMappingVersion121 {
                 switch (port.getPortQual()) {
 
                     case XpdrClient:
-                        String lcp0 = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
+                        String lcp0 = createXpdrLogicalConnectionPort(1, client, StringConstants.CLIENT_TOKEN);
                         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                         mappingMap.put(lcp0,
                             createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null));
@@ -232,15 +240,13 @@ public class PortMappingVersion121 {
 
                     case XpdrNetwork:
                         if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                            String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
+                            String lcp = createXpdrLogicalConnectionPort(1, line, StringConstants.NETWORK_TOKEN);
                             lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                             mappingMap.put(lcp,
                                 createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null));
                             line++;
                             continue;
                         }
-                        // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
-                        //      Some code alignment must be considered.
 
                         if (!checkPartnerPortNotNull(port)) {
                             LOG.warn("Error in the configuration of port {} of {} for {}",
@@ -276,22 +282,9 @@ public class PortMappingVersion121 {
                                 circuitPackName);
                             continue;
                         }
-                        String lcp1 = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
-                        String lcp2 = new StringBuilder("XPDR1-")
-                            .append(StringConstants.NETWORK_TOKEN)
-                            .append(line + 1)
-                            .toString();
-                        if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
-                            LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
-                            line += 2;
-                            continue;
-                        }
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
-                        lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
-                        mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName, lcp1,
-                            lcp2, null, null));
-                        mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2,
-                            cpOpt.get().getCircuitPackName(), lcp2, lcp1, null, null));
+                        putXpdrLcpsInMaps(line, nodeId, 1,
+                                circuitPackName, cpOpt.get().getCircuitPackName(), port, port2,
+                                lcpMap, mappingMap);
                         line += 2;
                         break;
 
@@ -498,25 +491,22 @@ public class PortMappingVersion121 {
     }
 
     private String createLogicalConnectionPort(Ports port, int index, int portIndex) {
-        String lcp = null;
-        switch (port.getPortDirection()) {
-            case Tx:
-                lcp = "SRG" + index + "-PP" + portIndex + "-TX";
-                break;
-            case Rx:
-                lcp = "SRG" + index + "-PP" + portIndex + "-RX";
-                break;
-            case Bidirectional:
-                lcp = "SRG" + index + "-PP" + portIndex + "-TXRX";
-                break;
-            default:
-                LOG.error("Unsupported port direction for port {} : {}", port, port.getPortDirection());
+        if (SUFFIX.containsKey(port.getPortDirection())) {
+            return String.join("-", "SRG" + index, "PP" + portIndex, SUFFIX.get(port.getPortDirection()));
         }
-        return lcp;
+        LOG.error("port {} : Unsupported port direction {}", port, port.getPortDirection());
+        return null;
     }
 
-    private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
-        List<Degree> degrees = new ArrayList<>();
+    private String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
+        return new StringBuilder("XPDR").append(xponderNb)
+                .append("-")
+                .append(token).append(lcpNb)
+                .toString();
+    }
+
+    private Map<Integer, Degree> getDegreesMap(String deviceId, Info ordmInfo) {
+        Map<Integer, Degree> degrees = new HashMap<>();
 
         // Get value for max degree from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
@@ -530,7 +520,7 @@ public class PortMappingVersion121 {
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
-                degrees.add(ordmDegreeObject.get());
+                degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
         LOG.info("Device {} has {} degree", deviceId, degrees.size());
@@ -539,21 +529,8 @@ public class PortMappingVersion121 {
 
     private Map<Integer, List<ConnectionPorts>> getPerDegreePorts(String deviceId, Info ordmInfo) {
         Map<Integer, List<ConnectionPorts>> conPortMap = new HashMap<>();
-        Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
-
-        for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
-            LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
-            Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (ordmDegreeObject.isPresent()) {
-                conPortMap.put(degreeCounter, new ArrayList<>(ordmDegreeObject.get()
-                        .nonnullConnectionPorts().values()));
-            }
-        }
-        LOG.info("Device {} has {} degree", deviceId, conPortMap.size());
+        getDegreesMap(deviceId, ordmInfo).forEach(
+            (index, degree) -> conPortMap.put(index, new ArrayList<>(degree.nonnullConnectionPorts().values())));
         return conPortMap;
     }
 
@@ -601,17 +578,13 @@ public class PortMappingVersion121 {
         return cpToInterfaceMap;
     }
 
-    private List<CpToDegree> getCpToDegreeList(List<Degree> degrees, String nodeId,
-            Map<String, String> interfaceList) {
+    private List<CpToDegree> getCpToDegreeList(Map<Integer, Degree> degrees, Map<String, String> interfaceList) {
         List<CpToDegree> cpToDegreeList = new ArrayList<>();
-        for (Degree degree : degrees) {
-            if (degree.getCircuitPacks() == null) {
-                continue;
-            }
+        for (Degree degree : degrees.values()) {
             LOG.info("Inside CP to degree list");
             cpToDegreeList.addAll(degree.nonnullCircuitPacks().values().stream()
                 .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(),
-                    degree.getDegreeNumber().toString(), nodeId, interfaceList))
+                    degree.getDegreeNumber().toString(), interfaceList))
                 .collect(Collectors.toList()));
         }
         return cpToDegreeList;
@@ -659,7 +632,7 @@ public class PortMappingVersion121 {
         }
     }
 
-    private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber, String nodeId,
+    private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber,
             Map<String, String> interfaceList) {
         return new CpToDegreeBuilder()
             .withKey(new CpToDegreeKey(circuitPackName))
@@ -734,11 +707,31 @@ public class PortMappingVersion121 {
         return mpBldr.build();
     }
 
+    private void putXpdrLcpsInMaps(int line, String nodeId,
+            Integer xponderNb,
+            String circuitPackName, String circuitPackName2, Ports port, Ports port2,
+            Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
+        String lcp1 = createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+        String lcp2 = createXpdrLogicalConnectionPort(xponderNb, line + 1, StringConstants.NETWORK_TOKEN);
+        if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
+            LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
+            return;
+        }
+        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
+        lcpMap.put(circuitPackName2 + '+' + port2.getPortName(), lcp2);
+        mappingMap.put(lcp1,
+                createXpdrMappingObject(nodeId, port, circuitPackName, lcp1, lcp2, null, null));
+        mappingMap.put(lcp2,
+                createXpdrMappingObject(nodeId, port2, circuitPackName2, lcp2, lcp1, null, null));
+        return;
+    }
+
+
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
-        List<Degree> degrees = getDegrees(nodeId, deviceInfo);
+        Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
-        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, nodeId, interfaceList);
+        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, interfaceList);
         LOG.info("Map looks like this {}", interfaceList);
         postPortMapping(nodeId, null, null, cpToDegreeList);
 
