@@ -586,16 +586,7 @@ public class ConvertORTopoToTapiTopo {
                     .setNodeEdgePointUuid(
                             this.uuidMap.get(String.join("+", this.ietfNodeId, I_OTSI, tp.getTpId().getValue())))
                     .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                    .NodeEdgePoint enep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-                    .node.rule.group.NodeEdgePointBuilder()
-                    .setTopologyUuid(tapiTopoUuid)
-                    .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, OTSI)))
-                    .setNodeEdgePointUuid(
-                            this.uuidMap.get(String.join("+", this.ietfNodeId, E_OTSI, tp.getTpId().getValue())))
-                    .build();
             nepList.put(inep.key(), inep);
-            nepList.put(enep.key(), enep);
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                     .setUuid(new Uuid(
                             UUID.nameUUIDFromBytes(("otsi node rule group " + count).getBytes(Charset.forName("UTF-8")))
@@ -645,7 +636,7 @@ public class ConvertORTopoToTapiTopo {
                     .build();
 
             OwnedNodeEdgePoint onep = createNep(oorNetworkPortList.get(i), Map.of(onedName.key(), onedName),
-                    LayerProtocolName.ODU, LayerProtocolName.DSR, true, String.join("+", this.ietfNodeId, I_ODU));
+                    LayerProtocolName.ODU, LayerProtocolName.DSR, false, String.join("+", this.ietfNodeId, I_ODU));
             onepl.put(onep.key(), onep);
         }
         // network nep creation on E_ODU node
@@ -661,7 +652,7 @@ public class ConvertORTopoToTapiTopo {
                     .build();
 
             OwnedNodeEdgePoint onep = createNep(oorNetworkPortList.get(i), Map.of(onedName.key(), onedName),
-                    LayerProtocolName.ODU, LayerProtocolName.DSR, false, String.join("+", this.ietfNodeId, E_ODU));
+                    LayerProtocolName.ODU, LayerProtocolName.DSR, true, String.join("+", this.ietfNodeId, E_ODU));
             onepl.put(onep.key(), onep);
         }
         // create NodeRuleGroup
@@ -671,13 +662,13 @@ public class ConvertORTopoToTapiTopo {
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
                     nepList = new HashMap<>();
             for (TpId tp : nbl.getTpList()) {
-                if (this.uuidMap.containsKey(String.join("+", this.ietfNodeId, E_ODU, tp.getValue()))) {
+                if (this.uuidMap.containsKey(String.join("+", this.ietfNodeId, I_ODU, tp.getValue()))) {
                     org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
                         nep = new org.opendaylight.yang.gen.v1.urn
                             .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
                             .setTopologyUuid(tapiTopoUuid)
                             .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, DSR)))
-                            .setNodeEdgePointUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, E_ODU,
+                            .setNodeEdgePointUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, I_ODU,
                                     tp.getValue())))
                             .build();
                     nepList.put(nep.key(), nep);
@@ -971,7 +962,7 @@ public class ConvertORTopoToTapiTopo {
     private void createTapiTransitionalLinks() {
         for (TerminationPoint tp : this.oorNetworkPortList) {
             Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
-            String sourceKey = String.join("+", this.ietfNodeId, E_ODU, tp.getTpId().getValue());
+            String sourceKey = String.join("+", this.ietfNodeId, I_ODU, tp.getTpId().getValue());
             Uuid sourceUuidTp = this.uuidMap.get(sourceKey);
             String destKey = String.join("+", this.ietfNodeId, I_OTSI, tp.getTpId().getValue());
             Uuid destUuidTp = this.uuidMap.get(destKey);
