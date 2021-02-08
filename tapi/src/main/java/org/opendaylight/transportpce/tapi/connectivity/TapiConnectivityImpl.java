@@ -11,16 +11,28 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
-import org.opendaylight.transportpce.tapi.utils.MappingUtils;
+import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.BandwidthProfileBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.TotalSizeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceOutputBuilder;
@@ -34,16 +46,16 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ServiceType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.UpdateConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.UpdateConnectivityServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.Connection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.ConnectionBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.CapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.output.ServiceBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -59,74 +71,122 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImpl.class);
 
     private OrgOpenroadmServiceService serviceHandler;
+    private final TapiContext tapiContext;
+    private final ConnectivityUtils connectivityUtils;
+    private TapiPceListenerImpl pceListenerImpl;
+    private TapiRendererListenerImpl rendererListenerImpl;
+    private TapiServiceHandlerListenerImpl serviceHandlerListenerImpl;
 
-    public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler) {
+    public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler, TapiContext tapiContext,
+                                ConnectivityUtils connectivityUtils, TapiPceListenerImpl pceListenerImpl,
+                                TapiRendererListenerImpl rendererListenerImpl,
+                                TapiServiceHandlerListenerImpl serviceHandlerListenerImpl) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
+        this.tapiContext = tapiContext;
+        this.connectivityUtils = connectivityUtils;
+        this.pceListenerImpl = pceListenerImpl;
+        this.rendererListenerImpl = rendererListenerImpl;
+        this.serviceHandlerListenerImpl = serviceHandlerListenerImpl;
     }
 
     @Override
     public ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> createConnectivityService(
         CreateConnectivityServiceInput input) {
+        // TODO: later version of TAPI models include Name as an input parameter in connectivity.yang
         LOG.info("RPC create-connectivity received: {}", input.getEndPoint());
+        Uuid serviceUuid = new Uuid(UUID.randomUUID().toString());
+        this.pceListenerImpl.setInput(input);
+        this.pceListenerImpl.setServiceUuid(serviceUuid);
+        this.rendererListenerImpl.setServiceUuid(serviceUuid);
+        ListenableFuture<RpcResult<ServiceCreateOutput>> output = null;
         OperationResult validationResult = CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(
-            input);
+                input);
         if (validationResult.isSuccess()) {
             LOG.info("input parameter of RPC create-connectivity are being handled");
-            // check uuid of SIP in the map
-            Map<Uuid, GenericServiceEndpoint> map = MappingUtils.getMap();
-
-            if (map.containsKey(input.getEndPoint().values().stream().findFirst().get()
-                    .getServiceInterfacePoint().getServiceInterfacePointUuid())
-                && map.containsKey(input.getEndPoint().values().stream().skip(1).findFirst().get()
-                    .getServiceInterfacePoint()
-                    .getServiceInterfacePointUuid())) {
-                ServiceCreateInput sci = ConnectivityUtils.buildServiceCreateInput(
-                    map.get(input.getEndPoint().values().stream().findFirst().get()
-                        .getServiceInterfacePoint()
-                        .getServiceInterfacePointUuid()),
-                    map.get(input.getEndPoint().values().stream().skip(1).findFirst().get()
-                        .getServiceInterfacePoint()
-                        .getServiceInterfacePointUuid()));
-                ListenableFuture<RpcResult<ServiceCreateOutput>> output = this.serviceHandler.serviceCreate(sci);
+            // check uuid of SIP in tapi context
+            Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.tapiContext.getTapiContext()
+                    .getServiceInterfacePoint();
+            if (sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst().get()
+                    .getServiceInterfacePoint().getServiceInterfacePointUuid()))
+                && sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
+                    .findFirst().get().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
+                ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
+                output = this.serviceHandler.serviceCreate(sci);
                 if (!output.isDone()) {
                     return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().buildFuture();
                 }
             } else {
                 LOG.error("Unknown UUID");
             }
-
         }
-
-        Map<EndPointKey, EndPoint> endPointList = new HashMap<>();
-        EndPoint endpoint1 = new EndPointBuilder()
-            .setLocalId(UUID.randomUUID().toString())
-            .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(new Uuid(UUID
-                .randomUUID().toString())).build())
-            .build();
-        EndPoint endpoint2 = new EndPointBuilder()
-            .setLocalId(UUID.randomUUID().toString())
-            .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(new Uuid(UUID
-                .randomUUID().toString())).build())
-            .build();
-        endPointList.put(endpoint1.key(), endpoint1);
-        endPointList.put(endpoint2.key(), endpoint2);
-        Connection connection = new ConnectionBuilder().setConnectionUuid(new Uuid(UUID.randomUUID().toString()))
-            .build();
+        try {
+            if (output == null) {
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().buildFuture();
+            }
+            if (output.get().getResult().getConfigurationResponseCommon().getResponseCode()
+                    .equals(ResponseCodes.RESPONSE_FAILED)) {
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().buildFuture();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error checking respons code of service create", e);
+        }
+        // TODO: Connections and states should be created/updated when the pce and renderer are done :)
+        Map<EndPointKey, EndPoint> endPointList = createEndPoints(input.getEndPoint());
+        Name name = new NameBuilder()
+                .setValueName("Connectivity Service Name")
+                .setValue(serviceUuid.getValue())
+                .build();
         ConnectivityService service = new ConnectivityServiceBuilder()
-            .setUuid(new Uuid(UUID.randomUUID().toString()))
-            .build();
-        Name serviceName = new NameBuilder().setValueName("Service Name").setValue("SENDATE Service 1").build();
-        CreateConnectivityServiceOutput output = new CreateConnectivityServiceOutputBuilder()
-            .setService(new ServiceBuilder(service)
-                .setUuid(new Uuid(UUID.randomUUID().toString()))
-                .setName(Map.of(serviceName.key(), serviceName))
-                .setServiceLayer(input.getEndPoint().values().stream().findFirst().get().getLayerProtocolName())
+                .setUuid(serviceUuid)
+                .setAdministrativeState(AdministrativeState.LOCKED)
+                .setOperationalState(OperationalState.DISABLED)
+                .setLifecycleState(LifecycleState.POTENTIALAVAILABLE)
+                .setUuid(serviceUuid)
+                .setServiceLayer(input.getConnectivityConstraint().getServiceLayer())
+                .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY)
+                .setConnectivityDirection(ForwardingDirection.BIDIRECTIONAL)
+                .setName(Map.of(name.key(), name))
+                .setConnection(new HashMap<>())
                 .setEndPoint(endPointList)
-                .setConnection(Map.of(connection.key(), connection))
-                .build())
             .build();
-        return RpcResultBuilder.success(output).buildFuture();
+        // add to tapi context
+        this.tapiContext.updateConnectivityContext(Map.of(service.key(), service), null);
+        // return ConnectivityServiceCreateOutput
+        return RpcResultBuilder.success(new CreateConnectivityServiceOutputBuilder()
+                .setService(new ServiceBuilder(service).build()).build()).buildFuture();
+    }
+
+    private Map<EndPointKey, EndPoint> createEndPoints(
+            Map<org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPointKey,
+                org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint> endPoints) {
+        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
+        for (org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint ep:
+                endPoints.values()) {
+            EndPoint endpoint = new EndPointBuilder()
+                    .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
+                            .setServiceInterfacePointUuid(ep.getServiceInterfacePoint().getServiceInterfacePointUuid())
+                            .build())
+                    .setName(ep.getName())
+                    .setAdministrativeState(ep.getAdministrativeState())
+                    .setDirection(ep.getDirection())
+                    .setLifecycleState(ep.getLifecycleState())
+                    .setOperationalState(ep.getOperationalState())
+                    .setLayerProtocolName(ep.getLayerProtocolName())
+                    .setCapacity(new CapacityBuilder()
+                        .setTotalSize(new TotalSizeBuilder().build())
+                        .setBandwidthProfile(new BandwidthProfileBuilder().build()) // TODO: implement bandwidth profile
+                            .build())
+                    .setProtectionRole(ep.getProtectionRole())
+                    .setRole(ep.getRole())
+                    .setLocalId(ep.getLocalId())
+                    .build();
+            endPointMap.put(endpoint.key(), endpoint);
+        }
+        return endPointMap;
     }
 
     @Override
