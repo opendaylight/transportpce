@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type.NumUnnumHop;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
@@ -39,10 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
-import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.common.Uint16;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,19 +53,9 @@ public class GnpyResult {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
     private Response response = null;
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
-    private JsonStringConverter<Result> converter;
 
-    public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo,
-            BindingDOMCodecServices bindingDOMCodecServices) throws GnpyException {
+    public GnpyResult(Result result, GnpyTopoImpl gnpyTopo) throws GnpyException {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
-        this.converter = new JsonStringConverter<>(bindingDOMCodecServices);
-        // Create the data object
-        QName pathQname = QName.create("gnpy:path", "2020-09-09", "result");
-        LOG.debug("the Qname is {} / namesapce {} ; module {}; ", pathQname, pathQname.getNamespace(),
-            pathQname.getModule());
-        YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-        Result result = converter.createDataObjectFromJsonString(yangId, gnpyResponseString,
-                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
         List<Response> responses = new ArrayList<>(result.nonnullResponse().values());
         if (responses.isEmpty()) {
             throw new GnpyException("In GnpyResult: the response from GNpy is null!");

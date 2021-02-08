@@ -11,14 +11,10 @@ package org.opendaylight.transportpce.pce.gnpy;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyStub;
 
 
 public class JerseyServer extends JerseyTest {
-
-    static {
-        //we must hardcode port because it's hardcoded in ConnectToGnpyServer
-        System.setProperty("jersey.config.test.container.port", "8008");
-    }
 
     @Override
     protected Application configure() {
