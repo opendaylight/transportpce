@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.connectivity;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +29,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.Service;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.SubrateEthSlaBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
@@ -46,6 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.Node;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.CapacityUnit;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
@@ -61,7 +66,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ProtectionRole;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ServiceType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPointKey;
@@ -77,6 +84,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.CapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.ConnectivityConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointKey;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
@@ -100,6 +111,8 @@ public final class ConnectivityUtils {
     private static final String OTSI_MC = "OTSi_MEDIA_CHANNEL";
     private static final String TP = "TerminationPoint";
     private static final String NODE = "Node";
+    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+        .getBytes(Charset.forName("UTF-8"))).toString());
     private static final Logger LOG = LoggerFactory.getLogger(ConnectivityUtils.class);
 
     private final ServiceDataStoreOperations serviceDataStoreOperations;
@@ -280,11 +293,32 @@ public final class ConnectivityUtils {
             .setLifecycleState(LifecycleState.INSTALLED)
             .setUuid(new Uuid(UUID.nameUUIDFromBytes(service.getServiceName().getBytes(Charset.forName("UTF-8")))
                 .toString()))
+            .setServiceLayer(mapServiceLayer(serviceAEnd.getServiceFormat()))
+            .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY)
             .setConnectivityDirection(ForwardingDirection.BIDIRECTIONAL)
             .setName(Map.of(name.key(), name))
             .setConnection(connMap)
             .setEndPoint(endPointMap)
             .build();
+    }
+
+    private LayerProtocolName mapServiceLayer(ServiceFormat serviceFormat) {
+        LayerProtocolName serviceLayer = null;
+        switch (serviceFormat) {
+            case OC:
+            case OTU:
+                serviceLayer = LayerProtocolName.PHOTONICMEDIA;
+                break;
+            case ODU:
+                serviceLayer = LayerProtocolName.ODU;
+                break;
+            case Ethernet:
+                serviceLayer = LayerProtocolName.DSR;
+                break;
+            default:
+                LOG.info("Service layer mapping not supported for {}", serviceFormat.getName());
+        }
+        return serviceLayer;
     }
 
     private Map<ConnectionKey, Connection> createConnectionsFromService(
@@ -876,10 +910,17 @@ public final class ConnectivityUtils {
             default:
                 LOG.error("Service Format not supported");
         }
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.local._class.Name name =
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.local._class.NameBuilder()
+                        .setValueName("OpenROADM info").setValue(String.join("-",
+                        serviceZEnd.getClli(), serviceZEnd.getTxDirection().getPort().getPortDeviceName(),
+                        serviceZEnd.getTxDirection().getPort().getPortName()))
+                        .build();
         return endPointBuilder
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
                 .setServiceInterfacePointUuid(sipUuid)
                 .build())
+            .setName(Map.of(name.key(), name))
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setDirection(PortDirection.BIDIRECTIONAL)
             .setLifecycleState(LifecycleState.INSTALLED)
@@ -924,10 +965,17 @@ public final class ConnectivityUtils {
             default:
                 LOG.error("Service Format not supported");
         }
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.local._class.Name name =
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.local._class.NameBuilder()
+                        .setValueName("OpenROADM info").setValue(String.join("-",
+                        serviceAEnd.getClli(), serviceAEnd.getTxDirection().getPort().getPortDeviceName(),
+                        serviceAEnd.getTxDirection().getPort().getPortName()))
+                        .build();
         return endPointBuilder
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
                 .setServiceInterfacePointUuid(sipUuid)
                 .build())
+            .setName(Map.of(name.key(), name))
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setDirection(PortDirection.BIDIRECTIONAL)
             .setLifecycleState(LifecycleState.INSTALLED)
@@ -1120,5 +1168,283 @@ public final class ConnectivityUtils {
     private String getIdBasedOnModelVersion(String nodeid) {
         return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*") ? String.join("-", nodeid.split("-")[0], nodeid.split("-")[1])
                                                         : nodeid.split("-")[0];
+    }
+
+    public ServiceCreateInput createORServiceInput(CreateConnectivityServiceInput input, Uuid serviceUuid) {
+        // TODO: not taking into account all the constraints. Only using EndPoints and Connectivity Constraint.
+        Map<org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPointKey,
+            org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint>
+            endPointMap = input.getEndPoint();
+        ConnectivityConstraint constraint = input.getConnectivityConstraint();
+        ConnectionType connType = null;
+        ServiceFormat serviceFormat = null;
+        String nodeAid = String.join("+", endPointMap.values().stream().findFirst().get().getLocalId(), DSR);
+        String nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().get().getLocalId(), DSR);
+        LOG.info("Node a = {}", nodeAid);
+        LOG.info("Node z = {}", nodeZid);
+        switch (constraint.getServiceLayer().getIntValue()) {
+            case 0:
+                LOG.info("ODU");
+                connType = ConnectionType.Infrastructure;
+                serviceFormat = ServiceFormat.ODU;
+                break;
+            case 2:
+                LOG.info("DSR");
+                connType = ConnectionType.Service;
+                serviceFormat = ServiceFormat.Ethernet;
+                break;
+            case 3:
+                LOG.info("PHOTONIC");
+                connType = getConnectionTypePhtnc(endPointMap.values());
+                serviceFormat = getServiceFormatPhtnc(endPointMap.values());
+                if (serviceFormat.equals(ServiceFormat.OC)) {
+                    nodeAid = String.join("+", endPointMap.values().stream().findFirst().get().getLocalId(),
+                        PHTNC_MEDIA);
+                    nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().get().getLocalId(),
+                        PHTNC_MEDIA);
+                } else {
+                    nodeAid = String.join("+", endPointMap.values().stream().findFirst().get().getLocalId(), OTSI);
+                    nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().get().getLocalId(),
+                        OTSI);
+                }
+                LOG.info("Node a photonic = {}", nodeAid);
+                LOG.info("Node z photonic = {}", nodeZid);
+                break;
+            default:
+                LOG.info("Service type {} not supported", constraint.getServiceLayer().getName());
+        }
+        // map endpoints into service end points. Map the type of service from TAPI to OR
+        ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(endPointMap.values().stream().findFirst().get(),
+            serviceFormat, nodeAid);
+        ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(endPointMap.values().stream().skip(1).findFirst().get(),
+            serviceFormat, nodeZid);
+        if (serviceAEnd == null || serviceZEnd == null) {
+            LOG.error("Couldnt map endpoints to service end");
+            return null;
+        }
+        LOG.info("Service a end = {}", serviceAEnd.toString());
+        LOG.info("Service z end = {}", serviceZEnd.toString());
+        return new ServiceCreateInputBuilder()
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setConnectionType(connType)
+            .setServiceName(serviceUuid.getValue())
+            .setCommonId("common id")
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request-1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url")
+                .setRequestSystemId("appname")
+                .build())
+            .setCustomer("customer")
+            .setDueDate(DateAndTime.getDefaultInstance("2018-06-15T00:00:01Z"))
+            .setOperatorContact("pw1234")
+            .build();
+    }
+
+    private ServiceZEnd tapiEndPointToServiceZPoint(
+        org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint endPoint,
+        ServiceFormat serviceFormat, String nodeZid) {
+        // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
+        //  Not the rest which is needed in the txPortDeviceName.
+        //  It could be obtained from the SIP which has the NEP and includes all the OR name.
+        Uuid sipUuid = endPoint.getServiceInterfacePoint().getServiceInterfacePointUuid();
+        // Todo -> need to find the NEP associated to that SIP
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeZid.getBytes(Charset.forName("UTF-8"))).toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node =
+            this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
+        if (node == null) {
+            LOG.info("Node not found in datastore");
+            return null;
+        }
+        OwnedNodeEdgePoint nep = null;
+        for (OwnedNodeEdgePoint onep : node.getOwnedNodeEdgePoint().values()) {
+            if (onep.getMappedServiceInterfacePoint() == null) {
+                continue;
+            }
+            if (onep.getMappedServiceInterfacePoint().containsKey(new MappedServiceInterfacePointKey(sipUuid))) {
+                nep = onep;
+                break;
+            }
+        }
+        if (nep == null) {
+            LOG.info("Nep not found in datastore");
+            return null;
+        }
+        String nodeName = endPoint.getName().values().stream().findFirst().get().getValue();
+        // TODO --> get clli from datastore?
+        String clli = "NodeSC";
+        String nodeid = String.join("-", nodeName.split("-")[0], nodeName.split("-")[1]);
+        String nepName = nep.getName().values().stream().findFirst().get().getValue();
+        String txPortDeviceName = nepName.split("\\+")[0];
+        String txPortName = nepName.split("\\+")[2];
+        String rxPortDeviceName = txPortDeviceName;
+        String rxPortName = txPortName;
+        LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
+        ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
+            .setClli(clli)
+            .setNodeId(new NodeIdType(nodeid))
+            .setOpticType(OpticTypes.Gray)
+            .setServiceFormat(serviceFormat)
+            .setServiceRate(Uint32.valueOf(100))
+            .setSubrateEthSla(new SubrateEthSlaBuilder().setSubrateEthSla(
+                new org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.service.types.rev190531.subrate.eth.sla.SubrateEthSlaBuilder()
+                    .setCommittedBurstSize(Uint16.valueOf(64))
+                    .setCommittedInfoRate(Uint32.valueOf(100000))
+                    .build())
+                .build())
+            .setTxDirection(new TxDirectionBuilder()
+                .setPort(new PortBuilder()
+                    .setPortDeviceName(txPortDeviceName)
+                    .setPortName(txPortName)
+                    .setPortRack(PORT_RACK_VALUE)
+                    .setPortShelf("00")
+                    .setPortType(PORT_TYPE)
+                    .build())
+                .setLgx(new LgxBuilder()
+                    .setLgxDeviceName(LGX_DEVICE_NAME)
+                    .setLgxPortName(LGX_PORT_NAME)
+                    .setLgxPortRack(PORT_RACK_VALUE)
+                    .setLgxPortShelf("00")
+                    .build())
+                .build())
+            .setRxDirection(new RxDirectionBuilder()
+                .setPort(new PortBuilder()
+                    .setPortDeviceName(rxPortDeviceName)
+                    .setPortName(rxPortName)
+                    .setPortRack(PORT_RACK_VALUE)
+                    .setPortShelf("00")
+                    .setPortType(PORT_TYPE)
+                    .build())
+                .setLgx(new LgxBuilder()
+                    .setLgxDeviceName(LGX_DEVICE_NAME)
+                    .setLgxPortName(LGX_PORT_NAME)
+                    .setLgxPortRack(PORT_RACK_VALUE)
+                    .setLgxPortShelf("00")
+                    .build())
+                .build());
+        if (serviceFormat.equals(ServiceFormat.ODU)) {
+            serviceZEndBuilder.setOduServiceRate(ODU4.class);
+        }
+        if (serviceFormat.equals(ServiceFormat.OTU)) {
+            serviceZEndBuilder.setOtuServiceRate(OTU4.class);
+        }
+        return serviceZEndBuilder.build();
+    }
+
+    private ServiceAEnd tapiEndPointToServiceAPoint(
+        org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint endPoint,
+        ServiceFormat serviceFormat, String nodeAid) {
+        // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
+        //  Not the rest which is needed in the txPortDeviceName.
+        //  It could be obtained from the SIP which has the NEP and includes all the OR name.
+        Uuid sipUuid = endPoint.getServiceInterfacePoint().getServiceInterfacePointUuid();
+        // Todo -> need to find the NEP associated to that SIP
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeAid.getBytes(Charset.forName("UTF-8"))).toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node =
+            this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
+        if (node == null) {
+            LOG.info("Node not found in datastore");
+            return null;
+        }
+        OwnedNodeEdgePoint nep = null;
+        for (OwnedNodeEdgePoint onep : node.getOwnedNodeEdgePoint().values()) {
+            if (onep.getMappedServiceInterfacePoint() == null) {
+                continue;
+            }
+            if (onep.getMappedServiceInterfacePoint().containsKey(new MappedServiceInterfacePointKey(sipUuid))) {
+                nep = onep;
+                break;
+            }
+        }
+        if (nep == null) {
+            LOG.info("Nep not found in datastore");
+            return null;
+        }
+        String nodeName = endPoint.getName().values().stream().findFirst().get().getValue();
+        // TODO --> get clli from datastore?
+        String clli = "NodeSA";
+        String nodeid = String.join("-", nodeName.split("-")[0], nodeName.split("-")[1]);
+        String nepName = nep.getName().values().stream().findFirst().get().getValue();
+        String txPortDeviceName = nepName.split("\\+")[0];
+        String txPortName = nepName.split("\\+")[2];
+        String rxPortDeviceName = txPortDeviceName;
+        String rxPortName = txPortName;
+        LOG.info("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
+        ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
+            .setClli(clli)
+            .setNodeId(new NodeIdType(nodeid))
+            .setOpticType(OpticTypes.Gray)
+            .setServiceFormat(serviceFormat)
+            .setServiceRate(Uint32.valueOf(100))
+            .setSubrateEthSla(new SubrateEthSlaBuilder().setSubrateEthSla(
+                new org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.service.types.rev190531.subrate.eth.sla.SubrateEthSlaBuilder()
+                    .setCommittedBurstSize(Uint16.valueOf(64))
+                    .setCommittedInfoRate(Uint32.valueOf(100000))
+                    .build())
+                .build())
+            .setTxDirection(new TxDirectionBuilder()
+                .setPort(new PortBuilder()
+                    .setPortDeviceName(txPortDeviceName)
+                    .setPortName(txPortName)
+                    .setPortRack(PORT_RACK_VALUE)
+                    .setPortShelf("00")
+                    .setPortType(PORT_TYPE)
+                    .build())
+                .setLgx(new LgxBuilder()
+                    .setLgxDeviceName(LGX_DEVICE_NAME)
+                    .setLgxPortName(LGX_PORT_NAME)
+                    .setLgxPortRack(PORT_RACK_VALUE)
+                    .setLgxPortShelf("00")
+                    .build())
+                .build())
+            .setRxDirection(new RxDirectionBuilder()
+                .setPort(new PortBuilder()
+                    .setPortDeviceName(rxPortDeviceName)
+                    .setPortName(rxPortName)
+                    .setPortRack(PORT_RACK_VALUE)
+                    .setPortShelf("00")
+                    .setPortType(PORT_TYPE)
+                    .build())
+                .setLgx(new LgxBuilder()
+                    .setLgxDeviceName(LGX_DEVICE_NAME)
+                    .setLgxPortName(LGX_PORT_NAME)
+                    .setLgxPortRack(PORT_RACK_VALUE)
+                    .setLgxPortShelf("00")
+                    .build())
+                .build());
+        if (serviceFormat.equals(ServiceFormat.ODU)) {
+            serviceAEndBuilder.setOduServiceRate(ODU4.class);
+        }
+        if (serviceFormat.equals(ServiceFormat.OTU)) {
+            serviceAEndBuilder.setOtuServiceRate(OTU4.class);
+        }
+        return serviceAEndBuilder.build();
+    }
+
+    private ConnectionType getConnectionTypePhtnc(Collection<org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint> endPoints) {
+        if (endPoints.stream().anyMatch(ep -> ep.getName().values().stream()
+                .anyMatch(name -> name.getValue().contains("ROADM")))) {
+            // EndPoints are ROADMs
+            return ConnectionType.RoadmLine;
+        }
+        // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
+        return ConnectionType.Infrastructure;
+    }
+
+    private ServiceFormat getServiceFormatPhtnc(Collection<org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint> endPoints) {
+        if (endPoints.stream().anyMatch(ep -> ep.getName().values().stream()
+                .anyMatch(name -> name.getValue().contains("ROADM")))) {
+            // EndPoints are ROADMs
+            return ServiceFormat.OC;
+        }
+        // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
+        return ServiceFormat.OTU;
     }
 }
