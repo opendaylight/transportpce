@@ -43,6 +43,8 @@ import org.opendaylight.transportpce.olm.power.PowerMgmt;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
@@ -105,10 +107,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
 
         LOG.info("Creating PCE beans ...");
+        // TODO: pass those parameters through command line
+        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
+                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
         PathComputationService pathComputationService = new PathComputationServiceImpl(
                 networkTransaction,
                 lightyServices.getBindingNotificationPublishService(),
-                lightyServices.getAdapterContext().currentSerializer()
+                gnpyConsumer
                 );
         pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
