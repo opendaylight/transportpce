@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "23b1c4b9_da13c816",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-08T09:21:32Z",
+      "side": 1,
+      "message": "Not very keen on this kind of tweaks which do not promote understanding. Since there are only 2 cases, the switch case is indeed not the most suitable structure here. Replaced",
+      "parentUuid": "cb481675_8bb84cbd",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 32
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1098a0c1_0630052e",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a38a57d5_4c3fb856",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-08T09:21:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1098a0c1_0630052e",
+      "range": {
+        "startLine": 731,
+        "startChar": 0,
+        "endLine": 731,
+        "endChar": 36
+      },
+      "revId": "8ffb9ffc80de78ae0acd972f25e00bbee445c939",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
