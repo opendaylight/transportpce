@@ -15,14 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.GnpyTopoImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
-import org.opendaylight.transportpce.pce.utils.PceTestUtils;
-import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.PathBandwidth;
@@ -88,17 +84,6 @@ public class PathComputationServiceImplTest extends AbstractTest {
                 pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
 
     }
-
-    @Test(expected = Exception.class)
-    public void generateGnpyResponse() throws Exception {
-        PceTestUtils.writeNetworkIntoDataStore(dataBroker, dataStoreContext, TransactionUtils.getNetworkForSpanLoss());
-        GnpyResult gnpyResult2 =
-                new GnpyResult("A-to-Z",
-                        new GnpyTopoImpl(new NetworkTransactionImpl(
-                                new RequestProcessor(dataBroker))), null);
-        pathComputationServiceImpl.generateGnpyResponse(gnpyResult2.getResponse(), "A-to-Z");
-    }
-
 
     @After
     public void destroy() {

@@ -8,15 +8,14 @@
 
 package org.opendaylight.transportpce.pce;
 
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
-import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
 import org.opendaylight.transportpce.pce.gnpy.GnpyException;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.GnpyUtilitiesImpl;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.graph.PceGraph;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -59,22 +58,23 @@ public class PceSendingPceRPCs {
     private Boolean success;
     private String message;
     private String responseCode;
-    private BindingDOMCodecServices bindingDOMCodecServices;
+    private final GnpyConsumer gnpyConsumer;
 
-    public PceSendingPceRPCs() {
+    public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
+        this.gnpyConsumer = gnpyConsumer;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
-        NetworkTransactionService networkTransaction, BindingDOMCodecServices bindingDOMCodecServices) {
+        NetworkTransactionService networkTransaction, GnpyConsumer gnpyConsumer) {
+        this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
         this.networkTransaction = networkTransaction;
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
     }
 
     public void cancelResourceReserve() {
@@ -155,10 +155,9 @@ public class PceSendingPceRPCs {
 
         //Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
         try {
-            ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
-            if (connectToGnpy.isGnpyURLExist()) {
+            if (gnpyConsumer.isAvailable()) {
                 GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
-                        bindingDOMCodecServices);
+                        gnpyConsumer);
                 if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;
