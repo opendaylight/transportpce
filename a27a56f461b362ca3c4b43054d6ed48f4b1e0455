@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "917176ea_2fe888cd",
+        "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-02-09T17:06:43Z",
+      "side": 1,
+      "message": "yes we could do it the same way as it is done in nbinotifications feature and dmaap client feature",
+      "parentUuid": "067a406a_93e28cbc",
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc71d53b_207f802b",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
         "patchSetId": 3
