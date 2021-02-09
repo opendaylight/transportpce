@@ -89,6 +89,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.Ports1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -864,7 +867,7 @@ public class PortMappingVersion710 {
         return mpBldr.build();
     }
 
-    private Mapping createXpdrMappingObject(String nodeId, Ports ports, String circuitPackName,
+    private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
             XpdrNodeTypes xpdrNodeType) {
 
@@ -880,17 +883,27 @@ public class PortMappingVersion710 {
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
-                .setSupportingPort(ports.getPortName())
-                .setPortDirection(ports.getPortDirection().getName())
+                .setSupportingPort(port.getPortName())
+                .setPortDirection(port.getPortDirection().getName())
                 .setLcpHashVal(FnvUtils.fnv1_64(nodeIdLcp));
-        if (ports.getPortQual() != null) {
-            mpBldr.setPortQual(ports.getPortQual().getName());
+        if (port.getPortQual() != null) {
+            mpBldr.setPortQual(port.getPortQual().getName());
         }
         if (xpdrNodeType != null) {
             mpBldr.setXponderType(xpdrNodeType);
         }
         if (partnerLcp != null) {
             mpBldr.setPartnerLcp(partnerLcp);
+        }
+        if (port.augmentation(Ports1.class) != null && port.augmentation(Ports1.class).getPortCapabilities() != null) {
+            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supIfCapMap = port
+                .augmentation(Ports1.class).getPortCapabilities().nonnullSupportedInterfaceCapability();
+            for (SupportedInterfaceCapability sic : supIfCapMap.values()) {
+                supportedIntf.add(sic.getIfCapType());
+            }
+            mpBldr.setSupportedInterfaceCapability(supportedIntf);
         }
         return mpBldr.build();
     }
