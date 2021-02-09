@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c80cf9b5_0e85e705",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-09T16:21:45Z",
+      "side": 1,
+      "message": "yes",
+      "range": {
+        "startLine": 110,
+        "startChar": 8,
+        "endLine": 110,
+        "endChar": 59
+      },
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cad8e690_152b8a81",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-09T16:21:45Z",
+      "side": 1,
+      "message": "indentation",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 67
+      },
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c66abb8_1cbc87f5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyResource.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-09T16:21:45Z",
+      "side": 1,
+      "message": "this is the correct path.\nThough, I noticed the docker images in tox.ini is not aligned since it declares a msileading version 1.2 .\nIsn\u0027t it the occasion to remediate at this discrepancy by publishing a new docker image ?\n\n+ Ahmed for his opinion",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "067a406a_93e28cbc",
+        "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-09T16:21:45Z",
+      "side": 1,
+      "message": "This is clearly much better.\nI wonder whether they would be a way to declare this into karaf features configuration.",
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc71d53b_207f802b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-09T16:21:45Z",
+      "side": 1,
+      "message": "why not for test purposes but something like mylogin, mypassword looks more adapted to me.",
+      "range": {
+        "startLine": 43,
+        "startChar": 58,
+        "endLine": 43,
+        "endChar": 59
+      },
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
