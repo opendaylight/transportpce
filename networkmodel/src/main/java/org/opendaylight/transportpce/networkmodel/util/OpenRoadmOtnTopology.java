@@ -62,8 +62,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
@@ -601,28 +603,32 @@ public final class OpenRoadmOtnTopology {
         for (Mapping mapping : mappings) {
             // openroadm-otn-topoology augmentation
             Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supIfMap = new HashMap<>();
-            for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
-                SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                    .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa)))
-                    .setIfCapType(convertSupIfCapa(supInterCapa))
+            TerminationPoint1Builder otnTp1Bldr = new TerminationPoint1Builder();
+            if (mapping.getSupportedInterfaceCapability() != null) {
+                XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
+                for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
+                    SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
+                        .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa)))
+                        .setIfCapType(convertSupIfCapa(supInterCapa))
+                        .build();
+                    supIfMap.put(supIfCapa.key(), supIfCapa);
+                }
+                TpSupportedInterfaces tpSupIf = new TpSupportedInterfacesBuilder()
+                    .setSupportedInterfaceCapability(supIfMap)
                     .build();
-                supIfMap.put(supIfCapa.key(), supIfCapa);
+                otnTp1Bldr.setTpSupportedInterfaces(tpSupIf);
+                if (withRate) {
+                    xtpcaBldr.setRate(fixRate(mapping.getSupportedInterfaceCapability().get(0)));
+                    otnTp1Bldr.setXpdrTpPortConnectionAttributes(xtpcaBldr.build());
+                }
+            } else {
+                LOG.warn("mapping {} of node {} has no if-cap-type", mapping.getLogicalConnectionPoint(),
+                    node.getNodeId());
             }
-            TpSupportedInterfaces tpSupIf = new TpSupportedInterfacesBuilder()
-                .setSupportedInterfaceCapability(supIfMap)
-                .build();
-            XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
-            if (withRate) {
-                xtpcaBldr.setRate(fixRate(mapping.getSupportedInterfaceCapability().get(0)));
-            }
-            TerminationPoint1 otnTp1 = new TerminationPoint1Builder()
-                .setTpSupportedInterfaces(tpSupIf)
-                .setXpdrTpPortConnectionAttributes(xtpcaBldr.build())
-                .build();
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder tpceTp1Bldr =
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder();
             TpId tpId = new TpId(mapping.getLogicalConnectionPoint());
-            setclientNwTpAttr(tpMap, node, tpId, tpType, otnTp1, tpceTp1Bldr);
+            setclientNwTpAttr(tpMap, node, tpId, tpType, otnTp1Bldr.build(), tpceTp1Bldr);
         }
     }
 
@@ -673,24 +679,28 @@ public final class OpenRoadmOtnTopology {
     private static Class<? extends SupportedIfCapability> convertSupIfCapa(Class<? extends
             SupportedIfCapability> ifCapType) {
         switch (ifCapType.getSimpleName()) {
-            case "If100GEODU4":
-                return If100GEODU4.class;
+            case "IfOTUCnODUCn":
+                return IfOTUCnODUCn.class;
             case "IfOCHOTU4ODU4":
                 return IfOCHOTU4ODU4.class;
-            case "If1GEODU0":
-                return If1GEODU0.class;
+            case "IfOCH":
+                return IfOCH.class;
+            case "If100GEODU4":
+                return If100GEODU4.class;
             case "If10GEODU2e":
                 return If10GEODU2e.class;
             case "If10GEODU2":
                 return If10GEODU2.class;
+            case "If1GEODU0":
+                return If1GEODU0.class;
+            case "If400GE":
+                return If400GE.class;
             case "If100GE":
                 return If100GE.class;
             case "If10GE":
                 return If10GE.class;
             case "If1GE":
                 return If1GE.class;
-            case "IfOCH":
-                return IfOCH.class;
             default:
                 return null;
         }
