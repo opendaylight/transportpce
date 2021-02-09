@@ -11,14 +11,19 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
@@ -52,6 +57,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROMS;
@@ -94,6 +100,8 @@ public class ConvertORTopoToTapiTopo {
     private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToTapiTopo.class);
     private String ietfNodeId;
     private OpenroadmNodeType ietfNodeType;
+    private AdminStates ietfNodeAdminState;
+    private State ietfNodeOperState;
     private List<TerminationPoint> oorClientPortList;
     private List<TerminationPoint> oorNetworkPortList;
     private OduSwitchingPools oorOduSwitchingPool;
@@ -119,6 +127,12 @@ public class ConvertORTopoToTapiTopo {
         }
         this.ietfNodeType = ietfNode.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class).getNodeType();
+        this.ietfNodeAdminState = ietfNode.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+            .getAdministrativeState();
+        this.ietfNodeOperState = ietfNode.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+            .getOperationalState();
         this.oorNetworkPortList = ietfNode.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
             .getTerminationPoint().values().stream()
@@ -179,18 +193,27 @@ public class ConvertORTopoToTapiTopo {
         createTapiTransitionalLinks();
     }
 
-    public void convertLinks(List
-        <org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link>
-        otnLinkList) {
+    public void convertLinks(Map<
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+                .LinkKey,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+                .Link> otnLinkMap) {
+        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .Link> otnLinkList = new ArrayList<>(otnLinkMap.values());
+        Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue()
+            .compareTo(l2.getLinkId().getValue()));
         List<String> linksToNotConvert = new ArrayList<>();
-        LOG.info("creation of {} otn links", otnLinkList.size() / 2);
+        LOG.info("creation of {} otn links", otnLinkMap.size() / 2);
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .Link link : otnLinkList) {
-            if (!linksToNotConvert.contains(link.getLinkId().getValue())) {
-                Link tapiLink = createTapiLink(link);
-                linksToNotConvert.add(link
-                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
-                    .getOppositeLink().getValue());
+            .Link otnlink : otnLinkList) {
+            if (!linksToNotConvert.contains(otnlink.getLinkId().getValue())) {
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+                    .network.Link oppositeLink = otnLinkMap.get(new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns
+                        .yang.ietf.network.topology.rev180226.networks.network.LinkKey(otnlink.augmentation(
+                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                            .getOppositeLink()));
+                Link tapiLink = createTapiLink(otnlink, oppositeLink);
+                linksToNotConvert.add(oppositeLink.getLinkId().getValue());
                 tapiLinks.put(tapiLink.key(), tapiLink);
             }
         }
@@ -321,12 +344,49 @@ public class ConvertORTopoToTapiTopo {
                 .setUuid(nodeUuid)
                 .setName(nodeNames)
                 .setLayerProtocolName(layerProtocols)
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(this.ietfNodeAdminState))
+                .setOperationalState(setTapiOperationalState(this.ietfNodeOperState))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setOwnedNodeEdgePoint(onepl)
                 .setNodeRuleGroup(nodeRuleGroupList)
                 .build();
+    }
+
+    private AdministrativeState setTapiAdminState(AdminStates adminState) {
+        if (adminState == null) {
+            return null;
+        }
+        return adminState.equals(AdminStates.InService)
+            ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
+    }
+
+    private AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2) {
+        if (adminState1 == null || adminState2 == null) {
+            return null;
+        }
+        if (AdminStates.InService.equals(adminState1) && AdminStates.InService.equals(adminState2)) {
+            return AdministrativeState.UNLOCKED;
+        } else {
+            return AdministrativeState.LOCKED;
+        }
+    }
+
+    private OperationalState setTapiOperationalState(State operState) {
+        if (operState == null) {
+            return null;
+        }
+        return operState.getName().equals("inService") ? OperationalState.ENABLED : OperationalState.DISABLED;
+    }
+
+    private OperationalState setTapiOperationalState(State operState1, State operState2) {
+        if (operState1 == null || operState2 == null) {
+            return null;
+        }
+        if (State.InService.equals(operState1) && State.InService.equals(operState2)) {
+            return OperationalState.ENABLED;
+        } else {
+            return OperationalState.DISABLED;
+        }
     }
 
     private Uuid getNodeUuid4Photonic(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
@@ -486,11 +546,16 @@ public class ConvertORTopoToTapiTopo {
         if (withSip) {
             onepBldr.setMappedServiceInterfacePoint(createSIP(this.uuidMap.get(key), 1));
         }
-        onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedCepLayerProtocolQualifier(oorTp, nodeProtocol));
-        onepBldr.setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
-                .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
+        onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedCepLayerProtocolQualifier(oorTp, nodeProtocol))
+            .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
+            .setLinkPortRole(PortRole.SYMMETRIC)
+            .setAdministrativeState(setTapiAdminState(
+                    oorTp.augmentation(TerminationPoint1.class).getAdministrativeState()))
+            .setOperationalState(setTapiOperationalState(
+                    oorTp.augmentation(TerminationPoint1.class).getOperationalState()))
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+            .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         return onepBldr.build();
     }
 
@@ -565,7 +630,7 @@ public class ConvertORTopoToTapiTopo {
 
     private List<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedCepLayerProtocolQualifier(TerminationPoint tp,
         LayerProtocolName lpn) {
-        List<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new ArrayList<>();
+        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
         List<SupportedInterfaceCapability> sicList = new ArrayList<>(
             tp.augmentation(org.opendaylight.yang.gen.v1.http
                     .org.openroadm.otn.network.topology.rev200529.TerminationPoint1.class).getTpSupportedInterfaces()
@@ -573,22 +638,39 @@ public class ConvertORTopoToTapiTopo {
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
-                    if (sic.getIfCapType().getSimpleName().equals("If10GEODU2e")) {
-                        sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
-                        sclpqList.add(ODUTYPEODU2E.class);
-                    } else if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")) {
-                        sclpqList.add(ODUTYPEODU4.class);
-                    } else if (sic.getIfCapType().getSimpleName().equals("If100GEODU4")) {
-                        sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
-                        sclpqList.add(ODUTYPEODU4.class);
-                    } else if (sic.getIfCapType().getSimpleName().equals("If100GE")) {
-                        sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
+                    switch (sic.getIfCapType().getSimpleName()) {
+                        case "If10GEODU2e":
+                            sclpqSet.add(ODUTYPEODU2E.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            break;
+                        case "If10GEODU2":
+                            sclpqSet.add(ODUTYPEODU2.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            break;
+                        case "If10GE":
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            break;
+                        case "If100GEODU4":
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                            sclpqSet.add(ODUTYPEODU4.class);
+                            break;
+                        case "If100GE":
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                            break;
+                        case "IfOCHOTU4ODU4":
+                        case "IfOCH":
+                            sclpqSet.add(ODUTYPEODU4.class);
+                            break;
+                        default:
+                            LOG.error("IfCapability type not managed");
+                            break;
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")) {
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
+                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
                     }
                     break;
                 default:
@@ -596,7 +678,7 @@ public class ConvertORTopoToTapiTopo {
                     break;
             }
         }
-        return sclpqList;
+        return new ArrayList<>(sclpqSet);
     }
 
     private void createTapiTransitionalLinks() {
@@ -639,7 +721,9 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private Link createTapiLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-        .networks.network.Link link) {
+            .networks.network.Link link,
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
+            oppositeLink) {
         String prefix = link.getLinkId().getValue().split("-")[0];
         String sourceNode = link.getSource().getSourceNode().getValue();
         String sourceTp = link.getSource().getSourceTp().toString();
@@ -651,6 +735,16 @@ public class ConvertORTopoToTapiTopo {
         Uuid destUuidTp;
         Uuid destUuidNode;
         Name linkName;
+        AdminStates oppositeLinkAdminState = null;
+        State oppositeLinkOperState = null;
+        if (oppositeLink != null) {
+            oppositeLinkAdminState = oppositeLink.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getAdministrativeState();
+            oppositeLinkOperState = oppositeLink.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getOperationalState();
+        }
         switch (prefix) {
             case "OTU4":
                 sourceUuidTp = this.uuidMap.get(String.join("+", sourceNode, I_OTSI, sourceTp));
@@ -679,8 +773,12 @@ public class ConvertORTopoToTapiTopo {
                     .toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setLayerProtocolName(Arrays.asList(LayerProtocolName.PHOTONICMEDIA))
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(link
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                    .getAdministrativeState(), oppositeLinkAdminState))
+                .setOperationalState(setTapiOperationalState(link
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                    .getOperationalState(), oppositeLinkOperState))
                 .setDirection(ForwardingDirection.BIDIRECTIONAL)
                 .setNodeEdgePoint(nepList)
                 .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
@@ -718,8 +816,12 @@ public class ConvertORTopoToTapiTopo {
                     .toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setLayerProtocolName(Arrays.asList(LayerProtocolName.ODU))
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(link
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                    .getAdministrativeState(), oppositeLinkAdminState))
+                .setOperationalState(setTapiOperationalState(link
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                    .getOperationalState(), oppositeLinkOperState))
                 .setDirection(ForwardingDirection.BIDIRECTIONAL)
                 .setNodeEdgePoint(nepList)
                 .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(

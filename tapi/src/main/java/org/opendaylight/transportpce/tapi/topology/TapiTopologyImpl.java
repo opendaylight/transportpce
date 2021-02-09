@@ -12,7 +12,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -225,10 +224,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
             LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
         }
         if (otnTopo.augmentation(Network1.class) != null) {
-            List<Link> otnLinkList = new ArrayList<>(otnTopo.augmentation(Network1.class).getLink().values());
-            Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue()
-                .compareTo(l2.getLinkId().getValue()));
-            tapiFactory.convertLinks(otnLinkList);
+            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+                .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
+            tapiFactory.convertLinks(otnLinkMap);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
         }
         Name name = new NameBuilder().setValue(TopologyUtils.T0_MULTILAYER).setValueName("TAPI Topology Name").build();
