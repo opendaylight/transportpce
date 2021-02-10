@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de36b94a_f36b6bbc",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "Why do you absolutely want this port to be fixed and not a pluggable? Somewhat in contradiction with the declared model \"CFP2-DCU\" which suggests this is a pluggable",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 54
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461271cd_1b97c245",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "Cosmetic, but this is not exactly what we could expect as a port label. Maybe more something like XPDRA-Network-port?",
+      "range": {
+        "startLine": 153,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 56
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47de04bb_7fe2a96e",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "For 400G, min RX will be -20",
+      "range": {
+        "startLine": 159,
+        "startChar": 6,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f5e012e_d5aa08a6",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "2? 1, being the subslot of the Network port.",
+      "range": {
+        "startLine": 194,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 26
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d94f6f2_6033dcd5",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "These are the specs corresponding to a network port. For client we will have something in a limited range, that will probably depend on the client PHY type. Will come back to you with some more adequate specifications",
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a3f5117_7d90a9f1",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "This si correct as it is. If we want to address a larger number of use cases, including flex transponders which have the ability to operate at different rates, we could add to the list other profiles in the same way, changing both the otucn-n-rate (2,3) and the foic type (2.4, 3.6). This is not absolutely needed now, but if we consider that these configurations will be used for test, we may need to include this now or later on (don\u0027t know yet if this is in the scope of the OFC demo)",
+      "range": {
+        "startLine": 265,
+        "startChar": 3,
+        "endLine": 265,
+        "endChar": 34
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3db111be_340be7a3",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-02-10T11:57:00Z",
+      "side": 1,
+      "message": "foic-identity is the generic identity. I suggest we use foic4.8 which corresponds to 400G 16QAM as defined in OpenROADM specifications",
+      "range": {
+        "startLine": 269,
+        "startChar": 100,
+        "endLine": 269,
+        "endChar": 186
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
