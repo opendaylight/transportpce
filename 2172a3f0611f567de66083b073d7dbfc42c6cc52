@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30a910a6_c62de6a5",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-10T14:54:34Z",
+      "side": 1,
+      "message": "why not simply oper-XPDRA1.xml ?",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "507a97df_9c3eff38",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-10T14:54:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
