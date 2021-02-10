@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fa0b6886_500f68a1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyResource.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-10T10:00:17Z",
+      "side": 1,
+      "message": "yes it\u0027s not mandatory, it\u0027s just more convenient for the users in my opinion.\nWa can forget that for the moment if you and Ahmed are not confortable with this move.",
+      "parentUuid": "bcb0e8ad_e6d94aef",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "a27a56f461b362ca3c4b43054d6ed48f4b1e0455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "067a406a_93e28cbc",
         "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
         "patchSetId": 3
