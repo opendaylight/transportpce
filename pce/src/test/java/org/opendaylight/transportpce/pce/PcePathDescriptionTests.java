@@ -13,8 +13,11 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
@@ -40,9 +43,14 @@ public class PcePathDescriptionTests extends AbstractTest {
     private PceLink pceLink = null;
     private Link link = null;
     private Node node = null;
+    private String deviceNodeId = "device node";
+    private String serviceType = "100GE";
+    @Mock
+    private PortMapping portMapping;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         // Build Link
         link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
                 "OpenROADM-3-1-DEG1",
@@ -52,9 +60,9 @@ public class PcePathDescriptionTests extends AbstractTest {
 
         NodeBuilder node1Builder = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes());
         node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
-        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
 
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
@@ -67,7 +75,6 @@ public class PcePathDescriptionTests extends AbstractTest {
         Map<LinkId, PceLink> map = Map.of(new LinkId("OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1"), pceLink);
         pcePathDescription = new PcePathDescription(List.of(pceLink),
                 map, pceResult);
-
     }
 
     // TODO fix opposite link
