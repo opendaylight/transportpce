@@ -54,14 +54,68 @@ public class PostAlgoPathValidator {
             return pceResult;
         }
         int tribSlotNb = 1;
+        int spectralWidthSlotNumber = 0;
+        SpectrumAssignment spectrumAssignment = null;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_400GE:
+                spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
+                    .getOrDefault(serviceType, GridConstant.NB_SLOTS_400G);
+                spectrumAssignment = getSpectrumAssignment(path,
+                        allPceNodes, spectralWidthSlotNumber);
+                pceResult.setServiceType(serviceType);
+                if (spectrumAssignment.getBeginIndex() == 0 && spectrumAssignment.getStopIndex() == 0) {
+                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
+                    return pceResult;
+                }
+                if (spectrumAssignment.isFlexGrid()) {
+                    LOG.info("Spectrum assignment flexgrid mode");
+                    pceResult.setResultWavelength(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER);
+                } else {
+                    LOG.info("Spectrum assignment fixedgrid mode");
+                    pceResult.setResultWavelength(
+                            GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()));
+                }
+                pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex()));
+                pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex()));
+                LOG.info("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
+
+                // Check the OSNR
+                if (!checkOSNR(path)) {
+                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.setLocalCause(PceResult.LocalCause.OUT_OF_SPEC_OSNR);
+                    return pceResult;
+                }
+
+                // Check if MaxLatency is defined in the hard constraints
+                if ((pceHardConstraints.getMaxLatency() != -1)
+                        && (!checkLatency(pceHardConstraints.getMaxLatency(), path))) {
+                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.setLocalCause(PceResult.LocalCause.TOO_HIGH_LATENCY);
+                    return pceResult;
+                }
+
+                // Check if nodes are included in the hard constraints
+                if (!checkInclude(path, pceHardConstraints)) {
+                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.setLocalCause(PceResult.LocalCause.HD_NODE_INCLUDE);
+                    return pceResult;
+                }
+
+                // TODO here other post algo validations can be added
+                // more data can be sent to PceGraph module via PceResult structure if required
+
+                pceResult.setRC(ResponseCodes.RESPONSE_OK);
+                pceResult.setLocalCause(PceResult.LocalCause.NONE);
+
+                break;
 
             case StringConstants.SERVICE_TYPE_100GE:
             case StringConstants.SERVICE_TYPE_OTU4:
-                int spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
+                spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
                     .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
-                SpectrumAssignment spectrumAssignment = getSpectrumAssignment(path,
+                spectrumAssignment = getSpectrumAssignment(path,
                         allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex() == 0 && spectrumAssignment.getStopIndex() == 0) {
