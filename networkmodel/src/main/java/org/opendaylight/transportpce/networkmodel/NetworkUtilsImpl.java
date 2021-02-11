@@ -119,18 +119,21 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
                 .success(new InitXpdrRdmLinksOutputBuilder().setResult("Xponder Roadm Link created successfully"))
                 .buildFuture();
         } else {
+            LOG.error("init-xpdr-rdm-links rpc failed due to a bad input parameter");
             return RpcResultBuilder.<InitXpdrRdmLinksOutput>failed().buildFuture();
         }
     }
 
     @Override
     public ListenableFuture<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
+        LOG.info("Roadm to Xpdr links rpc called");
         boolean createRdmXpdrLinks = Rdm2XpdrLink.createRdmXpdrLinks(input.getLinksInput(), this.dataBroker);
         if (createRdmXpdrLinks) {
             return RpcResultBuilder
                 .success(new InitRdmXpdrLinksOutputBuilder().setResult("Roadm Xponder links created successfully"))
                 .buildFuture();
         } else {
+            LOG.error("init-rdm-xpdr-links rpc failed due to a bad input parameter");
             return RpcResultBuilder.<InitRdmXpdrLinksOutput>failed().buildFuture();
         }
     }
