@@ -54,14 +54,22 @@ public class PostAlgoPathValidator {
             return pceResult;
         }
         int tribSlotNb = 1;
+        int spectralWidthSlotNumber = 0;
+        if (StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
+            spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
+                .getOrDefault(serviceType, GridConstant.NB_SLOTS_400G);
+        } else if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)) {
+            spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
+                .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
+        }
+        SpectrumAssignment spectrumAssignment = null;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
-
+            case StringConstants.SERVICE_TYPE_400GE:
             case StringConstants.SERVICE_TYPE_100GE:
             case StringConstants.SERVICE_TYPE_OTU4:
-                int spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
-                    .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
-                SpectrumAssignment spectrumAssignment = getSpectrumAssignment(path,
+                spectrumAssignment = getSpectrumAssignment(path,
                         allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex() == 0 && spectrumAssignment.getStopIndex() == 0) {
@@ -108,9 +116,7 @@ public class PostAlgoPathValidator {
 
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 pceResult.setLocalCause(PceResult.LocalCause.NONE);
-
                 break;
-
             case StringConstants.SERVICE_TYPE_10GE:
                 tribSlotNb = 8;
             //fallthrough
@@ -129,19 +135,16 @@ public class PostAlgoPathValidator {
                         tribPort, tribSlot, tribSlotNb);
                 }
                 break;
-
             case StringConstants.SERVICE_TYPE_ODU4:
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 LOG.info("In PostAlgoPathValidator: ODU4 path found {}", path);
                 break;
-
             default:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
                     serviceType, path);
                 break;
         }
-
         return pceResult;
     }
 
