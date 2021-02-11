@@ -42,7 +42,7 @@ public class PceProviderTest extends AbstractTest {
         requestProcessor = Mockito.mock(RequestProcessor.class);
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
-                null);
+                null, null);
         pceProvider = new PceProvider(rpcService, pathComputationService);
     }
 

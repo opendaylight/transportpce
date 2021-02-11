@@ -47,7 +47,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
         gnpyResult = Mockito.mock(GnpyResult.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
-                this.getNotificationPublishService(), null);
+                this.getNotificationPublishService(), null, null);
         pathComputationServiceImpl.init();
     }
 
