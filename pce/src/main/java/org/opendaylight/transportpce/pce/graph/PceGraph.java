@@ -97,7 +97,7 @@ public class PceGraph {
                     pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
             if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
-                LOG.info("In calcPath: post algo validations DROPPED the path {}", path);
+                LOG.warn("In calcPath: post algo validations DROPPED the path {}", path);
                 continue;
             }
 
@@ -108,8 +108,9 @@ public class PceGraph {
             }
 
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
-            if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
-                    || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
+            if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+                    || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
+                    || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
                 LOG.info("In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
                         + " hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),

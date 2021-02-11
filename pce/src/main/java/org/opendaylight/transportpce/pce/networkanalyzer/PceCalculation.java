@@ -25,6 +25,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
@@ -81,6 +82,7 @@ public class PceCalculation {
     private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
     private Set<LinkId> linksToExclude = new HashSet<>();
     private PceResult returnStructure;
+    private PortMapping portMapping;
 
     private enum ConstraintTypes {
         NONE, HARD_EXCLUDE, HARD_INCLUDE, HARD_DIVERSITY, SOFT_EXCLUDE, SOFT_INCLUDE, SOFT_DIVERSITY;
@@ -89,13 +91,15 @@ public class PceCalculation {
     private MappingUtils mappingUtils;
 
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
-            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc) {
+            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
+            PortMapping portMapping) {
         this.input = input;
         this.networkTransactionService = networkTransactionService;
         this.returnStructure = rc;
 
         this.pceHardConstraints = pceHardConstraints;
         this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
+        this.portMapping = portMapping;
         parseInput();
     }
 
@@ -153,6 +157,8 @@ public class PceCalculation {
             //And casting to int bumps the limit here.
             //Passing by ENUM or String are possible alternatives.
             //Maybe HashMap and similar options should also be considered here.
+        } else if ("Ethernet".equals(serviceFormatA) && serviceRate == 400L) {
+            serviceType = StringConstants.SERVICE_TYPE_400GE;
         } else if ("Ethernet".equals(serviceFormatA)) {
         //only rate 100L is currently supported except in Ethernet
             if (serviceRate == 10L) {
@@ -185,7 +191,7 @@ public class PceCalculation {
         InstanceIdentifier<Network> nwInstanceIdentifier = null;
         Network nw = null;
         if (("OC".equals(serviceFormatA)) || ("OTU".equals(serviceFormatA)) || (("Ethernet".equals(serviceFormatA))
-            && (serviceRate == 100L))) {
+            && (serviceRate == 100L)) || ("Ethernet".equals(serviceFormatA) && serviceRate == 400L)) {
 
             LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
             nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
@@ -251,8 +257,9 @@ public class PceCalculation {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
 
-        if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
-                || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
+        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
             // 100GE service and OTU4 service are handled at the openroadm-topology layer
             for (Node node : allNodes) {
                 validateNode(node);
@@ -374,9 +381,10 @@ public class PceCalculation {
             return false;
         }
 
-        if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
-                || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
-            // 100GE or OTU4 services are handled at WDM Layer
+        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
+            // 100GE or 400GE or OTU4 services are handled at WDM Layer
             PceLink pcelink = new PceLink(link, source, dest);
             if (!pcelink.isValid()) {
                 dropOppositeLink(link);
@@ -486,18 +494,18 @@ public class PceCalculation {
 
     }
 
-    private boolean validateNode(Node node) {
+    private void validateNode(Node node) {
         LOG.debug("validateNode: node {} ", node);
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
         if (node1 == null) {
             LOG.error("getNodeType: no Node1 (type) Augmentation for node: [{}]. Node is ignored", node.getNodeId());
-            return false;
+            return;
         }
         if (State.OutOfService.equals(node1.getOperationalState())) {
             LOG.error("getNodeType: node is ignored due to operational state - {}", node1.getOperationalState()
                     .getName());
-            return false;
+            return;
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
         String deviceNodeId = MapUtils.getSupNetworkNode(node);
@@ -506,18 +514,19 @@ public class PceCalculation {
         if (deviceNodeId == null || deviceNodeId.isBlank()) {
             deviceNodeId = node.getNodeId().getValue();
         }
+
         LOG.info("Device node id {} for {}", deviceNodeId, node);
-        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, mappingUtils.getOpenRoadmVersion(deviceNodeId),
-                getSlotWidthGranularity(deviceNodeId, node.getNodeId()));
+        PceOpticalNode pceNode = new PceOpticalNode(deviceNodeId, this.serviceType, portMapping, node, nodeType,
+            mappingUtils.getOpenRoadmVersion(deviceNodeId), getSlotWidthGranularity(deviceNodeId, node.getNodeId()));
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initFrequenciesBitSet();
 
         if (!pceNode.isValid()) {
             LOG.warn(" validateNode: Node is ignored");
-            return false;
+            return;
         }
         if (validateNodeConstraints(pceNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
-            return false;
+            return;
         }
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.aendPceNode == null
             && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
@@ -530,7 +539,7 @@ public class PceCalculation {
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
         LOG.debug("validateNode: node is saved {}", pceNode.getNodeId().getValue());
-        return true;
+        return;
     }
 
     private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode, String azNodeId, String azEndPoint) {
@@ -557,7 +566,7 @@ public class PceCalculation {
         }
     }
 
-    private boolean validateOtnNode(Node node) {
+    private void validateOtnNode(Node node) {
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
         if (node.augmentation(Node1.class) != null) {
@@ -568,10 +577,10 @@ public class PceCalculation {
 
             if (!pceOtnNode.isValid()) {
                 LOG.warn(" validateOtnNode: Node {} is ignored", node.getNodeId().getValue());
-                return false;
+                return;
             }
             if (validateNodeConstraints(pceOtnNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                return false;
+                return;
             }
             if (pceOtnNode.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null) {
                 this.aendPceNode = pceOtnNode;
@@ -581,10 +590,10 @@ public class PceCalculation {
             }
             allPceNodes.put(pceOtnNode.getNodeId(), pceOtnNode);
             LOG.info("validateOtnNode: node {} is saved", node.getNodeId().getValue());
-            return true;
+            return;
         } else {
             LOG.error("ValidateOtnNode: no node-type augmentation. Node {} is ignored", node.getNodeId().getValue());
-            return false;
+            return;
         }
     }
 

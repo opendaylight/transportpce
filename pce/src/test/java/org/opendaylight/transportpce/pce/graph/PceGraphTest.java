@@ -13,8 +13,11 @@ import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -45,9 +48,14 @@ public class PceGraphTest {
     private PceOpticalNode pceOpticalNode = null;
     private PceOpticalNode pceOpticalNode2 = null;
     private Map<NodeId, PceNode> allPceNodes = null;
+    private String deviceNodeId = "device node";
+    private String serviceType = "100GE";
+    @Mock
+    private PortMapping portMapping;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         // Build Link
         link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
                 "OpenROADM-3-1-DEG1",
@@ -57,12 +65,12 @@ public class PceGraphTest {
         node = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
                 .setNodeId(nodeId).withKey(new NodeKey(nodeId))
                 .build();
-        pceOpticalNode = new PceOpticalNode(node,
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         NodeId nodeId2 = new NodeId("OpenROADM-3-1-DEG1");
         Node node2 = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
                 .setNodeId(nodeId2).withKey(new NodeKey(nodeId2)).build();
-        pceOpticalNode2 = new PceOpticalNode(node2,
+        pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node2,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClient("XPONDER-CLIENT");
