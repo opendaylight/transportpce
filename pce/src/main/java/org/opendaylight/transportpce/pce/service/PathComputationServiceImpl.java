@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
@@ -62,14 +63,16 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final ListeningExecutorService executor;
     private ServicePathRpcResult notification = null;
     private final GnpyConsumer gnpyConsumer;
+    private PortMapping portMapping;
 
     public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
                                       NotificationPublishService notificationPublishService,
-                                      GnpyConsumer gnpyConsumer) {
+                                      GnpyConsumer gnpyConsumer, PortMapping portMapping) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
+        this.portMapping = portMapping;
     }
 
     public void init() {
@@ -158,7 +161,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 String message = "";
                 String responseCode = "";
                 PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService,
-                        gnpyConsumer);
+                        gnpyConsumer, portMapping);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();
