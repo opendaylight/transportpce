@@ -68,12 +68,17 @@ final class Rdm2XpdrLink {
         TerminationPoint xpdrTp = getTpofNode(srcNode, srcTp, dataBroker);
         TerminationPoint rdmTp = getTpofNode(destNode, destTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp,
-                rdmTp).build();
+        NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp, rdmTp);
+        Network network;
+        if (networkBldr == null) {
+            return false;
+        } else {
+            network = networkBldr.build();
+        }
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
 
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
 
@@ -98,13 +103,18 @@ final class Rdm2XpdrLink {
         TerminationPoint xpdrTp = getTpofNode(destNode, destTp, dataBroker);
         TerminationPoint rdmTp = getTpofNode(srcNode, srcTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp,
-                rdmTp).build();
+        NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp, rdmTp);
+        Network network;
+        if (networkBldr == null) {
+            return false;
+        } else {
+            network = networkBldr.build();
+        }
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
         try {
             commit.get();
@@ -119,6 +129,9 @@ final class Rdm2XpdrLink {
 
     private static NetworkBuilder createNetworkBuilder(String srcNode, String srcTp, String destNode, String destTp,
         boolean isXponderInput, TerminationPoint xpdrTp, TerminationPoint rdmTp) {
+        if (xpdrTp == null || rdmTp == null) {
+            return null;
+        }
         //update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder(xpdrTp);
         if (xpdrTpBldr.augmentation(TerminationPoint1.class) != null) {
