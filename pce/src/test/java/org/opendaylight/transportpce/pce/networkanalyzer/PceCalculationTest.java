@@ -42,7 +42,8 @@ public class PceCalculationTest extends AbstractTest {
                 new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
-                pceResult);
+                pceResult,
+                null);
     }
 
     @Test
@@ -64,7 +65,7 @@ public class PceCalculationTest extends AbstractTest {
                 new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
-                pceResult);
+                pceResult, null);
         pceCalculation.retrievePceNetwork();
         Assert.assertEquals(StringConstants.SERVICE_TYPE_100GE, pceCalculation.getServiceType());
         Assert.assertNotNull(pceCalculation.getReturnStructure());
@@ -85,7 +86,7 @@ public class PceCalculationTest extends AbstractTest {
                 new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
-                pceResult);
+                pceResult, null);
 
         pceCalculation.retrievePceNetwork();
 //        Assert.assertEquals(StringConstants.SERVICE_TYPE_100GE, pceCalculation.getServiceType());
