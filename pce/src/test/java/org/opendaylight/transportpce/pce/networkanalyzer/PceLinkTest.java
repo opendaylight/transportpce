@@ -14,9 +14,12 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
@@ -53,10 +56,14 @@ public class PceLinkTest extends AbstractTest {
 
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
     private PceLink pceLink = null;
+    private String deviceNodeId = "device node";
+    private String serviceType = "100GE";
+    @Mock
+    private PortMapping portMapping;
 
     @Before
     public void setup() {
-
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -66,7 +73,7 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
@@ -79,7 +86,7 @@ public class PceLinkTest extends AbstractTest {
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
@@ -92,7 +99,7 @@ public class PceLinkTest extends AbstractTest {
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
 
@@ -106,7 +113,7 @@ public class PceLinkTest extends AbstractTest {
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
@@ -119,7 +126,7 @@ public class PceLinkTest extends AbstractTest {
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));

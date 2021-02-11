@@ -13,7 +13,9 @@ import static org.junit.Assert.assertNotNull;
 import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -32,6 +34,8 @@ public class PceServiceRPCImplTest extends AbstractTest {
     private NotificationPublishService notificationPublishService;
     private NetworkTransactionImpl networkTransaction;
     private PceServiceRPCImpl pceServiceRPC;
+    @Mock
+    private PortMapping portMapping;
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
@@ -40,7 +44,7 @@ public class PceServiceRPCImplTest extends AbstractTest {
         notificationPublishService = new NotificationPublishServiceMock();
         networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
-                null);
+                null, portMapping);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);
 
     }

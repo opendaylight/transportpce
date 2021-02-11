@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
@@ -59,6 +60,7 @@ public class PceSendingPceRPCs {
     private String message;
     private String responseCode;
     private final GnpyConsumer gnpyConsumer;
+    private PortMapping portMapping;
 
     public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {
         setPathDescription(null);
@@ -68,13 +70,14 @@ public class PceSendingPceRPCs {
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
-        NetworkTransactionService networkTransaction, GnpyConsumer gnpyConsumer) {
+        NetworkTransactionService networkTransaction, GnpyConsumer gnpyConsumer, PortMapping portMapping) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
         this.networkTransaction = networkTransaction;
+        this.portMapping = portMapping;
     }
 
     public void cancelResourceReserve() {
@@ -93,7 +96,7 @@ public class PceSendingPceRPCs {
     public void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints) {
 
         PceCalculation nwAnalizer =
-            new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc);
+            new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc, portMapping);
         nwAnalizer.retrievePceNetwork();
         rc = nwAnalizer.getReturnStructure();
         String serviceType = nwAnalizer.getServiceType();
