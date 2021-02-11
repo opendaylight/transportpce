@@ -25,7 +25,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
@@ -68,12 +67,16 @@ final class Rdm2XpdrLink {
         TerminationPoint xpdrTp = getTpofNode(srcNode, srcTp, dataBroker);
         TerminationPoint rdmTp = getTpofNode(destNode, destTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp,
-                rdmTp).build();
+        NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp, rdmTp);
+        Network network;
+        if (networkBldr == null) {
+            return false;
+        }
+        network = networkBldr.build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
 
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
 
@@ -98,13 +101,17 @@ final class Rdm2XpdrLink {
         TerminationPoint xpdrTp = getTpofNode(destNode, destTp, dataBroker);
         TerminationPoint rdmTp = getTpofNode(srcNode, srcTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp,
-                rdmTp).build();
+        NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp, rdmTp);
+        Network network;
+        if (networkBldr == null) {
+            return false;
+        }
+        network = networkBldr.build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
         try {
             commit.get();
@@ -119,6 +126,9 @@ final class Rdm2XpdrLink {
 
     private static NetworkBuilder createNetworkBuilder(String srcNode, String srcTp, String destNode, String destTp,
         boolean isXponderInput, TerminationPoint xpdrTp, TerminationPoint rdmTp) {
+        if (xpdrTp == null || rdmTp == null) {
+            return null;
+        }
         //update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder(xpdrTp);
         if (xpdrTpBldr.augmentation(TerminationPoint1.class) != null) {
@@ -160,8 +170,7 @@ final class Rdm2XpdrLink {
         LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
             .addAugmentation(lnk2bldr.build());
 
-        LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
-        LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
+        LOG.info("Creating Link with id {}", linkBuilder.getLinkId());
         Link link = linkBuilder.build();
         Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableMap.of(link.key(),link));
 
