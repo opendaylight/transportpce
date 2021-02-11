@@ -97,7 +97,7 @@ public class PceGraph {
                     pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
             if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
-                LOG.info("In calcPath: post algo validations DROPPED the path {}", path);
+                LOG.warn("In calcPath: post algo validations DROPPED the path {}", path);
                 continue;
             }
 
@@ -111,6 +111,7 @@ public class PceGraph {
             switch (serviceType) {
 
                 case StringConstants.SERVICE_TYPE_100GE:
+                case StringConstants.SERVICE_TYPE_400GE:
                 case StringConstants.SERVICE_TYPE_OTU4:
                     LOG.info(
                         "In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
