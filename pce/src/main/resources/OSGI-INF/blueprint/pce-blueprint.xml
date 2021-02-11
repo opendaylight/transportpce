@@ -22,18 +22,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </cm:property-placeholder>
 
   <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
-
   <reference id="bindingDOMCodecServices" interface="org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices" />
-
-
-  <reference id="dataBroker"
-        interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
-
-  <reference id="rpcService"
-        interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
-
-  <reference id="notificationPublishService"
-        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
+  <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
+  <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
+  <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
+  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping"/>
 
   <bean id="pceServiceImpl"
         class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"
@@ -41,6 +34,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <argument ref="networkTransactionImpl"/>
     <argument ref="notificationPublishService" />
     <argument ref="gnpyConsumer" />
+    <argument ref="portMapping" />
   </bean>
 
   <bean id="gnpyConsumer"

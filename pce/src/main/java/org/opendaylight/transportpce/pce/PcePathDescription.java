@@ -91,6 +91,7 @@ public class PcePathDescription {
                     .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
             .setAToZ(atozMap);
         switch (rc.getServiceType()) {
+            case StringConstants.SERVICE_TYPE_400GE:
             case StringConstants.SERVICE_TYPE_100GE:
             case StringConstants.SERVICE_TYPE_OTU4:
                 atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
@@ -112,6 +113,7 @@ public class PcePathDescription {
                 }
                 break;
             default:
+                LOG.warn("unknown service type : unable to set Min/Max frequencies");
                 break;
         }
         return atoZDirectionBldr;
@@ -128,6 +130,7 @@ public class PcePathDescription {
                         .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
                 .setZToA(ztoaMap);
         switch (rc.getServiceType()) {
+            case StringConstants.SERVICE_TYPE_400GE:
             case StringConstants.SERVICE_TYPE_100GE:
             case StringConstants.SERVICE_TYPE_OTU4:
                 ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
@@ -149,6 +152,7 @@ public class PcePathDescription {
                 }
                 break;
             default:
+                LOG.warn("unknown service type : unable to set Min/Max frequencies");
                 break;
         }
         return ztoADirectionBldr;

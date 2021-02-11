@@ -18,12 +18,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -38,7 +42,15 @@ public class PceOpticalNode implements PceNode {
 
     private Node node;
     private NodeId nodeId;
+    private String deviceNodeId;
     private OpenroadmNodeType nodeType;
+<<<<<<< HEAD   (3b663b Manage 400G in portmapping and topologies)
+=======
+    private AdminStates adminStates;
+    private State state;
+    private String serviceType;
+    private PortMapping portMapping;
+>>>>>>> CHANGE (e82fba Adapt PCE to compute a 400GE path)
 
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<>();
@@ -50,12 +62,19 @@ public class PceOpticalNode implements PceNode {
     private String version;
     private BigDecimal slotWidthGranularity;
 
-    public PceOpticalNode(Node node, OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity) {
-        if (node != null
+    public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
+        OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity) {
+        if (deviceNodeId != null
+                && serviceType != null
+                && portMapping != null
+                && node != null
                 && node.getNodeId() != null
                 && nodeType != null
                 && version != null
                 && slotWidthGranularity != null) {
+            this.deviceNodeId = deviceNodeId;
+            this.serviceType = serviceType;
+            this.portMapping = portMapping;
             this.node = node;
             this.nodeId = node.getNodeId();
             this.nodeType = nodeType;
@@ -136,6 +155,33 @@ public class PceOpticalNode implements PceNode {
                         availableByteArray);
     }
 
+    private boolean isTpWithGoodCapabilities(
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node
+        .TerminationPoint tp) {
+        Mapping mapping = this.portMapping.getMapping(deviceNodeId, tp.getTpId().getValue());
+        if (mapping == null || mapping.getSupportedInterfaceCapability() == null) {
+            return true;
+        }
+        switch (this.serviceType) {
+            case "400GE":
+                if (mapping.getSupportedInterfaceCapability().contains(IfOTUCnODUCn.class)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "100GE":
+                if (mapping.getSupportedInterfaceCapability().contains(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.IfOCH.class)
+                    || mapping.getSupportedInterfaceCapability().contains(IfOCH.class)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                return true;
+        }
+    }
+
     public void initFrequenciesBitSet() {
         if (!isValid()) {
             return;
@@ -191,6 +237,7 @@ public class PceOpticalNode implements PceNode {
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint tp : allTps) {
             TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
+<<<<<<< HEAD   (3b663b Manage 400G in portmapping and topologies)
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1 nttp1 = tp
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
                 .TerminationPoint1.class);
@@ -204,6 +251,33 @@ public class PceOpticalNode implements PceNode {
                 // find Client of this network TP
                 String client;
                 org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
+=======
+            if (cntp1.getTpType() != OpenroadmTpType.XPONDERNETWORK) {
+                LOG.warn("initXndrTps: {} is not an Xponder network port", cntp1.getTpType().getName());
+                continue;
+            }
+            if (!isTpWithGoodCapabilities(tp)) {
+                LOG.warn("initXndrTps: {} network port has not correct if-capabilities", tp.getTpId().getValue());
+                continue;
+            }
+            if (!State.InService.equals(cntp1.getOperationalState())) {
+                LOG.warn("initXndrTps: XPONDER tp = {} is OOS/degraded", tp.getTpId().getValue());
+                this.valid = false;
+                continue;
+            }
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1 nttp1 = tp
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
+                .TerminationPoint1.class);
+            if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
+                this.usedXpndrNWTps.add(tp.getTpId().getValue());
+                LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
+            } else {
+                this.valid = true;
+            }
+            // find Client of this network TP
+            String client;
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
+>>>>>>> CHANGE (e82fba Adapt PCE to compute a 400GE path)
                     tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019
                         .TerminationPoint1.class);
                 if (tpceTp1 != null) {
