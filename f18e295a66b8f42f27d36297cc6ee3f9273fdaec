@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef5b8a87_1c1830a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T08:37:13Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "f18e295a66b8f42f27d36297cc6ee3f9273fdaec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c950079_8dd5aaee",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T08:37:13Z",
+      "side": 1,
+      "message": "should preferably be inside the next if-block",
+      "range": {
+        "startLine": 607,
+        "startChar": 12,
+        "endLine": 607,
+        "endChar": 106
+      },
+      "revId": "f18e295a66b8f42f27d36297cc6ee3f9273fdaec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ba067ca_370378ba",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T08:37:13Z",
+      "side": 1,
+      "message": "Though this is OK, I think some logic order would be helpful here.",
+      "range": {
+        "startLine": 682,
+        "startChar": 0,
+        "endLine": 682,
+        "endChar": 27
+      },
+      "revId": "f18e295a66b8f42f27d36297cc6ee3f9273fdaec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
