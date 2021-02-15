@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "309506be_34f849b5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T09:03:02Z",
+      "side": 1,
+      "message": "What about this rather ?\n\nif (networkBldr \u003d\u003d null) {\n    return false;\n}\nNetwork network \u003d networkBldr.build();",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "cd1d4e9f9a52042d53b1f029fce239e280050b58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1129a4b9_177e75d7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T09:03:02Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 24
+      },
+      "revId": "cd1d4e9f9a52042d53b1f029fce239e280050b58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
