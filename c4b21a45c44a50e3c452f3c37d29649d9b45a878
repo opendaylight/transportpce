@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7009cda5_081422ec",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T10:36:30Z",
+      "side": 1,
+      "message": "similar to RpcStatusEx.Failed\nI think that it can be mutualized and that switch/case would probably more indicated here",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 84
+      },
+      "revId": "c4b21a45c44a50e3c452f3c37d29649d9b45a878",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
