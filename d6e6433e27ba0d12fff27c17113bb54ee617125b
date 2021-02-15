@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "4e200e42_196e85cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T09:04:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e0eeb04_734581f1",
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45c522f2_0ae607db",
         "filename": "dmaap-client/pom.xml",
         "patchSetId": 2
