@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5ee0b04_a96822e4",
+        "filename": "features/odl-transportpce-nbinotifications/pom.xml",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T09:07:00Z",
+      "side": 1,
+      "message": "2021 ? + trailing blanks",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 75
+      },
+      "revId": "45855e681d19ad4cdd229a1b0a94f8cf1c5d99bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b65a23_4c4e56df",
+        "filename": "features/odl-transportpce-nbinotifications/src/main/feature/feature.xml",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-15T09:07:00Z",
+      "side": 1,
+      "message": "copyright header ?",
+      "revId": "45855e681d19ad4cdd229a1b0a94f8cf1c5d99bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
