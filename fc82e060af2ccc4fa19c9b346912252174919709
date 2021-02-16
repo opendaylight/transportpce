@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "88f67777_d8cf2d25",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-16T17:56:05Z",
+      "side": 1,
+      "message": "No, I don\u0027t think debug level is appropriate here. Whatever is the return of checkPath(), this is a useful information to detect quickly what and where could be the issue.",
+      "parentUuid": "71374a49_f0d2e158",
+      "range": {
+        "startLine": 100,
+        "startChar": 20,
+        "endLine": 100,
+        "endChar": 24
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68b9fba4_4549b9ca",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7f0286ab_c65d7ece",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-16T17:56:05Z",
+      "side": 1,
+      "message": "OK, but outside the scope of this change.\nAck",
+      "parentUuid": "68b9fba4_4549b9ca",
+      "range": {
+        "startLine": 118,
+        "startChar": 16,
+        "endLine": 118,
+        "endChar": 22
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a0b1866_52513f04",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2021-02-15T09:00:11Z",
       "side": 1,
       "message": "I think this would be better handled inside the next switch/case block which checks also the servicetype",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 40
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4712cd41_755be13a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-16T17:56:05Z",
+      "side": 1,
+      "message": "We can always optimize things, but not sure it eases the code readability and understanding...\nDone",
+      "parentUuid": "3a0b1866_52513f04",
       "range": {
         "startLine": 57,
         "startChar": 0,
@@ -91,6 +163,30 @@
       "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cafbdd7c_36f45c7f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-16T17:56:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "747714dd_bf6a50be",
+      "range": {
+        "startLine": 190,
+        "startChar": 1,
+        "endLine": 190,
+        "endChar": 5
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
