@@ -51,7 +51,6 @@ public class PceGraph {
 
     // results
     private PceResult pceResult = null;
-    private List<PceLink> shortestPathAtoZ = null;
 
     // for path calculation
     List<GraphPath<String, PceGraphEdge>> allWPaths = null;
@@ -107,28 +106,25 @@ public class PceGraph {
                 pathAtoZ.add(edge.link());
             }
 
-            shortestPathAtoZ = new ArrayList<>(pathAtoZ);
             if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
                     || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
                     || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
-                LOG.info("In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
+                LOG.info("In calcPath FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
                         + " hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
                         pathAtoZ.size(), path.getWeight(), pathAtoZ);
-                break;
             } else {
                 // Service is at OTN layer and is relying on a supporting wavelength service
-                LOG.info("In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
+                LOG.info("In calcPath FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
                         pathAtoZ.size(), path.getWeight(), pathAtoZ);
-                break;
             }
 
         }
 
-        if (shortestPathAtoZ != null) {
+        if (!pathAtoZ.isEmpty()) {
             LOG.info("In calcPath CHOOSEN PATH for wl [{}], min freq {}, max freq {}, hops {}, path AtoZ {}",
                     pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
-                    shortestPathAtoZ.size(), shortestPathAtoZ);
+                    pathAtoZ.size(), pathAtoZ);
         }
         LOG.info("In calcPath : pceResult {}", pceResult);
         return (pceResult.getStatus());
@@ -259,7 +255,7 @@ public class PceGraph {
     }
 
     public List<PceLink> getPathAtoZ() {
-        return shortestPathAtoZ;
+        return pathAtoZ;
     }
 
     public PceResult getReturnStructure() {
