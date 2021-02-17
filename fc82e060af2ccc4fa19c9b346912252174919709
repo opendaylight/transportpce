@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8b785d4f_ca46ce16",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-17T09:50:32Z",
+      "side": 1,
+      "message": "I am sure it is useful but I think it cannot be considererd as a major operation for operators and networks admins, can it be?\ncf https://docs.opendaylight.org/en/latest/developer-guides/logging-subsystem.html#info",
+      "parentUuid": "88f67777_d8cf2d25",
+      "range": {
+        "startLine": 100,
+        "startChar": 20,
+        "endLine": 100,
+        "endChar": 24
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68b9fba4_4549b9ca",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
         "patchSetId": 3
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "f3c8e23c_aa41d641",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-17T09:50:32Z",
+      "side": 1,
+      "message": "I agree - I reopen it to have a trace of it until it is fixed in another change.",
+      "parentUuid": "7f0286ab_c65d7ece",
+      "range": {
+        "startLine": 118,
+        "startChar": 16,
+        "endLine": 118,
+        "endChar": 22
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a0b1866_52513f04",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 3
@@ -140,6 +188,30 @@
       "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a38ed115_f8ab62d5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-17T09:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4712cd41_755be13a",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 40
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
