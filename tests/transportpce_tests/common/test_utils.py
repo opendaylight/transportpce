@@ -137,7 +137,8 @@ def install_karaf_feature(feature_name: str):
         os.path.dirname(os.path.realpath(__file__)),
         "..", "..", "..", "karaf", "target", "assembly", "bin", "client")
     return subprocess.run([executable],
-                          input='feature:install ' + feature_name + '\n feature:list | grep tapi \n logout \n',
+                          input='feature:install ' + feature_name + '\n feature:list | grep '
+                          + feature_name + ' \n logout \n',
                           universal_newlines=True, check=False)
 
 
