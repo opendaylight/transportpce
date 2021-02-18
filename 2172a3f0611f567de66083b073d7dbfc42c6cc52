@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4d300670_49df8842",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-18T07:49:32Z",
+      "side": 1,
+      "message": "Because oper-XPDRA1.xml corresponds (will correspond for 7.1) to TPDR-100G",
+      "parentUuid": "30a910a6_c62de6a5",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "507a97df_9c3eff38",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-10T14:54:34Z",
       "side": 1,
       "message": "idem",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7933e7b8_09d8340f",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-18T07:49:32Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "507a97df_9c3eff38",
       "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
