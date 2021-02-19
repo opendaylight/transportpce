@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "fc440f40_bd7cf7b1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-19T08:51:27Z",
+      "side": 1,
+      "message": "OK let\u0027s use warn level if this is an inconsistency indeed.",
+      "parentUuid": "46391cf0_27d98d23",
+      "range": {
+        "startLine": 100,
+        "startChar": 20,
+        "endLine": 100,
+        "endChar": 24
+      },
+      "revId": "fc82e060af2ccc4fa19c9b346912252174919709",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68b9fba4_4549b9ca",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
         "patchSetId": 3
