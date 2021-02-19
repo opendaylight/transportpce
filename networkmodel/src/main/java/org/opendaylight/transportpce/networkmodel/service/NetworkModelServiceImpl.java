@@ -320,12 +320,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         switch (cpackType) {
             case "ADDROP":
                 LOG.info("ADDROP circuit pack modified");
-                setTerminationPointsChangedMap(changedCpack);
+                setTerminationPointsChangedMap(changedCpack, nodeId);
                 // setTpStateHashmap(changedCpack);
                 break;
             case "WSSDEG":
                 LOG.info("WSSDEG circuit pack modified");
-                setTerminationPointsChangedMap(changedCpack);
+                setTerminationPointsChangedMap(changedCpack, nodeId);
                 // 3. Update the termination points of the node that sent a NETCONF notification
                 updateOpenRoadmNetworkTopologyTPs(nodesList, nodeId);
                 // 4. Update the links of the topology affected by the changes on TPs (if any)
@@ -739,12 +739,17 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     }
 
-    private void setTerminationPointsChangedMap(CircuitPacks changedCpack) {
+    private void setTerminationPointsChangedMap(CircuitPacks changedCpack, String nodeId) {
         List<Ports> portsList = new ArrayList<>(Objects.requireNonNull(changedCpack.getPorts()).values());
         for (Ports port : portsList) {
             String lcp = port.getLogicalConnectionPoint();
-            if (lcp != null && !this.terminationPointsChanged.containsKey(lcp)) {
-                this.terminationPointsChanged.put(lcp, State.forValue(port.getOperationalState().getIntValue()));
+            if (lcp != null) {
+                String abstractNodeid = nodeId + "-" + lcp.split("-")[0];
+                if (!this.terminationPointsChanged.containsKey(abstractNodeid + "-" + lcp)) {
+                    LOG.info("Node id {}, LCP {}", abstractNodeid, lcp);
+                    this.terminationPointsChanged.put(abstractNodeid + "-" + lcp,
+                            State.forValue(port.getOperationalState().getIntValue()));
+                }
             }
         }
     }
@@ -768,19 +773,20 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     String tpId = Objects.requireNonNull(tp.getTpId()).getValue();
                     State tpState = Objects.requireNonNull(tp.augmentation(org.opendaylight.yang.gen.v1.http
                         .org.openroadm.common.network.rev200529.TerminationPoint1.class)).getOperationalState();
-                    if (this.terminationPointsChanged.containsKey(tpId) && !this.terminationPointsChanged.get(tpId)
-                            .equals(tpState)) {
+                    String key = abstractNodeId + "-" + tpId;
+                    if (this.terminationPointsChanged.containsKey(key)
+                            && !this.terminationPointsChanged.get(key).equals(tpState)) {
                         // The state of a termination point has changed... updating
                         State newTpOperationalState = null;
                         AdminStates newTpAdminState = null;
                         /* 3. If the TP has changed its state, it has to be added to the links Map, as a Link state
                         is defined by the state of the TPs that model the link. */
-                        switch (this.terminationPointsChanged.get(tpId)) {
+                        switch (this.terminationPointsChanged.get(key)) {
                             case InService:
                                 newTpAdminState = AdminStates.InService;
                                 newTpOperationalState = State.InService;
                                 // Add TP and state inService to the links Map
-                                this.linksChanged.put(tpId, State.InService);
+                                this.linksChanged.put(key, State.InService);
                                 // Update topology change list for service handler notification
                                 this.topologyChanges.put(
                                     new OrdTopologyChangesKey(node.getNodeId().getValue() + "-" + tpId),
@@ -793,7 +799,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                                 newTpAdminState = AdminStates.OutOfService;
                                 newTpOperationalState = State.OutOfService;
                                 // Add TP and state outOfService to the links Map
-                                this.linksChanged.put(tpId, State.OutOfService);
+                                this.linksChanged.put(key, State.OutOfService);
                                 // Update topology change list for service handler notification
                                 this.topologyChanges.put(
                                     new OrdTopologyChangesKey(node.getNodeId().getValue() + "-" + tpId),
@@ -850,6 +856,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String dstNode = link.getDestination().getDestNode().getValue();
             State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http
                 .org.openroadm.common.network.rev200529.Link1.class).getOperationalState();
+            String srcKey = srcNode + "-" + srcTp;
+            String dstKey = dstNode + "-" + dstTp;
             /* 1. Check the current state of the source and dest tps of the link. If these tps exist on the links Map
             and the states are different, then we need to update the link state accordingly.
             There are several cases depending on the current link state:
@@ -861,38 +869,38 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             end. */
             switch (linkState) {
                 case InService:
-                    if (this.linksChanged.containsKey(srcTp) && this.linksChanged.containsKey(dstTp)) {
+                    if (this.linksChanged.containsKey(srcKey) && this.linksChanged.containsKey(dstKey)) {
                         // Both TPs of the link have been updated. If one of them is outOfService --> link outOfService
-                        if (State.OutOfService.equals(this.linksChanged.get(srcTp)) || State.OutOfService.equals(this
-                                .linksChanged.get(dstTp))) {
+                        if (State.OutOfService.equals(this.linksChanged.get(srcKey)) || State.OutOfService.equals(this
+                                .linksChanged.get(dstKey))) {
                             updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
                         }
-                    } else if (this.linksChanged.containsKey(srcTp) && State.OutOfService.equals(this.linksChanged
-                            .get(srcTp))) {
+                    } else if (this.linksChanged.containsKey(srcKey) && State.OutOfService.equals(this.linksChanged
+                            .get(srcKey))) {
                         // Source TP has been changed to outOfService --> link outOfService
                         updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
-                    } else if (this.linksChanged.containsKey(dstTp) && State.OutOfService.equals(this.linksChanged
-                            .get(dstTp))) {
+                    } else if (this.linksChanged.containsKey(dstKey) && State.OutOfService.equals(this.linksChanged
+                            .get(dstKey))) {
                         // Destination TP has been changed to outOfService --> link outOfService
                         updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
                     }
                     break;
                 case OutOfService:
-                    if (this.linksChanged.containsKey(srcTp) && this.linksChanged.containsKey(dstTp)) {
+                    if (this.linksChanged.containsKey(srcKey) && this.linksChanged.containsKey(dstKey)) {
                         // Both TPs of the link have been updated. If both of them are inService --> link inService
-                        if (State.InService.equals(this.linksChanged.get(srcTp)) || State.InService.equals(this
-                                .linksChanged.get(dstTp))) {
+                        if (State.InService.equals(this.linksChanged.get(srcKey)) || State.InService.equals(this
+                                .linksChanged.get(dstKey))) {
                             updateLinkStates(link, State.InService, AdminStates.InService);
                         }
-                    } else if (this.linksChanged.containsKey(srcTp) && State.InService.equals(this.linksChanged
-                            .get(srcTp))) {
+                    } else if (this.linksChanged.containsKey(srcKey) && State.InService.equals(this.linksChanged
+                            .get(srcKey))) {
                         // Source TP has been changed to inService --> check the second TP and update link to inService
                         // only if both TPs are inService
                         if (tpInService(dstNode, dstTp, nodesList)) {
                             updateLinkStates(link, State.InService, AdminStates.InService);
                         }
-                    } else if (this.linksChanged.containsKey(dstTp) && State.InService.equals(this.linksChanged
-                            .get(dstTp))) {
+                    } else if (this.linksChanged.containsKey(dstKey) && State.InService.equals(this.linksChanged
+                            .get(dstKey))) {
                         // Destination TP has been changed to to inService --> check the second TP and update link to
                         // inService only if both TPs are inService
                         if (tpInService(srcNode, srcTp, nodesList)) {
