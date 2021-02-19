@@ -116,6 +116,30 @@
       "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b9a3e65_6c837111",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-02-19T08:17:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66c38677_dddf4510",
+      "range": {
+        "startLine": 35,
+        "startChar": 19,
+        "endLine": 35,
+        "endChar": 40
+      },
+      "revId": "ff99c0eb831072e74354f05f7c6d4de81015804e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
