@@ -11,15 +11,16 @@ package org.opendaylight.transportpce.pce.gnpy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApiBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.ServiceFileBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.TopologyFileBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Connections;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathRouteObjects;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.service.PathRequest;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.Synchronization;
@@ -28,10 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class that implements the functions asked to gnpy.
@@ -42,24 +40,22 @@ import org.slf4j.LoggerFactory;
 
 public class GnpyUtilitiesImpl {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GnpyUtilitiesImpl.class);
     private PathComputationRequestInput input;
     private GnpyTopoImpl gnpyTopo = null;
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Uint32 requestId;
-    private BindingDOMCodecServices bindingDOMCodecServices;
-
+    private final GnpyConsumer gnpyConsumer;
 
     public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input,
-            BindingDOMCodecServices bindingDOMCodecServices)
+            GnpyConsumer gnpyConsumer)
         throws GnpyException {
         this.gnpyTopo = new GnpyTopoImpl(networkTransaction);
         this.input = input;
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
         this.requestId = Uint32.valueOf(0);
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.gnpyConsumer = gnpyConsumer;
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -87,18 +83,13 @@ public class GnpyUtilitiesImpl {
         // Send the computed path to GNPY tool
         List<Elements> elementsList = new ArrayList<>(gnpyTopo.getElements().values());
         List<Connections> connectionsList = gnpyTopo.getConnections();
-        String gnpyResponse;
-        try {
-            gnpyResponse = getGnpyResponse(elementsList, connectionsList, pathRequestList,
+        Result gnpyResponse = getGnpyResponse(elementsList, connectionsList, pathRequestList,
                 synchronizationList);
-        } catch (Exception e) {
-            throw new GnpyException("Something went wrong", e);
-        }
         // Analyze the response
         if (gnpyResponse == null) {
             throw new GnpyException("In GnpyUtilities: no response from GNPy server");
         }
-        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo, bindingDOMCodecServices);
+        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo);
         result.analyzeResult();
         return result;
     }
@@ -123,9 +114,8 @@ public class GnpyUtilitiesImpl {
         return result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
     }
 
-    public String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
-        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList)
-                throws GnpyException {
+    public Result getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
+        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList) {
         GnpyApi gnpyApi = new GnpyApiBuilder()
             .setTopologyFile(
                 new TopologyFileBuilder()
@@ -137,18 +127,7 @@ public class GnpyUtilitiesImpl {
                         .collect(Collectors.toMap(PathRequest::key, pathRequest -> pathRequest)))
                 .build())
             .build();
-        InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
-        String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(bindingDOMCodecServices);
-        gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
-        LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
-        ConnectToGnpyServer connect = new ConnectToGnpyServer();
-        String gnpyJsonModified = gnpyJson
-            .replace("gnpy-eqpt-config:", "")
-            .replace("gnpy-path-computation-simplified:", "")
-            .replace("gnpy-network-topology:", "");
-
-        return connect.returnGnpyResponse(gnpyJsonModified);
+        return gnpyConsumer.computePaths(gnpyApi);
     }
 
     public GnpyResult getGnpyAtoZ() {
