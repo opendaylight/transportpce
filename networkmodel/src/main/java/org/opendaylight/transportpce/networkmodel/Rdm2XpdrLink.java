@@ -68,11 +68,10 @@ final class Rdm2XpdrLink {
         TerminationPoint rdmTp = getTpofNode(destNode, destTp, dataBroker);
 
         NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp, rdmTp);
-        Network network;
         if (networkBldr == null) {
             return false;
         }
-        network = networkBldr.build();
+        Network network = networkBldr.build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
@@ -102,11 +101,10 @@ final class Rdm2XpdrLink {
         TerminationPoint rdmTp = getTpofNode(srcNode, srcTp, dataBroker);
 
         NetworkBuilder networkBldr = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp, rdmTp);
-        Network network;
         if (networkBldr == null) {
             return false;
         }
-        network = networkBldr.build();
+        Network network = networkBldr.build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
