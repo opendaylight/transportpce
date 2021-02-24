@@ -107,19 +107,24 @@ public class PceGraph {
             }
 
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
-            if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
-                    || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
-                LOG.info("In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
+            switch (serviceType) {
+
+                case StringConstants.SERVICE_TYPE_100GE:
+                case StringConstants.SERVICE_TYPE_OTU4:
+                    LOG.info(
+                        "In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
                         + " hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
                         pathAtoZ.size(), path.getWeight(), pathAtoZ);
-                break;
-            } else {
-                // Service is at OTN layer and is relying on a supporting wavelength service
-                LOG.info("In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
+                    break;
+
+                default:
+                    LOG.info(
+                        "In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
                         pathAtoZ.size(), path.getWeight(), pathAtoZ);
-                break;
+                    break;
             }
+            break;
 
         }
 
@@ -224,8 +229,8 @@ public class PceGraph {
             case PropagationDelay :
                 weight = link.getLatency();
                 LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link);
-                if ((("1GE".equals(serviceType)) || ("10GE".equals(serviceType)) || ("ODU4".equals(serviceType)))
-                        && (weight == 0)) {
+                if ((weight == 0)
+                        && ("1GE".equals(serviceType) || "10GE".equals(serviceType) || "ODU4".equals(serviceType))) {
                     LOG.warn("PropagationDelay set as metric, but latency is null: is latency set for OTN link {}?",
                         link);
                 }
