@@ -2,6 +2,8 @@
 
 #set -x
 
+VERSIONS_LIST=${@:-"1.2.1 2.2.1 7.1"}
+
 #check if curl exists
 if ! [ -x "$(command -v curl)" ];then
     echo "curl is not installed." >&2
@@ -13,33 +15,38 @@ if ! [ -x "$(command -v unzip)" ];then
     exit 1
 fi
 
-#clean honeynode directories
+for VERSION in $VERSIONS_LIST
+do
+    case "$VERSION" in
+        "1.2.1") PLUGIN_VERSION=1.0.4
+        ;;
+        "2.2.1") PLUGIN_VERSION=2.0.5
+        ;;
+        "7.1") PLUGIN_VERSION=7.1.2
+        ;;
+        *) echo "unsupported device version" >&2
+        continue
+        ;;
+    esac
+    TARGET_DIR=$(dirname $0)/honeynode/$VERSION
+    INSTALL_DIR=$TARGET_DIR/honeynode-simulator
+    ARTIFACT_ZIPFILE=$TARGET_DIR/artifact.zip
+    TARGET_URL="https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-$PLUGIN_VERSION/download?job=mvn-build"
 
-if [ -d "$(dirname $0)/honeynode/1.2.1/honeynode-simulator" ];then
-    echo "Removing $(dirname $0)/honeynode/1.2.1/honeynode-simulator directory"
-    rm -rf $(dirname $0)/honeynode/1.2.1/honeynode-simulator
-fi
-if [ -d "$(dirname $0)/honeynode/2.2.1/honeynode-simulator" ];then
-    echo "Removing $(dirname $0)/honeynode/2.2.1/honeynode-simulator directory"
-    rm -rf $(dirname $0)/honeynode/2.2.1/honeynode-simulator
-fi
-if [ -d "$(dirname $0)/honeynode/7.1/honeynode-simulator" ];then
-    echo "Removing $(dirname $0)/honeynode/7.1/honeynode-simulator directory"
-    rm -rf $(dirname $0)/honeynode/7.1/honeynode-simulator
-fi
-#download honeynode for 1.2.1 devices and install it
-#complete source code can be found at https://gitlab.com/Orange-OpenSource/lfn/odl/honeynode-simulator.git
-echo "Installing honeynode for 1.2.1 devices to $(dirname $0)/honeynode/1.2.1/honeynode-simulator directory "
-curl -sS --location --request GET "https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-1.0.4/download?job=mvn-build" -o $(dirname $0)/honeynode/1.2.1/artifact.zip
-unzip -q $(dirname $0)/honeynode/1.2.1/artifact.zip -d $(dirname $0)/honeynode/1.2.1
-rm -f $(dirname $0)/honeynode/1.2.1/artifact.zip
-#download honeynode for 2.2.1 devices and install it
-echo "Installing honeynode for 2.2.1 devices to $(dirname $0)/honeynode/2.2.1/honeynode-simulator directory "
-curl -sS --location --request GET "https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-2.0.5/download?job=mvn-build" -o $(dirname $0)/honeynode/2.2.1/artifact.zip
-unzip -q $(dirname $0)/honeynode/2.2.1/artifact.zip -d $(dirname $0)/honeynode/2.2.1
-rm -f $(dirname $0)/honeynode/2.2.1/artifact.zip
-#download honeynode for 7.1 devices and install it
-echo "Installing honeynode for 7.1 devices to $(dirname $0)/honeynode/7.1/honeynode-simulator directory "
-curl -sS --location --request GET "https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-7.1.2/download?job=mvn-build" -o $(dirname $0)/honeynode/7.1/artifact.zip
-unzip -q $(dirname $0)/honeynode/7.1/artifact.zip -d $(dirname $0)/honeynode/7.1
-rm -f $(dirname $0)/honeynode/7.1/artifact.zip
+    #clean honeynode install directory
+
+    if [ -d "$INSTALL_DIR" ];then
+        echo "Removing $INSTALL_DIR directory"
+        rm -rf $INSTALL_DIR
+    fi
+
+    #download honeynode  and install it
+    #complete source code can be found at https://gitlab.com/Orange-OpenSource/lfn/odl/honeynode-simulator.git
+
+    echo "Installing honeynode for $VERSION devices to $INSTALL_DIR directory "
+    curl -sS --location --request GET $TARGET_URL -o $ARTIFACT_ZIPFILE
+    unzip -q $ARTIFACT_ZIPFILE -d $TARGET_DIR
+    rm -f $ARTIFACT_ZIPFILE
+
+done
+exit
