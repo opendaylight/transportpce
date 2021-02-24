@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8de53dda_04386ea9",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "\u003d\u003d",
+      "range": {
+        "startLine": 121,
+        "startChar": 36,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "ab2579fc54ca73a115bf90e5d89930bc18f924ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51aad97_47aa3595",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "indent +4 or add a LF to separate method declaration from body",
+      "range": {
+        "startLine": 167,
+        "startChar": 8,
+        "endLine": 167,
+        "endChar": 109
+      },
+      "revId": "ab2579fc54ca73a115bf90e5d89930bc18f924ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03504d7d_01671b96",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 185,
+        "startChar": 7,
+        "endLine": 185,
+        "endChar": 54
+      },
+      "revId": "ab2579fc54ca73a115bf90e5d89930bc18f924ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "582c91b0_a4649a58",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "no more needed",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "ab2579fc54ca73a115bf90e5d89930bc18f924ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

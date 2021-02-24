@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "c0d7348b_17e0391c",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c02477f7_70a96cdd",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 17
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "664f226d_c15d0418",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
         "patchSetId": 2
@@ -236,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "e37fe998_77bb3c6f",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "664f226d_c15d0418",
+      "range": {
+        "startLine": 558,
+        "startChar": 12,
+        "endLine": 558,
+        "endChar": 36
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6e42abc_d77c6d29",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
         "patchSetId": 2
@@ -256,6 +304,30 @@
       "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9be7053a_2c171f3c",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T20:11:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6e42abc_d77c6d29",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "e7880d4a9b7fe0a949b7e5969be17a687c2a7321",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
