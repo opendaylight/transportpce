@@ -27,13 +27,16 @@ public class OpenRoadmInterfaceFactory {
     private final MappingUtils mappingUtils;
     private final OpenRoadmInterface121 openRoadmInterface121;
     private final OpenRoadmInterface221 openRoadmInterface221;
+    private final OpenRoadmInterface710 openRoadmInterface710;
     private final OpenRoadmOtnInterface221 openRoadmOtnInterface;
 
     public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, OpenRoadmInterface121 openRoadmInterface121,
-            OpenRoadmInterface221 openRoadmInterface221, OpenRoadmOtnInterface221 openRoadmOTNInterface) {
+            OpenRoadmInterface221 openRoadmInterface221, OpenRoadmInterface710 openRoadmInterface710,
+        OpenRoadmOtnInterface221 openRoadmOTNInterface) {
         this.mappingUtils = mappingUtils;
         this.openRoadmInterface121 = openRoadmInterface121;
         this.openRoadmInterface221 = openRoadmInterface221;
+        this.openRoadmInterface710 = openRoadmInterface710;
         this.openRoadmOtnInterface = openRoadmOTNInterface;
     }
 
@@ -45,6 +48,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                return openRoadmInterface710.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             default:
                 return null;
         }
@@ -83,7 +88,13 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
                         spectrumInformation);
-
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                // In the case of 710 device, we logically combine the OTSi and OTSiGroup interface and represent
+                // as OCh
+                String interfaceOtsiName = openRoadmInterface710.createOpenRoadmOtsiInterface(nodeId, logicalConnPoint,
+                    spectrumInformation);
+                return openRoadmInterface710.createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint,
+                    interfaceOtsiName);
             default:
                 return null;
         }
@@ -108,6 +119,12 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
                         supportingOtuInterface);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                // Here ODUCn and ODUflex are combined
+                String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(nodeId,
+                    logicalConnPoint, supportingOtuInterface);
+                return openRoadmInterface710.createOpenRoadmOduflexInterface(nodeId, logicalConnPoint,
+                    interfaceNameOduc4);
             default:
                 return null;
         }
@@ -135,6 +152,12 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint,
                     asupportingOtuInterface, znodeId, zlogicalConnPoint);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                // Here ODUCn and ODUflex are combined
+                String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(anodeId,
+                    alogicalConnPoint, asupportingOtuInterface, znodeId, zlogicalConnPoint);
+                return openRoadmInterface710.createOpenRoadmOduflexInterface(anodeId, alogicalConnPoint,
+                    interfaceNameOduc4, znodeId, zlogicalConnPoint);
             default:
                 return null;
         }
@@ -159,6 +182,9 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221
                         .createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                return openRoadmInterface710.createOpenRoadmOtucnInterface(nodeId, logicalConnPoint,
+                    supportOchInterface);
             default:
                 return null;
         }
@@ -187,6 +213,9 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOtu4Interface(anodeId, alogicalConnPoint,
                         asupportOchInterface, znodeId, zlogicalConnPoint);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                return openRoadmInterface710.createOpenRoadmOtucnInterface(anodeId, alogicalConnPoint,
+                    asupportOchInterface, znodeId, zlogicalConnPoint);
             default:
                 return null;
         }
