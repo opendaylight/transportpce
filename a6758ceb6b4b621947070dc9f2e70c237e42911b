@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c2b459_e22275cb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T12:07:46Z",
+      "side": 1,
+      "message": "I think it should better be handled inside the next block.\n\nwhat about this ?\n\nelse if (\"Ethernet\".equals(serviceFormatA)) {\n\n   if (serviceRate \u003d\u003d 400L)\n        serviceType \u003d StringConstants.SERVICE_TYPE_400GE;\n   } elseif (serviceRate \u003d\u003d 10L) {\n        serviceType \u003d StringConstants.SERVICE_TYPE_10GE;\n   } else if (serviceRate \u003d\u003d 1L) {\n        serviceType \u003d StringConstants.SERVICE_TYPE_1GE;\n   } else {\n        LOG.debug(\"parseInput: unsupported service type: Format Ethernet Rate {}\", serviceRate);\n   }\n\n} else {\n...",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 1
+      },
+      "revId": "a6758ceb6b4b621947070dc9f2e70c237e42911b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1913232a_ad343955",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-24T12:07:46Z",
+      "side": 1,
+      "message": "There is a possible factorization with \"Ethernet\".equals(serviceFormatA).\nIt could avoid a double check on it",
+      "revId": "a6758ceb6b4b621947070dc9f2e70c237e42911b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
