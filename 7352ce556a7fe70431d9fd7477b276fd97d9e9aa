@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b810eb3d_5f9270b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-25T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "915169a7_18db2ab1",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90cf598b_33357b03",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 3
@@ -258,6 +282,30 @@
       "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2642918e_63b50c1c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-25T15:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d28f85d8_c1573567",
+      "range": {
+        "startLine": 191,
+        "startChar": 72,
+        "endLine": 191,
+        "endChar": 73
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
