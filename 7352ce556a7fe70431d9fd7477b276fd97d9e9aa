@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "98f0c3b1_6268bad8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-02-25T07:51:28Z",
+      "side": 1,
+      "message": "ah okay I meant that inside the name space, there should be no line feed\ninside the block \"openroadm.optical.channel.tributary.signal.interfaces.rev200529\".\n\nThe reason is that otherwise, we won\u0027t detect this line easily when we may need to upgrade the NS version to a newer revision.",
+      "parentUuid": "660fa847_abe74dab",
+      "range": {
+        "startLine": 149,
+        "startChar": 86,
+        "endLine": 149,
+        "endChar": 87
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6df0e470_91b5fa3a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 3
