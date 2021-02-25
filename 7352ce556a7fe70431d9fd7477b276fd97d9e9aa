@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "47c2afd9_2bcf4284",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-02-25T04:26:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90cf598b_33357b03",
+      "range": {
+        "startLine": 2,
+        "startChar": 14,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d5cf719_d045a9d5",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 3
@@ -68,6 +92,30 @@
       "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72358ba5_b942a38b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-02-25T04:26:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d5cf719_d045a9d5",
+      "range": {
+        "startLine": 139,
+        "startChar": 30,
+        "endLine": 139,
+        "endChar": 113
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "660fa847_abe74dab",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-02-25T04:26:40Z",
+      "side": 1,
+      "message": "Sorry Guillaume, couldn\u0027t follow your comment here",
+      "parentUuid": "e881d958_8cb50dbc",
+      "range": {
+        "startLine": 149,
+        "startChar": 86,
+        "endLine": 149,
+        "endChar": 87
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6df0e470_91b5fa3a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 3
@@ -105,6 +177,30 @@
       "writtenOn": "2021-02-24T20:01:52Z",
       "side": 1,
       "message": "idem etc",
+      "range": {
+        "startLine": 191,
+        "startChar": 72,
+        "endLine": 191,
+        "endChar": 73
+      },
+      "revId": "7352ce556a7fe70431d9fd7477b276fd97d9e9aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d28f85d8_c1573567",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-02-25T04:26:40Z",
+      "side": 1,
+      "message": "same !",
+      "parentUuid": "6df0e470_91b5fa3a",
       "range": {
         "startLine": 191,
         "startChar": 72,
