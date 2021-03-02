@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bdf6e030_e4c3f158",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-02T07:57:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f8ce5f45_beb46c98",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 38
+      },
+      "revId": "7301735cdf2bf079a4253ea6ce0bc53d28923dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "464753a5_8e7b9947",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils221.java",
         "patchSetId": 3
