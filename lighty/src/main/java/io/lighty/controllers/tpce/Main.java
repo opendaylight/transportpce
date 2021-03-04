@@ -106,8 +106,8 @@ public class Main {
      * Build options for command line arguments
      * @return
      */
-    private static Options builOptions() {
-        Option rescontFileOption = Option.builder(RESTCONF_OPTION_NAME)
+    private static Options buildOptions() {
+        Option restconfFileOption = Option.builder(RESTCONF_OPTION_NAME)
                 .desc("Restconf configuration file")
                 .argName(RESTCONF_OPTION_NAME)
                 .hasArg(true)
@@ -120,7 +120,7 @@ public class Main {
                 .required(false)
                 .build();
         Options options = new Options();
-        options.addOption(rescontFileOption);
+        options.addOption(restconfFileOption);
         options.addOption(useNbiNotificationsOption);
         return options;
     }
@@ -171,7 +171,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Options options = builOptions();
+        Options options = buildOptions();
         try {
             CommandLine commandLine = new DefaultParser().parse(options, args);
             String restConfConfigurationFile = commandLine.getOptionValue(RESTCONF_OPTION_NAME, null);
