@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0fb170e_02a116d2",
+        "filename": "features/odl-transportpce-dmaap-client/pom.xml",
+        "patchSetId": 21
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-04T15:59:54Z",
+      "side": 1,
+      "message": "tabs should be avoided",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 24
+      },
+      "revId": "da739bdfd5d50efadbb066aa97c9b03a33c1639e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
