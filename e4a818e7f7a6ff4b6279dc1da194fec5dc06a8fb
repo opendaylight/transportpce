@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cead66d_3673c483",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-04T17:25:42Z",
+      "side": 1,
+      "message": "I haven\u0027t found any sample files to give a full example here.",
+      "range": {
+        "startLine": 185,
+        "startChar": 35,
+        "endLine": 185,
+        "endChar": 60
+      },
+      "revId": "e4a818e7f7a6ff4b6279dc1da194fec5dc06a8fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
