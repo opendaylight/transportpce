@@ -106,8 +106,8 @@ public class Main {
      * Build options for command line arguments
      * @return
      */
-    private static Options builOptions() {
-        Option rescontFileOption = Option.builder(RESTCONF_OPTION_NAME)
+    private static Options buildOptions() {
+        Option restconfFileOption = Option.builder(RESTCONF_OPTION_NAME)
                 .desc("Restconf configuration file")
                 .argName(RESTCONF_OPTION_NAME)
                 .hasArg(true)
@@ -120,7 +120,7 @@ public class Main {
                 .required(false)
                 .build();
         Options options = new Options();
-        options.addOption(rescontFileOption);
+        options.addOption(restconfFileOption);
         options.addOption(useNbiNotificationsOption);
         return options;
     }
@@ -171,7 +171,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Options options = builOptions();
+        Options options = buildOptions();
         try {
             CommandLine commandLine = new DefaultParser().parse(options, args);
             String restConfConfigurationFile = commandLine.getOptionValue(RESTCONF_OPTION_NAME, null);
@@ -181,8 +181,8 @@ public class Main {
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(
-                    "java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar "
-                    + "[-restconf rescontConfigurationFile] [-nbinotification]",
+                    "java -ms<size> -mx<size> -XX:MaxMetaspaceSize=<size> -jar tpce.jar "
+                    + "[-restconf <restconfConfigurationFile>] [-nbinotification]",
                     options);
             System.exit(1);
         }
