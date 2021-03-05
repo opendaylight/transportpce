@@ -7,7 +7,7 @@
 # and is available at http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 #
-# debian dependecies: apt-get install libnet-openssh-perl libio-pty-perl
+# debian dependencies: apt-get install libnet-openssh-perl libio-pty-perl
 #
 
 use strict;

@@ -7,7 +7,7 @@
 # and is available at http://www.eclipse.org/legal/epl-v10.html
 ##############################################################################
 #
-# debian dependecies: apt-get install libnet-openssh-perl libio-pty-perl
+# debian dependencies: apt-get install libnet-openssh-perl libio-pty-perl
 #
 
 use strict;
@@ -40,7 +40,7 @@ are then proxified between both ends.
 By default, exchanges are altered according to the rules specified inside this script and easily 
 modifiable. This behaviour can be disabled with the '-s' option.
 For more convenience, the server hello handshake can also alternatively be replaced by the content
-of an external file rather instead of writing specific rules.
+of an external file instead of writing specific rules.
 
 OPTIONS :
 
