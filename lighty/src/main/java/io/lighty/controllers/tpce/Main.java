@@ -181,8 +181,10 @@ public class Main {
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(
-                    "java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar "
-                    + "[-restconf rescontConfigurationFile] [-nbinotification]",
+                    "java -ms<size> -mx<size> -XX:MaxMetaspaceSize=<size> -jar tpce.jar "
+                    + "[-restconf <restconfConfigurationFile>] [-nbinotification]"
+                    +" e.g. java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar"
+                    + "-restconf ../src/test/resources/config.json -nbinotification",
                     options);
             System.exit(1);
         }
