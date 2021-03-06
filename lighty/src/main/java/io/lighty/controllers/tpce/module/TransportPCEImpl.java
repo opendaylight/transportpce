@@ -130,7 +130,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         FrequenciesService networkModelWavelengthService =
                 new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
-                lightyServices.getBindingDataBroker(), deviceTransactionManager);
+                lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
                 lightyServices.getNotificationService(), networkModelWavelengthService);
