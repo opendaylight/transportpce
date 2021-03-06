@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AT&T and others.  All rights reserved.
+ * Copyright © 2021 Orange and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -12,25 +12,25 @@ import java.util.Collection;
 import java.util.LinkedList;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CreateTechInfoNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OtdrScanResult;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.notification.Edit;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.ChangeNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.CreateTechInfoNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OtdrScanResult;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.change.notification.Edit;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacks;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeviceListener221 implements OrgOpenroadmDeviceListener {
+public class DeviceListener710 implements OrgOpenroadmDeviceListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceListener221.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceListener710.class);
     private final String nodeId;
     private final PortMapping portMapping;
 
-    public DeviceListener221(String nodeId, PortMapping portMapping) {
+    public DeviceListener710(String nodeId, PortMapping portMapping) {
         this.nodeId = nodeId;
         this.portMapping = portMapping;
     }
