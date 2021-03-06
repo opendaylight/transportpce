@@ -11,6 +11,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -23,12 +24,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,8 +67,6 @@ public class PortMappingImpl implements PortMapping {
         }
     }
 
-
-
     @Override
     public Mapping getMapping(String nodeId, String logicalConnPoint) {
 
@@ -91,6 +90,28 @@ public class PortMappingImpl implements PortMapping {
         return null;
     }
 
+    @Override
+    public Mapping getMapping(String nodeId, String circuitPackName, String portName) {
+        KeyedInstanceIdentifier<Nodes, NodesKey> portMappingIID = InstanceIdentifier.create(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId));
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> portMapppingOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
+            if (!portMapppingOpt.isPresent()) {
+                LOG.warn("Could not get portMapping for node {}", nodeId);
+                return null;
+            }
+            Map<MappingKey, Mapping> mappings = portMapppingOpt.get().getMapping();
+            for (Mapping mapping : mappings.values()) {
+                if (circuitPackName.equals(mapping.getSupportingCircuitPackName())
+                    && portName.equals(mapping.getSupportingPort())) {
+                    return mapping;
+                }
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
+        }
+        return null;
+    }
 
     @Override
     public McCapabilities getMcCapbilities(String nodeId, String mcLcp) {
@@ -139,57 +160,9 @@ public class PortMappingImpl implements PortMapping {
             case 1:
                 return portMappingVersion121.updateMapping(nodeId, oldMapping);
             case 2:
-                MappingBuilder oldMapping2Bldr221 = new MappingBuilder()
-                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                        .setPortDirection(oldMapping.getPortDirection());
-                if (oldMapping.getConnectionMapLcp() != null) {
-                    oldMapping2Bldr221.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
-                }
-                if (oldMapping.getPartnerLcp() != null) {
-                    oldMapping2Bldr221.setPartnerLcp(oldMapping.getPartnerLcp());
-                }
-                if (oldMapping.getPortQual() != null) {
-                    oldMapping2Bldr221.setPortQual(oldMapping.getPortQual());
-                }
-                if (oldMapping.getSupportingCircuitPackName() != null) {
-                    oldMapping2Bldr221.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
-                }
-                if (oldMapping.getSupportingOms() != null) {
-                    oldMapping2Bldr221.setSupportingOms(oldMapping.getSupportingOms());
-                }
-                if (oldMapping.getSupportingOts() != null) {
-                    oldMapping2Bldr221.setSupportingOts(oldMapping.getSupportingOts());
-                }
-                if (oldMapping.getSupportingPort() != null) {
-                    oldMapping2Bldr221.setSupportingPort(oldMapping.getSupportingPort());
-                }
-                return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr221.build());
+                return portMappingVersion22.updateMapping(nodeId, oldMapping);
             case 3:
-                MappingBuilder oldMapping2Bldr710 = new MappingBuilder()
-                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                        .setPortDirection(oldMapping.getPortDirection());
-                if (oldMapping.getConnectionMapLcp() != null) {
-                    oldMapping2Bldr710.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
-                }
-                if (oldMapping.getPartnerLcp() != null) {
-                    oldMapping2Bldr710.setPartnerLcp(oldMapping.getPartnerLcp());
-                }
-                if (oldMapping.getPortQual() != null) {
-                    oldMapping2Bldr710.setPortQual(oldMapping.getPortQual());
-                }
-                if (oldMapping.getSupportingCircuitPackName() != null) {
-                    oldMapping2Bldr710.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
-                }
-                if (oldMapping.getSupportingOms() != null) {
-                    oldMapping2Bldr710.setSupportingOms(oldMapping.getSupportingOms());
-                }
-                if (oldMapping.getSupportingOts() != null) {
-                    oldMapping2Bldr710.setSupportingOts(oldMapping.getSupportingOts());
-                }
-                if (oldMapping.getSupportingPort() != null) {
-                    oldMapping2Bldr710.setSupportingPort(oldMapping.getSupportingPort());
-                }
-                return portMappingVersion710.updateMapping(nodeId, oldMapping2Bldr710.build());
+                return portMappingVersion710.updateMapping(nodeId, oldMapping);
             default:
                 return false;
         }
@@ -213,6 +186,4 @@ public class PortMappingImpl implements PortMapping {
         }
         return null;
     }
-
-
 }

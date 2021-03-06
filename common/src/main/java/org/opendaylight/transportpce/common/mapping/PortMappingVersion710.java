@@ -180,7 +180,7 @@ public class PortMappingVersion710 {
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
-        InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+        InstanceIdentifier<Ports> portId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()));
         if ((oldMapping == null) || (nodeId == null)) {
@@ -188,15 +188,9 @@ public class PortMappingVersion710 {
             return false;
         }
         try {
-            Optional<Ports> portObject = deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, portIId, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (!portObject.isPresent()) {
-                return false;
-            }
-            Ports port = portObject.get();
-            Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
-                oldMapping.getLogicalConnectionPoint());
+            Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+                portId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
+            Mapping newMapping = updateMappingObject(nodeId, port, oldMapping);
             LOG.debug("{} : Updating old mapping Data {} for {} by new mapping data {}",
                     nodeId, oldMapping, oldMapping.getLogicalConnectionPoint(), newMapping);
             final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
@@ -843,7 +837,36 @@ public class PortMappingVersion710 {
                 && !logicalConnectionPoint.contains(StringConstants.NETWORK_TOKEN))) {
             return mpBldr.build();
         }
-        // Get OMS and OTS interface provisioned on the TTP's
+        mpBldr = updateMappingInterfaces(nodeId, mpBldr, port);
+        return mpBldr.build();
+    }
+
+    private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping) {
+        MappingBuilder mpBldr = new MappingBuilder(oldmapping);
+        updateMappingStates(mpBldr, port, oldmapping);
+        if ((port.getInterfaces() == null)
+            || (!oldmapping.getLogicalConnectionPoint().contains(StringConstants.TTP_TOKEN)
+                && !oldmapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN))) {
+            return mpBldr.build();
+        }
+        // Get interfaces provisioned on the port
+        mpBldr = updateMappingInterfaces(nodeId, mpBldr, port);
+        return mpBldr.build();
+    }
+
+    private MappingBuilder updateMappingStates(MappingBuilder mpBldr, Ports port, Mapping oldmapping) {
+        if (port.getAdministrativeState() != null
+            && !port.getAdministrativeState().getName().equals(oldmapping.getPortAdminState())) {
+            mpBldr.setPortAdminState(port.getAdministrativeState().name());
+        }
+        if (port.getOperationalState() != null
+            && !port.getOperationalState().getName().equals(oldmapping.getPortOperState())) {
+            mpBldr.setPortOperState(port.getOperationalState().name());
+        }
+        return mpBldr;
+    }
+
+    private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
         for (Interfaces interfaces : port.getInterfaces()) {
             try {
                 Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
@@ -871,7 +894,7 @@ public class PortMappingVersion710 {
                     nodeId, interfaces.getInterfaceName(), ex);
             }
         }
-        return mpBldr.build();
+        return mpBldr;
     }
 
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
