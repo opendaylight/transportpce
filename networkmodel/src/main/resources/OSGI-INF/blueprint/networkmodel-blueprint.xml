@@ -37,6 +37,7 @@
         <argument ref="networkModelService" />
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
+        <argument ref="portMapping" />
     </bean>
 
     <bean id="networkutilsServiceImpl" class="org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl">
