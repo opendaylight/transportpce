@@ -830,6 +830,12 @@ public class PortMappingVersion710 {
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName());
+        if (port.getAdministrativeState() != null) {
+            mpBldr.setPortAdminState(port.getAdministrativeState().name());
+        }
+        if (port.getOperationalState() != null) {
+            mpBldr.setPortOperState(port.getOperationalState().name());
+        }
 
         if ((port.getInterfaces() == null)
             || (!logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
@@ -904,6 +910,12 @@ public class PortMappingVersion710 {
                 supportedIntf.add(sic.getIfCapType());
             }
             mpBldr.setSupportedInterfaceCapability(supportedIntf);
+        }
+        if (port.getAdministrativeState() != null) {
+            mpBldr.setPortAdminState(port.getAdministrativeState().name());
+        }
+        if (port.getOperationalState() != null) {
+            mpBldr.setPortOperState(port.getOperationalState().name());
         }
         return mpBldr.build();
     }

@@ -86,7 +86,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '2/0',
-             'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional'},
+             'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_05_rdm_portmapping_SRG1_PP7_TXRX(self):
@@ -95,7 +96,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': 'C7', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP7-TXRX', 'port-direction': 'bidirectional'},
+             'logical-connection-point': 'SRG1-PP7-TXRX', 'port-direction': 'bidirectional',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_06_rdm_portmapping_SRG3_PP1_TXRX(self):
@@ -104,7 +106,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': 'C1', 'supporting-circuit-pack-name': '5/0',
-             'logical-connection-point': 'SRG3-PP1-TXRX', 'port-direction': 'bidirectional'},
+             'logical-connection-point': 'SRG3-PP1-TXRX', 'port-direction': 'bidirectional',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_07_xpdr_device_connection(self):
@@ -141,7 +144,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'OSvMgUyP+mE='},
+             'lcp-hash-val': 'OSvMgUyP+mE=',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_11_xpdr_portmapping_NETWORK2(self):
@@ -152,7 +156,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT3', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'OSvMgUyP+mI='},
+             'lcp-hash-val': 'OSvMgUyP+mI=',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_12_xpdr_portmapping_CLIENT1(self):
@@ -164,7 +169,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AO9UFkY/TLYw'},
+             'lcp-hash-val': 'AO9UFkY/TLYw',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT2(self):
@@ -176,7 +182,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/C2-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
              'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AO9UFkY/TLYz'},
+             'lcp-hash-val': 'AO9UFkY/TLYz',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT3(self):
@@ -188,7 +195,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/C3-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT3',
              'connection-map-lcp': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
-             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYy'},
+             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYy',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_15_xpdr_portmapping_CLIENT4(self):
@@ -199,7 +207,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supporting-port': 'C4',
              'supporting-circuit-pack-name': '1/0/C4-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT4', 'port-direction': 'bidirectional',
-             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLY1'},
+             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLY1',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
     def test_16_xpdr_device_disconnection(self):
