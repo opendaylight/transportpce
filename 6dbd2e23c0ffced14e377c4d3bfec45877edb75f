@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9b414a2_9f3b1db4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-10T08:40:54Z",
+      "side": 1,
+      "message": "merge conflict here",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 1
+      },
+      "revId": "6dbd2e23c0ffced14e377c4d3bfec45877edb75f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef938384_f06b4fba",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-10T08:40:54Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "6dbd2e23c0ffced14e377c4d3bfec45877edb75f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f0aec5_7d56027c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-10T08:40:54Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "6dbd2e23c0ffced14e377c4d3bfec45877edb75f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb601617_7b1ac7d5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-10T08:40:54Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 65
+      },
+      "revId": "6dbd2e23c0ffced14e377c4d3bfec45877edb75f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
