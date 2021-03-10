@@ -48,11 +48,13 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '1/0',
-             'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional'},
+             'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
         self.assertIn(
             {'supporting-port': 'C3', 'supporting-circuit-pack-name': '3/0',
-             'logical-connection-point': 'SRG1-PP3-TXRX', 'port-direction': 'bidirectional'},
+             'logical-connection-point': 'SRG1-PP3-TXRX', 'port-direction': 'bidirectional',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
@@ -64,7 +66,8 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AMkDwQ7xTmRI'},
+             'lcp-hash-val': 'AMkDwQ7xTmRI',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
@@ -72,7 +75,8 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALj'},
+             'lcp-hash-val': 'AJUUr6I5fALj',
+             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
