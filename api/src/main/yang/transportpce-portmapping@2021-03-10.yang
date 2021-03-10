@@ -34,9 +34,13 @@ module transportpce-portmapping {
      AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
      ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2021-03-10 {
+      description
+      "Upgrading imported models to 7.1.0";
+  }
   revision 2020-10-12 {
-    description
-    "Upgrading imported models to 7.1.0";
+      description
+      "Upgrading imported models to 7.1.0";
   }
   revision 2020-08-27 {
     description
@@ -163,6 +167,16 @@ module transportpce-portmapping {
           description
             "Useful to identify from portmapping client from network ports
              of XPDR";
+        }
+        leaf port-admin-state {
+          type string;
+          description
+            "admin-state of port";
+        }
+        leaf port-oper-state {
+            type string;
+            description
+              "operational-state of port";
         }
         leaf supporting-ethernet {
           type string;
