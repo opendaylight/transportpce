@@ -11,8 +11,11 @@ package org.opendaylight.transportpce.pce.graph;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
@@ -26,10 +29,15 @@ public class PceGraphEdgeTest {
     private Node node = null;
     private PceLink pceLink = null;
     private PceGraphEdge pceGraphEdge = null;
+    private String deviceNodeId = "device node";
+    private String serviceType = "100GE";
+    @Mock
+    private PortMapping portMapping;
 
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         // Build Link
         link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
                 "OpenROADM-3-1-DEG1",
@@ -38,9 +46,9 @@ public class PceGraphEdgeTest {
         //  Link link=genereateLinkBuilder();
         node =  NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes()).build();
 
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
-        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(node,
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
 
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);

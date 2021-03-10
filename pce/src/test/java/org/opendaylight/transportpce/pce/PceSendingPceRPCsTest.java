@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
@@ -38,6 +39,8 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     private JerseyServer jerseyServer = new JerseyServer();
     private DataBroker dataBroker;
     private GnpyConsumer gnpyConsumer;
+    @Mock
+    private PortMapping portMapping;
 
 
     @Before
@@ -48,7 +51,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
-                        networkTransaction, gnpyConsumer);
+                        networkTransaction, gnpyConsumer, portMapping);
     }
 
     @Test
@@ -62,7 +65,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         jerseyServer.setUp();
         pceSendingPceRPCs =
                 new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                        networkTransaction, gnpyConsumer);
+                        networkTransaction, gnpyConsumer, portMapping);
 
         pceSendingPceRPCs.pathComputation();
         Assert.assertTrue(gnpyConsumer.isAvailable());
