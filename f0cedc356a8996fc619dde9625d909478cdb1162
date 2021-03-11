@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "903bdedf_fd715968",
+        "filename": "api/src/main/yang/nbi-notifications@2020-11-30.yang",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-11T15:57:57Z",
+      "side": 1,
+      "message": "Ack\n\nEPL applies by default\nJIRA ticket created https://jira.opendaylight.org/browse/TRNSPRTPCE-417",
+      "parentUuid": "d0d53c13_d5d68227",
+      "revId": "f0cedc356a8996fc619dde9625d909478cdb1162",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c628bd6_ee548f1d",
         "filename": "nbinotifications/src/test/resources/event.json",
         "patchSetId": 26
@@ -33,6 +51,24 @@
       "revId": "f0cedc356a8996fc619dde9625d909478cdb1162",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6cf064_e39393fc",
+        "filename": "nbinotifications/src/test/resources/event.json",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-11T15:57:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c628bd6_ee548f1d",
+      "revId": "f0cedc356a8996fc619dde9625d909478cdb1162",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
