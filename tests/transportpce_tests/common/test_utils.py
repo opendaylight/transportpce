@@ -190,6 +190,12 @@ def put_xmlrequest(url, data):
         headers=TYPE_APPLICATION_XML,
         auth=(ODL_LOGIN, ODL_PWD))
 
+def put_jsonrequest(url, data):
+    return requests.request(
+        "PUT", url.format(RESTCONF_BASE_URL),
+        data=data,
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 def rawput_request(url, data):
     return requests.request(
