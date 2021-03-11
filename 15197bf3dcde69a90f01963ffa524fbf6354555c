@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4b083d8_ca4930c8",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_renderer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-11T12:01:47Z",
+      "side": 1,
+      "message": "looks like this dictionary is ued 3 times -\u003e possible constant ?",
+      "revId": "15197bf3dcde69a90f01963ffa524fbf6354555c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
