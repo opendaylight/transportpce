@@ -15,6 +15,8 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -115,6 +117,38 @@ public final class TopologyUtils {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error deleting link {}", linkId.getValue(), e);
             return false;
+        }
+    }
+
+    public static AdminStates setNetworkAdminState(String adminState) {
+        if (adminState == null) {
+            return null;
+        }
+        switch (adminState) {
+            case "InService":
+                return AdminStates.InService;
+            case "OutOfService":
+                return AdminStates.OutOfService;
+            case "Maintenance":
+                return AdminStates.Maintenance;
+            default:
+                return null;
+        }
+    }
+
+    public static State setNetworkOperState(String operState) {
+        if (operState == null) {
+            return null;
+        }
+        switch (operState) {
+            case "InService":
+                return State.InService;
+            case "OutOfService":
+                return State.OutOfService;
+            case "Degraded":
+                return State.Degraded;
+            default:
+                return null;
         }
     }
 }
