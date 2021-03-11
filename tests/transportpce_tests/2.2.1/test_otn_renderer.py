@@ -21,6 +21,16 @@ from common import test_utils
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
+    NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR1-NETWORK1",
+                           "supporting-port": "CP1-CFP0-P1",
+                           "supported-interface-capability": [
+                               "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+                           ],
+                           "port-direction": "bidirectional",
+                           "port-qual": "xpdr-network",
+                           "supporting-circuit-pack-name": "CP1-CFP0",
+                           "xponder-type": "mpdr",
+                           'lcp-hash-val': 'Swfw02qXGyI='}
 
     @classmethod
     def setUpClass(cls):
@@ -68,23 +78,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {"logical-connection-point": "XPDR1-NETWORK1",
-             "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
-                 "org-openroadm-port-types:if-OCH-OTU4-ODU4"
-             ],
-                "port-direction": "bidirectional",
-                "port-qual": "xpdr-network",
-                "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
-             'lcp-hash-val': 'Swfw02qXGyI='},
+            self.NETWORK1_CHECK_DICT,
             res['mapping'])
 
     def test_04_service_path_create_OCH_OTU4(self):
         response = test_utils.service_path_request("create", "service_OCH_OTU4", "1",
                                                    [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}],
                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   768)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -100,16 +101,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {"logical-connection-point": "XPDR1-NETWORK1",
-             "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
-                 "org-openroadm-port-types:if-OCH-OTU4-ODU4"
-             ],
-                "port-direction": "bidirectional",
-                "port-qual": "xpdr-network",
-                "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
-                "lcp-hash-val": "Swfw02qXGyI="},
+            self.NETWORK1_CHECK_DICT,
             res['mapping'])
 
     def test_06_check_interface_och(self):
@@ -172,19 +164,9 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
+        self.NETWORK1_CHECK_DICT["supporting-odu4"] = "XPDR1-NETWORK1-ODU4"
         self.assertIn(
-            {"logical-connection-point": "XPDR1-NETWORK1",
-             "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
-                 "org-openroadm-port-types:if-OCH-OTU4-ODU4"
-             ],
-                "port-direction": "bidirectional",
-                "port-qual": "xpdr-network",
-                "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
-                "supporting-odu4": "XPDR1-NETWORK1-ODU4",
-                "lcp-hash-val": "Swfw02qXGyI="
-             },
+            self.NETWORK1_CHECK_DICT,
             res['mapping'])
 
     def test_10_check_interface_ODU4(self):
@@ -369,7 +351,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.service_path_request("delete", "service_OCH_OTU4", "1",
                                                    [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}],
                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   768)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
