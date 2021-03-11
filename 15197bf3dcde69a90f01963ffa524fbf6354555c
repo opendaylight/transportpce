@@ -16,6 +16,24 @@
       "revId": "15197bf3dcde69a90f01963ffa524fbf6354555c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69499e3f_7f2c5cf5",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_renderer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-03-11T12:40:15Z",
+      "side": 1,
+      "message": "Only 2 times. For me, the readibility is better as it is...",
+      "parentUuid": "e4b083d8_ca4930c8",
+      "revId": "15197bf3dcde69a90f01963ffa524fbf6354555c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
