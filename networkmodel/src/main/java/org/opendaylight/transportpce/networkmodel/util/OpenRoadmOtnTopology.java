@@ -628,13 +628,14 @@ public final class OpenRoadmOtnTopology {
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder tpceTp1Bldr =
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder();
             TpId tpId = new TpId(mapping.getLogicalConnectionPoint());
-            setclientNwTpAttr(tpMap, node, tpId, tpType, otnTp1Bldr.build(), tpceTp1Bldr);
+            setclientNwTpAttr(tpMap, node, tpId, tpType, otnTp1Bldr.build(), tpceTp1Bldr, mapping);
         }
     }
 
     private static void setclientNwTpAttr(Map<TerminationPointKey, TerminationPoint> tpMap, OtnTopoNode node, TpId tpId,
             OpenroadmTpType tpType, TerminationPoint1 otnTp1,
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder tpceTp1Bldr) {
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder tpceTp1Bldr,
+            Mapping mapping) {
         switch (tpType) {
             case XPONDERNETWORK:
                 if (node.getXpdrNetConnectionMap().get(tpId.getValue()) != null) {
@@ -645,14 +646,15 @@ public final class OpenRoadmOtnTopology {
                     .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
                     .setTpRef(tpId.getValue())
                     .build();
-                TerminationPoint ietfTpNw = buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, Map.of(stp.key(), stp));
+                TerminationPoint ietfTpNw = buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, Map.of(stp.key(), stp),
+                    mapping);
                 tpMap.put(ietfTpNw.key(),ietfTpNw);
                 break;
             case XPONDERCLIENT:
                 if (node.getXpdrCliConnectionMap().get(tpId.getValue()) != null) {
                     tpceTp1Bldr.setAssociatedConnectionMapPort(node.getXpdrCliConnectionMap().get(tpId.getValue()));
                 }
-                TerminationPoint ietfTpCl = buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, null);
+                TerminationPoint ietfTpCl = buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, null, mapping);
                 tpMap.put(ietfTpCl.key(),ietfTpCl);
                 break;
             default:
@@ -735,7 +737,7 @@ public final class OpenRoadmOtnTopology {
     private static TerminationPoint buildIetfTp(
         org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1Builder tpceTp1Bldr,
         TerminationPoint1 otnTp1, OpenroadmTpType tpType, TpId tpId,
-        Map<SupportingTerminationPointKey, SupportingTerminationPoint> supportTpMap) {
+        Map<SupportingTerminationPointKey, SupportingTerminationPoint> supportTpMap, Mapping mapping) {
 
         TerminationPointBuilder ietfTpBldr = new TerminationPointBuilder();
         if (tpceTp1Bldr.getAssociatedConnectionMapPort() != null) {
@@ -747,8 +749,8 @@ public final class OpenRoadmOtnTopology {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 ocnTp =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder()
                     .setTpType(tpType)
-                    .setAdministrativeState(AdminStates.InService)
-                    .setOperationalState(State.InService)
+                    .setAdministrativeState(TopologyUtils.setNetworkAdminState(mapping.getPortAdminState()))
+                    .setOperationalState(TopologyUtils.setNetworkOperState(mapping.getPortOperState()))
                     .build();
 
         ietfTpBldr.setTpId(tpId)
