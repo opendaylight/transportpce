@@ -284,6 +284,24 @@
     },
     {
       "key": {
+        "uuid": "6a6de24f_0957b26e",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/PublishNotificationServiceSerializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-11T16:04:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bc9229c4_f40fa628",
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "deb9771c_c2831951",
         "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/RxDirectionSerializer.java",
         "patchSetId": 2
@@ -328,6 +346,30 @@
       "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96e15cda_19dd9788",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/resource/config/RxDirectionSerializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-11T16:04:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "882a3400_cb0f3948",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 27,
+        "endChar": 28
+      },
+      "revId": "d6e6433e27ba0d12fff27c17113bb54ee617125b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
