@@ -265,7 +265,8 @@ public class PortMappingVersion710 {
                 int client = 1;
                 Integer xponderNb = xponder.getXpdrNumber().toJava();
                 XpdrNodeTypes xponderType = xponder.getXpdrType();
-                for (XpdrPort xpdrPort : xponder.nonnullXpdrPort().values()) {
+                for (XpdrPort xpdrPort : xponder.nonnullXpdrPort().values().stream()
+                        .sorted((xp1, xp2) -> xp1.getIndex().compareTo(xp2.getIndex())).collect(Collectors.toList())) {
                     String circuitPackName = xpdrPort.getCircuitPackName();
                     String portName = xpdrPort.getPortName().toString();
                     // If there xponder-subtree has missing circuit-packs or ports,
