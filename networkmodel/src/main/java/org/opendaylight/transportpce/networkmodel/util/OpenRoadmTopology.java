@@ -196,8 +196,8 @@ public final class OpenRoadmTopology {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder
                     ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
                         .org.openroadm.common.network.rev200529.TerminationPoint1Builder()
-                        .setAdministrativeState(AdminStates.InService)
-                        .setOperationalState(State.InService);
+                        .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                        .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
                 if (m.getPortQual().equals("xpdr-network")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
                     org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
@@ -226,8 +226,8 @@ public final class OpenRoadmTopology {
                         ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
                                 .org.openroadm.common.network.rev200529.TerminationPoint1Builder()
                             .setTpType(OpenroadmTpType.XPONDERNETWORK)
-                            .setAdministrativeState(AdminStates.InService)
-                            .setOperationalState(State.InService);
+                            .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                            .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
                     ietfTpBldr
                         .addAugmentation(ocnTp1Bldr.build());
                     TerminationPoint ietfTp = ietfTpBldr.build();
@@ -253,8 +253,8 @@ public final class OpenRoadmTopology {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder
                 ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                     .TerminationPoint1Builder()
-                        .setAdministrativeState(AdminStates.InService)
-                        .setOperationalState(State.InService);
+                        .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                        .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
 
             // Added states to degree port. TODO: add to mapping relation between abstracted and physical node states
             switch (m.getPortDirection()) {
@@ -323,8 +323,8 @@ public final class OpenRoadmTopology {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1Builder ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
                 .org.openroadm.common.network.rev200529.TerminationPoint1Builder()
-                    .setAdministrativeState(AdminStates.InService)
-                    .setOperationalState(State.InService);
+                    .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                    .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
             // Added states to srg port. TODO: add to mapping relation between abstracted and physical node states
             switch (m.getPortDirection()) {
                 case "bidirectional":
