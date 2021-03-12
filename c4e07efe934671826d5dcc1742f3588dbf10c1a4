@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd2c849d_91732c74",
+        "filename": "tox.ini",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-12T08:05:59Z",
+      "side": 1,
+      "message": "I think it is better to run this test before E2E tests",
+      "revId": "c4e07efe934671826d5dcc1742f3588dbf10c1a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
