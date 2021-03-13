@@ -199,7 +199,7 @@
                         "supporting-circuit-pack-name": "CP2-QSFP1"
                     },
                     {
-                        "logical-connection-point": "XPDR1-CLIENT3",
+                        "logical-connection-point": "XPDR1-CLIENT2",
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP2-P1",
@@ -211,7 +211,7 @@
                         "supporting-circuit-pack-name": "CP1-SFP2"
                     },
                     {
-                        "logical-connection-point": "XPDR1-CLIENT4",
+                        "logical-connection-point": "XPDR1-CLIENT3",
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP3-P1",
@@ -224,7 +224,7 @@
                         "supporting-circuit-pack-name": "CP1-SFP3"
                     },
                     {
-                        "logical-connection-point": "XPDR1-CLIENT1",
+                        "logical-connection-point": "XPDR1-CLIENT4",
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP4-P1",
@@ -237,7 +237,7 @@
                         "supporting-circuit-pack-name": "CP1-SFP4"
                     },
                     {
-                        "logical-connection-point": "XPDR1-CLIENT2",
+                        "logical-connection-point": "XPDR1-CLIENT1",
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP1-P1",
