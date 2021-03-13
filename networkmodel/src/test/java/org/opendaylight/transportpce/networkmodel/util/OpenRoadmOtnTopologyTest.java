@@ -35,13 +35,13 @@ import org.junit.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.JsonUtil;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
@@ -50,6 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
@@ -86,7 +87,7 @@ public class OpenRoadmOtnTopologyTest {
         try (Reader reader = new FileReader("src/test/resources/portMapping.json", StandardCharsets.UTF_8);
                 JsonReader portMappingReader = new JsonReader(reader)) {
             Network portMapping = (Network) JsonUtil.getInstance().getDataObjectFromJson(portMappingReader,
-                    QName.create("http://org/opendaylight/transportpce/portmapping", "2021-03-10", "network"));
+                    QName.create("http://org/opendaylight/transportpce/portmapping", "2021-03-15", "network"));
             for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {
                     this.portMappingTpdr = nodes;
@@ -880,6 +881,7 @@ public class OpenRoadmOtnTopologyTest {
     }
 
     private void checkSpdrTpList(Uint16 xpdrNb, List<TerminationPoint> tpList) {
+        LOG.info("tpList = {}", tpList);
         assertEquals(
             "only IfOCHOTU4ODU4 interface capabitily expected",
             IfOCHOTU4ODU4.class,
@@ -927,26 +929,14 @@ public class OpenRoadmOtnTopologyTest {
                     .getTpSupportedInterfaces()
                     .getSupportedInterfaceCapability().values().size());
             assertEquals(
-                "supported interface capability of tp-id XPDR1-CLIENT1 should contain 3 if-cap-type",
+                "supported interface capability of tp-id XPDR1-CLIENT3 should contain 3 if-cap-type",
                 3,
-                tpList.get(0)
+                tpList.get(2)
                     .augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
                             .TerminationPoint1.class)
                     .getTpSupportedInterfaces()
                     .getSupportedInterfaceCapability().values().size());
-            List<SupportedInterfaceCapability> sicListClient3 = tpList.get(2)
-                .augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
-                    .TerminationPoint1.class)
-                .getTpSupportedInterfaces()
-                .getSupportedInterfaceCapability().values().stream().collect(Collectors.toList());
-            for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient3) {
-                assertThat("tp should have 2 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2",
-                    String.valueOf(supportedInterfaceCapability.getIfCapType()),
-                    either(containsString(String.valueOf(If10GEODU2e.class)))
-                    .or(containsString(String.valueOf(If10GEODU2.class))));
-            }
             List<SupportedInterfaceCapability> sicListClient1 = tpList.get(0)
                 .augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
@@ -954,21 +944,33 @@ public class OpenRoadmOtnTopologyTest {
                 .getTpSupportedInterfaces()
                 .getSupportedInterfaceCapability().values().stream().collect(Collectors.toList());
             for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient1) {
+                assertThat("tp should have 2 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2",
+                    String.valueOf(supportedInterfaceCapability.getIfCapType()),
+                    either(containsString(String.valueOf(If10GEODU2e.class)))
+                    .or(containsString(String.valueOf(If10GEODU2.class))));
+            }
+            List<SupportedInterfaceCapability> sicListClient3 = tpList.get(3)
+                .augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
+                    .TerminationPoint1.class)
+                .getTpSupportedInterfaces()
+                .getSupportedInterfaceCapability().values().stream().collect(Collectors.toList());
+            for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient3) {
                 assertThat("tp should have 3 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2, if-10GE",
                     String.valueOf(supportedInterfaceCapability.getIfCapType()),
                     either(containsString(String.valueOf(If10GEODU2e.class)))
                     .or(containsString(String.valueOf(If10GEODU2.class)))
                     .or(containsString(String.valueOf(If10GE.class))));
             }
-            assertEquals(
-                "the rate should be ODU2e",
-                ODU2e.class,
-                tpList.get(2)
+            assertThat("the rate should be ODU2 or ODU2e or 10GE",
+                String.valueOf(tpList.get(2)
                     .augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
                             .TerminationPoint1.class)
                     .getXpdrTpPortConnectionAttributes()
-                    .getRate());
+                    .getRate()),
+                either(containsString(String.valueOf(ODU2e.class)))
+                .or(containsString(String.valueOf(ODU2.class))));
             assertEquals(
                 "TP should be of type client",
                 OpenroadmTpType.XPONDERCLIENT,
