@@ -22,10 +22,10 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.olm.util.OlmUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210310.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -80,7 +80,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     && destTpId != null) {
 
                 Nodes inputNode = inputNodeOptional.get();
-                OpenroadmVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
+                OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
                 LOG.info("Getting data from input node {}", inputNode.getNodeInfo().getNodeType());
                 LOG.info("Getting mapping data for node is {}",
                         inputNode.nonnullMapping().values().stream().filter(o -> o.key()
@@ -194,7 +194,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     && inputNodeOptional.get().getNodeInfo().getNodeType().equals(NodeTypes.Rdm)) {
                 // If Degree is transmitting end then set power
                 Nodes inputNode = inputNodeOptional.get();
-                OpenroadmVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
+                OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
                 LOG.info("This is a roadm {} device", openroadmVersion.getName());
                 String connectionNumber = String.join(GridConstant.NAME_PARAMETERS_SEPARATOR,srcTpId, destTpId,
                         spectralSlotName);
@@ -504,7 +504,7 @@ public class PowerMgmtImpl implements PowerMgmt {
      * @return true/false based on status of operation
      */
     private boolean callSetTransponderPower(String nodeId, String interfaceName, BigDecimal txPower,
-                                            OpenroadmVersion openroadmVersion) {
+                                            OpenroadmNodeVersion openroadmVersion) {
         boolean powerSetupResult = false;
         try {
             if (openroadmVersion.getIntValue() == 1) {
