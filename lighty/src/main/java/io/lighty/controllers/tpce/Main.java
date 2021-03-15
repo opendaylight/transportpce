@@ -34,21 +34,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
+
+    private static final String RESTCONF_OPTION_NAME = "restconf";
+
+    private static final String NBINOTIFICATION_OPTION_NAME = "nbinotification";
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private ShutdownHook shutdownHook;
 
     public void start() {
-        start(new String[] {}, false);
+        start(null, false, false);
     }
 
     @SuppressWarnings("checkstyle:Illegalcatch")
-    public void start(String[] args, boolean registerShutdownHook) {
+    public void start(String restConfConfigurationFile, boolean activateNbiNotification, boolean registerShutdownHook) {
         long startTime = System.nanoTime();
         TpceBanner.print();
         RestConfConfiguration restConfConfig = null;
@@ -57,8 +68,8 @@ public class Main {
             ControllerConfiguration singleNodeConfiguration = ControllerConfigUtils
                     .getDefaultSingleNodeConfiguration(TPCEUtils.getYangModels());
             // 2. get RESTCONF NBP configuration
-            if (args.length == 1) {
-                Path configPath = Paths.get(args[0]);
+            if (restConfConfigurationFile != null) {
+                Path configPath = Paths.get(restConfConfigurationFile);
                 LOG.info("Using restconf configuration from file {} ...", configPath);
                 restConfConfig = RestConfConfigUtils.getRestConfConfiguration(Files.newInputStream(configPath));
 
@@ -72,7 +83,7 @@ public class Main {
             restConfConfig.setJsonRestconfServiceType(JsonRestConfServiceType.DRAFT_02);
             // 3. NETCONF SBP configuration
             NetconfConfiguration netconfSBPConfig = NetconfConfigUtils.createDefaultNetconfConfiguration();
-            startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook);
+            startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook, activateNbiNotification);
             float duration = (System.nanoTime() - startTime) / 1_000_000f;
             LOG.info("lighty.io and RESTCONF-NETCONF started in {}ms", duration);
         } catch (ConfigurationException | ExecutionException | IOException e) {
@@ -91,9 +102,33 @@ public class Main {
         }
     }
 
+    /**
+     * Build options for command line arguments
+     * @return
+     */
+    private static Options buildOptions() {
+        Option restconfFileOption = Option.builder(RESTCONF_OPTION_NAME)
+                .desc("Restconf configuration file")
+                .argName(RESTCONF_OPTION_NAME)
+                .hasArg(true)
+                .required(false)
+                .build();
+        Option useNbiNotificationsOption = Option.builder(NBINOTIFICATION_OPTION_NAME)
+                .desc("Activate NBI notifications feature")
+                .argName(NBINOTIFICATION_OPTION_NAME)
+                .hasArg(false)
+                .required(false)
+                .build();
+        Options options = new Options();
+        options.addOption(restconfFileOption);
+        options.addOption(useNbiNotificationsOption);
+        return options;
+    }
+
     private void startLighty(ControllerConfiguration controllerConfiguration,
             RestConfConfiguration restConfConfiguration, NetconfConfiguration netconfSBPConfiguration,
-            boolean registerShutdownHook) throws ConfigurationException, ExecutionException, InterruptedException {
+            boolean registerShutdownHook, boolean activateNbiNotification)
+                    throws ConfigurationException, ExecutionException, InterruptedException {
 
         // 1. initialize and start Lighty controller (MD-SAL, Controller, YangTools,
         // Akka)
@@ -121,7 +156,7 @@ public class Main {
         netconfSouthboundPlugin.start().get();
 
         // 4. start TransportPCE beans
-        TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices());
+        TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices(), activateNbiNotification);
         transportPCE.start().get();
 
         // 5. Register shutdown hook for graceful shutdown.
@@ -136,8 +171,23 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Main app = new Main();
-        app.start(args, true);
+        Options options = buildOptions();
+        try {
+            CommandLine commandLine = new DefaultParser().parse(options, args);
+            String restConfConfigurationFile = commandLine.getOptionValue(RESTCONF_OPTION_NAME, null);
+            boolean useNbiNotifications = commandLine.hasOption(NBINOTIFICATION_OPTION_NAME);
+            Main app = new Main();
+            app.start(restConfConfigurationFile, useNbiNotifications, true);
+        } catch (ParseException e) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp(
+                    "java -ms<size> -mx<size> -XX:MaxMetaspaceSize=<size> -jar tpce.jar "
+                    + "[-restconf <restconfConfigurationFile>] [-nbinotification]"
+                    +" e.g. java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar"
+                    + "-restconf ../src/test/resources/config.json -nbinotification",
+                    options);
+            System.exit(1);
+        }
     }
 
     private static class ShutdownHook extends Thread {
