@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a6f9ca88_0353f2b7",
+        "filename": "tox.ini",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-15T09:10:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dcc5c14_542f55f7",
+      "range": {
+        "startLine": 22,
+        "startChar": 147,
+        "endLine": 22,
+        "endChar": 155
+      },
+      "revId": "c4e07efe934671826d5dcc1742f3588dbf10c1a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd2c849d_91732c74",
         "filename": "tox.ini",
         "patchSetId": 6
@@ -87,6 +111,24 @@
       "revId": "c4e07efe934671826d5dcc1742f3588dbf10c1a4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c18ede1_b5af0aeb",
+        "filename": "tox.ini",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-15T09:10:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd2c849d_91732c74",
+      "revId": "c4e07efe934671826d5dcc1742f3588dbf10c1a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
