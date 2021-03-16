@@ -7,14 +7,22 @@
  */
 package org.opendaylight.transportpce.networkmodel.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -22,13 +30,20 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,5 +165,68 @@ public final class TopologyUtils {
             default:
                 return null;
         }
+    }
+
+    public static TopologyShard updateTopologyShard(String abstractNodeid, Mapping mapping, Map<NodeKey, Node> nodes,
+            Map<LinkKey, Link> links) {
+        // update termination-point corresponding to the mapping
+        List<TerminationPoint> topoTps = new ArrayList<>();
+        TerminationPoint tp = nodes.get(new NodeKey(new NodeId(abstractNodeid))).augmentation(Node1.class)
+            .getTerminationPoint().get(new TerminationPointKey(new TpId(mapping.getLogicalConnectionPoint())));
+        TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder(tp.augmentation(TerminationPoint1.class));
+        if (!tp1Bldr.getAdministrativeState().getName().equals(mapping.getPortAdminState())) {
+            tp1Bldr.setAdministrativeState(AdminStates.valueOf(mapping.getPortAdminState()));
+        }
+        if (!tp1Bldr.getOperationalState().getName().equals(mapping.getPortOperState())) {
+            tp1Bldr.setOperationalState(State.valueOf(mapping.getPortOperState()));
+        }
+        TerminationPointBuilder tpBldr = new TerminationPointBuilder(tp).addAugmentation(tp1Bldr.build());
+        topoTps.add(tpBldr.build());
+
+        if (links == null) {
+            return new TopologyShard(null, null, topoTps);
+        }
+        String tpId = tpBldr.getTpId().getValue();
+        // update links terminating on the given termination-point
+        List<Link> filteredTopoLinks = links.values().stream()
+            .filter(l1 -> (l1.getSource().getSourceNode().getValue().equals(abstractNodeid)
+                && l1.getSource().getSourceTp().toString().equals(tpId))
+                || (l1.getDestination().getDestNode().getValue().equals(abstractNodeid)
+                && l1.getDestination().getDestTp().toString().equals(tpId)))
+            .collect(Collectors.toList());
+        List<Link> topoLinks = new ArrayList<>();
+        for (Link link : filteredTopoLinks) {
+            TerminationPoint otherLinkTp;
+            if (link.getSource().getSourceNode().getValue().equals(abstractNodeid)) {
+                otherLinkTp = nodes
+                    .get(new NodeKey(new NodeId(link.getDestination().getDestNode().getValue())))
+                    .augmentation(Node1.class)
+                    .getTerminationPoint()
+                    .get(new TerminationPointKey(new TpId(link.getDestination().getDestTp().toString())));
+            } else {
+                otherLinkTp = nodes
+                    .get(new NodeKey(new NodeId(link.getSource().getSourceNode().getValue())))
+                    .augmentation(Node1.class)
+                    .getTerminationPoint()
+                    .get(new TerminationPointKey(new TpId(link.getSource().getSourceTp().toString())));
+            }
+            Link1Builder link1Bldr = new Link1Builder(link.augmentation(Link1.class));
+            if (tpBldr.augmentation(TerminationPoint1.class).getAdministrativeState().equals(AdminStates.InService)
+                && otherLinkTp.augmentation(TerminationPoint1.class)
+                    .getAdministrativeState().equals(AdminStates.InService)) {
+                link1Bldr.setAdministrativeState(AdminStates.InService);
+            } else {
+                link1Bldr.setAdministrativeState(AdminStates.OutOfService);
+            }
+            if (tpBldr.augmentation(TerminationPoint1.class).getOperationalState().equals(State.InService)
+                && otherLinkTp.augmentation(TerminationPoint1.class)
+                    .getOperationalState().equals(State.InService)) {
+                link1Bldr.setOperationalState(State.InService);
+            } else {
+                link1Bldr.setOperationalState(State.OutOfService);
+            }
+            topoLinks.add(new LinkBuilder(link).addAugmentation(link1Bldr.build()).build());
+        }
+        return new TopologyShard(null, topoLinks, topoTps);
     }
 }

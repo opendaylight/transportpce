@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 
@@ -37,15 +37,16 @@ public interface NetworkModelService {
     void deleteOpenRoadmnode(String nodeId);
 
     /**
-     * Update OpenROADM network topology. TODO: update all topologies
+     * Update termination point, and if need, be associated links, of
+     * openroadm-topology and otn-topology after a change on a given mapping.
      *
      * @param nodeId
-     *     unique node ID of OpenROADM node that sent the NETCONF notification.
-     * @param changedCpack
-     *     circuit pack modified from the NETCONF notification.
-     *
+     *            unique node ID of OpenROADM node at the origin of the NETCONF
+     *            notification change.
+     * @param mapping
+     *            updated mapping following the device notification change.
      */
-    void updateOpenRoadmNetworkTopology(String nodeId, CircuitPacks changedCpack);
+    void updateOpenRoadmTopologies(String nodeId, Mapping mapping);
 
     /**
      * Set/update connection status of OpenROADM node.

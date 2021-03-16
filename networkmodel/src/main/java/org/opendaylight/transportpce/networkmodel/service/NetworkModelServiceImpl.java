@@ -8,12 +8,10 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +20,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -32,23 +31,13 @@ import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChanges;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesKey;
+import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.d._interface.ord.topology.types.rev201116.TopologyNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -56,18 +45,14 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
@@ -85,13 +70,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final PortMapping portMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
-    // Maps that include topology component changed with its new operational state <id, state>
-    private Map<String, State> linksChanged;
-    private Map<String, State> terminationPointsChanged;
-    // Variables for creating and sending topology update notification
-    private final NotificationPublishService notificationPublishService;
-    private Map<OrdTopologyChangesKey, OrdTopologyChanges> topologyChanges;
-    private TopologyUpdateResult notification = null;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
             final R2RLinkDiscovery linkDiscovery, PortMapping portMapping,
@@ -102,10 +80,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
-        this.linksChanged = new HashMap<String, State>();
-        this.terminationPointsChanged = new HashMap<String, State>();
-        this.notificationPublishService = notificationPublishService;
-        this.topologyChanges = new HashMap<OrdTopologyChangesKey, OrdTopologyChanges>();
     }
 
     public void init() {
@@ -279,68 +253,97 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void updateOpenRoadmNetworkTopology(String nodeId, CircuitPacks changedCpack) {
-        // Clear maps for each NETCONF notification received
-        this.linksChanged.clear();
-        this.terminationPointsChanged.clear();
-        this.topologyChanges.clear();
-        // 1. Get the list links and nodes of the current openroadm network topology
-        List<Link> linkList = null;
-        List<Node> nodesList = null;
+    public void updateOpenRoadmTopologies(String nodeId, Mapping mapping) {
+        LOG.info("update OpenRoadm topologies after change update from: {} ", nodeId);
+        Network openroadmTopology = null;
+        Network otnTopology = null;
+        Map<LinkKey, Link> openroadmTopologyLinks = null;
+        Map<LinkKey, Link> otnTopologyLinks = null;
         try {
-            InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
-                InstanceIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                    .augmentation(Network1.class);
-            InstanceIdentifier.InstanceIdentifierBuilder<Network> networkIID =
-                InstanceIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
-            Optional<Network> networkOptional = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                networkIID.build()).get();
-            Optional<Network1> network1Optional =
-                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, network1IID.build()).get();
-            if (network1Optional.isPresent()) {
-                // Links list
-                linkList = new ArrayList<>(Objects.requireNonNull(network1Optional.get().getLink()).values());
+            openroadmTopology = this.networkTransactionService
+                .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OVERLAY_NETWORK_II)
+                .get().get();
+            if (openroadmTopology.augmentation(Network1.class) != null) {
+                openroadmTopologyLinks = openroadmTopology.augmentation(Network1.class).getLink();
             }
-            if (networkOptional.isPresent()) {
-                // Nodes list
-                nodesList = new ArrayList<>(Objects.requireNonNull(networkOptional.get().getNode()).values());
+            otnTopology = this.networkTransactionService
+                .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OTN_NETWORK_II)
+                .get().get();
+            if (otnTopology.augmentation(Network1.class) != null) {
+                otnTopologyLinks = otnTopology.augmentation(Network1.class).getLink();
             }
-        } catch (InterruptedException e) {
-            LOG.error("Couldn't get list of links in the network. Error={}", e.getMessage());
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            LOG.error("Couldn't get list of links in the network. Error={}", e.getMessage());
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error when trying to update node : {}", nodeId, e);
         }
-        /* 2. For simplicity the update is only considered in the case of a WSSDEG circuit pack change where client and
-        line ports (external ports) of a node are included and there is a 1-to-1 port mapping to the nodes TPs. The
-        mapping between ports and TPs internal of a node is a bit different as the is a 1-to-many port mapping */
-        String cpackType = changedCpack.getCircuitPackType();
-        switch (cpackType) {
-            case "ADDROP":
-                LOG.info("ADDROP circuit pack modified");
-                setTerminationPointsChangedMap(changedCpack, nodeId);
-                // setTpStateHashmap(changedCpack);
-                break;
-            case "WSSDEG":
-                LOG.info("WSSDEG circuit pack modified");
-                setTerminationPointsChangedMap(changedCpack, nodeId);
-                // 3. Update the termination points of the node that sent a NETCONF notification
-                updateOpenRoadmNetworkTopologyTPs(nodesList, nodeId);
-                // 4. Update the links of the topology affected by the changes on TPs (if any)
-                updateOpenRoadmNetworkTopologyLinks(linkList, nodesList);
-                // Send notification to service handler
-                sendNotification(TopologyNotificationTypes.OpenroadmTopologyUpdate, this.topologyChanges);
-                break;
-            case "port":
-                LOG.info("port circuit pack modified");
-                break;
-            case "pluggable":
-                LOG.info("pluggable circuit pack modified");
-                break;
-            default:
-                LOG.warn("Circuitp pack of type {} not recognized", cpackType);
+        if (openroadmTopology == null || otnTopology == null) {
+            LOG.warn("Error getting topologies from datastore");
+            return;
+        }
+        String abstractNodeid = String.join("-", nodeId, mapping.getLogicalConnectionPoint().split("-")[0]);
+        // nodes/links update in openroadm-topology
+        if (openroadmTopology.getNode() != null) {
+            TopologyShard topologyShard = TopologyUtils.updateTopologyShard(abstractNodeid, mapping,
+                openroadmTopology.getNode(), openroadmTopologyLinks);
+            if (topologyShard.getLinks() != null) {
+                for (Link link : topologyShard.getLinks()) {
+                    LOG.info("updating links {} in {}", link.getLinkId().getValue(),
+                        NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Link> iiTopologyLink = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .augmentation(Network1.class)
+                        .child(Link.class, link.key())
+                        .build();
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyLink, link);
+                }
+            }
+            if (topologyShard.getTps() != null) {
+                for (TerminationPoint tp : topologyShard.getTps()) {
+                    LOG.info("updating TP {} in openroadm-topology", tp.getTpId().getValue());
+                    InstanceIdentifier<TerminationPoint> iiTopologyTp = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Node.class, new NodeKey(new NodeId(abstractNodeid)))
+                        .augmentation(Node1.class)
+                        .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
+                        .build();
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyTp, tp);
+                }
+            }
+        }
+        // nodes/links update in otn-topology
+        if (otnTopology.getNode() != null
+            && otnTopology.getNode().containsKey(new NodeKey(new NodeId(abstractNodeid)))) {
+            TopologyShard otnShard = TopologyUtils.updateTopologyShard(abstractNodeid, mapping,
+                otnTopology.getNode(), otnTopologyLinks);
+            if (otnShard.getLinks() != null) {
+                for (Link link : otnShard.getLinks()) {
+                    LOG.info("updating links {} in {}", link.getLinkId().getValue(),
+                        NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Link> iiTopologyLink = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .augmentation(Network1.class)
+                        .child(Link.class, link.key())
+                        .build();
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyLink, link);
+                }
+            }
+            if (otnShard.getTps() != null) {
+                for (TerminationPoint tp : otnShard.getTps()) {
+                    LOG.info("updating TP {} in otn-topology", tp.getTpId().getValue());
+                    InstanceIdentifier<TerminationPoint> iiTopologyTp = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .child(Node.class, new NodeKey(new NodeId(abstractNodeid)))
+                        .augmentation(Node1.class)
+                        .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
+                        .build();
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyTp, tp);
+                }
+            }
+        }
+        // commit datastore updates
+        try {
+            networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error updating openroadm-topology", e);
         }
     }
 
@@ -735,249 +738,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
         } else {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-        }
-
-    }
-
-    private void setTerminationPointsChangedMap(CircuitPacks changedCpack, String nodeId) {
-        List<Ports> portsList = new ArrayList<>(Objects.requireNonNull(changedCpack.getPorts()).values());
-        for (Ports port : portsList) {
-            String lcp = port.getLogicalConnectionPoint();
-            if (lcp != null) {
-                String abstractNodeid = nodeId + "-" + lcp.split("-")[0];
-                if (!this.terminationPointsChanged.containsKey(abstractNodeid + "-" + lcp)) {
-                    LOG.info("Node id {}, LCP {}", abstractNodeid, lcp);
-                    this.terminationPointsChanged.put(abstractNodeid + "-" + lcp,
-                            State.forValue(port.getOperationalState().getIntValue()));
-                }
-            }
-        }
-    }
-
-    private void updateOpenRoadmNetworkTopologyTPs(List<Node> nodesList, String nodeId) {
-        /* 1. The nodes in nodesList are abstract nodes (i.e. ROADMA01-DEG1) and we have the id of the node that has
-        a change (i.e. ROADMA01). So we only need to look for the abstract nodes that belong to the physical node. */
-        String abstractNodeId;
-        for (Node node : nodesList) {
-            abstractNodeId = Objects.requireNonNull(node.getNodeId()).getValue();
-            // Checking if the node is operationally inService
-            if (abstractNodeId.contains(nodeId) && node.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev200529.Node1.class)
-                    .getOperationalState().equals(State.InService)) {
-                /* 2. Check if the state of the termination points from the topology shard are equal to the state of
-                the termination points in the previously created map. */
-                List<TerminationPoint> tpList = new ArrayList<>(Objects.requireNonNull(node.augmentation(Node1.class))
-                    .getTerminationPoint().values());
-                Map<TerminationPointKey, TerminationPoint> updatedTpMap = new HashMap<>();
-                for (TerminationPoint tp : tpList) {
-                    String tpId = Objects.requireNonNull(tp.getTpId()).getValue();
-                    State tpState = Objects.requireNonNull(tp.augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.network.rev200529.TerminationPoint1.class)).getOperationalState();
-                    String key = abstractNodeId + "-" + tpId;
-                    if (this.terminationPointsChanged.containsKey(key)
-                            && !this.terminationPointsChanged.get(key).equals(tpState)) {
-                        // The state of a termination point has changed... updating
-                        State newTpOperationalState = null;
-                        AdminStates newTpAdminState = null;
-                        /* 3. If the TP has changed its state, it has to be added to the links Map, as a Link state
-                        is defined by the state of the TPs that model the link. */
-                        switch (this.terminationPointsChanged.get(key)) {
-                            case InService:
-                                newTpAdminState = AdminStates.InService;
-                                newTpOperationalState = State.InService;
-                                // Add TP and state inService to the links Map
-                                this.linksChanged.put(key, State.InService);
-                                // Update topology change list for service handler notification
-                                this.topologyChanges.put(
-                                    new OrdTopologyChangesKey(node.getNodeId().getValue() + "-" + tpId),
-                                    new OrdTopologyChangesBuilder()
-                                        .setId(node.getNodeId().getValue() + "-" + tpId)
-                                        .setState(newTpOperationalState)
-                                        .build());
-                                break;
-                            case OutOfService:
-                                newTpAdminState = AdminStates.OutOfService;
-                                newTpOperationalState = State.OutOfService;
-                                // Add TP and state outOfService to the links Map
-                                this.linksChanged.put(key, State.OutOfService);
-                                // Update topology change list for service handler notification
-                                this.topologyChanges.put(
-                                    new OrdTopologyChangesKey(node.getNodeId().getValue() + "-" + tpId),
-                                    new OrdTopologyChangesBuilder()
-                                        .setId(node.getNodeId().getValue() + "-" + tpId)
-                                        .setState(newTpOperationalState)
-                                        .build());
-                                break;
-                            case Degraded:
-                                LOG.warn("Operational state Degraded not handled");
-                                break;
-                            default:
-                                LOG.warn("Unrecognized state!");
-                        }
-                        // 4. Add modified TP to the updated List.
-                        TerminationPoint updTp = new TerminationPointBuilder().withKey(tp.key())
-                            .setTpId(tp.getTpId())
-                            .addAugmentation(new TerminationPoint1Builder()
-                                .setAdministrativeState(newTpAdminState)
-                                .setOperationalState(newTpOperationalState)
-                                .build())
-                            .build();
-                        updatedTpMap.put(tp.key(), updTp);
-                    }
-                    // 5. Update the list of termination points of the corresponding node and merge to the datastore.
-                    if (!updatedTpMap.isEmpty()) {
-                        Node updNode = new NodeBuilder().setNodeId(node.getNodeId()).addAugmentation(new Node1Builder()
-                            .setTerminationPoint(updatedTpMap).build()).build();
-                        InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(
-                            Networks.class).child(Network.class, new NetworkKey(
-                                    new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key())
-                            .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
-                            updNode);
-                        try {
-                            networkTransactionService.commit().get();
-                        } catch (InterruptedException e) {
-                            LOG.error("Couldnt commit change to openroadm topology.", e);
-                            Thread.currentThread().interrupt();
-                        } catch (ExecutionException e) {
-                            LOG.error("Couldnt commit change to openroadm topology.", e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void updateOpenRoadmNetworkTopologyLinks(List<Link> linkList, List<Node> nodesList) {
-        for (Link link : linkList) {
-            String srcTp = link.getSource().getSourceTp().toString();
-            String dstTp = link.getDestination().getDestTp().toString();
-            String srcNode = link.getSource().getSourceNode().getValue();
-            String dstNode = link.getDestination().getDestNode().getValue();
-            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev200529.Link1.class).getOperationalState();
-            String srcKey = srcNode + "-" + srcTp;
-            String dstKey = dstNode + "-" + dstTp;
-            /* 1. Check the current state of the source and dest tps of the link. If these tps exist on the links Map
-            and the states are different, then we need to update the link state accordingly.
-            There are several cases depending on the current link state:
-                - TPs were both inService and one of them (or both) is (are) now outOfService --> link to outOfService
-                - TPs were both outOfService and both of them are now inService --> link to inService
-            However, if only one TP exists on the Link map, we will need to check the state of the other end in order to
-            make a decision: i.e. we cannot assume that if a TP has changed from outOfService to inService the link will
-            become inService, as this can only happen if both TPs are inService, therefore we need to check the other
-            end. */
-            switch (linkState) {
-                case InService:
-                    if (this.linksChanged.containsKey(srcKey) && this.linksChanged.containsKey(dstKey)) {
-                        // Both TPs of the link have been updated. If one of them is outOfService --> link outOfService
-                        if (State.OutOfService.equals(this.linksChanged.get(srcKey)) || State.OutOfService.equals(this
-                                .linksChanged.get(dstKey))) {
-                            updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
-                        }
-                    } else if (this.linksChanged.containsKey(srcKey) && State.OutOfService.equals(this.linksChanged
-                            .get(srcKey))) {
-                        // Source TP has been changed to outOfService --> link outOfService
-                        updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
-                    } else if (this.linksChanged.containsKey(dstKey) && State.OutOfService.equals(this.linksChanged
-                            .get(dstKey))) {
-                        // Destination TP has been changed to outOfService --> link outOfService
-                        updateLinkStates(link, State.OutOfService, AdminStates.OutOfService);
-                    }
-                    break;
-                case OutOfService:
-                    if (this.linksChanged.containsKey(srcKey) && this.linksChanged.containsKey(dstKey)) {
-                        // Both TPs of the link have been updated. If both of them are inService --> link inService
-                        if (State.InService.equals(this.linksChanged.get(srcKey)) || State.InService.equals(this
-                                .linksChanged.get(dstKey))) {
-                            updateLinkStates(link, State.InService, AdminStates.InService);
-                        }
-                    } else if (this.linksChanged.containsKey(srcKey) && State.InService.equals(this.linksChanged
-                            .get(srcKey))) {
-                        // Source TP has been changed to inService --> check the second TP and update link to inService
-                        // only if both TPs are inService
-                        if (tpInService(dstNode, dstTp, nodesList)) {
-                            updateLinkStates(link, State.InService, AdminStates.InService);
-                        }
-                    } else if (this.linksChanged.containsKey(dstKey) && State.InService.equals(this.linksChanged
-                            .get(dstKey))) {
-                        // Destination TP has been changed to to inService --> check the second TP and update link to
-                        // inService only if both TPs are inService
-                        if (tpInService(srcNode, srcTp, nodesList)) {
-                            updateLinkStates(link, State.InService, AdminStates.InService);
-                        }
-                    }
-                    break;
-                case Degraded:
-                    LOG.warn("Link state degraded not handled");
-                    break;
-                default:
-                    LOG.warn("Unrecognized state!");
-            }
-        }
-    }
-
-    private boolean tpInService(String nodeId, String tpId, List<Node> nodesList) {
-        // Check the node with dstNode id and check the state of the TP with id dstTP id
-        for (Node node : nodesList) {
-            if (Objects.requireNonNull(node.getNodeId()).getValue().equals(nodeId)) {
-                List<TerminationPoint> tpList = new ArrayList<>(Objects.requireNonNull(Objects.requireNonNull(node
-                    .augmentation(Node1.class)).getTerminationPoint()).values());
-                for (TerminationPoint tp : tpList) {
-                    if (Objects.requireNonNull(tp.getTpId()).getValue().equals(tpId)) {
-                        if (State.InService.equals(tp.augmentation(org.opendaylight.yang.gen.v1.http
-                                .org.openroadm.common.network.rev200529.TerminationPoint1.class)
-                                .getOperationalState())) {
-                            // The second TP is also inService
-                            return true;
-                        }
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-        return false;
-    }
-
-    private void updateLinkStates(Link link, State state, AdminStates adminStates) {
-        // TODO: add change to list of changes
-        // Update topology change list
-        this.topologyChanges.put(new OrdTopologyChangesKey(link.getLinkId().getValue()),
-                new OrdTopologyChangesBuilder().setId(link.getLinkId().getValue()).setState(state).build());
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1 link1 = new Link1Builder()
-            .setOperationalState(state).setAdministrativeState(adminStates).build();
-        Link updLink = new LinkBuilder().withKey(link.key()).addAugmentation(link1).build();
-        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .augmentation(Network1.class).child(Link.class, link.key());
-        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(), updLink);
-        try {
-            networkTransactionService.commit().get();
-        } catch (InterruptedException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error={}", e.getMessage());
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error={}", e.getMessage());
-        }
-    }
-
-    @SuppressFBWarnings(
-            value = "UPM_UNCALLED_PRIVATE_METHOD",
-            justification = "false positive, this method is used by public updateOpenRoadmNetworkTopology")
-    private void sendNotification(TopologyNotificationTypes notificationType,
-                                  Map<OrdTopologyChangesKey, OrdTopologyChanges> topologyChangesMap) {
-        if (topologyChangesMap.isEmpty()) {
-            LOG.warn("Empty Topology Change map. No updates in topology");
-            return;
-        }
-        TopologyUpdateResultBuilder topologyUpdateResultBuilder = new TopologyUpdateResultBuilder()
-                .setNotificationType(notificationType).setOrdTopologyChanges(topologyChangesMap);
-        this.notification = topologyUpdateResultBuilder.build();
-        try {
-            notificationPublishService.putNotification(this.notification);
-        } catch (InterruptedException e) {
-            LOG.error("Notification offer rejected. Error={}", e.getMessage());
         }
     }
 }

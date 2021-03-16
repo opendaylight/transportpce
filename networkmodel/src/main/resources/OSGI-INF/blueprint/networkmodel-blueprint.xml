@@ -31,6 +31,11 @@
         <argument ref="netconfTopologyListener" />
         <argument ref="notificationService" />
         <argument ref="frequenciesService" />
+        <argument ref="portMappingListener" />
+    </bean>
+
+    <bean id="portMappingListener" class="org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener">
+        <argument ref="networkModelService" />
     </bean>
 
     <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
