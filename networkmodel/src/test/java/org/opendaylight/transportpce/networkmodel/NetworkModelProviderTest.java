@@ -23,6 +23,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
@@ -41,13 +42,15 @@ public class NetworkModelProviderTest extends AbstractTest {
     private NotificationService notificationService;
     @Mock
     private FrequenciesService frequenciesService;
+    @Mock
+    private PortMappingListener portMappingListener;
 
 
     @Test
     public void networkmodelProviderInitTest() {
         NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
             rpcProviderService, networkutilsService, topologyListener, notificationService,
-            frequenciesService);
+            frequenciesService, portMappingListener);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
             @Override

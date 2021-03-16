@@ -15,6 +15,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.listeners.ServiceHandlerListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
@@ -42,16 +43,18 @@ public class NetworkModelProvider {
     private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
+    private ListenerRegistration<PortMappingListener> mappingListenerRegistration;
     private ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
     private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
     private NotificationService notificationService;
     private FrequenciesService frequenciesService;
+    private PortMappingListener portMappingListener;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
         final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
         final NetConfTopologyListener topologyListener, NotificationService notificationService,
-        FrequenciesService frequenciesService) {
+        FrequenciesService frequenciesService, PortMappingListener portMappingListener) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
@@ -59,6 +62,7 @@ public class NetworkModelProvider {
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
+        this.portMappingListener = portMappingListener;
     }
 
     /**
@@ -70,9 +74,11 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
-        dataTreeChangeListenerRegistration =
-            dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
+        dataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
+        mappingListenerRegistration = dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener);
         networkutilsServiceRpcRegistration =
             rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
         TransportpceServicehandlerListener serviceHandlerListner =
@@ -87,6 +93,9 @@ public class NetworkModelProvider {
         LOG.info("NetworkModelProvider Closed");
         if (dataTreeChangeListenerRegistration != null) {
             dataTreeChangeListenerRegistration.close();
+        }
+        if (mappingListenerRegistration != null) {
+            mappingListenerRegistration.close();
         }
         if (networkutilsServiceRpcRegistration != null) {
             networkutilsServiceRpcRegistration.close();
