@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b642a4e_389bd3c9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-17T08:47:43Z",
+      "side": 1,
+      "message": "LGTM but I think there is no need to use this intermediate variables since it is not reused anywhere else.\n\nA comment why this list needs to be sorted might be helpful here.",
+      "range": {
+        "startLine": 265,
+        "startChar": 16,
+        "endLine": 265,
+        "endChar": 53
+      },
+      "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
