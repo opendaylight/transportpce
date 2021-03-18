@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,11 @@ import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfo;
@@ -70,6 +76,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final PortMapping portMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
+    // Variables for creating and sending topology update notification
+    private final NotificationPublishService notificationPublishService;
+    private Map<TopologyChangesKey, TopologyChanges> topologyChanges;
+    private TopologyUpdateResult notification = null;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
             final R2RLinkDiscovery linkDiscovery, PortMapping portMapping,
@@ -80,6 +90,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
+        this.notificationPublishService = notificationPublishService;
+        this.topologyChanges = new HashMap<TopologyChangesKey, TopologyChanges>();
     }
 
     public void init() {
@@ -255,6 +267,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     @Override
     public void updateOpenRoadmTopologies(String nodeId, Mapping mapping) {
         LOG.info("update OpenRoadm topologies after change update from: {} ", nodeId);
+        this.topologyChanges.clear();
         Network openroadmTopology = null;
         Network otnTopology = null;
         Map<LinkKey, Link> openroadmTopologyLinks = null;
@@ -306,6 +319,17 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
                         .build();
                     networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyTp, tp);
+                    TopologyChanges tc = new TopologyChangesBuilder()
+                        .withKey(new TopologyChangesKey(abstractNodeid, tp.getTpId().getValue()))
+                        .setNodeId(abstractNodeid)
+                        .setTpId(tp.getTpId().getValue())
+                        .setState(tp.augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+                                .class).getOperationalState())
+                        .build();
+                    if (!this.topologyChanges.containsKey(tc.key())) {
+                        this.topologyChanges.put(tc.key(), tc);
+                    }
                 }
             }
         }
@@ -336,12 +360,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
                         .build();
                     networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTopologyTp, tp);
+                    TopologyChanges tc = new TopologyChangesBuilder()
+                        .withKey(new TopologyChangesKey(abstractNodeid, tp.getTpId().getValue()))
+                        .setNodeId(abstractNodeid)
+                        .setTpId(tp.getTpId().getValue())
+                        .setState(tp.augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+                                .class).getOperationalState())
+                        .build();
+                    if (!this.topologyChanges.containsKey(tc.key())) {
+                        this.topologyChanges.put(tc.key(), tc);
+                    }
                 }
             }
         }
         // commit datastore updates
         try {
             networkTransactionService.commit().get();
+            sendNotification();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error updating openroadm-topology", e);
         }
@@ -738,6 +774,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
         } else {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
+        }
+    }
+
+    @SuppressFBWarnings(
+            value = "UPM_UNCALLED_PRIVATE_METHOD",
+            justification = "false positive, this method is used by public updateOpenRoadmNetworkTopology")
+    private void sendNotification() {
+        if (topologyChanges.isEmpty()) {
+            LOG.warn("Empty Topology Change List. No updates in topology");
+            return;
+        }
+        this.notification = new TopologyUpdateResultBuilder()
+            .setTopologyChanges(topologyChanges)
+            .build();
+        try {
+            notificationPublishService.putNotification(this.notification);
+        } catch (InterruptedException e) {
+            LOG.error("Notification offer rejected. Error={}", e.getMessage());
         }
     }
 }
