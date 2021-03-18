@@ -24,8 +24,8 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceListBuilder;
@@ -192,9 +192,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
                     .child(Services.class, new ServicesKey(serviceName));
-            Services services = new ServicesBuilder(readService.get()).setOperationalState(operationalState)
-                    .setAdministrativeState(administrativeState)
-                    .build();
+            Services services = new ServicesBuilder(readService.get())
+                .setOperationalState(convertOperState(operationalState))
+                .setAdministrativeState(convertAdminState(administrativeState))
+                .build();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -221,11 +222,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
                             .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
                                 .temp.service.list.ServicesKey(serviceName));
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                .Services services = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
-                    .service.list.ServicesBuilder(readService.get()).setOperationalState(operationalState)
-                        .setAdministrativeState(administrativeState)
-                        .build();
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services services =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.ServicesBuilder(
+                    readService.get())
+                .setOperationalState(convertOperState(operationalState))
+                .setAdministrativeState(convertAdminState(administrativeState))
+                .build();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -429,7 +431,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         switch (choice) {
             case 0 : /* Modify. */
                 LOG.debug("Modifying '{}' Service", serviceName);
-                service.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
+                service.setOperationalState(convertOperState(State.InService))
+                    .setAdministrativeState(convertAdminState(AdminStates.InService));
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, service.build());
                 action = "modifyService";
                 break;
@@ -450,5 +453,17 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         }
 
         return null;
+    }
+
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
+        convertAdminState(AdminStates adminState61) {
+        return org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
+            .valueOf(adminState61.name());
+    }
+
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
+        convertOperState(State operState61) {
+        return org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
+            .valueOf(operState61.name());
     }
 }
