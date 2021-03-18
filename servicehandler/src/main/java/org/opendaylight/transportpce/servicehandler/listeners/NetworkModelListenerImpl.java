@@ -7,20 +7,22 @@
  */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChanges;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirectionBuilder;
@@ -34,8 +36,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.Link;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.Node;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescriptionBuilder;
@@ -59,30 +59,14 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
 
     @Override
     public void onTopologyUpdateResult(TopologyUpdateResult notification) {
-        LOG.info("Topology update notification: {}", notification.toString());
+        LOG.debug("Topology update notification: {}", notification.toString());
         if (compareTopologyUpdateResult(notification)) {
             LOG.warn("TopologyUpdateResult already wired !");
             return;
         }
         topologyUpdateResult = notification;
-        switch (topologyUpdateResult.getNotificationType().getIntValue()) {
-            case 1:
-                // Update service datastore and service path description
-                LOG.info("openroadm-topology update");
-                updateServicePaths(notification);
-                break;
-            case 2:
-                LOG.info("openroadm-network update");
-                break;
-            case 3:
-                LOG.info("clli-network update");
-                break;
-            case 4:
-                LOG.info("otn-topology update");
-                break;
-            default:
-                break;
-        }
+        // Update service datastore and service path description
+        updateServicePaths(notification);
     }
 
     /**
@@ -90,23 +74,21 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
      * @param notification the result notification.
      */
     private void updateServicePaths(TopologyUpdateResult notification) {
-        Map<OrdTopologyChangesKey, OrdTopologyChanges> ordTopologyChanges = notification.getOrdTopologyChanges();
+        @Nullable
+        Map<TopologyChangesKey, TopologyChanges> topologyChanges = notification.getTopologyChanges();
         Optional<ServicePathList> servicePathListOptional = this.serviceDataStoreOperations.getServicePaths();
         ServicePathList servicePathList = null;
         if (!servicePathListOptional.isPresent()) {
-            LOG.error("Couldn't retrieve service path list");
+            LOG.warn("Enable to retrieve service path list");
             return;
         }
         servicePathList = servicePathListOptional.get();
-        if (servicePathList.getServicePaths().isEmpty()) {
-            return;
-        }
         for (ServicePaths servicePaths : servicePathList.getServicePaths().values()) {
             String serviceName = servicePaths.getServicePathName();
             PathDescription pathDescription = servicePaths.getPathDescription();
             // update path descriptions in the datastore
-            Map<AToZKey, AToZ> updatedAtoZ = changePathElementStateAZ(ordTopologyChanges, pathDescription);
-            Map<ZToAKey, ZToA> updatedZtoA = changePathElementStateZA(ordTopologyChanges, pathDescription);
+            Map<AToZKey, AToZ> updatedAtoZ = changePathElementStateAZ(topologyChanges, pathDescription);
+            Map<ZToAKey, ZToA> updatedZtoA = changePathElementStateZA(topologyChanges, pathDescription);
             OperationResult operationResult = this.serviceDataStoreOperations
                     .modifyServicePath(buildNewPathDescription(pathDescription, updatedAtoZ, updatedZtoA), serviceName);
             if (!operationResult.isSuccess()) {
@@ -123,169 +105,86 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             }
             services = serviceOptional.get();
             OperationResult operationResult1 = null;
-            if (State.InService.equals(services.getOperationalState())
-                    && !allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                LOG.info("Service={} needs to be updated to outOfService", serviceName);
+            if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State.InService
+                    .equals(services.getOperationalState())
+                && !allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                LOG.debug("Service={} needs to be updated to outOfService", serviceName);
                 operationResult1 = this.serviceDataStoreOperations.modifyService(serviceName, State.OutOfService,
                         AdminStates.OutOfService);
-            } else if (State.OutOfService.equals(services.getOperationalState())
-                    && allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                LOG.info("Service={} needs to be updated to inService", serviceName);
+            } else if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State.OutOfService
+                    .equals(services.getOperationalState())
+                && allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                LOG.debug("Service={} needs to be updated to inService", serviceName);
                 operationResult1 = this.serviceDataStoreOperations.modifyService(serviceName, State.InService,
                         AdminStates.InService);
             } else {
-                LOG.info("Service {} state doesnt need to be modified", serviceName);
+                LOG.debug("Service {} state doesnt need to be modified", serviceName);
             }
             if (operationResult1 != null && operationResult1.isSuccess()) {
-                LOG.info("Service state correctly updated in datastore");
+                LOG.info("Service state of {} correctly updated in datastore", serviceName);
             }
         }
     }
 
-    private Map<ZToAKey, ZToA> changePathElementStateZA(Map<OrdTopologyChangesKey,
-            OrdTopologyChanges> ordTopologyChanges, PathDescription pathDescription) {
-        Map<ZToAKey, ZToA> ztoaMap = pathDescription.getZToADirection().getZToA();
-        // Needed as ztoaMap is immutable
-        Map<ZToAKey, ZToA> newztoaMap = new HashMap<ZToAKey, ZToA>();
-        for (ZToA element : ztoaMap.values()) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State elementState
-                    = element.getResource().getState();
-            String elementType = element.getResource().getResource().implementedInterface().getSimpleName();
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State updatedState = null;
-            ZToAKey elementKey = null;
-            Resource elementResource = null;
-            switch (elementType) {
-                case "TerminationPoint":
-                    TerminationPoint tp = (TerminationPoint) element.getResource().getResource();
-                    // for the tps we need to merge nodeId and tpId
-                    String tpId = tp.getTpNodeId() + "-" + tp.getTpId();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(tpId))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(tpId)).getState()
-                            .equals(elementState))) {
-                        newztoaMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(tpId)).getState();
-                    LOG.info("Updating path element {} to {}", tpId, updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new ZToAKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(tp).setState(updatedState).build();
-                    ZToA tpResource = new ZToABuilder().setId(tp.getTpId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newztoaMap.put(elementKey, tpResource);
-                    break;
-                case "Link":
-                    Link link = (Link) element.getResource().getResource();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(link.getLinkId()))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(link.getLinkId())).getState()
-                            .equals(elementState))) {
-                        newztoaMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(link.getLinkId())).getState();
-                    LOG.info("Updating path element {} to {}", link.getLinkId(), updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new ZToAKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(link).setState(updatedState).build();
-                    ZToA linkResource = new ZToABuilder().setId(link.getLinkId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newztoaMap.put(elementKey, linkResource);
-                    break;
-                case "Node":
-                    Node node = (Node) element.getResource().getResource();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(node.getNodeId()))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(node.getNodeId())).getState()
-                            .equals(elementState))) {
-                        newztoaMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(node.getNodeId())).getState();
-                    LOG.info("Updating path element {} to {}", node.getNodeId(), updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new ZToAKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(node).setState(updatedState).build();
-                    ZToA nodeResource = new ZToABuilder().setId(node.getNodeId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newztoaMap.put(elementKey, nodeResource);
-                    break;
-                default:
-                    LOG.warn("Element type {} not recognized", elementType);
-                    break;
+    private Map<ZToAKey, ZToA> changePathElementStateZA(Map<TopologyChangesKey, TopologyChanges> topologyChanges,
+        PathDescription pathDescription) {
+
+        Map<ZToAKey, ZToA> newztoaMap = new HashMap<>(pathDescription.getZToADirection().getZToA());
+        List<ZToA> tpResources = pathDescription.getZToADirection().getZToA().values().stream()
+            .filter(ele -> ele.getResource().getResource().implementedInterface().getSimpleName()
+                .equals("TerminationPoint"))
+            .collect(Collectors.toList());
+        for (ZToA ztoA : tpResources) {
+            String ztoAid = ztoA.getId();
+            State ztoAState = ztoA.getResource().getState();
+            TerminationPoint tp = (TerminationPoint) ztoA.getResource().getResource();
+            if (topologyChanges.containsKey(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
+                && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
+                .equals(ztoAState)) {
+                LOG.debug("updating ztoa tp {}", ztoA);
+                State updatedState = topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
+                    .getState();
+                Resource updatedResource = new ResourceBuilder()
+                    .setResource(tp)
+                    .setState(updatedState)
+                    .build();
+                ZToA updatedZToA = new ZToABuilder(ztoA)
+                    .setId(ztoAid)
+                    .setResource(updatedResource)
+                    .build();
+                newztoaMap.put(updatedZToA.key(), updatedZToA);
             }
         }
         return newztoaMap;
     }
 
-    private Map<AToZKey, AToZ> changePathElementStateAZ(Map<OrdTopologyChangesKey,
-            OrdTopologyChanges> ordTopologyChanges, PathDescription pathDescription) {
-        Map<AToZKey, AToZ> atozMap = pathDescription.getAToZDirection().getAToZ();
-        // Needed as atozMap is immutable
-        Map<AToZKey, AToZ> newatozMap = new HashMap<AToZKey, AToZ>();
-        for (AToZ element : atozMap.values()) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State elementState
-                = element.getResource().getState();
-            String elementType = element.getResource().getResource().implementedInterface().getSimpleName();
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State updatedState = null;
-            AToZKey elementKey = null;
-            Resource elementResource = null;
-            switch (elementType) {
-                case "TerminationPoint":
-                    TerminationPoint tp = (TerminationPoint) element.getResource().getResource();
-                    // for the tps we need to merge nodeId and tpId
-                    String tpId = tp.getTpNodeId() + "-" + tp.getTpId();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(tpId))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(tpId)).getState()
-                            .equals(elementState))) {
-                        newatozMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(tpId)).getState();
-                    LOG.info("Updating path element {} to {}", tpId, updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new AToZKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(tp).setState(updatedState).build();
-                    AToZ tpResource = new AToZBuilder().setId(tp.getTpId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newatozMap.put(elementKey, tpResource);
-                    break;
-                case "Link":
-                    Link link = (Link) element.getResource().getResource();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(link.getLinkId()))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(link.getLinkId())).getState()
-                            .equals(elementState))) {
-                        newatozMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(link.getLinkId()))
-                            .getState();
-                    LOG.info("Updating path element {} to {}", link.getLinkId(), updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new AToZKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(link).setState(updatedState).build();
-                    AToZ linkResource = new AToZBuilder().setId(link.getLinkId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newatozMap.put(elementKey, linkResource);
-                    break;
-                case "Node":
-                    Node node = (Node) element.getResource().getResource();
-                    if (!(ordTopologyChanges.containsKey(new OrdTopologyChangesKey(node.getNodeId()))
-                            && !ordTopologyChanges.get(new OrdTopologyChangesKey(node.getNodeId())).getState()
-                            .equals(elementState))) {
-                        newatozMap.put(element.key(), element);
-                        continue;
-                    }
-                    updatedState = ordTopologyChanges.get(new OrdTopologyChangesKey(node.getNodeId())).getState();
-                    LOG.info("Updating path element {} to {}", node.getNodeId(), updatedState.getName());
-                    // Create new resource element and replace on map
-                    elementKey = new AToZKey(element.getId());
-                    elementResource = new ResourceBuilder().setResource(node).setState(updatedState).build();
-                    AToZ nodeResource = new AToZBuilder().setId(node.getNodeId()).withKey(elementKey)
-                            .setResource(elementResource).build();
-                    newatozMap.put(elementKey, nodeResource);
-                    break;
-                default:
-                    LOG.warn("Element type {} not recognized", elementType);
-                    break;
+    private Map<AToZKey, AToZ> changePathElementStateAZ(Map<TopologyChangesKey,
+            TopologyChanges> topologyChanges, PathDescription pathDescription) {
+
+        Map<AToZKey, AToZ> newatozMap = new HashMap<>(pathDescription.getAToZDirection().getAToZ());
+        List<AToZ> tpResources = pathDescription.getAToZDirection().getAToZ().values().stream()
+            .filter(ele -> ele.getResource().getResource().implementedInterface().getSimpleName()
+                .equals("TerminationPoint"))
+            .collect(Collectors.toList());
+        for (AToZ atoZ : tpResources) {
+            String atoZid = atoZ.getId();
+            State atoZState = atoZ.getResource().getState();
+            TerminationPoint tp = (TerminationPoint) atoZ.getResource().getResource();
+            if (topologyChanges.containsKey(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
+                && !topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId())).getState()
+                .equals(atoZState)) {
+                LOG.debug("updating atoz tp {}", atoZ);
+                State updatedState = topologyChanges.get(new TopologyChangesKey(tp.getTpNodeId(), tp.getTpId()))
+                    .getState();
+                Resource updatedResource = new ResourceBuilder()
+                    .setResource(tp)
+                    .setState(updatedState)
+                    .build();
+                AToZ updatedAToZ = new AToZBuilder(atoZ)
+                    .setId(atoZid)
+                    .setResource(updatedResource)
+                    .build();
+                newatozMap.put(updatedAToZ.key(), updatedAToZ);
             }
         }
         return newatozMap;
@@ -293,25 +192,16 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
 
     private PathDescription buildNewPathDescription(PathDescription pathDescription, Map<AToZKey, AToZ> updatedAtoZ,
                                                     Map<ZToAKey, ZToA> updatedZtoA) {
-        // A to Z
-        AToZDirection atozDir = new AToZDirectionBuilder()
+        AToZDirection atozDir = new AToZDirectionBuilder(pathDescription.getAToZDirection())
                 .setAToZ(updatedAtoZ)
-                .setAToZWavelengthNumber(pathDescription.getAToZDirection().getAToZWavelengthNumber())
-                .setModulationFormat(pathDescription.getAToZDirection().getModulationFormat())
-                .setRate(pathDescription.getAToZDirection().getRate())
-                .setTribPortNumber(pathDescription.getAToZDirection().getTribPortNumber())
-                .setTribSlotNumber(pathDescription.getAToZDirection().getTribSlotNumber())
                 .build();
-        // Z to A
-        ZToADirection ztoaDir = new ZToADirectionBuilder()
+        ZToADirection ztoaDir = new ZToADirectionBuilder(pathDescription.getZToADirection())
                 .setZToA(updatedZtoA)
-                .setZToAWavelengthNumber(pathDescription.getZToADirection().getZToAWavelengthNumber())
-                .setModulationFormat(pathDescription.getZToADirection().getModulationFormat())
-                .setRate(pathDescription.getAToZDirection().getRate())
-                .setTribPortNumber(pathDescription.getAToZDirection().getTribPortNumber())
-                .setTribSlotNumber(pathDescription.getAToZDirection().getTribSlotNumber())
                 .build();
-        return new PathDescriptionBuilder().setAToZDirection(atozDir).setZToADirection(ztoaDir).build();
+        return new PathDescriptionBuilder()
+            .setAToZDirection(atozDir)
+            .setZToADirection(ztoaDir)
+            .build();
     }
 
     private boolean allElementsinPathinService(Map<AToZKey, AToZ> updatedAtoZ, Map<ZToAKey, ZToA> updatedZtoA) {
@@ -330,18 +220,12 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         return allEleminService;
     }
 
-    @SuppressFBWarnings(
-            value = "ES_COMPARING_STRINGS_WITH_EQ",
-            justification = "false positives, not strings but real object references comparisons")
     private boolean compareTopologyUpdateResult(TopologyUpdateResult notification) {
         if (topologyUpdateResult == null) {
             return false;
         }
-        if (topologyUpdateResult.getNotificationType() != notification.getNotificationType()) {
-            return false;
-        }
-        if (topologyUpdateResult.getOrdTopologyChanges().values()
-                .equals(notification.getOrdTopologyChanges().values())) {
+        if (topologyUpdateResult.getTopologyChanges().values()
+                .equals(notification.getTopologyChanges().values())) {
             return false;
         }
         return true;
