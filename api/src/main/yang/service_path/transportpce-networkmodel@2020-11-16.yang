@@ -2,11 +2,6 @@ module transportpce-networkmodel {
   namespace "http://org/opendaylight/transportpce/networkmodel";
   prefix org-opendaylight-transportpce-networkmodel;
 
-  import transportpce-common-ord-topology-types {
-    prefix transportpce-common-ord-topology-types;
-    revision-date 2020-11-16;
-  }
-
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
     revision-date 2019-11-29;
@@ -52,28 +47,30 @@ module transportpce-networkmodel {
       "Initial revision of network model version 1.5";
   }
 
-  grouping element-change {
-    leaf id {
-      type string;
-      mandatory true;
-      description "Id of abstracted element that changed in the topology";
-    }
-    leaf state {
-      type org-openroadm-common-state-types:state;
-      mandatory true;
-      description "Operational state of the affected element";
-    }
-  }
-
   notification topology-update-result {
     description
-      "This Notification indicates result of an update in the openroadm topology";
-    leaf notification-type {
-      type transportpce-common-ord-topology-types:topology-notification-types;
-    }
-    list ord-topology-changes {
-      key "id";
-      uses element-change;
+      "This Notification indicates result of any termination-point updates in
+       openroadm and/or otn topologies";
+    list topology-changes {
+      key "node-id tp-id";
+      description
+        "Node and tp modified in openroadm or otn topology";
+      leaf tp-id {
+        type string;
+        description
+          "Id of the termination-point changed in the topology";
+      }
+      leaf node-id {
+        type string;
+        description
+          "Node Id supporting the changed termination-point as identified
+           in openroadm and otn topolgoies";
+      }
+      leaf state {
+        type org-openroadm-common-state-types:state;
+        description
+          "New administrative state of the modified termination-point";
+      }
     }
   }
 }
