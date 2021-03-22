@@ -31,6 +31,7 @@ public class DeviceListener221 implements OrgOpenroadmDeviceListener {
     private final PortMapping portMapping;
 
     public DeviceListener221(String nodeId, PortMapping portMapping) {
+        super();
         this.nodeId = nodeId;
         this.portMapping = portMapping;
     }
