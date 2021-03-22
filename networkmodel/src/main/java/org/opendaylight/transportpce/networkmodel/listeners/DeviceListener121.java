@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
@@ -30,6 +29,7 @@ public class DeviceListener121 implements OrgOpenroadmDeviceListener {
     private final PortMapping portMapping;
 
     public DeviceListener121(String nodeId, PortMapping portMapping) {
+        super();
         this.nodeId = nodeId;
         this.portMapping = portMapping;
     }
@@ -40,6 +40,7 @@ public class DeviceListener121 implements OrgOpenroadmDeviceListener {
      * @param notification ChangeNotification object
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void onChangeNotification(ChangeNotification notification) {
         if (notification.getEdit() == null) {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
@@ -50,7 +51,7 @@ public class DeviceListener121 implements OrgOpenroadmDeviceListener {
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
                     LinkedList<PathArgument> path = new LinkedList<>();
-                    path.addAll((Collection<? extends PathArgument>) edit.getTarget().getPathArguments());
+                    edit.getTarget().getPathArguments().forEach(p -> path.add(p));
                     InstanceIdentifier<Ports> portIID = (InstanceIdentifier<Ports>) InstanceIdentifier
                         .create(path);
                     String portName = InstanceIdentifier.keyOf(portIID).getPortName();
