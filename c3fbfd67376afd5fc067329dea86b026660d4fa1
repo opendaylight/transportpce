@@ -70,6 +70,30 @@
       "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f13a0b1b_10e4010e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-03-23T08:54:34Z",
+      "side": 1,
+      "message": "Even if it is not optimized, I prefer for its readability",
+      "parentUuid": "a8dcb2e9_aefcd8a3",
+      "range": {
+        "startLine": 265,
+        "startChar": 16,
+        "endLine": 265,
+        "endChar": 53
+      },
+      "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
