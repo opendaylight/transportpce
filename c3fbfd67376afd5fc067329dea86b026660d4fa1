@@ -46,6 +46,30 @@
       "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8dcb2e9_aefcd8a3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-23T08:29:42Z",
+      "side": 1,
+      "message": "nope\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/95539/1",
+      "parentUuid": "02626183_24539948",
+      "range": {
+        "startLine": 265,
+        "startChar": 16,
+        "endLine": 265,
+        "endChar": 53
+      },
+      "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
