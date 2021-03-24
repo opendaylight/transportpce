@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cb7d064_5fb426a4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T11:35:31Z",
+      "side": 1,
+      "message": "Should remove this line?",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 101
+      },
+      "revId": "a0122dc8d88d7a18ea07108c55329f9ef6d7fc7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c641e19_6ff9711b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T11:35:31Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 229,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 101
+      },
+      "revId": "a0122dc8d88d7a18ea07108c55329f9ef6d7fc7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fc6f24b_b4e4aef6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T11:35:31Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 290,
+        "endChar": 101
+      },
+      "revId": "a0122dc8d88d7a18ea07108c55329f9ef6d7fc7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
