@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfa6c3e2_687ccfb1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:39:40Z",
+      "side": 1,
+      "message": "an administrative or operational state.",
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfce750a_d5e8df7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:39:40Z",
+      "side": 1,
+      "message": "listens",
+      "range": {
+        "startLine": 12,
+        "startChar": 50,
+        "endLine": 12,
+        "endChar": 56
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a904bc_3384cf23",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:39:40Z",
+      "side": 1,
+      "message": "punctuation\n\nand, if need be, associated links of",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 48
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d29c2e09_33e3a173",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:39:40Z",
+      "side": 1,
+      "message": "a LF or condition indentation +4 would help better distinguish conditions from statements.",
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e9bd53_4ece8270",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:39:40Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 63
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
