@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d21a5bf2_9ee432c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T08:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfa6c3e2_687ccfb1",
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfce750a_d5e8df7d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97dcae25_04b02471",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T08:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfce750a_d5e8df7d",
+      "range": {
+        "startLine": 12,
+        "startChar": 50,
+        "endLine": 12,
+        "endChar": 56
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a4acf8dc_f0580f65",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T08:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49a904bc_3384cf23",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 48
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d29c2e09_33e3a173",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
         "patchSetId": 1
@@ -79,6 +145,24 @@
       "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b773678f_7b46dfa0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T08:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d29c2e09_33e3a173",
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +186,30 @@
       "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71204a21_9f7cf138",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-03-24T08:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e9bd53_4ece8270",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 63
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
