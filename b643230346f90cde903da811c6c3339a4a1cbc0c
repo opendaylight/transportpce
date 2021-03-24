@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "302dda78_b154948e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:21:31Z",
+      "side": 1,
+      "message": "allows",
+      "range": {
+        "startLine": 84,
+        "startChar": 19,
+        "endLine": 84,
+        "endChar": 25
+      },
+      "revId": "b643230346f90cde903da811c6c3339a4a1cbc0c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1a89228_d814229d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:21:31Z",
+      "side": 1,
+      "message": "node",
+      "range": {
+        "startLine": 101,
+        "startChar": 31,
+        "endLine": 101,
+        "endChar": 37
+      },
+      "revId": "b643230346f90cde903da811c6c3339a4a1cbc0c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba477317_1a5c2433",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:21:31Z",
+      "side": 1,
+      "message": "missing line feed here",
+      "range": {
+        "startLine": 113,
+        "startChar": 54,
+        "endLine": 113,
+        "endChar": 57
+      },
+      "revId": "b643230346f90cde903da811c6c3339a4a1cbc0c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
