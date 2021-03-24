@@ -76,10 +76,19 @@ public final class OlmUtils {
         LOG.info("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder;
-        if (openRoadmVersion.getIntValue() == 1) {
-            pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
-        } else {
-            pmOutputBuilder = OlmUtils22.pmFetch(input, deviceTransactionManager);
+        switch (openRoadmVersion.getIntValue()) {
+            case 1:
+                pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
+                break;
+            case 2:
+                pmOutputBuilder = OlmUtils221.pmFetch(input, deviceTransactionManager);
+                break;
+            case 3:
+                pmOutputBuilder = OlmUtils710.pmFetch(input, deviceTransactionManager);
+                break;
+            default:
+                LOG.error("Unrecognized OpenRoadm version");
+                pmOutputBuilder = new GetPmOutputBuilder();
         }
         return pmOutputBuilder;
     }
