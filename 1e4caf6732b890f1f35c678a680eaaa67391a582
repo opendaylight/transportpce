@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81c916bd_fc534fc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:30:03Z",
+      "side": 1,
+      "message": "refactor",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 9
+      },
+      "revId": "1e4caf6732b890f1f35c678a680eaaa67391a582",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dd40242_daa6aa57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:30:03Z",
+      "side": 1,
+      "message": "refactor",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 9
+      },
+      "revId": "1e4caf6732b890f1f35c678a680eaaa67391a582",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b05439_11a748d3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:30:03Z",
+      "side": 1,
+      "message": "Coucou Hibou\n\nMight be log.debug if a message needs to be sent here.",
+      "range": {
+        "startLine": 141,
+        "startChar": 11,
+        "endLine": 141,
+        "endChar": 32
+      },
+      "revId": "1e4caf6732b890f1f35c678a680eaaa67391a582",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cc37e05_7e3cafa7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:30:03Z",
+      "side": 1,
+      "message": "Coucou Hibou",
+      "range": {
+        "startLine": 253,
+        "startChar": 12,
+        "endLine": 253,
+        "endChar": 32
+      },
+      "revId": "1e4caf6732b890f1f35c678a680eaaa67391a582",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54332914_255a9659",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-03-24T07:30:03Z",
+      "side": 1,
+      "message": "error logged and return true ?",
+      "range": {
+        "startLine": 264,
+        "startChar": 12,
+        "endLine": 264,
+        "endChar": 79
+      },
+      "revId": "1e4caf6732b890f1f35c678a680eaaa67391a582",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
