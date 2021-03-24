@@ -94,6 +94,30 @@
       "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6cfc4c85_b3c96af2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-03-24T14:22:56Z",
+      "side": 1,
+      "message": "Include proposal made by Guillaume in abandoned change 95539.",
+      "parentUuid": "f13a0b1b_10e4010e",
+      "range": {
+        "startLine": 265,
+        "startChar": 16,
+        "endLine": 265,
+        "endChar": 53
+      },
+      "revId": "c3fbfd67376afd5fc067329dea86b026660d4fa1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
