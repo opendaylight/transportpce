@@ -74,10 +74,10 @@ public class NetConfTopologyListenerTest {
     @Test
     public void testOnDataTreeChanged() {
 
-        final DataObjectModification<Node> newNode = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModification<Node> newNode = mock(DataObjectModification.class);
         when(newNode.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
-        final DataTreeModification<Node> ch = mock(DataTreeModification.class);
+        @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(newNode);
 
