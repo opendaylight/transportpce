@@ -85,6 +85,7 @@ public interface OpenRoadmInterfaces {
      * This methods does an edit-config operation on the openROADM device in
      * order to create the OTN given interface.
      *
+     * @param <T> specified type of object
      * @param nodeId node ID
      * @param ifBuilder Builder object containing the data to post
      * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
