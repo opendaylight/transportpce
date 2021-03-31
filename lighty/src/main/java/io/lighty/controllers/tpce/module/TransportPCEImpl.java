@@ -106,17 +106,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         RequestProcessor requestProcessor = new RequestProcessor(lightyServices.getBindingDataBroker());
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
 
-        LOG.info("Creating PCE beans ...");
-        // TODO: pass those parameters through command line
-        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
-                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
-        PathComputationService pathComputationService = new PathComputationServiceImpl(
-                networkTransaction,
-                lightyServices.getBindingNotificationPublishService(),
-                gnpyConsumer
-                );
-        pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
-
         LOG.info("Creating network-model beans ...");
         R2RLinkDiscovery linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction);
@@ -134,6 +123,18 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
                 lightyServices.getNotificationService(), networkModelWavelengthService);
+
+        LOG.info("Creating PCE beans ...");
+        // TODO: pass those parameters through command line
+        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
+                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
+        PathComputationService pathComputationService = new PathComputationServiceImpl(
+                networkTransaction,
+                lightyServices.getBindingNotificationPublishService(),
+                gnpyConsumer,
+                portMapping
+                );
+        pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
