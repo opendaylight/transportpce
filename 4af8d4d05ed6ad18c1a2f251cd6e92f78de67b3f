@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "57142128_84c3aa4d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-01T07:52:35Z",
+      "side": 1,
+      "message": "Will add JIRA ticket to all the changes... I forgot",
+      "parentUuid": "ed6b845c_8f827e00",
+      "revId": "4af8d4d05ed6ad18c1a2f251cd6e92f78de67b3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9653fd3_83a8a4d2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 14
@@ -39,6 +57,30 @@
       "revId": "4af8d4d05ed6ad18c1a2f251cd6e92f78de67b3f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03fd8405_ae050773",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-01T07:52:35Z",
+      "side": 1,
+      "message": "Will fix this as well. I think it also happens in the other changes... my bad",
+      "parentUuid": "a9653fd3_83a8a4d2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 39
+      },
+      "revId": "4af8d4d05ed6ad18c1a2f251cd6e92f78de67b3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
