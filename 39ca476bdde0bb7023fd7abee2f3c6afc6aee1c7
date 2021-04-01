@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "77efba3d_2c3c501d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-01T08:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e95a5b49_ab553511",
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd3d1bf6_3d96d06c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 13
@@ -39,6 +57,30 @@
       "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f60b1c15_e1e5f332",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-01T08:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd3d1bf6_3d96d06c",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -96,6 +138,30 @@
       "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d70c7a4_0a2ab4be",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-01T08:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe28051d_4d167f64",
+      "range": {
+        "startLine": 2,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
