@@ -101,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "9c6e653c_d7b1fa4b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-01T09:22:27Z",
+      "side": 1,
+      "message": "The id of 7.1 devices has the same format as 2.2.1 devices, so its included, the naming Ive put made the confusion...\nAlso, switch statements require string literals and do not currently accept regex patterns",
+      "parentUuid": "cdf5eb75_675e317a",
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4d37c2b_515fac51",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 13
@@ -115,6 +133,24 @@
       "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "163a70c7_66942269",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-01T09:22:27Z",
+      "side": 1,
+      "message": "This issue persists... even when my IDE is well configured... I will fix it",
+      "parentUuid": "c4d37c2b_515fac51",
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -162,6 +198,30 @@
       "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ae0057_8f6d1d66",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-01T09:22:27Z",
+      "side": 1,
+      "message": "Not needed?? Only to the files that are fully new??",
+      "parentUuid": "fe28051d_4d167f64",
+      "range": {
+        "startLine": 2,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     },
     {
       "key": {
