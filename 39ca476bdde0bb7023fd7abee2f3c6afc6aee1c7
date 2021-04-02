@@ -243,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "a04c4cda_7878a0f6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-02T13:02:56Z",
+      "side": 1,
+      "message": "Sorry, the comments here was to point a supposed copyright owner change and not an append.\nI was confused by the copyright change tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java\n\nYou can append Nokia as long as you do not remove the original copyright owner and year.\nBut effectively it is not needed since it is mentioned \"and others\".\n\nThough, I personnally discourage it since such practices results can lead to endless lists of contributors.\nGit log history can provide all the details if really needed.",
+      "parentUuid": "50ae0057_8f6d1d66",
+      "range": {
+        "startLine": 2,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "39ca476bdde0bb7023fd7abee2f3c6afc6aee1c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b51fd37_877061ed",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 13
