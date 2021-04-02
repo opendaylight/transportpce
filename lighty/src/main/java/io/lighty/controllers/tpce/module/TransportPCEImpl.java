@@ -9,10 +9,8 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
-
 import java.util.Arrays;
 import java.util.List;
-
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -38,6 +36,7 @@ import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
+import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -132,10 +131,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         FrequenciesService networkModelWavelengthService =
                 new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
-                lightyServices.getBindingDataBroker(), deviceTransactionManager);
+                lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
+        PortMappingListener portMappingListener = new PortMappingListener(networkModelService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
-                lightyServices.getNotificationService(), networkModelWavelengthService);
+                lightyServices.getNotificationService(), networkModelWavelengthService, portMappingListener);
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
@@ -183,13 +183,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
             pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, "N/A");
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
                 servicehandler);
         tapiProvider = initTapi(lightyServices, servicehandler);
-        if(activateNbiNotification) {
+        if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
                     publisherTopicList, null, null, lightyServices.getRpcProviderService(),
@@ -211,8 +211,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.init();
         LOG.info("Initializing tapi provider ...");
         tapiProvider.init();
-        LOG.info("Initializing nbi-notifications provider ...");
-        nbiNotificationsProvider.init();
+        if(nbiNotificationsProvider != null) {
+            LOG.info("Initializing nbi-notifications provider ...");
+            nbiNotificationsProvider.init();
+        }
         LOG.info("Init done.");
         return true;
     }

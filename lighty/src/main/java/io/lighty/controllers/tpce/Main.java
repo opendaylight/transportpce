@@ -34,7 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -83,7 +82,8 @@ public class Main {
             restConfConfig.setJsonRestconfServiceType(JsonRestConfServiceType.DRAFT_02);
             // 3. NETCONF SBP configuration
             NetconfConfiguration netconfSBPConfig = NetconfConfigUtils.createDefaultNetconfConfiguration();
-            startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook, activateNbiNotification);
+            startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook,
+                    activateNbiNotification);
             float duration = (System.nanoTime() - startTime) / 1_000_000f;
             LOG.info("lighty.io and RESTCONF-NETCONF started in {}ms", duration);
         } catch (ConfigurationException | ExecutionException | IOException e) {
@@ -103,7 +103,7 @@ public class Main {
     }
 
     /**
-     * Build options for command line arguments
+     * Build options for command line arguments.
      * @return
      */
     private static Options buildOptions() {
@@ -183,7 +183,7 @@ public class Main {
             formatter.printHelp(
                     "java -ms<size> -mx<size> -XX:MaxMetaspaceSize=<size> -jar tpce.jar "
                     + "[-restconf <restconfConfigurationFile>] [-nbinotification]"
-                    +" e.g. java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar"
+                    + " e.g. java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar"
                     + "-restconf ../src/test/resources/config.json -nbinotification",
                     options);
             System.exit(1);
