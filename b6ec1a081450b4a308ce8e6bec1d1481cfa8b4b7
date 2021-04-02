@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f97ec47_a8c3bbf0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-02T19:12:58Z",
+      "side": 1,
+      "message": "should be after the guard clause",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 79
+      },
+      "revId": "b6ec1a081450b4a308ce8e6bec1d1481cfa8b4b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36402922_1a158989",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-02T19:12:58Z",
+      "side": 1,
+      "message": "return new ServiceCreateInputBuilder()\n     .setCommonId(\"commonId\")\n     [...]\n      .build()",
+      "revId": "b6ec1a081450b4a308ce8e6bec1d1481cfa8b4b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
