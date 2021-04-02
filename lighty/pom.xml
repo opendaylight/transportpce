@@ -12,10 +12,7 @@
         <groupId>io.lighty.core</groupId>
         <artifactId>lighty-app-parent</artifactId>
         <version>14.0.0</version>
-        <!--
-        lighty-core is usually released a few days before the official Opendaylight release.
-        13.0.0 = Aluminium release of 2020/09/18
-        -->
+        <!--version>14.0.1-SNAPSHOT</version-->
         <relativePath />
     </parent>
 

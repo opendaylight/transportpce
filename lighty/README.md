@@ -9,12 +9,19 @@ This project starts [TransportPCE](https://git.opendaylight.org/gerrit/#/admin/p
 
 #### Before compiling Lighty-TransportPCE
 1. Make sure upstream projects are compiled locally and stored in local ``~/.m2/repository``:
-2. compile __transportpce/silicon__
+2. compile __transportpce/master__
 ```
-git clone -b stable/silicon https://git.opendaylight.org/gerrit/transportpce && (cd transportpce && curl -kLo `git rev-parse --git-dir`/hooks/commit-msg https://git.opendaylight.org/gerrit/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)
+git clone https://git.opendaylight.org/gerrit/transportpce && (cd transportpce && curl -kLo `git rev-parse --git-dir`/hooks/commit-msg https://git.opendaylight.org/gerrit/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)
 cd transportpce
 ```
 mvn clean install -s tests/odl_settings.xml -DskipTests -Dmaven.javadoc.skip=true -Dodlparent.spotbugs.skip -Dodlparent.checkstyle.skip
+```
+3. compile __lighty-core/master__
+```
+git clone https://github.com/PantheonTechnologies/lighty-core.git
+cd lighty-core
+git checkout master
+mvn clean install -DskipTests -Dmaven.javadoc.skip=true
 ```
 #### Compile Lighty-TransportPCE
 * Project is build using maven command:
