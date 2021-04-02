@@ -9,10 +9,8 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
-
 import java.util.Arrays;
 import java.util.List;
-
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -149,6 +147,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 );
         pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
+
+
+
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         PowerMgmt powerMgmt = new PowerMgmtImpl(lightyServices.getBindingDataBroker(), openRoadmInterfaces,
@@ -183,13 +184,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
             pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, "N/A");
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
                 servicehandler);
         tapiProvider = initTapi(lightyServices, servicehandler);
-        if(activateNbiNotification) {
+        if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
                     publisherTopicList, null, null, lightyServices.getRpcProviderService(),
