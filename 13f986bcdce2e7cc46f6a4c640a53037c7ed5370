@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acbffdde_5f920703",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-03T09:00:47Z",
+      "side": 1,
+      "message": "misleading indentations here",
+      "revId": "13f986bcdce2e7cc46f6a4c640a53037c7ed5370",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
