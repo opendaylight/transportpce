@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a102c31_2d3ca414",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-03T08:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f97ec47_a8c3bbf0",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 79
+      },
+      "revId": "b6ec1a081450b4a308ce8e6bec1d1481cfa8b4b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36402922_1a158989",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 16
@@ -39,6 +63,24 @@
       "revId": "b6ec1a081450b4a308ce8e6bec1d1481cfa8b4b7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3455fa2c_f0c47c8f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-03T08:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36402922_1a158989",
+      "revId": "b6ec1a081450b4a308ce8e6bec1d1481cfa8b4b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
