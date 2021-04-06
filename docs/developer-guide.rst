@@ -1439,6 +1439,15 @@ be connected together, through a point-to-point 100GE service running over a wav
     port is connected to Add/Drop nodes of the ROADM infrastructure are retrieved in order to
     abstract only relevant information.
 
+odl-transportpce-dmaap-client
+-----------------------------
+
+This feature allows TransportPCE application to send notifications on ONAP Dmaap Message router
+following service request results.
+This feature listens on NBI notifications and sends the PublishNotificationService content to
+Dmaap on the topic "unauthenticated.TPCE" through a POST request on /events/unauthenticated.TPCE
+It uses Jackson to serialize the notification to JSON and jersey client to send the POST request.
+
 Help
 ----
 
