@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c9042f1_84f5d643",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c79f8eb7_61c7c64a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "100ea3ea_6fcf5481",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc854835_446e2fc8",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "100ea3ea_6fcf5481",
+      "range": {
+        "startLine": 1446,
+        "startChar": 9,
+        "endLine": 1446,
+        "endChar": 32
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "fb18b693_b88641f8",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5141c942_584a49b8",
+      "range": {
+        "startLine": 1447,
+        "startChar": 45,
+        "endLine": 1447,
+        "endChar": 49
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "04fb0890_5f674fb1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc3547b4_343cf0c9",
+      "range": {
+        "startLine": 1447,
+        "startChar": 13,
+        "endLine": 1447,
+        "endChar": 19
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "632a7016_0f96d8f4",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2021-04-06T12:11:24Z",
       "side": 1,
       "message": "topic \"unauthenticated\" or unauthenticated  topic (maybe rather unfilled or empty topicin that case) ?",
+      "range": {
+        "startLine": 1448,
+        "startChar": 13,
+        "endLine": 1448,
+        "endChar": 34
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18a57b0f_c2cdd22e",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "This the name of the topic unauthenticated.TPCE, so I\u0027ve put \"",
+      "parentUuid": "632a7016_0f96d8f4",
       "range": {
         "startLine": 1448,
         "startChar": 13,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "28884058_a69dcc21",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6d1fbbe_619bb906",
+      "range": {
+        "startLine": 60,
+        "startChar": 95,
+        "endLine": 60,
+        "endChar": 107
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a79daf3_72d209e5",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "5475e7f0_d18e7ddc",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a79daf3_72d209e5",
+      "range": {
+        "startLine": 104,
+        "startChar": 82,
+        "endLine": 104,
+        "endChar": 87
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5da1d346_ba1cbeee",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -183,6 +351,30 @@
       "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20c09ec5_55a04cdb",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2021-04-06T12:35:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5da1d346_ba1cbeee",
+      "range": {
+        "startLine": 112,
+        "startChar": 5,
+        "endLine": 112,
+        "endChar": 8
+      },
+      "revId": "ae7234315cd1b830d0bbec14d79b13841b353e23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
