@@ -55,6 +55,11 @@ TransportPCE User-Facing Features
    -  This feature is considered experimental. It provides transportPCE with an external connector to
       a MariaDB inventory currently limited to OpenROADM 1.2.1 devices.
 
+-  **feature odl-transportpce-dmaap-client**
+
+   -  This feature is considered experimental. It provides a REST client in order to send TPCE notifications
+      to ONAP Dmaap Message router.
+
 How To Start
 ------------
 
@@ -91,5 +96,22 @@ For example by modifying the environment variables JAVA_MIN_MEM and JAVA_MAX_MEM
 if you need the inventory external connector support limited to 1.2.1 OpenROADM devices, then run::
 
    feature:install odl-transportpce-inventory
+
+if you need the Dmaap connector support, before running Opendaylight, set DMAAP_BASE_URL as environment variable.
+For example, if the base url of your Dmaap server is "https://dmaap-mr:30226", then::
+
+    export DMAAP_BASE_URL=https://dmaap-mr:30226
+
+if your Dmaap server provides https connection through a self-signed certificate, do not forget to add the certificate
+to the JAVA truststore::
+
+    echo -n | openssl s_client -showcerts -connect dmaap-mr:30226 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/dmaap.crt
+    keytool -import -v -trustcacerts -alias dmaap -file /tmp/dmaap.crt -keystore /etc/ssl/certs/java/cacerts -keypass changeit -storepass changeit -noprompt
+
+where dmaap-mr:30226 is the url of your Dmaap server.
+
+Then run in karaf::
+
+   feature:install odl-transportpce-dmaap-client
 
 For a more detailed overview of the TransportPCE, see the :ref:`transportpce-dev-guide`.
