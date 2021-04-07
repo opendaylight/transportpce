@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ab00c0f2_d7f9cf97",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97d71597_77f08525",
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "499bb694_287c3d1c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 23
@@ -33,6 +51,24 @@
       "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6384bc0_7cb98318",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "499bb694_287c3d1c",
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "3e377806_94ff8915",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cf3402c_3458e538",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 8
+      },
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae333246_1eb46690",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
         "patchSetId": 23
@@ -70,6 +130,30 @@
       "writtenOn": "2021-04-07T19:14:55Z",
       "side": 1,
       "message": "LF no more needed",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 41
+      },
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "150330ce_8d7a68fb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "What do you mean by LF?",
+      "parentUuid": "ae333246_1eb46690",
       "range": {
         "startLine": 110,
         "startChar": 0,
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "18a22cc9_9a142960",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "Will change this. So that there is no duplicated code",
+      "parentUuid": "208715d2_4270f130",
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6758bbf_1f87c899",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
         "patchSetId": 23
@@ -113,6 +215,24 @@
       "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaeaba34_d2969b43",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-07T21:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6758bbf_1f87c899",
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
