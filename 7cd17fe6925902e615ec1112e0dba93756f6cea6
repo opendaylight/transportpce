@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fe67a6e1_62c50d7e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T19:14:55Z",
+      "side": 1,
+      "message": "OK fair enough for me as long as you leave a comment here to clearly state it.",
+      "parentUuid": "2a0592f7_3b579a31",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 75
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "936422a3_2517c838",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
         "patchSetId": 21
