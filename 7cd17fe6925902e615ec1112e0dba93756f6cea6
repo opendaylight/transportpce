@@ -1,0 +1,221 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73c33524_4d1523d4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "no real modification here\n-\u003e should be taken out of the change",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5942f1c2_83013167",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "150a6990_35e6735a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "switch/case more indicated here in my opinion\n\nNo 7.1 devices ?",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 75
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "936422a3_2517c838",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "I would prefer\nreturn new HashMap\u003c\u003e();\n\nand an afterward declaration of Map\u003cLinkKey, Link\u003e linkMap \u003d new HashMap\u003c\u003e();",
+      "range": {
+        "startLine": 98,
+        "startChar": 23,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03ac5b1b_184a5224",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "guard clause style more appropriate here in my opinion\n\ncontinue;\n\nand then no else block",
+      "range": {
+        "startLine": 105,
+        "startChar": 5,
+        "endLine": 105,
+        "endChar": 62
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da2b1961_36716060",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "idem\n\netc",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c979eb8_0fd76c42",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "indent +4",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 71
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cafdad9_c758761b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "I would prefer\nreturn new HashMap\u003c\u003e();",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 27
+      },
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb87ec25_e072dfba",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "guard clause style more appropriate in my opinion here",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1534f0db_da6fb5da",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "arguments readability",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac850427_925dff04",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T16:36:41Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "7cd17fe6925902e615ec1112e0dba93756f6cea6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
