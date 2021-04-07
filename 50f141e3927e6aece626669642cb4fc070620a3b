@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "4cf3402c_3458e538",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-07T19:23:23Z",
+      "side": 1,
+      "message": "trailing blanks",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 8
+      },
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae333246_1eb46690",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
         "patchSetId": 23
