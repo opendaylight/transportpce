@@ -88,6 +88,24 @@
       "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7f29175_4f026994",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-04-08.yang",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T13:57:09Z",
+      "side": 1,
+      "message": "good question\nI created a JIRA ticket for that in the next sprint.\nWe forgot to precise a license in the first models published.\nEPL is the default license otherwise.\nI\u0027ll explain you the license problem and the difference between copyrights and license in the meeting if you join.",
+      "parentUuid": "1c62c1b8_5b4f6f67",
+      "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
