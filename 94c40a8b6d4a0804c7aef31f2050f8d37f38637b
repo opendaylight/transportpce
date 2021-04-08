@@ -106,6 +106,24 @@
       "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05948b67_fa872fef",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-04-08.yang",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T14:06:17Z",
+      "side": 1,
+      "message": "cf https://jira.opendaylight.org/browse/TRNSPRTPCE-417",
+      "parentUuid": "d7f29175_4f026994",
+      "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
