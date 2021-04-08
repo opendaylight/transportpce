@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "810ca33f_afb56b99",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T08:28:45Z",
+      "side": 1,
+      "message": "OK so we just need to fix the date and to remove the references to ATT and OpenROADM",
+      "parentUuid": "aaf4f92c_dc601262",
+      "revId": "32c2b897da39b0565857e7afa26394f96f28b034",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85ad9c84_5f3a900d",
         "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
         "patchSetId": 23
