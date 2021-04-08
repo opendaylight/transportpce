@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "80164d13_6e6ed299",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T08:02:42Z",
+      "side": 1,
+      "message": "The format and the BSD 3-clause are OK but you can\u0027t attribute the rights to another company (or another consortium) except if this company accepts them explicitly. If I have no proof of that, I couldn\u0027t reasonnably merge this change.\n\nFYI in case you have reused materials from ONF/TAPI models here, they use the ALv2 license , also compatible with the EPL, and which allows relicensing.\nhttps://github.com/OpenNetworkingFoundation/TAPI/blob/develop/LICENSE\nBut you must abide by the redistribution clause (§4).",
+      "parentUuid": "1fa75173_ddabeacf",
+      "revId": "32c2b897da39b0565857e7afa26394f96f28b034",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85ad9c84_5f3a900d",
         "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
         "patchSetId": 23
