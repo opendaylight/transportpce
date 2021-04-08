@@ -16,6 +16,24 @@
       "revId": "226233058f65129f652fa468de4f8164846bf398",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e149626a_5bd38c1b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-08T07:59:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e20773a5_7c4404e6",
+      "revId": "226233058f65129f652fa468de4f8164846bf398",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
