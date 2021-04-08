@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50837db0_dbfcc053",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T07:50:03Z",
+      "side": 1,
+      "message": "OpenROADM and AT\u0026T really ?",
+      "revId": "32c2b897da39b0565857e7afa26394f96f28b034",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ad9c84_5f3a900d",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-08T07:50:03Z",
+      "side": 1,
+      "message": "otherwise OK BSD 3-clauses is compatible with EPL.",
+      "revId": "32c2b897da39b0565857e7afa26394f96f28b034",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
