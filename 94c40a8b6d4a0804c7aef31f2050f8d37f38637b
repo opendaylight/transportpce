@@ -52,6 +52,24 @@
       "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ae03f0_6ea47e07",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-04-08.yang",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-08T12:40:14Z",
+      "side": 1,
+      "message": "I dont understand why in this model you need a license but in others such as NetworkUtils.yang or PortMapping.yang you dont need it",
+      "parentUuid": "07c71d45_6d087d0d",
+      "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
