@@ -124,6 +124,24 @@
       "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b67d002_23ea332c",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-04-08.yang",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-08T15:14:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05948b67_fa872fef",
+      "revId": "94c40a8b6d4a0804c7aef31f2050f8d37f38637b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
