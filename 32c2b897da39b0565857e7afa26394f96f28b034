@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1fa75173_ddabeacf",
+        "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-08T07:53:00Z",
+      "side": 1,
+      "message": "To be honest, I dont know the format of the license. I just copy pasted it from the model I created for the network model notification... let mw know what should be put here....",
+      "parentUuid": "50837db0_dbfcc053",
+      "revId": "32c2b897da39b0565857e7afa26394f96f28b034",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85ad9c84_5f3a900d",
         "filename": "api/src/main/yang/transportpce-tapinetworkutils@2021-02-04.yang",
         "patchSetId": 23
