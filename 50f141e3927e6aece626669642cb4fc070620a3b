@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b920d711_9cebd6db",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-09T13:24:03Z",
+      "side": 1,
+      "message": "Line Feed \u003d Unix character to indicate a new line",
+      "parentUuid": "150330ce_8d7a68fb",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 41
+      },
+      "revId": "50f141e3927e6aece626669642cb4fc070620a3b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "208715d2_4270f130",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
         "patchSetId": 23

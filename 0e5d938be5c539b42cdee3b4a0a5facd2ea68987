@@ -46,6 +46,30 @@
       "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07139123_09dac3e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-09T13:24:03Z",
+      "side": 1,
+      "message": "I took advantage of the rebase to fix it but there are still refactoring issues in this change.\n\nYes you need to download the latest changes in a local branches of your local git repo.\nAnd then you need to rebase or cherry-pick or copy-paste, etc but you\u0027ll have probably merge-conflicts to deal with.\nThere is not only one strategy for that.\n\"git reset HEAD~1 file\" + \"git checkout -- file\" can be also helpful to remove autorfomatting issues.",
+      "parentUuid": "b9acb226_67412e5e",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
