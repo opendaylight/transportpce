@@ -70,6 +70,30 @@
       "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3223396_378d0873",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-09T15:14:42Z",
+      "side": 1,
+      "message": "Tell me if this is correct. I have download the latest commit you pushed, which includes all the relation chain except the Connectivity Service Impl change. Locally I have my branch with this commit so I have done the following:\ngit review -d \u0027change_id_of_Topology_service_RPC_Impl\u0027\ngit cherry-pick \u0027Commit_Hash_of_ConnectivityService_from_local_branch\u0027\n--\u003e Solve issues and commit. Now I have the Connectivity Service Impl change in the history (with the same ChangeId of gerrit)",
+      "parentUuid": "07139123_09dac3e9",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
