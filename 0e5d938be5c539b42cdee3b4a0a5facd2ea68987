@@ -22,6 +22,30 @@
       "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9acb226_67412e5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-09T08:24:05Z",
+      "side": 1,
+      "message": "Will solve it. Just one question I have. Now that you have submitted a new patch set for all the changes but the last one. There is a Not Current state in the last change. How do I solve this locally so next time I push something I dont mess it up on gerrit?? Do I need to rebase my last change on your new patch sets?? Thanks for the reply 😊",
+      "parentUuid": "73713061_2dac91a6",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
