@@ -98,7 +98,7 @@ def start_tpce():
     else:
         process = start_karaf()
         start_msg = KARAF_OK_START_MSG
-    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=60):
+    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=120):
         print("OpenDaylight started !")
     else:
         print("OpenDaylight failed to start !")
