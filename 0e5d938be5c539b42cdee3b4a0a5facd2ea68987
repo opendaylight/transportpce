@@ -94,6 +94,30 @@
       "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a466508_5726a294",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-09T19:30:52Z",
+      "side": 1,
+      "message": "yes it looks correct\nAnf if not, we will see :)",
+      "parentUuid": "c3223396_378d0873",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "0e5d938be5c539b42cdee3b4a0a5facd2ea68987",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
