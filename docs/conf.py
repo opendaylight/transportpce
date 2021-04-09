@@ -11,4 +11,9 @@
 ##############################################################################
 
 from docs_conf.conf import *
+linkcheck_ignore = [
+    # Ignore dmaap sample URL
+    'https://dmaap-mr:30226',
+]
+linkcheck_timeout = 300
 
