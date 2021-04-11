@@ -25,6 +25,27 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU3;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUflexCbr;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUflexFlexe;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUflexGfp;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUflexImp;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU3;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTUflex;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OduRateIdentity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OtuRateIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutputBuilder;
@@ -89,8 +110,8 @@ public final class ModelMappingUtils {
 
         serviceAEnd.setServiceFormat(input.getServiceAEnd().getServiceFormat())
             .setServiceRate(input.getServiceAEnd().getServiceRate())
-            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
-            .setOduServiceRate(input.getServiceAEnd().getOduServiceRate())
+            .setOtuServiceRate(getOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()))
+            .setOduServiceRate(getOduServiceRate(input.getServiceAEnd().getOduServiceRate()))
             .setClli(input.getServiceAEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
             .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
@@ -104,8 +125,8 @@ public final class ModelMappingUtils {
             .transportpce.renderer.rev201125.service.implementation.request.input.ServiceZEndBuilder();
         serviceZEnd.setServiceFormat(input.getServiceZEnd().getServiceFormat())
             .setServiceRate(input.getServiceZEnd().getServiceRate())
-            .setOtuServiceRate(input.getServiceZEnd().getOtuServiceRate())
-            .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
+            .setOtuServiceRate(getOtuServiceRate(input.getServiceZEnd().getOtuServiceRate()))
+            .setOduServiceRate(getOduServiceRate(input.getServiceZEnd().getOduServiceRate()))
             .setClli(input.getServiceZEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceZEnd().getNodeId().getValue()).getValue())
             .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
@@ -130,6 +151,95 @@ public final class ModelMappingUtils {
             .setZToADirection(pathDescription.getZToADirection());
         serviceImplementationRequestInputBuilder.setPathDescription(pathDescBuilder.build());
         return serviceImplementationRequestInputBuilder.build();
+    }
+
+    private static Class<? extends OduRateIdentity> getOduServiceRate(
+            Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OduRateIdentity>
+                oduServiceRate) {
+        if (oduServiceRate == null) {
+            return null;
+        }
+        String oduRate = oduServiceRate.getSimpleName();
+        LOG.info("ODU rate = {}", oduRate);
+        Class<? extends OduRateIdentity> odu = null;
+        switch (oduRate) {
+            case "ODU0":
+                odu = ODU0.class;
+                break;
+            case "ODU1":
+                odu = ODU1.class;
+                break;
+            case "ODU2":
+                odu = ODU2.class;
+                break;
+            case "ODU2e":
+                odu = ODU2e.class;
+                break;
+            case "ODU3":
+                odu = ODU3.class;
+                break;
+            case "ODU4":
+                odu = ODU4.class;
+                break;
+            case "ODUCn":
+                odu = ODUCn.class;
+                break;
+            case "ODUflexCbr":
+                odu = ODUflexCbr.class;
+                break;
+            case "ODUflexFlexe":
+                odu = ODUflexFlexe.class;
+                break;
+            case "ODUflexGfp":
+                odu = ODUflexGfp.class;
+                break;
+            case "ODUflexImp":
+                odu = ODUflexImp.class;
+                break;
+            default:
+                LOG.error("OTU rate {} not recognized", oduRate);
+        }
+        return odu;
+    }
+
+    private static Class<? extends OtuRateIdentity> getOtuServiceRate(
+            Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OtuRateIdentity>
+                otuServiceRate) {
+        if (otuServiceRate == null) {
+            return null;
+        }
+        String otuRate = otuServiceRate.getSimpleName();
+        LOG.info("OTU rate = {}", otuRate);
+        Class<? extends OtuRateIdentity> otu = null;
+        switch (otuRate) {
+            case "OTU0":
+                otu = OTU0.class;
+                break;
+            case "OTU1":
+                otu = OTU1.class;
+                break;
+            case "OTU2":
+                otu = OTU2.class;
+                break;
+            case "OTU2e":
+                otu = OTU2e.class;
+                break;
+            case "OTU3":
+                otu = OTU3.class;
+                break;
+            case "OTU4":
+                otu = OTU4.class;
+                break;
+            case "OTUCn":
+                otu = OTUCn.class;
+                break;
+            case "OTUflex":
+                otu = OTUflex.class;
+                break;
+            default:
+                LOG.error("OTU rate {} not recognized", otuRate);
+        }
+        return otu;
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125
