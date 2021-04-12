@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3a39933_12c9e011",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "misleading indentation\n\n                        .setValueName(\"OpenROADM info\")\n                        .setValue(\n                            String.join(\"-\",\n                                serviceZEnd.getClli(),\n                                serviceZEnd.getTxDirection().getPort().getPortDeviceName(),\n                                serviceZEnd.getTxDirection().getPort().getPortName()))",
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbd87caf_54826974",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb3e582a_9b126771",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "LGTM but it might LOG.debug and I am not a specialist.\n\nYou might take a look at this to choose the right level of logging.\nhttps://docs.opendaylight.org/en/latest/developer-guides/logging-subsystem.html",
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f5725d0_b7ec8471",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d9228fd_4b64b200",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "rather warn or error ?\nOr is it normal that it happens?",
+      "range": {
+        "startLine": 1261,
+        "startChar": 12,
+        "endLine": 1261,
+        "endChar": 21
+      },
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "680acbe3_e6d760fd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceListenerImpl.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T09:50:12Z",
+      "side": 1,
+      "message": "I would prefer return + ternary operator here",
+      "revId": "fb96eba7834831e9e3da7e6e553bbbcf205c95ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
