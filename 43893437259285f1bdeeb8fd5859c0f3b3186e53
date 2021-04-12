@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60e6b889_36ca9354",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceListenerImpl.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T12:06:56Z",
+      "side": 1,
+      "message": "should stay sticked\n\n        return nodeid.matches(\"[A-Z]{5}-[A-Z0-9]{2}-.*\") ? String.join(\"-\", nodeid.split(\"-\")[0], nodeid.split(\"-\")[1])\n                                                        : nodeid.split(\"-\")[0];",
+      "revId": "43893437259285f1bdeeb8fd5859c0f3b3186e53",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
