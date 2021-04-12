@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "49ccde7f_36801a6b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T12:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aab8f29_67da7d50",
+      "revId": "5b06209d3305e1053b1be65ab0abb868ad310a5e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "116425a9_08d23d61",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 1
@@ -105,6 +123,24 @@
       "revId": "5b06209d3305e1053b1be65ab0abb868ad310a5e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e937034f_4e5b57fc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T12:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b9ace96_d3964e09",
+      "revId": "5b06209d3305e1053b1be65ab0abb868ad310a5e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
