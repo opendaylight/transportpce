@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "f7f5b22b_b6dc6077",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T18:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a11d95f7_80322205",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 48
+      },
+      "revId": "1943724b6f74cc9198fdef993e9e43d0a3e5661b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d29c2e09_33e3a173",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
         "patchSetId": 1
