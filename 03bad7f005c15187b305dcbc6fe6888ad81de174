@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2440d24a_5ffe0fcb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T10:56:59Z",
+      "side": 1,
+      "message": "return ODUxx.class would avoid many break statements and the odu variable creation.",
+      "revId": "03bad7f005c15187b305dcbc6fe6888ad81de174",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9956d53_c922ed2a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T10:56:59Z",
+      "side": 1,
+      "message": "return OTUxx.class would avoid many break statements and the otu variable creation.",
+      "revId": "03bad7f005c15187b305dcbc6fe6888ad81de174",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
