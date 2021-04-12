@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,6 +30,7 @@ import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Host;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
@@ -60,12 +62,15 @@ public class NetConfTopologyListenerTest {
     private DeviceTransactionManager deviceTransactionManager;
     @Mock
     private PortMapping portMapping;
+    @Mock
+    private Map<String, NodeRegistration> registrations;
 
     @Test
     public void testOnDataTreeChangedWhenDeleteNode() {
         final DataObjectModification<Node> node = mock(DataObjectModification.class);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
         final DataTreeModification<Node> ch = mock(DataTreeModification.class);
+        final NodeRegistration nodeRegistration = mock(NodeRegistration.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(node);
 
@@ -73,13 +78,16 @@ public class NetConfTopologyListenerTest {
             OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(node.getDataBefore()).thenReturn(netconfNode);
+        when(registrations.remove(anyString())).thenReturn(nodeRegistration);
+
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
-            deviceTransactionManager, portMapping);
+            deviceTransactionManager, portMapping, registrations);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(node, times(1)).getModificationType();
         verify(node, times(3)).getDataBefore();
         verify(networkModelService, times(1)).deleteOpenRoadmnode(anyString());
+        verify(nodeRegistration, times(1)).unregisterListeners();
     }
 
     @Test

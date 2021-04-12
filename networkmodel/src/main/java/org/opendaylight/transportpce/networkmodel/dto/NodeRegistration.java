@@ -7,60 +7,110 @@
  */
 package org.opendaylight.transportpce.networkmodel.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener;
+import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener;
+import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener121;
+import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener710;
+import org.opendaylight.transportpce.networkmodel.listeners.TcaListener;
+import org.opendaylight.transportpce.networkmodel.listeners.TcaListener221;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.OrgOpenroadmDeOperationsListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.OrgOpenroadmLldpListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.OrgOpenroadmTcaListener;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NodeRegistration {
-
+    private static final Logger LOG = LoggerFactory.getLogger(NodeRegistration.class);
     private final String nodeId;
-    private final ListenerRegistration<OrgOpenroadmAlarmListener> accessAlarmNotificationListenerRegistration;
-    private final ListenerRegistration<OrgOpenroadmDeOperationsListener>
-        accessDeOperationasNotificationListenerRegistration;
-    private final ListenerRegistration<OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration;
-    private final ListenerRegistration<OrgOpenroadmLldpListener> accessLldpNotificationListenerRegistration;
-    private final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration;
+    private final String nodeVersion;
+    private final NotificationService notificationService;
+    private final DataBroker dataBroker;
+    private final PortMapping portMapping;
+    private final List<ListenerRegistration<?>> listeners;
 
-    public NodeRegistration(String nodeId,
-            ListenerRegistration<OrgOpenroadmAlarmListener> accessAlarmNotificationListenerRegistration,
-            ListenerRegistration<OrgOpenroadmDeOperationsListener> accessDeOperationasNotificationListenerRegistration,
-            ListenerRegistration<OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration,
-            ListenerRegistration<OrgOpenroadmLldpListener> accessLldpNotificationListenerRegistration,
-            ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration) {
+    public NodeRegistration(String nodeId, String nodeVersion, NotificationService notificationService,
+            DataBroker dataBroker, PortMapping portMapping) {
         this.nodeId = nodeId;
-        this.accessAlarmNotificationListenerRegistration = accessAlarmNotificationListenerRegistration;
-        this.accessDeOperationasNotificationListenerRegistration = accessDeOperationasNotificationListenerRegistration;
-        this.accessDeviceNotificationListenerRegistration = accessDeviceNotificationListenerRegistration;
-        this.accessLldpNotificationListenerRegistration = accessLldpNotificationListenerRegistration;
-        this.accessTcaNotificationListenerRegistration = accessTcaNotificationListenerRegistration;
+        this.nodeVersion = nodeVersion;
+        this.notificationService = notificationService;
+        this.dataBroker = dataBroker;
+        this.portMapping = portMapping;
+        listeners = new ArrayList<ListenerRegistration<?>>();
     }
 
-    public String getNodeId() {
-        return nodeId;
+    public void registerListeners() {
+        switch (this.nodeVersion) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                registerListeners121();
+                break;
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                registerListeners221();
+                break;
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+                registerListeners710();
+                break;
+            default:
+                LOG.debug("Unable to register listeners - unknown device version for {}", this.nodeId);
+                break;
+        }
     }
 
-    public ListenerRegistration<OrgOpenroadmAlarmListener> getAccessAlarmNotificationListenerRegistration() {
-        return accessAlarmNotificationListenerRegistration;
+    public void unregisterListeners() {
+        LOG.info("Unregistering notification listeners for node: {}", this.nodeId);
+        for (ListenerRegistration<?> listenerRegistration : listeners) {
+            listenerRegistration.close();
+        }
     }
 
-    public ListenerRegistration<OrgOpenroadmDeOperationsListener>
-        getAccessDeOperationasNotificationListenerRegistration() {
-        return accessDeOperationasNotificationListenerRegistration;
+    private void registerListeners121() {
+        OrgOpenroadmAlarmListener alarmListener = new AlarmNotificationListener(this.dataBroker);
+        LOG.info("Registering notification listener on OrgOpenroadmAlarmListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(alarmListener));
+
+        OrgOpenroadmDeOperationsListener deOperationsListener = new DeOperationsListener();
+        LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deOperationsListener));
+
+        OrgOpenroadmDeviceListener deviceListener = new DeviceListener121(nodeId, this.portMapping);
+        LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deviceListener));
+
+        TcaListener tcaListener = new TcaListener();
+        LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(tcaListener));
     }
 
-    public ListenerRegistration<OrgOpenroadmDeviceListener> getAccessDeviceNotificationListenerRegistration() {
-        return accessDeviceNotificationListenerRegistration;
+    private void registerListeners221() {
+        AlarmNotificationListener221 alarmListener = new AlarmNotificationListener221(dataBroker);
+        LOG.info("Registering notification listener on OrgOpenroadmAlarmListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(alarmListener));
+
+        DeOperationsListener221 deOperationsListener = new DeOperationsListener221();
+        LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deOperationsListener));
+
+        DeviceListener221 deviceListener = new DeviceListener221(nodeId, this.portMapping);
+        LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deviceListener));
+
+        TcaListener221 tcaListener = new TcaListener221();
+        LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(tcaListener));
     }
 
-    public ListenerRegistration<OrgOpenroadmLldpListener> getAccessLldpNotificationListenerRegistration() {
-        return accessLldpNotificationListenerRegistration;
+    private void registerListeners710() {
+        DeviceListener710 deviceListener = new DeviceListener710(nodeId, this.portMapping);
+        LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deviceListener));
     }
-
-    public ListenerRegistration<OrgOpenroadmTcaListener> getAccessTcaNotificationListenerRegistration() {
-        return accessTcaNotificationListenerRegistration;
-    }
-
 }
