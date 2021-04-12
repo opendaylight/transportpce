@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eee7cf4_24449e23",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/NodeRegistration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-12T12:43:46Z",
+      "side": 1,
+      "message": "indent +4 or add a LF to separate clearly method declaration from body",
+      "revId": "38c25510e38f4417aaae299afbfbcf06111ce012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
