@@ -46,13 +46,27 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TapiCommonService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.UpdateServiceInterfacePointInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.UpdateServiceInterfacePointOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.Sip;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.SipBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.SipKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInput;
@@ -96,7 +110,7 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TapiTopologyImpl implements TapiTopologyService {
+public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImpl.class);
     private final DataBroker dataBroker;
@@ -473,5 +487,54 @@ public class TapiTopologyImpl implements TapiTopologyService {
             .build();
         nodeRuleGroupMap.put(nodeRuleGroup.key(), nodeRuleGroup);
         return nodeRuleGroupMap;
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>>
+            getServiceInterfacePointDetails(GetServiceInterfacePointDetailsInput input) {
+        Uuid sipUuid = new Uuid(input.getSipIdOrName());
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
+            this.tapiContext.getTapiContext().getServiceInterfacePoint();
+        if (sips == null || sips.isEmpty()) {
+            return RpcResultBuilder.<GetServiceInterfacePointDetailsOutput>failed().withError(RpcError.ErrorType.RPC,
+                "No sips in datastore").buildFuture();
+        }
+        if (!sips.containsKey(new ServiceInterfacePointKey(sipUuid))) {
+            return RpcResultBuilder.<GetServiceInterfacePointDetailsOutput>failed().withError(RpcError.ErrorType.RPC,
+                "Sip doesnt exist in datastore").buildFuture();
+        }
+        org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.details.output.Sip outSip =
+                new org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.details.output.SipBuilder(
+                        sips.get(new ServiceInterfacePointKey(sipUuid)))
+                    .build();
+        return RpcResultBuilder.success(new GetServiceInterfacePointDetailsOutputBuilder().setSip(outSip).build())
+            .buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>>
+            getServiceInterfacePointList(GetServiceInterfacePointListInput input) {
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
+            this.tapiContext.getTapiContext().getServiceInterfacePoint();
+        if (sips == null || sips.isEmpty()) {
+            return RpcResultBuilder.<GetServiceInterfacePointListOutput>failed().withError(RpcError.ErrorType.RPC,
+                "No sips in datastore").buildFuture();
+        }
+        Map<SipKey, Sip> outSipMap = new HashMap<>();
+        for (ServiceInterfacePoint sip : sips.values()) {
+            Sip si = new SipBuilder(sip).build();
+            outSipMap.put(si.key(), si);
+        }
+        return RpcResultBuilder.success(new GetServiceInterfacePointListOutputBuilder().setSip(outSipMap).build())
+            .buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<UpdateServiceInterfacePointOutput>>
+            updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
+        // TODO --> not yet implemented
+        return null;
     }
 }
