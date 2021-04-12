@@ -79,7 +79,7 @@ def start_sims(sims_list):
         print("starting simulator for " + sim + "...")
         log_file = os.path.join(LOG_DIRECTORY, SIMS[sim]['logfile'])
         process = start_honeynode(log_file, SIMS[sim]['port'], SIMS[sim]['configfile'])
-        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 200):
             print("simulator for " + sim + " started")
         else:
             print("simulator for " + sim + " failed to start")
