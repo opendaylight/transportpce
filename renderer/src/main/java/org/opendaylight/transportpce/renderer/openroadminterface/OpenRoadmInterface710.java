@@ -44,6 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.Otsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtsiGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.loopback.rev191129.maint.loopback.MaintLoopbackBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.testsignal.rev200529.maint.testsignal.MaintTestsignal.TestPattern;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.testsignal.rev200529.maint.testsignal.MaintTestsignalBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.attributes.FlexoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
@@ -323,6 +324,7 @@ public class OpenRoadmInterface710 {
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            .setTestPattern(TestPattern.PRBS23)
             .setEnabled(false);
 
         // Create an ODUC4 object
@@ -388,6 +390,7 @@ public class OpenRoadmInterface710 {
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            .setTestPattern(TestPattern.PRBS23)
             .setEnabled(false);
 
         // Create an ODUC4 object
@@ -448,6 +451,7 @@ public class OpenRoadmInterface710 {
 
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            .setTestPattern(TestPattern.PRBS23)
             .setEnabled(false);
 
         // Parent Odu-allocation
@@ -525,6 +529,7 @@ public class OpenRoadmInterface710 {
 
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            .setTestPattern(TestPattern.PRBS23)
             .setEnabled(false);
 
         // Parent Odu-allocation
