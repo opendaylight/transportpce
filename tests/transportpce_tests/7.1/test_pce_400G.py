@@ -16,7 +16,8 @@ import os
 import sys
 import time
 import requests
-from common import test_utils
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCE400Gtesting(unittest.TestCase):
