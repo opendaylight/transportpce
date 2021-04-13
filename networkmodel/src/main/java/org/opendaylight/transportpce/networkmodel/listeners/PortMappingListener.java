@@ -44,8 +44,8 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
                     path.addAll((Collection<? extends PathArgument>) change.getRootPath().getRootIdentifier()
                         .getPathArguments());
                     path.removeLast();
-                    InstanceIdentifier<Nodes> portmappintNodeID = (InstanceIdentifier<Nodes>) InstanceIdentifier
-                        .create(path);
+                    @SuppressWarnings("unchecked") InstanceIdentifier<Nodes> portmappintNodeID =
+                        (InstanceIdentifier<Nodes>) InstanceIdentifier.create(path);
                     String nodeId = InstanceIdentifier.keyOf(portmappintNodeID).getNodeId();
                     networkModelService.updateOpenRoadmTopologies(nodeId, newMapping);
                 }
