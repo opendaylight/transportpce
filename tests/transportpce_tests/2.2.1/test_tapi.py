@@ -18,10 +18,9 @@ import os
 import sys
 import time
 import unittest
-
 import requests
-
-from common import test_utils
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created successfully'
@@ -30,6 +29,7 @@ class TransportTapitesting(unittest.TestCase):
 
     processes = None
     WAITING = 20
+    NODE_VERSION = '2.2.1'
     cr_serv_sample_data = {"input": {
         "sdnc-request-header": {
             "request-id": "request-1",
@@ -154,7 +154,13 @@ class TransportTapitesting(unittest.TestCase):
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmb', 'roadmc', 'xpdrc', 'spdra', 'spdrc'])
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION),
+                                               ('roadma', cls.NODE_VERSION),
+                                               ('roadmb', cls.NODE_VERSION),
+                                               ('roadmc', cls.NODE_VERSION),
+                                               ('xpdrc', cls.NODE_VERSION),
+                                               ('spdra', cls.NODE_VERSION),
+                                               ('spdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -203,7 +209,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertNotIn("link", res["output"]["topology"], 'Topology should contain no link')
 
     def test_03_connect_rdmb(self):
-        response = test_utils.mount_device("ROADM-B1", 'roadmb')
+        response = test_utils.mount_device("ROADM-B1", ('roadmb', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
@@ -238,7 +244,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(5)
 
     def test_06_connect_xpdra(self):
-        response = test_utils.mount_device("XPDR-A1", 'xpdra')
+        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
@@ -246,12 +252,12 @@ class TransportTapitesting(unittest.TestCase):
         self.test_04_check_tapi_topos()
 
     def test_08_connect_rdma(self):
-        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
     def test_09_connect_rdmc(self):
-        response = test_utils.mount_device("ROADM-C1", 'roadmc')
+        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
@@ -334,7 +340,7 @@ class TransportTapitesting(unittest.TestCase):
                          'Topology should contain 1 oms link')
 
     def test_15_connect_xpdrc(self):
-        response = test_utils.mount_device("XPDR-C1", 'xpdrc')
+        response = test_utils.mount_device("XPDR-C1", ('xpdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
@@ -399,13 +405,13 @@ class TransportTapitesting(unittest.TestCase):
                          'Topology should contain 2 oms links')
 
     def test_20_connect_spdr_sa1(self):
-        response = test_utils.mount_device("SPDR-SA1", 'spdra')
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
         # TODO replace connect and disconnect timers with test_utils.wait_until_log_contains
 
     def test_21_connect_spdr_sc1(self):
-        response = test_utils.mount_device("SPDR-SC1", 'spdrc')
+        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
         # TODO replace connect and disconnect timers with test_utils.wait_until_log_contains

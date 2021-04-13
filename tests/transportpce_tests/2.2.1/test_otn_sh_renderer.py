@@ -15,17 +15,21 @@
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
+    NODE_VERSION = '2.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['spdra', 'spdrc'])
+        cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
+                                               ('spdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -38,7 +42,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_SPDR_SA1(self):
-        response = test_utils.mount_device("SPDR-SA1", 'spdra')
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
@@ -51,7 +55,7 @@ class TransportPCEtesting(unittest.TestCase):
             'connected')
 
     def test_02_connect_SPDR_SC1(self):
-        response = test_utils.mount_device("SPDR-SC1", 'spdrc')
+        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
