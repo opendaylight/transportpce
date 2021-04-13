@@ -11,7 +11,7 @@ This project starts [TransportPCE](https://git.opendaylight.org/gerrit/#/admin/p
 1. Make sure upstream projects are compiled locally and stored in local ``~/.m2/repository``:
 2. compile __transportpce/master__
 ```
-git clone https://git.opendaylight.org/gerrit/transportpce && (cd transportpce && curl -kLo `git rev-parse --git-dir`/hooks/commit-msg https://git.opendaylight.org/gerrit/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)
+git clone -b stable/silicon https://git.opendaylight.org/gerrit/transportpce && (cd transportpce && curl -kLo `git rev-parse --git-dir`/hooks/commit-msg https://git.opendaylight.org/gerrit/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)
 cd transportpce
 ```
 mvn clean install -s tests/odl_settings.xml -DskipTests -Dmaven.javadoc.skip=true -Dodlparent.spotbugs.skip -Dodlparent.checkstyle.skip
