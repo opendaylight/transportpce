@@ -15,17 +15,20 @@
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
     processes = None
+    NODE_VERSION = '2.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma'])
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -39,7 +42,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_01_rdm_device_connection(self):
-        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
@@ -107,7 +110,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_08_xpdr_device_connection(self):
-        response = test_utils.mount_device("XPDR-A1", 'xpdra')
+        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_09_xpdr_device_connected(self):

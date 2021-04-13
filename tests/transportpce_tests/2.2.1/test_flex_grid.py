@@ -12,17 +12,20 @@
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
     processes = None
+    NODE_VERSION = '2.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['roadmd'])
+        cls.processes = test_utils.start_sims([('roadmd', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -35,7 +38,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_01_rdm_device_connection(self):
-        response = test_utils.mount_device("ROADM-D1", 'roadmd')
+        response = test_utils.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
