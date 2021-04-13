@@ -25,8 +25,6 @@ import requests
 import simulators
 
 SIMS = simulators.SIMS
-HONEYNODE_EXECUTABLE = simulators.HONEYNODE_EXECUTABLE
-SAMPLES_DIRECTORY = simulators.SAMPLES_DIRECTORY
 
 HONEYNODE_OK_START_MSG = "Netconf SSH endpoint started successfully at 0.0.0.0"
 KARAF_OK_START_MSG = re.escape(
@@ -60,8 +58,7 @@ TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'applicatio
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
 
-LOG_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-
+SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log")
 KARAF_LOG = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
@@ -76,13 +73,13 @@ else:
 
 def start_sims(sims_list):
     for sim in sims_list:
-        print("starting simulator for " + sim + "...")
-        log_file = os.path.join(LOG_DIRECTORY, SIMS[sim]['logfile'])
-        process = start_honeynode(log_file, SIMS[sim]['port'], SIMS[sim]['configfile'])
-        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 200):
-            print("simulator for " + sim + " started")
+        print("starting simulator " + sim[0] + " in OpenROADM device version " + sim[1] + "...")
+        log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
+        process = start_honeynode(log_file, sim)
+        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+            print("simulator for " + sim[0] + " started")
         else:
-            print("simulator for " + sim + " failed to start")
+            print("simulator for " + sim[0] + " failed to start")
             shutdown_process(process)
             for pid in process_list:
                 shutdown_process(pid)
@@ -434,11 +431,15 @@ def shutdown_process(process):
         process.send_signal(signal.SIGINT)
 
 
-def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
-    if os.path.isfile(HONEYNODE_EXECUTABLE):
+def start_honeynode(log_file: str, sim):
+    executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                              "..", "..", "honeynode", sim[1], "honeynode-simulator", "honeycomb-tpce")
+    sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                    "..", "..", "sample_configs", "openroadm", sim[1])
+    if os.path.isfile(executable):
         with open(log_file, 'w') as outfile:
             return subprocess.Popen(
-                [HONEYNODE_EXECUTABLE, node_port, os.path.join(SAMPLES_DIRECTORY, node_config_file_name)],
+                [executable, SIMS[sim]['port'], os.path.join(sample_directory, SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
     return None
 
@@ -492,4 +493,3 @@ class TimeOut:
     def __exit__(self, type, value, traceback):
         # pylint: disable=W0622
         signal.alarm(0)
-

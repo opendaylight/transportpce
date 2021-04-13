@@ -16,13 +16,16 @@ import base64
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
     WAITING = 20  # nominal value is 300
+    NODE_VERSION = '2.2.1'
 
     cr_serv_sample_data = {"input": {
         "sdnc-request-header": {
@@ -129,8 +132,10 @@ class TransportPCEtesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(
-            ['spdra', 'roadma', 'roadmc', 'spdrc'])
+        cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
+                                               ('roadma', cls.NODE_VERSION),
+                                               ('roadmc', cls.NODE_VERSION),
+                                               ('spdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -143,22 +148,22 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_spdrA(self):
-        response = test_utils.mount_device("SPDR-SA1", 'spdra')
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_connect_spdrC(self):
-        response = test_utils.mount_device("SPDR-SC1", 'spdrc')
+        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
-        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_connect_rdmC(self):
-        response = test_utils.mount_device("ROADM-C1", 'roadmc')
+        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
