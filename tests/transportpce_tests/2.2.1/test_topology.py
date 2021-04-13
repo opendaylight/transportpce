@@ -17,7 +17,9 @@ import unittest
 import time
 import logging
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -90,11 +92,13 @@ class TransportPCEtesting(unittest.TestCase):
                             'org-openroadm-common-network:operational-state': 'inService'})]
         }
     }
+    NODE_VERSION = '2.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmb', 'roadmc'])
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
+                                               ('roadmb', cls.NODE_VERSION), ('roadmc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -107,7 +111,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_ROADM_A1(self):
-        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
@@ -189,7 +193,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_06_connect_XPDRA(self):
-        response = test_utils.mount_device("XPDR-A1", 'xpdra')
+        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_07_getClliNetwork(self):
@@ -320,7 +324,7 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertEqual(len(check_list[link_type]), 0)
 
     def test_13_connect_ROADMC(self):
-        response = test_utils.mount_device("ROADM-C1", 'roadmc')
+        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
@@ -521,7 +525,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):
-        response = test_utils.mount_device("ROADM-B1", 'roadmb')
+        response = test_utils.mount_device("ROADM-B1", ('roadmb', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
