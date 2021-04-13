@@ -15,17 +15,20 @@
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
     processes = None
+    NODE_VERSION = '1.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma'])
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -38,24 +41,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
 
-#    def test_01_restconfAPI(self):
-#        response = test_utils.get_netconf_oper_request("controller-config")
-#        self.assertEqual(response.status_code, requests.codes.ok)
-#        res = response.json()
-#        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
-#                         'connected')
-
-#     def test_02_restconfAPI(self):
-#         response = test_utils.portmapping_request("controller-config")
-#         self.assertEqual(response.status_code, requests.codes.not_found)
-#         res = response.json()
-#         self.assertIn(
-#             {"error-type":"application", "error-tag":"data-missing",
-#             "error-message":"Request could not be completed because the relevant data model content does not exist "},
-#             res['errors']['error'])
-
     def test_01_rdm_device_connection(self):
-        response = test_utils.mount_device("ROADMA01", 'roadma')
+        response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
@@ -111,7 +98,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_07_xpdr_device_connection(self):
-        response = test_utils.mount_device("XPDRA01", 'xpdra')
+        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_08_xpdr_device_connected(self):

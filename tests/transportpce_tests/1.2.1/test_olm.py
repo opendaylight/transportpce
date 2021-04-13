@@ -15,17 +15,23 @@
 import unittest
 import time
 import requests
-from common import test_utils
+import sys
+sys.path.append('transportpce_tests/common/')
+import test_utils
 
 
 class TransportOlmTesting(unittest.TestCase):
 
     processes = None
+    NODE_VERSION = '1.2.1'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma-full', 'roadmc-full', 'xpdrc'])
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION),
+                                               ('roadma-full', cls.NODE_VERSION),
+                                               ('roadmc-full', cls.NODE_VERSION),
+                                               ('xpdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -39,19 +45,19 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(1)
 
     def test_01_xpdrA_device_connected(self):
-        response = test_utils.mount_device("XPDRA01", 'xpdra')
+        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_xpdrC_device_connected(self):
-        response = test_utils.mount_device("XPDRC01", 'xpdrc')
+        response = test_utils.mount_device("XPDRC01", ('xpdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_rdmA_device_connected(self):
-        response = test_utils.mount_device("ROADMA01", 'roadma-full')
+        response = test_utils.mount_device("ROADMA01", ('roadma-full', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_rdmC_device_connected(self):
-        response = test_utils.mount_device("ROADMC01", 'roadmc-full')
+        response = test_utils.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_05_connect_xprdA_to_roadmA(self):
