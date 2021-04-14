@@ -60,6 +60,11 @@ TransportPCE User-Facing Features
    -  This feature is considered experimental. It provides a REST client in order to send TPCE notifications
       to ONAP Dmaap Message router.
 
+-  **feature odl-transportpce-nbinotifications**
+
+   -  This feature is considered experimental. It provides transportPCE with connectors in order to read/write
+      notifications stored in topics of a Kafka server.
+
 How To Start
 ------------
 
@@ -113,5 +118,9 @@ where dmaap-mr:30226 is the url of your Dmaap server.
 Then run in karaf::
 
    feature:install odl-transportpce-dmaap-client
+
+if you need the NBI-notifications support, then run::
+
+   feature:install odl-transportpce-nbinotifications
 
 For a more detailed overview of the TransportPCE, see the :ref:`transportpce-dev-guide`.
