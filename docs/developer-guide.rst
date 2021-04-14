@@ -1448,6 +1448,41 @@ This feature listens on NBI notifications and sends the PublishNotificationServi
 Dmaap on the topic "unauthenticated.TPCE" through a POST request on /events/unauthenticated.TPCE
 It uses Jackson to serialize the notification to JSON and jersey client to send the POST request.
 
+odl-transportpce-nbinotifications
+---------------------------------
+
+This feature allows TransportPCE application to write and read notifications stored in topics of a Kafka server.
+When the feature is called to write notification to a Kafka server, it will serialize the notification
+into JSON format and then will publish it in a topic of the server.
+When the feature is called to read notifications from a Kafka server, it will retrieve it from
+the topic of the server and will deserialize it.
+
+For now, when the REST RPC service-create is called to create a bidirectional end-to end service,
+depending on the success or the fail of the creation, the feature will notify the progression of
+the creation to a Kafka server. The topics that store theses notifications are named after the connection type
+(service, infrastructure, roadm-line). For instance, if the RPC service-create is called to create an
+infrastructure connection, the service notifications related to this connection will be stored in
+the topic 'infrastructure'.
+
+To retrieve theses service notifications stored in the Kafka server :
+
+**REST API** : *POST /restconf/operations/nbi-notifications:get-notifications-service*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "input": {
+        "connection-type": "service",
+        "id-consumer": "consumer",
+        "group-id": "test"
+       }
+    }
+
+.. note::
+    The field 'connection-type' corresponds to the topic that store the notifications.
+
 Help
 ----
 
