@@ -1448,6 +1448,72 @@ This feature listens on NBI notifications and sends the PublishNotificationServi
 Dmaap on the topic "unauthenticated.TPCE" through a POST request on /events/unauthenticated.TPCE
 It uses Jackson to serialize the notification to JSON and jersey client to send the POST request.
 
+odl-transportpce-nbinotifications
+---------------------------------
+
+This feature allows TransportPCE application to write and read notifications stored in topics of a Kafka server.
+When the feature is called to write notification to a Kafka server, it will serialize the notification
+into JSON format and then will publish it in a topic of the server.
+When the feature is called to read notifications from a Kafka server, it will retrieve it from
+the topic of the server and will deserialize it.
+
+For now, when the REST RPC service-create is called to create a bidirectional end-to-end service,
+depending on the success or the fail of the creation, the feature will notify the progression of
+the creation to a Kafka server. The topics that store these notifications are named after the connection type
+(service, infrastructure, roadm-line). For instance, if the RPC service-create is called to create an
+infrastructure connection, the service notifications related to this connection will be stored in
+the topic 'infrastructure'.
+
+The figure below shows an example of the application nbinotifications in order to notify the
+progress of a service creation.
+
+.. figure:: ./images/TransportPCE-nbinotifications-service-example.jpg
+   :alt: Example of service notifications using the feature nbinotifications in TransportPCE
+
+
+Depending of the success of the service creation, different notifications will be published
+to the topic 'service' of the Kafka server.
+
+
+-  **ServiceCreate request received** : Indicates that TransportPCE received an RPC request service-create
+   and started the process of creation. The notification contains all information concerning
+   the new service to create.
+
+
+If the service was correctly implemented, these notifications will be published :
+
+
+-  **PCE calculation done OK !** : Indicates that the PCE calculation requested by the service-create
+   was successful. It also contains all information concerning the new service to create.
+-  **Service implemented !** : Indicates that the service was successfully implemented.
+   It also contains all information concerning the new service.
+
+
+Otherwise, this notification will be published :
+
+
+-  **ServiceCreate failed ...** : Indicates that the process of service-create failed.
+   It contains the failure response.
+
+To retrieve these service notifications stored in the Kafka server :
+
+**REST API** : *POST /restconf/operations/nbi-notifications:get-notifications-service*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "input": {
+        "connection-type": "service",
+        "id-consumer": "consumer",
+        "group-id": "test"
+       }
+    }
+
+.. note::
+    The field 'connection-type' corresponds to the topic that store the notifications.
+
 Help
 ----
 
