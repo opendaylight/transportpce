@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8925a9b_45d23312",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-04-14T17:02:50Z",
+      "side": 1,
+      "message": "according to  ?",
+      "range": {
+        "startLine": 1462,
+        "startChar": 85,
+        "endLine": 1462,
+        "endChar": 90
+      },
+      "revId": "7d08f7aa5063d2e3e3747a01125833b190f14723",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
