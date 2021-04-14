@@ -60,6 +60,11 @@ TransportPCE User-Facing Features
    -  This feature is considered experimental. It provides a REST client in order to send TPCE notifications
       to ONAP Dmaap Message router.
 
+-  **feature odl-transportpce-nbinotifications**
+
+   -  This feature is considered experimental. It provides transportPCE with connectors in order to read/write
+      notifications stored in topics of a Kafka server.
+
 How To Start
 ------------
 
@@ -113,5 +118,20 @@ where dmaap-mr:30226 is the url of your Dmaap server.
 Then run in karaf::
 
    feature:install odl-transportpce-dmaap-client
+
+If you need the NBI-notifications support, before running Opendaylight, make sure to run ZooKeeper and
+then the Kafka server.
+By default, it is considered that the Kafka server is installed in localhost and listens on the 9092 port,
+if it isn't the case then modify the file *'transportpce/features/odl-transportpce-nbinotifications
+/src/main/resources/org.opendaylight.transportpce.nbinotifications.cfg'*::
+
+   suscriber.server=${env:KAFKA_SERVER:-[IP_ADDRESS]:[PORT]}
+   publisher.server=${env:KAFKA_SERVER:-[IP_ADDRESS]:[PORT]}
+
+*where [IP_ADDRESS] and [PORT] are respectively the ip address and the port that host the Kafka server.*
+
+After that, run in karaf::
+
+   feature:install odl-transportpce-nbinotifications
 
 For a more detailed overview of the TransportPCE, see the :ref:`transportpce-dev-guide`.
