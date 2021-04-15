@@ -18,11 +18,11 @@ fi
 for VERSION in $VERSIONS_LIST
 do
     case "$VERSION" in
-        "1.2.1") PLUGIN_VERSION=1.0.4
+        "1.2.1") PLUGIN_VERSION=1.0.6
         ;;
         "2.2.1") PLUGIN_VERSION=2.0.6
         ;;
-        "7.1") PLUGIN_VERSION=7.1.2
+        "7.1") PLUGIN_VERSION=7.1.3
         ;;
         *) echo "unsupported device version" >&2
         continue
