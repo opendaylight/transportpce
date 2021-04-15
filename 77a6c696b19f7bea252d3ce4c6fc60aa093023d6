@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a217a7e_a4380351",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-15T08:29:10Z",
+      "side": 1,
+      "message": "Maybe, add a second note to prevent user that it is preferable to have the kafka server started and available before installing the feature to avoid a log pollution.\nIt is also important to remind that the IP/socket port used by kafka server may be configured in the transportpce/features/odl-transportpce-nbinotifications/src/main/resources/org.opendaylight.transportpce.nbinotifications.cfg file. The KAFKA_SERVER environment variable may be used to configure it, otherwise, the per-default localhost:9092 is used.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 0,
+        "endLine": 1483,
+        "endChar": 8
+      },
+      "revId": "77a6c696b19f7bea252d3ce4c6fc60aa093023d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
