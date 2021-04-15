@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec0dc406_29996a10",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-15T09:12:48Z",
+      "side": 1,
+      "message": "In patchset 10, I proposed a modification to use blueprint dependency injection instead of creating manually a new instance of NetworkTransactionImpl. Unfortunately, patchset 11 overwrote my modification proposal...",
+      "range": {
+        "startLine": 61,
+        "startChar": 16,
+        "endLine": 61,
+        "endChar": 82
+      },
+      "revId": "ed934f248160f99d9cf7d2776570ac8e7abeb929",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
