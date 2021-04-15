@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60a441a4_ff9ed271",
+        "filename": "tests/transportpce_tests/hybrid/test_device_change_notifications.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-15T13:56:21Z",
+      "side": 1,
+      "message": "import not used in the test suite",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 19
+      },
+      "revId": "0173e4f9a4e2740993ae3f4db8f848bc62f24a4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
