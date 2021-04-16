@@ -414,7 +414,9 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(-60, res['roadm-connections'][0]['target-output-power'])
+        self.assertNotIn('target-output-power', res['roadm-connections'][0],
+                         "roadm-connection should not have any 'target-output-power' field")
+
 
     def test_28_get_roadmconnection_ROADMC(self):
         response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")

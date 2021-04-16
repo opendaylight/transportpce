@@ -227,6 +227,8 @@ public class CrossConnectImpl221 {
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
+            } else {
+                rdmConnBldr.setTargetOutputPower(null);
             }
             RoadmConnections newRdmConn = rdmConnBldr.build();
 
