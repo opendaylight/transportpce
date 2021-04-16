@@ -222,48 +222,45 @@ public class CrossConnectImpl221 {
 
     public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctName) {
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctName);
-        if (rdmConnOpt.isPresent()) {
-            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
-            rdmConnBldr.setOpticalControlMode(mode);
-            if (powerValue != null) {
-                rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
-            }
-            RoadmConnections newRdmConn = rdmConnBldr.build();
+        if (!rdmConnOpt.isPresent()) {
+            LOG.warn("Roadm-Connection is null in set power level ({})", ctName);
+            return false;
+        }
+        RoadmConnections newRdmConn = new RoadmConnectionsBuilder(rdmConnOpt.get())
+            .setOpticalControlMode(mode)
+            .setTargetOutputPower(powerValue == null ? null : new PowerDBm(powerValue))
+            .build();
 
-            Future<Optional<DeviceTransaction>> deviceTxFuture =
-                    deviceTransactionManager.getDeviceTransaction(deviceId);
-            DeviceTransaction deviceTx;
-            try {
-                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-                if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
-                } else {
-                    LOG.error("Transaction for device {} was not found!", deviceId);
-                    return false;
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Unable to get transaction for device {}!", deviceId, e);
+        Future<Optional<DeviceTransaction>> deviceTxFuture =
+                deviceTransactionManager.getDeviceTransaction(deviceId);
+        DeviceTransaction deviceTx;
+        try {
+            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+            if (deviceTxOpt.isPresent()) {
+                deviceTx = deviceTxOpt.get();
+            } else {
+                LOG.error("Transaction for device {} was not found!", deviceId);
                 return false;
             }
-
-            // post the cross connect on the device
-            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(ctName));
-            deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
-            FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-            try {
-                commit.get();
-                LOG.info("Roadm connection power level successfully set ");
-                return true;
-            } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Failed to post {}", newRdmConn, ex);
-            }
-
-        } else {
-            LOG.warn("Roadm-Connection is null in set power level ({})", ctName);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Unable to get transaction for device {}!", deviceId, e);
+            return false;
         }
-        return false;
+
+        // post the cross connect on the device
+        InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(ctName));
+        deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
+        FluentFuture<? extends @NonNull CommitInfo> commit =
+            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+        try {
+            commit.get();
+            LOG.info("Roadm connection power level successfully set ");
+            return true;
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.warn("Failed to post {}", newRdmConn, ex);
+            return false;
+        }
     }
 
     private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
