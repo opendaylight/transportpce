@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ce17aeb2_81d83ee8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-17T17:20:13Z",
+      "side": 1,
+      "message": "Actually, it is useless. Will correct it.",
+      "parentUuid": "00549c98_736eacc0",
+      "revId": "ed5be8ab68057cdaad4ca172a75f62aa6f0597bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6a1ee47_e6e16164",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
         "patchSetId": 32
@@ -39,6 +57,30 @@
       "revId": "ed5be8ab68057cdaad4ca172a75f62aa6f0597bf",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66b02b2c_ac36f322",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-17T17:20:13Z",
+      "side": 1,
+      "message": "Same as before",
+      "parentUuid": "f6a1ee47_e6e16164",
+      "range": {
+        "startLine": 287,
+        "startChar": 16,
+        "endLine": 287,
+        "endChar": 64
+      },
+      "revId": "ed5be8ab68057cdaad4ca172a75f62aa6f0597bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
