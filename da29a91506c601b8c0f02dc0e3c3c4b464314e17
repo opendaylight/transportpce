@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4d22088_91740c5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-19T19:38:52Z",
+      "side": 1,
+      "message": "The title can be changed to \"Bump dependencies version to Silicon dev\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "da29a91506c601b8c0f02dc0e3c3c4b464314e17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0418a3a3_9a4f3ec6",
+        "filename": "common/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-19T19:38:52Z",
+      "side": 1,
+      "message": "7.0.6",
+      "range": {
+        "startLine": 13,
+        "startChar": 17,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "da29a91506c601b8c0f02dc0e3c3c4b464314e17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e870be77_d7b2e981",
+        "filename": "common/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-19T19:38:52Z",
+      "side": 1,
+      "message": "7.0.6 etc",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 30
+      },
+      "revId": "da29a91506c601b8c0f02dc0e3c3c4b464314e17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0b3d4e1_385eeec1",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-19T19:38:52Z",
+      "side": 1,
+      "message": "8.1.1 etc",
+      "range": {
+        "startLine": 15,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "da29a91506c601b8c0f02dc0e3c3c4b464314e17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
