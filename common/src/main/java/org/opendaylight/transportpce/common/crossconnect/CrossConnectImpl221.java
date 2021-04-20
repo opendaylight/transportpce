@@ -104,7 +104,7 @@ public class CrossConnectImpl221 {
         }
 
         // post the cross connect on the device
-        deviceTx.put(LogicalDatastoreType.CONFIGURATION, rdmConnectionIID, rdmConnBldr.build());
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, rdmConnectionIID, rdmConnBldr.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -249,7 +249,7 @@ public class CrossConnectImpl221 {
             // post the cross connect on the device
             InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(RoadmConnections.class, new RoadmConnectionsKey(ctName));
-            deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
+            deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
             try {
