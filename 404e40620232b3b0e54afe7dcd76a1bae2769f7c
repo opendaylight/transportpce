@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb02925d_8741b0f4",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-04-20T09:18:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6411419_c86c4c2a",
+      "range": {
+        "startLine": 122,
+        "startChar": 50,
+        "endLine": 122,
+        "endChar": 70
+      },
+      "revId": "404e40620232b3b0e54afe7dcd76a1bae2769f7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "595fac9d_1914e82f",
         "filename": "docs/user-guide.rst",
         "patchSetId": 3

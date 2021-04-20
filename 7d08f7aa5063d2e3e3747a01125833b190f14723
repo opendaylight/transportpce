@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "33edc569_1f5262d0",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-04-20T09:18:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8cbdf786_3ee19f9f",
+      "range": {
+        "startLine": 1462,
+        "startChar": 54,
+        "endLine": 1462,
+        "endChar": 60
+      },
+      "revId": "7d08f7aa5063d2e3e3747a01125833b190f14723",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09998ffc_776e2d41",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
