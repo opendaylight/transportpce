@@ -236,7 +236,7 @@ public final class PowerMgmtVersion710 {
         // post the cross connect on the device
         InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
-        deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
