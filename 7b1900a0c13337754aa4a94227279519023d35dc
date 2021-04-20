@@ -39,6 +39,30 @@
       "revId": "7b1900a0c13337754aa4a94227279519023d35dc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "169f7606_7d5e2812",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-20T10:34:58Z",
+      "side": 1,
+      "message": "I don\u0027t think that \"ORDM\" is so explicit for people outside TransportPCE dev... For me, the message was sufficiently explicit...\nsim[1] gives indeed the device version.\nsim is already an hash/dictionary where the previous explicit key name has been replaced by a tuple. sim[1] allows getting just the second element of the tuple for this log purpose.",
+      "parentUuid": "9a9f2eaa_b53c0a10",
+      "range": {
+        "startLine": 76,
+        "startChar": 53,
+        "endLine": 76,
+        "endChar": 54
+      },
+      "revId": "7b1900a0c13337754aa4a94227279519023d35dc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
