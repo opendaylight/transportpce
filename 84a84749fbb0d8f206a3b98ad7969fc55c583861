@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69e67f42_26f3cfa0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-20T09:13:31Z",
+      "side": 1,
+      "message": "what about this ?\n\nRoadmConnections newRdmConn \u003d new RoadmConnectionsBuilder(rdmConnOpt.get())\n        .setOpticalControlMode(mode)\n        .setTargetOutputPower(powerValue \u003d\u003d null ? null : new PowerDBm(powerValue))\n        .build();",
+      "revId": "84a84749fbb0d8f206a3b98ad7969fc55c583861",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
