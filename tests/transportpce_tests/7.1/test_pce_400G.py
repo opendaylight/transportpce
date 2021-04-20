@@ -67,7 +67,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
     # Load port mapping
     def test_01_load_port_mapping(self):
         response = test_utils.put_jsonrequest(test_utils.URL_FULL_PORTMAPPING, self.port_mapping_data)
-        self.assertEqual(response.status_code, requests.codes.created)
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.created))
         time.sleep(2)
 
     # Load simple bidirectional topology
