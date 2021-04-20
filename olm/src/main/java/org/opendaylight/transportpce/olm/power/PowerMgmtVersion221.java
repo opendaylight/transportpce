@@ -180,7 +180,7 @@ public final class PowerMgmtVersion221 {
         }
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(interfaceName));
-        deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -243,7 +243,7 @@ public final class PowerMgmtVersion221 {
             // post the cross connect on the device
             InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
-            deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
+            deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
             try {
