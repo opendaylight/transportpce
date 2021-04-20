@@ -70,7 +70,7 @@ public class OpenRoadmInterfacesImpl710 {
             Interface.class, new InterfaceKey(ifBuilder.getName()));
         LOG.info("POST INTERF for {} : InterfaceBuilder : name = {} \t type = {}", nodeId, ifBuilder.getName(),
             ifBuilder.getType().toString());
-        deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -222,7 +222,7 @@ public class OpenRoadmInterfacesImpl710 {
                 throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
                     nodeId), e);
             }
-            deviceTx.put(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
+            deviceTx.merge(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
             FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
             try {
