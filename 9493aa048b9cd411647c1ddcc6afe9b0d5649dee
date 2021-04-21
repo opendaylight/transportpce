@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd1dc8d6_a334f839",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkUtilsImpl.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:54:23Z",
+      "side": 1,
+      "message": "it seems that there is a \"createTapiLink\" method with more or less the same code in at least 4 different classes of TAPI module. Would not it be possible to mutualize a litle bit this piece of code in one utile classe?",
+      "range": {
+        "startLine": 154,
+        "startChar": 17,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
