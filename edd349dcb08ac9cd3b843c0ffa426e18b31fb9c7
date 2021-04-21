@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20f52b9_82a3e24a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T16:22:45Z",
+      "side": 1,
+      "message": "It is preferable to log this exception here in order to keep its trace...",
+      "range": {
+        "startLine": 109,
+        "startChar": 59,
+        "endLine": 109,
+        "endChar": 60
+      },
+      "revId": "edd349dcb08ac9cd3b843c0ffa426e18b31fb9c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
