@@ -28,14 +28,19 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration22;
+import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration710;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.TcaListener710;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.OrgOpenroadmDeOperationsListener;
@@ -61,6 +66,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final DeviceTransactionManager deviceTransactionManager;
     private final Map<String, NodeRegistration> registrations;
     private final Map<String, NodeRegistration22> registrations22;
+    private final Map<String, NodeRegistration710> registrations710;
 
     public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
              DeviceTransactionManager deviceTransactionManager) {
@@ -69,6 +75,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.deviceTransactionManager = deviceTransactionManager;
         this.registrations = new ConcurrentHashMap<>();
         this.registrations22 = new ConcurrentHashMap<>();
+        this.registrations710 = new ConcurrentHashMap<>();
     }
 
     @SuppressFBWarnings(
@@ -116,10 +123,10 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(tcaListener);
 
-            String streamName = "NETCONF";
+            String streamName = "OPENROADM";
 
             if (streamName == null) {
-                streamName = "OPENROADM";
+                streamName = "NETCONF";
             }
 
             final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
@@ -173,9 +180,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 notificationService.get().registerNotificationListener(tcaListener);
 
 
-            String streamName = "NETCONF";
+            String streamName = "OPENROADM";
             if (streamName == null) {
-                streamName = "OPENROADM";
+                streamName = "NETCONF";
             }
             final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
             if (service.isPresent()) {
@@ -198,8 +205,60 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 null, accessTcaNotificationListenerRegistration);
             registrations22.put(nodeId, nodeRegistration22);
 
-        }
+        } else if (openRoadmVersion.equals(StringConstants.OPENROADM_DEVICE_VERSION_7_1_0)) {
+            final org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529.OrgOpenroadmAlarmListener
+                    alarmListener = new AlarmNotificationListener710(dataBroker);
+            LOG.info("Registering notification listener on OrgOpenroadmAlarmListener for node: {}", nodeId);
+            final ListenerRegistration<org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529
+                    .OrgOpenroadmAlarmListener> accessAlarmNotificationListenerRegistration =
+                    notificationService.get().registerNotificationListener(alarmListener);
 
+            final org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev200529
+                    .OrgOpenroadmDeOperationsListener deOperationsListener = new DeOperationsListener710();
+            LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
+            final ListenerRegistration<org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev200529
+                    .OrgOpenroadmDeOperationsListener> accessDeOperationasNotificationListenerRegistration =
+                    notificationService.get().registerNotificationListener(deOperationsListener);
+
+            final org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceListener
+                    deviceListener = new DeviceListener710();
+            LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
+            final ListenerRegistration<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529
+                    .OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration =
+                    notificationService.get().registerNotificationListener(deviceListener);
+
+            final org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev200327.OrgOpenroadmTcaListener
+                    tcaListener = new TcaListener710();
+            LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
+            final ListenerRegistration<org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev200327
+                    .OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
+                    notificationService.get().registerNotificationListener(tcaListener);
+
+            String streamName = "OPENROADM";
+            if (streamName == null) {
+                streamName = "NETCONF";
+            }
+            final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
+            if (service.isPresent()) {
+                final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
+                if (rpcService == null) {
+                    LOG.error("Failed to get RpcService for node {}", nodeId);
+                } else {
+                    final CreateSubscriptionInputBuilder createSubscriptionInputBuilder =
+                            new CreateSubscriptionInputBuilder();
+                    createSubscriptionInputBuilder.setStream(new StreamNameType(streamName));
+                    LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
+                    rpcService.createSubscription(createSubscriptionInputBuilder.build());
+                }
+            } else {
+                LOG.error("Failed to get RpcService for node {}", nodeId);
+            }
+            NodeRegistration710 nodeRegistration710 = new NodeRegistration710(nodeId,
+                    accessAlarmNotificationListenerRegistration,
+                    accessDeOperationasNotificationListenerRegistration, accessDeviceNotificationListenerRegistration,
+                    null, accessTcaNotificationListenerRegistration);
+            registrations710.put(nodeId, nodeRegistration710);
+        }
     }
 
     private void onDeviceDisConnected(final String nodeId) {
