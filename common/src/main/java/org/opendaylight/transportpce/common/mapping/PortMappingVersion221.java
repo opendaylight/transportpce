@@ -874,11 +874,7 @@ public class PortMappingVersion221 {
             List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
                 .SupportedIfCapability>> supportedIntf = new ArrayList<>();
             for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
-                @SuppressWarnings("unchecked") Class<? extends
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability> sup1 =
-                    (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                        .SupportedIfCapability>) sup;
-                supportedIntf.add(sup1);
+                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()));
             }
             mpBldr.setSupportedInterfaceCapability(supportedIntf);
         }
