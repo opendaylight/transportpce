@@ -26,9 +26,9 @@ SIMS = {
     ('xpdrc', '2.2.1'): {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc221.log'},
     ('spdra', '2.2.1'): {'port': '17845', 'configfile': 'oper-SPDRA.xml', 'logfile': 'spdra221.log'},
     ('spdrc', '2.2.1'): {'port': '17846', 'configfile': 'oper-SPDRC.xml', 'logfile': 'spdrc221.log'},
-    ('xpdra', '7.1'): {'port': '17850', 'configfile': 'oper-XPDRA.xml', 'logfile': 'xpdra71.log'},
-    ('roadma', '7.1'): {'port': '17851', 'configfile': 'oper-ROADMA.xml', 'logfile': 'roadma71.log'},
-    ('roadmb', '7.1'): {'port': '17852', 'configfile': 'oper-ROADMB.xml', 'logfile': 'roadmb71.log'},
-    ('roadmc', '7.1'): {'port': '17853', 'configfile': 'oper-ROADMC.xml', 'logfile': 'roadmc71.log'},
-    ('xpdrc', '7.1'): {'port': '17854', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc71.log'}
+    ('xpdra', '7.1.0'): {'port': '17850', 'configfile': 'oper-XPDRA2.xml', 'logfile': 'xpdra71.log'},
+    ('roadma', '7.1.0'): {'port': '17851', 'configfile': 'oper-ROADMA.xml', 'logfile': 'roadma71.log'},
+    ('roadmb', '7.1.0'): {'port': '17852', 'configfile': 'oper-ROADMB.xml', 'logfile': 'roadmb71.log'},
+    ('roadmc', '7.1.0'): {'port': '17853', 'configfile': 'oper-ROADMC.xml', 'logfile': 'roadmc71.log'},
+    ('xpdrc', '7.1.0'): {'port': '17854', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc71.log'}
 }
