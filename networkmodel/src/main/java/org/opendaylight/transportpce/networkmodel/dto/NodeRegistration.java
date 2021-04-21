@@ -15,13 +15,16 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener;
 import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.AlarmNotificationListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener;
 import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.DeOperationsListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener121;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener221;
 import org.opendaylight.transportpce.networkmodel.listeners.DeviceListener710;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener;
 import org.opendaylight.transportpce.networkmodel.listeners.TcaListener221;
+import org.opendaylight.transportpce.networkmodel.listeners.TcaListener710;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.OrgOpenroadmDeOperationsListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
@@ -109,8 +112,20 @@ public class NodeRegistration {
     }
 
     private void registerListeners710() {
+        AlarmNotificationListener710 alarmListener = new AlarmNotificationListener710(dataBroker);
+        LOG.info("Registering notification listener on OrgOpenroadmAlarmListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(alarmListener));
+
+        DeOperationsListener710 deOperationsListener = new DeOperationsListener710();
+        LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(deOperationsListener));
+
         DeviceListener710 deviceListener = new DeviceListener710(nodeId, this.portMapping);
         LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
         listeners.add(notificationService.registerNotificationListener(deviceListener));
+
+        TcaListener710 tcaListener = new TcaListener710();
+        LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
+        listeners.add(notificationService.registerNotificationListener(tcaListener));
     }
 }

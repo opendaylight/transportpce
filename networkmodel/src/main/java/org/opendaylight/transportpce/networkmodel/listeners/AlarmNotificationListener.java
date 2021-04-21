@@ -68,17 +68,12 @@ public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
         } catch (InterruptedException | ExecutionException ex) {
             LOG.warn("Exception thrown while reading Logical Connection Point value: ", ex);
         }
-        StringBuilder sb = new StringBuilder(notification.getResource().getDevice().getNodeId()).append(PIPE);
-        sb.append(buildCause(notification.getProbableCause()));
-        sb.append(notification.getId() != null ? notification.getId() : "").append(PIPE)
-                .append(notification.getType() != null ? notification.getType().toString() : "").append(PIPE)
-                .append(notification.getRaiseTime() != null ? notification.getRaiseTime().toString() : "").append(PIPE)
-                .append(notification.getSeverity() != null ? notification.getSeverity().getName() : "").append(PIPE)
-                .append(notification.getCircuitId() != null ? notification.getCircuitId() : "").append(PIPE);
+        String message = String.join(PIPE,notification.getResource().getDevice().getNodeId(),
+                buildCause(notification.getProbableCause()),notification.getId() != null ? notification.getId() : "",
+                notification.getRaiseTime() != null ? notification.getRaiseTime().toString() : "",
+                notification.getSeverity() != null ? notification.getSeverity().getName() : "",
+                notification.getCircuitId() != null ? notification.getCircuitId() : "", buildType(notification));
 
-        sb.append(buildType(notification));
-
-        String message = sb.toString();
         Nodes build = new NodesBuilder().setNodeId(notification.getResource().getDevice().getNodeId()).build();
         if (allNodeList.contains(build)) {
             LOG.info("onAlarmNotification: {}", message);
@@ -88,16 +83,15 @@ public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
     }
 
     private String buildCause(ProbableCause probableCause) {
-        StringBuilder sb = new StringBuilder();
         if (probableCause == null) {
             return "||||";
         }
-        sb.append((probableCause.getCause() != null) ? probableCause.getCause().getName() : "").append(PIPE)
-                .append((probableCause.getDirection() != null) ? probableCause.getDirection().getName() : "")
-                .append(PIPE).append((probableCause.getExtension() != null) ? probableCause.getExtension() : "")
-                .append(PIPE).append((probableCause.getLocation() != null) ? probableCause.getLocation().getName() : "")
-                .append(PIPE);
-        return sb.toString();
+        String probableCauseStr = String.join(PIPE,
+                (probableCause.getCause() != null) ? probableCause.getCause().getName() : "",
+                (probableCause.getDirection() != null) ? probableCause.getDirection().getName() : "",
+                (probableCause.getExtension() != null) ? probableCause.getExtension() : "",
+                (probableCause.getLocation() != null) ? probableCause.getLocation().getName() : "");
+        return probableCauseStr;
     }
 
     @SuppressWarnings("unchecked")
@@ -205,11 +199,8 @@ public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
             default:
                 LOG.warn("Unknown resource type {}", wantedResourceType);
         }
-        StringBuilder sb = new StringBuilder(circuitPack);
-        sb.append(PIPE).append(connection).append(PIPE).append(degree).append(PIPE).append(iface);
-        sb.append(PIPE).append(internalLink).append(PIPE).append(physicalLink).append(PIPE).append(service);
-        sb.append(PIPE).append(shelf).append(PIPE).append(sharedRiskGroup).append(PIPE).append(port);
-        sb.append(PIPE).append(portCircuitPack);
-        return sb.toString();
+        String buildTyeStr = String.join(PIPE, circuitPack, connection, degree, iface, internalLink, physicalLink,
+                service, shelf, sharedRiskGroup, port, portCircuitPack);
+        return buildTyeStr;
     }
 }

@@ -47,6 +47,9 @@ public class DeviceListener121 implements OrgOpenroadmDeviceListener {
             return;
         }
         for (Edit edit : notification.getEdit()) {
+            if (edit.getTarget() == null) {
+                continue;
+            }
             // 1. Detect the org-openroadm-device object modified
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":

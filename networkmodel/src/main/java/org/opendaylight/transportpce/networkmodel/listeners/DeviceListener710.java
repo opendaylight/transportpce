@@ -60,6 +60,9 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
         Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap = new HashMap<>();
         InstanceIdentifier<OduSwitchingPools> ospIID = null;
         for (Edit edit : notification.getEdit()) {
+            if (edit.getTarget() == null) {
+                continue;
+            }
             // 1. Detect the org-openroadm-device object modified
             LinkedList<PathArgument> path = new LinkedList<>();
             switch (edit.getTarget().getTargetType().getSimpleName()) {
