@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edae4e81_816ba714",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-21T12:13:02Z",
+      "side": 1,
+      "message": "I think that toString() is not useful with LOG.info\n\nhttps://rules.sonarsource.com/java/RSPEC-3457",
+      "range": {
+        "startLine": 62,
+        "startChar": 79,
+        "endLine": 62,
+        "endChar": 90
+      },
+      "revId": "614bfbe0f5f627e749d189f0c8f7489a24b88fdd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
