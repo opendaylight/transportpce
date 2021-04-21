@@ -55,17 +55,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.TpSupportedInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
@@ -608,8 +597,8 @@ public final class OpenRoadmOtnTopology {
                 XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
                 for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
                     SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                        .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa)))
-                        .setIfCapType(convertSupIfCapa(supInterCapa))
+                        .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
+                        .setIfCapType(supInterCapa)
                         .build();
                     supIfMap.put(supIfCapa.key(), supIfCapa);
                 }
@@ -671,36 +660,6 @@ public final class OpenRoadmOtnTopology {
                 return ODU0.class;
             case "If10GEODU2e":
                 return ODU2e.class;
-            default:
-                return null;
-        }
-    }
-
-    private static Class<? extends SupportedIfCapability> convertSupIfCapa(Class<? extends
-            SupportedIfCapability> ifCapType) {
-        switch (ifCapType.getSimpleName()) {
-            case "IfOTUCnODUCn":
-                return IfOTUCnODUCn.class;
-            case "IfOCHOTU4ODU4":
-                return IfOCHOTU4ODU4.class;
-            case "IfOCH":
-                return IfOCH.class;
-            case "If100GEODU4":
-                return If100GEODU4.class;
-            case "If10GEODU2e":
-                return If10GEODU2e.class;
-            case "If10GEODU2":
-                return If10GEODU2.class;
-            case "If1GEODU0":
-                return If1GEODU0.class;
-            case "If400GE":
-                return If400GE.class;
-            case "If100GE":
-                return If100GE.class;
-            case "If10GE":
-                return If10GE.class;
-            case "If1GE":
-                return If1GE.class;
             default:
                 return null;
         }
