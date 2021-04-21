@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95e94738_289e4b44",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:13:40Z",
+      "side": 1,
+      "message": "May be could be merged with the previous predicate?",
+      "range": {
+        "startLine": 225,
+        "startChar": 20,
+        "endLine": 225,
+        "endChar": 112
+      },
+      "revId": "b93317e9197997c783ef948d72b801f22a071126",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
