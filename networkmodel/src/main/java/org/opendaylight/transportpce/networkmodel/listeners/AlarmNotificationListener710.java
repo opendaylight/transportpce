@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AT&T and others.  All rights reserved.
+ * Copyright © 2021 AT&T and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -18,32 +18,32 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsupp
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.Nodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.AlarmNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.OrgOpenroadmAlarmListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.alarm.ProbableCause;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.ResourceType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.Resource;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.CircuitPack;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Connection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Degree;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.InternalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.PhysicalLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Port;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Service;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Shelf;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.resource.Srg;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529.AlarmNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529.OrgOpenroadmAlarmListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529.alarm.ProbableCause;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.ResourceType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.Resource;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.CircuitPack;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Connection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Degree;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.InternalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.PhysicalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Port;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Service;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Shelf;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Srg;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
+public class AlarmNotificationListener710 implements OrgOpenroadmAlarmListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AlarmNotificationListener221.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AlarmNotificationListener710.class);
     private static final String PIPE = "|";
     private final DataBroker dataBroker;
 
-    public AlarmNotificationListener221(DataBroker dataBroker) {
+    public AlarmNotificationListener710(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 
@@ -73,7 +73,7 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
                 buildCause(notification.getProbableCause()),notification.getId() != null ? notification.getId() : "",
                 notification.getRaiseTime() != null ? notification.getRaiseTime().toString() : "",
                 notification.getSeverity() != null ? notification.getSeverity().getName() : "",
-                notification.getCircuitId() != null ? notification.getCircuitId() : "", buildType(notification));
+                notification.getCircuitId() != null ? notification.getCircuitId() : "",buildType(notification));
 
         Nodes build = new NodesBuilder().setNodeId(notification.getResource().getDevice().getNodeId().getValue())
             .build();
