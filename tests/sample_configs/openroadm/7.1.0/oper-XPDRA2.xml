@@ -33,6 +33,20 @@
         <longitude>2.0000</longitude>
       </geoLocation>
     </info>
+    <otn-odu-mux-hierarchy-profile>
+      <profile-name>one-stage-ODUCn-ODUflex-ODU4</profile-name>
+      <mux-capability>
+        <stage-number>1</stage-number>
+        <ho-odu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODUCn</ho-odu-type>
+        <ho-odu-payload-type>22</ho-odu-payload-type>
+        <lo-odu-proactive-DMp>true</lo-odu-proactive-DMp>
+        <supported-lo-odu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</supported-lo-odu-type>
+        <supported-lo-odu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODUflex-cbr</supported-lo-odu-type>
+        <lo-odu-tcm-capable>true</lo-odu-tcm-capable>
+        <lo-odu-proactive-DMt>true</lo-odu-proactive-DMt>
+        <lo-odu-tcm-direction-capability>down-tcm</lo-odu-tcm-direction-capability>
+      </mux-capability>
+    </otn-odu-mux-hierarchy-profile>
     <users>
       <user>
         <name>openroadm</name>
@@ -163,7 +177,7 @@
         </transponder-port>
         <port-capabilities xmlns="http://org/openroadm/port-capability">
           <supported-interface-capability>
-            <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-OTUCn-ODUCn</if-cap-type>
+            <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-otsi-otsigroup</if-cap-type>
             <otsigroup-capability-profile-name>otsigroup-profile1</otsigroup-capability-profile-name>
           </supported-interface-capability>
         </port-capabilities>
@@ -264,9 +278,10 @@
     </connection-map>
     <otsigroup-capability-profile>
       <profile-name>otsigroup-profile1</profile-name>
-      <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-otsi-otsigroup</if-cap-type>
+      <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-OTUCn-ODUCn</if-cap-type>
       <otucn-n-rate>4</otucn-n-rate>
       <foic-type xmlns:org-openroadm-common-optical-channel-types="http://org/openroadm/common-optical-channel-types">org-openroadm-common-optical-channel-types:foic4.8</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
     </otsigroup-capability-profile>
     <mc-capability-profile>
       <profile-name>mc-capa-profile1</profile-name>
