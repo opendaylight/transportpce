@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea388c81_08ff8cc0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:59:50Z",
+      "side": 1,
+      "message": "This exception should be logged.",
+      "range": {
+        "startLine": 291,
+        "startChar": 59,
+        "endLine": 291,
+        "endChar": 60
+      },
+      "revId": "a0d803fdb048e50552cfa759f923d1ce76720d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d49c284d_2d9b97a5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:59:50Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 313,
+        "startChar": 59,
+        "endLine": 313,
+        "endChar": 60
+      },
+      "revId": "a0d803fdb048e50552cfa759f923d1ce76720d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "932447f6_73200ebb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:59:50Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 333,
+        "startChar": 59,
+        "endLine": 333,
+        "endChar": 60
+      },
+      "revId": "a0d803fdb048e50552cfa759f923d1ce76720d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d78c568_cd59fc01",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:59:50Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 353,
+        "startChar": 59,
+        "endLine": 353,
+        "endChar": 60
+      },
+      "revId": "a0d803fdb048e50552cfa759f923d1ce76720d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
