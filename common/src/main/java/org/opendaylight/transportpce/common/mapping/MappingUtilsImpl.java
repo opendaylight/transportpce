@@ -20,6 +20,18 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,5 +104,34 @@ public class MappingUtilsImpl implements MappingUtils {
         }
         LOG.info("Capabilitities for node {}: {}", nodeId, mcCapabilities);
         return mcCapabilities;
+    }
+
+    public static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
+        switch (ifCapType) {
+            case "IfOTUCnODUCn":
+                return IfOTUCnODUCn.class;
+            case "IfOCHOTU4ODU4":
+                return IfOCHOTU4ODU4.class;
+            case "IfOCH":
+                return IfOCH.class;
+            case "If100GEODU4":
+                return If100GEODU4.class;
+            case "If10GEODU2e":
+                return If10GEODU2e.class;
+            case "If10GEODU2":
+                return If10GEODU2.class;
+            case "If1GEODU0":
+                return If1GEODU0.class;
+            case "If400GE":
+                return If400GE.class;
+            case "If100GE":
+                return If100GE.class;
+            case "If10GE":
+                return If10GE.class;
+            case "If1GE":
+                return If1GE.class;
+            default:
+                return null;
+        }
     }
 }
