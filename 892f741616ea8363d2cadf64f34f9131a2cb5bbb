@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6740bbbf_25a1209b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:41:22Z",
+      "side": 1,
+      "message": "This method is long and rahter complex (already true for its original version coming from the networkmodel module).\nIts reuse here in tapi module could have been the opportunity to try to improve it, reducing its length, spliting it into smaller private methods...",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 38
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e1014de_2a4cf9af",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetconfTopologyListener.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:41:22Z",
+      "side": 1,
+      "message": "This code is based on an old verions of NetconfTopologyListener coming from Networkmodel module. That latter has been rather recently refactored. Should be preferable to base this code on the newest version which is less convoluted...",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cfa3174_e7166ec7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetconfTopologyListener.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:41:22Z",
+      "side": 1,
+      "message": "Not a good idea to catch a NPE, all the more than the exception is not logged...",
+      "range": {
+        "startLine": 100,
+        "startChar": 33,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57676719_dfa2f945",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T17:41:22Z",
+      "side": 1,
+      "message": "This method is very long. It would worth seeing to what extent there would not have way to split this method into several smaller ones.",
+      "range": {
+        "startLine": 165,
+        "startChar": 16,
+        "endLine": 165,
+        "endChar": 30
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
