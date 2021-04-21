@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9018d477_0baff8e1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T16:59:47Z",
+      "side": 1,
+      "message": "NPE should never been catched. The exception should be rethrown or logged.",
+      "range": {
+        "startLine": 959,
+        "startChar": 17,
+        "endLine": 959,
+        "endChar": 39
+      },
+      "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad309a43_18428806",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-21T16:59:47Z",
+      "side": 1,
+      "message": "Preferable to remove useless code",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 18
+      },
+      "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
