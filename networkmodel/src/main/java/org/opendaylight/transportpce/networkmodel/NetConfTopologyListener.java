@@ -92,6 +92,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             return;
         }
 
+        String streamName = "NETCONF";
+
         if (openRoadmVersion.equals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1)) {
 
             final OrgOpenroadmAlarmListener alarmListener = new AlarmNotificationListener(this.dataBroker);
@@ -115,12 +117,6 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
             final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(tcaListener);
-
-            String streamName = "NETCONF";
-
-            if (streamName == null) {
-                streamName = "OPENROADM";
-            }
 
             final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
             if (service.isPresent()) {
@@ -172,11 +168,6 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 .OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(tcaListener);
 
-
-            String streamName = "NETCONF";
-            if (streamName == null) {
-                streamName = "OPENROADM";
-            }
             final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
             if (service.isPresent()) {
                 final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
@@ -283,29 +274,4 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             }
         }
     }
-
-
-    /*private String getSupportedStream(String nodeId) {
-        InstanceIdentifier<Streams> streamsIID = InstanceIdentifier.create(Netconf.class).child(Streams.class);
-        try {
-            Optional<Streams> ordmInfoObject =
-                    this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-                            streamsIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (!ordmInfoObject.isPresent()) {
-                LOG.error("Get Stream RPC is not supported");
-                return "NETCONF";
-            }
-            for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf
-                        .streams.Stream strm : ordmInfoObject.get().getStream()) {
-
-                if ("OPENROADM".equalsIgnoreCase(strm.getName().getValue())) {
-                    return strm.getName().getValue().toUpperCase();
-                }
-            }
-            return "NETCONF";
-        } catch (NullPointerException ex) {
-            LOG.error("NullPointerException thrown while getting Info from a non Open ROADM device {}", nodeId);
-            return "NETCONF";
-        }
-    }*/
 }
