@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31439922_89b2a4f3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T09:49:10Z",
+      "side": 1,
+      "message": "What about this ?\n\n        String message \u003d String.join(PIPE, notification.getResource().getDevice().getNodeId().getValue()), ... , ... );",
+      "revId": "d30cb9a54a2e2a335b635a11fca42111d0895f78",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34b6fa6c_aa5111b6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T09:49:10Z",
+      "side": 1,
+      "message": "what about this ?\n\n   private String buildCause(ProbableCause probableCause) {\n        if (probableCause \u003d\u003d null) {\n            return \"||||\";\n        }\n\n       return String.join(PIPE, probableCause.getCause() !\u003d null) ? probableCause.getCause().getName() : \"\"), [..]);\n   }",
+      "revId": "d30cb9a54a2e2a335b635a11fca42111d0895f78",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d28ee03_c4d6c91c",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T09:49:10Z",
+      "side": 1,
+      "message": "what about this\n\n       return String.join(PIPE,circuitPack,connection,degree,[..]);",
+      "revId": "d30cb9a54a2e2a335b635a11fca42111d0895f78",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
