@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c8a3bad_85668766",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "this can probably put before the if-block",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 44
+      },
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c9952df_d8697d5a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "this part of the code was already dead indeed and can be removed.\nIt was probably related to a former call in the assignment above to the method getSupportedStream, commented out at the end of this file, .",
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ad15d8_7cbf69b9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37b900a8_07da8fb3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4498b060_d966ec51",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/NodeRegistration710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "2021 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29f9ccb9_6dbe78d8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-22T06:56:35Z",
+      "side": 1,
+      "message": "2021 ? etc",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "8a07b5c0af4688d4148f342d460edd6fb47041e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
