@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c39c26_3190d453",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-23T12:22:12Z",
+      "side": 1,
+      "message": "node id is XPDR-A2 \u003d\u003e vote -1",
+      "range": {
+        "startLine": 44,
+        "startChar": 44,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef04b335_eaeea161",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-23T12:22:12Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 51,
+        "startChar": 56,
+        "endLine": 51,
+        "endChar": 63
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
