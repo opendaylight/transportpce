@@ -46,6 +46,30 @@
       "revId": "d24dbf5b20b533ea5cdebe619da26d3c6c4ebf6c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "63e7215c_302c7db5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-23T12:00:50Z",
+      "side": 1,
+      "message": "still the same. But up to you to decide.\nI\u0027ve seen there is another change-Id and there\u0027s not so many remarks here. Let\u0027s abandon it.",
+      "parentUuid": "753eff6d_5824a67f",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "d24dbf5b20b533ea5cdebe619da26d3c6c4ebf6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
