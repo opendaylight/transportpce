@@ -45,6 +45,29 @@
       "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aa12526_6ea309ba",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-23T18:31:14Z",
+      "side": 1,
+      "message": "this is now fixed in parent change https://git.opendaylight.org/gerrit/c/transportpce/+/95795\nI let you sync with Gilles to decide which version to keep.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 104
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
