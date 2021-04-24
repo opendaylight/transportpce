@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "beb0d858_a46f48cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-24T09:13:49Z",
+      "side": 1,
+      "message": "External links won\u0027t last for ever\nand should not substitute to a minimal description in\nthe commit body message.\n\nJIRA tickets should be at the end of the commit body with change-Id, signatures, etc",
+      "revId": "554eda24728d1174a177a855e71e24de1ed440d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
