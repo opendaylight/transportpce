@@ -8,7 +8,6 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import os
 
 SIMS = {
     ('xpdra', '1.2.1'): {'port': '17830', 'configfile': 'oper-XPDRA.xml', 'logfile': 'xpdra-121.log'},
@@ -26,11 +25,11 @@ SIMS = {
     ('xpdrc', '2.2.1'): {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc-221.log'},
     ('spdra', '2.2.1'): {'port': '17845', 'configfile': 'oper-SPDRA.xml', 'logfile': 'spdra-221.log'},
     ('spdrc', '2.2.1'): {'port': '17846', 'configfile': 'oper-SPDRC.xml', 'logfile': 'spdrc-221.log'},
-    ('xpdra', '7.1'): {'port': '17850', 'configfile': 'oper-XPDRA.xml', 'logfile': 'xpdra-71.log'},
-    ('roadma', '7.1'): {'port': '17851', 'configfile': 'oper-ROADMA.xml', 'logfile': 'roadma-71.log'},
-    ('roadmb', '7.1'): {'port': '17852', 'configfile': 'oper-ROADMB.xml', 'logfile': 'roadmb-71.log'},
-    ('roadmc', '7.1'): {'port': '17853', 'configfile': 'oper-ROADMC.xml', 'logfile': 'roadmc-71.log'},
-    ('xpdrc', '7.1'): {'port': '17854', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc-71.log'},
-    ('xpdra2', '7.1'): {'port': '17857', 'configfile': 'oper-XPDRA2.xml', 'logfile': 'xpdra2-71.log'},
-    ('xpdrc2', '7.1'): {'port': '17858', 'configfile': 'oper-XPDRC2.xml', 'logfile': 'xpdrc2-71.log'}
+    ('xpdra', '7.1.0'): {'port': '17850', 'configfile': 'oper-XPDRA.xml', 'logfile': 'xpdra-710.log'},
+    ('roadma', '7.1.0'): {'port': '17851', 'configfile': 'oper-ROADMA.xml', 'logfile': 'roadma-710.log'},
+    ('roadmb', '7.1.0'): {'port': '17852', 'configfile': 'oper-ROADMB.xml', 'logfile': 'roadmb-710.log'},
+    ('roadmc', '7.1.0'): {'port': '17853', 'configfile': 'oper-ROADMC.xml', 'logfile': 'roadmc-710.log'},
+    ('xpdrc', '7.1.0'): {'port': '17854', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc-710.log'},
+    ('xpdra2', '7.1.0'): {'port': '17857', 'configfile': 'oper-XPDRA2.xml', 'logfile': 'xpdra2-710.log'},
+    ('xpdrc2', '7.1.0'): {'port': '17858', 'configfile': 'oper-XPDRC2.xml', 'logfile': 'xpdrc2-710.log'}
 }

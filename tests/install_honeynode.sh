@@ -22,7 +22,7 @@ do
         ;;
         "2.2.1") PLUGIN_VERSION=2.0.7
         ;;
-        "7.1") PLUGIN_VERSION=7.1.4
+        "7.1.0") PLUGIN_VERSION=7.1.4
         ;;
         *) echo "unsupported device version" >&2
         continue
