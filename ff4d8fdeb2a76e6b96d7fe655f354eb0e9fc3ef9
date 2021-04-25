@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ccbea045_5bc6650f",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-04-25T13:03:51Z",
+      "side": 1,
+      "message": "Do you want me to change A1 to \"A2\", wherever necessary? Or change the node-id to \"XPDR-A1\"? Sorry didn\u0027t understand the comment. For now, I have changed the node-id to \"XPDR-A1\"",
+      "parentUuid": "87c39c26_3190d453",
+      "range": {
+        "startLine": 44,
+        "startChar": 44,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef04b335_eaeea161",
         "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e2b39965_dc51d4c9",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-04-25T13:03:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ef04b335_eaeea161",
+      "range": {
+        "startLine": 51,
+        "startChar": 56,
+        "endLine": 51,
+        "endChar": 63
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa12526_6ea309ba",
         "filename": "tests/transportpce_tests/common/simulators.py",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2021-04-23T18:31:14Z",
       "side": 1,
       "message": "this is now fixed in parent change https://git.opendaylight.org/gerrit/c/transportpce/+/95795\nI let you sync with Gilles to decide which version to keep.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 104
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2d35180_02af5e71",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-04-25T13:03:51Z",
+      "side": 1,
+      "message": "I have modified oper-XPDRA2.xml and it differs from oper-XPDRA.xml in few places, for instance added otn-odu-mux-hierarchy-profile, changed the if-cap-type for the network port to \"if-otsi-otsigroup\", removed the PM related data. I would prefer this to have this version 2 (oper-XPDRA2.xml), until we stabilize 400G code.",
+      "parentUuid": "1aa12526_6ea309ba",
       "range": {
         "startLine": 30,
         "startChar": 4,
