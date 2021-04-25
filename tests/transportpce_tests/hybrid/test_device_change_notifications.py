@@ -115,7 +115,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     WAITING = 25  # nominal value is 300
     NODE_VERSION_121 = '1.2.1'
     NODE_VERSION_221 = '2.2.1'
-    NODE_VERSION_71 = '7.1'
+    NODE_VERSION_710 = '7.1.0'
 
     @classmethod
     def setUpClass(cls):
@@ -123,7 +123,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION_121),
                                                ('roadma', cls.NODE_VERSION_221),
                                                ('roadmc', cls.NODE_VERSION_221),
-                                               ('xpdrc', cls.NODE_VERSION_71)])
+                                               ('xpdrc', cls.NODE_VERSION_710)])
 
     @classmethod
     def tearDownClass(cls):
@@ -140,7 +140,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_connect_xpdrC(self):
-        response = test_utils.mount_device("XPDR-C1", ('xpdrc', self.NODE_VERSION_71))
+        response = test_utils.mount_device("XPDR-C1", ('xpdrc', self.NODE_VERSION_710))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
