@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac8c9354_4d6bd732",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T07:50:39Z",
+      "side": 0,
+      "message": "these 2 lines should not be deleted",
+      "revId": "198090c97021103d430fb8fa0a0eae9eea74fe68",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
