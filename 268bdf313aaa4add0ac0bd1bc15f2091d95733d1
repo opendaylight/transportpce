@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4d7e91e6_cee02b8b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T10:32:37Z",
+      "side": 1,
+      "message": "Reopen\nLet\u0027s wait for Gilles\u0027feedback.",
+      "parentUuid": "5b3a76cc_ea7cdcdd",
+      "range": {
+        "startLine": 959,
+        "startChar": 17,
+        "endLine": 959,
+        "endChar": 39
+      },
+      "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad309a43_18428806",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
         "patchSetId": 23
