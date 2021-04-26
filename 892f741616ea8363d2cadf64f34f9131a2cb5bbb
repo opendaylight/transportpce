@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "42521cf6_c43428b3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetconfTopologyListener.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-26T10:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e1014de_2a4cf9af",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8cfa3174_e7166ec7",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetconfTopologyListener.java",
         "patchSetId": 28
@@ -68,6 +92,30 @@
       "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c12cfa89_e4a85f67",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetconfTopologyListener.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-26T10:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cfa3174_e7166ec7",
+      "range": {
+        "startLine": 100,
+        "startChar": 33,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "892f741616ea8363d2cadf64f34f9131a2cb5bbb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
