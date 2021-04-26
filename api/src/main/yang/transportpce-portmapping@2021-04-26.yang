@@ -15,6 +15,10 @@ module transportpce-portmapping {
      prefix org-openroadm-device-types;
      revision-date 2019-11-29;
   }
+  import org-openroadm-otn-common-types {
+      prefix org-openroadm-otn-common-types;
+      revision-date 2020-03-27;
+  }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
     revision-date 2019-11-29;
@@ -33,7 +37,11 @@ module transportpce-portmapping {
     "YANG definitions of RPCs supported by OLM. Copyright (c) 2017
      AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
      ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
-
+  
+  revision 2021-04-26 {
+      description
+      "Adding mux-profile information to support 400G Muxponder";
+  }
   revision 2021-03-10 {
       description
       "Upgrading imported models to 7.1.0";
@@ -194,9 +202,27 @@ module transportpce-portmapping {
             "Rate supported by the port";
         }
         leaf-list supported-interface-capability {
-          type identityref {
-            base org-openroadm-port-types:supported-if-capability;
-          }
+            type identityref {
+                base org-openroadm-port-types:supported-if-capability;
+            }
+        }
+        container mpdr-restrictions {
+            when "../port-qual = 'switch-client' and ../../node-info/openroadm-version = '7.1.0'";
+            description
+              "This container provides the information about multiplexing of LO ODUs to HO ODUs
+              Caveat: If port advertizes multiple rates, this container does not work and results could 
+              be wrong, meaning if the supported-interface-capabilities include, if-100GE-ODU4, if-OTU4-ODU4, 
+              if-200GE-oduflexcbr, then min/max-trib-slot could be different";
+            leaf min-trib-slot {
+                type org-openroadm-otn-common-types:opucn-trib-slot-def;
+                description
+                    "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+            }
+            leaf max-trib-slot {
+                type org-openroadm-otn-common-types:opucn-trib-slot-def;
+                description
+                    "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+            }
         }
         leaf xponder-type {
           type org-openroadm-device-types:xpdr-node-types;
