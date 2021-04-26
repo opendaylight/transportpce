@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "420b0bd9_a835918b",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T07:54:48Z",
+      "side": 0,
+      "message": "dash are useful to separate version from device number",
+      "range": {
+        "startLine": 14,
+        "startChar": 91,
+        "endLine": 14,
+        "endChar": 92
+      },
+      "revId": "198090c97021103d430fb8fa0a0eae9eea74fe68",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "114241bf_8d679e38",
         "filename": "tests/transportpce_tests/common/simulators.py",
         "patchSetId": 5
