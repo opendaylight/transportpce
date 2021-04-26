@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1c0d3e9_3f0b1e8a",
+        "filename": "tests/sample_configs/openroadm/7.1.0/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T06:57:00Z",
+      "side": 1,
+      "message": "this is the nodeId to use when mounting the device in functional tests",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "54d8ced7c4bfcf860c603f9377b13081961c063d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}

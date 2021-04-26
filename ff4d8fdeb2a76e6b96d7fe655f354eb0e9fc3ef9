@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d7b7816e_60eff805",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T06:57:00Z",
+      "side": 1,
+      "message": "It is up to you depending on what you want to do. But I guess you should.\n\nLine 30 is starting the sims \u0027xpdra2\u0027 that refers to a XML configuration file where the nodeId is set to \"XPDR-A2\".\nThe XML config that uses \"XPDR-A1\" as node-Id corresponds only to the sim \u0027xpdra\u0027 that is not  started anywhere in this test.",
+      "parentUuid": "ccbea045_5bc6650f",
+      "range": {
+        "startLine": 44,
+        "startChar": 44,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef04b335_eaeea161",
         "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
         "patchSetId": 3
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "I have modified oper-XPDRA2.xml and it differs from oper-XPDRA.xml in few places, for instance added otn-odu-mux-hierarchy-profile, changed the if-cap-type for the network port to \"if-otsi-otsigroup\", removed the PM related data. I would prefer this to have this version 2 (oper-XPDRA2.xml), until we stabilize 400G code.",
       "parentUuid": "1aa12526_6ea309ba",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 104
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd95b735_18b65b40",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-26T06:57:00Z",
+      "side": 1,
+      "message": "This is OK afaik but I can\u0027t easily see the difference with the already existing oper-XPDRA2.xml configuration since it was deleted in the previous change and readded here...",
+      "parentUuid": "b2d35180_02af5e71",
       "range": {
         "startLine": 30,
         "startChar": 4,
