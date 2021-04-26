@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5b3a76cc_ea7cdcdd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-26T10:24:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9018d477_0baff8e1",
+      "range": {
+        "startLine": 959,
+        "startChar": 17,
+        "endLine": 959,
+        "endChar": 39
+      },
+      "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad309a43_18428806",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
         "patchSetId": 23
@@ -69,6 +93,30 @@
       "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb54757d_3ae4c58f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-26T10:24:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad309a43_18428806",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 18
+      },
+      "revId": "268bdf313aaa4add0ac0bd1bc15f2091d95733d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
