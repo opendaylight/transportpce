@@ -70,6 +70,30 @@
       "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41fe801b_ce988264",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkUtilsImpl.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-27T14:23:46Z",
+      "side": 1,
+      "message": "I have multiple todo things written in my notebook (to improve some things). This has been added, to refactor code duplication. I will try to address it ASAP. So as you prefer. It can  be a separated change once this one is merged.",
+      "parentUuid": "2261250d_23d9377c",
+      "range": {
+        "startLine": 154,
+        "startChar": 17,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
