@@ -94,6 +94,30 @@
       "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d7b0296_500ca084",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkUtilsImpl.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-27T14:39:40Z",
+      "side": 1,
+      "message": "That is fair enough for me too.\nWe can discuss priorities with Gilles this thursday meeting.",
+      "parentUuid": "41fe801b_ce988264",
+      "range": {
+        "startLine": 154,
+        "startChar": 17,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
