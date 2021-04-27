@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73626ef0_b38dc8dc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 41
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-27T19:27:04Z",
+      "side": 1,
+      "message": "What about simply ?\n\n        if (!this.networkMap.containsKey(nodeid)) {\n            this.networkMap.put(nodeid, netMap);\n        } else if (!this.networkMap.get(nodeid).containsKey(txPortName)) {\n            this.networkMap.get(nodeid).putAll(netMap);\n        }",
+      "revId": "f949af8c545e6446a379f8f3d71314351c513ecf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
