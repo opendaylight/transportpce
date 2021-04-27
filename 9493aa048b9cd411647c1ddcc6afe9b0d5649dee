@@ -46,6 +46,30 @@
       "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2261250d_23d9377c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkUtilsImpl.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-27T13:55:10Z",
+      "side": 1,
+      "message": "I would be fine if we create a JIRA ticket for the next sptrint\n and mention it with a TODO comment where it makes sense in the code.",
+      "parentUuid": "01d50304_6f17f601",
+      "range": {
+        "startLine": 154,
+        "startChar": 17,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "9493aa048b9cd411647c1ddcc6afe9b0d5649dee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
