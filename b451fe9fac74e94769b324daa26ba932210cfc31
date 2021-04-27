@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5787ae9_d15458e1",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-27T13:05:02Z",
+      "side": 1,
+      "message": "not used",
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672f835d_daacb7b5",
+        "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-27T13:05:02Z",
+      "side": 1,
+      "message": "not used",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 11
+      },
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13de5b78_ed6e1ad9",
+        "filename": "tests/transportpce_tests/2.2.1/test_nbinotifications.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-27T13:05:02Z",
+      "side": 1,
+      "message": "not used",
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "835c2425_2f9e5875",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_end2end.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-27T13:05:02Z",
+      "side": 1,
+      "message": "not used",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 11
+      },
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b5e9dd_cf651da1",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-27T13:05:02Z",
+      "side": 1,
+      "message": "not used",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 11
+      },
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
