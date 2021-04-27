@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f26621f0_072f5458",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/R2RTapiLinkDiscovery.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-27T14:00:03Z",
+      "side": 1,
+      "message": "LF no more needed",
+      "revId": "1d9801f8abf772e5d3b5f606e8396c00a559185f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
