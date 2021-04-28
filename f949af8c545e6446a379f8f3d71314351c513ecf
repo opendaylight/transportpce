@@ -16,6 +16,24 @@
       "revId": "f949af8c545e6446a379f8f3d71314351c513ecf",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3828ddee_a52d3bf1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 41
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-04-28T07:33:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73626ef0_b38dc8dc",
+      "revId": "f949af8c545e6446a379f8f3d71314351c513ecf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
