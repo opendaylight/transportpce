@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "17d5691d_4ac96f96",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-04-28T19:18:54Z",
+      "side": 1,
+      "message": "@Guillaume sorry but actually the constant is actually used in some tests. On the other hand, we could plan for the future to homogenize the waiting times in the different test suites to avoid to set some of them manually in the tests",
+      "parentUuid": "6344b02e_d23b246a",
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "672f835d_daacb7b5",
         "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
         "patchSetId": 10
