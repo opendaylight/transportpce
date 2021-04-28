@@ -24,7 +24,6 @@ import test_utils
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
-    WAITING = 20  # nominal value is 300
     NODE_VERSION = '2.2.1'
 
     cr_serv_sample_data = {"input": {
