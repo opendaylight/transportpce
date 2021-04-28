@@ -28,7 +28,6 @@ CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created
 class TransportTapitesting(unittest.TestCase):
 
     processes = None
-    WAITING = 20
     NODE_VERSION = '2.2.1'
     cr_serv_sample_data = {"input": {
         "sdnc-request-header": {

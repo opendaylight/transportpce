@@ -111,7 +111,6 @@ class TransportPCEFulltesting(unittest.TestCase):
     }
     }
 
-    WAITING = 20  # nominal value is 300
     NODE_VERSION = '2.2.1'
 
     @classmethod
