@@ -248,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "e7235cfb_e7074b9b",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-28T14:16:08Z",
+      "side": 1,
+      "message": "Ack\n\nThis is more a remark than something that needs to be solved.",
+      "parentUuid": "9a3f5117_7d90a9f1",
+      "range": {
+        "startLine": 265,
+        "startChar": 3,
+        "endLine": 265,
+        "endChar": 34
+      },
+      "revId": "76fab8f11cf02879300751aa2ffd15a196c1f218",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3db111be_340be7a3",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 2

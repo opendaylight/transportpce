@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2c6aa5cf_93bfe31d",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-28T14:16:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d300670_49df8842",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "507a97df_9c3eff38",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
         "patchSetId": 3
@@ -69,6 +87,24 @@
       "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d3b686_9809a9f8",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-28T14:16:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7933e7b8_09d8340f",
+      "revId": "2172a3f0611f567de66083b073d7dbfc42c6cc52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
