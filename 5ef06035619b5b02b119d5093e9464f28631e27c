@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "48595a3e_66bea1e0",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMA.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-29T08:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c0e7c08_c117677f",
+      "range": {
+        "startLine": 76,
+        "startChar": 23,
+        "endLine": 76,
+        "endChar": 27
+      },
+      "revId": "5ef06035619b5b02b119d5093e9464f28631e27c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d34d1239_dbacef2a",
         "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMA.xml",
         "patchSetId": 5
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "9d944d18_965c6c67",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMA.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-29T08:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bf59a87_8a573f05",
+      "range": {
+        "startLine": 94,
+        "startChar": 25,
+        "endLine": 94,
+        "endChar": 29
+      },
+      "revId": "5ef06035619b5b02b119d5093e9464f28631e27c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aebdc07_7c4a0447",
         "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMC.xml",
         "patchSetId": 5
@@ -140,6 +188,30 @@
       "revId": "5ef06035619b5b02b119d5093e9464f28631e27c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d58c7b8e_a6333bd8",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMC.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-04-29T08:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64afa769_e5711003",
+      "range": {
+        "startLine": 410,
+        "startChar": 23,
+        "endLine": 410,
+        "endChar": 36
+      },
+      "revId": "5ef06035619b5b02b119d5093e9464f28631e27c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
