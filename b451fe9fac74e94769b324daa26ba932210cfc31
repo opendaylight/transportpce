@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "63355fad_59d52cf7",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-29T06:20:38Z",
+      "side": 1,
+      "message": "OK  thx for the quick feedback.\nIf so, I am closing this comment.\nI am not sure each test needs the same timer value.\nBut feel free to propose something on top of this change.",
+      "parentUuid": "17d5691d_4ac96f96",
+      "revId": "b451fe9fac74e94769b324daa26ba932210cfc31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "672f835d_daacb7b5",
         "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
         "patchSetId": 10
