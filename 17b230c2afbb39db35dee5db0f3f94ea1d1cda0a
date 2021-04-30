@@ -87,6 +87,24 @@
       "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c668794_16d89029",
+        "filename": "tox.ini",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T11:30:47Z",
+      "side": 1,
+      "message": "Yes that is fine too.\n\nCan we move also these 3 lines before E2E tests ?\nThey are pretty long and if we got a failure in these new tests, the gate will warn us sooner this way.",
+      "parentUuid": "a8204f5e_34258ab3",
+      "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
