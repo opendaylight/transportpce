@@ -37,13 +37,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChanges;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
@@ -740,7 +740,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     private void setTerminationPointsChangedMap(CircuitPacks changedCpack, String nodeId) {
-        List<Ports> portsList = new ArrayList<>(Objects.requireNonNull(changedCpack.getPorts()).values());
+        List<Ports> portsList = new ArrayList(changedCpack.nonnullPorts().values());
         for (Ports port : portsList) {
             String lcp = port.getLogicalConnectionPoint();
             if (lcp != null) {
