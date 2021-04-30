@@ -237,6 +237,86 @@
         </port-capabilities>
       </ports>
     </circuit-packs>
+      <circuit-packs>
+    <circuit-pack-name>1/0/3-PLUG-CLIENT</circuit-pack-name>
+    <circuit-pack-type>client_pluggable</circuit-pack-type>
+      <circuit-pack-product-code>Client_P</circuit-pack-product-code>
+      <lifecycle-state>deployed</lifecycle-state>
+      <administrative-state>inService</administrative-state>
+      <vendor>VendorA</vendor>
+      <model>QSFP28</model>
+      <serial-id>serial-1234</serial-id>
+      <type>client_pluggable</type>
+      <product-code>clientXPDR</product-code>
+      <manufacture-date>2007-10-10T00:00:00Z</manufacture-date>
+      <clei>12345678901</clei>
+      <hardware-version>0.1</hardware-version>
+      <operational-state>inService</operational-state>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-mode>NORMAL</circuit-pack-mode>
+      <shelf>1</shelf>
+      <slot>1</slot>
+      <subSlot>3</subSlot>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <is-physical>true</is-physical>
+      <is-passive>true</is-passive>
+      <faceplate-label>xponder-XPDRA</faceplate-label>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/0</circuit-pack-name>
+        <cp-slot-name>slot-3</cp-slot-name>
+      </parent-circuit-pack>
+    <ports>
+      <port-name>1</port-name>
+      <administrative-state>inService</administrative-state>
+      <port-capabilities xmlns="http://org/openroadm/port-capability">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+          <otn-capability>
+            <mpdr-client-restriction>
+              <network-ho-odu-circuit-pack-name>1/0/4-PLUG-NETWORK</network-ho-odu-circuit-pack-name>
+              <muxp-profile-name>ABCD-4-BY-100G</muxp-profile-name>
+              <muxp-profile-name>ABCD-3-BY-100G</muxp-profile-name>
+              <network-ho-odu-port-name>1</network-ho-odu-port-name>
+            </mpdr-client-restriction>
+          </otn-capability>
+        </supported-interface-capability>
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+          <otn-capability>
+            <mpdr-client-restriction>
+              <network-ho-odu-circuit-pack-name>1/0/4-PLUG-NETWORK</network-ho-odu-circuit-pack-name>
+              <muxp-profile-name>ABCD-4-BY-100G</muxp-profile-name>
+              <muxp-profile-name>ABCD-3-BY-100G</muxp-profile-name>
+              <network-ho-odu-port-name>1</network-ho-odu-port-name>
+            </mpdr-client-restriction>
+            <otn-capability-profile-name>otn-ODUk-CTP-no-protection</otn-capability-profile-name>
+          </otn-capability>
+        </supported-interface-capability>
+      </port-capabilities>
+      <port-type>QSFP28</port-type>
+      <port-qual>switch-client</port-qual>
+    </ports>
+    <is-pluggable-optics>true</is-pluggable-optics>
+    <administrative-state>inService</administrative-state>
+    <parent-circuit-pack>
+      <circuit-pack-name>1/0</circuit-pack-name>
+      <cp-slot-name>C7</cp-slot-name>
+    </parent-circuit-pack>
+    <vendor/>
+    <faceplate-label>not-installed</faceplate-label>
+    <is-passive>false</is-passive>
+    <circuit-pack-category>
+      <type>circuitPack</type>
+    </circuit-pack-category>
+    <operational-state>inService</operational-state>
+    <circuit-pack-type>QSFP28</circuit-pack-type>
+    <serial-id/>
+    <hardware-version/>
+  </circuit-packs>
+
     <xponder>
       <xpdr-number>1</xpdr-number>
       <xpdr-type>tpdr</xpdr-type>
