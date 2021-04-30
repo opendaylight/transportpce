@@ -66,11 +66,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 notification);
         switch (notifType) {
             /* service-implementation-request. */
-            case 3 :
+            case 3:
                 onServiceImplementationResult(notification);
                 break;
             /* service-delete. */
-            case 4 :
+            case 4:
                 onServiceDeleteResult(notification);
                 break;
             default:
@@ -89,34 +89,32 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 break;
             case Failed:
                 LOG.error("Renderer service delete failed !");
+                Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+                sendNbiNotification(new PublishNotificationServiceBuilder()
+                        .setServiceName(service.getServiceName())
+                        .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                        .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                        .setCommonId(service.getCommonId())
+                        .setConnectionType(service.getConnectionType())
+                        .setResponseFailed("Renderer service delete failed !")
+                        .setMessage("ServiceDelete request failed ...")
+                        .setOperationalState(service.getOperationalState())
+                        .setTopic(TOPIC)
+                        .build());
                 return;
-            case  Pending:
-                LOG.warn("Renderer service delete returned a Penging RpcStatusEx code!");
+            case Pending:
+                LOG.warn("Renderer service delete returned a Pending RpcStatusEx code!");
                 return;
             default:
                 LOG.error("Renderer service delete returned an unknown RpcStatusEx code!");
                 return;
         }
-        Services service = serviceDataStoreOperations.getService(notification.getServiceName()).get();
-        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
-                .setServiceName(service.getServiceName())
-                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
-                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
-                .setCommonId(service.getCommonId())
-                .setConnectionType(service.getConnectionType())
-                .setResponseFailed("")
-                .setMessage("Service deleted !")
-                .setOperationalState(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.state.types.rev181130.State.Degraded)
-                .setTopic(TOPIC)
-                .build();
-        sendNbiNotification(nbiNotification);
         LOG.info("Service '{}' deleted !", notification.getServiceName());
         if (this.input == null) {
             LOG.error("ServiceInput parameter is null !");
             return;
         }
-        LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
+        LOG.info("sending PCE cancel resource reserve for '{}'", this.input.getServiceName());
         this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
                 ServiceNotificationTypes.ServiceDeleteResult);
         sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceDeleteResult);
@@ -134,7 +132,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             case Failed:
                 onFailedServiceImplementation(notification.getServiceName());
                 break;
-            case  Pending:
+            case Pending:
                 LOG.warn("Service Implementation still pending according to RpcStatusEx");
                 break;
             default:
@@ -149,37 +147,44 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onSuccededServiceImplementation(RendererRpcResultSp notification) {
         LOG.info("Service implemented !");
-        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
-                .setServiceName(input.getServiceName())
-                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
-                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
-                .setResponseFailed("")
-                .setMessage("Service implemented !")
-                .setOperationalState(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.state.types.rev181130.State.InService)
-                .setTopic(TOPIC)
-                .build();
-        sendNbiNotification(nbiNotification);
         if (serviceDataStoreOperations == null) {
             LOG.debug("serviceDataStoreOperations is null");
             return;
         }
-        OperationResult operationResult = null;
+        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
+                .setServiceName(input.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                .setTopic(TOPIC);
+        OperationResult operationResult;
+        String serviceType = "";
         if (tempService) {
             operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
-            if (!operationResult.isSuccess()) {
-                LOG.warn("Temp Service status not updated in datastore !");
-            }
+            serviceType = "Temp ";
         } else {
             operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
-            if (!operationResult.isSuccess()) {
-                LOG.warn("Service status not updated in datastore !");
-            } else {
+        }
+        if (operationResult.isSuccess()) {
+            sendNbiNotification(nbiNotificationBuilder
+                    .setResponseFailed("")
+                    .setMessage("Service implemented !")
+                    .setOperationalState(org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.common.state.types.rev181130.State.InService)
+                    .build());
+            if (!tempService) {
                 sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
             }
+        } else {
+            LOG.warn("{}Service status not updated in datastore !", serviceType);
+            sendNbiNotification(nbiNotificationBuilder
+                    .setResponseFailed(serviceType + "Service status not updated in datastore !")
+                    .setMessage("ServiceCreate request failed ...")
+                    .setOperationalState(org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.common.state.types.rev181130.State.OutOfService)
+                    .build());
         }
     }
 
@@ -202,7 +207,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             notificationPublishService.putNotification(
                     serviceHandlerNotification);
         } catch (InterruptedException e) {
-            LOG.warn("Something went wrong while sending notification for sevice {}",
+            LOG.warn("Something went wrong while sending notification for service {}",
                     serviceRpcResultSp.getServiceName(), e);
             Thread.currentThread().interrupt();
         }
@@ -214,23 +219,33 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onFailedServiceImplementation(String serviceName) {
         LOG.error("Renderer implementation failed !");
+        Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+        sendNbiNotification(new PublishNotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId())
+                .setConnectionType(service.getConnectionType())
+                .setResponseFailed("Renderer implementation failed !")
+                .setMessage("ServiceCreate request failed ...")
+                .setOperationalState(service.getOperationalState())
+                .setTopic(TOPIC)
+                .build());
         OperationResult deleteServicePathOperationResult =
                 this.serviceDataStoreOperations.deleteServicePath(serviceName);
         if (!deleteServicePathOperationResult.isSuccess()) {
             LOG.warn("Service path was not removed from datastore!");
         }
+        OperationResult deleteServiceOperationResult;
+        String serviceType = "";
         if (tempService) {
-            OperationResult deleteServiceOperationResult =
-                    this.serviceDataStoreOperations.deleteTempService(serviceName);
-            if (!deleteServiceOperationResult.isSuccess()) {
-                LOG.warn("Temp Service was not removed from datastore!");
-            }
+            deleteServiceOperationResult = this.serviceDataStoreOperations.deleteTempService(serviceName);
+            serviceType = "Temp ";
         } else {
-            OperationResult deleteServiceOperationResult =
-                    this.serviceDataStoreOperations.deleteService(serviceName);
-            if (!deleteServiceOperationResult.isSuccess()) {
-                LOG.warn("Service was not removed from datastore!");
-            }
+            deleteServiceOperationResult = this.serviceDataStoreOperations.deleteService(serviceName);
+        }
+        if (deleteServiceOperationResult.isSuccess()) {
+            LOG.warn("{}Service was not removed from datastore!", serviceType);
         }
     }
 
