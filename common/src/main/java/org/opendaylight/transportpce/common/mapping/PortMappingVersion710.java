@@ -43,6 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilitiesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mpdr.restrictions.grp.MpdrRestrictionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
@@ -89,14 +90,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.Ports1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapabilityKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.supported._interface.capability.otn.capability.MpdrClientRestriction;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 // FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
 // some mutualization would be helpful
@@ -930,8 +934,26 @@ public class PortMappingVersion710 {
                 .SupportedIfCapability>> supportedIntf = new ArrayList<>();
             Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supIfCapMap = port
                 .augmentation(Ports1.class).getPortCapabilities().nonnullSupportedInterfaceCapability();
+            SupportedInterfaceCapability sic1 = null;
             for (SupportedInterfaceCapability sic : supIfCapMap.values()) {
                 supportedIntf.add(sic.getIfCapType());
+                sic1 = sic;
+            }
+            if (port.getPortQual() == PortQual.SwitchClient
+                && !sic1.getOtnCapability().getMpdrClientRestriction().isEmpty()) {
+                List<MpdrClientRestriction> mpdrClientRestriction = sic1.getOtnCapability().getMpdrClientRestriction();
+                // Here we assume all the supported-interfaces has the support same rates, and the
+                //
+                String mxpProfileName = mpdrClientRestriction.get(0).getMuxpProfileName().get(0);
+                // From this muxponder-profile get the min-trib-slot and the max-trib-slot
+                LOG.info("This is mxp-profile name {}", mxpProfileName);
+                MpdrRestrictionsBuilder mpdrRestrictionsBuilder = new MpdrRestrictionsBuilder();
+
+                mpdrRestrictionsBuilder.setMaxTribSlot(OpucnTribSlotDef.getDefaultInstance("1.20"));
+                mpdrRestrictionsBuilder.setMinTribSlot(OpucnTribSlotDef.getDefaultInstance("1.1"));
+                // TODO: Add a function that provides the tribSlot information from muxProfile
+
+                mpBldr.setMpdrRestrictions(mpdrRestrictionsBuilder.build());
             }
             mpBldr.setSupportedInterfaceCapability(supportedIntf);
         }
