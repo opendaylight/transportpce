@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1276c12_7b4815c4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T08:39:42Z",
+      "side": 1,
+      "message": "Modifications here and in the config files are not described in the commit message.\nIn my opinion, they deserve a separate change.",
+      "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f499a15_8ee3a418",
+        "filename": "tox.ini",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T08:39:42Z",
+      "side": 1,
+      "message": "I think that lines 73-76 order is not coherent.\nIn my opion, portmapping should be put before pce_400G for 2 reasons:\n- this is what is done in 1.2.1 tests\n- pce_400G does not require any sims. Thus sims installation should precede portmapping tests.\n\nAlso, I think it was fine to put this new tests before E2E tests at line 62.",
+      "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
