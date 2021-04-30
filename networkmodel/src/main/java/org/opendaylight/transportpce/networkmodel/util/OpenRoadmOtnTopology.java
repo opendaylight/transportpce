@@ -66,7 +66,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1G
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
@@ -684,10 +686,14 @@ public final class OpenRoadmOtnTopology {
     private static Class<? extends SupportedIfCapability> convertSupIfCapa(Class<? extends
             SupportedIfCapability> ifCapType) {
         switch (ifCapType.getSimpleName()) {
+            case "IfOtsiOtsigroup":
+                return IfOtsiOtsigroup.class;
             case "IfOTUCnODUCn":
                 return IfOTUCnODUCn.class;
             case "IfOCHOTU4ODU4":
                 return IfOCHOTU4ODU4.class;
+            case "IfOTU4ODU4":
+                return IfOTU4ODU4.class;
             case "IfOCH":
                 return IfOCH.class;
             case "If100GEODU4":
