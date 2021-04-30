@@ -199,6 +199,11 @@ module transportpce-portmapping {
         description
           "ODU4 interface provisioned on the port";
       }
+      leaf supporting-oduc4 {
+        type string;
+        description
+          "ODUC4 interface provisioned on the port (B100G)";
+      }
       leaf rate {
         type string;
         description
