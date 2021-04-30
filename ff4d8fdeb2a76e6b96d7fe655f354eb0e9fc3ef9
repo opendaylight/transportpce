@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "64f91328_c0f3fca8",
+        "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T12:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7b7816e_60eff805",
+      "range": {
+        "startLine": 44,
+        "startChar": 44,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef04b335_eaeea161",
         "filename": "tests/transportpce_tests/7.1.0/test_portmapping.py",
         "patchSetId": 3
@@ -188,6 +212,30 @@
       "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30f5b23_347f0730",
+        "filename": "tests/transportpce_tests/common/simulators.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T12:26:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fd95b735_18b65b40",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 104
+      },
+      "revId": "ff4d8fdeb2a76e6b96d7fe655f354eb0e9fc3ef9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
