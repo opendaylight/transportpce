@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f7262ae_bb7f51f0",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T09:18:59Z",
+      "side": 1,
+      "message": "This object creation is useless if guard-clauses conditions (listed just after) are met.\n\nAlso true if this is a temp Service.\n\nThe code here should be reviewed in my opinion.",
+      "revId": "53c20f4778a665f9786d170ac7cce9d3bc30908a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6405316_54cdd8eb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T09:18:59Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "53c20f4778a665f9786d170ac7cce9d3bc30908a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8799cd3_01707668",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-04-30T09:18:59Z",
+      "side": 1,
+      "message": "revision should stay sticked",
+      "revId": "53c20f4778a665f9786d170ac7cce9d3bc30908a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
