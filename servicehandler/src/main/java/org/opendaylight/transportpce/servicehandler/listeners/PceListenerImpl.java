@@ -24,6 +24,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
@@ -158,7 +159,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                 sendNbiNotification(nbiNotification);
                 return false;
             case Pending:
-                LOG.warn("PCE path computation returned a Penging RpcStatusEx code!");
+                LOG.warn("PCE path computation returned a Pending RpcStatusEx code!");
                 return false;
             case Successful:
                 LOG.info("PCE calculation done OK !");
@@ -195,11 +196,25 @@ public class PceListenerImpl implements TransportpcePceListener {
      * Process cancel resource result.
      */
     private void onCancelResourceResult() {
+        Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
+                .setServiceName(service.getServiceName())
+                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                .setCommonId(service.getCommonId())
+                .setConnectionType(service.getConnectionType())
+                .setTopic(TOPIC);
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.info("PCE cancel resource failed !");
+            PublishNotificationService nbiNotification = nbiNotificationBuilder
+                    .setResponseFailed("PCE cancel resource failed !")
+                    .setMessage("ServiceDelete request failed ...")
+                    .setOperationalState(service.getOperationalState())
+                    .build();
+            sendNbiNotification(nbiNotification);
             return;
         } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Pending) {
-            LOG.warn("PCE cancel returned a Penging RpcStatusEx code!");
+            LOG.warn("PCE cancel returned a Pending RpcStatusEx code!");
             return;
         } else if (servicePathRpcResult.getStatus() != RpcStatusEx.Successful) {
             LOG.error("PCE cancel returned an unknown RpcStatusEx code!");
@@ -209,21 +224,42 @@ public class PceListenerImpl implements TransportpcePceListener {
         OperationResult deleteServicePathOperationResult =
                 this.serviceDataStoreOperations.deleteServicePath(input.getServiceName());
         if (!deleteServicePathOperationResult.isSuccess()) {
-            LOG.warn("Service path was not removed from datastore!");
+            LOG.warn("Service path was not removed from datastore !");
         }
         OperationResult deleteServiceOperationResult = null;
         if (tempService) {
             deleteServiceOperationResult =
                     this.serviceDataStoreOperations.deleteTempService(input.getServiceName());
             if (!deleteServiceOperationResult.isSuccess()) {
-                LOG.warn("Temp Service was not removed from datastore!");
+                LOG.warn("Temp Service was not removed from datastore !");
+                PublishNotificationService nbiNotification = nbiNotificationBuilder
+                        .setResponseFailed("Temp Service was not removed from datastore !")
+                        .setMessage("ServiceDelete request failed ...")
+                        .setOperationalState(service.getOperationalState())
+                        .build();
+                sendNbiNotification(nbiNotification);
             }
         } else {
             deleteServiceOperationResult =
                     this.serviceDataStoreOperations.deleteService(input.getServiceName());
             if (!deleteServiceOperationResult.isSuccess()) {
-                LOG.warn("Service was not removed from datastore!");
+                LOG.warn("Service was not removed from datastore !");
+                PublishNotificationService nbiNotification = nbiNotificationBuilder
+                        .setResponseFailed("Service was not removed from datastore !")
+                        .setMessage("ServiceDelete request failed ...")
+                        .setOperationalState(service.getOperationalState())
+                        .build();
+                sendNbiNotification(nbiNotification);
             }
+        }
+        if (deleteServiceOperationResult.isSuccess()) {
+            PublishNotificationService nbiNotification = nbiNotificationBuilder
+                    .setResponseFailed("")
+                    .setMessage("Service deleted !")
+                    .setOperationalState(State.Degraded)
+                    .setTopic(TOPIC)
+                    .build();
+            sendNbiNotification(nbiNotification);
         }
         /**
          * if it was an RPC serviceReconfigure, re-launch PCR.

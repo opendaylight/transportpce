@@ -251,7 +251,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
                 .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
                 .setMessage("ServiceDelete request received ...")
-                .setOperationalState(State.OutOfService)
+                .setOperationalState(service.getOperationalState())
                 .setResponseFailed("")
                 .setTopic(topic)
                 .build();
@@ -273,9 +273,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
             nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
-                    .setMessage("ServiceCreate request failed ...")
-                    .setOperationalState(State.OutOfService)
-                    .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
+                    .setMessage("ServiceDelete request failed ...")
+                    .setOperationalState(State.InService)
+                    .setResponseFailed(LogMessages.RENDERER_DELETE_FAILED)
                     .build();
             sendNbiNotification(nbiNotification);
             return ModelMappingUtils.createDeleteServiceReply(
