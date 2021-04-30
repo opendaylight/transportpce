@@ -69,6 +69,24 @@
       "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8204f5e_34258ab3",
+        "filename": "tox.ini",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-04-30T11:11:13Z",
+      "side": 1,
+      "message": "Portmapping test is only done after the honeynode is installed. I didn\u0027t understand the last part of the second bullet.\nI can move pce400G to precede honeynode installation.",
+      "parentUuid": "0249a489_6307ac02",
+      "revId": "17b230c2afbb39db35dee5db0f3f94ea1d1cda0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
