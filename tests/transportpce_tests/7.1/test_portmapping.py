@@ -106,11 +106,53 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['mapping'])
 
-    def test_06_xpdr_device_disconnection(self):
+    # Check the port-mapping for the switch-client and switch-network port-quals
+    def test_06_xpdr2_portmapping_NETWORK1(self):
+        response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR2-NETWORK1")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn(
+            {'supported-interface-capability':
+               ['org-openroadm-port-types:if-otsi-otsigroup'],
+             'supporting-port': 'L2',
+             'supporting-circuit-pack-name': '1/0/7-PLUG-NETWORK',
+             'logical-connection-point': 'XPDR2-NETWORK1',
+             'port-qual': 'switch-network',
+             'port-direction': 'bidirectional',
+             'lcp-hash-val': 'LY9PxYJqUbw=',
+             'port-admin-state': 'InService',
+             'port-oper-state': 'InService',
+             'xponder-type': 'mpdr'
+             },
+            res['mapping'])
+
+    def test_07_xpdr2_portmapping_CLIENT1(self):
+        response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR2-CLIENT1")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn(
+            {'supported-interface-capability':
+               ['org-openroadm-port-types:if-100GE-ODU4',
+                'org-openroadm-port-types:if-OCH-OTU4-ODU4'],
+             'supporting-port': 'C3',
+             'supporting-circuit-pack-name': '1/0/3-PLUG-CLIENT',
+             'logical-connection-point': 'XPDR2-CLIENT1',
+             'port-direction': 'bidirectional',
+              'port-qual': 'switch-client',
+             'lcp-hash-val': 'AK+Cna4EclRH',
+             'port-admin-state': 'InService',
+             'port-oper-state': 'InService',
+             "mpdr-restrictions": {
+               "min-trib-slot": "1.1",
+               "max-trib-slot": "1.20"
+             }},
+            res['mapping'])
+
+    def test_08_xpdr_device_disconnection(self):
         response = test_utils.unmount_device("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
-    def test_07_xpdr_device_disconnected(self):
+    def test_09_xpdr_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
@@ -120,7 +162,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                               "relevant data model content does not exist"},
             res['errors']['error'])
 
-    def test_08_xpdr_device_not_connected(self):
+    def test_10_xpdr_device_not_connected(self):
         response = test_utils.portmapping_request("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
