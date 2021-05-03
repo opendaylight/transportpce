@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <netconf xmlns="urn:ietf:params:xml:ns:netmod:notification">
-  <streams>
-    <stream>
-      <name>OPENROADM</name>
-    </stream>
-  </streams>
-</netconf>
+    <streams>
+      <stream>
+        <name>OPENROADM</name>
+      </stream>
+    </streams>
+  </netconf>
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
       <node-id>XPDR-A2</node-id>
@@ -114,16 +114,34 @@
         <slot-name>slot-2</slot-name>
         <label>2</label>
         <provisioned-circuit-pack>1/0/1-PLUG-CLIENT</provisioned-circuit-pack>
+        <slot-status>installed-prov-match</slot-status>
       </cp-slots>
       <cp-slots>
         <slot-name>slot-3</slot-name>
         <label>3</label>
-        <slot-status>empty-not-prov</slot-status>
+        <provisioned-circuit-pack>1/0/3-PLUG-CLIENT</provisioned-circuit-pack>
+        <slot-status>installed-prov-match</slot-status>
       </cp-slots>
       <cp-slots>
         <slot-name>slot-4</slot-name>
         <label>4</label>
         <slot-status>empty-not-prov</slot-status>
+      </cp-slots>
+      <cp-slots>
+        <slot-name>slot-5</slot-name>
+        <label>5</label>
+        <slot-status>empty-not-prov</slot-status>
+      </cp-slots>
+      <cp-slots>
+        <slot-name>slot-6</slot-name>
+        <label>6</label>
+        <slot-status>empty-not-prov</slot-status>
+      </cp-slots>
+      <cp-slots>
+        <slot-name>slot-7</slot-name>
+        <label>7</label>
+        <provisioned-circuit-pack>1/0/7-PLUG-NET</provisioned-circuit-pack>
+        <slot-status>installed-prov-match</slot-status>
       </cp-slots>
     </circuit-packs>
     <circuit-packs>
@@ -178,7 +196,9 @@
         <port-capabilities xmlns="http://org/openroadm/port-capability">
           <supported-interface-capability>
             <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-otsi-otsigroup</if-cap-type>
-            <otsigroup-capability-profile-name>otsigroup-profile1</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC4.8-OTUC4</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC3.6-OTUC3</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC2.4-OTUC2</otsigroup-capability-profile-name>
           </supported-interface-capability>
         </port-capabilities>
       </ports>
@@ -224,12 +244,6 @@
         <lifecycle-state>deployed</lifecycle-state>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
-        <transponder-port>
-          <port-power-capability-min-rx>-22.00</port-power-capability-min-rx>
-          <port-power-capability-min-tx>-5.00</port-power-capability-min-tx>
-          <port-power-capability-max-rx>1.00</port-power-capability-max-rx>
-          <port-power-capability-max-tx>0.00</port-power-capability-max-tx>
-        </transponder-port>
         <port-capabilities xmlns="http://org/openroadm/port-capability">
           <supported-interface-capability>
             <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-400GE</if-cap-type>
@@ -237,6 +251,276 @@
         </port-capabilities>
       </ports>
     </circuit-packs>
+    <circuit-packs>
+      <circuit-pack-name>1/0/3-PLUG-CLIENT</circuit-pack-name>
+      <circuit-pack-type>client_pluggable</circuit-pack-type>
+      <circuit-pack-product-code>Client_P</circuit-pack-product-code>
+      <lifecycle-state>deployed</lifecycle-state>
+      <administrative-state>inService</administrative-state>
+      <vendor>VendorA</vendor>
+      <model>QSFP28</model>
+      <serial-id>serial-1234</serial-id>
+      <type>client_pluggable</type>
+      <product-code>clientXPDR</product-code>
+      <manufacture-date>2007-10-10T00:00:00Z</manufacture-date>
+      <clei>12345678901</clei>
+      <hardware-version>0.1</hardware-version>
+      <operational-state>inService</operational-state>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-mode>NORMAL</circuit-pack-mode>
+      <shelf>1</shelf>
+      <slot>1</slot>
+      <subSlot>3</subSlot>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <is-physical>true</is-physical>
+      <is-passive>true</is-passive>
+      <faceplate-label>xponder-XPDRA</faceplate-label>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/0</circuit-pack-name>
+        <cp-slot-name>slot-3</cp-slot-name>
+      </parent-circuit-pack>
+      <ports>
+        <port-name>C3</port-name>
+        <administrative-state>inService</administrative-state>
+        <operational-state>inService</operational-state>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+            <otn-capability>
+              <mpdr-client-restriction>
+                <network-ho-odu-circuit-pack-name>1/0/7-PLUG-NETWORK</network-ho-odu-circuit-pack-name>
+                <muxp-profile-name>ABCD-4-BY-100G-1</muxp-profile-name>
+                <muxp-profile-name>ABCD-3-BY-100G-1</muxp-profile-name>
+                <network-ho-odu-port-name>1</network-ho-odu-port-name>
+              </mpdr-client-restriction>
+            </otn-capability>
+          </supported-interface-capability>
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+            <otn-capability>
+              <mpdr-client-restriction>
+                <network-ho-odu-circuit-pack-name>1/0/7-PLUG-NETWORK</network-ho-odu-circuit-pack-name>
+                <muxp-profile-name>ABCD-4-BY-100G-1</muxp-profile-name>
+                <muxp-profile-name>ABCD-3-BY-100G-1</muxp-profile-name>
+                <network-ho-odu-port-name>1</network-ho-odu-port-name>
+              </mpdr-client-restriction>
+            </otn-capability>
+          </supported-interface-capability>
+        </port-capabilities>
+        <port-type>QSFP28</port-type>
+        <port-direction>bidirectional</port-direction>
+        <port-wavelength-type>wavelength</port-wavelength-type>
+        <port-qual>switch-client</port-qual>
+      </ports>
+    </circuit-packs>
+    <circuit-packs>
+      <circuit-pack-name>1/0/7-PLUG-NETWORK</circuit-pack-name>
+      <circuit-pack-type>CFP2-DCO</circuit-pack-type>
+      <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
+      <lifecycle-state>deployed</lifecycle-state>
+      <administrative-state>inService</administrative-state>
+      <vendor>VendorA</vendor>
+      <model>CFP2-DCO</model>
+      <serial-id>serial-1234</serial-id>
+      <type>line_pluggable</type>
+      <product-code>lineXPDR</product-code>
+      <manufacture-date>2007-10-10T00:00:00Z</manufacture-date>
+      <clei>12345678901</clei>
+      <hardware-version>0.1</hardware-version>
+      <operational-state>inService</operational-state>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-mode>NORMAL</circuit-pack-mode>
+      <shelf>1</shelf>
+      <slot>1</slot>
+      <subSlot>7</subSlot>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <is-physical>true</is-physical>
+      <is-passive>true</is-passive>
+      <faceplate-label>xponder-XPDRA</faceplate-label>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/0</circuit-pack-name>
+        <cp-slot-name>slot-7</cp-slot-name>
+      </parent-circuit-pack>
+      <ports>
+        <port-name>L2</port-name>
+        <administrative-state>inService</administrative-state>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
+            <otsigroup-capability-profile-name>FOIC4.8-OTUC4</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC3.6-OTUC3</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC2.4-OTUC2</otsigroup-capability-profile-name>
+          </supported-interface-capability>
+        </port-capabilities>
+        <port-type>CFP2-DCO</port-type>
+        <faceplate-label>pluggable</faceplate-label>
+        <is-physical>true</is-physical>
+        <operational-state>inService</operational-state>
+        <transponder-port>
+          <port-power-capability-max-rx>13.0</port-power-capability-max-rx>
+          <port-power-capability-min-tx>-5.0</port-power-capability-min-tx>
+          <port-power-capability-min-rx>-22.0</port-power-capability-min-rx>
+          <port-power-capability-max-tx>0.0</port-power-capability-max-tx>
+        </transponder-port>
+        <port-direction>bidirectional</port-direction>
+        <port-wavelength-type>wavelength</port-wavelength-type>
+        <port-qual>switch-network</port-qual>
+      </ports>
+    </circuit-packs>
+    <otsigroup-capability-profile>
+      <profile-name>FOIC2.4-OTUC2</profile-name>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic2.4</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+      <otucn-n-rate>2</otucn-n-rate>
+    </otsigroup-capability-profile>
+    <otsigroup-capability-profile>
+      <profile-name>FOIC3.6-OTUC3</profile-name>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic3.6</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+      <otucn-n-rate>3</otucn-n-rate>
+    </otsigroup-capability-profile>
+    <otsigroup-capability-profile>
+      <profile-name>FOIC4.8-OTUC4</profile-name>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic4.8</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+      <otucn-n-rate>4</otucn-n-rate>
+    </otsigroup-capability-profile>
+    <muxp-profile>
+      <profile-name>ABCD-4-BY-100G-1</profile-name>
+      <network-ho-odu-trib-port-number>1</network-ho-odu-trib-port-number>
+      <network-ho-odu-opucn-trib-slots>1.3</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.2</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.5</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.4</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.1</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.18</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.17</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.16</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.15</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.7</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.6</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.9</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.19</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.8</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.10</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.20</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.14</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.13</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.12</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.11</network-ho-odu-opucn-trib-slots>
+      <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTUCn.ts</odtu-type>
+    </muxp-profile>
+    <muxp-profile>
+      <profile-name>ABCD-4-BY-100G-2</profile-name>
+      <network-ho-odu-trib-port-number>2</network-ho-odu-trib-port-number>
+      <network-ho-odu-opucn-trib-slots>2.2</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.1</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.4</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.3</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.9</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.16</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.6</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.17</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.5</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.18</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.8</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.19</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.7</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.12</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.13</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.14</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.15</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.20</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.10</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>2.11</network-ho-odu-opucn-trib-slots>
+      <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTUCn.ts</odtu-type>
+    </muxp-profile>
+    <muxp-profile>
+      <profile-name>ABCD-4-BY-100G-3</profile-name>
+      <network-ho-odu-trib-port-number>3</network-ho-odu-trib-port-number>
+      <network-ho-odu-opucn-trib-slots>3.1</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.3</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.2</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.9</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.8</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.17</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.5</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.18</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.4</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.19</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.7</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.6</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.13</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.14</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.15</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.16</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.20</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.10</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.11</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>3.12</network-ho-odu-opucn-trib-slots>
+      <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTUCn.ts</odtu-type>
+      </muxp-profile>
+    <muxp-profile>
+      <profile-name>ABCD-4-BY-100G-4</profile-name>
+      <network-ho-odu-trib-port-number>4</network-ho-odu-trib-port-number>
+      <network-ho-odu-opucn-trib-slots>4.2</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.1</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.8</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.7</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.9</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.19</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.4</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.18</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.3</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.6</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.5</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.15</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.14</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.17</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.16</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.11</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.10</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.13</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.12</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>4.20</network-ho-odu-opucn-trib-slots>
+      <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTUCn.ts</odtu-type>
+    </muxp-profile>
+    <muxp-profile>
+      <profile-name>ABCD-3-BY-100G-1</profile-name>
+      <network-oducn-n-rate>3</network-oducn-n-rate>
+      <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTUCn.ts</odtu-type>
+      <network-ho-odu-trib-port-number>1</network-ho-odu-trib-port-number>
+      <network-ho-odu-opucn-trib-slots>1.3</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.2</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.5</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.4</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.1</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.18</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.17</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.16</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.15</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.7</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.6</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.9</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.8</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.19</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.10</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.20</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.14</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.13</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.12</network-ho-odu-opucn-trib-slots>
+      <network-ho-odu-opucn-trib-slots>1.11</network-ho-odu-opucn-trib-slots>
+      <network-odu-rate xmlns:x="http://org/openroadm/otn-common-types">x:ODUCn</network-odu-rate>
+    </muxp-profile>
     <xponder>
       <xpdr-number>1</xpdr-number>
       <xpdr-type>tpdr</xpdr-type>
@@ -252,6 +536,20 @@
         <circuit-pack-name>1/0/1-PLUG-CLIENT</circuit-pack-name>
         <port-name>C1</port-name>
         <eqpt-srg-id>1</eqpt-srg-id>
+      </xpdr-port>
+    </xponder>
+    <xponder>
+      <xpdr-number>2</xpdr-number>
+      <xpdr-type>mpdr</xpdr-type>
+      <xpdr-port>
+        <index>1</index>
+        <circuit-pack-name>1/0/7-PLUG-NETWORK</circuit-pack-name>
+        <port-name>L2</port-name>
+      </xpdr-port>
+      <xpdr-port>
+        <index>2</index>
+        <circuit-pack-name>1/0/3-PLUG-CLIENT</circuit-pack-name>
+        <port-name>C3</port-name>
       </xpdr-port>
     </xponder>
     <connection-map>
@@ -276,13 +574,6 @@
         <port-name>C1</port-name>
       </destination>
     </connection-map>
-    <otsigroup-capability-profile>
-      <profile-name>otsigroup-profile1</profile-name>
-      <if-cap-type xmlns:org-openroadm-port-types="http://org/openroadm/port/types">org-openroadm-port-types:if-OTUCn-ODUCn</if-cap-type>
-      <otucn-n-rate>4</otucn-n-rate>
-      <foic-type xmlns:org-openroadm-common-optical-channel-types="http://org/openroadm/common-optical-channel-types">org-openroadm-common-optical-channel-types:foic4.8</foic-type>
-      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
-    </otsigroup-capability-profile>
     <mc-capability-profile>
       <profile-name>mc-capa-profile1</profile-name>
       <center-freq-granularity>3.125</center-freq-granularity>
