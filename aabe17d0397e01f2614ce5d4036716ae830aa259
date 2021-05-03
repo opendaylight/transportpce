@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cbc635b_13a12253",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-03T13:02:44Z",
+      "side": 1,
+      "message": "What about this rather?\n\n                LOG.info(\"{}: Muxp-profile used for trib information {}\", nodeId, mxpProfileName);          \n                // This provides the tribSlot information from muxProfile\n                List\u003cOpucnTribSlotDef\u003e minMaxOpucnTribSlots \u003d getOpucnTribSlots(nodeId, mxpProfileName);\n                mpBldr.setMpdrRestrictions(\n                        new MpdrRestrictionsBuilder()\n                           .setMinTribSlot(minMaxOpucnTribSlots.get(0))\n                           .setMaxTribSlot(minMaxOpucnTribSlots.get(1))\n                           .build());",
+      "revId": "aabe17d0397e01f2614ce5d4036716ae830aa259",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
