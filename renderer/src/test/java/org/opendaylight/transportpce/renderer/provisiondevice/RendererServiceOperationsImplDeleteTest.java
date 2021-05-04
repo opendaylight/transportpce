@@ -29,6 +29,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
+import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -48,6 +49,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface710;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -94,6 +96,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private PortMappingVersion121 portMappingVersion121;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
+    private CrossConnectImpl710 crossConnectImpl710;
     private OtnDeviceRendererService otnDeviceRendererService;
 
     private void setMountPoint(MountPoint mountPoint) {
@@ -117,14 +120,18 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
-            this.crossConnectImpl221);
+            this.crossConnectImpl221, this.crossConnectImpl710);
         this.crossConnect = Mockito.spy(crossConnect);
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping,openRoadmInterfaces);
-        OpenRoadmOtnInterface221 openRoadmOTNInterface = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
+        OpenRoadmOtnInterface221 openRoadmOTNInterface221 = new OpenRoadmOtnInterface221(portMapping,
+            openRoadmInterfaces);
+        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
+            openRoadmInterfaces);
         OpenRoadmInterfaceFactory openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,
-             openRoadmInterface121, openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface);
+            openRoadmInterface121, openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface221,
+            openRoadmOtnInterface710);
 
         this.deviceRenderer = new DeviceRendererServiceImpl(getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
