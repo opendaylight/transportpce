@@ -324,7 +324,8 @@ public class OpenRoadmInterface710 {
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            .setTestPattern(TestPattern.PRBS23)
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
 
         // Create an ODUC4 object
@@ -390,7 +391,8 @@ public class OpenRoadmInterface710 {
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            .setTestPattern(TestPattern.PRBS23)
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
 
         // Create an ODUC4 object
@@ -434,6 +436,138 @@ public class OpenRoadmInterface710 {
         return oduInterfaceBuilder.getName();
     }
 
+    public String createOpenRoadmOtnOducnInterface(String nodeId, String logicalConnPoint,
+        String supportingOtucn)
+        throws OpenRoadmInterfaceException {
+        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (portMap == null) {
+            throw new OpenRoadmInterfaceException(
+                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
+                    nodeId, logicalConnPoint));
+        }
+        // Create ODUcn object
+        // Start with OPU object
+        // OPU payload
+        OpuBuilder opuBuilder = new OpuBuilder()
+            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+            .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+        // Maint test signal
+        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
+            .setEnabled(false);
+
+        // Create an ODUC4 object
+        OduBuilder oduBuilder = new OduBuilder()
+            .setRate(ODUCn.class)
+            .setOducnNRate(Uint16.valueOf(4))
+            .setOduFunction(ODUTTP.class)
+            .setMonitoringMode(MonitoringMode.Terminated)
+            .setTimActEnabled(false)
+            .setTimDetectMode(TimDetectMode.Disabled)
+            .setDegmIntervals(Uint8.valueOf(2))
+            .setDegthrPercentage(Uint16.valueOf(100))
+            .setOpu(opuBuilder.build())
+            .setMaintTestsignal(maintTestsignal.build());
+
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
+            logicalConnPoint + "-ODUC4");
+
+        // Create a list
+        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        listSupportingOtucnInterface.add(supportingOtucn);
+
+        oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder oduIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder();
+
+        oduInterfaceBuilder.addAugmentation(oduIf1Builder.setOdu(oduBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(nodeId, oduInterfaceBuilder);
+
+        // Post the equipment-state change on the device circuit-pack if xpdr node
+        if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
+        }
+        // Update the port-mapping with the interface information
+        this.portMapping.updateMapping(nodeId, portMap);
+        return oduInterfaceBuilder.getName();
+    }
+
+
+    // With SAPI and DAPI information
+    public String createOpenRoadmOtnOducnInterface(String anodeId, String alogicalConnPoint,
+        String supportingOtucn, String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
+        Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
+        Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
+        if (portMapA == null) {
+            throw new OpenRoadmInterfaceException(
+                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
+                    anodeId, alogicalConnPoint));
+        }
+        // On the Zside
+        if (portMapZ == null) {
+            throw new OpenRoadmInterfaceException(
+                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
+                    znodeId, zlogicalConnPoint));
+
+        }
+        // Create ODUcn object
+        // Start with OPU object
+        // OPU payload
+        OpuBuilder opuBuilder = new OpuBuilder()
+            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+            .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+        // Maint test signal
+        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
+            .setEnabled(false);
+
+        // Create an ODUC4 object
+        OduBuilder oduBuilder = new OduBuilder()
+            .setRate(ODUCn.class)
+            .setOducnNRate(Uint16.valueOf(4))
+            .setOduFunction(ODUTTP.class)
+            .setMonitoringMode(MonitoringMode.Terminated)
+            .setTimActEnabled(false)
+            .setTimDetectMode(TimDetectMode.Disabled)
+            .setDegmIntervals(Uint8.valueOf(2))
+            .setDegthrPercentage(Uint16.valueOf(100))
+            .setOpu(opuBuilder.build())
+            .setTxSapi(portMapA.getLcpHashVal())
+            .setTxDapi(portMapZ.getLcpHashVal())
+            .setExpectedSapi(portMapZ.getLcpHashVal())
+            .setExpectedDapi(portMapZ.getLcpHashVal())
+            .setMaintTestsignal(maintTestsignal.build());
+
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
+            alogicalConnPoint + "-ODUC4");
+
+        // Create a list
+        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        listSupportingOtucnInterface.add(supportingOtucn);
+
+        oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder oduIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder();
+
+        oduInterfaceBuilder.addAugmentation(oduIf1Builder.setOdu(oduBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(anodeId, oduInterfaceBuilder);
+
+        // Post the equipment-state change on the device circuit-pack if xpdr node
+        if (portMapA.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(anodeId, portMapA.getSupportingCircuitPackName(), true);
+        }
+        // Update the port-mapping with the interface information
+        this.portMapping.updateMapping(anodeId, portMapA);
+        return oduInterfaceBuilder.getName();
+    }
+
     // This is only for transponder
     public String createOpenRoadmOduflexInterface(String nodeId, String logicalConnPoint,
             String supportingOducn)
@@ -451,7 +585,8 @@ public class OpenRoadmInterface710 {
 
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            .setTestPattern(TestPattern.PRBS23)
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
 
         // Parent Odu-allocation
@@ -529,7 +664,8 @@ public class OpenRoadmInterface710 {
 
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            .setTestPattern(TestPattern.PRBS23)
+            // PRBS value should be PRBS31 if enabled is true
+            .setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
 
         // Parent Odu-allocation

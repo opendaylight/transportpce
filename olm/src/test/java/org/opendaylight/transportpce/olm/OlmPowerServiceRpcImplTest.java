@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
+import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -91,6 +92,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
     private OlmPowerServiceRpcImpl olmPowerServiceRpc;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl22;
+    private CrossConnectImpl710 crossConnectImpl710;
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl22;
@@ -110,8 +112,9 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl22 = new CrossConnectImpl221(deviceTransactionManager);
+        this.crossConnectImpl710 = new CrossConnectImpl710(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
-                this.crossConnectImpl22);
+                this.crossConnectImpl22, this.crossConnectImpl710);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
         this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager);

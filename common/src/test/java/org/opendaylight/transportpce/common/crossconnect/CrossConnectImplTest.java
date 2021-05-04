@@ -30,6 +30,7 @@ public class CrossConnectImplTest {
     private static DeviceTransactionManager deviceTransactionManager;
     private CrossConnectImpl121 crossConnectImpl121 = null;
     private CrossConnectImpl221 crossConnectImpl221 = null;
+    private CrossConnectImpl710 crossConnectImpl710 = null;
     private MappingUtils mappingUtils = null;
 
     @Before
@@ -37,9 +38,11 @@ public class CrossConnectImplTest {
         deviceTransactionManager = mock(DeviceTransactionManager.class);
         crossConnectImpl121 = mock(CrossConnectImpl121.class);
         crossConnectImpl221 = mock(CrossConnectImpl221.class);
+        crossConnectImpl710 = mock(CrossConnectImpl710.class);
         mappingUtils = mock(MappingUtils.class);
         crossConnectImpl =
-                new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl121, crossConnectImpl221);
+                new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl121,
+                    crossConnectImpl221, crossConnectImpl710);
     }
 
     @Before
