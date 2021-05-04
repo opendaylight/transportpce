@@ -892,9 +892,20 @@ public class PortMappingVersion710 {
                 if (interfaceType.equals(OpticalTransport.class)) {
                     mpBldr.setSupportingOts(interfaces.getInterfaceName());
                 }
+                String interfaceName = interfaces.getInterfaceName();
                 if (interfaceType.equals(OtnOdu.class)) {
-                    mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+                    switch (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)) {
+                        case "ODU":
+                            mpBldr.setSupportingOdu4(interfaceName);
+                            break;
+                        case "ODUC4":
+                            mpBldr.setSupportingOduc4(interfaceName);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
             } catch (OpenRoadmInterfaceException ex) {
                 LOG.warn("{} : Error while getting interface {} - ",
                     nodeId, interfaces.getInterfaceName(), ex);
