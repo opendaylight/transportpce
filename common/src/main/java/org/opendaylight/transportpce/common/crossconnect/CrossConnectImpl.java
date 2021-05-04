@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,13 +32,16 @@ public class CrossConnectImpl implements CrossConnect {
     private final MappingUtils mappingUtils;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
+    private CrossConnectImpl710 crossConnectImpl710;
 
     public CrossConnectImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                             CrossConnectImpl121 crossConnectImpl121,
-                            CrossConnectImpl221 crossConnectImpl221) {
+                            CrossConnectImpl221 crossConnectImpl221,
+                            CrossConnectImpl710 crossConnectImpl710) {
         this.mappingUtils = mappingUtils;
         this.crossConnectImpl121 = crossConnectImpl121;
         this.crossConnectImpl221 = crossConnectImpl221;
+        this.crossConnectImpl710 = crossConnectImpl710;
         this.crossConnect = null;
     }
 
@@ -84,6 +88,14 @@ public class CrossConnectImpl implements CrossConnect {
         return null;
     }
 
+    public List<String> deleteCrossConnect(String nodeId, String connectionNumber) {
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        if (OPENROADM_DEVICE_VERSION_7_1.equals(openRoadmVersion)) {
+            return crossConnectImpl710.deleteOtnCrossConnect(nodeId, connectionNumber);
+        }
+        return null;
+    }
+
     public List<?> getConnectionPortTrail(String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber,
             int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
@@ -118,6 +130,14 @@ public class CrossConnectImpl implements CrossConnect {
     @Override
     public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node)
             throws OpenRoadmInterfaceException {
-        return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(node.getNodeId());
+
+        if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
+            return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);
+        }
+        else if (OPENROADM_DEVICE_VERSION_7_1.equals(openRoadmVersion)) {
+            return crossConnectImpl710.postOtnCrossConnect(createdOduInterfaces, node);
+        }
+        return Optional.empty();
     }
 }
