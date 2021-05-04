@@ -59,6 +59,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 // Adding OTN interface
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
@@ -291,8 +292,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
         OpenRoadmOtnInterface221 openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping,
                 openRoadmInterfaces);
+        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
+            openRoadmInterfaces);
         return new OpenRoadmInterfaceFactory(mappingUtils, openRoadmInterface121, openRoadmInterface221,
-            openRoadmInterface710, openRoadmOtnInterface221);
+            openRoadmInterface710, openRoadmOtnInterface221, openRoadmOtnInterface710);
     }
 
     /**

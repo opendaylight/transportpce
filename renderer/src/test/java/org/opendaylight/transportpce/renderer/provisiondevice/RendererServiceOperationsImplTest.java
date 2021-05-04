@@ -44,6 +44,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface710;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
@@ -110,9 +111,12 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping,openRoadmInterfaces);
-        OpenRoadmOtnInterface221 openRoadmOTNInterface = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
+        OpenRoadmOtnInterface221 openRoadmOTNInterface221 = new OpenRoadmOtnInterface221(portMapping,
+            openRoadmInterfaces);
+        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
+            openRoadmInterfaces);
         this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,openRoadmInterface121,
-            openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface);
+            openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface221, openRoadmOtnInterface710);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,

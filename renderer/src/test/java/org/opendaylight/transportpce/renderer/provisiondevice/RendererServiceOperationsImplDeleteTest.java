@@ -48,6 +48,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface710;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -122,9 +123,13 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping,openRoadmInterfaces);
-        OpenRoadmOtnInterface221 openRoadmOTNInterface = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
+        OpenRoadmOtnInterface221 openRoadmOTNInterface221 = new OpenRoadmOtnInterface221(portMapping,
+            openRoadmInterfaces);
+        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
+            openRoadmInterfaces);
         OpenRoadmInterfaceFactory openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,
-             openRoadmInterface121, openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface);
+             openRoadmInterface121, openRoadmInterface221, openRoadmInterface710, openRoadmOTNInterface221,
+            openRoadmOtnInterface710);
 
         this.deviceRenderer = new DeviceRendererServiceImpl(getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
