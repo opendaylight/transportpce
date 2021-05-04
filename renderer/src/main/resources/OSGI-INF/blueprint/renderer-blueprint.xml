@@ -43,8 +43,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="openRoadmInterfaces"/>
   </bean>
 
-  <bean id="openRoadmOtnInterface"
+  <bean id="openRoadmOtnInterface221"
         class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221">
+    <argument ref="portMapping"/>
+    <argument ref="openRoadmInterfaces"/>
+  </bean>
+
+  <bean id="openRoadmOtnInterface710"
+    class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710">
     <argument ref="portMapping"/>
     <argument ref="openRoadmInterfaces"/>
   </bean>
@@ -55,7 +61,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="openRoadmInterface121"/>
     <argument ref="openRoadmInterface221"/>
     <argument ref="openRoadmInterface710"/>
-    <argument ref="openRoadmOtnInterface"/>
+    <argument ref="openRoadmOtnInterface221"/>
+    <argument ref="openRoadmOtnInterface710"/>
   </bean>
 
   <bean id="deviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl" >
