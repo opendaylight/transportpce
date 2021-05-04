@@ -85,11 +85,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
     </bean>
 
+    <bean id="crossConnect710" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
     <bean id="crossConnectImpl" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
         <argument ref="deviceTransactionManager" />
         <argument ref="mappingUtils" />
         <argument ref="crossConnect121" />
         <argument ref="crossConnect221" />
+        <argument ref="crossConnect710" />
     </bean>
 
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
