@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f9d15e1_ee918de7",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T06:53:00Z",
+      "side": 1,
+      "message": "much better but we have now multiple nbiNotification local declarations and allocations.\n\nthey can be factorized inside the sendNbiNotification call this way:\n\nsendNbiNotification(nbiNotificationBuilder\n                    .setResponseFailed(\"PCE cancel resource failed !\")\n                    .setMessage(\"ServiceDelete request failed ...\")\n                    .setOperationalState(service.getOperationalState())\n                    .build());\nreturn;",
+      "revId": "9464a3a93a11fceb00e2549cf82c2e69ad610733",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7ea4f84_073f5d58",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T06:53:00Z",
+      "side": 1,
+      "message": "these 2 clauses (pending and successful) must be tested first and nbiNotificationBuilder must be declared afterwards",
+      "revId": "9464a3a93a11fceb00e2549cf82c2e69ad610733",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acc3ab8e_a11c7c4b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T06:53:00Z",
+      "side": 1,
+      "message": "should be place after line 160",
+      "revId": "9464a3a93a11fceb00e2549cf82c2e69ad610733",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404cd8a7_1dff06e1",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T06:53:00Z",
+      "side": 1,
+      "message": "idem than previous file",
+      "revId": "9464a3a93a11fceb00e2549cf82c2e69ad610733",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
