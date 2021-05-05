@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dfc578a_ef1c1f00",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "indent +4 or add a LF to separate clearly method prototype from its body.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 107
+      },
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "037e943f_4b16b0bb",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa52fa21_bdc61c20",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b483314a_a90941e2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "indent +4 or add a new line to separate method declaration and body",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 69
+      },
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a99539b_37e2a549",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc9655de_fe22e481",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T13:26:27Z",
+      "side": 1,
+      "message": "setterr should be on a new line for style coherency",
+      "range": {
+        "startLine": 113,
+        "startChar": 48,
+        "endLine": 113,
+        "endChar": 49
+      },
+      "revId": "f013c967098ef90673f2433f24b4311084416214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
