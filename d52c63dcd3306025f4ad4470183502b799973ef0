@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6d73a64_334b3e36",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T14:27:15Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n        if (servicePathRpcResult.getStatus() \u003d\u003d RpcStatusEx.Pending) {\n            LOG.warn(\"PCE cancel returned a Pending RpcStatusEx code!\");\n            return;\n        } else if (servicePathRpcResult.getStatus() !\u003d RpcStatusEx.Successful) {\n            LOG.error(\"PCE cancel returned an unknown RpcStatusEx code!\");\n            return;\n        }\n\n        PublishNotificationServiceBuilder nbiNotificationBuilder \u003d new PublishNotificationServiceBuilder()\n                .setServiceName(service.getServiceName())\n                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())\n                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())\n                .setCommonId(service.getCommonId())\n                .setConnectionType(service.getConnectionType())\n                .setTopic(TOPIC);\n\n        if (servicePathRpcResult.getStatus() \u003d\u003d RpcStatusEx.Failed) {\n            LOG.info(\"PCE cancel resource failed !\");\n            PublishNotificationService nbiNotification \u003d nbiNotificationBuilder\n                    .setResponseFailed(\"PCE cancel resource failed !\")\n                    .setMessage(\"ServiceDelete request failed ...\")\n                    .setOperationalState(service.getOperationalState())\n                    .build();\n            sendNbiNotification(nbiNotification);\n            return;\n        }",
+      "revId": "d52c63dcd3306025f4ad4470183502b799973ef0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e354e94_afc0c410",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-05T14:27:15Z",
+      "side": 1,
+      "message": "I amn not sure .setTopic(TOPIC) is still needed.\n\nwhat about this rather ?\n\n        OperationResult deleteServiceOperationResult \u003d null;\n        String serviceType\u003d\"\";\n        if (tempService) {\n            deleteServiceOperationResult \u003d\n                    this.serviceDataStoreOperations.deleteTempService(input.getServiceName());\n            serviceType\u003d\"Temp \"\n\n        } else {\n            deleteServiceOperationResult \u003d\n                    this.serviceDataStoreOperations.deleteService(input.getServiceName());\n        }\n        if (deleteServiceOperationResult.isSuccess()) {\n            sendNbiNotification(nbiNotificationBuilder\n                    .setResponseFailed(\"\")\n                    .setMessage(\"Service deleted !\")\n                    .setOperationalState(State.Degraded)\n                    .build());\n        } else {\n            LOG.warn(\"{}Service was not removed from datastore !\", serviceType);\n            sendNbiNotification(nbiNotificationBuilder\n                    .setResponseFailed(serviceType + \"Service was not removed from datastore !\")\n                    .setMessage(\"ServiceDelete request failed ...\")\n                    .setOperationalState(service.getOperationalState())\n                    .build());\n        }\n\nWe may define some constants for error message but this can be done in a separate change.",
+      "revId": "d52c63dcd3306025f4ad4470183502b799973ef0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
