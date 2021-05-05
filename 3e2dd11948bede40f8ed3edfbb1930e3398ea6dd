@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "264af97b_b6475eff",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-05-05T06:53:33Z",
+      "side": 1,
+      "message": "Is this otn-capability-profile required by renderer?\nIf yes, this profile should be added in the configuration, and an otn-capability-profile should be also specified for if-cap-type 100GE-ODU4..., and such profiles should also appear in portmapping?\nIf no, could we remove this leaf? and consider that the two if-cap-type (100GE-ODU4 and OCH-OTU4-ODU4) have the same otn-capability?",
+      "range": {
+        "startLine": 310,
+        "startChar": 14,
+        "endLine": 310,
+        "endChar": 99
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8757156e_bd2da3b7",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-05-05T06:53:33Z",
+      "side": 1,
+      "message": "Is this otn-capability-profile used by renderer?\nThis profile does not exist in the configuration...",
+      "range": {
+        "startLine": 383,
+        "startChar": 35,
+        "endLine": 383,
+        "endChar": 62
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6475479c_19c9192a",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-05-05T06:53:33Z",
+      "side": 1,
+      "message": "I understand that we should also have two other profiles: \"ABCD-3-BY-100-2\" for trib-port 2, and \"ABCD-3-BY-100-3\" for trib-port 3. Is it correct?",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 51
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
