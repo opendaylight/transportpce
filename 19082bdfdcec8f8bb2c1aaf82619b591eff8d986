@@ -33,6 +33,74 @@
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0595fa5_0ab43793",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:15:48Z",
+      "side": 1,
+      "message": "add a LF or indent +4 to separate method declaration and body",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baeae023_e32fe130",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:15:48Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eda14603_72dd1e80",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:15:48Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc392b8d_5a414e5f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:15:48Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
