@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "350f65d1_4a9aa96b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T11:04:22Z",
+      "side": 1,
+      "message": "LGTM\nThough I think switch/case structures would be more indicated in most of functions here\nand would avoid the allocation of the string openRoadmVersion.\n\ne.g.\n    @Override\n    public Optional\u003cString\u003e postOtnCrossConnect(List\u003cString\u003e createdOduInterfaces, Nodes node)\n            throws OpenRoadmInterfaceException {\n        String openRoadmVersion \u003d mappingUtils.getOpenRoadmVersion(node.getNodeId());\n        if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {\n            return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);\n        }\n        else if (OPENROADM_DEVICE_VERSION_7_1_0.equals(openRoadmVersion)) {\n            return crossConnectImpl710.postOtnCrossConnect(createdOduInterfaces, node);\n        }\n        return Optional.empty();\n    }\n\n\nbecomes\n\n    @Override\n    public Optional\u003cString\u003e postOtnCrossConnect(List\u003cString\u003e createdOduInterfaces, Nodes node)\n            throws OpenRoadmInterfaceException {\n        Switch(mappingUtils.getOpenRoadmVersion(node.getNodeId()) {\n\n            case OPENROADM_DEVICE_VERSION_2_2_1:\n                return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);\n\n            case OPENROADM_DEVICE_VERSION_7_1_0:\n                return crossConnectImpl710.postOtnCrossConnect(createdOduInterfaces, node);\n\n            default:\n                return Optional.empty();\n        }\n    }",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b3e400b_56e172c1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T11:04:22Z",
+      "side": 1,
+      "message": "What about this rather?\n\n                String interfaceName \u003d interfaces.getInterfaceName();\n                if (interfaceType.equals(OtnOdu.class) {\n                    switch(interfaceName.substring(interfaceName.lastIndexOf(\"-\") + 1)) {\n                        case \"ODU\":\n                            mpBldr.setSupportingOdu4(interfaceName);\n                            break;\n\n                        case \"ODUC4\":\n                            mpBldr.setSupportingOduc4(interfaceName);\n                            break;\n\n                        default:\n                            break;\n                    }\n                }",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
