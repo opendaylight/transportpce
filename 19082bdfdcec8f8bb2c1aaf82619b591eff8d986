@@ -70,6 +70,40 @@
     },
     {
       "key": {
+        "uuid": "5d70ba21_340f10b1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "what about merging these 2 lines?\n\n        ethInterfaceBldr.addAugmentation(new Interface1Builder().setEthernet(ethIfBuilder.build()).build());",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a221c185_0f2a0869",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "and these 2 others ?\n\n      return ethInterfaceBldr.getName();",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eda14603_72dd1e80",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
         "patchSetId": 5
@@ -87,6 +121,58 @@
     },
     {
       "key": {
+        "uuid": "c36bca3a_30c2ab67",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "this was about method declaration and body",
+      "parentUuid": "eda14603_72dd1e80",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fae86779_d73c74d0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55be46e8_3b1e9403",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "what about merging these 4 lines ?\n\n\n            oduBuilder.setOpu(new OpuBuilder()\n                .setExpPayloadType(new PayloadTypeDef(payLoad))\n                .setPayloadType(new PayloadTypeDef(payLoad))\n                .build());",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cc392b8d_5a414e5f",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
         "patchSetId": 5
@@ -98,6 +184,24 @@
       "writtenOn": "2021-05-06T12:15:48Z",
       "side": 1,
       "message": "idem",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1850f2af_4ffad61b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-06T12:24:12Z",
+      "side": 1,
+      "message": "this was about method declaration and body separation.",
+      "parentUuid": "cc392b8d_5a414e5f",
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
