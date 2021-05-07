@@ -1,0 +1,221 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85c76de6_eeedcf1c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "switching",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543d4c65_ed074a67",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "exists",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66e24f00_5f9235b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "implement",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 12
+      },
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf84c674_90059005",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "indent +4 or addd a LF to seprate clearly method declaration from its body",
+      "range": {
+        "startLine": 196,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 68
+      },
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cd2b5b4_06adf5b1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "maybe a ternary operator would be welcome here",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c67d79f_20918890",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "this is OK. Though, I prefer guard-clause style in scuh cases.\n\n            if (nbl \u003d\u003d null) {\n                return false;\n            }\n            nblMap.put(nbl.key(), nbl);\n\nAnyway, shouldn\u0027t we log an error or a warning here when nbl\u003d\u003dnull",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daac4f97_4a118fbc",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "maybe ternary operators would be welcome here",
+      "range": {
+        "startLine": 280,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 9
+      },
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2233ae69_c6bf2911",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "cirtcuitPackName and portName string allocation can be avoided\n\nString lcp \u003d getLcpFromCpAndPort(mappings, portList.getCircuitPackName(), portList.getPortName());",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d7a4b92_44186afa",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "idem line 252",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57cb1ec2_0beeb91e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "factorization possible\n\nreturn nblBldr.setLcpList(lcpList).build();",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b95a84c_b53f3d25",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-07T09:22:00Z",
+      "side": 1,
+      "message": "maybe ternary operator would be welcome here.",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
