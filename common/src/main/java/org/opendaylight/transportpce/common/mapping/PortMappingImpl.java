@@ -11,6 +11,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -28,8 +29,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,5 +189,19 @@ public class PortMappingImpl implements PortMapping {
             LOG.error("Unable to get node {} in portmapping", nodeId);
         }
         return null;
+    }
+
+    @Override
+    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, InstanceIdentifier<OduSwitchingPools> ospIID,
+            Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap) {
+        OpenroadmNodeVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+        switch (openROADMversion.getIntValue()) {
+            case 3:
+                return portMappingVersion710.updatePortMappingWithOduSwitchingPools(nodeId, ospIID, nbliidMap);
+            default:
+                LOG.error("Update of the port-mapping [odu-switching-pool] not available for this device version {}",
+                    openROADMversion);
+                return false;
+        }
     }
 }

@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -98,6 +99,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.supported._interface.capability.otn.capability.MpdrClientRestriction;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -212,6 +214,76 @@ public class PortMappingVersion710 {
                     nodeId, oldMapping.getLogicalConnectionPoint(), e);
             return false;
         }
+    }
+
+    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, InstanceIdentifier<OduSwitchingPools> ospIID,
+            Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap) {
+
+        KeyedInstanceIdentifier<Nodes, NodesKey> portMappingNodeIID = InstanceIdentifier.create(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId));
+        Nodes portmappingNode = null;
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            portmappingNode = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingNodeIID).get().get();
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to read the port-mapping for nodeId {}", nodeId, ex);
+        }
+        if (portmappingNode == null) {
+            return false;
+        }
+        Map<MappingKey, Mapping> mappings = portmappingNode.nonnullMapping();
+
+        OduSwitchingPools osp = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+            ospIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
+        Uint16 ospNumber = osp.getSwitchingPoolNumber();
+        Map<SwitchingPoolLcpKey, SwitchingPoolLcp> splMap = new HashMap(portmappingNode.nonnullSwitchingPoolLcp());
+        SwitchingPoolLcpBuilder splBldr = splMap.containsKey(new SwitchingPoolLcpKey(ospNumber))
+            ? new SwitchingPoolLcpBuilder(splMap.get(new SwitchingPoolLcpKey(ospNumber)))
+            : new SwitchingPoolLcpBuilder().setSwitchingPoolNumber(ospNumber)
+                .setSwitchingPoolType(osp.getSwitchingPoolType());
+        Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
+        for (Entry<Uint16, List<InstanceIdentifier<PortList>>> entry : nbliidMap.entrySet()) {
+            Uint32 interconnectBw = osp.getNonBlockingList().get(new
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org
+                    .openroadm.device.odu.switching.pools.NonBlockingListKey(entry.getKey()))
+                .getInterconnectBandwidth();
+            NonBlockingList nbl = createNonBlockingList(splBldr, interconnectBw, entry, mappings, nodeId);
+            if (nbl == null) {
+                return false;
+            }
+            nblMap.put(nbl.key(), nbl);
+        }
+        SwitchingPoolLcp switchingPoolLcp = splBldr
+            .setNonBlockingList(nblMap)
+            .build();
+        splMap.put(switchingPoolLcp.key(), switchingPoolLcp);
+        List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>(splMap.values());
+        postPortMapping(nodeId, null, null, null, switchingPoolList, null);
+        return true;
+    }
+
+    private NonBlockingList createNonBlockingList(SwitchingPoolLcpBuilder splBldr, Uint32 interconnectBw,
+            Entry<Uint16, List<InstanceIdentifier<PortList>>> entry, Map<MappingKey, Mapping> mappings, String nodeId) {
+        NonBlockingListBuilder nblBldr;
+        if (splBldr.getNonBlockingList() != null
+            && splBldr.getNonBlockingList().containsKey(new NonBlockingListKey(entry.getKey()))) {
+            nblBldr = new NonBlockingListBuilder(splBldr.getNonBlockingList()
+                .get(new NonBlockingListKey(entry.getKey())));
+        } else {
+            nblBldr = new NonBlockingListBuilder()
+                .setNblNumber(entry.getKey())
+                .setInterconnectBandwidth(interconnectBw);
+        }
+        List<String> lcpList = nblBldr.getLcpList() != null ? nblBldr.getLcpList() : new ArrayList<>();
+        for (InstanceIdentifier<PortList> id : entry.getValue()) {
+            PortList portList = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+                id, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
+            String lcp = getLcpFromCpAndPort(mappings, portList.getCircuitPackName(), portList.getPortName());
+            if (lcp == null || lcpList.contains(lcp)) {
+                return null;
+            }
+            lcpList.add(lcp);
+        }
+        return nblBldr.setLcpList(lcpList).build();
     }
 
     private boolean createXpdrPortMapping(String nodeId, List<Mapping> portMapList) {
@@ -1315,4 +1387,13 @@ public class PortMappingVersion710 {
         return nodeInfoBldr.build();
     }
 
+    private String getLcpFromCpAndPort(Map<MappingKey, Mapping> mappings, String cpName, String portName) {
+        for (Mapping mapping : mappings.values()) {
+            if (cpName.equals(mapping.getSupportingCircuitPackName())
+                && portName.equals(mapping.getSupportingPort())) {
+                return mapping.getLogicalConnectionPoint();
+            }
+        }
+        return null;
+    }
 }

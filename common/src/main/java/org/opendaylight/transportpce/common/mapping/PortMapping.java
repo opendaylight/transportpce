@@ -8,9 +8,17 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+
+import java.util.List;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
+
 
 public interface PortMapping {
 
@@ -151,4 +159,25 @@ public interface PortMapping {
      * @return node data if success otherwise null.
      */
     Nodes getNode(String nodeId);
+
+    /**
+     * This method allows to update a port-mapping node with odu-connection-map data.
+     * This method is used for an otn xponder in version 7.1, when a device sends a
+     * change-notification advertising controller that odu-switching-pools containers
+     * have been populated inside its configuration
+     * (appears after creation of an OTSI-Group interface).
+     *
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     * @param ospIID
+     *            Instance Identifier of the odu-switching-pools.
+     * @param nbliidMap
+     *            Map containing the non-blocking-list number as key,
+     *            and the list of Instance Identifier corresponding to each port-list
+     *            as value.
+     *
+     * @return Result true/false based on status of operation.
+     */
+    boolean updatePortMappingWithOduSwitchingPools(String nodeId, InstanceIdentifier<OduSwitchingPools> ospIID,
+        Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap);
 }
