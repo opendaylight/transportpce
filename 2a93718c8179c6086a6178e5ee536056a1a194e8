@@ -22,6 +22,30 @@
       "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e185df1_25c07ea4",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-08T11:44:42Z",
+      "side": 1,
+      "message": "Yes, this and many other things to be changed. Can we postpone this to June, if we all agree.",
+      "parentUuid": "7df034a6_7915383e",
+      "range": {
+        "startLine": 244,
+        "startChar": 84,
+        "endLine": 244,
+        "endChar": 87
+      },
+      "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
