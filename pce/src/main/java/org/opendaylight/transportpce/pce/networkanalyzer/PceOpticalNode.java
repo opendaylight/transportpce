@@ -60,9 +60,12 @@ public class PceOpticalNode implements PceNode {
     private BitSet frequenciesBitSet;
     private String version;
     private BigDecimal slotWidthGranularity;
+    private BigDecimal centralFreqGranularity;
 
     public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
-        OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity) {
+        OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity,
+        BigDecimal centralFreqGranularity) {
+
         if (deviceNodeId != null
                 && serviceType != null
                 && portMapping != null
@@ -79,6 +82,7 @@ public class PceOpticalNode implements PceNode {
             this.nodeType = nodeType;
             this.version = version;
             this.slotWidthGranularity = slotWidthGranularity;
+            this.centralFreqGranularity = centralFreqGranularity;
             this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http
                     .org.openroadm.common.network.rev200529.Node1.class).getAdministrativeState();
             this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
@@ -473,6 +477,16 @@ public class PceOpticalNode implements PceNode {
     @Override
     public BigDecimal getSlotWidthGranularity() {
         return slotWidthGranularity;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
+     */
+    @Override
+    public BigDecimal getCentralFreqGranularity() {
+        return centralFreqGranularity;
     }
 
 }
