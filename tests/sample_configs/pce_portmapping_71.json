@@ -127,7 +127,14 @@
                     "node-clli": "NodeA",
                     "openroadm-version": "7.1.0",
                     "node-vendor": "vendorA"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPDR-mcprofile",
+                        "center-freq-granularity": 3.125,
+                        "slot-width-granularity": 6.25
+                    }
+                ]
             },
             {
                 "node-id": "XPDR-C2",
@@ -165,7 +172,14 @@
                     "node-clli": "NodeC",
                     "openroadm-version": "7.1.0",
                     "node-vendor": "vendorA"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPDR-mcprofile",
+                        "center-freq-granularity": 3.125,
+                        "slot-width-granularity": 6.25
+                    }
+                ]
             },
             {
                 "node-id": "ROADM-A1",
