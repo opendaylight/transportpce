@@ -593,4 +593,14 @@ public class PceOtnNode implements PceNode {
     public BigDecimal getSlotWidthGranularity() {
         return null;
     }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
+     */
+    @Override
+    public BigDecimal getCentralFreqGranularity() {
+        return null;
+    }
 }

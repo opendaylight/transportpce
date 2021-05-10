@@ -84,6 +84,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.xponder.XpdrPort;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.InterfaceType;
@@ -132,7 +133,7 @@ public class PortMappingVersion710 {
     }
 
     public boolean createMappingData(String nodeId) {
-        LOG.info("{} : OpenROADM version 7.1.0 node - Creating Mapping Data", nodeId);
+        LOG.info("{} : OpenROADM version 7.1 node - Creating Mapping Data", nodeId);
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
@@ -176,6 +177,14 @@ public class PortMappingVersion710 {
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
                     LOG.warn("{} : Unable to create mapping for the Xponder", nodeId);
+                    return false;
+                }
+                // In the case of 7.1 models, even XPDR advertizes mc-capabilities,
+                // hence we need to populate this information into the port-mapping data
+                // Get MC capabilities
+                if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilities)) {
+                    // return false if MC capabilites failed
+                    LOG.warn("{} : Unable to create MC capabilities", nodeId);
                     return false;
                 }
                 break;
@@ -277,13 +286,17 @@ public class PortMappingVersion710 {
         for (InstanceIdentifier<PortList> id : entry.getValue()) {
             PortList portList = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
                 id, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
-            String lcp = getLcpFromCpAndPort(mappings, portList.getCircuitPackName(), portList.getPortName());
-            if (lcp == null || lcpList.contains(lcp)) {
+            String circuitPackName = portList.getCircuitPackName();
+            String portName = portList.getPortName();
+            String lcp = getLcpFromCpAndPort(mappings, circuitPackName, portName);
+            if (lcp != null && !lcpList.contains(lcp)) {
+                lcpList.add(lcp);
+            } else {
                 return null;
             }
-            lcpList.add(lcp);
         }
-        return nblBldr.setLcpList(lcpList).build();
+        nblBldr.setLcpList(lcpList);
+        return nblBldr.build();
     }
 
     private boolean createXpdrPortMapping(String nodeId, List<Mapping> portMapList) {
@@ -1209,9 +1222,33 @@ public class PortMappingVersion710 {
 
     private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo,
             Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap) {
-        Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
-        List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
-        mcCapabilitiesMap.putAll(getMcCapabilities(degrees, srgs, deviceInfo, nodeId));
+        if (deviceInfo.getNodeType() == NodeTypes.Rdm) {
+            Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
+            List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
+            mcCapabilitiesMap.putAll(getMcCapabilities(degrees, srgs, deviceInfo, nodeId));
+        } else if ((deviceInfo.getNodeType() == NodeTypes.Xpdr)) {
+            Map<McCapabilityProfileKey, McCapabilityProfile> mcProfileXpdr = getMcCapabilityProfiles(nodeId,
+                deviceInfo);
+            if (mcProfileXpdr.size() > 1) {
+                LOG.warn("Re-check the mc-capability-profiles for XPDR port-mapping");
+            }
+            // Typically for a XPDR there will be only one mc-capability-profile
+            for (Map.Entry<McCapabilityProfileKey, McCapabilityProfile> mcCapProfile : mcProfileXpdr.entrySet()) {
+                String mcNodeName = "XPDR" + "-" + "mcprofile";
+                McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
+                    .withKey(new McCapabilitiesKey(mcNodeName))
+                    .setMcNodeName(mcNodeName);
+                mcCapabilitiesBuilder
+                    .setCenterFreqGranularity(mcCapProfile.getValue().getCenterFreqGranularity())
+                    .setSlotWidthGranularity(mcCapProfile.getValue().getSlotWidthGranularity());
+                // Build and add to the Map
+                mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
+                LOG.info("Finished building mc-capability profile for XPDR {}", nodeId);
+                // Since we only have one mc-profile for XPDR, we can break the for-loop
+                break;
+            }
+
+        }
         return true;
     }
 
