@@ -29,7 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -173,7 +173,7 @@ public class PceOpticalNode implements PceNode {
         }
         switch (this.serviceType) {
             case "400GE":
-                if (mapping.getSupportedInterfaceCapability().contains(IfOTUCnODUCn.class)) {
+                if (mapping.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
                     return true;
                 } else {
                     return false;
