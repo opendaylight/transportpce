@@ -148,11 +148,20 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              }},
             res['mapping'])
 
-    def test_08_xpdr_device_disconnection(self):
+    # Added test to check mc-capability-profile for a transponder
+    def test_08_check_mccapprofile(self):
+        response = test_utils.portmapping_request("XPDR-A2/mc-capabilities/XPDR-mcprofile")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(res['mc-capabilities'][0]['mc-node-name'], 'XPDR-mcprofile')
+        self.assertEqual(res['mc-capabilities'][0]['center-freq-granularity'], 3.125)
+        self.assertEqual(res['mc-capabilities'][0]['slot-width-granularity'], 6.25)
+
+    def test_09_xpdr_device_disconnection(self):
         response = test_utils.unmount_device("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
-    def test_09_xpdr_device_disconnected(self):
+    def test_10_xpdr_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
@@ -162,7 +171,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                               "relevant data model content does not exist"},
             res['errors']['error'])
 
-    def test_10_xpdr_device_not_connected(self):
+    def test_11_xpdr_device_not_connected(self):
         response = test_utils.portmapping_request("XPDR-A2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
