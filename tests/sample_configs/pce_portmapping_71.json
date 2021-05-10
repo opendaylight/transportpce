@@ -98,7 +98,7 @@
                         "logical-connection-point": "XPDR1-NETWORK1",
                         "supporting-circuit-pack-name": "1/0/1-PLUG-NET",
                         "supported-interface-capability": [
-                            "org-openroadm-port-types:if-OTUCn-ODUCn"
+                            "org-openroadm-port-types:if-otsi-otsigroup"
                         ],
                         "lcp-hash-val": "AIGiVAQ4gDil",
                         "port-direction": "bidirectional",
@@ -136,7 +136,7 @@
                         "logical-connection-point": "XPDR1-NETWORK1",
                         "supporting-circuit-pack-name": "1/0/1-PLUG-NET",
                         "supported-interface-capability": [
-                            "org-openroadm-port-types:if-OTUCn-ODUCn"
+                            "org-openroadm-port-types:if-otsi-otsigroup"
                         ],
                         "lcp-hash-val": "ZbICgmaBrJM=",
                         "port-direction": "bidirectional",
