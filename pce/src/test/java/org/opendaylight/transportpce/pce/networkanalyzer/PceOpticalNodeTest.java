@@ -85,7 +85,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     public void isValidTest() {
         OpenroadmNodeType nodeType = OpenroadmNodeType.ROADM;
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node, nodeType,
-            StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+            StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         Assert.assertTrue(pceOpticalNode.isValid());
     }
 
@@ -93,7 +93,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     public void testInitSrgTps() {
 
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initFrequenciesBitSet();
@@ -110,7 +111,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, specificNode,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
@@ -120,7 +122,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTpDegTypes() {
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertEquals(usedBitSet,pceOpticalNode.getBitSetData().get(88,96));
@@ -130,7 +133,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTpXpondrTypes() {
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
@@ -140,7 +144,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testinitFrequenciesBitSet() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initFrequenciesBitSet();
         Assert.assertFalse(pceOpticalNode.isValid());
@@ -151,7 +156,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testGetRdmSrgClient() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
@@ -164,7 +170,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilderEmpty(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
         Node specificNode = node1Builder.setNodeId(new NodeId("test")).build();
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         pceOpticalNode.initFrequenciesBitSet();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
@@ -177,7 +184,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testGetRdmSrgClientDeg() {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
@@ -190,7 +198,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXCP);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         Assert.assertFalse(pceOpticalNode.isValid());
         Assert.assertNull(pceOpticalNode.getBitSetData());
@@ -203,7 +212,8 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
-                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("2"));
         Assert.assertFalse(pceOpticalNode.isValid());
