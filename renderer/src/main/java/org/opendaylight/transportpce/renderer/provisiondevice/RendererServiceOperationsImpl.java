@@ -123,7 +123,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case Service: case RoadmLine: // This takes into account of Ethernet 100G, 1G, 10G and ODU4
                         LOG.info("RPC implementation for {}", input.getConnectionType());
                         if (((input.getServiceAEnd().getServiceRate() != null)
-                            && (input.getServiceAEnd().getServiceRate().intValue() == 100))
+                            && ((input.getServiceAEnd().getServiceRate().intValue() == 100))
+                            || (input.getServiceAEnd().getServiceRate().intValue() == 400))
                             && ((input.getServiceAEnd().getServiceFormat().getName().equals("Ethernet"))
                                 || (input.getServiceAEnd().getServiceFormat().getName().equals("OC")))) {
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
