@@ -69,6 +69,9 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 public class OpenRoadmInterface710 {
     private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
         "Unable to get mapping from PortMapping for node % and logical connection port %s";
+    // These are 7.1 node IDs in HONEYNODE sample configs
+    List<String> honeyNodeIds = Arrays.asList("XPDR-A1", "XPDR-A2", "XPDR-C1", "XPDR-C2");
+
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
 
@@ -79,7 +82,7 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
-            throws OpenRoadmInterfaceException {
+        throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
@@ -108,8 +111,8 @@ public class OpenRoadmInterface710 {
 
 
     public String createOpenRoadmOtsiInterface(String nodeId, String logicalConnPoint,
-            SpectrumInformation spectrumInformation)
-            throws OpenRoadmInterfaceException {
+        SpectrumInformation spectrumInformation)
+        throws OpenRoadmInterfaceException {
         // TODO : Check this method
         ModulationFormat modulationFormat = ModulationFormat.DpQam16;
         Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
@@ -143,7 +146,7 @@ public class OpenRoadmInterface710 {
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http
-                .org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1Builder otsiIf1Builder =
+            .org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1Builder otsiIf1Builder =
             new org.opendaylight.yang.gen.v1.http
                 .org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1Builder();
 
@@ -163,8 +166,8 @@ public class OpenRoadmInterface710 {
     // This is a transponder use-case where the supporting port is just one, but YANG model
     // requires supporting port to be list
     public String createOpenRoadmOtsiGroupInterface(String nodeId, String logicalConnPoint,
-            String supportingOtsiInterface)
-            throws OpenRoadmInterfaceException {
+        String supportingOtsiInterface)
+        throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
@@ -186,7 +189,7 @@ public class OpenRoadmInterface710 {
         otsiGroupInterfaceBldr.setSupportingInterfaceList(listSupportingOtsiInterface);
 
         org.opendaylight.yang.gen.v1.http.org.openroadm.otsi.group.interfaces.rev200529.Interface1Builder
-                otsiGroupIf1Builder =
+            otsiGroupIf1Builder =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.otsi.group.interfaces.rev200529.Interface1Builder();
         otsiGroupInterfaceBldr.addAugmentation(otsiGroupIf1Builder.setOtsiGroup(otsiGroupBuilder.build()).build());
 
@@ -202,8 +205,8 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmOtucnInterface(String nodeId, String logicalConnPoint,
-            String supportingOtsiGroupInterface)
-            throws OpenRoadmInterfaceException {
+        String supportingOtsiGroupInterface)
+        throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
@@ -249,8 +252,8 @@ public class OpenRoadmInterface710 {
 
     // Adding method to have SAPI/DAPI information for the OTUCn
     public String createOpenRoadmOtucnInterface(String anodeId, String alogicalConnPoint,
-            String supportingOtsiGroupInterface, String znodeId, String zlogicalConnPoint)
-            throws OpenRoadmInterfaceException {
+        String supportingOtsiGroupInterface, String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapA == null) {
@@ -308,8 +311,8 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmOducnInterface(String nodeId, String logicalConnPoint,
-            String supportingOtucn)
-            throws OpenRoadmInterfaceException {
+        String supportingOtucn)
+        throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
@@ -322,11 +325,17 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(nodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -389,11 +398,17 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(anodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -451,11 +466,17 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(nodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -520,11 +541,17 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
+
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(anodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -570,8 +597,8 @@ public class OpenRoadmInterface710 {
 
     // This is only for transponder
     public String createOpenRoadmOduflexInterface(String nodeId, String logicalConnPoint,
-            String supportingOducn)
-            throws OpenRoadmInterfaceException {
+        String supportingOducn)
+        throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
@@ -586,8 +613,13 @@ public class OpenRoadmInterface710 {
         // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(nodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Parent Odu-allocation
         // Set the trib-slot array
@@ -641,8 +673,8 @@ public class OpenRoadmInterface710 {
 
     // This is only for transponder; with SAPI/DAPI information
     public String createOpenRoadmOduflexInterface(String anodeId, String alogicalConnPoint,
-            String supportingOducn, String znodeId, String zlogicalConnPoint)
-            throws OpenRoadmInterfaceException {
+        String supportingOducn, String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapA == null) {
@@ -662,11 +694,15 @@ public class OpenRoadmInterface710 {
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
 
-        // Maint test signal
         MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
             // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
+            //.setTestPattern(TestPattern.PRBS31)
             .setEnabled(false);
+
+        // Maint test signal
+        if (honeyNodeIds.contains(anodeId)) {
+            maintTestsignal.setTestPattern(TestPattern.PRBS31);
+        }
 
         // Parent Odu-allocation
         // Set the trib-slot array
@@ -706,7 +742,7 @@ public class OpenRoadmInterface710 {
 
 
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder
-                oduflexIf1Builder =
+            oduflexIf1Builder =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder();
 
         oduflexInterfaceBuilder.addAugmentation(oduflexIf1Builder.setOdu(oduBuilder.build()).build());
