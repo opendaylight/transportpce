@@ -81,7 +81,7 @@ public class GridUtilsTest {
 
     @Test
     public void getWidthFromRateAndModulationFormatTest() {
-        assertEquals("Width should be 80", new FrequencyGHz(GridConstant.WIDTH_80),
+        assertEquals("Width should be 75", new FrequencyGHz(GridConstant.WIDTH_75),
                 GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_400,
                         ModulationFormat.DpQam16));
     }
