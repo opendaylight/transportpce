@@ -107,7 +107,7 @@ public class PceConstraintsTest extends AbstractTest {
     @Test
     public void getIncludePceNodesTest() {
         Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 0);
-        pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null, null, null));
+        pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null, null, null, null));
         Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 1);
 
     }
