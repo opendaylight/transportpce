@@ -469,7 +469,8 @@ public class PceCalculation {
 
         LOG.info("Device node id {} for {}", deviceNodeId, node);
         PceOpticalNode pceNode = new PceOpticalNode(deviceNodeId, this.serviceType, portMapping, node, nodeType,
-            mappingUtils.getOpenRoadmVersion(deviceNodeId), getSlotWidthGranularity(deviceNodeId, node.getNodeId()));
+            mappingUtils.getOpenRoadmVersion(deviceNodeId), getSlotWidthGranularity(deviceNodeId, node.getNodeId()),
+            getCentralFreqGranularity(deviceNodeId, node.getNodeId()));
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initFrequenciesBitSet();
 
@@ -759,12 +760,42 @@ public class PceCalculation {
         // deviceNodeId: openroadm-network level node
         List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
         String[] params = nodeId.getValue().split("-");
-        // DEGX or SRGX
-        String rdmModuleName = params[params.length - 1];
+        // DEGx or SRGx or XPDRx
+        String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
-            if (mcCapabitility.getMcNodeName().contains(rdmModuleName)
+            if (mcCapabitility.getMcNodeName().contains("XPDR")
+                && mcCapabitility.getSlotWidthGranularity() != null) {
+                return mcCapabitility.getSlotWidthGranularity().getValue();
+            }
+            if (mcCapabitility.getMcNodeName().contains(moduleName)
                     && mcCapabitility.getSlotWidthGranularity() != null) {
                 return mcCapabitility.getSlotWidthGranularity().getValue();
+            }
+        }
+        return GridConstant.SLOT_WIDTH_50;
+    }
+
+    /**
+     * Get mc capability central-width granularity for device.
+     * @param deviceNodeId String
+     * @param nodeId NodeId
+     * @return center-freq granularity
+     */
+    private BigDecimal getCentralFreqGranularity(String deviceNodeId, NodeId nodeId) {
+        // nodeId: openroadm-topology level node
+        // deviceNodeId: openroadm-network level node
+        List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
+        String[] params = nodeId.getValue().split("-");
+        // DEGx or SRGx or XPDRx
+        String moduleName = params[params.length - 1];
+        for (McCapabilities mcCapabitility : mcCapabilities) {
+            if (mcCapabitility.getMcNodeName().contains("XPDR")
+                && mcCapabitility.getCenterFreqGranularity() != null) {
+                return mcCapabitility.getCenterFreqGranularity().getValue();
+            }
+            if (mcCapabitility.getMcNodeName().contains(moduleName)
+                && mcCapabitility.getCenterFreqGranularity() != null) {
+                return mcCapabitility.getCenterFreqGranularity().getValue();
             }
         }
         return GridConstant.SLOT_WIDTH_50;

@@ -271,15 +271,17 @@ module transportpce-portmapping {
 
   grouping mc-capabilities {
     list mc-capabilities {
-      when "../node-info/node-type = 'rdm'";
       key "mc-node-name";
       description
-        "Capabilities of the media channel associated with a degree or a SRG.";
+        "Capabilities of the media channel associated with a degree SRG, or
+        XPDR (7.1 and above). ";
       leaf mc-node-name {
         type string;
         description
           "Name of the node, it has the format of DEGi-TTP or SRGj-PP
-           Where i, and j are the degree and SRG numbers respectively";
+           Where i, and j are the degree and SRG numbers respectively.
+           For XPDR type it will have one element in the leaf-list,
+           with name XPDR-mcprofile";
       }
       leaf slot-width-granularity {
         type org-openroadm-common-optical-channel-types:frequency-GHz;

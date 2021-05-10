@@ -66,12 +66,14 @@ public class PceGraphTest {
                 .setNodeId(nodeId).withKey(new NodeKey(nodeId))
                 .build();
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         NodeId nodeId2 = new NodeId("OpenROADM-3-1-DEG1");
         Node node2 = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
                 .setNodeId(nodeId2).withKey(new NodeKey(nodeId2)).build();
         pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node2,
-                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, GridConstant.SLOT_WIDTH_50);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClient("XPONDER-CLIENT");
 
