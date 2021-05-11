@@ -113,9 +113,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_04_path_computation_xpdr_bi(self):
         response = test_utils.path_computation_request("request-1", "service-1",
                                                        {"node-id": "XPDRA01", "service-rate": "100",
-                                                           "service-format": "Ethernet", "clli": "nodeA"},
+                                                           "service-format": "Ethernet", "clli": "nodeA",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"node-id": "XPDRC01", "service-rate": "100",
-                                                           "service-format": "Ethernet", "clli": "nodeC"})
+                                                           "service-format": "Ethernet", "clli": "nodeC",
+                                                           "tx-direction": {"port": {"port-name": "Client-1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -177,9 +179,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_11_path_computation_xpdr_uni(self):
         response = test_utils.path_computation_request("request-1", "service-1",
                                                        {"node-id": "XPONDER-1-2", "service-rate": "100",
-                                                           "service-format": "Ethernet", "clli": "ORANGE1"},
+                                                           "service-format": "Ethernet", "clli": "ORANGE1",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"node-id": "XPONDER-3-2", "service-rate": "100",
-                                                           "service-format": "Ethernet", "clli": "ORANGE3"})
+                                                           "service-format": "Ethernet", "clli": "ORANGE3",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -257,7 +261,7 @@ class TransportPCEtesting(unittest.TestCase):
                                                         "tx-direction": {"port": {
                                                             "port-device-name": "Some port-device-name",
                                                             "port-type": "Some port-type",
-                                                            "port-name": "Some port-name",
+                                                            "port-name": "XPDR1-CLIENT1",
                                                             "port-rack": "Some port-rack",
                                                             "port-shelf": "Some port-shelf",
                                                             "port-slot": "Some port-slot",
@@ -277,7 +281,7 @@ class TransportPCEtesting(unittest.TestCase):
                                                            "tx-direction": {"port": {
                                                                "port-device-name": "Some port-device-name",
                                                                "port-type": "Some port-type",
-                                                               "port-name": "Some port-name",
+                                                               "port-name": "XPDR1-CLIENT1",
                                                                "port-rack": "Some port-rack",
                                                                "port-shelf": "Some port-shelf",
                                                                "port-slot": "Some port-slot",
@@ -309,9 +313,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_19_success2_path_computation(self):
         response = test_utils.path_computation_request("request 1", "service 1",
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-3-2", "clli": "ORANGE3"})
+                                                           "node-id": "XPONDER-3-2", "clli": "ORANGE3",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -326,9 +332,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_20_success3_path_computation(self):
         response = test_utils.path_computation_request("request 1", "service 1",
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-3-2", "clli": "ORANGE3"},
+                                                           "node-id": "XPONDER-3-2", "clli": "ORANGE3",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"exclude_": {"node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -344,9 +352,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_21_path_computation_before_oms_attribute_deletion(self):
         response = test_utils.path_computation_request("request 1", "service 1",
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
+                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -374,9 +384,11 @@ class TransportPCEtesting(unittest.TestCase):
     def test_23_path_computation_after_oms_attribute_deletion(self):
         response = test_utils.path_computation_request("request 1", "service 1",
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
+                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}},
                                                        {"service-rate": "100", "service-format": "Ethernet",
-                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1",
+                                                           "tx-direction": {"port": {"port-name": "XPDR1-CLIENT1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
