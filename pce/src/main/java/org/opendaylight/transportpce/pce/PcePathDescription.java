@@ -93,15 +93,18 @@ public class PcePathDescription {
             .setAToZ(atozMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
-            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
                 atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
                 atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(rc.getMinFreq()));
                 atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
+            case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
                 if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
                     @SuppressWarnings("unchecked")
                     List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
@@ -132,12 +135,14 @@ public class PcePathDescription {
                 .setZToA(ztoaMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
-            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
                 ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
                 ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(rc.getMinFreq()));
                 ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
+            case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
