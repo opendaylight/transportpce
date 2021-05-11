@@ -129,7 +129,7 @@ public final class PceTestData {
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .setServiceFormat(ServiceFormat.ODU)
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setClli("Some clli11")
                 .setNodeId("XPONDER-1-2")
                 .setTxDirection(new TxDirectionBuilder().setPort(
@@ -222,7 +222,7 @@ public final class PceTestData {
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setClli("Some clli11")
                 .setNodeId("XPONDER-1-2")
                 .setTxDirection(new TxDirectionBuilder().setPort(
@@ -315,7 +315,7 @@ public final class PceTestData {
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setClli("Some clli11")
                 .setNodeId("XPONDER-1-2")
                 .setTxDirection(new TxDirectionBuilder().setPort(
@@ -423,11 +423,11 @@ public final class PceTestData {
                 .setRequestId("request 1")
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-2")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-2")
                 .build();
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
@@ -490,11 +490,11 @@ public final class PceTestData {
                 .setRequestId("request 1")
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-2")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-2")
                 .build();
         OrderedHops orderedHops = new OrderedHopsBuilder()
@@ -572,11 +572,23 @@ public final class PceTestData {
                 .setRequestId("request 1")
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-2")
+                .setTxDirection(new TxDirectionBuilder().setPort(
+                    new PortBuilder()
+                            .setPortDeviceName("Some port-device-name")
+                            .setPortType("Some port-type")
+                            .setPortName("Some port-name")
+                            .setPortRack("Some port-rack")
+                            .setPortShelf("Some port-shelf")
+                            .setPortSlot("Some port-slot")
+                            .setPortSubSlot("Some port-sub-slot")
+                            .build()).build())
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-2")
                 .build();
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
@@ -617,11 +629,11 @@ public final class PceTestData {
                 .setRequestId("request 1")
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-2")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-2")
                 .build();
         HardConstraints hardConstrains = new HardConstraintsBuilder().build();
@@ -644,11 +656,11 @@ public final class PceTestData {
                 .setRequestId("request 1")
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-2")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-2")
                 .build();
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
@@ -736,11 +748,11 @@ public final class PceTestData {
                 .setNode(true).build();
 
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-1-1")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setNodeId("XPONDER-3-1")
                 .build();
 
@@ -768,7 +780,7 @@ public final class PceTestData {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
                         .service.create.input.ServiceAEndBuilder()
                         .setClli("clli")
-                        .setServiceRate(Uint32.valueOf(0))
+                        .setServiceRate(Uint32.valueOf(100))
                         .setNodeId(new NodeIdType("XPONDER-1-2"))
                         .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
                                 .openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder()
@@ -784,7 +796,7 @@ public final class PceTestData {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
                         .service.create.input.ServiceZEndBuilder()
                         .setClli("clli")
-                        .setServiceRate(Uint32.valueOf(0))
+                        .setServiceRate(Uint32.valueOf(100))
                         .setNodeId(new NodeIdType("XPONDER-3-2"))
                         .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
                                 .openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder()
@@ -844,7 +856,7 @@ public final class PceTestData {
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
                 .setClli("Some clli11")
                 .setNodeId(nodeZ)
                 .setTxDirection(new TxDirectionBuilder().setPort(
