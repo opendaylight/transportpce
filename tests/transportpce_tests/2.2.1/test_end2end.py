@@ -213,6 +213,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 # test service-create for Eth service from xpdr to xpdr
     def test_11_create_eth_service1(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service1"
+        self.cr_serv_sample_data["input"]["service-a-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-z-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -367,6 +369,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_22_create_eth_service2(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service2"
+        self.cr_serv_sample_data["input"]["service-a-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-z-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -481,6 +485,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 #     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service3"
+        self.cr_serv_sample_data["input"]["service-a-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-z-end"]['tx-direction']['port']['port-name'] = "XPDR1-CLIENT1"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
