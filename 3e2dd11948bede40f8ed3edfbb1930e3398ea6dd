@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6e1d9392_2c087a32",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:26:29Z",
+      "side": 1,
+      "message": "Yes, Giles. I understand your point. At the moment it looks like we do not have a need for this. Will remove it for now, and try to research the importance for it.",
+      "parentUuid": "264af97b_b6475eff",
+      "range": {
+        "startLine": 310,
+        "startChar": 14,
+        "endLine": 310,
+        "endChar": 99
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8757156e_bd2da3b7",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c93338c1_c3561912",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:26:29Z",
+      "side": 1,
+      "message": "No we do not use it. Will remove it",
+      "parentUuid": "8757156e_bd2da3b7",
+      "range": {
+        "startLine": 383,
+        "startChar": 35,
+        "endLine": 383,
+        "endChar": 62
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6475479c_19c9192a",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2021-05-05T06:53:33Z",
       "side": 1,
       "message": "I understand that we should also have two other profiles: \"ABCD-3-BY-100-2\" for trib-port 2, and \"ABCD-3-BY-100-3\" for trib-port 3. Is it correct?",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 51
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "335cb880_fa01103f",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:26:29Z",
+      "side": 1,
+      "message": "Not exactly. These profiles indicates what trib-slots of the network port are connected to client-port. For instance ABCD-4-BY-100G-1 indicates that client port C3 is connected to network port 1/0/7-PLUG-NETWORK. Sorry I made a mistake naming the network port as 1/0/4-PLUG-NETWORK. Will modify it in the next patch.\n\nOnce the other client-ports are provisioned such as C4, C5 and C6, you should see other muxp-profiles listed under ports. For instance, say you provision C4 client, then in the mpdr-client-restriction container you will can set (usually device populates it) the muxp-profile-name as ABCD-4-BY-100-2, which means that C4 client uses trib-slot/ports 2.1 to 2.20 on network 1/0/7/PLUG-NETWORK. Similarly you can imagine for other two clients.\n\nWith regard to ABCD-3-BY-100 and ABCD-2-BY-100 are other configurations possible, where 3 100G clients are multiplexed into 300G network side or 2 100G clients are multiplexed as 200G wavelength. etc. For the moment we are not using these configurations and I will remove those profiles and only keep the ones related to ABCD-4-BY-100.\n\nLet me know if this make sense to you.",
+      "parentUuid": "6475479c_19c9192a",
       "range": {
         "startLine": 502,
         "startChar": 6,
