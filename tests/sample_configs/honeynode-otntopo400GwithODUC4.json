@@ -1,0 +1,620 @@
+{
+    "network": [
+        {
+            "network-id": "otn-topology",
+            "network-types": {
+                "org-openroadm-common-network:openroadm-common-network": {}
+            },
+            "node": [
+                {
+                    "node-id": "XPDR-A2-XPDR1",
+                    "org-openroadm-common-network:node-type": "TPDR",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-otn-network-topology:xpdr-attributes": {
+                        "xpdr-number": 1
+                    },
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR1-CLIENT1",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-400GE"
+                                    }
+                                ]
+                            },
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        },
+                        {
+                            "tp-id": "XPDR1-NETWORK1",
+                            "supporting-termination-point": [
+                                {
+                                    "network-ref": "openroadm-topology",
+                                    "node-ref": "XPDR-A2-XPDR1",
+                                    "tp-ref": "XPDR1-NETWORK1"
+                                }
+                            ],
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-otsi-otsigroup"
+                                    }
+                                ]
+                            },
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-A2"
+                        },
+                        {
+                            "network-ref": "openroadm-topology",
+                            "node-ref": "XPDR-A2-XPDR1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-C2-XPDR1",
+                    "org-openroadm-common-network:node-type": "TPDR",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-otn-network-topology:xpdr-attributes": {
+                        "xpdr-number": 1
+                    },
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR1-CLIENT1",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-400GE"
+                                    }
+                                ]
+                            },
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        },
+                        {
+                            "tp-id": "XPDR1-NETWORK1",
+                            "supporting-termination-point": [
+                                {
+                                    "network-ref": "openroadm-topology",
+                                    "node-ref": "XPDR-C2-XPDR1",
+                                    "tp-ref": "XPDR1-NETWORK1"
+                                }
+                            ],
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-otsi-otsigroup"
+                                    }
+                                ]
+                            },
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-C2"
+                        },
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        },
+                        {
+                            "network-ref": "openroadm-topology",
+                            "node-ref": "XPDR-C2-XPDR1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-A2-XPDR2",
+                    "org-openroadm-common-network:node-type": "MUXPDR",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-otn-network-topology:xpdr-attributes": {
+                        "xpdr-number": 2
+                    },
+                    "org-openroadm-otn-network-topology:switching-pools": {
+                        "odu-switching-pools": [
+                            {
+                                "switching-pool-number": 1,
+                                "switching-pool-type": "non-blocking",
+                                "non-blocking-list": [
+                                    {
+                                        "nbl-number": 1,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "tp-list": [
+                                            "XPDR2-NETWORK1",
+                                            "XPDR2-CLIENT1"
+                                        ],
+                                        "available-interconnect-bandwidth": 10
+                                    },
+                                    {
+                                        "nbl-number": 2,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "tp-list": [
+                                            "XPDR2-CLIENT2",
+                                            "XPDR2-NETWORK1"
+                                        ],
+                                        "available-interconnect-bandwidth": 10
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR2-NETWORK1",
+                            "supporting-termination-point": [
+                                {
+                                    "network-ref": "openroadm-topology",
+                                    "node-ref": "XPDR-A2-XPDR2",
+                                    "tp-ref": "XPDR2-NETWORK1"
+                                }
+                            ],
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-otsi-otsigroup"
+                                    }
+                                ]
+                            },
+                                                        "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODUCn",
+                                "ts-pool": [
+                                    1,
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6,
+                                    7,
+                                    8,
+                                    9,
+                                    10,
+                                    15,
+                                    16,
+                                    13,
+                                    14,
+                                    19,
+                                    20,
+                                    17,
+                                    18,
+                                    11,
+                                    12,
+                                    31,
+                                    32,
+                                    29,
+                                    30,
+                                    35,
+                                    36,
+                                    33,
+                                    34,
+                                    23,
+                                    24,
+                                    21,
+                                    22,
+                                    27,
+                                    28,
+                                    25,
+                                    26,
+                                    47,
+                                    48,
+                                    45,
+                                    46,
+                                    51,
+                                    52,
+                                    49,
+                                    50,
+                                    39,
+                                    40,
+                                    37,
+                                    38,
+                                    43,
+                                    44,
+                                    41,
+                                    42,
+                                    63,
+                                    64,
+                                    61,
+                                    62,
+                                    67,
+                                    68,
+                                    65,
+                                    66,
+                                    55,
+                                    56,
+                                    53,
+                                    54,
+                                    59,
+                                    60,
+                                    57,
+                                    58,
+                                    79,
+                                    80,
+                                    77,
+                                    78,
+                                    71,
+                                    72,
+                                    69,
+                                    70,
+                                    75,
+                                    76,
+                                    73,
+                                    74
+                                ],
+                                "odtu-tpn-pool": [
+                                    {
+                                        "odtu-type": "org-openroadm-otn-common-types:ODTUCn.ts",
+                                        "tpn-pool": [
+                                            1,
+                                            3,
+                                            2,
+                                            4
+                                        ]
+                                    }
+                                ]
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        },
+                        {
+                            "tp-id": "XPDR2-CLIENT1",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+                                    },
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-100GE-ODU4"
+                                    }
+                                ]
+                            },
+                            "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODU4"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        },
+                        {
+                            "tp-id": "XPDR2-CLIENT2",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+                                    },
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-100GE-ODU4"
+                                    }
+                                ]
+                            },
+                            "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODU4"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-A2"
+                        },
+                        {
+                            "network-ref": "openroadm-topology",
+                            "node-ref": "XPDR-A2-XPDR2"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-C2-XPDR2",
+                    "org-openroadm-common-network:node-type": "MUXPDR",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-otn-network-topology:xpdr-attributes": {
+                        "xpdr-number": 2
+                    },
+                    "org-openroadm-otn-network-topology:switching-pools": {
+                        "odu-switching-pools": [
+                            {
+                                "switching-pool-number": 1,
+                                "switching-pool-type": "non-blocking",
+                                "non-blocking-list": [
+                                    {
+                                        "nbl-number": 1,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "tp-list": [
+                                            "XPDR2-NETWORK1",
+                                            "XPDR2-CLIENT1"
+                                        ],
+                                        "available-interconnect-bandwidth": 10
+                                    },
+                                    {
+                                        "nbl-number": 2,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "tp-list": [
+                                            "XPDR2-CLIENT2",
+                                            "XPDR2-NETWORK1"
+                                        ],
+                                        "available-interconnect-bandwidth": 10
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR2-NETWORK1",
+                            "supporting-termination-point": [
+                                {
+                                    "network-ref": "openroadm-topology",
+                                    "node-ref": "XPDR-C2-XPDR2",
+                                    "tp-ref": "XPDR2-NETWORK1"
+                                }
+                            ],
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-otsi-otsigroup"
+                                    }
+                                ]
+                            },
+                                                        "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODUCn",
+                                "ts-pool": [
+                                    1,
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6,
+                                    7,
+                                    8,
+                                    9,
+                                    10,
+                                    15,
+                                    16,
+                                    13,
+                                    14,
+                                    19,
+                                    20,
+                                    17,
+                                    18,
+                                    11,
+                                    12,
+                                    31,
+                                    32,
+                                    29,
+                                    30,
+                                    35,
+                                    36,
+                                    33,
+                                    34,
+                                    23,
+                                    24,
+                                    21,
+                                    22,
+                                    27,
+                                    28,
+                                    25,
+                                    26,
+                                    47,
+                                    48,
+                                    45,
+                                    46,
+                                    51,
+                                    52,
+                                    49,
+                                    50,
+                                    39,
+                                    40,
+                                    37,
+                                    38,
+                                    43,
+                                    44,
+                                    41,
+                                    42,
+                                    63,
+                                    64,
+                                    61,
+                                    62,
+                                    67,
+                                    68,
+                                    65,
+                                    66,
+                                    55,
+                                    56,
+                                    53,
+                                    54,
+                                    59,
+                                    60,
+                                    57,
+                                    58,
+                                    79,
+                                    80,
+                                    77,
+                                    78,
+                                    71,
+                                    72,
+                                    69,
+                                    70,
+                                    75,
+                                    76,
+                                    73,
+                                    74
+                                ],
+                                "odtu-tpn-pool": [
+                                    {
+                                        "odtu-type": "org-openroadm-otn-common-types:ODTUCn.ts",
+                                        "tpn-pool": [
+                                            1,
+                                            3,
+                                            2,
+                                            4
+                                        ]
+                                    }
+                                ]
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        },
+                        {
+                            "tp-id": "XPDR2-CLIENT1",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+                                    },
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-100GE-ODU4"
+                                    }
+                                ]
+                            },
+                            "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODU4"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        },
+                        {
+                            "tp-id": "XPDR2-CLIENT2",
+                            "org-openroadm-otn-network-topology:tp-supported-interfaces": {
+                                "supported-interface-capability": [
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+                                    },
+                                    {
+                                        "if-cap-type": "org-openroadm-port-types:if-100GE-ODU4"
+                                    }
+                                ]
+                            },
+                            "org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes": {
+                                "rate": "org-openroadm-otn-common-types:ODU4"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-C2"
+                        },
+                        {
+                            "network-ref": "openroadm-topology",
+                            "node-ref": "XPDR-C2-XPDR2"
+                        },
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        }
+                    ]
+                }
+            ],
+                       "ietf-network-topology:link": [
+                {
+                    "link-id": "OTUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1",
+                    "source": {
+                        "source-node": "XPDR-A2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
+                    },
+                    "destination": {
+                        "dest-node": "XPDR-C2-XPDR2",
+                        "dest-tp": "XPDR2-NETWORK1"
+                    },
+                    "org-openroadm-otn-network-topology:available-bandwidth": "0",
+                    "org-openroadm-otn-network-topology:used-bandwidth": "400000",
+                    "org-openroadm-common-network:link-type": "OTN-LINK",
+                    "transportpce-topology:otn-link-type": "OTUC4",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "OTUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1"
+                },
+                {
+                    "link-id": "OTUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1",
+                    "source": {
+                        "source-node": "XPDR-C2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
+                    },
+                    "destination": {
+                        "dest-node": "XPDR-A2-XPDR2",
+                        "dest-tp": "XPDR2-NETWORK1"
+                    },
+                    "org-openroadm-otn-network-topology:available-bandwidth": "0",
+                    "org-openroadm-otn-network-topology:used-bandwidth": "400000",
+                    "org-openroadm-common-network:link-type": "OTN-LINK",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "transportpce-topology:otn-link-type": "OTUC4",
+                    "org-openroadm-common-network:opposite-link": "OTUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1"
+                },
+                {
+                    "link-id": "ODUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1",
+                    "source": {
+                        "source-node": "XPDR-A2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
+                    },
+                    "destination": {
+                        "dest-node": "XPDR-C2-XPDR2",
+                        "dest-tp": "XPDR2-NETWORK1"
+                    },
+                    "org-openroadm-otn-network-topology:available-bandwidth": "400000",
+                    "org-openroadm-otn-network-topology:used-bandwidth": "0",
+                    "org-openroadm-common-network:link-type": "OTN-LINK",
+                    "transportpce-topology:otn-link-type": "ODUC4",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "ODUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1"
+                },
+                {
+                    "link-id": "ODUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1",
+                    "source": {
+                        "source-node": "XPDR-C2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
+                    },
+                    "destination": {
+                        "dest-node": "XPDR-A2-XPDR2",
+                        "dest-tp": "XPDR2-NETWORK1"
+                    },
+                    "org-openroadm-otn-network-topology:available-bandwidth": "400000",
+                    "org-openroadm-otn-network-topology:used-bandwidth": "0",
+                    "org-openroadm-common-network:link-type": "OTN-LINK",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "transportpce-topology:otn-link-type": "ODUC4",
+                    "org-openroadm-common-network:opposite-link": "ODUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1"
+                }
+            ]
+        }
+    ]
+}
