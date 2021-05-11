@@ -571,12 +571,15 @@ public final class PceTestData {
         ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
                 .setRequestId("request 1")
                 .build();
+
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-                .setServiceRate(Uint32.valueOf(0))
+                .setServiceRate(Uint32.valueOf(100))
+                .setServiceFormat(ServiceFormat.Ethernet)
                 .setNodeId("XPONDER-1-2")
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .setServiceRate(Uint32.valueOf(0))
+                .setServiceFormat(ServiceFormat.Ethernet)
                 .setNodeId("XPONDER-3-2")
                 .build();
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
