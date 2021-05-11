@@ -71,7 +71,7 @@ public class PcePathDescriptionTests extends AbstractTest {
         pceResult = new PceResult();
         pceResult.setRC("200");
         pceResult.setRate(Long.valueOf(1));
-        pceResult.setServiceType(StringConstants.SERVICE_TYPE_100GE);
+        pceResult.setServiceType(StringConstants.SERVICE_TYPE_100GE_T);
         Map<LinkId, PceLink> map = Map.of(new LinkId("OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1"), pceLink);
         pcePathDescription = new PcePathDescription(List.of(pceLink),
                 map, pceResult);
