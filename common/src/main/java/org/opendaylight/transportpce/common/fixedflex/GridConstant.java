@@ -42,7 +42,7 @@ public final class GridConstant {
      * Map for associate service type with nb slots.
      */
     public static final Map<String, Integer> SPECTRAL_WIDTH_SLOT_NUMBER_MAP = Map.of(
-            StringConstants.SERVICE_TYPE_100GE, NB_SLOTS_100G,
+            StringConstants.SERVICE_TYPE_100GE_T, NB_SLOTS_100G,
             StringConstants.SERVICE_TYPE_400GE, NB_SLOTS_400G,
             StringConstants.SERVICE_TYPE_OTU4, NB_SLOTS_100G);
 

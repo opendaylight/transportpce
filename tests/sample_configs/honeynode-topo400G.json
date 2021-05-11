@@ -2,20 +2,509 @@
     "network": [
         {
             "network-id": "openroadm-topology",
+            "network-types": {
+                "org-openroadm-common-network:openroadm-common-network": {}
+            },
+            "node": [
+                {
+                    "node-id": "ROADM-A1-SRG3",
+                    "org-openroadm-common-network:node-type": "SRG",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "SRG3-PP3-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG3-PP2-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG3-CP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
+                        },
+                        {
+                            "tp-id": "SRG3-PP1-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG3-PP4-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:srg-attributes": {
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-A1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-A2-XPDR1",
+                    "org-openroadm-common-network:node-type": "XPONDER",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT",
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1"
+                        },
+                        {
+                            "tp-id": "XPDR1-NETWORK1",
+                            "org-openroadm-network-topology:xpdr-network-attributes": {
+                                "tail-equipment-id": "ROADM-A1-SRG1--SRG1-PP1-TXRX"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-A2"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-C2-XPDR1",
+                    "org-openroadm-common-network:node-type": "XPONDER",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT",
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1"
+                        },
+                        {
+                            "tp-id": "XPDR1-NETWORK1",
+                            "org-openroadm-network-topology:xpdr-network-attributes": {
+                                "tail-equipment-id": "ROADM-C1-SRG1--SRG1-PP1-TXRX"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
+                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-C2"
+                        },
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-A2-XPDR2",
+                    "org-openroadm-common-network:node-type": "XPONDER",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR2-NETWORK1",
+                            "org-openroadm-network-topology:xpdr-network-attributes": {
+                                "tail-equipment-id": "ROADM-A1-SRG1--SRG1-PP2-TXRX"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-A2"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "XPDR-C2-XPDR2",
+                    "org-openroadm-common-network:node-type": "XPONDER",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "XPDR2-NETWORK1",
+                            "org-openroadm-network-topology:xpdr-network-attributes": {
+                                "tail-equipment-id": "ROADM-C1-SRG1--SRG1-PP2-TXRX"
+                            },
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
+                        }
+                    ],
+                    "supporting-node": [
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "XPDR-C2"
+                        },
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-C1-SRG1",
+                    "org-openroadm-common-network:node-type": "SRG",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "SRG1-PP4-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP1-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP2-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP3-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-CP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:srg-attributes": {
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-C1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-A1-SRG1",
+                    "org-openroadm-common-network:node-type": "SRG",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "SRG1-PP4-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP1-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP2-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-PP3-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
+                        },
+                        {
+                            "tp-id": "SRG1-CP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:srg-attributes": {
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-A1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-A1-DEG1",
+                    "org-openroadm-common-network:node-type": "DEGREE",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "DEG1-CTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
+                        },
+                        {
+                            "tp-id": "DEG1-TTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:degree-attributes": {
+                        "degree-number": 1,
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-A1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-A1-DEG2",
+                    "org-openroadm-common-network:node-type": "DEGREE",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "DEG2-TTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
+                        },
+                        {
+                            "tp-id": "DEG2-CTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:degree-attributes": {
+                        "degree-number": 2,
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeA"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-A1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-C1-DEG1",
+                    "org-openroadm-common-network:node-type": "DEGREE",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "DEG1-CTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
+                        },
+                        {
+                            "tp-id": "DEG1-TTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:degree-attributes": {
+                        "degree-number": 1,
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-C1"
+                        }
+                    ]
+                },
+                {
+                    "node-id": "ROADM-C1-DEG2",
+                    "org-openroadm-common-network:node-type": "DEGREE",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "ietf-network-topology:termination-point": [
+                        {
+                            "tp-id": "DEG2-TTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
+                        },
+                        {
+                            "tp-id": "DEG2-CTP-TXRX",
+                            "org-openroadm-common-network:operational-state": "inService",
+                            "org-openroadm-common-network:administrative-state": "inService",
+                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
+                        }
+                    ],
+                    "org-openroadm-network-topology:degree-attributes": {
+                        "degree-number": 2,
+                        "avail-freq-maps": [
+                            {
+                                "map-name": "cband",
+                                "freq-map-granularity": 6.25,
+                                "start-edge-freq": 191.325,
+                                "effective-bits": 768,
+                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+                            }
+                        ]
+                    },
+                    "supporting-node": [
+                        {
+                            "network-ref": "clli-network",
+                            "node-ref": "NodeC"
+                        },
+                        {
+                            "network-ref": "openroadm-network",
+                            "node-ref": "ROADM-C1"
+                        }
+                    ]
+                }
+            ],
             "ietf-network-topology:link": [
                 {
-                    "link-id": "XPDR-C2-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP4-TXRX",
+                    "link-id": "ROADM-A1-SRG1-SRG1-PP2-TXRXtoXPDR-A2-XPDR2-XPDR2-NETWORK1",
                     "source": {
-                        "source-node": "XPDR-C2-XPDR1",
-                        "source-tp": "XPDR1-NETWORK1"
+                        "source-node": "ROADM-A1-SRG1",
+                        "source-tp": "SRG1-PP2-TXRX"
                     },
-                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "ROADM-C1-SRG1-SRG1-PP4-TXRXtoXPDR-C2-XPDR1-XPDR1-NETWORK1",
+                    "org-openroadm-common-network:opposite-link": "XPDR-A2-XPDR2-XPDR2-NETWORK1toROADM-A1-SRG1-SRG1-PP2-TXRX",
                     "org-openroadm-common-network:administrative-state": "inService",
                     "destination": {
-                        "dest-tp": "SRG1-PP4-TXRX",
-                        "dest-node": "ROADM-C1-SRG1"
+                        "dest-tp": "XPDR2-NETWORK1",
+                        "dest-node": "XPDR-A2-XPDR2"
+                    }
+                },
+                {
+                    "link-id": "ROADM-C1-SRG1-SRG1-PP2-TXRXtoXPDR-C2-XPDR2-XPDR2-NETWORK1",
+                    "source": {
+                        "source-node": "ROADM-C1-SRG1",
+                        "source-tp": "SRG1-PP2-TXRX"
+                    },
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "XPDR-C2-XPDR2-XPDR2-NETWORK1toROADM-C1-SRG1-SRG1-PP2-TXRX",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "destination": {
+                        "dest-tp": "XPDR2-NETWORK1",
+                        "dest-node": "XPDR-C2-XPDR2"
                     }
                 },
                 {
@@ -50,18 +539,18 @@
                     }
                 },
                 {
-                    "link-id": "XPDR-C1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX",
+                    "link-id": "XPDR-A2-XPDR2-XPDR2-NETWORK1toROADM-A1-SRG1-SRG1-PP2-TXRX",
                     "source": {
-                        "source-node": "XPDR-C1-XPDR1",
-                        "source-tp": "XPDR1-NETWORK1"
+                        "source-node": "XPDR-A2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
                     },
                     "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C1-XPDR1-XPDR1-NETWORK1",
+                    "org-openroadm-common-network:opposite-link": "ROADM-A1-SRG1-SRG1-PP2-TXRXtoXPDR-A2-XPDR2-XPDR2-NETWORK1",
                     "org-openroadm-common-network:administrative-state": "inService",
                     "destination": {
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "dest-node": "ROADM-C1-SRG1"
+                        "dest-tp": "SRG1-PP2-TXRX",
+                        "dest-node": "ROADM-A1-SRG1"
                     }
                 },
                 {
@@ -80,6 +569,36 @@
                     }
                 },
                 {
+                    "link-id": "ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C2-XPDR1-XPDR1-NETWORK1",
+                    "source": {
+                        "source-node": "ROADM-C1-SRG1",
+                        "source-tp": "SRG1-PP1-TXRX"
+                    },
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "XPDR-C2-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "destination": {
+                        "dest-tp": "XPDR1-NETWORK1",
+                        "dest-node": "XPDR-C2-XPDR1"
+                    }
+                },
+                {
+                    "link-id": "XPDR-A2-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX",
+                    "source": {
+                        "source-node": "XPDR-A2-XPDR1",
+                        "source-tp": "XPDR1-NETWORK1"
+                    },
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A2-XPDR1-XPDR1-NETWORK1",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "destination": {
+                        "dest-tp": "SRG1-PP1-TXRX",
+                        "dest-node": "ROADM-A1-SRG1"
+                    }
+                },
+                {
                     "link-id": "ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX",
                     "source": {
                         "source-node": "ROADM-A1-SRG3",
@@ -92,6 +611,21 @@
                     "destination": {
                         "dest-tp": "DEG1-CTP-TXRX",
                         "dest-node": "ROADM-A1-DEG1"
+                    }
+                },
+                {
+                    "link-id": "ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A2-XPDR1-XPDR1-NETWORK1",
+                    "source": {
+                        "source-node": "ROADM-A1-SRG1",
+                        "source-tp": "SRG1-PP1-TXRX"
+                    },
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "XPDR-A2-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "destination": {
+                        "dest-tp": "XPDR1-NETWORK1",
+                        "dest-node": "XPDR-A2-XPDR1"
                     }
                 },
                 {
@@ -122,36 +656,6 @@
                     "destination": {
                         "dest-tp": "SRG3-CP-TXRX",
                         "dest-node": "ROADM-A1-SRG3"
-                    }
-                },
-                {
-                    "link-id": "ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1",
-                    "source": {
-                        "source-node": "ROADM-A1-SRG1",
-                        "source-tp": "SRG1-PP1-TXRX"
-                    },
-                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "destination": {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "dest-node": "XPDR-A1-XPDR1"
-                    }
-                },
-                {
-                    "link-id": "ROADM-A1-SRG1-SRG1-PP4-TXRXtoXPDR-A2-XPDR1-XPDR1-NETWORK1",
-                    "source": {
-                        "source-node": "ROADM-A1-SRG1",
-                        "source-tp": "SRG1-PP4-TXRX"
-                    },
-                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "XPDR-A2-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP4-TXRX",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "destination": {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "dest-node": "XPDR-A2-XPDR1"
                     }
                 },
                 {
@@ -186,21 +690,6 @@
                     }
                 },
                 {
-                    "link-id": "ROADM-C1-SRG1-SRG1-PP4-TXRXtoXPDR-C2-XPDR1-XPDR1-NETWORK1",
-                    "source": {
-                        "source-node": "ROADM-C1-SRG1",
-                        "source-tp": "SRG1-PP4-TXRX"
-                    },
-                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "XPDR-C2-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP4-TXRX",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "destination": {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "dest-node": "XPDR-C2-XPDR1"
-                    }
-                },
-                {
                     "link-id": "ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX",
                     "source": {
                         "source-node": "ROADM-C1-DEG2",
@@ -228,21 +717,6 @@
                     "destination": {
                         "dest-tp": "SRG1-CP-TXRX",
                         "dest-node": "ROADM-C1-SRG1"
-                    }
-                },
-                {
-                    "link-id": "XPDR-A2-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP4-TXRX",
-                    "source": {
-                        "source-node": "XPDR-A2-XPDR1",
-                        "source-tp": "XPDR1-NETWORK1"
-                    },
-                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "ROADM-A1-SRG1-SRG1-PP4-TXRXtoXPDR-A2-XPDR1-XPDR1-NETWORK1",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "destination": {
-                        "dest-tp": "SRG1-PP4-TXRX",
-                        "dest-node": "ROADM-A1-SRG1"
                     }
                 },
                 {
@@ -276,18 +750,18 @@
                     }
                 },
                 {
-                    "link-id": "XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX",
+                    "link-id": "XPDR-C2-XPDR2-XPDR2-NETWORK1toROADM-C1-SRG1-SRG1-PP2-TXRX",
                     "source": {
-                        "source-node": "XPDR-A1-XPDR1",
-                        "source-tp": "XPDR1-NETWORK1"
+                        "source-node": "XPDR-C2-XPDR2",
+                        "source-tp": "XPDR2-NETWORK1"
                     },
                     "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1",
+                    "org-openroadm-common-network:opposite-link": "ROADM-C1-SRG1-SRG1-PP2-TXRXtoXPDR-C2-XPDR2-XPDR2-NETWORK1",
                     "org-openroadm-common-network:administrative-state": "inService",
                     "destination": {
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "dest-node": "ROADM-A1-SRG1"
+                        "dest-tp": "SRG1-PP2-TXRX",
+                        "dest-node": "ROADM-C1-SRG1"
                     }
                 },
                 {
@@ -318,21 +792,6 @@
                     "destination": {
                         "dest-tp": "DEG1-CTP-TXRX",
                         "dest-node": "ROADM-A1-DEG1"
-                    }
-                },
-                {
-                    "link-id": "ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C1-XPDR1-XPDR1-NETWORK1",
-                    "source": {
-                        "source-node": "ROADM-C1-SRG1",
-                        "source-tp": "SRG1-PP1-TXRX"
-                    },
-                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:opposite-link": "XPDR-C1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "destination": {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "dest-node": "XPDR-C1-XPDR1"
                     }
                 },
                 {
@@ -411,6 +870,21 @@
                     }
                 },
                 {
+                    "link-id": "XPDR-C2-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX",
+                    "source": {
+                        "source-node": "XPDR-C2-XPDR1",
+                        "source-tp": "XPDR1-NETWORK1"
+                    },
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:operational-state": "inService",
+                    "org-openroadm-common-network:opposite-link": "ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C2-XPDR1-XPDR1-NETWORK1",
+                    "org-openroadm-common-network:administrative-state": "inService",
+                    "destination": {
+                        "dest-tp": "SRG1-PP1-TXRX",
+                        "dest-node": "ROADM-C1-SRG1"
+                    }
+                },
+                {
                     "link-id": "ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX",
                     "source": {
                         "source-node": "ROADM-A1-DEG1",
@@ -424,524 +898,6 @@
                         "dest-tp": "DEG2-CTP-TXRX",
                         "dest-node": "ROADM-A1-DEG2"
                     }
-                }
-            ],
-            "network-types": {
-                "org-openroadm-common-network:openroadm-common-network": {}
-            },
-            "node": [
-                {
-                    "node-id": "ROADM-A1-SRG3",
-                    "org-openroadm-common-network:node-type": "SRG",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:srg-attributes": {
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "SRG3-PP3-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG3-PP2-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG3-CP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
-                        },
-                        {
-                            "tp-id": "SRG3-PP1-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG3-PP4-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-A1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "XPDR-A2-XPDR1",
-                    "org-openroadm-common-network:node-type": "XPONDER",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "XPDR1-CLIENT1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "ROADM-A1-SRG1--SRG1-PP4-TXRX"
-                            },
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "XPDR-A2"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "XPDR-C2-XPDR1",
-                    "org-openroadm-common-network:node-type": "XPONDER",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "XPDR1-CLIENT1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "ROADM-C1-SRG1--SRG1-PP4-TXRX"
-                            },
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "XPDR-C2"
-                        },
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeC"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "XPDR-C1-XPDR1",
-                    "org-openroadm-common-network:node-type": "XPONDER",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "XPDR1-CLIENT1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-CLIENT2",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK2",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK2",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT2",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "ROADM-C1-SRG1--SRG1-PP1-TXRX"
-                            },
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeC"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "XPDR-C1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-C1-SRG1",
-                    "org-openroadm-common-network:node-type": "SRG",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:srg-attributes": {
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "SRG1-PP4-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP1-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP2-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP3-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-CP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeC"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-C1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-A1-SRG1",
-                    "org-openroadm-common-network:node-type": "SRG",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:srg-attributes": {
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "SRG1-PP4-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP1-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP2-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-PP3-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-PP"
-                        },
-                        {
-                            "tp-id": "SRG1-CP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "SRG-TXRX-CP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-A1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-A1-DEG1",
-                    "org-openroadm-common-network:node-type": "DEGREE",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:degree-attributes": {
-                        "degree-number": 1,
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "DEG1-CTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
-                        },
-                        {
-                            "tp-id": "DEG1-TTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-A1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-A1-DEG2",
-                    "org-openroadm-common-network:node-type": "DEGREE",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:degree-attributes": {
-                        "degree-number": 2,
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "DEG2-TTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
-                        },
-                        {
-                            "tp-id": "DEG2-CTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-A1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "XPDR-A1-XPDR1",
-                    "org-openroadm-common-network:node-type": "XPONDER",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "XPDR1-CLIENT1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-CLIENT2",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK2",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK2",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT2",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        },
-                        {
-                            "tp-id": "XPDR1-NETWORK1",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "ROADM-A1-SRG1--SRG1-PP1-TXRX"
-                            },
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "XPDR-A1"
-                        },
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeA"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-C1-DEG1",
-                    "org-openroadm-common-network:node-type": "DEGREE",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:degree-attributes": {
-                        "degree-number": 1,
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "DEG1-CTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
-                        },
-                        {
-                            "tp-id": "DEG1-TTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeC"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-C1"
-                        }
-                    ]
-                },
-                {
-                    "node-id": "ROADM-C1-DEG2",
-                    "org-openroadm-common-network:node-type": "DEGREE",
-                    "org-openroadm-common-network:operational-state": "inService",
-                    "org-openroadm-common-network:administrative-state": "inService",
-                    "org-openroadm-network-topology:degree-attributes": {
-                        "degree-number": 2,
-                        "avail-freq-maps": [
-                            {
-                                "map-name": "cband",
-                                "freq-map-granularity": 6.25,
-                                "start-edge-freq": 191.325,
-                                "effective-bits": 768,
-                                "freq-map": "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-                            }
-                        ]
-                    },
-                    "ietf-network-topology:termination-point": [
-                        {
-                            "tp-id": "DEG2-TTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-TTP"
-                        },
-                        {
-                            "tp-id": "DEG2-CTP-TXRX",
-                            "org-openroadm-common-network:operational-state": "inService",
-                            "org-openroadm-common-network:administrative-state": "inService",
-                            "org-openroadm-common-network:tp-type": "DEGREE-TXRX-CTP"
-                        }
-                    ],
-                    "supporting-node": [
-                        {
-                            "network-ref": "clli-network",
-                            "node-ref": "NodeC"
-                        },
-                        {
-                            "network-ref": "openroadm-network",
-                            "node-ref": "ROADM-C1"
-                        }
-                    ]
                 }
             ]
         }

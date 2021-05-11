@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTUCnTs;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.SwitchingPools;
@@ -34,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -127,7 +129,8 @@ public class PceOtnNode implements PceNode {
                 .TerminationPoint1.class);
             //TODO many nested if-structures below, this needs to be reworked
             if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
-                    && StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)) {
+                    && (StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
+                        || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
@@ -142,7 +145,8 @@ public class PceOtnNode implements PceNode {
                         node.getNodeId().getValue());
                 }
             } else if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
-                && (this.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
+                        || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                         || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
@@ -150,10 +154,12 @@ public class PceOtnNode implements PceNode {
                 } else {
                     continue;
                 }
-                if (StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)
-                        && checkOdtuTTPforLoOduCreation(ontTp1, 10)
-                    || StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)
-                    && checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
+                if ((StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)
+                        && checkOdtuTTPforLoOduCreation(ontTp1, 10))
+                    || (StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)
+                        && checkOdtuTTPforLoOduCreation(ontTp1, 1))
+                    || (StringConstants.SERVICE_TYPE_100GE_M.equals(otnServiceType)
+                        && checkOdtuTTPforLoOduCreation(ontTp1, 20))) {
                     LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                 } else {
@@ -163,6 +169,9 @@ public class PceOtnNode implements PceNode {
                     } else if (StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)) {
                         LOG.error("TP {} of {} does not allow ODU0 termination creation", tp.getTpId().getValue(),
                             node.getNodeId().getValue());
+                    } else if (StringConstants.SERVICE_TYPE_100GE_M.equals(otnServiceType)) {
+                        LOG.error("TP {} of {} does not allow ODU4 termination creation", tp.getTpId().getValue(),
+                            node.getNodeId().getValue());
                     } else {
                         LOG.error("TP {} of {} does not allow any termination creation", tp.getTpId().getValue(),
                             node.getNodeId().getValue());
@@ -170,7 +179,8 @@ public class PceOtnNode implements PceNode {
                 }
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
                 && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
+                    || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
+                    || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
@@ -187,8 +197,10 @@ public class PceOtnNode implements PceNode {
             }
         }
 
-        if ((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType) && mode.equals("AZ"))
+        if (((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
+                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)) && mode.equals("AZ"))
             || ((StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
+                    || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))
                 && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
                      || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
@@ -244,9 +256,10 @@ public class PceOtnNode implements PceNode {
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
         for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
                 .values()) {
-            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
-            if (sic.getIfCapType().equals(IfOCHOTU4ODU4.class)
-                && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null) {
+            LOG.info("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.class) || sic.getIfCapType().equals(IfOtsiOtsigroup.class))
+                && (ontTp1.getXpdrTpPortConnectionAttributes() == null
+                    || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
                 return true;
             }
         }
@@ -257,9 +270,13 @@ public class PceOtnNode implements PceNode {
         if (ontTp1.getXpdrTpPortConnectionAttributes() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
-            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
+            && (ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
                 .stream().findFirst().get().getOdtuType()
                 .equals(ODTU4TsAllocated.class)
+                ||
+                ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
+                .stream().findFirst().get().getOdtuType()
+                .equals(ODTUCnTs.class))
             && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
                 .stream().findFirst().get().getTpnPool().isEmpty()
             && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb)) {
@@ -284,7 +301,8 @@ public class PceOtnNode implements PceNode {
                         return true;
                     }
                     break;
-                case StringConstants.SERVICE_TYPE_100GE:
+                case StringConstants.SERVICE_TYPE_100GE_T:
+                case StringConstants.SERVICE_TYPE_100GE_M:
                     if (sic.getIfCapType().equals(If100GEODU4.class)) {
                         return true;
                     }
@@ -370,9 +388,12 @@ public class PceOtnNode implements PceNode {
             .collect(Collectors.toList());
 
         for (TerminationPoint tp : networkTpList) {
-            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
-                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
-                    .values().stream().findFirst().get().getOdtuType().equals(ODTU4TsAllocated.class)) {
+            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes() != null
+                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
+                && (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
+                    .values().stream().findFirst().get().getOdtuType().equals(ODTU4TsAllocated.class)
+                    || tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
+                    .values().stream().findFirst().get().getOdtuType().equals(ODTUCnTs.class))) {
                 @Nullable
                 List<Uint16> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
                     .getOdtuTpnPool().values().stream().findFirst().get().getTpnPool();
@@ -394,7 +415,8 @@ public class PceOtnNode implements PceNode {
             .collect(Collectors.toList());
 
         for (TerminationPoint tp : networkTpList) {
-            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getTsPool() != null) {
+            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes() != null
+                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getTsPool() != null) {
                 @Nullable
                 List<Uint16> tsPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
                     .getTsPool();

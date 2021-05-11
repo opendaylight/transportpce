@@ -329,7 +329,13 @@ public class PceLink implements Serializable {
         long neededBW;
         OtnLinkType neededType = null;
         switch (serviceType) {
-
+            case "ODUC4":
+                if (this.usedBandwidth != 0L) {
+                    return false;
+                }
+                neededBW = 400000L;
+                neededType = OtnLinkType.OTUC4;
+                break;
             case "ODU4":
                 if (this.usedBandwidth != 0L) {
                     return false;
@@ -346,6 +352,10 @@ public class PceLink implements Serializable {
                 break;
             case "ODU1":
                 neededBW = 2500L;
+                break;
+            case "100GEm":
+                neededBW = 100000L;
+                neededType = OtnLinkType.ODUC4;
                 break;
             case "10GE":
                 neededBW = 10000L;

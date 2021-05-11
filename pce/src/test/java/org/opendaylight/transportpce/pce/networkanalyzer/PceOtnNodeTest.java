@@ -144,7 +144,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNode() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -157,7 +157,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNodeTypeNull() {
         pceOtnNode = new PceOtnNode(node, null,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -167,7 +167,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNodeTypeDeg() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
         pceOtnNode.initXndrTps("AZ");
         Assert.assertFalse("not valid node , its type isn't one of MUXPDR or SWITCH or TPDR" ,
                 pceOtnNode.isPceOtnNodeValid(pceOtnNode));

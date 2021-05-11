@@ -8,6 +8,9 @@
 package org.opendaylight.transportpce.pce;
 
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +28,14 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,6 +43,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
+    private Mapping mapping;
     @Mock
     private YangParserFactory yangParserFactory;
     @Mock
@@ -52,6 +64,12 @@ public class PceSendingPceRPCsTest extends AbstractTest {
                 "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
                         networkTransaction, gnpyConsumer, portMapping);
+        mapping = new MappingBuilder().setLogicalConnectionPoint("logicalConnectionPoint").setPortQual("xpdr-client")
+            .build();
+        NodeInfo info = new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).build();
+        Nodes node = new NodesBuilder().withKey(new NodesKey("node")).setNodeId("node").setNodeInfo(info).build();
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
+        when(portMapping.getNode(anyString())).thenReturn(node);
     }
 
     @Test
@@ -66,7 +84,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         pceSendingPceRPCs =
                 new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
                         networkTransaction, gnpyConsumer, portMapping);
-
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
         pceSendingPceRPCs.pathComputation();
         Assert.assertTrue(gnpyConsumer.isAvailable());
         jerseyServer.tearDown();

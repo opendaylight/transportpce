@@ -59,11 +59,12 @@ public class PostAlgoPathValidator {
         SpectrumAssignment spectrumAssignment = null;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_400GE:
                 spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
                     .getOrDefault(serviceType, GridConstant.NB_SLOTS_400G);
             //fallthrough
-            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
                 spectrumAssignment = getSpectrumAssignment(path,
                         allPceNodes, spectralWidthSlotNumber);
@@ -113,8 +114,9 @@ public class PostAlgoPathValidator {
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 pceResult.setLocalCause(PceResult.LocalCause.NONE);
                 break;
+            case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
-                tribSlotNb = 8;
+                tribSlotNb = StringConstants.SERVICE_TYPE_10GE.equals(serviceType) ? 8 : 20;
             //fallthrough
             case StringConstants.SERVICE_TYPE_1GE:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
@@ -132,8 +134,9 @@ public class PostAlgoPathValidator {
                 }
                 break;
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
-                LOG.info("In PostAlgoPathValidator: ODU4 path found {}", path);
+                LOG.info("In PostAlgoPathValidator: ODU4/ODUC4 path found {}", path);
                 break;
             default:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);

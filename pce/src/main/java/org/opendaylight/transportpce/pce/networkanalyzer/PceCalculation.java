@@ -29,10 +29,13 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -134,45 +137,11 @@ public class PceCalculation {
         serviceRate = input.getServiceAEnd().getServiceRate().toJava();
 
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
-        if (!(serviceFormatA.equals(serviceFormatZ))) {
-            LOG.info("parseInput: different service format for A and Z not handled, will use service format from Aend");
-        } else if (serviceRate == 100L) {
-            switch (serviceFormatA) {
-                case "Ethernet":
-                case "OC":
-                    serviceType = StringConstants.SERVICE_TYPE_100GE;
-                    break;
-                case "OTU":
-                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
-                    break;
-                case "ODU":
-                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
-                    break;
-                default:
-                    LOG.debug("parseInput: unsupported service type: Format {} Rate 100L", serviceFormatA);
-                    break;
-            }
-            //switch(serviceRate) may seem a better option at first glance.
-            //But switching on Long or long is not directly possible in Java.
-            //And casting to int bumps the limit here.
-            //Passing by ENUM or String are possible alternatives.
-            //Maybe HashMap and similar options should also be considered here.
-        } else if ("Ethernet".equals(serviceFormatA)) {
-        //only rate 100L is currently supported except in Ethernet
-            if (serviceRate == 400L) {
-                serviceType = StringConstants.SERVICE_TYPE_400GE;
-            } else if (serviceRate == 10L) {
-                serviceType = StringConstants.SERVICE_TYPE_10GE;
-            } else if (serviceRate == 1L) {
-                serviceType = StringConstants.SERVICE_TYPE_1GE;
-            } else {
-                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", serviceRate);
-            }
-        } else {
-            LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
-                serviceFormatA, serviceRate);
-        }
+
+        setServiceType();
         if (StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_10GE.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
             anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
@@ -187,30 +156,138 @@ public class PceCalculation {
         return true;
     }
 
+    private void setServiceType() {
+        if ("Ethernet".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 1:
+                    serviceType = StringConstants.SERVICE_TYPE_1GE;
+                    break;
+                case 10:
+                    serviceType = StringConstants.SERVICE_TYPE_10GE;
+                    break;
+                case 100:
+                    serviceType = StringConstants.SERVICE_TYPE_100GE_T;
+                    if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
+                        .getNodeInfo().getNodeType())) {
+                        if (input.getServiceAEnd().getTxDirection() != null
+                            && input.getServiceAEnd().getTxDirection().getPort() != null
+                            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
+                            String lcp = input.getServiceAEnd().getTxDirection().getPort().getPortName();
+                            if (portMapping.getMapping(input.getServiceAEnd().getNodeId(), lcp) != null) {
+                                Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(), lcp);
+                                if (PortQual.SwitchClient.getName().equals(mapping.getPortQual())) {
+                                    serviceType = StringConstants.SERVICE_TYPE_100GE_M;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_400GE;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+        if ("OC".equals(serviceFormatA) && Long.valueOf(100L).equals(serviceRate)) {
+            serviceType = StringConstants.SERVICE_TYPE_100GE_T;
+        }
+        if ("OTU".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 100:
+                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_OTUC4;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+        if ("ODU".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 100:
+                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_ODUC4;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+    }
+
     private boolean readMdSal() {
         InstanceIdentifier<Network> nwInstanceIdentifier = null;
-        Network nw = null;
-        if (("OC".equals(serviceFormatA)) || ("OTU".equals(serviceFormatA))
-            || ("Ethernet".equals(serviceFormatA) && ((serviceRate == 100L) || (serviceRate == 400L)))) {
-            LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
-            nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
-        } else if ("ODU".equals(serviceFormatA)
-            || ("Ethernet".equals(serviceFormatA) && ((serviceRate == 10L) || (serviceRate == 1L)))) {
-            LOG.info("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
-            nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
-        } else {
-            LOG.info("readMdSal: service-rate {} / service-format not handled {}", serviceRate, serviceFormatA);
-            return false;
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_100GE_T:
+            case StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+                LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
+                nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+                break;
+            case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                LOG.info("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
+                nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
+                break;
+            default:
+                LOG.warn("readMdSal: unknown service-type for service-rate {} and service-format {}", serviceRate,
+                    serviceFormatA);
+                break;
         }
 
+        if (readTopology(nwInstanceIdentifier) != null) {
+            allNodes = readTopology(nwInstanceIdentifier).nonnullNode().values().stream().sorted((n1, n2)
+                -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue())).collect(Collectors.toList());
+            Network1 nw1 = readTopology(nwInstanceIdentifier).augmentation(Network1.class);
+            if (nw1 != null) {
+                allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
+                    -> l1.getSource().getSourceTp().toString().compareTo(l2.getSource().getSourceTp().toString()))
+                        .collect(Collectors.toList());
+            } else {
+                LOG.warn("no otn links in otn-topology");
+            }
+            if (allNodes == null || allNodes.isEmpty()) {
+                LOG.error("readMdSal: no nodes ");
+                return false;
+            }
+            LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
+            LOG.debug("readMdSal: network nodes: {} nodes added", allNodes);
+
+            if (allLinks == null || allLinks.isEmpty()) {
+                LOG.error("readMdSal: no links ");
+                return false;
+            }
+            LOG.info("readMdSal: network links: {} links added", allLinks.size());
+            LOG.debug("readMdSal: network links: {} links added", allLinks);
+
+            return true;
+        } else {
+            LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
+            return false;
+        }
+    }
+
+    private Network readTopology(InstanceIdentifier<Network> nwInstanceIdentifier) {
+        Network nw = null;
         try {
             Optional<Network> nwOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
             if (nwOptional.isPresent()) {
                 nw = nwOptional.get();
                 LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
+                networkTransactionService.close();
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
@@ -219,46 +296,17 @@ public class PceCalculation {
             throw new RuntimeException(
                 "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
         }
-        networkTransactionService.close();
-
-        if (nw == null) {
-            LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
-            return false;
-        }
-        allNodes = nw.nonnullNode().values().stream().sorted((n1, n2)
-            -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue())).collect(Collectors.toList());
-        Network1 nw1 = nw.augmentation(Network1.class);
-        if (nw1 != null) {
-            allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
-                -> l1.getSource().getSourceTp().toString().compareTo(l2.getSource().getSourceTp().toString()))
-                    .collect(Collectors.toList());
-        } else {
-            LOG.warn("no otn links in otn-topology");
-        }
-        if (allNodes == null || allNodes.isEmpty()) {
-            LOG.error("readMdSal: no nodes ");
-            return false;
-        }
-        LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
-        LOG.debug("readMdSal: network nodes: {} nodes added", allNodes);
-
-        if (allLinks == null || allLinks.isEmpty()) {
-            LOG.error("readMdSal: no links ");
-            return false;
-        }
-        LOG.info("readMdSal: network links: {} links added", allLinks.size());
-        LOG.debug("readMdSal: network links: {} links added", allLinks);
-
-        return true;
+        return nw;
     }
 
     private boolean analyzeNw() {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
 
-        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+        if (StringConstants.SERVICE_TYPE_100GE_T.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
+                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_OTUC4.equals(serviceType)) {
             // 100GE service and OTU4 service are handled at the openroadm-topology layer
             for (Node node : allNodes) {
                 validateNode(node);
@@ -380,117 +428,22 @@ public class PceCalculation {
             return false;
         }
 
-        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
-            // 100GE or 400GE or OTU4 services are handled at WDM Layer
-            PceLink pcelink = new PceLink(link, source, dest);
-            if (!pcelink.isValid()) {
-                dropOppositeLink(link);
-                LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_100GE_T:
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_400GE:
+                return processPceLink(link, sourceId, destId, source, dest);
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_1GE:
+                return processPceOtnLink(link, source, dest);
+            default:
+                LOG.error(" validateLink: Unmanaged service type {}", serviceType);
                 return false;
-            }
-            LinkId linkId = pcelink.getLinkId();
-            if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                dropOppositeLink(link);
-                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                return false;
-            }
-            switch (pcelink.getlinkType()) {
-                case ROADMTOROADM:
-                case EXPRESSLINK:
-                    allPceLinks.put(linkId, pcelink);
-                    source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
-                        pcelink.getlinkType(), pcelink);
-                    break;
-                case ADDLINK:
-                    pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
-                    addLinks.add(pcelink);
-                    LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
-                    break;
-                case DROPLINK:
-                    pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
-                    dropLinks.add(pcelink);
-                    LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
-                    break;
-                case XPONDERINPUT:
-                    // store separately all SRG links directly
-                    azSrgs.add(sourceId);
-                    // connected to A/Z
-                    if (!dest.checkTP(pcelink.getDestTP().toString())) {
-                        LOG.debug(
-                            "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
-                        return false;
-                    }
-                    if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
-                        pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().toString()));
-                    }
-                    allPceLinks.put(linkId, pcelink);
-                    source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
-                    break;
-                // does it mean XPONDER==>>SRG ?
-                case XPONDEROUTPUT:
-                    // store separately all SRG links directly
-                    azSrgs.add(destId);
-                    // connected to A/Z
-                    if (!source.checkTP(pcelink.getSourceTP().toString())) {
-                        LOG.debug(
-                            "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
-                        return false;
-                    }
-                    if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
-                        pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().toString()));
-                    }
-                    allPceLinks.put(linkId, pcelink);
-                    source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
-                    break;
-                default:
-                    LOG.warn("validateLink: link type is not supported {}", pcelink);
-            }
-            return true;
-
-        } else if ((StringConstants.SERVICE_TYPE_ODU4.equals(serviceType))
-                || (StringConstants.SERVICE_TYPE_10GE.equals(serviceType))
-                || (StringConstants.SERVICE_TYPE_1GE.equals(serviceType))) {
-            // ODU4, 1GE and 10GE services relying on ODU2, ODU2e or ODU0 services are handled at OTN layer
-            PceLink pceOtnLink = new PceLink(link, source, dest);
-
-            if (!pceOtnLink.isOtnValid(link, serviceType)) {
-                dropOppositeLink(link);
-                LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
-                return false;
-            }
-
-            LinkId linkId = pceOtnLink.getLinkId();
-            if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                dropOppositeLink(link);
-                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                return false;
-            }
-
-            switch (pceOtnLink.getlinkType()) {
-                case OTNLINK:
-                    if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
-                        pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().toString()));
-                    }
-
-                    allPceLinks.put(linkId, pceOtnLink);
-                    source.addOutgoingLink(pceOtnLink);
-                    LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
-                    break;
-                default:
-                    LOG.warn("validateLink: link type is not supported {}", pceOtnLink);
-            }
-            return true;
-
-        } else {
-            LOG.error(" validateLink: Unmanaged service type {}", serviceType);
-            return false;
         }
-
     }
 
     private void validateNode(Node node) {
@@ -658,6 +611,108 @@ public class PceCalculation {
         if (!pceNode.isValid()) {
             LOG.error("validateNode : there are no available frequencies in node {}", pceNode.getNodeId().getValue());
             return false;
+        }
+        return true;
+    }
+
+    private boolean processPceLink(Link link, NodeId sourceId, NodeId destId, PceNode source, PceNode dest) {
+        PceLink pcelink = new PceLink(link, source, dest);
+        if (!pcelink.isValid()) {
+            dropOppositeLink(link);
+            LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+            return false;
+        }
+        LinkId linkId = pcelink.getLinkId();
+        if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+            dropOppositeLink(link);
+            LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+            return false;
+        }
+        switch (pcelink.getlinkType()) {
+            case ROADMTOROADM:
+            case EXPRESSLINK:
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
+                    pcelink.getlinkType(), pcelink);
+                break;
+            case ADDLINK:
+                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
+                addLinks.add(pcelink);
+                LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
+                break;
+            case DROPLINK:
+                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
+                dropLinks.add(pcelink);
+                LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
+                break;
+            case XPONDERINPUT:
+                // store separately all SRG links directly
+                azSrgs.add(sourceId);
+                // connected to A/Z
+                if (!dest.checkTP(pcelink.getDestTP().toString())) {
+                    LOG.debug(
+                        "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
+                    return false;
+                }
+                if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
+                    pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().toString()));
+                }
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
+                break;
+            // does it mean XPONDER==>>SRG ?
+            case XPONDEROUTPUT:
+                // store separately all SRG links directly
+                azSrgs.add(destId);
+                // connected to A/Z
+                if (!source.checkTP(pcelink.getSourceTP().toString())) {
+                    LOG.debug(
+                        "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
+                    return false;
+                }
+                if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
+                    pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().toString()));
+                }
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
+                break;
+            default:
+                LOG.warn("validateLink: link type is not supported {}", pcelink);
+        }
+        return true;
+    }
+
+    private boolean processPceOtnLink(Link link, PceNode source, PceNode dest) {
+        PceLink pceOtnLink = new PceLink(link, source, dest);
+
+        if (!pceOtnLink.isOtnValid(link, serviceType)) {
+            dropOppositeLink(link);
+            LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+            return false;
+        }
+
+        LinkId linkId = pceOtnLink.getLinkId();
+        if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+            dropOppositeLink(link);
+            LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+            return false;
+        }
+
+        switch (pceOtnLink.getlinkType()) {
+            case OTNLINK:
+                if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
+                    pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().toString()));
+                }
+
+                allPceLinks.put(linkId, pceOtnLink);
+                source.addOutgoingLink(pceOtnLink);
+                LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
+                break;
+            default:
+                LOG.warn("validateLink: link type is not supported {}", pceOtnLink);
         }
         return true;
     }
