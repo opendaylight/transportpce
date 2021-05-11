@@ -111,7 +111,7 @@ public class PceGraphTest {
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
                 null, rc,
-                StringConstants.SERVICE_TYPE_100GE);
+                StringConstants.SERVICE_TYPE_100GE_T);
 
         Assert.assertEquals(pceGraph.calcPath(), false);
     }
