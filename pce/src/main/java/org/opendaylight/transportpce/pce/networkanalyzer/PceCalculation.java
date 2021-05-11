@@ -29,10 +29,13 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -134,45 +137,11 @@ public class PceCalculation {
         serviceRate = input.getServiceAEnd().getServiceRate().toJava();
 
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
-        if (!(serviceFormatA.equals(serviceFormatZ))) {
-            LOG.info("parseInput: different service format for A and Z not handled, will use service format from Aend");
-        } else if (serviceRate == 100L) {
-            switch (serviceFormatA) {
-                case "Ethernet":
-                case "OC":
-                    serviceType = StringConstants.SERVICE_TYPE_100GE;
-                    break;
-                case "OTU":
-                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
-                    break;
-                case "ODU":
-                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
-                    break;
-                default:
-                    LOG.debug("parseInput: unsupported service type: Format {} Rate 100L", serviceFormatA);
-                    break;
-            }
-            //switch(serviceRate) may seem a better option at first glance.
-            //But switching on Long or long is not directly possible in Java.
-            //And casting to int bumps the limit here.
-            //Passing by ENUM or String are possible alternatives.
-            //Maybe HashMap and similar options should also be considered here.
-        } else if ("Ethernet".equals(serviceFormatA)) {
-        //only rate 100L is currently supported except in Ethernet
-            if (serviceRate == 400L) {
-                serviceType = StringConstants.SERVICE_TYPE_400GE;
-            } else if (serviceRate == 10L) {
-                serviceType = StringConstants.SERVICE_TYPE_10GE;
-            } else if (serviceRate == 1L) {
-                serviceType = StringConstants.SERVICE_TYPE_1GE;
-            } else {
-                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", serviceRate);
-            }
-        } else {
-            LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
-                serviceFormatA, serviceRate);
-        }
+
+        setServiceType();
         if (StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_10GE.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
             anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
@@ -187,21 +156,92 @@ public class PceCalculation {
         return true;
     }
 
+    private void setServiceType() {
+        if ("Ethernet".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 1:
+                    serviceType = StringConstants.SERVICE_TYPE_1GE;
+                    break;
+                case 10:
+                    serviceType = StringConstants.SERVICE_TYPE_10GE;
+                    break;
+                case 100:
+                    if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
+                        .getNodeInfo().getNodeType())) {
+                        if (input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
+                            String lcp = input.getServiceAEnd().getTxDirection().getPort().getPortName();
+                            Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(), lcp);
+                            if (PortQual.XpdrClient.getName().equals(mapping.getPortQual())) {
+                                serviceType = StringConstants.SERVICE_TYPE_100GE_T;
+                            }
+                            if (PortQual.SwitchClient.getName().equals(mapping.getPortQual())) {
+                                serviceType = StringConstants.SERVICE_TYPE_100GE_M;
+                            }
+                        }
+                    } else {
+                        serviceType = StringConstants.SERVICE_TYPE_100GE_T;
+                    }
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_400GE;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+        if ("OC".equals(serviceFormatA) && Long.valueOf(100L).equals(serviceRate)) {
+            serviceType = StringConstants.SERVICE_TYPE_100GE;
+        }
+        if ("OTU".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 100:
+                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_OTUC4;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+        if ("ODU".equals(serviceFormatA)) {
+            switch (serviceRate.intValue()) {
+                case 100:
+                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
+                    break;
+                case 400:
+                    serviceType = StringConstants.SERVICE_TYPE_ODUC4;
+                    break;
+                default:
+                    LOG.warn("Invalid service-rate {}", serviceRate);
+                    break;
+            }
+        }
+    }
+
     private boolean readMdSal() {
         InstanceIdentifier<Network> nwInstanceIdentifier = null;
         Network nw = null;
-        if (("OC".equals(serviceFormatA)) || ("OTU".equals(serviceFormatA))
-            || ("Ethernet".equals(serviceFormatA) && ((serviceRate == 100L) || (serviceRate == 400L)))) {
+        if (StringConstants.SERVICE_TYPE_100GE_T.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_OTUC4.equals(serviceType)) {
             LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
             nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
-        } else if ("ODU".equals(serviceFormatA)
-            || ("Ethernet".equals(serviceFormatA) && ((serviceRate == 10L) || (serviceRate == 1L)))) {
+        } else if (StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_10GE.equals(serviceType)
+            || StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
             LOG.info("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
             nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
         } else {
-            LOG.info("readMdSal: service-rate {} / service-format not handled {}", serviceRate, serviceFormatA);
+            LOG.warn("readMdSal: unknown service-type for service-rate {} and service-format {}", serviceRate,
+                serviceFormatA);
             return false;
         }
 
@@ -256,9 +296,10 @@ public class PceCalculation {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
 
-        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+        if (StringConstants.SERVICE_TYPE_100GE_T.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
+                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_OTUC4.equals(serviceType)) {
             // 100GE service and OTU4 service are handled at the openroadm-topology layer
             for (Node node : allNodes) {
                 validateNode(node);
@@ -380,8 +421,9 @@ public class PceCalculation {
             return false;
         }
 
-        if (StringConstants.SERVICE_TYPE_100GE.equals(serviceType)
+        if (StringConstants.SERVICE_TYPE_100GE_T.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_OTUC4.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)) {
             // 100GE or 400GE or OTU4 services are handled at WDM Layer
             PceLink pcelink = new PceLink(link, source, dest);
@@ -454,6 +496,8 @@ public class PceCalculation {
 
         } else if ((StringConstants.SERVICE_TYPE_ODU4.equals(serviceType))
                 || (StringConstants.SERVICE_TYPE_10GE.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType))
                 || (StringConstants.SERVICE_TYPE_1GE.equals(serviceType))) {
             // ODU4, 1GE and 10GE services relying on ODU2, ODU2e or ODU0 services are handled at OTN layer
             PceLink pceOtnLink = new PceLink(link, source, dest);
