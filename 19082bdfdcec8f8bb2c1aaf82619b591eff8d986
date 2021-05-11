@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "70baa86a_e0e52b66",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "350f65d1_4a9aa96b",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b3e400b_56e172c1",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcfb823f_58b198f5",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3b3e400b_56e172c1",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "522bc300_0dad4e9b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d70ba21_340f10b1",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a221c185_0f2a0869",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
         "patchSetId": 5
@@ -101,6 +155,24 @@
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f284768_c02f3581",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a221c185_0f2a0869",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +211,24 @@
     },
     {
       "key": {
+        "uuid": "02a1ddb4_21108b53",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c36bca3a_30c2ab67",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fae86779_d73c74d0",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
         "patchSetId": 5
@@ -156,6 +246,24 @@
     },
     {
       "key": {
+        "uuid": "cd7dae07_a7d77387",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fae86779_d73c74d0",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55be46e8_3b1e9403",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
         "patchSetId": 5
@@ -170,6 +278,24 @@
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56fb3675_9ea66c0b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "55be46e8_3b1e9403",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -205,6 +331,24 @@
       "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19002f24_450f5c87",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-11T02:02:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1850f2af_4ffad61b",
+      "revId": "19082bdfdcec8f8bb2c1aaf82619b591eff8d986",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
