@@ -55,7 +55,12 @@
         "node-model": "model1",
         "node-ip-address": "1.2.3.4"
       },
-      "mapping": [],
+      "mapping": [
+        {
+          "logical-connection-point": "XPDR1-CLIENT1",
+          "port-qual": "xpdr-client"
+        }
+      ],
       "mc-capabilities": [],
       "cp-to-degree": [],
       "switching-pool-lcp": []
@@ -175,7 +180,12 @@
         "node-model": "model1",
         "node-ip-address": "1.2.3.4"
       },
-      "mapping": [],
+      "mapping": [
+        {
+          "logical-connection-point": "XPDR1-CLIENT1",
+          "port-qual": "xpdr-client"
+        }
+      ],
       "mc-capabilities": [],
       "cp-to-degree": [],
       "switching-pool-lcp": []
@@ -295,7 +305,12 @@
         "node-model": "model1",
         "node-ip-address": "1.2.3.4"
       },
-      "mapping": [],
+      "mapping": [
+        {
+          "logical-connection-point": "XPDR1-CLIENT1",
+          "port-qual": "xpdr-client"
+        }
+      ],
       "mc-capabilities": [],
       "cp-to-degree": [],
       "switching-pool-lcp": []
@@ -610,7 +625,12 @@
         "node-model": "model1",
         "node-ip-address": "1.2.3.4"
       },
-      "mapping": [],
+      "mapping": [
+        {
+          "logical-connection-point": "XPDR1-CLIENT1",
+          "port-qual": "xpdr-client"
+        }
+      ],
       "mc-capabilities": [],
       "cp-to-degree": [],
       "switching-pool-lcp": []
@@ -655,7 +675,12 @@
         "node-model": "model1",
         "node-ip-address": "1.2.3.4"
       },
-      "mapping": [],
+      "mapping": [
+        {
+          "logical-connection-point": "XPDR1-CLIENT1",
+          "port-qual": "xpdr-client"
+        }
+      ],
       "mc-capabilities": [],
       "cp-to-degree": [],
       "switching-pool-lcp": []
