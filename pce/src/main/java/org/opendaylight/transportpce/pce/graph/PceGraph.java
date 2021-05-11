@@ -110,7 +110,8 @@ public class PceGraph {
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
             switch (serviceType) {
 
-                case StringConstants.SERVICE_TYPE_100GE:
+                case StringConstants.SERVICE_TYPE_100GE_T:
+                case StringConstants.SERVICE_TYPE_OTUC4:
                 case StringConstants.SERVICE_TYPE_400GE:
                 case StringConstants.SERVICE_TYPE_OTU4:
                     LOG.info(
