@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -112,7 +112,7 @@ public final class NetworkmodelTestUtil {
                     .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
                     .build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.Link1Builder()
+                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1Builder()
                     .setOtnLinkType(type)
                     .build())
             .build();
@@ -135,7 +135,7 @@ public final class NetworkmodelTestUtil {
                     .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
                     .build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.Link1Builder()
+                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1Builder()
                     .setOtnLinkType(type)
                     .build())
             .build();
