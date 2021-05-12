@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64d21699_6dfd5443",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "body linelength should be \u003c72 char",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36f8e99f_98132e52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32804e36_e98db81b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "7.1",
+      "range": {
+        "startLine": 182,
+        "startChar": 34,
+        "endLine": 182,
+        "endChar": 39
+      },
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eae1f9a_2f53e926",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "I think the ternary operator was more appropriate here",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "babc5a63_a60beefe",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "idem for guard clause style here",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18994a65_c0f35c2a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 10
+      },
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeab2f8e_3a928af2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "indent +4 or add a LF here",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1447de11_c318fb0c",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:09Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 348,
+        "endChar": 2
+      },
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
