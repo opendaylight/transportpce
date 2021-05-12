@@ -21,6 +21,9 @@ module transportpce-topology {
     contact
         "TransportPCE team";
 
+    revision 2021-05-11 {
+        description "Update otn-link-type enum for higher rates";
+    }
     revision 2020-10-19 {
         description "Update to 7.1.0 Openroadm network and common models";
     }
@@ -50,6 +53,12 @@ module transportpce-topology {
         }
         enum "ODU0" {
           value 4;
+        }
+        enum "OTUC4" {
+          value 5;
+        }
+        enum "ODUC4" {
+          value 6;
         }
       }
     }
