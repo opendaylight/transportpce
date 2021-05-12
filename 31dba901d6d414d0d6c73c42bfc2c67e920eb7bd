@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91c779f7_9240a428",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "the openRoadmVersion variable allocation can be avoided",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3439fb91_2cbac342",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "indent +4 or add a LF",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dabf2eba_9b30a46c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "What about this rather ?\n\n        if (!otnXc.isPresent()) {\n            LOG.warn(\"Cross connect {} does not exist, halting delete\", connectionName);\n            return null;\n        }\n\n        interfList.add(otnXc.get().getSource().getSrcIf());\n        interfList.add(otnXc.get().getDestination().getDstIf());",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e56009d_034091f5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "I think a ternary operator would ne more adapted here.\n\n  String supportingInterface \u003d isNetworkPort ? portMap.getSupportingOduc4() : logicalConnPoint + \"-ETHERNET100G\";",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fd05c26_09ba9d42",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "ODUC ?\n\nIt seems very similar to the previous case; and this methodd is quite long.\nSome refactoring or intermediate methods might be needed here",
+      "range": {
+        "startLine": 137,
+        "startChar": 72,
+        "endLine": 137,
+        "endChar": 75
+      },
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff706334_0a826e91",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:29:03Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n\n        if (!(deLimiter.equals(\"ODU\")) || !(deLimiter.equals(\"ODUC4\"))) {\n            LOG.error(\"ODU node list update will be incorrect\");\n        }\n        if (nodeInterfaceList.isEmpty()) {\n            return new ArrayList\u003c\u003e();\n        }\n        List\u003cString\u003e nodesToUpdate \u003d new ArrayList\u003c\u003e();\n        for (NodeInterface nodeInterf : nodeInterfaceList) {\n            if (nodeInterf.getOduInterfaceId() \u003d\u003d null) {\n                continue;\n            }\n            List\u003cString\u003e interList \u003d nodeInterf.getOduInterfaceId().stream()\n                        .filter(id -\u003e id.contains(\"NETWORK\")).collect(Collectors.toList());\n            if (interList.isEmpty()) {\n                continue;\n            }\n            for (String inter : interList) {\n            ...\n            }\n        }",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
