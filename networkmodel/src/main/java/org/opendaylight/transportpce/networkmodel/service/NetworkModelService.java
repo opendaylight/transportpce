@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 
 /**

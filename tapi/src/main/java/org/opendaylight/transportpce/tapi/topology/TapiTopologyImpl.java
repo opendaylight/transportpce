@@ -281,7 +281,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
         String networkLcp;
         if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
             networkLcp = tp.augmentation(
-                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
+                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.TerminationPoint1.class)
                 .getAssociatedConnectionMapPort();
         } else {
             networkLcp = tp.getTpId().getValue();

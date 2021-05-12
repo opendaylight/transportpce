@@ -342,12 +342,12 @@ public class OpenRoadmTopologyTest {
         assertEquals("XPDR1-CLIENT1", tps.get(0).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERCLIENT, tps.get(0).augmentation(TerminationPoint1.class).getTpType());
         assertEquals("XPDR1-NETWORK1", tps.get(0).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.TerminationPoint1.class)
             .getAssociatedConnectionMapPort());
         assertEquals("XPDR1-NETWORK1", tps.get(2).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERNETWORK, tps.get(2).augmentation(TerminationPoint1.class).getTpType());
         assertEquals("XPDR1-CLIENT1", tps.get(2).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.TerminationPoint1.class)
             .getAssociatedConnectionMapPort());
     }
 
