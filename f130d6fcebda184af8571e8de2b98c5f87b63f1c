@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0d24221_0817bc47",
+        "filename": "tests/transportpce_tests/7.1/test_portmapping.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:46:12Z",
+      "side": 1,
+      "message": "AT\u0026T ?",
+      "range": {
+        "startLine": 3,
+        "startChar": 21,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "f130d6fcebda184af8571e8de2b98c5f87b63f1c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
