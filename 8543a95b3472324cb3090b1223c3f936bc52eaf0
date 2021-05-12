@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "86eabc40_4174cd2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:43:51Z",
+      "side": 1,
+      "message": "no sign off ?",
+      "revId": "8543a95b3472324cb3090b1223c3f936bc52eaf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80557f94_854a51fb",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 2
