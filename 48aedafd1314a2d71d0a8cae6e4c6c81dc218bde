@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "6b58e3c6_010b21e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:44:12Z",
+      "side": 1,
+      "message": "no sign off",
+      "revId": "48aedafd1314a2d71d0a8cae6e4c6c81dc218bde",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75f85e69_c4ecd9ec",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 2
