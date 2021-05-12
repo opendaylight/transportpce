@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75f85e69_c4ecd9ec",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:35:53Z",
+      "side": 1,
+      "message": "methods declaration are no more clearly seprated from body here.\nPlease let the +4 indent.",
+      "revId": "48aedafd1314a2d71d0a8cae6e4c6c81dc218bde",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fadd886_58573d6b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-12T13:35:53Z",
+      "side": 1,
+      "message": "what happens if a real device matches one of this nodeId?\n\u003d\u003e conditonal compilation would be more appropriate in such a situation \u003d\u003e vote -2\n\nhttps://www.renebergelt.de/blog/2018/03/conditional-compilation-with-java-and-maven/",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 90
+      },
+      "revId": "48aedafd1314a2d71d0a8cae6e4c6c81dc218bde",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
