@@ -62,8 +62,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -275,7 +275,7 @@ public class OpenRoadmOtnTopologyTest {
             "otn link type should be OTU4",
             OtnLinkType.OTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1.class)
                 .getOtnLinkType());
     }
 
@@ -350,7 +350,7 @@ public class OpenRoadmOtnTopologyTest {
             OtnLinkType.ODTU4,
             sortedLinks.get(0)
                 .augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1.class)
                 .getOtnLinkType());
 
         assertEquals("list of TPs should contain 2 updated TPs", 2, topoShard.getTps().size());
