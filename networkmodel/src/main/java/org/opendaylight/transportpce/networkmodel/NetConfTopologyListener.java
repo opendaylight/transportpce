@@ -125,6 +125,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         registrations.put(nodeId, nodeRegistration);
         String streamName = "NETCONF";
         subscribeStream(mountPoint, streamName, nodeId);
+        streamName = "OPENROADM";
+        subscribeStream(mountPoint, streamName, nodeId);
     }
 
     private void onDeviceDisConnected(final String nodeId) {
