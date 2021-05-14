@@ -15,6 +15,10 @@ module transportpce-common-types {
     revision-date 2018-10-19;
   }
 
+  revision 2021-09-30 {
+    description
+      "Replace leaf width in optical-renderer-input by mc-width and nmc-width";
+  }
   revision 2021-06-18 {
     description
       "Replace olm-renderer-input by optical-rendrer-input.
@@ -494,9 +498,14 @@ module transportpce-common-types {
     leaf center-freq {
       type org-openroadm-common-types:frequency-THz;
     }
-    leaf width {
+    leaf nmc-width {
       description
-       " Width of nmc";
+       " Width of network media channel nmc";
+      type org-openroadm-common-types:frequency-GHz;
+    }
+    leaf mc-width {
+      description
+       " Width of media channel (mc)";
       type org-openroadm-common-types:frequency-GHz;
     }
     leaf min-freq {

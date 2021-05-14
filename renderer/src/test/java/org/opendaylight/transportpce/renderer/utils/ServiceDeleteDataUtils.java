@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
@@ -56,6 +57,8 @@ public final class ServiceDeleteDataUtils {
         AToZDirection atozDirection = new AToZDirectionBuilder()
                 .setRate(Uint32.valueOf(20))
                 .setAToZWavelengthNumber(Uint32.valueOf(20))
+                .setAToZMinFrequency(FrequencyTHz.getDefaultInstance("196.125"))
+                .setAToZMaxFrequency(FrequencyTHz.getDefaultInstance("196.075"))
                 .setAToZ(atoZMap)
                 .setModulationFormat("OC")
                 .build();
@@ -69,6 +72,8 @@ public final class ServiceDeleteDataUtils {
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
                 .setRate(Uint32.valueOf(20))
                 .setZToAWavelengthNumber(Uint32.valueOf(20))
+                .setZToAMinFrequency(FrequencyTHz.getDefaultInstance("196.125"))
+                .setZToAMaxFrequency(FrequencyTHz.getDefaultInstance("196.075"))
                 .setZToA(ztoAMap)
                 .setModulationFormat("OC")
                 .build();
