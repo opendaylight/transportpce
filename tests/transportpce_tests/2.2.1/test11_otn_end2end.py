@@ -378,7 +378,7 @@ class TransportPCEtesting(unittest.TestCase):
         ele = res['node'][0]['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR1-NETWORK1', ele['tp-id'])
         self.assertEqual({'frequency': 196.1,
-                          'width': 40},
+                          'nmc-width': 40},
                          ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
         time.sleep(3)
 

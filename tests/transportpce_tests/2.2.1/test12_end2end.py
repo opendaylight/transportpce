@@ -291,7 +291,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual({'frequency': 196.1,
-                                  'width': 40},
+                                  'nmc-width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             elif ele['tp-id'] in ('XPDR1-CLIENT2', 'XPDR1-CLIENT1'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
@@ -424,11 +424,11 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual({'frequency': 196.1,
-                                  'width': 40},
+                                  'nmc-width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             elif ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertEqual({'frequency': 196.05,
-                                  'width': 40},
+                                  'nmc-width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             elif ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT2'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
