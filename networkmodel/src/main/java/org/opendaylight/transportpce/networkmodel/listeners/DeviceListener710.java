@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.CreateTechInfoNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceListener;
@@ -25,11 +28,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class DeviceListener710 implements OrgOpenroadmDeviceListener {
 
@@ -59,9 +65,17 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
         }
         Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap = new HashMap<>();
         InstanceIdentifier<OduSwitchingPools> ospIID = null;
+        SwitchingPoolLcpBuilder oduSwPoolBuilder = null;
+        Map<NonBlockingListKey, org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426
+                .switching.pool.lcp.switching.pool.lcp.NonBlockingList> nonBlockingMap = new HashMap<>();
+
         for (Edit edit : notification.getEdit()) {
+            if (edit.getTarget() == null) {
+                continue;
+            }
             // 1. Detect the org-openroadm-device object modified
             LinkedList<PathArgument> path = new LinkedList<>();
+            NonBlockingListBuilder nonBlockingList = new NonBlockingListBuilder();
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
@@ -90,10 +104,38 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
                     break;
                 case "OduSwitchingPools":
                     LOG.info("odu-switching-pools modified on device {}", nodeId);
+                    if (edit.getOperation().getIntValue() == 2) {
+                        Uint16 oduSwNum = edit.getTarget().firstKeyOf(OduSwitchingPools.class).getSwitchingPoolNumber();
+                        oduSwPoolBuilder = new SwitchingPoolLcpBuilder()
+                            .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
+                            .setSwitchingPoolNumber(oduSwNum);
+                    }
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
                     ospIID = (InstanceIdentifier<OduSwitchingPools>) InstanceIdentifier.create(path);
                     break;
                 case "PortList":
+                    if (edit.getOperation().getIntValue() == 2) {
+                        Uint16 nblNum = edit.getTarget().firstKeyOf(NonBlockingList.class).getNblNumber();
+                        List<String> lcpList = new ArrayList<>();
+                        if (nonBlockingMap.containsKey(new NonBlockingListKey(nblNum))) {
+                            nonBlockingList = new NonBlockingListBuilder(nonBlockingMap
+                                    .get(new NonBlockingListKey(nblNum)));
+                            lcpList.addAll(nonBlockingList.getLcpList());
+                        } else {
+                            nonBlockingList.setNblNumber(nblNum);
+                            nonBlockingList.setInterconnectBandwidth(Uint32.valueOf(0));
+                        }
+                        nonBlockingList.withKey(new NonBlockingListKey(nblNum));
+                        lcpList.add(this.portMapping
+                                .getMapping(this.nodeId,
+                                    edit.getTarget().firstKeyOf(PortList.class).getCircuitPackName(),
+                                    edit.getTarget().firstKeyOf(PortList.class).getPortName())
+                                .getLogicalConnectionPoint());
+                        nonBlockingList.setLcpList(lcpList);
+                        nonBlockingMap.put(nonBlockingList.key(),nonBlockingList.build());
+                    } else if (edit.getOperation().getIntValue() == 3) {
+                        Uint16 nblNum = edit.getTarget().firstKeyOf(NonBlockingList.class).getNblNumber();
+                    }
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
                     InstanceIdentifier<PortList> plIID = (InstanceIdentifier<PortList>) InstanceIdentifier.create(path);
                     path.removeLast();
@@ -111,11 +153,14 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
             }
         }
         if (!nbliidMap.isEmpty() && ospIID != null) {
-            InstanceIdentifier<OduSwitchingPools> id = ospIID;
+            //InstanceIdentifier<OduSwitchingPools> id = ospIID;
+            oduSwPoolBuilder.setNonBlockingList(nonBlockingMap);
+            SwitchingPoolLcpBuilder finalOduSwPoolBuilder = oduSwPoolBuilder;
             Runnable handleNetconfEvent = new Runnable() {
                 @Override
                 public void run() {
-                    portMapping.updatePortMappingWithOduSwitchingPools(nodeId, id, nbliidMap);
+                    //portMapping.updatePortMappingWithOduSwitchingPools(nodeId, id, nbliidMap);
+                    portMapping.updatePortMappingWithOduSwitchingPools(nodeId, finalOduSwPoolBuilder.build());
                     LOG.info("{} : swiching-pool data updated", nodeId);
                 }
             };
