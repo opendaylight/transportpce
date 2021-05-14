@@ -29,6 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.SwitchingPoolLcp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -201,6 +202,19 @@ public class PortMappingImpl implements PortMapping {
             default:
                 LOG.error("Update of the port-mapping [odu-switching-pool] not available for this device version {}",
                     openROADMversion);
+                return false;
+        }
+    }
+
+    @Override
+    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, SwitchingPoolLcp switchingPoolLcp) {
+        OpenroadmNodeVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+        switch (openROADMversion.getIntValue()) {
+            case 3:
+                return portMappingVersion710.updatePortMappingWithOduSwitchingPools(nodeId, switchingPoolLcp);
+            default:
+                LOG.error("Update of the port-mapping [odu-switching-pool] not available for this device version {}",
+                        openROADMversion);
                 return false;
         }
     }
