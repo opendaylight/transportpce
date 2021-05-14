@@ -270,6 +270,25 @@ public class PortMappingVersion710 {
         return true;
     }
 
+    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, SwitchingPoolLcp switchingPoolLcp) {
+        KeyedInstanceIdentifier<Nodes, NodesKey> portMappingNodeIID = InstanceIdentifier.create(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId));
+        Nodes portmappingNode = null;
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            portmappingNode = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingNodeIID).get().get();
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to read the port-mapping for nodeId {}", nodeId, ex);
+        }
+        if (portmappingNode == null) {
+            return false;
+        }
+        Map<SwitchingPoolLcpKey, SwitchingPoolLcp> splMap = new HashMap(portmappingNode.nonnullSwitchingPoolLcp());
+        splMap.put(switchingPoolLcp.key(), switchingPoolLcp);
+        List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>(splMap.values());
+        postPortMapping(nodeId, null, null, null, switchingPoolList, null);
+        return true;
+    }
+
     private NonBlockingList createNonBlockingList(SwitchingPoolLcpBuilder splBldr, Uint32 interconnectBw,
             Entry<Uint16, List<InstanceIdentifier<PortList>>> entry, Map<MappingKey, Mapping> mappings, String nodeId) {
         NonBlockingListBuilder nblBldr;
