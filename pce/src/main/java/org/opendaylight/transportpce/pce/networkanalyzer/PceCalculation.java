@@ -606,12 +606,14 @@ public class PceCalculation {
                     pcelink.getlinkType(), pcelink);
                 break;
             case ADDLINK:
-                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().getValue()));
+                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().getValue(),
+                        StringConstants.SERVICE_DIRECTION_AZ));
                 addLinks.add(pcelink);
                 LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
                 break;
             case DROPLINK:
-                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().getValue()));
+                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().getValue(),
+                        StringConstants.SERVICE_DIRECTION_ZA));
                 dropLinks.add(pcelink);
                 LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
                 break;
