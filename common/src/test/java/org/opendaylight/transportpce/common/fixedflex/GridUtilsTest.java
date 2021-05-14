@@ -130,7 +130,7 @@ public class GridUtilsTest {
                         .FrequencyTHz(BigDecimal.valueOf(196.125)))
                 .setMinFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyTHz(BigDecimal.valueOf(196.075)))
-                .setWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
+                .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyGHz(GridConstant.WIDTH_40))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
@@ -156,7 +156,7 @@ public class GridUtilsTest {
                         .FrequencyTHz(BigDecimal.valueOf(196.125)))
                 .setMinFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyTHz(BigDecimal.valueOf(196.075)))
-                .setWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
+                .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyGHz(GridConstant.WIDTH_40))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
@@ -178,7 +178,7 @@ public class GridUtilsTest {
                 .setWaveNumber(Uint32.valueOf(1))
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-                .setWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
+                .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyGHz(GridConstant.WIDTH_40))
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);

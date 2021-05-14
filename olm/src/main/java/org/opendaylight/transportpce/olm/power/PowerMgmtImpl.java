@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.olm.power;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -370,15 +372,17 @@ public class PowerMgmtImpl implements PowerMgmt {
         BigDecimal powerValue = spanLossTx.subtract(BigDecimal.valueOf(9)).min(BigDecimal.valueOf(2));
         // we work at constant power spectral density (50 GHz channel width @-20dBm=37.5GHz)
         // 87.5 GHz channel width @-20dBm=75GHz
-        if (input.getWidth() != null) {
-            BigDecimal gridSize = input.getWidth().getValue();
-            LOG.debug("Input Gridsize is {}",gridSize);
-            if (gridSize.equals(GridConstant.WIDTH_80)) {
-                powerValue = powerValue.add(BigDecimal.valueOf(3));
-            }
-            // TODO no default or warning for unsupported grid sizes ?
+        LOG.debug("Input Gridsize is {}",input.getMcWidth().getValue());
+        if (input.getMcWidth() != null && input.getMcWidth().getValue().equals(GridConstant.WIDTH_80)) {
+            powerValue = powerValue.add(BigDecimal.valueOf(3));
+        } else if (input.getMcWidth() != null && input.getMcWidth().getValue().equals(GridConstant.SLOT_WIDTH_87_5)) {
+            BigDecimal logVal = GridConstant.SLOT_WIDTH_87_5.divide(new BigDecimal(50));
+            double pdsVal = 10 * Math.log10(logVal.doubleValue());
+            powerValue = powerValue.add(new BigDecimal(pdsVal,
+                    new MathContext(3, RoundingMode.HALF_EVEN)));
         }
-        // FIXME compliancy with OpenROADM MSA and approximations used
+
+        // FIXME compliancy with OpenROADM MSA and approximations used -- should be addressed with powermask update
         // cf JIRA ticket https://jira.opendaylight.org/browse/TRNSPRTPCE-494
         LOG.info("Power Value is {}", powerValue);
         return powerValue;
