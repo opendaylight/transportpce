@@ -563,7 +563,7 @@ public class PceOtnNode implements PceNode {
     }
 
     @Override
-    public String getRdmSrgClient(String tp) {
+    public String getRdmSrgClient(String tp, String direction) {
         return null;
     }
 
