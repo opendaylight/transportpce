@@ -286,7 +286,7 @@ class TransportOlmTesting(unittest.TestCase):
                     }
                 ],
                 "center-freq": 196.1,
-                "width": 40,
+                "nmc-width": 40,
                 "min-freq": 196.075,
                 "max-freq": 196.125,
                 "lower-spectral-slot-number": 761,
@@ -351,7 +351,7 @@ class TransportOlmTesting(unittest.TestCase):
                     }
                 ],
                 "center-freq": 196.1,
-                "width": 40,
+                "nmc-width": 40,
                 "min-freq": 196.075,
                 "max-freq": 196.125,
                 "lower-spectral-slot-number": 761,
@@ -409,7 +409,7 @@ class TransportOlmTesting(unittest.TestCase):
                     }
                 ],
                 "center-freq": 196.1,
-                "width": 40,
+                "nmc-width": 40,
                 "min-freq": 196.075,
                 "max-freq": 196.125,
                 "lower-spectral-slot-number": 761,
