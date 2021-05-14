@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "597c6846_d727269c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-14T19:57:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "91c779f7_9240a428",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3439fb91_2cbac342",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
         "patchSetId": 7
@@ -50,6 +68,24 @@
       "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "489cd2f4_c0d14bec",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-14T19:57:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3439fb91_2cbac342",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
