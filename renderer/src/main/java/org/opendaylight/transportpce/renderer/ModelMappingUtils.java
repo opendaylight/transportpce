@@ -35,7 +35,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
@@ -44,9 +43,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.NodesKey;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -124,7 +123,9 @@ public final class ModelMappingUtils {
             .setServiceName(serviceName)
             .setOperation(operation)
             .setNodes(nodeLists.getRendererNodeList())
-            .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
+            .setNmcWidth(new FrequencyGHz(GridConstant.WIDTH_40))
+            .setMcWidth(new FrequencyGHz(pathDescription.getAToZDirection().getAToZMaxFrequency().getValue()
+                       .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue())));
         if (atoZDirection.getAToZWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(atoZDirection.getAToZWavelengthNumber());
@@ -157,7 +158,7 @@ public final class ModelMappingUtils {
                     && GridConstant.FREQUENCY_WIDTH_TABLE
                     .contains(atoZDirection.getRate(), optionalModulationFormat.get())) {
                 servicePathInputBuilder
-                    .setWidth(FrequencyGHz
+                    .setNmcWidth(FrequencyGHz
                         .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),
                         optionalModulationFormat.get())));
             }
@@ -176,7 +177,9 @@ public final class ModelMappingUtils {
             .setOperation(operation)
             .setServiceName(serviceName)
             .setNodes(nodeLists.getRendererNodeList())
-            .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
+            .setNmcWidth(new FrequencyGHz(GridConstant.WIDTH_40))
+            .setMcWidth(new FrequencyGHz(pathDescription.getAToZDirection().getAToZMaxFrequency().getValue()
+                        .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue())));
         if (ztoADirection.getZToAWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(ztoADirection.getZToAWavelengthNumber());
@@ -208,7 +211,7 @@ public final class ModelMappingUtils {
             if (optionalModulationFormat.isPresent()
                     && GridConstant.FREQUENCY_WIDTH_TABLE
                     .contains(ztoADirection.getRate(), optionalModulationFormat.get())) {
-                servicePathInputBuilder.setWidth(FrequencyGHz
+                servicePathInputBuilder.setNmcWidth(FrequencyGHz
                         .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),
                                 optionalModulationFormat.get())));
             }
@@ -221,7 +224,7 @@ public final class ModelMappingUtils {
     public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, Action operation,
         String serviceFormat, Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
-        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.Nodes> nodes =
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes> nodes =
             new ArrayList<>();
         NodeLists nodeLists =
             (asideToZside)
@@ -229,7 +232,7 @@ public final class ModelMappingUtils {
             : getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
         for (Nodes node: nodeLists.getRendererNodeList()) {
-            nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
+            nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes
                 .NodesBuilder()
                             .setNodeId(node.getNodeId())
                             .setClientTp(node.getSrcTp())
@@ -252,12 +255,6 @@ public final class ModelMappingUtils {
             otnServicePathInputBuilder
                 .setTribPortNumber(tribPort)
                 .setTribSlot(minTribSlot);
-        }
-        if (serviceRate.intValue() == 100) {
-            List<OpucnTribSlotDef> opucnTribSlotDefList = new ArrayList<>();
-            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMinTribSlot());
-            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMaxTribSlot());
-            otnServicePathInputBuilder.setOpucnTribSlots(opucnTribSlotDefList);
         }
         return otnServicePathInputBuilder.build();
     }
