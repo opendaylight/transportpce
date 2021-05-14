@@ -203,8 +203,8 @@ public final class GridUtils {
                     .getCentralFrequency(spectrumInformation.getMinFrequency(),
                             spectrumInformation.getMaxFrequency()).getValue());
         }
-        if (input.getWidth() != null) {
-            spectrumInformation.setWidth(input.getWidth().getValue());
+        if (input.getNmcWidth() != null) {
+            spectrumInformation.setWidth(input.getNmcWidth().getValue());
         }
         if (input.getModulationFormat() != null) {
             spectrumInformation.setModulationFormat(input.getModulationFormat());
