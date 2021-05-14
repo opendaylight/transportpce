@@ -311,7 +311,7 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public String getRdmSrgClient(String tp) {
+    public String getRdmSrgClient(String tp, String direction) {
         LOG.info("getRdmSrgClient: Getting PP client for tp '{}' on node : {}", tp, this.nodeId);
         OpenroadmTpType srgType = null;
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
@@ -322,7 +322,16 @@ public class PceOpticalNode implements PceNode {
         switch (cpType) {
             case SRGTXRXCP:
                 LOG.info("getRdmSrgClient: Getting BI Directional PP port ...");
-                srgType = OpenroadmTpType.SRGTXRXPP;
+                // Take the first-element in the available PP key set
+                if (availableSrgPp.entrySet().iterator().next().getKey()
+                        // and check if the port is bidirectional
+                        .contains("TXRX")) {
+                    srgType = OpenroadmTpType.SRGTXRXPP;
+                } else if (direction.equalsIgnoreCase("aToz")) {
+                    srgType = OpenroadmTpType.SRGRXPP;
+                } else {
+                    srgType = OpenroadmTpType.SRGTXPP;
+                }
                 break;
             case SRGTXCP:
                 LOG.info("getRdmSrgClient: Getting UNI Rx PP port ...");
