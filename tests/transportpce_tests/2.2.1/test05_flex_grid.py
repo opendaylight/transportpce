@@ -130,7 +130,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                 "transportpce-device-renderer:service-name": "testNMC-MC",
                 "transportpce-device-renderer:wave-number": "0",
                 "transportpce-device-renderer:center-freq": "196.05",
-                "transportpce-device-renderer:width": "80",
+                "transportpce-device-renderer:nmc-width": "80",
                 "transportpce-device-renderer:nodes": [
                     {
                         "transportpce-device-renderer:node-id": "ROADM-D1",
