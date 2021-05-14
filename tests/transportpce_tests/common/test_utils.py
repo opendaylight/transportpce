@@ -441,7 +441,7 @@ def service_path_request(operation: str, servicename: str, wavenumber: str, node
         "renderer:operation": operation,
         "renderer:nodes": nodes,
         "renderer:center-freq": centerfreq,
-        "renderer:width": slotwidth,
+        "renderer:nmc-width": slotwidth,
         "renderer:min-freq": minfreq,
         "renderer:max-freq": maxfreq,
         "renderer:lower-spectral-slot-number": lowerslotnumber,

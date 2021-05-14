@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -63,6 +65,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private final OtnDeviceRendererService otnDeviceRendererService = Mockito.mock(OtnDeviceRendererService.class);
     private final PortMapping portMapping = Mockito.mock(PortMapping.class);
     private final CrossConnect crossConnect = Mockito.mock(CrossConnect.class);
+    private final ReadTransaction readTransaction = Mockito.mock(ReadTransaction.class);
     private TransportpceOlmService olmService;
 
     private void setMountPoint(MountPoint mountPoint) {
@@ -82,7 +85,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
 
     @Test
-    public void serviceDeleteOperationPp() throws ExecutionException, InterruptedException {
+    public void serviceDeleteOperationPp() throws ExecutionException, InterruptedException, TimeoutException {
         writePathDescription();
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
