@@ -46,6 +46,9 @@ public final class StringConstants {
     public static final String SERVICE_TYPE_ODUC4 = "ODUC4";
 
 
+    public static final String SERVICE_DIRECTION_AZ = "aToz";
+    public static final String SERVICE_DIRECTION_ZA = "zToa";
+
     private StringConstants() {
         // hiding the default constructor
     }
