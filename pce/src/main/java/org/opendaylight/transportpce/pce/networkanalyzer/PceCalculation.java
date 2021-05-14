@@ -405,12 +405,14 @@ public class PceCalculation {
                         pcelink.getlinkType(), pcelink);
                     break;
                 case ADDLINK:
-                    pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
+                    pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString(),
+                            StringConstants.SERVICE_DIRECTION_AZ));
                     addLinks.add(pcelink);
                     LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
                     break;
                 case DROPLINK:
-                    pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
+                    pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString(),
+                            StringConstants.SERVICE_DIRECTION_ZA));
                     dropLinks.add(pcelink);
                     LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
                     break;
@@ -529,11 +531,23 @@ public class PceCalculation {
         }
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.aendPceNode == null
             && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
-            this.aendPceNode = pceNode;
+            // Added to ensure A-node has a addlink in the topology
+            List<Link> links = this.allLinks.stream()
+                    .filter(x -> x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
+                    .collect(Collectors.toList());
+            if (links.size() > 0) {
+                this.aendPceNode = pceNode;
+            }
         }
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.zendPceNode == null
             && isAZendPceNode(this.serviceFormatZ, pceNode, znodeId, "Z")) {
-            this.zendPceNode = pceNode;
+            // Added to ensure Z-node has a droplink in the topology
+            List<Link> links = this.allLinks.stream()
+                    .filter(x -> x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
+                    .collect(Collectors.toList());
+            if (links.size() > 0) {
+                this.zendPceNode = pceNode;
+            }
         }
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);

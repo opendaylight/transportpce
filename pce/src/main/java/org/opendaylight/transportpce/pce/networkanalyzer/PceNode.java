@@ -26,7 +26,7 @@ public interface PceNode {
 
     void addOutgoingLink(PceLink outLink);
 
-    String getRdmSrgClient(String tp);
+    String getRdmSrgClient(String tp, String direction);
 
     String getXpdrClient(String tp);
 
