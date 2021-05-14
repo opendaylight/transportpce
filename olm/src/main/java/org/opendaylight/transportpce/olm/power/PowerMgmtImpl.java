@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.olm.power;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -324,6 +326,13 @@ public class PowerMgmtImpl implements PowerMgmt {
                         // 87.5 GHz channel width @-20dBm=75GHz
                         if (input.getWidth() != null && GridConstant.WIDTH_80.equals(input.getWidth().getValue())) {
                             powerValue = powerValue.add(BigDecimal.valueOf(3));
+                        } else if (input.getWidth() != null && GridConstant.SLOT_WIDTH_87_5.equals(input.getWidth()
+                                .getValue())) {
+                            LOG.debug("Input Gridsize is {}",input.getWidth().getValue());
+                            BigDecimal logVal = GridConstant.SLOT_WIDTH_87_5.divide(new BigDecimal(50));
+                            double pdsVal = 10 * Math.log10(logVal.doubleValue());
+                            powerValue = powerValue.add(new BigDecimal(pdsVal,
+                                    new MathContext(3, RoundingMode.HALF_EVEN)));
                         }
                         LOG.info("Power Value is {}", powerValue);
                         try {
