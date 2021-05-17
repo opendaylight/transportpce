@@ -61,6 +61,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
@@ -360,6 +361,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 String.valueOf(lowerSpectralSlotNumber),
                 String.valueOf(higherSpectralSlotNumber));
+        OpenroadmNodeVersion nodeOpenRoadmVersion = this.portMapping.getNode(nodeId).getNodeInfo()
+                .getOpenroadmVersion();
         List<String> interfacesToDelete = new LinkedList<>();
         if (destTp.contains(StringConstants.NETWORK_TOKEN)
                 || srcTp.contains(StringConstants.CLIENT_TOKEN)
@@ -381,6 +384,23 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 interfacesToDelete.add(
                         this.openRoadmInterfaceFactory
                         .createOpenRoadmOchInterfaceName(destTp,spectralSlotName));
+            } else if (destTp.contains(StringConstants.NETWORK_TOKEN) && nodeOpenRoadmVersion
+                    .equals(OpenroadmNodeVersion._71)) {
+                try {
+                    if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODUFLEX").isPresent()) {
+                        interfacesToDelete.add(destTp + "-ODUFLEX");
+                    }
+                    if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODUC4").isPresent()) {
+                        interfacesToDelete.add(destTp + "-ODUC4");
+                    }
+                    if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-OTUC4").isPresent()) {
+                        interfacesToDelete.add(destTp + "-OTUC4");
+                    }
+                } catch (OpenRoadmInterfaceException e) {
+                    LOG.error("impossible to get interface {} or {}", destTp + "-ODU", destTp + ODU4, e);
+                }
+                interfacesToDelete.add(destTp + "-OTSI-GROUP");
+                interfacesToDelete.add(destTp + "-" + lowerSpectralSlotNumber + ":" + higherSpectralSlotNumber);
             }
             if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                 interfacesToDelete.add(srcTp + "-ODU");
