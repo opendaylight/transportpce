@@ -260,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "1ffd7d02_709b5b3f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-17T09:31:50Z",
+      "side": 1,
+      "message": "So I assume the answer is \"there is no error to log\".",
+      "parentUuid": "212fb624_e6215732",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "daac4f97_4a118fbc",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 1
