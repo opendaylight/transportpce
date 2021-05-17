@@ -103,33 +103,9 @@ public class OpenRoadmInterfacesImpl710 {
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.get();
             // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
-            if (ifBuilder.getType() == OtnOdu.class) {
-                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.augmentation(Interface1.class));
-                OduBuilder odu = new OduBuilder(oduBuilder.getOdu());
-                if (odu.getMaintTestsignal() != null) {
-                    MaintTestsignalBuilder maintSignalBuilder = new MaintTestsignalBuilder();
-                    maintSignalBuilder.setEnabled(false);
-                    odu.setMaintTestsignal(maintSignalBuilder.build());
-                }
-                oduBuilder.setOdu(odu.build());
-                ifBuilder.addAugmentation(oduBuilder.build());
-            } else if (ifBuilder.getType() == OtnOtu.class) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder
-                    otuBuilder =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder(
-                        intf2Delete.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1
-                                .class));
-                OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
-                if (otu.getMaintLoopback() != null) {
-                    MaintLoopbackBuilder maintLoopBackBuilder = new MaintLoopbackBuilder();
-                    maintLoopBackBuilder.setEnabled(false);
-                    otu.setMaintLoopback(maintLoopBackBuilder.build());
-                }
-                otuBuilder.setOtu(otu.build());
-                ifBuilder.addAugmentation(otuBuilder.build());
-            }
+            InterfaceBuilder ifBuilder = new InterfaceBuilder();
+            ifBuilder.setName(intf2Delete.getName());
+            ifBuilder.setType(intf2Delete.getType());
             ifBuilder.setAdministrativeState(AdminStates.OutOfService);
             // post interface with updated admin state
             try {
