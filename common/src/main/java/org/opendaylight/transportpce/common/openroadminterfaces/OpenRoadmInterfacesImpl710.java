@@ -28,14 +28,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfac
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.States;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOdu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOtu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.loopback.rev191129.maint.loopback.MaintLoopbackBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.testsignal.rev200529.maint.testsignal.MaintTestsignalBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.odu.container.OduBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.otu.container.OtuBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +84,7 @@ public class OpenRoadmInterfacesImpl710 {
 
 
     public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
-        LOG.info("deleting interface {} on device221 {}", interfaceName, nodeId);
+        LOG.info("deleting interface {} on device71 {}", interfaceName, nodeId);
         Optional<Interface> intf2DeleteOpt;
         try {
             intf2DeleteOpt = getInterface(nodeId, interfaceName);
@@ -103,33 +95,9 @@ public class OpenRoadmInterfacesImpl710 {
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.get();
             // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
-            if (ifBuilder.getType() == OtnOdu.class) {
-                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.augmentation(Interface1.class));
-                OduBuilder odu = new OduBuilder(oduBuilder.getOdu());
-                if (odu.getMaintTestsignal() != null) {
-                    MaintTestsignalBuilder maintSignalBuilder = new MaintTestsignalBuilder();
-                    maintSignalBuilder.setEnabled(false);
-                    odu.setMaintTestsignal(maintSignalBuilder.build());
-                }
-                oduBuilder.setOdu(odu.build());
-                ifBuilder.addAugmentation(oduBuilder.build());
-            } else if (ifBuilder.getType() == OtnOtu.class) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder
-                    otuBuilder =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder(
-                        intf2Delete.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1
-                                .class));
-                OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
-                if (otu.getMaintLoopback() != null) {
-                    MaintLoopbackBuilder maintLoopBackBuilder = new MaintLoopbackBuilder();
-                    maintLoopBackBuilder.setEnabled(false);
-                    otu.setMaintLoopback(maintLoopBackBuilder.build());
-                }
-                otuBuilder.setOtu(otu.build());
-                ifBuilder.addAugmentation(otuBuilder.build());
-            }
+            InterfaceBuilder ifBuilder = new InterfaceBuilder();
+            ifBuilder.setName(intf2Delete.getName());
+            ifBuilder.setType(intf2Delete.getType());
             ifBuilder.setAdministrativeState(AdminStates.OutOfService);
             // post interface with updated admin state
             try {
