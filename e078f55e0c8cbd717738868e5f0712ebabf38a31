@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a34dfbef_8367cd27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "title length \u003e 50 char",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f830955c_8f28afd0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "line \u003e 72 char",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fcc674e_228f5027",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "Do we really need 2 subscriptions ?",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a5e7639_45459f78",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "this comment line is not useful",
+      "range": {
+        "startLine": 107,
+        "startChar": 20,
+        "endLine": 107,
+        "endChar": 81
+      },
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0005293d_aead5c8b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "what  about ?\n                        Uint16 oduSwNum \u003d edit.getTarget().firstKeyOf(OduSwitchingPools.class).getSwitchingPoolNumber();\n                        oduSwPoolBuilder \u003d new SwitchingPoolLcpBuilder()\n                            .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)\n                            .setSwitchingPoolNumber(oduSwNum);",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca9a97d_f0da335f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "idem etc",
+      "range": {
+        "startLine": 114,
+        "startChar": 20,
+        "endLine": 114,
+        "endChar": 81
+      },
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5db71f70_e351f4cc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-18T13:34:17Z",
+      "side": 1,
+      "message": "String allocation for circuitPackName, cpPortName and lcp can be avoided",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
