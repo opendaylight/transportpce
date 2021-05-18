@@ -278,6 +278,24 @@
     },
     {
       "key": {
+        "uuid": "4368927d_283449cf",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-05-18T10:57:22Z",
+      "side": 1,
+      "message": "yes, exactly",
+      "parentUuid": "1ffd7d02_709b5b3f",
+      "revId": "0b0f68cbdc80dbce95c6a802a118d142aa881ede",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "daac4f97_4a118fbc",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 1
