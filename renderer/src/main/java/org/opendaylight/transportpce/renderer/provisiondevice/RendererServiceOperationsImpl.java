@@ -650,7 +650,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
                 "Deleting otn-service path via renderer");
         OtnServicePathOutput result = otnDeviceRenderer.deleteOtnServicePath(ospi);
-        if (result.isSuccess()) {
+        if (result.getSuccess()) {
             sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
                     serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription);
             return true;

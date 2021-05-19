@@ -649,7 +649,7 @@ public class INode221 {
                     .getOdu());
                 oduRate = String.valueOf(oduIfBuilder.getRate());
                 oduMonitoringMode = oduIfBuilder.getMonitoringMode().getName();
-                oduProactiveDelayMeasurementEnabled = oduIfBuilder.isProactiveDelayMeasurementEnabled().toString();
+                oduProactiveDelayMeasurementEnabled = oduIfBuilder.getProactiveDelayMeasurementEnabled().toString();
 
                 persistDevInterfaceTcm(nodeId, name, oduIfBuilder, connection);
                 persistDevInterfaceOtnOduTxMsi(nodeId, name, oduIfBuilder, connection);
@@ -663,7 +663,7 @@ public class INode221 {
                         /*persistDevInterfaceOtnOduTxMsi(nodeId,name,oduIfBuilder,connection);
                         persistDevInterfaceOtnOduRxMsi(nodeId,name,oduIfBuilder,connection);
                         persistDevInterfaceOtnOduExpMsi(nodeId,name,oduIfBuilder,connection); */
-                maintTestsignalEnabled = oduIfBuilder.getMaintTestsignal().isEnabled().toString();
+                maintTestsignalEnabled = oduIfBuilder.getMaintTestsignal().getEnabled().toString();
                 maintTestsignalTestpatternEnu = oduIfBuilder.getMaintTestsignal().getTestPattern().getIntValue();
                 maintTestsignalTypeEnu = oduIfBuilder.getMaintTestsignal().getType().getIntValue();
                 maintTestsignalBiterrors = oduIfBuilder.getMaintTestsignal().getBitErrors().toString();
@@ -678,7 +678,7 @@ public class INode221 {
                     .getOtu());
                 otuRate = otuIfBuilder.getRate().getName();
                 otuFecEnu = otuIfBuilder.getFec().getIntValue();
-                otuMaintLoopbackEnabled = otuIfBuilder.getMaintLoopback().isEnabled().toString();
+                otuMaintLoopbackEnabled = otuIfBuilder.getMaintLoopback().getEnabled().toString();
                 otuMaintTypeEnu = otuIfBuilder.getMaintLoopback().getType().getIntValue();
                 break;
 
@@ -792,8 +792,8 @@ public class INode221 {
 
         String layer = tcm.getLayer().toString();
         int monitoringModeEnu = tcm.getMonitoringMode().getIntValue();
-        String ltcActEnabled = tcm.isLtcActEnabled().toString();
-        String proactiveDelayMeasurementEnabled = tcm.isProactiveDelayMeasurementEnabled().toString();
+        String ltcActEnabled = tcm.getLtcActEnabled().toString();
+        String proactiveDelayMeasurementEnabled = tcm.getProactiveDelayMeasurementEnabled().toString();
         //int tcmDirectionEnu = -1;
         //int timDetectModeEnu = -1;
         //String txSapi = "";
