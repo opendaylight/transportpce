@@ -121,7 +121,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         setMountPoint(null);
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertFalse(result.isSuccess());
+        Assert.assertFalse(result.getSuccess());
         Assert.assertEquals("node 1 is not mounted on the controller",
             result.getResult());
     }
@@ -131,7 +131,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertFalse(result.isSuccess());
+        Assert.assertFalse(result.getSuccess());
     }
 
     @Test
@@ -151,7 +151,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         writePortMapping(input);
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertTrue(result.isSuccess());
+        Assert.assertTrue(result.getSuccess());
     }
 
     private void writePortMapping(CreateOtsOmsInput input) {

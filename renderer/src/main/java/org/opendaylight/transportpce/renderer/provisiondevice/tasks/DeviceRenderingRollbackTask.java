@@ -55,7 +55,7 @@ public class DeviceRenderingRollbackTask extends RollbackTask {
                 .setNodeInterface(this.renderedInterfaces)
                 .build();
         RendererRollbackOutput rollbackOutput = this.rendererService.rendererRollback(rollbackInput);
-        if (! rollbackOutput.isSuccess()) {
+        if (! rollbackOutput.getSuccess()) {
             LOG.warn("Device rendering rollback of {} was not successful! Failed rollback on {}.", this.getId(),
                     createErrorMessage(rollbackOutput.nonnullFailedToRollback().values()));
         } else {

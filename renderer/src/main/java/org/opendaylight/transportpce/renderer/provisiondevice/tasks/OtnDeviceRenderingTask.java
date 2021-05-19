@@ -33,7 +33,7 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
     @Override
     public OtnDeviceRenderingResult call() throws Exception {
         OtnServicePathOutput output = this.otnDeviceRenderer.setupOtnServicePath(this.otnServicePathInput);
-        if (Boolean.TRUE.equals(output.isSuccess())) {
+        if (Boolean.TRUE.equals(output.getSuccess())) {
             LOG.info("Device rendering finished successfully.");
             return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()));
 
