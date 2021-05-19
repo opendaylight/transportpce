@@ -90,7 +90,7 @@ public interface PortMapping {
      *            Unique Identifier for the node of interest.
      * @param circuitPackName
      *            Name of the supporting circuit-pack
-     * @param circuitPackName
+     * @param portName
      *            Name of the supporting port
      *
      * @return Result Mapping object if success otherwise null.
