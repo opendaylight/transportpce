@@ -38,7 +38,7 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
     public DeviceRenderingResult call() throws Exception {
         ServicePathOutput output = this.deviceRenderer.setupServicePath(this.servicePathInputData.getServicePathInput(),
                 this.direction);
-        if (!output.isSuccess()) {
+        if (!output.getSuccess()) {
             LOG.warn("Device rendering not successfully finished.");
             return DeviceRenderingResult.failed("Operation Failed");
         }
