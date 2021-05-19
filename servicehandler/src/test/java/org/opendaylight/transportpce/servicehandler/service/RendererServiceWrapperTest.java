@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +50,11 @@ public class RendererServiceWrapperTest extends AbstractTest {
     @InjectMocks
     private RendererServiceWrapper rendererServiceWrapperMock;
 
+    private AutoCloseable closeable;
+
     @Before
-    public void init() throws NoSuchMethodException {
-        MockitoAnnotations.initMocks(this);
+    public void openMocks() throws NoSuchMethodException {
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -153,5 +156,9 @@ public class RendererServiceWrapperTest extends AbstractTest {
         verify(this.rendererServiceOperationsMock).serviceDelete(any(
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteInput
                     .class), any());
+    }
+
+    @After public void releaseMocks() throws Exception {
+        closeable.close();
     }
 }
