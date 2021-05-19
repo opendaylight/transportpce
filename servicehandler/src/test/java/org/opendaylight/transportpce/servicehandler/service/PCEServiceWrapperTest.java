@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,9 +47,11 @@ public class PCEServiceWrapperTest extends AbstractTest {
     @InjectMocks
     private PCEServiceWrapper pceServiceWrapperMock;
 
+    private AutoCloseable closeable;
+
     @Before
-    public void init() throws NoSuchMethodException {
-        MockitoAnnotations.initMocks(this);
+    public void openMocks() throws NoSuchMethodException {
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -159,5 +162,9 @@ public class PCEServiceWrapperTest extends AbstractTest {
         Assert.assertEquals("PCE calculation in progress",
                 pceResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.pathComputationServiceMock).pathComputationRequest((any(PathComputationRequestInput.class)));
+    }
+
+    @After public void releaseMocks() throws Exception {
+        closeable.close();
     }
 }

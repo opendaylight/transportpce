@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,11 +36,11 @@ public class RendererProviderTest extends AbstractTest {
     @Mock
     DeviceRendererRPCImpl deviceRendererRPC;
 
+    private AutoCloseable closeable;
 
     @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-
+    public void openMocks() {
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -55,5 +56,8 @@ public class RendererProviderTest extends AbstractTest {
                 .registerRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
     }
 
+    @After public void releaseMocks() throws Exception {
+        closeable.close();
+    }
 
 }
