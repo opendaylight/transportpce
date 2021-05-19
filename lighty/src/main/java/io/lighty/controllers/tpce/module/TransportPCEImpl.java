@@ -239,27 +239,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         return true;
     }
 
-    /**
-     * Init tapi provider beans.
-     *
-     * @param lightyServices LightyServices
-     * @param rendererServiceOperations RendererServiceOperations
-     * @return TapiProvider instance
-     */
     private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler) {
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
                 servicehandler, new TapiListener());
     }
 
-    /**
-     * Init renderer provider beans.
-     *
-     * @param lightyServices LightyServices
-     * @param olmPowerServiceRpc TransportpceOlmService
-     * @param deviceRendererService DeviceRendererService
-     * @param otnDeviceRendererService OtnDeviceRendererService
-     * @return RendererProvider instance
-     */
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
             DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService) {
         DeviceRendererRPCImpl deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService,
@@ -271,14 +255,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 rendererServiceOperations);
     }
 
-    /**
-     * Init OpenRoadmInterfaceFactory.
-     *
-     * @param mappingUtils MappingUtils
-     * @param openRoadmInterfaces OpenRoadmInterfaces
-     * @param portMapping PortMapping
-     * @return OpenRoadmInterfaceFactory instance
-     */
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
             OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
@@ -290,13 +266,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             openRoadmInterface710, openRoadmOtnInterface221);
     }
 
-    /**
-     * Init PortMapping.
-     *
-     * @param lightyServices LightyServices
-     * @param openRoadmInterfaces OpenRoadmInterfaces
-     * @return PortMapping instance
-     */
     private PortMapping initPortMapping(LightyServices lightyServices, OpenRoadmInterfaces openRoadmInterfaces) {
         PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(lightyServices.getBindingDataBroker(),
             deviceTransactionManager, openRoadmInterfaces);
@@ -308,12 +277,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             portMappingVersion221, portMappingVersion121);
     }
 
-    /**
-     * Init OpenRoadmInterfaces.
-     *
-     * @param mappingUtils MappingUtils
-     * @return OpenRoadmInterfaces instance
-     */
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils) {
         OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(
                 deviceTransactionManager);
@@ -325,12 +288,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
     }
 
-    /**
-     * Init CrossConnect.
-     *
-     * @param mappingUtils MappingUtils
-     * @return CrossConnect instance
-     */
     private CrossConnect initCrossConnect(MappingUtils mappingUtils) {
         CrossConnectImpl121 crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         CrossConnectImpl221 crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
