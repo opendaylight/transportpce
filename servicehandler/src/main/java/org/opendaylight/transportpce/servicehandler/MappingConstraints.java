@@ -173,9 +173,9 @@ public class MappingConstraints {
                         .setExistingService(tmpDiversity.getExistingService())
                         .setExistingServiceApplicability(
                                 new ExistingServiceApplicabilityBuilder()
-                                .setClli(tmpDiversity.getExistingServiceApplicability().isSite())
-                                .setNode(tmpDiversity.getExistingServiceApplicability().isNode())
-                                .setSrlg(tmpDiversity.getExistingServiceApplicability().isSrlg())
+                                .setClli(tmpDiversity.getExistingServiceApplicability().getSite())
+                                .setNode(tmpDiversity.getExistingServiceApplicability().getNode())
+                                .setSrlg(tmpDiversity.getExistingServiceApplicability().getSrlg())
                                 .build())
                         .build());
             }

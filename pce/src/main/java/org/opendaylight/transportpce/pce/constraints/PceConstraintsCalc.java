@@ -172,13 +172,13 @@ public class PceConstraintsCalc {
             if (temp == null) {
                 return;
             }
-            if (Boolean.TRUE.equals(temp.isNode())) {
+            if (Boolean.TRUE.equals(temp.getNode())) {
                 rt = PceConstraints.ResourceType.NODE;
             }
-            if (Boolean.TRUE.equals(temp.isSrlg())) {
+            if (Boolean.TRUE.equals(temp.getSrlg())) {
                 rt = PceConstraints.ResourceType.SRLG;
             }
-            if (Boolean.TRUE.equals(temp.isClli())) {
+            if (Boolean.TRUE.equals(temp.getClli())) {
                 rt = PceConstraints.ResourceType.CLLI;
             }
             LOG.info("in readGeneralContrains {} list is :{}", rt, diversity);
