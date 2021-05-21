@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb908bd3_5946a1f5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:18:57Z",
+      "side": 1,
+      "message": "fall-through comment is useless just after switch declaration.",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "764cd2d1_374ef510",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:18:57Z",
+      "side": 1,
+      "message": "OK maybe a ternary operator is more indicated here",
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f457126c_e217dc0f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:18:57Z",
+      "side": 1,
+      "message": "I thinks switch/case is more indicated here and maybe above and below for style coherency.",
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "026cf5ee_d16472f8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:18:57Z",
+      "side": 1,
+      "message": "idem here but there will be nested switch/case structure.\nSo there is probably room here for one or more intermediate function(s).",
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "804d0040_82062574",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:18:57Z",
+      "side": 1,
+      "message": "this condition can be factorized\n\nthis way a switch/case structure can be used on this.otnServicetype",
+      "range": {
+        "startLine": 131,
+        "startChar": 15,
+        "endLine": 131,
+        "endChar": 73
+      },
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
