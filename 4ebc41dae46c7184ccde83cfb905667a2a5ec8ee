@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ed98112_af8d7bbf",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5513eda_facf60d6",
+      "revId": "4ebc41dae46c7184ccde83cfb905667a2a5ec8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3956f85a_53301696",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "4ebc41dae46c7184ccde83cfb905667a2a5ec8ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6af2e84_7717aef3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3956f85a_53301696",
+      "revId": "4ebc41dae46c7184ccde83cfb905667a2a5ec8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "4ebc41dae46c7184ccde83cfb905667a2a5ec8ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824db49b_4d31f9c2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf810f7f_bee87dbd",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 14
+      },
+      "revId": "4ebc41dae46c7184ccde83cfb905667a2a5ec8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
