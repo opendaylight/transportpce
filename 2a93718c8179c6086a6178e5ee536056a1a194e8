@@ -46,6 +46,30 @@
       "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2864a359_e9042eb4",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T15:25:22Z",
+      "side": 1,
+      "message": "I have no objection but I need other\u0027s feedback.\nNote that June is getting close now and there are still a few open issues in this change.\n\nAnyway, I think that if 7.1.0 is supported, 7.1 must be supported too and thus is missing here.",
+      "parentUuid": "1e185df1_25c07ea4",
+      "range": {
+        "startLine": 244,
+        "startChar": 84,
+        "endLine": 244,
+        "endChar": 87
+      },
+      "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
