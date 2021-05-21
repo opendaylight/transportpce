@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dc76e67_6d379174",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T13:09:02Z",
+      "side": 1,
+      "message": "colon not needed at the end of the title\n\nWhat about this title \"Update Renderer Interface deletion for B100G TPDR\" rather ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "fe8aec882263d047ae21484e4b254a1068d68b8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9afcdbe_e10ac3b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T13:09:02Z",
+      "side": 1,
+      "message": "Renderer",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "fe8aec882263d047ae21484e4b254a1068d68b8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b03fad5_67771c97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T13:09:02Z",
+      "side": 1,
+      "message": "line length \u003e 72 char",
+      "revId": "fe8aec882263d047ae21484e4b254a1068d68b8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b86f0cd9_5bc35f9c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T13:09:02Z",
+      "side": 1,
+      "message": "variable allocation not needed\nsee below",
+      "revId": "fe8aec882263d047ae21484e4b254a1068d68b8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afbfd809_0f93bb88",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-21T13:09:02Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n             } else if (destTp.contains(StringConstants.NETWORK_TOKEN) \u0026\u0026\n                     this.portMapping.getNode(nodeId).getNodeInfo().equals(OpenroadmNodeVersion._710)) {",
+      "revId": "fe8aec882263d047ae21484e4b254a1068d68b8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
