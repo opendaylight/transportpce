@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83983fd8_740911a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-22T13:43:07Z",
+      "side": 1,
+      "message": "Use preferably present-tense, imperative-style\n\nhttps://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id\u003dHEAD#n133\n\nAlso true for https://git.opendaylight.org/gerrit/c/transportpce/+/96110/7",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "f843cc1fda1e2a46085129524f60f1171af0d9b3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f64301e6_3fed4eed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-22T13:43:07Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 9
+      },
+      "revId": "f843cc1fda1e2a46085129524f60f1171af0d9b3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6369572_c86037b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-22T13:43:07Z",
+      "side": 1,
+      "message": "functional",
+      "range": {
+        "startLine": 10,
+        "startChar": 14,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "f843cc1fda1e2a46085129524f60f1171af0d9b3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
