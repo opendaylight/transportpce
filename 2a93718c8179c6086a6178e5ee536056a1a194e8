@@ -70,6 +70,30 @@
       "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f141e5_7164e297",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-05-24T15:25:45Z",
+      "side": 1,
+      "message": "Yes, but I think once we correct this to 7.1, then supporting both 7.1.0 and 7.1 would be unnecessary. In fact we can refer this version number to the enum of the OpenROADM models rather than defining something new. Like I said earlier, will work on correcting it to 7.1 everywhere after the OFC demo, which is June 2nd week, if that is okay.",
+      "parentUuid": "2864a359_e9042eb4",
+      "range": {
+        "startLine": 244,
+        "startChar": 84,
+        "endLine": 244,
+        "endChar": 87
+      },
+      "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
