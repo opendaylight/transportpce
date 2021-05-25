@@ -94,6 +94,30 @@
       "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0a96c4_09baac20",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-05-25T09:09:39Z",
+      "side": 1,
+      "message": "Agree with last Bala\u0027s statement",
+      "parentUuid": "27f141e5_7164e297",
+      "range": {
+        "startLine": 244,
+        "startChar": 84,
+        "endLine": 244,
+        "endChar": 87
+      },
+      "revId": "2a93718c8179c6086a6178e5ee536056a1a194e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
