@@ -34,6 +34,16 @@ repositories:
     - transportpce
 committers:
     - <<: *odl_transportpce_ptl
+    - name: 'Christophe Betoule'
+      email: 'christophe.betoule@orange.com'
+      company: 'orange'
+      id: 'cbetoule'
+      timezone: 'Europe/Paris'
+    - name: 'Balagangadhar Bathula'
+      email: 'bb4341@att.com'
+      company: 'att'
+      id: 'b95quare'
+      timezone: 'America/New_York'
     - name: 'Gilles Thouenon'
       email: 'gilles.thouenon@orange.com'
       company: 'orange'
