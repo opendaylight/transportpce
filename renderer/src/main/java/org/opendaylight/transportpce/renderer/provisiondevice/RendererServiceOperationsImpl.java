@@ -53,7 +53,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
@@ -134,7 +136,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     OPERATION_FAILED);
                             }
                         } else { // This implies, service-rate is 1 or 10G
-                            // This includes the lower-order odu (1G, 10G) and this is A-Z side
+                            // This includes the lower-order odu (1G, 10G, 100G) and this is A-Z side
                             LOG.info("RPC implementation for LO-ODU");
                             String serviceRate = ""; // Assuming service at A-side and Z-side has same service rate
                             if (input.getServiceAEnd().getServiceRate() != null) {
@@ -163,23 +165,34 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         break;
                     case Infrastructure:
                         LOG.info("RPC implementation for {}", input.getConnectionType());
-                        if ((input.getServiceAEnd().getOtuServiceRate() != null)
-                            && (input.getServiceAEnd().getOtuServiceRate().equals(OTU4.class))) {
-                            // For the service of OTU4 infrastructure
-                            // First create the OCH and OTU interfaces
-                            String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
-                            if (!createServicepathInput(input)) {
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
+                        if (input.getServiceAEnd().getOtuServiceRate() != null) {
+                            if ((input.getServiceAEnd().getOtuServiceRate().equals(OTU4.class))
+                                || (input.getServiceAEnd().getOtuServiceRate().equals(OTUCn.class))) {
+                                // For the service of OTU4 or OTUCn infrastructure
+                                // Create the OCH and OTU interfaces for OTU4 class
+                                // Create OTSi, OTSi-group and OTUCn interface
+                                if (!createServicepathInput(input)) {
+                                    return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                                        OPERATION_FAILED);
+                                }
                             }
                         }
-                        if ((input.getServiceAEnd().getOduServiceRate() != null)
-                            && (input.getServiceAEnd().getOduServiceRate().equals(ODU4.class))) {
-                            // For the service of OTU4 infrastructure
-                            String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
+                        if (input.getServiceAEnd().getOduServiceRate() != null) {
+                            String serviceRate = null;
+                            if (input.getServiceAEnd().getOduServiceRate().equals(ODU4.class)) {
+                                // For the service of OTU4 infrastructure
+                                serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
+                            }
+                            else if (input.getServiceAEnd().getOduServiceRate().equals(ODUCn.class)) {
+                                // For the service of OTUCn infrastructure
+                                // TODO: what happens if split-lambda where to be used? We will have ODUC2 rate,
+                                // TODO: which case service-rate would be 200
+                                // TODO: in that case it would be 200G?? Need to understand more
+                                serviceRate = "400G"; // For OtnDeviceRendererServiceImpl
+                            }
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
                                 input.getServiceAEnd().getOduServiceRate(), serviceRate);
-                            // Now start rendering ODU4 interface
+                            // Now start rendering ODU4 or ODUC4 interface
                             // This is A-Z side
                             OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
                                 .rendererCreateOtnServiceInput(input.getServiceName(),
