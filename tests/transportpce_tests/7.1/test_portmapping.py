@@ -67,12 +67,12 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'7.1',
                             u'node-vendor': u'vendorA',
-                            u'node-model': u'model2'}},
+                            u'node-model': u'model'}},
             res)
         time.sleep(3)
 
     # Check the if-capabilities and the other details for network
-    def test_04_xpdr_portmapping_NETWORK1(self):
+    def test_04_tpdr_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -80,7 +80,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             {'supported-interface-capability':
               ['org-openroadm-port-types:if-otsi-otsigroup'],
              'supporting-port': 'L1',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+             'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1',
              'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional',
@@ -92,14 +92,14 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              },
             res['mapping'])
 
-    def test_05_xpdr_portmapping_CLIENT1(self):
+    def test_05_tpdr_portmapping_CLIENT1(self):
         response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR1-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-400GE'],
              'supporting-port': 'C1',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
+             'supporting-circuit-pack-name': '1/1/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
              'lcp-hash-val': 'AODABTVSOHH0',
@@ -107,15 +107,15 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     # Check the port-mapping for the switch-client and switch-network port-quals
-    def test_06_xpdr2_portmapping_NETWORK1(self):
+    def test_06_mpdr_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR2-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
             {'supported-interface-capability':
                ['org-openroadm-port-types:if-otsi-otsigroup'],
-             'supporting-port': 'L2',
-             'supporting-circuit-pack-name': '1/0/7-PLUG-NETWORK',
+             'supporting-port': 'L1',
+             'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
              'logical-connection-point': 'XPDR2-NETWORK1',
              'port-qual': 'switch-network',
              'port-direction': 'bidirectional',
@@ -126,7 +126,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              },
             res['mapping'])
 
-    def test_07_xpdr2_portmapping_CLIENT1(self):
+    def test_07_mpdr_portmapping_CLIENT1(self):
         response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR2-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -134,8 +134,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             {'supported-interface-capability':
                ['org-openroadm-port-types:if-100GE-ODU4',
                 'org-openroadm-port-types:if-OCH-OTU4-ODU4'],
-             'supporting-port': 'C3',
-             'supporting-circuit-pack-name': '1/0/3-PLUG-CLIENT',
+             'supporting-port': 'C1',
+             'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR2-CLIENT1',
              'port-direction': 'bidirectional',
               'port-qual': 'switch-client',
