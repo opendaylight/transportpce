@@ -126,6 +126,6 @@ final class OrdLink {
         return null;
     }
 
-    private OrdLink(){
+    private OrdLink() {
     }
 }
