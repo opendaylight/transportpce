@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8a6d730_eccc3f7b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-28T18:43:47Z",
+      "side": 1,
+      "message": "nothing really done here -\u003e this modificationshould be put out of the change",
+      "revId": "861d768b2683b8be052fbae8c4d1a2c1e405671b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e8401a_b0b589e8",
+        "filename": "tests/sample_configs/honeynode-otntopo400GwithODUC4.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-05-28T18:43:47Z",
+      "side": 1,
+      "message": "trailing blanks",
+      "range": {
+        "startLine": 614,
+        "startChar": 67,
+        "endLine": 614,
+        "endChar": 87
+      },
+      "revId": "861d768b2683b8be052fbae8c4d1a2c1e405671b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
