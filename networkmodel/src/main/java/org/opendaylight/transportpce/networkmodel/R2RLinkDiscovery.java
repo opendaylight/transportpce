@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -26,11 +26,11 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.cp.to.degree.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.cp.to.degree.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
@@ -97,7 +97,7 @@ public class R2RLinkDiscovery {
                         .org.openroadm.lldp.rev181019.Protocols1.class).getLldp().getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr221List.getIfName().size());
                 return rdm2rdmLinkCreatedv221(nodeId, nbr221List);
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 LOG.info("Not yet implemented?");
                 return false;
             default:

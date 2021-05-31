@@ -6,7 +6,7 @@
                 "node-info": {
                     "node-clli": "NodeA",
                     "node-vendor": "vendorA",
-                    "openroadm-version": "7.1.0",
+                    "openroadm-version": "7.1",
                     "node-ip-address": "1.2.3.4",
                     "node-type": "xpdr",
                     "node-model": "model"
@@ -231,7 +231,7 @@
                 "node-info": {
                     "node-clli": "NodeC",
                     "node-vendor": "vendorA",
-                    "openroadm-version": "7.1.0",
+                    "openroadm-version": "7.1",
                     "node-ip-address": "1.2.3.4",
                     "node-type": "xpdr",
                     "node-model": "model"
