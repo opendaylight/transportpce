@@ -61,8 +61,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
@@ -385,7 +385,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         this.openRoadmInterfaceFactory
                         .createOpenRoadmOchInterfaceName(destTp,spectralSlotName));
             } else if (destTp.contains(StringConstants.NETWORK_TOKEN) && nodeOpenRoadmVersion
-                    .equals(OpenroadmNodeVersion._710)) {
+                    .equals(OpenroadmNodeVersion._71)) {
                 try {
                     if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODUFLEX").isPresent()) {
                         interfacesToDelete.add(destTp + "-ODUFLEX");
