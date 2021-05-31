@@ -56,7 +56,7 @@ public class NodeRegistration {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 registerListeners221();
                 break;
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 registerListeners710();
                 break;
             default:
