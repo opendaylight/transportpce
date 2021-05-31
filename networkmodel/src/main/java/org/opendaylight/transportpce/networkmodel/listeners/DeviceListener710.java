@@ -14,10 +14,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.SwitchingPoolLcpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.switching.pool.lcp.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.CreateTechInfoNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceListener;
@@ -66,7 +66,7 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
         Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap = new HashMap<>();
         InstanceIdentifier<OduSwitchingPools> ospIID = null;
         SwitchingPoolLcpBuilder oduSwPoolBuilder = null;
-        Map<NonBlockingListKey, org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426
+        Map<NonBlockingListKey, org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210531
                 .switching.pool.lcp.switching.pool.lcp.NonBlockingList> nonBlockingMap = new HashMap<>();
 
         for (Edit edit : notification.getEdit()) {
