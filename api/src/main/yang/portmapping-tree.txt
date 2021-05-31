@@ -1,0 +1,316 @@
+module: gnpy-api
+  +--rw gnpy-api
+     +--rw topology-file
+     |  +--rw elements* [uid]
+     |  |  +--rw uid                  string
+     |  |  +--rw type                 identityref
+     |  |  +--rw type_variety?        string
+     |  |  +--rw metadata
+     |  |  |  +--rw location
+     |  |  |     +--rw city         string
+     |  |  |     +--rw region       string
+     |  |  |     +--rw latitude     Coordinate
+     |  |  |     +--rw longitude    Coordinate
+     |  |  +--rw (element-type)?
+     |  |     +--:(Edfa)
+     |  |     |  +--rw operational
+     |  |     |     +--rw gain-target    decimal64
+     |  |     |     +--rw tilt-target    decimal64
+     |  |     |     +--rw out-voa        decimal64
+     |  |     +--:(FiberRoadm)
+     |  |     |  +--rw params
+     |  |     |     +--rw (fiberroadm)?
+     |  |     |        +--:(Fiber)
+     |  |     |        |  +--rw length               decimal64
+     |  |     |        |  +--rw loss_coef            decimal64
+     |  |     |        |  +--rw length_units         identityref
+     |  |     |        |  +--rw att_in               decimal64
+     |  |     |        |  +--rw con_in               decimal64
+     |  |     |        |  +--rw con_out              decimal64
+     |  |     |        +--:(Roadm)
+     |  |     |           +--rw target_pch_out_db?   decimal64
+     |  |     +--:(Transceiver)
+     |  |     +--:(Fused)
+     |  +--ro connections* []
+     |     +--ro from_node?   -> /topo/elements/uid
+     |     +--ro to_node?     -> /topo/elements/uid
+     +--rw service-file
+        +--rw path-request* [request-id]
+        |  +--rw request-id                uint32
+        |  +--rw bidirectional             boolean
+        |  +--rw source?                   inet:ip-address
+        |  +--rw destination?              inet:ip-address
+        |  +--rw src-tp-id?                binary
+        |  +--rw dst-tp-id?                binary
+        |  +--rw explicit-route-objects
+        |  |  +--rw route-object-include-exclude* []
+        |  |     +--rw explicit-route-usage?        identityref
+        |  |     +--rw index?                       uint32
+        |  |     +--rw (type)?
+        |  |        +--:(num-unnum-hop)
+        |  |        |  +--rw num-unnum-hop
+        |  |        |     +--rw node-id?      string
+        |  |        |     +--rw link-tp-id?   string
+        |  |        |     +--rw hop-type?     te-hop-type
+        |  |        +--:(label)
+        |  |        |  +--rw label-hop
+        |  |        |     +--rw N?   int32
+        |  |        |     +--rw M?   int32
+        |  |        +--:(hop-attribute)
+        |  |           +--rw (hop-type)?
+        |  |              +--:(tsp)
+        |  |              |  +--rw transponder
+        |  |              |     +--rw transponder-type?   string
+        |  |              |     +--rw transponder-mode?   string
+        |  |              +--:(regen)
+        |  |              |  +--rw regenerator
+        |  |              |     +--rw regenerator-id?     string
+        |  |              |     +--rw transponder-type?   string
+        |  |              |     +--rw transponder-mode?   string
+        |  |              +--:(pow)
+        |  |                 +--rw optical-power
+        |  |                    +--rw optical-power?   decimal64
+        |  +--rw path-constraints
+        |     +--rw te-bandwidth
+        |        +--rw technology?            string
+        |        +--rw trx_type               string
+        |        +--rw trx_mode?              string
+        |        +--rw effective-freq-slot* [N]
+        |        |  +--rw N    int32
+        |        |  +--rw M?   int32
+        |        +--rw spacing                decimal64
+        |        +--rw max-nb-of-channel?     uint32
+        |        +--rw output-power?          decimal64
+        |        +--rw path_bandwidth         decimal64
+        +--rw synchronization* [synchronization-id]
+           +--rw synchronization-id    uint32
+           +--rw svec
+              +--rw relaxable?           boolean
+              +--rw disjointness?        te-path-disjointness
+              +--rw request-id-number*   uint32
+module: gnpy-eqpt-config
+  +--rw Edfa* [type_variety]
+  |  +--rw type_variety    string
+  +--rw Fiber* [type_variety]
+  |  +--rw type_variety    string
+  +--rw Transceiver* [type_variety]
+  |  +--rw type_variety    string
+  +--rw mode* [format]
+  |  +--rw format    string
+  +--rw Spans
+  +--rw Roadms
+  +--rw SI
+module: gnpy-path-computation-simplified
+  +--rw result
+     +--ro response* [response-id]
+        +--ro response-id              uint32
+        +--ro (response-type)?
+           +--:(no-path-case)
+           |  +--ro no-path!
+           |     +--ro no-path            string
+           |     +--ro path-properties
+           |        +--ro path-metric* [metric-type]
+           |        |  +--ro metric-type           identityref
+           |        |  +--ro accumulative-value?   decimal64
+           |        +--ro path-route-objects* []
+           |           +--ro path-route-object
+           |              +--ro index?                       uint32
+           |              +--ro (type)?
+           |                 +--:(num-unnum-hop)
+           |                 |  +--ro num-unnum-hop
+           |                 |     +--ro node-id?      string
+           |                 |     +--ro link-tp-id?   string
+           |                 |     +--ro hop-type?     te-hop-type
+           |                 +--:(label)
+           |                 |  +--ro label-hop
+           |                 |     +--ro N?   int32
+           |                 |     +--ro M?   int32
+           |                 +--:(hop-attribute)
+           |                    +--ro (hop-type)?
+           |                       +--:(tsp)
+           |                       |  +--ro transponder
+           |                       |     +--ro transponder-type?   string
+           |                       |     +--ro transponder-mode?   string
+           |                       +--:(regen)
+           |                       |  +--ro regenerator
+           |                       |     +--ro regenerator-id?     string
+           |                       |     +--ro transponder-type?   string
+           |                       |     +--ro transponder-mode?   string
+           |                       +--:(pow)
+           |                          +--ro optical-power
+           |                             +--ro optical-power?   decimal64
+           +--:(path-case)
+              +--ro path-properties
+                 +--ro path-metric* [metric-type]
+                 |  +--ro metric-type           identityref
+                 |  +--ro accumulative-value?   decimal64
+                 +--ro path-route-objects* []
+                    +--ro path-route-object
+                       +--ro index?                       uint32
+                       +--ro (type)?
+                          +--:(num-unnum-hop)
+                          |  +--ro num-unnum-hop
+                          |     +--ro node-id?      string
+                          |     +--ro link-tp-id?   string
+                          |     +--ro hop-type?     te-hop-type
+                          +--:(label)
+                          |  +--ro label-hop
+                          |     +--ro N?   int32
+                          |     +--ro M?   int32
+                          +--:(hop-attribute)
+                             +--ro (hop-type)?
+                                +--:(tsp)
+                                |  +--ro transponder
+                                |     +--ro transponder-type?   string
+                                |     +--ro transponder-mode?   string
+                                +--:(regen)
+                                |  +--ro regenerator
+                                |     +--ro regenerator-id?     string
+                                |     +--ro transponder-type?   string
+                                |     +--ro transponder-mode?   string
+                                +--:(pow)
+                                   +--ro optical-power
+                                      +--ro optical-power?   decimal64
+module: tapi
+  +--rw service-interface-points
+     +--rw service-end-point* [uuid]
+        +--rw uuid         tapi-common:uuid
+        +--rw end-point
+           +--rw service-end-point-type?   end-point-type
+
+  rpcs:
+    +---x load-topology
+       +---w input
+       |  +---w topology-name?   string
+       |  +---w topology
+       +--ro output
+          +--ro success?   boolean
+          +--ro result?    string
+module: transportpce-alarmsuppression
+  +--rw service-nodelist
+     +--rw nodelist* [service-name]
+        +--rw service-name    string
+        +--rw nodes* [node-id]
+           +--rw node-id    string
+module: transportpce-networkutils
+
+  rpcs:
+    +---x init-roadm-nodes
+    |  +---w input
+    |  |  +---w rdm-a-node?            string
+    |  |  +---w deg-a-num?             uint8
+    |  |  +---w termination-point-a?   string
+    |  |  +---w rdm-z-node?            string
+    |  |  +---w deg-z-num?             uint8
+    |  |  +---w termination-point-z?   string
+    |  +--ro output
+    |     +--ro result?   string
+    +---x init-xpdr-rdm-links
+    |  +---w input
+    |  |  +---w links-input
+    |  |     +---w xpdr-node?               string
+    |  |     +---w xpdr-num?                uint8
+    |  |     +---w network-num?             uint8
+    |  |     +---w rdm-node?                string
+    |  |     +---w srg-num?                 uint8
+    |  |     +---w termination-point-num?   string
+    |  +--ro output
+    |     +--ro result?   string
+    +---x init-rdm-xpdr-links
+    |  +---w input
+    |  |  +---w links-input
+    |  |     +---w xpdr-node?               string
+    |  |     +---w xpdr-num?                uint8
+    |  |     +---w network-num?             uint8
+    |  |     +---w rdm-node?                string
+    |  |     +---w srg-num?                 uint8
+    |  |     +---w termination-point-num?   string
+    |  +--ro output
+    |     +--ro result?   string
+    +---x delete-link
+       +---w input
+       |  +---w link-id?   string
+       +--ro output
+          +--ro result?   string
+module: transportpce-olm
+
+  rpcs:
+    +---x get-pm
+    |  +--ro output
+    |     +--ro resource-id?    string
+    |     +--ro measurements* []
+    |        +--ro pmparameter-name?    string
+    |        +--ro pmparameter-value?   string
+    +---x service-power-setup
+    |  +--ro output
+    |     +--ro result?   string
+    +---x service-power-turndown
+    |  +--ro output
+    |     +--ro result?   string
+    +---x service-power-reset
+    |  +---w input
+    |  |  +---w service-name?   string
+    |  +--ro output
+    |     +--ro result?   string
+    +---x calculate-spanloss-base
+    |  +---w input
+    |  |  +---w src-type?   enumeration
+    |  |  +---w link-id?    ietf-network-topology:link-id
+    |  +--ro output
+    |     +--ro result?   string
+    |     +--ro spans* []
+    |        +--ro link-id?    ietf-network-topology:link-id
+    |        +--ro spanloss?   string
+    +---x calculate-spanloss-current
+       +--ro output
+          +--ro result?   string
+module: transportpce-portmapping
+  +--rw network
+     +--rw nodes* [node-id]
+        +--rw node-id               string
+        +--rw node-info
+        |  +--rw node-type-onetwo?    org-openroadm-common-types:node-types
+        |  +--rw node-type-beyondh?   org-openroadm-device-types:node-types
+        |  +--rw openroadm-version?   enumeration
+        |  +--rw node-clli?           string
+        |  +--rw node-vendor?         string
+        |  +--rw node-model?          string
+        |  +--rw node-ip-address?     ietf-inet-types:ip-address
+        +--rw mapping* [logical-connection-point]
+        |  +--rw logical-connection-point        string
+        |  +--rw supporting-circuit-pack-name?   string
+        |  +--rw supporting-port?                string
+        |  +--rw supporting-oms?                 string
+        |  +--rw supporting-ots?                 string
+        |  +--rw port-direction?                 string
+        |  +--rw port-qual?                      string
+        |  +--rw supporting-ethernet?            string
+        |  +--rw supporting-odu4?                string
+        |  +--rw rate?                           string
+        |  +--rw supported-if-cap-onetwo*        identityref
+        |  +--rw supported-if-cap-beyondh*       identityref
+        |  +--rw xponder-type-onetwo?            org-openroadm-common-types:xpdr-node-types
+        |  +--rw xponder-type-beyondh?           org-openroadm-device-types:xpdr-node-types
+        |  +--rw connection-map-lcp?             string
+        |  +--rw partner-lcp?                    string
+        |  +--rw lcp-hash-val?                   string
+        +--rw mc-capabilities* [mc-node-name]
+        |  +--rw mc-node-name                       string
+        |  +--rw slot-width-granularity-onetwo?     org-openroadm-common-types:frequency-GHz
+        |  +--rw center-freq-granularity-onetwo?    org-openroadm-common-types:frequency-GHz
+        |  +--rw slot-width-granularity-beyondh?    org-openroadm-common-optical-channel-types:frequency-GHz
+        |  +--rw center-freq-granularity-beyondh?   org-openroadm-common-optical-channel-types:frequency-GHz
+        +--rw cp-to-degree* [circuit-pack-name]
+        |  +--rw circuit-pack-name    string
+        |  +--rw degree-number?       uint32
+        |  +--rw interface-name?      string
+        +--rw switching-pool-lcp* [switching-pool-number]
+           +--rw switching-pool-number          uint16
+           +--rw switching-pool-type-onetwo?    org-openroadm-switching-pool-types:switching-pool-types
+           +--rw switching-pool-type-beyondh?   org-openroadm-switching-pool-types:switching-pool-types
+           +--rw non-blocking-list* [nbl-number]
+              +--rw nbl-number                          uint16
+              +--rw interconnect-bandwidth-unit?        uint32
+              +--rw interconnect-bandwidth?             uint32
+              +--rw available-interconnect-bandwidth?   uint32
+              +--rw lcp-list*                           string

@@ -1,0 +1,50 @@
+module: transportpce-portmapping
+  +--rw network
+     +--rw nodes* [node-id]
+        +--rw node-id               string
+        +--rw node-info
+        |  +--rw node-type?           org-openroadm-device-types:node-types
+        |  +--rw openroadm-version?   openroadm-node-version
+        |  +--rw node-clli?           string
+        |  +--rw node-vendor?         string
+        |  +--rw node-model?          string
+        |  +--rw node-ip-address?     ietf-inet-types:ip-address
+        +--rw mapping* [logical-connection-point]
+        |  +--rw logical-connection-point          string
+        |  +--rw supporting-circuit-pack-name?     string
+        |  +--rw supporting-port?                  string
+        |  +--rw supporting-oms?                   string
+        |  +--rw supporting-ots?                   string
+        |  +--rw port-direction?                   string
+        |  +--rw port-qual?                        string
+        |  +--rw port-admin-state?                 string
+        |  +--rw port-oper-state?                  string
+        |  +--rw supporting-ethernet?              string
+        |  +--rw supporting-odu4?                  string
+        |  +--rw supporting-oduc4?                 string
+        |  +--rw rate?                             string
+        |  +--rw supported-interface-capability*   identityref
+        |  +--rw mpdr-restrictions
+        |  |  +--rw min-trib-slot?   org-openroadm-otn-common-types:opucn-trib-slot-def
+        |  |  +--rw max-trib-slot?   org-openroadm-otn-common-types:opucn-trib-slot-def
+        |  +--rw xponder-type?                     org-openroadm-device-types:xpdr-node-types
+        |  +--rw connection-map-lcp?               string
+        |  +--rw partner-lcp?                      string
+        |  +--rw lcp-hash-val?                     string
+        +--rw mc-capabilities* [mc-node-name]
+        |  +--rw mc-node-name               string
+        |  +--rw slot-width-granularity?    org-openroadm-common-optical-channel-types:frequency-GHz
+        |  +--rw center-freq-granularity?   org-openroadm-common-optical-channel-types:frequency-GHz
+        +--rw cp-to-degree* [circuit-pack-name]
+        |  +--rw circuit-pack-name    string
+        |  +--rw degree-number?       uint32
+        |  +--rw interface-name?      string
+        +--rw switching-pool-lcp* [switching-pool-number]
+           +--rw switching-pool-number    uint16
+           +--rw switching-pool-type?     org-openroadm-switching-pool-types:switching-pool-types
+           +--rw non-blocking-list* [nbl-number]
+              +--rw nbl-number                          uint16
+              +--rw interconnect-bandwidth-unit?        uint32
+              +--rw interconnect-bandwidth?             uint32
+              +--rw available-interconnect-bandwidth?   uint32
+              +--rw lcp-list*                           string
