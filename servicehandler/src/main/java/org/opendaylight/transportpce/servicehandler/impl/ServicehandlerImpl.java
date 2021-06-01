@@ -178,17 +178,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
-        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
-                .setServiceName(input.getServiceName())
-                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
-                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
-                .setResponseFailed("")
-                .setMessage("ServiceCreate request received ...")
-                .setOperationalState(State.OutOfService)
-                .setTopic(topic)
-                .build();
-        sendNbiNotification(nbiNotification);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
@@ -199,12 +188,15 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);
-            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+            sendNbiNotification(new PublishNotificationServiceBuilder()
+                    .setServiceName(input.getServiceName())
+                    .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                    .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                    .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
                     .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
                     .setMessage("ServiceCreate request failed ...")
                     .setOperationalState(State.Degraded)
-                    .build();
-            sendNbiNotification(nbiNotification);
+                    .build());
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
@@ -245,17 +237,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
         service = serviceOpt.get();
-        PublishNotificationService nbiNotification = new PublishNotificationServiceBuilder()
-                .setServiceName(service.getServiceName())
-                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
-                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
-                .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
-                .setMessage("ServiceDelete request received ...")
-                .setOperationalState(service.getOperationalState())
-                .setResponseFailed("")
-                .setTopic(topic)
-                .build();
-        sendNbiNotification(nbiNotification);
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -272,12 +253,15 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
-            nbiNotification = new PublishNotificationServiceBuilder(nbiNotification)
+            sendNbiNotification(new PublishNotificationServiceBuilder()
+                    .setServiceName(service.getServiceName())
+                    .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                    .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                    .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
                     .setMessage("ServiceDelete request failed ...")
                     .setOperationalState(State.InService)
                     .setResponseFailed(LogMessages.RENDERER_DELETE_FAILED)
-                    .build();
-            sendNbiNotification(nbiNotification);
+                    .build());
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);
