@@ -163,9 +163,6 @@ public class PceListenerImpl implements TransportpcePceListener {
                 return false;
             case Successful:
                 LOG.info("PCE calculation done OK !");
-                nbiNotification = publishNotificationServiceBuilder.setMessage("PCE calculation done OK !")
-                        .setResponseFailed("").setOperationalState(State.OutOfService).build();
-                sendNbiNotification(nbiNotification);
                 return true;
             default:
                 LOG.error("PCE path computation returned an unknown RpcStatusEx code {}",
