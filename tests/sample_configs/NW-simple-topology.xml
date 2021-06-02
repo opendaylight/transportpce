@@ -4618,7 +4618,7 @@
     <link-id>OpenROADM-5-1-DEG1-to-OpenROADM-5-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG1-to-OpenROADM-5-1-DEG1</opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
-    <source><source-node>OpenROADM-5-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>    
+    <source><source-node>OpenROADM-5-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
     <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
@@ -4867,7 +4867,7 @@
         </span>
     </OMS-attributes>
 </link>
-<link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">    
+<link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-1-DEG3-to-OpenROADM-4-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG3-to-OpenROADM-5-1-DEG3</opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>

@@ -37,7 +37,7 @@ Netconf SSH to TCP proxy to debug netconf exchanges.
 It listens to connections in clear TCP to the given port. When a TCP connection demand is received,
 it establishes a netconf SSH encrypted connection to the host in argument. Netconf rpcs and replies
 are then proxified between both ends.
-By default, exchanges are altered according to the rules specified inside this script and easily 
+By default, exchanges are altered according to the rules specified inside this script and easily
 modifiable. This behaviour can be disabled with the '-s' option.
 For more convenience, the server hello handshake can also alternatively be replaced by the content
 of an external file instead of writing specific rules.
@@ -146,7 +146,7 @@ if (!$kidpid) {
 
     # copy the socket to standard output
     my $buf;
-    
+
     if (defined ($hello_message)) {
         #retrieve the server hello but do not relay it
         while (my $nread = sysread($ssh_subsocket,$buf,400)) {
@@ -171,9 +171,9 @@ if (!$kidpid) {
         print $client $buf;
         $ssh_subsocket->flush();
         if (defined($verbose))  { print STDOUT  $buf; }
-               
+
     };
- 
+
     kill("TERM", $kidpid);              # send SIGTERM to child
 }
 # the else{} block runs only in the child process (client input relayed to the server)
