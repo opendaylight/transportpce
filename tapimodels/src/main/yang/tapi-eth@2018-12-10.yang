@@ -630,7 +630,7 @@ module tapi-eth {
         leaf cc-period {
             type oam-period;
             description "This attribute models the MI_CC_Period signal defined in G.8021 and configured as specified in G8051.
-                It is the period at which the CCM message should be sent. 
+                It is the period at which the CCM message should be sent.
                 Default values are: 3.33 ms for PS, 100 ms for PM, 1 s for FM.";
         }
         leaf cc-priority {

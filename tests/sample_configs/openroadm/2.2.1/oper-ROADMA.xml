@@ -140,7 +140,7 @@
         <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
       </ports>
     </circuit-packs>
-    <circuit-packs> 
+    <circuit-packs>
       <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>1/0/ETH-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
@@ -649,12 +649,12 @@
       <name>OMS-DEG2-TTP-TXRX</name>
       <supporting-circuit-pack-name>2/0</supporting-circuit-pack-name>
       <supporting-port>L1</supporting-port>
-      <supporting-interface>OTS-DEG2-TTP-TXRX</supporting-interface>      
-      <type xmlns:openROADM-if="http://org/openroadm/interfaces">openROADM-if:openROADMOpticalMultiplex</type> 
-      <description>TBD</description>      
+      <supporting-interface>OTS-DEG2-TTP-TXRX</supporting-interface>
+      <type xmlns:openROADM-if="http://org/openroadm/interfaces">openROADM-if:openROADMOpticalMultiplex</type>
+      <description>TBD</description>
       <circuit-id>TBD</circuit-id>
       <operational-state>inService</operational-state>
-      <administrative-state>inService</administrative-state>      
+      <administrative-state>inService</administrative-state>
     </interface>
 
     <protocols>

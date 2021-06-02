@@ -228,7 +228,7 @@ module tapi-topology {
             description "Provides the ordered structure of layer protocol transitions encapsulated in the TopologicalEntity. The ordering relates to the LinkPort role.";
         }
         description "Relevant for a Link that is formed by abstracting one or more LTPs (in a stack) to focus on the flow and deemphasize the protocol transformation.
-            This abstraction is relevant when considering multi-layer routing. 
+            This abstraction is relevant when considering multi-layer routing.
             The layer protocols of the LTP and the order of their application to the signal is still relevant and need to be accounted for. This is derived from the LTP spec details.
             This Pac provides the relevant abstractions of the LTPs and provides the necessary association to the LTPs involved.
             Links that included details in this Pac are often referred to as Transitional Links.";
