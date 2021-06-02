@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb1e7842_bf1de789",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-02T13:57:19Z",
+      "side": 1,
+      "message": "sent",
+      "range": {
+        "startLine": 7,
+        "startChar": 43,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "b1bf6d6ab8211127b57ad745203a1095ba3a4b4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc3bdfb_81551b4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-02T13:57:19Z",
+      "side": 1,
+      "message": "sent",
+      "range": {
+        "startLine": 9,
+        "startChar": 48,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "b1bf6d6ab8211127b57ad745203a1095ba3a4b4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99851655_785ae2a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-02T13:57:19Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 11,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 59
+      },
+      "revId": "b1bf6d6ab8211127b57ad745203a1095ba3a4b4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
