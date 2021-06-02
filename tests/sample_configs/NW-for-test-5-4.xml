@@ -8245,7 +8245,7 @@
         </span>
     </OMS-attributes>
 </link>
-<link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> 
+<link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
    <link-id>OpenROADM-3-2-DEG3-to-OpenROADM-2-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG3-to-OpenROADM-3-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3223</clfi>

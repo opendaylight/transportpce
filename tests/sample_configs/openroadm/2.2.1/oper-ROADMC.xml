@@ -542,12 +542,12 @@
       <name>OMS-DEG1-TTP-TXRX</name>
       <supporting-circuit-pack-name>1/0</supporting-circuit-pack-name>
       <supporting-port>L1</supporting-port>
-      <supporting-interface>OTS-DEG1-TTP-TXRX</supporting-interface>      
-      <type xmlns:openROADM-if="http://org/openroadm/interfaces">openROADM-if:openROADMOpticalMultiplex</type> 
-      <description>TBD</description>      
+      <supporting-interface>OTS-DEG1-TTP-TXRX</supporting-interface>
+      <type xmlns:openROADM-if="http://org/openroadm/interfaces">openROADM-if:openROADMOpticalMultiplex</type>
+      <description>TBD</description>
       <circuit-id>TBD</circuit-id>
       <operational-state>inService</operational-state>
-      <administrative-state>inService</administrative-state>      
+      <administrative-state>inService</administrative-state>
     </interface>
 
     <protocols>

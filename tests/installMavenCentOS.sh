@@ -14,7 +14,7 @@ echo $JAVAC_VER
 if [ "$JAVA_VER" -ge 110 -a "$JAVAC_VER" -ge 110 ];then
         echo "ok, java is 11 or newer"
 else
-	#java 11 installation for CentOS (releng OS image target)
+    #java 11 installation for CentOS (releng OS image target)
         echo "install java 11"
         sudo yum install -y java-11-openjdk java-11-openjdk-devel
         last_installed_jdk11=$(ls -tr1 /usr/lib/jvm/ | grep java-11-openjdk-11 | tail -1)

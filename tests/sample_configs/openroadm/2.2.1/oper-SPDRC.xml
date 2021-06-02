@@ -1719,7 +1719,7 @@
         <slot-name>CP3-S10</slot-name>
         <label>CP3S10</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S11</slot-name>
         <label>CP3S11</label>
       </cp-slots>
@@ -1759,7 +1759,7 @@
         <slot-name>CP3-S20</slot-name>
         <label>CP3S20</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S21</slot-name>
         <label>CP3S21</label>
       </cp-slots>
@@ -1799,7 +1799,7 @@
         <slot-name>CP3-S30</slot-name>
         <label>CP3S30</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S31</slot-name>
         <label>CP3S31</label>
       </cp-slots>
@@ -1839,7 +1839,7 @@
         <slot-name>CP3-S40</slot-name>
         <label>CP3S40</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S41</slot-name>
         <label>CP3S41</label>
       </cp-slots>
@@ -1879,7 +1879,7 @@
         <slot-name>CP3-S50</slot-name>
         <label>CP3S50</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S51</slot-name>
         <label>CP3S51</label>
       </cp-slots>
@@ -1919,7 +1919,7 @@
         <slot-name>CP3-S60</slot-name>
         <label>CP3S60</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S61</slot-name>
         <label>CP3S61</label>
       </cp-slots>
@@ -1959,7 +1959,7 @@
         <slot-name>CP3-S70</slot-name>
         <label>CP3S70</label>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>CP3-S71</slot-name>
         <label>CP3S71</label>
       </cp-slots>
@@ -2535,7 +2535,7 @@
         <eqpt-srg-id>6</eqpt-srg-id>
       </xpdr-port>
     </xponder>
-	<xponder>
+    <xponder>
       <xpdr-number>3</xpdr-number>
       <xpdr-type>mpdr</xpdr-type>
       <xpdr-port>
@@ -2833,7 +2833,7 @@
         </port-list>
       </non-blocking-list>
     </odu-switching-pools>
-	<odu-switching-pools>
+    <odu-switching-pools>
       <switching-pool-number>3</switching-pool-number>
       <switching-pool-type xmlns:org-openroadm-switching-pool-types="http://org/openroadm/switching-pool-types">non-blocking</switching-pool-type>
       <non-blocking-list>
@@ -2966,7 +2966,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>11</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3096,7 +3096,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>21</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3226,7 +3226,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>31</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3356,7 +3356,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>41</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3486,7 +3486,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>51</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3616,7 +3616,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>61</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>
@@ -3746,7 +3746,7 @@
           <slot-name>CP3-S0</slot-name>
         </pluggable-optics-holder-list>
       </non-blocking-list>
-	  <non-blocking-list>
+      <non-blocking-list>
         <nbl-number>71</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
         <interconnect-bandwidth>0</interconnect-bandwidth>

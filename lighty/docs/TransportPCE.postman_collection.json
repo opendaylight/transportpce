@@ -1,467 +1,467 @@
 {
-	"variables": [],
-	"info": {
-		"name": "TransportPCE",
-		"_postman_id": "2a8c7902-5793-e48c-ebab-72256fcac793",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "test_portmapping",
-			"description": "",
-			"item": [
-				{
-					"name": "test_01_rdm_device_connected",
-					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": {
-								"username": "admin",
-								"password": "admin",
-								"saveHelperData": true,
-								"showPassword": false
-							}
-						},
-						"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Basic YWRtaW46YWRtaW4=",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"node\" : {\n    \"node-id\": \"ROADMA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
-						},
-						"description": "connect device 01"
-					},
-					"response": []
-				},
-				{
-					"name": "test_02_rdm_device_connected",
-					"request": {
-						"url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_03_rdm_portmapping_DEG1_TTP_TXRX",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/DEG1-TTP-TXRX",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_04_rdm_portmapping_SRG1_PP7_TXRX",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/SRG1-PP7-TXRX",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_05_rdm_portmapping_SRG3_PP1_TXRX",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/SRG3-PP1-TXRX",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_06_xpdr_device_connected",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"node\" : {\n    \"node-id\": \"XPDRA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17831,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_07_xpdr_device_connected",
-					"request": {
-						"url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_08_xpdr_portmapping_NETWORK1",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-NETWORK1",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_09_xpdr_portmapping_NETWORK2",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-NETWORK2",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_10_xpdr_portmapping_CLIENT1",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT1",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_11_xpdr_portmapping_CLIENT2",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT2",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_12_xpdr_portmapping_CLIENT4",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT4",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_13_xpdr_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
-						"method": "DELETE",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_14_xpdr_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_15_xpdr_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_16_rdm_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-						"method": "DELETE",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_17_rdm_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "test_18_rdm_device_disconnected",
-					"request": {
-						"url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA",
-						"method": "GET",
-						"header": [],
-						"body": {},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Get Modules",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/modules",
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": "Get installed yang models "
-			},
-			"response": []
-		},
-		{
-			"name": "Get List Of Network Topologies",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology",
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "Get List Of Network Topologies"
-			},
-			"response": []
-		},
-		{
-			"name": "Create NetConf device ",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/new-netconf-device",
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"node\" : {\n    \"node-id\": \"new-netconf-device\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0\n  }\n}\n"
-				},
-				"description": "Create NetConf device "
-			},
-			"response": []
-		},
-		{
-			"name": "disconnect device 01",
-			"request": {
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-				"method": "DELETE",
-				"header": [],
-				"body": {},
-				"description": "Delete NetConf device"
-			},
-			"response": []
-		},
-		{
-			"name": "disconnect device 02",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "Delete NetConf device"
-			},
-			"response": []
-		},
-		{
-			"name": "Get Topologies Operational",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/operational/network-topology:network-topology",
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "Get Topologies Operational"
-			},
-			"response": []
-		},
-		{
-			"name": "connect device 01",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"node\" : {\n    \"node-id\": \"ROADMA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
-				},
-				"description": "connect device 01"
-			},
-			"response": []
-		},
-		{
-			"name": "connect device 02",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "admin",
-						"password": "admin",
-						"saveHelperData": true,
-						"showPassword": false
-					}
-				},
-				"url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YWRtaW46YWRtaW4=",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"node\" : {\n    \"node-id\": \"XPDRA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17831,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
-				},
-				"description": "connect device 02"
-			},
-			"response": []
-		}
-	]
+    "variables": [],
+    "info": {
+        "name": "TransportPCE",
+        "_postman_id": "2a8c7902-5793-e48c-ebab-72256fcac793",
+        "description": "",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "test_portmapping",
+            "description": "",
+            "item": [
+                {
+                    "name": "test_01_rdm_device_connected",
+                    "request": {
+                        "auth": {
+                            "type": "basic",
+                            "basic": {
+                                "username": "admin",
+                                "password": "admin",
+                                "saveHelperData": true,
+                                "showPassword": false
+                            }
+                        },
+                        "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "description": ""
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Basic YWRtaW46YWRtaW4=",
+                                "description": ""
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"node\" : {\n    \"node-id\": \"ROADMA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
+                        },
+                        "description": "connect device 01"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_02_rdm_device_connected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_03_rdm_portmapping_DEG1_TTP_TXRX",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/DEG1-TTP-TXRX",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_04_rdm_portmapping_SRG1_PP7_TXRX",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/SRG1-PP7-TXRX",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_05_rdm_portmapping_SRG3_PP1_TXRX",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA/mapping/SRG3-PP1-TXRX",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_06_xpdr_device_connected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "description": ""
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"node\" : {\n    \"node-id\": \"XPDRA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17831,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}"
+                        },
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_07_xpdr_device_connected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_08_xpdr_portmapping_NETWORK1",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-NETWORK1",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_09_xpdr_portmapping_NETWORK2",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-NETWORK2",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_10_xpdr_portmapping_CLIENT1",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT1",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_11_xpdr_portmapping_CLIENT2",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT2",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_12_xpdr_portmapping_CLIENT4",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA/mapping/XPDR1-CLIENT4",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_13_xpdr_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
+                        "method": "DELETE",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_14_xpdr_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_15_xpdr_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/XPDRA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_16_rdm_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                        "method": "DELETE",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_17_rdm_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "test_18_rdm_device_disconnected",
+                    "request": {
+                        "url": "http://localhost:8181/restconf/config/transportpce-portmapping:network/nodes/ROADMA",
+                        "method": "GET",
+                        "header": [],
+                        "body": {},
+                        "description": ""
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Get Modules",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/modules",
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": ""
+                },
+                "description": "Get installed yang models "
+            },
+            "response": []
+        },
+        {
+            "name": "Get List Of Network Topologies",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology",
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {},
+                "description": "Get List Of Network Topologies"
+            },
+            "response": []
+        },
+        {
+            "name": "Create NetConf device ",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/new-netconf-device",
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "description": ""
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"node\" : {\n    \"node-id\": \"new-netconf-device\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0\n  }\n}\n"
+                },
+                "description": "Create NetConf device "
+            },
+            "response": []
+        },
+        {
+            "name": "disconnect device 01",
+            "request": {
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                "method": "DELETE",
+                "header": [],
+                "body": {},
+                "description": "Delete NetConf device"
+            },
+            "response": []
+        },
+        {
+            "name": "disconnect device 02",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA",
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {},
+                "description": "Delete NetConf device"
+            },
+            "response": []
+        },
+        {
+            "name": "Get Topologies Operational",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/operational/network-topology:network-topology",
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {},
+                "description": "Get Topologies Operational"
+            },
+            "response": []
+        },
+        {
+            "name": "connect device 01",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "description": ""
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"node\" : {\n    \"node-id\": \"ROADMA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17830,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
+                },
+                "description": "connect device 01"
+            },
+            "response": []
+        },
+        {
+            "name": "connect device 02",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": {
+                        "username": "admin",
+                        "password": "admin",
+                        "saveHelperData": true,
+                        "showPassword": false
+                    }
+                },
+                "url": "http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA",
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "description": ""
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YWRtaW46YWRtaW4=",
+                        "description": ""
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"node\" : {\n    \"node-id\": \"XPDRA\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 17831,\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"tcp-only\": false,\n    \"keepalive-delay\": 0,\n    \"pass-through\": {}\n  }\n}\n"
+                },
+                "description": "connect device 02"
+            },
+            "response": []
+        }
+    ]
 }
