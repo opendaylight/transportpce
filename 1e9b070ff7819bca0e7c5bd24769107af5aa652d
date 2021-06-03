@@ -22,6 +22,23 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88db75c5_b3e88b8e",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2021-06-03T18:58:29Z",
+      "side": 1,
+      "message": "Doesn\u0027t the input width here refer to NMC width and not slot width? I thought it was changed from slot width to NMC width in an earlier commit so I don\u0027t understand how width can be compared to 87.5 GHz slot width here.",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
