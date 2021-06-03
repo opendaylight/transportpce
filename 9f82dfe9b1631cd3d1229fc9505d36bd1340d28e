@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "bb00ad56_7ec59fb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:47:31Z",
+      "side": 1,
+      "message": "present tense and imperative style are usually recommended in commit message",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 8
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5efc0008_3b7c6cf1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:47:31Z",
+      "side": 1,
+      "message": "This stream was changed for sure in the original commit in stable/silicon but I haven\u0027t found this modification in this version on the master",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "066e0560_09b275b5",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
         "patchSetId": 1
