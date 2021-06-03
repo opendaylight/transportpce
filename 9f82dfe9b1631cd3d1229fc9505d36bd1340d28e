@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "066e0560_09b275b5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "2021 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad867ab_02ce2102",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "String.join might be more indicated here",
+      "range": {
+        "startLine": 75,
+        "startChar": 75,
+        "endLine": 75,
+        "endChar": 88
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e65f648e_b88c18ad",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 97,
+        "startChar": 95,
+        "endLine": 97,
+        "endChar": 108
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f901ea79_c68ac591",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 211,
+        "startChar": 11,
+        "endLine": 211,
+        "endChar": 23
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1335f26_812386ea",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeOperationsListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "2021",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a316cf28_841746c4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/LldpListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "2021 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b2e41fa_e44e33ab",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/TcaListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-03T18:39:17Z",
+      "side": 1,
+      "message": "2021 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "9f82dfe9b1631cd3d1229fc9505d36bd1340d28e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
