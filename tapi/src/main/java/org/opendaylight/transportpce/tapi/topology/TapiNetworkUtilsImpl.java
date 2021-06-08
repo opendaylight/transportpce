@@ -172,6 +172,7 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
                 + "as either the node or the tp doesnt exist in the TAPI topology");
             return null;
         }
+
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
             .setTopologyUuid(this.tapiTopoUuid)
             .setNodeUuid(sourceUuidNode)
@@ -184,6 +185,24 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
             .setNodeEdgePointUuid(destUuidTp)
             .build();
         nepList.put(destNep.key(), destNep);
+        OperationalState sourceOperState = getOperState(sourceUuidTp, sourceUuidNode);
+        OperationalState destOperState = getOperState(destUuidTp, destUuidNode);
+        if (sourceOperState == null || destOperState == null) {
+            LOG.error("No link can be created, as the operational state was not found in the TAPI topology");
+            return null;
+        }
+        AdministrativeState sourceAdminState = getAdminState(sourceUuidTp, sourceUuidNode);
+        AdministrativeState destAdminState = getAdminState(destUuidTp, destUuidNode);
+        if (sourceAdminState == null || destAdminState == null) {
+            LOG.error("No link can be created, as the administrative state was not found in the TAPI topology");
+            return null;
+        }
+        OperationalState operState = (OperationalState.ENABLED.equals(sourceOperState)
+                && OperationalState.ENABLED.equals(destOperState))
+                ? OperationalState.ENABLED : OperationalState.DISABLED;
+        AdministrativeState adminState = (AdministrativeState.UNLOCKED.equals(sourceAdminState)
+                && AdministrativeState.UNLOCKED.equals(destAdminState))
+                ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
         Name linkName = new NameBuilder().setValueName(valueName)
             .setValue(linkId)
             .build();
@@ -220,8 +239,8 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                 .setRestorationPolicy(RestorationPolicy.NA)
                 .build())
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
+            .setAdministrativeState(adminState)
+            .setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                 new TotalSizeBuilder().setUnit(CapacityUnit.GBPS)
@@ -281,6 +300,44 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt retrieve nep from datastore");
             return false;
+        }
+    }
+
+    private OperationalState getOperState(Uuid nepUuid, Uuid nodeUuid) {
+        try {
+            InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class).child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                    .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                    .build();
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (optionalOnep.isPresent()) {
+                return optionalOnep.get().getOperationalState();
+            }
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt retrieve nep from datastore");
+            return null;
+        }
+    }
+
+    private AdministrativeState getAdminState(Uuid nepUuid, Uuid nodeUuid) {
+        try {
+            InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class).child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                    .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                    .build();
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (optionalOnep.isPresent()) {
+                return optionalOnep.get().getAdministrativeState();
+            }
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt retrieve nep from datastore");
+            return null;
         }
     }
 
