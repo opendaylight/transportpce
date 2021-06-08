@@ -39,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.conta
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.CapacityUnit;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
@@ -49,17 +50,25 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capa
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.pac.TotalPotentialCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ProtectionType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RestorationPolicy;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.link.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.link.NodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.link.ResilienceTypeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.cost.pac.CostCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.cost.pac.CostCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.timing.pac.LatencyCharacteristic;
@@ -160,6 +169,8 @@ public class R2RTapiLinkDiscovery {
                 ifName.getRemotePortId(), tapiTopoUuid);
             if (omsLink != null) {
                 linkMap.put(omsLink.key(), omsLink);
+            } else {
+                LOG.error("Link was not created");
             }
         }
         return linkMap;
@@ -186,6 +197,8 @@ public class R2RTapiLinkDiscovery {
                 ifName.getRemotePortId(), tapiTopoUuid);
             if (omsLink != null) {
                 linkMap.put(omsLink.key(), omsLink);
+            } else {
+                LOG.error("Link was not created");
             }
         }
         return linkMap;
@@ -242,6 +255,7 @@ public class R2RTapiLinkDiscovery {
         }
         // Todo -> only handling for the bidirectional case. I assume all tps are of the type bidirectional
         LOG.debug("Tapi R2R Link DstTPTx {}, DstTPRx {}", destTpTx, srcTpRx);
+
         // Create OMS Tapi Link
         LOG.info("Tapi R2R Link Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , "
             + "DestDegId: {}, DestTPId: {}", nodeId.getValue(), srcDegId, srcTpTx, destNodeId, destDegId, destTpRx);
@@ -272,6 +286,24 @@ public class R2RTapiLinkDiscovery {
             .setNodeEdgePointUuid(destUuidTp)
             .build();
         nepList.put(destNep.key(), destNep);
+        OperationalState sourceOperState = getOperState(tapiTopoUuid, sourceUuidTp, sourceUuidNode);
+        OperationalState destOperState = getOperState(tapiTopoUuid, destUuidTp, destUuidNode);
+        if (sourceOperState == null || destOperState == null) {
+            LOG.error("No link can be created, as the operational state was not found in the TAPI topology");
+            return null;
+        }
+        AdministrativeState sourceAdminState = getAdminState(tapiTopoUuid, sourceUuidTp, sourceUuidNode);
+        AdministrativeState destAdminState = getAdminState(tapiTopoUuid, destUuidTp, destUuidNode);
+        if (sourceAdminState == null || destAdminState == null) {
+            LOG.error("No link can be created, as the administrative state was not found in the TAPI topology");
+            return null;
+        }
+        OperationalState operState = (OperationalState.ENABLED.equals(sourceOperState)
+                && OperationalState.ENABLED.equals(destOperState))
+                ? OperationalState.ENABLED : OperationalState.DISABLED;
+        AdministrativeState adminState = (AdministrativeState.UNLOCKED.equals(sourceAdminState)
+                && AdministrativeState.UNLOCKED.equals(destAdminState))
+                ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
         String linkNameValue = String.join("-", sourceNode, sourceTp.split("-")[0], sourceTp)
             + "to" + String.join("-", destNode, destTp.split("-")[0], destTp);
         Name linkName = new NameBuilder().setValueName("OMS link name")
@@ -310,8 +342,8 @@ public class R2RTapiLinkDiscovery {
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                 .setRestorationPolicy(RestorationPolicy.NA)
                 .build())
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
+            .setAdministrativeState(adminState)
+            .setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                 new TotalSizeBuilder().setUnit(CapacityUnit.GBPS)
@@ -383,5 +415,41 @@ public class R2RTapiLinkDiscovery {
             LOG.error("Failed getting Mapping data from portMapping",e);
         }
         return Direction.NotApplicable;
+    }
+
+    private OperationalState getOperState(Uuid tapiTopoUuid, Uuid nepUuid, Uuid nodeUuid) {
+        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                .build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<OwnedNodeEdgePoint> optionalOnep = readTx.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (optionalOnep.isPresent()) {
+                return optionalOnep.get().getOperationalState();
+            }
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed getting Mapping data from portMapping",e);
+            return null;
+        }
+    }
+
+    private AdministrativeState getAdminState(Uuid tapiTopoUuid, Uuid nepUuid, Uuid nodeUuid) {
+        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                .build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<OwnedNodeEdgePoint> optionalOnep = readTx.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (optionalOnep.isPresent()) {
+                return optionalOnep.get().getAdministrativeState();
+            }
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed getting Mapping data from portMapping",e);
+            return null;
+        }
     }
 }
