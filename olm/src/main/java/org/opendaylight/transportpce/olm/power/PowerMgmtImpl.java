@@ -335,7 +335,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 //The value recommended by the white paper is 20 seconds and not 60.
                                 //TODO - commented code because one vendor is not supporting
                                 //GainLoss with target-output-power
-                                Thread.sleep(OlmUtils.OLM_TIMER_1);
+                                Thread.sleep(OlmUtils.OLM_TIMER_2);
                                 crossConnect.setPowerLevel(nodeId, OpticalControlMode.GainLoss.getName(), powerValue,
                                         connectionNumber);
                             } else {
