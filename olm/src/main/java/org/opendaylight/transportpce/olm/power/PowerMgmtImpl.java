@@ -341,12 +341,13 @@ public class PowerMgmtImpl implements PowerMgmt {
                             LOG.info("Success Value is {}", setXconnPowerSuccessVal);
                             if (setXconnPowerSuccessVal) {
                                 LOG.info("Roadm-connection: {} updated ", connectionNumber);
-                                //The value recommended by the white paper is 20 seconds and not 60.
-                                //TODO - commented code because one vendor is not supporting
-                                //GainLoss with target-output-power
-                                Thread.sleep(OlmUtils.OLM_TIMER_1);
+                                Thread.sleep(OlmUtils.OLM_TIMER_2);
                                 crossConnect.setPowerLevel(nodeId, OpticalControlMode.GainLoss.getName(), powerValue,
                                         connectionNumber);
+                                //TODO make this timer value configurable via OSGi blueprint
+                                // although the value recommended by the white paper is 20 seconds.
+                                // At least one vendor product needs 60 seconds
+                                // because it is not supporting GainLoss with target-output-power.
                             } else {
                                 LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber,
                                         nodeId);
