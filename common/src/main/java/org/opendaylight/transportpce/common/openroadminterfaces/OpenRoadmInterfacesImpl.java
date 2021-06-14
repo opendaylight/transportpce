@@ -185,4 +185,24 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             return null;
         }
     }
+
+    @Override
+    public String getSupportedInterface(String nodeId, String interfaceName) {
+        String supportedInterface = "";
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                supportedInterface = openRoadmInterfacesImpl121.getSupportedInterface(nodeId,interfaceName);
+                break;
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                supportedInterface = openRoadmInterfacesImpl221.getSupportedInterface(nodeId,interfaceName);
+                break;
+            case OPENROADM_DEVICE_VERSION_7_1:
+                supportedInterface = openRoadmInterfacesImpl710.getSupportedInterface(nodeId,interfaceName);
+                break;
+            default:
+                LOG.error("getSupportedInterface unknown ordm version error device {}", nodeId);
+        }
+        return supportedInterface;
+    }
+
 }
