@@ -51,7 +51,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
@@ -260,7 +259,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case Service:
                         if ((ServiceFormat.Ethernet.equals(service.getServiceAEnd().getServiceFormat())
                                 || ServiceFormat.OC.equals(service.getServiceAEnd().getServiceFormat()))
-                            && Uint32.valueOf("100").equals(service.getServiceAEnd().getServiceRate())) {
+                            && (Uint32.valueOf("100").equals(service.getServiceAEnd().getServiceRate())
+                                || Uint32.valueOf("400").equals(service.getServiceAEnd().getServiceRate()))) {
                             if (!manageServicePathDeletion(serviceName, pathDescription)) {
                                 return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
                                     OPERATION_FAILED);
@@ -652,14 +652,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private boolean manageOtnServicePathDeletion(String serviceName, PathDescription pathDescription,
         Services service) {
         OtnServicePathInput ospi = null;
-        if (ConnectionType.Infrastructure.equals(service.getConnectionType())) {
-            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(
-                serviceName, service.getServiceAEnd().getServiceFormat().getName(), "100G", pathDescription, true);
-        } else if (ConnectionType.Service.equals(service.getConnectionType())) {
-            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(serviceName,
+        ospi = ModelMappingUtils.rendererCreateOtnServiceInput(serviceName,
                 service.getServiceAEnd().getServiceFormat().getName(),
                 service.getServiceAEnd().getServiceRate().toString() + "G", pathDescription, true);
-        }
         LOG.info("Deleting otn-service path {} via renderer", serviceName);
         sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
                 "Deleting otn-service path via renderer");
