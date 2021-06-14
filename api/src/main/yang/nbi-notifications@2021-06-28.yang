@@ -24,6 +24,11 @@ module nbi-notifications {
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
 
+  revision 2021-06-28 {
+    description
+      "Implement new models, RPC for service alarms";
+  }
+
   revision 2020-11-30 {
     description
       "Initial revision of NBI notifications";
@@ -72,14 +77,46 @@ module nbi-notifications {
     }
   }
 
+  grouping notification-alarm-service {
+    leaf message {
+      type string;
+      mandatory true;
+      description
+        "Message for the specified service";
+    }
+    leaf service-name {
+      type string;
+      mandatory true;
+      description
+        "Identifier for the service to be created in the ROADM network, e.g., CLFI, CLCI, etc.
+        This is reported against the service, but may not get reflected in the service in the network.";
+    }
+    leaf connection-type {
+      type org-openroadm-common-service-types:connection-type;
+      mandatory true;
+    }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+      config false;
+      description
+        "Operational State: Actual state of service";
+    }
+  }
+
   container notification-service {
     description
       "Model used to send a notification from a service request";
     uses notification-service;
   }
 
+  container notification-alarm-service {
+    description
+      "Model used to send a notification from the service listener";
+    uses notification-alarm-service;
+    }
+
   rpc get-notifications-service {
-    description "Get the notifications service send by ServiceHandler by filtering through connection type";
+    description "Get the notifications service sent by ServiceHandler through filtering connection type";
     input {
       leaf connection-type {
         type org-openroadm-common-service-types:connection-type;
@@ -107,6 +144,35 @@ module nbi-notifications {
     }
   }
 
+  rpc get-notifications-alarm-service {
+    description "Get the notifications alarm service sent by ServiceListener through filtering connection type";
+    input {
+      leaf connection-type {
+        type org-openroadm-common-service-types:connection-type;
+        mandatory true;
+        description
+          "Type connection of the service";
+      }
+      leaf id-consumer {
+        type string;
+        mandatory true;
+        description
+          "Unique ID for the consumer";
+      }
+      leaf group-id {
+        type string;
+        mandatory true;
+        description
+          "ID Group for the consumer";
+      }
+    }
+    output {
+      list notification-alarm-service {
+        uses notification-alarm-service;
+      }
+    }
+  }
+
   notification publish-notification-service {
     description "Publish the notifications service for topic";
     leaf topic {
@@ -116,5 +182,16 @@ module nbi-notifications {
         "Topic where to send the notification service";
      }
      uses notification-service;
+  }
+
+  notification publish-notification-alarm-service {
+    description "Publish the notifications service alarm for topic";
+    leaf topic {
+      type string;
+      mandatory true;
+      description
+        "Topic where to send the notification service alarm";
+     }
+     uses notification-alarm-service;
   }
 }

@@ -17,15 +17,18 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
+import org.opendaylight.transportpce.nbinotifications.producer.PublisherAlarm;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
 
 public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Mock
     private Publisher publisher;
+    @Mock
+    private PublisherAlarm publisherAlarm;
 
     @Before
     public void setUp() {
@@ -34,7 +37,8 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     public void onPublishNotificationServiceTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisher));
+        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisher),
+                Map.of("test", publisherAlarm));
         PublishNotificationService notification = new PublishNotificationServiceBuilder().setTopic("test")
                 .setCommonId("commonId").setConnectionType(ConnectionType.Service).setMessage("Service deleted")
                 .setOperationalState(State.OutOfService).setServiceName("service name").build();
@@ -44,7 +48,8 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     public void onPublishNotificationServiceWrongTopicTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisher));
+        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisher),
+                Map.of("test", publisherAlarm));
         PublishNotificationService notification = new PublishNotificationServiceBuilder().setTopic("wrongtopic")
                 .setCommonId("commonId").setConnectionType(ConnectionType.Service).setMessage("Service deleted")
                 .setOperationalState(State.OutOfService).setServiceName("service name").build();
