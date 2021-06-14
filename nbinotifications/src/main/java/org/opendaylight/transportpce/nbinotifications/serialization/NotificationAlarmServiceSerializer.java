@@ -12,15 +12,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NotificationServiceSerializer implements Serializer<NotificationService> {
-    private static final Logger LOG = LoggerFactory.getLogger(NotificationServiceSerializer.class);
-    private JsonStringConverter<NotificationService> converter;
+
+public class NotificationAlarmServiceSerializer implements Serializer<NotificationAlarmService> {
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationAlarmServiceSerializer.class);
+    private JsonStringConverter<NotificationAlarmService> converter;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -28,12 +29,12 @@ public class NotificationServiceSerializer implements Serializer<NotificationSer
         LOG.info("Deserializer configuration {}", configs);
         if (configs.containsKey(ConfigConstants.CONVERTER)
                 && configs.get(ConfigConstants.CONVERTER) instanceof JsonStringConverter<?>) {
-            converter = (JsonStringConverter<NotificationService>) configs.get(ConfigConstants.CONVERTER);
+            converter = (JsonStringConverter<NotificationAlarmService>) configs.get(ConfigConstants.CONVERTER);
         }
     }
 
     @Override
-    public byte[] serialize(String topic, NotificationService data) {
+    public byte[] serialize(String topic, NotificationAlarmService data) {
         if (converter == null) {
             throw new IllegalArgumentException(
                     "Converter should be" + "configured through configure method of serializer");
@@ -42,7 +43,8 @@ public class NotificationServiceSerializer implements Serializer<NotificationSer
             return new byte[0];
         }
         try {
-            InstanceIdentifier<NotificationService> iid = InstanceIdentifier.builder(NotificationService.class).build();
+            InstanceIdentifier<NotificationAlarmService> iid =
+                    InstanceIdentifier.builder(NotificationAlarmService.class).build();
             String serialized = converter.createJsonStringFromDataObject(iid, data, JSONCodecFactorySupplier.RFC7951);
             LOG.info("Serialized event {}", serialized);
             return serialized.getBytes(StandardCharsets.UTF_8);

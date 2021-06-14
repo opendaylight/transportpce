@@ -11,17 +11,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmServiceBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NotificationServiceDeserializer implements Deserializer<NotificationService> {
-    private static final Logger LOG = LoggerFactory.getLogger(NotificationServiceDeserializer.class);
+public class NotificationAlarmServiceDeserializer implements Deserializer<NotificationAlarmService> {
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationAlarmServiceDeserializer.class);
     private JsonStringConverter<org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev210628.NotificationService> converter;
+        .nbi.notifications.rev210628.NotificationAlarmService> converter;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -30,13 +30,13 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
         if (configs.containsKey(ConfigConstants.CONVERTER)
                 && configs.get(ConfigConstants.CONVERTER) instanceof JsonStringConverter<?>) {
             converter = (JsonStringConverter<org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev210628.NotificationService>) configs
+                    .nbi.notifications.rev210628.NotificationAlarmService>) configs
                     .get(ConfigConstants.CONVERTER);
         }
     }
 
     @Override
-    public NotificationService deserialize(String topic, byte[] data) {
+    public NotificationAlarmService deserialize(String topic, byte[] data) {
         if (converter == null) {
             throw new IllegalArgumentException(
                     "Converter should be configured through configure method of deserializer");
@@ -47,21 +47,19 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
         // we have to map it to
         // org.opendaylight.yang.gen
         // .v1.nbi.notifications.rev201130.get.notifications.service.output.NotificationService
-        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService mappedString = converter
+        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService mappedString = converter
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(
-                        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService.QNAME),
+                        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService.QNAME),
                         value,
                         JSONCodecFactorySupplier.RFC7951);
         if (mappedString != null) {
             LOG.info("Reading event {}", mappedString);
-            return new NotificationServiceBuilder().setCommonId(mappedString.getCommonId())
-                    .setConnectionType(mappedString.getConnectionType()).setMessage(mappedString.getMessage())
+            return new NotificationAlarmServiceBuilder().setConnectionType(mappedString.getConnectionType())
+                    .setMessage(mappedString.getMessage())
                     .setOperationalState(mappedString.getOperationalState())
-                    .setResponseFailed(mappedString.getResponseFailed()).setServiceName(mappedString.getServiceName())
-                    .setServiceAEnd(mappedString.getServiceAEnd()).setServiceZEnd(mappedString.getServiceZEnd())
+                    .setServiceName(mappedString.getServiceName())
                     .build();
         }
         return null;
     }
-
 }

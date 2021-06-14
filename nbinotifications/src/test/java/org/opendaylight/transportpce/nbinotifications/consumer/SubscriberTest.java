@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
 
 public class SubscriberTest extends AbstractTest {
     private static final String TOPIC = "topic";

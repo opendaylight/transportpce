@@ -16,13 +16,13 @@ import java.util.Map;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
 
 public class NotificationServiceDeserializerTest extends AbstractTest {
 
     @Test
     public void deserializeTest() throws IOException {
-        JsonStringConverter<org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationService> converter =
+        JsonStringConverter<org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         NotificationServiceDeserializer deserializer = new NotificationServiceDeserializer();
         Map<String, Object> configs = Map.of(ConfigConstants.CONVERTER, converter);

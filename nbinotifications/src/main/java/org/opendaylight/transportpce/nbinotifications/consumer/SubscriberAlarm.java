@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Orange, Inc. and others.  All rights reserved.
+ * Copyright © 2021 Orange, Inc. and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -21,52 +21,53 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConstants;
-import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
+import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceDeserializer;
 import org.opendaylight.transportpce.nbinotifications.utils.NbiNotificationsUtils;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Subscriber {
-    private static final Logger LOG = LoggerFactory.getLogger(Subscriber.class);
+public class SubscriberAlarm {
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriberAlarm.class);
 
-    private final Consumer<String, NotificationService> consumer;
+    private final Consumer<String, NotificationAlarmService> consumer;
 
-    public Subscriber(String id, String groupId, String suscriberServer,
-            JsonStringConverter<org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.NotificationService> deserializer) {
+    public SubscriberAlarm(String id, String groupId, String subscriberServer,
+                           JsonStringConverter<org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev210628.NotificationAlarmService> deserializer) {
         Properties propsConsumer = NbiNotificationsUtils.loadProperties("subscriber.properties");
         propsConsumer.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         propsConsumer.put(ConsumerConfig.CLIENT_ID_CONFIG, id);
         propsConsumer.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        propsConsumer.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , NotificationServiceDeserializer.class);
+        propsConsumer.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , NotificationAlarmServiceDeserializer.class);
         propsConsumer.put(ConfigConstants.CONVERTER , deserializer);
-        if (suscriberServer != null && !suscriberServer.isBlank()) {
-            propsConsumer.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, suscriberServer);
+        if (subscriberServer != null && !subscriberServer.isBlank()) {
+            propsConsumer.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, subscriberServer);
         }
-        LOG.info("Suscribing for group id {}, client config id {} with properties {}", groupId, id, propsConsumer);
+        LOG.info("Subscribing for group id {}, client config id {} with properties {}", groupId, id, propsConsumer);
         consumer = new KafkaConsumer<>(propsConsumer);
     }
 
-    public List<NotificationService> subscribeService(String topicName) {
+    public List<NotificationAlarmService> subscribeAlarm(String topicName) {
         LOG.info("Subscribe request to topic '{}' ", topicName);
         consumer.subscribe(Collections.singleton(topicName));
-        final ConsumerRecords<String, NotificationService> consumerRecords = consumer.poll(Duration.ofMillis(1000));
-        List<NotificationService> notificationServiceList = new ArrayList<>();
-        YangInstanceIdentifier.of(NotificationService.QNAME);
-        for (ConsumerRecord<String, NotificationService> record : consumerRecords) {
+        final ConsumerRecords<String, NotificationAlarmService> consumerRecords = consumer
+                .poll(Duration.ofMillis(1000));
+        List<NotificationAlarmService> notificationAlarmServiceList = new ArrayList<>();
+        YangInstanceIdentifier.of(NotificationAlarmService.QNAME);
+        for (ConsumerRecord<String, NotificationAlarmService> record : consumerRecords) {
             if (record.value() != null) {
-                notificationServiceList.add(record.value());
+                notificationAlarmServiceList.add(record.value());
             }
         }
-        LOG.info("Getting records '{}' ", notificationServiceList);
+        LOG.info("Getting records '{}' ", notificationAlarmServiceList);
         consumer.unsubscribe();
         consumer.close();
-        return notificationServiceList;
+        return notificationAlarmServiceList;
     }
 
-    @VisibleForTesting public Subscriber(Consumer<String, NotificationService> consumer) {
+    @VisibleForTesting public SubscriberAlarm(Consumer<String, NotificationAlarmService> consumer) {
         this.consumer = consumer;
     }
 }

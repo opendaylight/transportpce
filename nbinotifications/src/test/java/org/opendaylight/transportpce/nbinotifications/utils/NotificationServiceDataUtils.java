@@ -15,10 +15,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class NotificationServiceDataUtils {
@@ -41,11 +41,11 @@ public final class NotificationServiceDataUtils {
     }
 
     public static org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev201130.get.notifications.service.output.NotificationService buildReceivedEvent() {
+        .nbi.notifications.rev210628.get.notifications.service.output.NotificationService buildReceivedEvent() {
         org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev201130.get.notifications.service.output.NotificationServiceBuilder
+            .nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder
             notificationServiceBuilder = new org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev201130.get.notifications.service.output.NotificationServiceBuilder()
+            .nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder()
                 .setMessage("message")
                 .setServiceName("service1")
                 .setOperationalState(State.InService)
