@@ -106,4 +106,6 @@ public interface OpenRoadmInterfaces {
     void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException;
 
+    String getSupportedInterface(String nodeId, String interfaceName);
+
 }
