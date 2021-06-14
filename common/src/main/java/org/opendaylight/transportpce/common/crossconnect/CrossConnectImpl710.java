@@ -134,8 +134,6 @@ public class CrossConnectImpl710 {
             return null;
         }
 
-        deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateOduConnectionIID(connectionName));
-
         // delete the cross connect on the device
         deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateOduConnectionIID(connectionName));
         FluentFuture<? extends @NonNull CommitInfo> commit =
