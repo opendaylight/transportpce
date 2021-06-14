@@ -20,6 +20,7 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
 
@@ -35,6 +36,9 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     PceListenerImpl pceListenerImpl;
 
     @Mock
+    ServiceListener serviceListener;
+
+    @Mock
     RendererListenerImpl rendererListenerImpl;
 
     @Mock
@@ -42,6 +46,7 @@ public class ServicehandlerProviderTest  extends AbstractTest {
 
     @Mock
     ServicehandlerImpl servicehandler;
+
 
     private AutoCloseable closeable;
 
@@ -54,8 +59,8 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     public void testInitRegisterServiceHandlerToRpcRegistry() {
         ServicehandlerProvider provider =  new ServicehandlerProvider(
                 getDataBroker(), rpcProviderRegistry,
-                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
-                networkModelListenerImpl, servicehandler);
+                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, serviceListener,
+                rendererListenerImpl, networkModelListenerImpl, servicehandler);
 
         provider.init();
 

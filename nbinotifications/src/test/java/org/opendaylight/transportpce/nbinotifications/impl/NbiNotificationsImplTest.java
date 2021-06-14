@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.GetNotificationsServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.GetNotificationsServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -26,9 +26,12 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Before
     public void setUp() {
         JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev201130.NotificationService> converter = new JsonStringConverter<>(
+            .nbi.notifications.rev210628.NotificationService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, "localhost:8080");
+        JsonStringConverter<org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev210628.NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
+                getDataStoreContextUtil().getBindingDOMCodecServices());
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
     }
 
     public void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
