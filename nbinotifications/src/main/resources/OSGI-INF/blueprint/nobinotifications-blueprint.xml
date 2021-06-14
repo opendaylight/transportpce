@@ -26,6 +26,11 @@ xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
                 <value>RendererListener</value>
             </list>
         </argument>
+        <argument>
+            <list value-type="java.lang.String">
+                <value>ServiceListener</value>
+            </list>
+        </argument>
         <argument value="${suscriber.server}"/>
         <argument value="${publisher.server}"/>
         <argument ref="rpcService" />
