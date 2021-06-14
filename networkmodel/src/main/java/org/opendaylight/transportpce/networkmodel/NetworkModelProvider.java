@@ -23,6 +23,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
@@ -34,15 +36,19 @@ public class NetworkModelProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelProvider.class);
     private static final InstanceIdentifier<Mapping> MAPPING_II = InstanceIdentifier.create(Network.class)
-        .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network
-                .Nodes.class)
-        .child(Mapping.class);
+            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network
+                    .Nodes.class)
+            .child(Mapping.class);
+    private static final InstanceIdentifier<Services> SERVICE = InstanceIdentifier.builder(ServiceList.class)
+            .child(Services.class).build();
 
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
+    private final NetConfServiceListener serviceListener;
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
+    private ListenerRegistration<NetConfServiceListener> serviceDataTreeChangeListenerRegistration;
     private ListenerRegistration<PortMappingListener> mappingListenerRegistration;
     private ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
@@ -52,13 +58,16 @@ public class NetworkModelProvider {
     private PortMappingListener portMappingListener;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
-        final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
-        final NetConfTopologyListener topologyListener, NotificationService notificationService,
-        FrequenciesService frequenciesService, PortMappingListener portMappingListener) {
+                                final RpcProviderService rpcProviderService,
+                                final TransportpceNetworkutilsService networkutilsService,
+                                final NetConfTopologyListener topologyListener,
+                                final NetConfServiceListener serviceListener, NotificationService notificationService,
+                                FrequenciesService frequenciesService, PortMappingListener portMappingListener) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
         this.topologyListener = topologyListener;
+        this.serviceListener = serviceListener;
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
@@ -76,23 +85,29 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
         dataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
+                        InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
+        serviceDataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, SERVICE), serviceListener);
         mappingListenerRegistration = dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener);
         networkutilsServiceRpcRegistration =
-            rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
+                rpcProviderService.registerRpcImplementation(
+                                TransportpceNetworkutilsService.class, networkutilsService);
         TransportpceServicehandlerListener serviceHandlerListner =
                 new ServiceHandlerListener(frequenciesService);
         serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
     }
 
-        /**
-         * Method called when the blueprint container is destroyed.
-         */
+    /**
+     * Method called when the blueprint container is destroyed.
+     */
     public void close() {
         LOG.info("NetworkModelProvider Closed");
         if (dataTreeChangeListenerRegistration != null) {
             dataTreeChangeListenerRegistration.close();
+        }
+        if (serviceDataTreeChangeListenerRegistration != null) {
+            serviceDataTreeChangeListenerRegistration.close();
         }
         if (mappingListenerRegistration != null) {
             mappingListenerRegistration.close();

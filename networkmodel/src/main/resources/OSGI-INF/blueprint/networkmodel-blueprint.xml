@@ -29,6 +29,7 @@
         <argument ref="rpcProviderService" />
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
+        <argument ref="netconfServiceListener" />
         <argument ref="notificationService" />
         <argument ref="frequenciesService" />
         <argument ref="portMappingListener" />
@@ -43,6 +44,11 @@
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
         <argument ref="portMapping" />
+    </bean>
+
+    <bean id="netconfServiceListener" class="org.opendaylight.transportpce.networkmodel.NetConfServiceListener">
+        <argument ref="dataBroker" />
+        <argument ref="notificationPublishService" />
     </bean>
 
     <bean id="networkutilsServiceImpl" class="org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl">
