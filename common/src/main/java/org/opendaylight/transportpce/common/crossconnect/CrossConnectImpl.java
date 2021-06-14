@@ -78,22 +78,16 @@ public class CrossConnectImpl implements CrossConnect {
 
     public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
 
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
+        switch(mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                return crossConnectImpl710.deleteOtnCrossConnect(nodeId, connectionNumber);
+            default:
+                return null;
         }
-        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
-        }
-        return null;
-    }
-
-    public List<String> deleteCrossConnect(String nodeId, String connectionNumber) {
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (OPENROADM_DEVICE_VERSION_7_1.equals(openRoadmVersion)) {
-            return crossConnectImpl710.deleteOtnCrossConnect(nodeId, connectionNumber);
-        }
-        return null;
     }
 
     public List<?> getConnectionPortTrail(String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber,

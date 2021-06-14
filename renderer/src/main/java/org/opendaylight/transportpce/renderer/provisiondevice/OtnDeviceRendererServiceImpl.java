@@ -29,7 +29,6 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceBuilder;
@@ -188,6 +187,18 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                             if (node.getNetwork2Tp() != null) {
                                 interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
                             }
+                        } else if ("Ethernet".equals(input.getServiceType())) {
+                            connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU4");
+                        }
+                        break;
+                    case ("400G"):
+                        LOG.info("Service Rate is 400G");
+                        if ("ODU".equals(input.getServiceType())) {
+                            interfacesToDelete.add(networkTp + "-ODUC4");
+                            otnNodesProvisioned.add(node);
+                            if (node.getNetwork2Tp() != null) {
+                                interfacesToDelete.add(node.getNetwork2Tp() + "-ODUC4");
+                            }
                         }
                         break;
                     case ("10G"):
@@ -208,9 +219,17 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     for (String interf : intToDelete) {
                         if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
                             this.deviceTransactionManager)) {
+
                             interfacesToDelete.add(interf);
-                            if (!getSupportedInterface(nodeId, interf).contains("ODU4")) {
-                                interfacesToDelete.add(getSupportedInterface(nodeId, interf));
+                            String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                            if (input.getServiceRate().equals("100G")) {
+                                if (!supportedInterface.contains("ODUC4")) {
+                                    interfacesToDelete.add(supportedInterface);
+                                }
+                            } else {
+                                if (!supportedInterface.contains("ODU4")) {
+                                    interfacesToDelete.add(supportedInterface);
+                                }
                             }
                         }
                     }
@@ -274,21 +293,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             return String.join("-", networkTp, oduType, serviceName, "x", node.getNetwork2Tp(), oduType, serviceName);
         } else {
             return "";
-        }
-    }
-
-    private String getSupportedInterface(String nodeId, String interf) {
-        Optional<Interface> supInterfOpt;
-        try {
-            supInterfOpt = this.openRoadmInterfaces.getInterface(nodeId, interf);
-            if (supInterfOpt.isPresent()) {
-                return supInterfOpt.get().getSupportingInterface();
-            } else {
-                return null;
-            }
-        } catch (OpenRoadmInterfaceException e) {
-            LOG.error("error getting Supported Interface of {} - {}", interf, nodeId, e);
-            return null;
         }
     }
 
