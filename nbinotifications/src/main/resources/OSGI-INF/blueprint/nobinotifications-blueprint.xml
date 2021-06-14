@@ -23,6 +23,7 @@ xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
                 <value>PceListener</value>
                 <value>ServiceHandlerOperations</value>
                 <value>ServiceHandler</value>
+                <value>NetConfServiceListener</value>
                 <value>RendererListener</value>
             </list>
         </argument>

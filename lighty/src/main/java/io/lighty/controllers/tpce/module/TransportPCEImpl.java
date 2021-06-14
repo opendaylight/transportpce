@@ -34,6 +34,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
+import org.opendaylight.transportpce.networkmodel.NetConfServiceListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
@@ -119,8 +120,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     /**
      * List of publisher topics.
      */
-    private final List<String> publisherTopicList =
-            Arrays.asList("PceListener", "ServiceHandlerOperations", "ServiceHandler", "RendererListener");
+    private final List<String> publisherTopicList = Arrays.asList("netConfServiceListener", "PceListener",
+            "ServiceHandlerOperations", "ServiceHandler", "RendererListener");
 
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification) {
         LOG.info("Initializing transaction providers ...");
@@ -143,10 +144,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
+        NetConfServiceListener netConfServiceListener =
+                new NetConfServiceListener(lightyServices.getBindingDataBroker(),
+                        lightyServices.getBindingNotificationPublishService());
         PortMappingListener portMappingListener = new PortMappingListener(networkModelService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
-                lightyServices.getNotificationService(), networkModelWavelengthService, portMappingListener);
+                netConfServiceListener, lightyServices.getNotificationService(), networkModelWavelengthService,
+                portMappingListener);
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
