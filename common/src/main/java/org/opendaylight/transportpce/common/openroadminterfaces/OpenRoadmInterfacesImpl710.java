@@ -203,4 +203,19 @@ public class OpenRoadmInterfacesImpl710 {
         }
     }
 
+    public String getSupportedInterface(String nodeId, String interf) {
+        Optional<Interface> supInterfOpt;
+        try {
+            supInterfOpt = getInterface(nodeId, interf);
+            if (supInterfOpt.isPresent()) {
+                return supInterfOpt.get().getSupportingInterfaceList().get(0);
+            } else {
+                return null;
+            }
+        } catch (OpenRoadmInterfaceException e) {
+            LOG.error("error getting Supported Interface of {} - {}", interf, nodeId, e);
+            return null;
+        }
+    }
+
 }

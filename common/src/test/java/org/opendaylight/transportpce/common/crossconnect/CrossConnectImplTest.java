@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
@@ -24,6 +25,7 @@ import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
+@Ignore
 public class CrossConnectImplTest {
 
     private CrossConnectImpl crossConnectImpl = null;
