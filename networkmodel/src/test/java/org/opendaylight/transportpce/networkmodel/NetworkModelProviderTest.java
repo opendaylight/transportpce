@@ -39,6 +39,8 @@ public class NetworkModelProviderTest extends AbstractTest {
     @Mock
     NetConfTopologyListener topologyListener;
     @Mock
+    NetConfServiceListener serviceListener;
+    @Mock
     private NotificationService notificationService;
     @Mock
     private FrequenciesService frequenciesService;
@@ -49,7 +51,7 @@ public class NetworkModelProviderTest extends AbstractTest {
     @Test
     public void networkmodelProviderInitTest() {
         NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
-            rpcProviderService, networkutilsService, topologyListener, notificationService,
+            rpcProviderService, networkutilsService, topologyListener, serviceListener, notificationService,
             frequenciesService, portMappingListener);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
