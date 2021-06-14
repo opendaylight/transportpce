@@ -18,6 +18,7 @@ import org.opendaylight.transportpce.dmaap.client.resource.EventsApi;
 import org.opendaylight.transportpce.dmaap.client.resource.config.JsonConfigurator;
 import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,11 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
         } catch (WebApplicationException e) {
             LOG.warn("Cannot send event {}", notification, e);
         }
+
+    }
+
+    @Override
+    public void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
 
     }
 

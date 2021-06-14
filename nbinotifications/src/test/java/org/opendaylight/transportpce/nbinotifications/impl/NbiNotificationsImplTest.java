@@ -28,7 +28,10 @@ public class NbiNotificationsImplTest extends AbstractTest {
         JsonStringConverter<org.opendaylight.yang.gen.v1
             .nbi.notifications.rev201130.NotificationService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, "localhost:8080");
+        JsonStringConverter<org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev201130.NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
+                getDataStoreContextUtil().getBindingDOMCodecServices());
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
     }
 
     public void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {

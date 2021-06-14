@@ -38,8 +38,8 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
     @Test
     public void initTest() {
         NbiNotificationsProvider provider = new NbiNotificationsProvider(
-                Arrays.asList("topic1", "topic2"), "localhost:8080", "localhost:8080",
-                rpcProviderRegistry, notificationService,
+                Arrays.asList("topic1", "topic2"), Arrays.asList("topic1", "topic2"), "localhost:8080",
+                "localhost:8080", rpcProviderRegistry, notificationService,
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         provider.init();
         verify(rpcProviderRegistry, times(1))

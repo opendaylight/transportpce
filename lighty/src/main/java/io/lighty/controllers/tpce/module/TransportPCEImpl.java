@@ -73,6 +73,7 @@ import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
@@ -119,8 +120,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     /**
      * List of publisher topics.
      */
-    private final List<String> publisherTopicList =
-            Arrays.asList("PceListener", "ServiceHandlerOperations", "ServiceHandler", "RendererListener");
+    private final List<String> publisherTopicList = Arrays.asList("PceListener", "ServiceHandlerOperations",
+            "ServiceHandler", "RendererListener");
+    private final List<String> publisherTopicAlarmList = Arrays.asList("ServiceListener");
 
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification) {
         LOG.info("Initializing transaction providers ...");
@@ -190,6 +192,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             lightyServices.getBindingNotificationPublishService());
         PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
             lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
+        ServiceListener serviceListener = new ServiceListener(lightyServices.getBindingDataBroker(),
+                lightyServices.getBindingNotificationPublishService());
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
@@ -197,8 +201,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, "N/A");
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
-                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                servicehandler);
+                serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
+                networkModelListenerImpl, servicehandler);
 
         LOG.info("Creating tapi beans ...");
         R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(lightyServices.getBindingDataBroker(),
@@ -223,7 +227,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
-                    publisherTopicList, null, null, lightyServices.getRpcProviderService(),
+                    publisherTopicList, publisherTopicAlarmList, null, null, lightyServices.getRpcProviderService(),
                     lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer());
         }
     }
