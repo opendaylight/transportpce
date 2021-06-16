@@ -1298,9 +1298,10 @@ module org-openroadm-device {
           "The supported circuit-pack.";
       }
       leaf-list port-list {
-        type leafref {
-          path "/org-openroadm-device/circuit-packs[circuit-pack-name=current()/../circuit-pack-name]/ports/port-name";
-        }
+        type string;
+//        type leafref {
+//          path "/org-openroadm-device/circuit-packs[circuit-pack-name=current()/../circuit-pack-name]/ports/port-name";
+//        }
         description
           "port list";
       }
