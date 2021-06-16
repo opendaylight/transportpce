@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38d5c808_f61b253e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfServiceListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-06-16T12:30:30Z",
+      "side": 1,
+      "message": "\"ServiceListener\" should be more appropriate. Netconf has nothing to do with listener.",
+      "range": {
+        "startLine": 26,
+        "startChar": 13,
+        "endLine": 26,
+        "endChar": 35
+      },
+      "revId": "95246a497e79f5de69bb19eea68079f09fada699",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79507a73_ca15e94e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfServiceListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-06-16T12:30:30Z",
+      "side": 1,
+      "message": "OK to notify when a service is being out-of-service. We could also expect being notified when the service is returning to in-service.",
+      "range": {
+        "startLine": 52,
+        "startChar": 20,
+        "endLine": 52,
+        "endChar": 22
+      },
+      "revId": "95246a497e79f5de69bb19eea68079f09fada699",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60824293_7276a051",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfServiceListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-06-16T12:30:30Z",
+      "side": 1,
+      "message": "For this kind of notification, may be having just the service-name, message and operational-state should be sufficient enought.",
+      "range": {
+        "startLine": 57,
+        "startChar": 32,
+        "endLine": 57,
+        "endChar": 47
+      },
+      "revId": "95246a497e79f5de69bb19eea68079f09fada699",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
