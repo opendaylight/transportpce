@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
@@ -36,7 +37,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -49,6 +49,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,7 @@ public class PceCalculation {
     private String serviceFormatA = "";
     private String serviceFormatZ = "";
     private String serviceType = "";
-    private Long serviceRate = 0L;
+    private Uint32 serviceRate = Uint32.valueOf(0);
 
     private PceConstraints pceHardConstraints;
 
@@ -136,11 +137,20 @@ public class PceCalculation {
         }
         serviceFormatA = input.getServiceAEnd().getServiceFormat().getName();
         serviceFormatZ = input.getServiceZEnd().getServiceFormat().getName();
-        serviceRate = input.getServiceAEnd().getServiceRate().toJava();
+        serviceRate = input.getServiceAEnd().getServiceRate();
+        if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+            && input.getServiceAEnd().getTxDirection() != null
+            && input.getServiceAEnd().getTxDirection().getPort() != null
+            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
+            Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+                input.getServiceAEnd().getTxDirection().getPort().getPortName());
+            serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate, mapping);
+        } else {
+            serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate, null);
+        }
 
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
 
-        setServiceType();
         getAZnodeId();
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
@@ -159,71 +169,6 @@ public class PceCalculation {
         } else {
             anodeId = input.getServiceAEnd().getNodeId();
             znodeId = input.getServiceZEnd().getNodeId();
-        }
-    }
-
-    private void setServiceType() {
-        if ("Ethernet".equals(serviceFormatA)) {
-            switch (serviceRate.intValue()) {
-                case 1:
-                    serviceType = StringConstants.SERVICE_TYPE_1GE;
-                    break;
-                case 10:
-                    serviceType = StringConstants.SERVICE_TYPE_10GE;
-                    break;
-                case 100:
-                    serviceType = StringConstants.SERVICE_TYPE_100GE_T;
-                    if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
-                        .getNodeInfo().getNodeType())) {
-                        if (input.getServiceAEnd().getTxDirection() != null
-                            && input.getServiceAEnd().getTxDirection().getPort() != null
-                            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
-                            String lcp = input.getServiceAEnd().getTxDirection().getPort().getPortName();
-                            if (portMapping.getMapping(input.getServiceAEnd().getNodeId(), lcp) != null) {
-                                Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(), lcp);
-                                if (PortQual.SwitchClient.getName().equals(mapping.getPortQual())) {
-                                    serviceType = StringConstants.SERVICE_TYPE_100GE_M;
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case 400:
-                    serviceType = StringConstants.SERVICE_TYPE_400GE;
-                    break;
-                default:
-                    LOG.warn("Invalid service-rate {}", serviceRate);
-                    break;
-            }
-        }
-        if ("OC".equals(serviceFormatA) && Long.valueOf(100L).equals(serviceRate)) {
-            serviceType = StringConstants.SERVICE_TYPE_100GE_T;
-        }
-        if ("OTU".equals(serviceFormatA)) {
-            switch (serviceRate.intValue()) {
-                case 100:
-                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
-                    break;
-                case 400:
-                    serviceType = StringConstants.SERVICE_TYPE_OTUC4;
-                    break;
-                default:
-                    LOG.warn("Invalid service-rate {}", serviceRate);
-                    break;
-            }
-        }
-        if ("ODU".equals(serviceFormatA)) {
-            switch (serviceRate.intValue()) {
-                case 100:
-                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
-                    break;
-                case 400:
-                    serviceType = StringConstants.SERVICE_TYPE_ODUC4;
-                    break;
-                default:
-                    LOG.warn("Invalid service-rate {}", serviceRate);
-                    break;
-            }
         }
     }
 
