@@ -182,11 +182,11 @@ class TransportPCE400Gtesting(unittest.TestCase):
     def test_07_path_computation_ODUC4_xpdr_bi(self):
         response = test_utils.path_computation_request("request-1", "service-ODUC4",
                                                        {"service-rate": "400", "clli": "NodeA", "service-format": "ODU",
-                                                           "node-id": "XPDR-A2-XPDR2",
+                                                           "node-id": "XPDR-A2",
                                                            "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
                                                        },
                                                        {"service-rate": "400", "clli": "NodeC", "service-format": "ODU",
-                                                           "node-id": "XPDR-C2-XPDR2",
+                                                           "node-id": "XPDR-C2",
                                                            "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
