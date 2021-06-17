@@ -117,6 +117,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # TODO: for lighty manage the activation of NBI notification feature
+        cls.init_failed = False
         cls.processes = test_utils.start_tpce()
         # NBI notification feature is not installed by default in Karaf
         if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
@@ -229,10 +230,8 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.get_notifications_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-2]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-2]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-2]['message'], 'ServiceCreate request received ...')
         self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
         self.assertEqual(res['output']['notification-service'][-1]['message'], 'ServiceCreate request failed ...')
         self.assertEqual(res['output']['notification-service'][-1]['response-failed'],
                          'PCE path computation failed !')
@@ -303,12 +302,8 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.get_notifications_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-3]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-3]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-3]['message'], 'ServiceCreate request received ...')
-        self.assertEqual(res['output']['notification-service'][-2]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-2]['message'], 'PCE calculation done OK !')
         self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
         self.assertEqual(res['output']['notification-service'][-1]['message'], 'Service implemented !')
         time.sleep(2)
 
@@ -331,10 +326,8 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.get_notifications_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-2]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-2]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-2]['message'], 'ServiceDelete request received ...')
         self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
         self.assertEqual(res['output']['notification-service'][-1]['message'], 'Service deleted !')
         time.sleep(2)
 
