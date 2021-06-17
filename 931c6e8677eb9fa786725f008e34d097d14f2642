@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bbccfbb_50178417",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-17T20:01:35Z",
+      "side": 0,
+      "message": "FOIC2.4-OTUC2",
+      "range": {
+        "startLine": 201,
+        "startChar": 47,
+        "endLine": 201,
+        "endChar": 52
+      },
+      "revId": "931c6e8677eb9fa786725f008e34d097d14f2642",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db03b82b_09d4b8b4",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-17T20:01:35Z",
+      "side": 0,
+      "message": "FOIC2.4-OTUC2",
+      "range": {
+        "startLine": 359,
+        "startChar": 47,
+        "endLine": 359,
+        "endChar": 60
+      },
+      "revId": "931c6e8677eb9fa786725f008e34d097d14f2642",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5042f258_1dad72e8",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-17T20:01:35Z",
+      "side": 0,
+      "message": "FOIC2.4-OTUC2",
+      "range": {
+        "startLine": 378,
+        "startChar": 20,
+        "endLine": 378,
+        "endChar": 33
+      },
+      "revId": "931c6e8677eb9fa786725f008e34d097d14f2642",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
