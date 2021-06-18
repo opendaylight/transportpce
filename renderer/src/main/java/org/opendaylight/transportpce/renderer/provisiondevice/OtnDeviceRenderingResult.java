@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.Collections;
 import java.util.List;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.node.interfaces.NodeInterface;
 
 public final class OtnDeviceRenderingResult extends OperationResult {
     private final List<NodeInterface> renderedNodeInterfaces;
