@@ -514,7 +514,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void updateOtnLinks(List<String> nodeTps, String serviceRate, Short tribPortNb, Short tribSoltNb,
+    public void updateOtnLinks(List<String> nodeTps, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb,
             boolean isDeletion) {
         List<Link> supportedOdu4Links = getSupportingOdu4Links(nodeTps);
         List<TerminationPoint> tps = getOtnNodeTps(nodeTps);
