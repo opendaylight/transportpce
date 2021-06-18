@@ -16,6 +16,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.Action;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.RendererRollbackOutputBuilder;
@@ -40,7 +41,7 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
     @Test
     public void testServicePathCreateOption() {
 
-        Mockito.when(servicePathInput.getOperation()).thenReturn(ServicePathInput.Operation.Create);
+        Mockito.when(servicePathInput.getOperation()).thenReturn(Action.Create);
         deviceRendererRPC.servicePath(servicePathInput);
         Mockito.verify(deviceRenderer, Mockito.times(1)).setupServicePath(servicePathInput, null);
 
@@ -49,7 +50,7 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
     @Test
     public void testServicePathDeleteOption() {
 
-        Mockito.when(servicePathInput.getOperation()).thenReturn(ServicePathInput.Operation.Delete);
+        Mockito.when(servicePathInput.getOperation()).thenReturn(Action.Create);
         deviceRendererRPC.servicePath(servicePathInput);
         Mockito.verify(deviceRenderer, Mockito.times(1)).deleteServicePath(servicePathInput);
 
