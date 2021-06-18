@@ -21,6 +21,10 @@ module transportpce-olm {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2021-06-18 {
+    description
+      "Updated following transportpce-common-types udpate";
+  }
   revision 2017-04-18 {
     description
       "Initial revision of olm model";
@@ -56,7 +60,7 @@ module transportpce-olm {
       "This RPC sets up output power values on a list of ROADMs/Transponders
          based on the path the wavelength takes";
     input {
-      uses org-transportpce-common-types:olm-renderer-input;
+      uses org-transportpce-common-types:optical-renderer-input;
     }
     output {
       leaf result {
@@ -70,7 +74,7 @@ module transportpce-olm {
       "This RPC turn down the output power values on a list of ROADMs/Transponders
          based on the path the wavelength takes";
     input {
-      uses org-transportpce-common-types:olm-renderer-input;
+      uses org-transportpce-common-types:optical-renderer-input;
     }
     output {
       leaf result {
