@@ -94,6 +94,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="olmService" />
     <argument ref="dataBroker" />
     <argument ref="notificationPublishService" />
+    <argument ref="portMapping" />
   </bean>
 
   <bean id="rendererProvider" class="org.opendaylight.transportpce.renderer.RendererProvider"
