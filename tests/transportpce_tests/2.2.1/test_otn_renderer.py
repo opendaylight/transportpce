@@ -156,7 +156,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_08_otn_service_path_create_ODU4(self):
-        response = test_utils.otn_service_path_request("create", "service_ODU4", "100G", "ODU",
+        response = test_utils.otn_service_path_request("create", "service_ODU4", "100", "ODU",
                                                        [{"node-id": "SPDR-SA1", "network-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -203,7 +203,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_11_otn_service_path_create_10GE(self):
-        response = test_utils.otn_service_path_request("create", "service1", "10G", "Ethernet",
+        response = test_utils.otn_service_path_request("create", "service1", "10", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT4",
                                                            "network-tp": "XPDR1-NETWORK1"}],
                                                        {"ethernet-encoding": "eth encode",
@@ -312,7 +312,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['odu-connection'][0]['source'])
 
     def test_16_otn_service_path_delete_10GE(self):
-        response = test_utils.otn_service_path_request("delete", "service1", "10G", "Ethernet",
+        response = test_utils.otn_service_path_request("delete", "service1", "10", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT4",
                                                            "network-tp": "XPDR1-NETWORK1"}],
                                                        {"ethernet-encoding": "eth encode",
@@ -342,7 +342,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_21_otn_service_path_delete_ODU4(self):
-        response = test_utils.otn_service_path_request("delete", "service_ODU4", "100G", "ODU",
+        response = test_utils.otn_service_path_request("delete", "service_ODU4", "100", "ODU",
                                                        [{"node-id": "SPDR-SA1", "network-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)

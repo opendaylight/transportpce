@@ -16,10 +16,10 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.CreateOtsOmsInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.RendererRollbackInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.RendererRollbackOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.RendererRollbackInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.RendererRollbackOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
 
 @Ignore
 public class DeviceRendererRPCImplTest extends AbstractTest {

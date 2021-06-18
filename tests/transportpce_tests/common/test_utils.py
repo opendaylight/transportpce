@@ -387,12 +387,12 @@ def service_path_request(operation: str, servicename: str, wavenumber: str, node
     return post_request(URL_SERVICE_PATH, attr)
 
 
-def otn_service_path_request(operation: str, servicename: str, servicerate: str, servicetype: str, nodes,
+def otn_service_path_request(operation: str, servicename: str, servicerate: str, serviceformat: str, nodes,
                              eth_attr=None):
     attr = {"service-name": servicename,
             "operation": operation,
             "service-rate": servicerate,
-            "service-type": servicetype,
+            "service-format": serviceformat,
             "nodes": nodes}
     if eth_attr:
         attr.update(eth_attr)
