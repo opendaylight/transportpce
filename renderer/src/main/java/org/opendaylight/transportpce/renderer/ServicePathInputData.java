@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
 
 public class ServicePathInputData {
 

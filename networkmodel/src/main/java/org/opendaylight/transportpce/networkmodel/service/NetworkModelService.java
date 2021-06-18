@@ -11,6 +11,7 @@ import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
  * Service for data manipulation on OpenROADM topology models.
@@ -105,7 +106,7 @@ public interface NetworkModelService {
      * @param isDeletion
      *       True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(List<String> nodeTps, String serviceRate, Short tribPortNb, Short tribSoltNb,
+    void updateOtnLinks(List<String> nodeTps, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb,
         boolean isDeletion);
 
 }
