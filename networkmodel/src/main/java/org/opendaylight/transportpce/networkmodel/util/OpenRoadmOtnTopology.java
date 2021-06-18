@@ -157,10 +157,10 @@ public final class OpenRoadmOtnTopology {
     }
 
     public static TopologyShard updateOtnLinks(List<Link> suppOdu4Links, List<TerminationPoint> oldTps,
-        String serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
+        Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
         List<Link> links = new ArrayList<>();
         Long bwIncr = 10000L;
-        if ("1G".equals(serviceRate)) {
+        if (serviceRate.intValue() == 1) {
             bwIncr = 1000L;
         }
         for (Link link : suppOdu4Links) {
@@ -303,7 +303,7 @@ public final class OpenRoadmOtnTopology {
         return tpBldr.addAugmentation(otnTp1Bldr.setXpdrTpPortConnectionAttributes(xtpcaBldr.build()).build()).build();
     }
 
-    private static TerminationPoint updateNodeTpTsPool(TerminationPoint tp, String serviceRate, Short tribPortNb,
+    private static TerminationPoint updateNodeTpTsPool(TerminationPoint tp, Uint32 serviceRate, Short tribPortNb,
         Short tribSlotNb, boolean isDeletion) {
         LOG.debug("in updateNodeTpTsPool");
         TerminationPointBuilder tpBldr = new TerminationPointBuilder(tp);
@@ -311,15 +311,15 @@ public final class OpenRoadmOtnTopology {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder(
             tpBldr.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes());
         List<Uint16> tsPool = new ArrayList<>(xtpcaBldr.getTsPool());
-        switch (serviceRate) {
-            case "1G":
+        switch (serviceRate.intValue()) {
+            case 1:
                 if (isDeletion) {
                     tsPool.add(Uint16.valueOf(tribSlotNb));
                 } else {
                     tsPool.remove(Uint16.valueOf(tribSlotNb));
                 }
                 break;
-            case "10G":
+            case 10:
                 if (isDeletion) {
                     for (int i = 0; i < NB_TRIB_SLOT_PER_10GE; i++) {
                         tsPool.add(Uint16.valueOf(tribSlotNb + i));

@@ -26,15 +26,16 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.otn.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,20 +67,20 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         boolean success = true;
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         List<String> results = new ArrayList<>();
-        if (input.getServiceType() == null || input.getServiceRate() == null) {
+        if (input.getServiceFormat() == null || input.getServiceRate() == null) {
             OtnServicePathOutputBuilder otnServicePathOutputBuilder = new OtnServicePathOutputBuilder()
                 .setSuccess(false)
                 .setResult("Error - service-type and service-rate must be presents");
             return otnServicePathOutputBuilder.build();
         }
         CopyOnWriteArrayList<Nodes> otnNodesProvisioned = new CopyOnWriteArrayList<>();
-        switch (input.getServiceType()) {
+        switch (input.getServiceFormat()) {
             case "Ethernet":
-                if ("10G".equals(input.getServiceRate()) || "1G".equals(input.getServiceRate())) {
+                if (input.getServiceRate().intValue() == 1 || input.getServiceRate().intValue() == 10) {
                     try {
                         LOG.info("Calling Node interfaces {} {} {} {} {} {} {}",
                             input.getServiceRate(), input.getEthernetEncoding(),
-                            input.getServiceType(), input.getOperation(), input.getTribPortNumber(),
+                            input.getServiceFormat(), input.getOperation(), input.getTribPortNumber(),
                             input.getTribSlot(), input.getNodes());
                         nodeInterfaces = createInterface(input);
                         LOG.info("Node interfaces created just fine ");
@@ -91,11 +92,12 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         LOG.warn("Set up service path failed", e);
                         success = false;
                     }
-                } else if ("100G".equals(input.getServiceRate())) {
+                } else if (input.getServiceRate().intValue() == 100) {
                     try {
                         LOG.info("Calling Node interfaces {} {} {} {} {} {}",
                             input.getServiceRate(), input.getEthernetEncoding(),
-                            input.getServiceType(), input.getOperation(), input.getOpucnTribSlots(), input.getNodes());
+                            input.getServiceFormat(), input.getOperation(), input.getOpucnTribSlots(),
+                            input.getNodes());
                         nodeInterfaces = createInterface(input);
                         LOG.info("Node interfaces created just fine for 100G OTN ");
                         // TODO: Update the OTN topology accordingly with Opucn-Trib-slots
@@ -111,7 +113,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 }
                 break;
             case "ODU":
-                if ("100G".equals(input.getServiceRate())) {
+                if (input.getServiceRate().intValue() == 100) {
                     try {
                         createODU4TtpInterface(input, nodeInterfaces, otnNodesProvisioned);
                         updateOtnTopology(otnNodesProvisioned, null, null, null, null, false);
@@ -119,7 +121,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         LOG.warn("Set up service path failed", e);
                         success = false;
                     }
-                } else if ("400G".equals(input.getServiceRate())) {
+                } else if (input.getServiceRate().intValue() == 400) {
                     try {
                         createOduc4TtpInterface(input, nodeInterfaces, otnNodesProvisioned);
                         updateOtnTopology(otnNodesProvisioned, null, null, null, null, false);
@@ -132,7 +134,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 }
                 break;
             default:
-                LOG.error("service-type {} not managed yet", input.getServiceType());
+                LOG.error("service-type {} not managed yet", input.getServiceFormat());
                 break;
         }
         if (success) {
@@ -171,29 +173,28 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             String nodeId = node.getNodeId();
             LOG.info("Deleting service setup on node {}", nodeId);
             String networkTp = node.getNetworkTp();
-            if (networkTp == null || input.getServiceRate() == null || input.getServiceType() == null) {
-                LOG.error("destination ({}) or service rate ({}) or service type ({}) is null.", networkTp,
-                    input.getServiceRate(), input.getServiceType());
+            if (networkTp == null || input.getServiceRate() == null || input.getServiceFormat() == null) {
+                LOG.error("destination ({}) or service-rate ({}) or service-format ({}) is null.", networkTp,
+                    input.getServiceRate(), input.getServiceFormat());
                 return;
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                 String connectionNumber = "";
-                switch (input.getServiceRate()) {
-                    case ("100G"):
-                        if ("ODU".equals(input.getServiceType())) {
+                switch (input.getServiceRate().intValue()) {
+                    case 100:
+                        if ("ODU".equals(input.getServiceFormat())) {
                             interfacesToDelete.add(networkTp + "-ODU4");
                             otnNodesProvisioned.add(node);
                             if (node.getNetwork2Tp() != null) {
                                 interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
                             }
-                        } else if ("Ethernet".equals(input.getServiceType())) {
+                        } else if ("Ethernet".equals(input.getServiceFormat())) {
                             connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU4");
                         }
                         break;
-                    case ("400G"):
-                        LOG.info("Service Rate is 400G");
-                        if ("ODU".equals(input.getServiceType())) {
+                    case 400:
+                        if ("ODU".equals(input.getServiceFormat())) {
                             interfacesToDelete.add(networkTp + "-ODUC4");
                             otnNodesProvisioned.add(node);
                             if (node.getNetwork2Tp() != null) {
@@ -201,10 +202,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                             }
                         }
                         break;
-                    case ("10G"):
+                    case 10:
                         connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU2e");
                         break;
-                    case ("1G"):
+                    case 1:
                         connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU0");
                         break;
                     default:
@@ -222,7 +223,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
                             interfacesToDelete.add(interf);
                             String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
-                            if (input.getServiceRate().equals("100G")) {
+                            if (input.getServiceRate().intValue() == 100) {
                                 if (!supportedInterface.contains("ODUC4")) {
                                     interfacesToDelete.add(supportedInterface);
                                 }
@@ -270,7 +271,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         }
         forkJoinPool.shutdown();
         LOG.info("requesting otn-topology update...");
-        if (!nodesTpToUpdate.isEmpty() && !"ODU".equals(input.getServiceType())) {
+        if (!nodesTpToUpdate.isEmpty() && !"ODU".equals(input.getServiceFormat())) {
             updateOtnTopology(null, nodesTpToUpdate, input.getServiceRate(), input.getTribPortNumber(),
                 input.getTribSlot(), true);
         } else if (!otnNodesProvisioned.isEmpty()) {
@@ -325,8 +326,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         LOG.info("Calling Create Interface entry for OTN service path");
         if (input.getServiceRate() == null
-            || !("1G".equals(input.getServiceRate()) || "10G".equals(input.getServiceRate())
-                || "100G".equals(input.getServiceRate()))) {
+            || !(input.getServiceRate().intValue() == 1 || input.getServiceRate().intValue() == 10
+                || input.getServiceRate().intValue() == 100)) {
             LOG.error("Service rate {} not managed yet", input.getServiceRate());
         } else {
             createLowOrderInterfaces(input, nodeInterfaces);
@@ -345,8 +346,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             // check if the node is mounted or not?
             List<String> createdEthInterfaces = new ArrayList<>();
             List<String> createdOduInterfaces = new ArrayList<>();
-            switch (input.getServiceRate()) {
-                case ("1G"):
+            switch (input.getServiceRate().intValue()) {
+                case 1:
                     LOG.info("Input service is 1G");
                     if (node.getClientTp() != null) {
                         createdEthInterfaces.add(
@@ -368,7 +369,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                                 input.getTribSlot()));
                     }
                     break;
-                case ("10G"):
+                case 10:
                     LOG.info("Input service is 10G");
                     if (node.getClientTp() != null) {
                         createdEthInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmEth10GInterface(
@@ -391,7 +392,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                                 input.getTribSlot()));
                     }
                     break;
-                case ("100G"):
+                case 100:
                     LOG.info("Input service is 100G");
                     // Take the first and last value in the list of OpucnTribSlot (assuming SH would provide
                     // min and max value only, size two)
@@ -503,7 +504,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         }
     }
 
-    private void updateOtnTopology(CopyOnWriteArrayList<Nodes> nodes, List<String> nodesTps, String serviceRate,
+    private void updateOtnTopology(CopyOnWriteArrayList<Nodes> nodes, List<String> nodesTps, Uint32 serviceRate,
         Short tribPortNb, Short tribSlotNb, boolean isDeletion) {
         if (nodes != null && nodes.size() == 2) {
             if (isDeletion) {

@@ -27,6 +27,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
@@ -36,8 +38,8 @@ import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetu
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OtnDeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
@@ -45,19 +47,17 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
@@ -95,16 +95,18 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final TransportpceOlmService olmService;
     private final DataBroker dataBroker;
     private final NotificationPublishService notificationPublishService;
+    private final PortMapping portMapping;
     private ListeningExecutorService executor;
 
     public RendererServiceOperationsImpl(DeviceRendererService deviceRenderer,
             OtnDeviceRendererService otnDeviceRenderer, TransportpceOlmService olmService,
-            DataBroker dataBroker, NotificationPublishService notificationPublishService) {
+            DataBroker dataBroker, NotificationPublishService notificationPublishService, PortMapping portMapping) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
         this.olmService = olmService;
         this.dataBroker = dataBroker;
         this.notificationPublishService = notificationPublishService;
+        this.portMapping = portMapping;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
     }
 
@@ -118,108 +120,62 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             public ServiceImplementationRequestOutput call() throws Exception {
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting service implementation Request ...");
-                // Here is the switch statement that distinguishes on the connection-type
-                LOG.info("Connection-type is {} for {}", input.getConnectionType(), input.getServiceName());
-                switch (input.getConnectionType()) {
-                    case Service: case RoadmLine: // This takes into account of Ethernet 100G, 1G, 10G and ODU4
-                        LOG.info("RPC implementation for {}", input.getConnectionType());
-                        if (((input.getServiceAEnd().getServiceRate() != null)
-                            && ((input.getServiceAEnd().getServiceRate().intValue() == 100))
-                            || (input.getServiceAEnd().getServiceRate().intValue() == 400))
-                            && ((input.getServiceAEnd().getServiceFormat().getName().equals("Ethernet"))
-                                || (input.getServiceAEnd().getServiceFormat().getName().equals("OC")))) {
-                            LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
-                                input.getServiceAEnd().getServiceFormat(), input.getServiceAEnd().getServiceRate());
-                            if (!createServicepathInput(input)) {
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                        } else { // This implies, service-rate is 1 or 10G
-                            // This includes the lower-order odu (1G, 10G, 100G) and this is A-Z side
-                            LOG.info("RPC implementation for LO-ODU");
-                            String serviceRate = ""; // Assuming service at A-side and Z-side has same service rate
-                            if (input.getServiceAEnd().getServiceRate() != null) {
-                                serviceRate = input.getServiceAEnd().getServiceRate().toString() + "G";
-                            }
-                            LOG.info("Start rendering for {} service with {} rate and {} format",
-                                input.getServiceName(), serviceRate,
-                                input.getServiceAEnd().getServiceFormat());
-                            // This is A-Z side
-                            OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
-                                .rendererCreateOtnServiceInput(input.getServiceName(),
-                                    input.getServiceAEnd().getServiceFormat().getName(),
-                                    serviceRate, (PathDescription) input.getPathDescription(), true);
-                            // Rollback should be same for all conditions, so creating a new one
-                            RollbackProcessor rollbackProcessor = new RollbackProcessor();
-                            List<OtnDeviceRenderingResult> otnRenderingResults = otnDeviceRendering(rollbackProcessor,
-                                otnServicePathInputAtoZ, null);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            LOG.info("OTN rendering result size {}", otnRenderingResults.size());
+                String serviceType;
+                if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
+                        .getNodeInfo().getNodeType())
+                    && input.getServiceAEnd().getTxDirection() != null
+                    && input.getServiceAEnd().getTxDirection().getPort() != null
+                    && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
+                    Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+                        input.getServiceAEnd().getTxDirection().getPort().getPortName());
+                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
+                        input.getServiceAEnd().getServiceRate(), mapping);
+                } else {
+                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
+                        input.getServiceAEnd().getServiceRate(), null);
+                }
+
+                switch (serviceType) {
+                    case StringConstants.SERVICE_TYPE_100GE_T:
+                    case StringConstants.SERVICE_TYPE_400GE:
+                    case StringConstants.SERVICE_TYPE_OTU4:
+                    case StringConstants.SERVICE_TYPE_OTUC4:
+                        if (!createServicepathInput(input)) {
+                            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                                OPERATION_FAILED);
                         }
                         break;
-                    case Infrastructure:
-                        LOG.info("RPC implementation for {}", input.getConnectionType());
-                        if (input.getServiceAEnd().getOtuServiceRate() != null) {
-                            if ((input.getServiceAEnd().getOtuServiceRate().equals(OTU4.class))
-                                || (input.getServiceAEnd().getOtuServiceRate().equals(OTUCn.class))) {
-                                // For the service of OTU4 or OTUCn infrastructure
-                                // Create the OCH and OTU interfaces for OTU4 class
-                                // Create OTSi, OTSi-group and OTUCn interface
-                                if (!createServicepathInput(input)) {
-                                    return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                        OPERATION_FAILED);
-                                }
-                            }
-                        }
-                        if (input.getServiceAEnd().getOduServiceRate() != null) {
-                            String serviceRate = null;
-                            if (input.getServiceAEnd().getOduServiceRate().equals(ODU4.class)) {
-                                // For the service of OTU4 infrastructure
-                                serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
-                            }
-                            else if (input.getServiceAEnd().getOduServiceRate().equals(ODUCn.class)) {
-                                // For the service of OTUCn infrastructure
-                                // TODO: what happens if split-lambda where to be used? We will have ODUC2 rate,
-                                // TODO: which case service-rate would be 200
-                                // TODO: in that case it would be 200G?? Need to understand more
-                                serviceRate = "400G"; // For OtnDeviceRendererServiceImpl
-                            }
-                            LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
-                                input.getServiceAEnd().getOduServiceRate(), serviceRate);
-                            // Now start rendering ODU4 or ODUC4 interface
-                            // This is A-Z side
-                            OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
-                                .rendererCreateOtnServiceInput(input.getServiceName(),
-                                    input.getServiceAEnd().getServiceFormat().getName(),
-                                    serviceRate,
-                                    input.getPathDescription(), true);
-                            // This is Z-A side
-                            OtnServicePathInput otnServicePathInputZtoA = ModelMappingUtils
-                                .rendererCreateOtnServiceInput(input.getServiceName(),
-                                    input.getServiceZEnd().getServiceFormat().getName(),
-                                    serviceRate,
-                                    input.getPathDescription(), false);
-                            // Rollback should be same for all conditions, so creating a new one
-                            RollbackProcessor rollbackProcessor = new RollbackProcessor();
-                            List<OtnDeviceRenderingResult> otnRenderingResults = otnDeviceRendering(rollbackProcessor,
-                                otnServicePathInputAtoZ, otnServicePathInputZtoA);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            LOG.info("OTN rendering result size {}", otnRenderingResults.size());
+                    case StringConstants.SERVICE_TYPE_1GE:
+                    case StringConstants.SERVICE_TYPE_10GE:
+                    case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC4:
+                        // This is A-Z side
+                        OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
+                            .rendererCreateOtnServiceInput(input.getServiceName(),
+                                input.getServiceAEnd().getServiceFormat().getName(),
+                                input.getServiceAEnd().getServiceRate(),
+                                input.getPathDescription(), true);
+                        // This is Z-A side
+                        OtnServicePathInput otnServicePathInputZtoA = ModelMappingUtils
+                            .rendererCreateOtnServiceInput(input.getServiceName(),
+                                input.getServiceZEnd().getServiceFormat().getName(),
+                                input.getServiceAEnd().getServiceRate(),
+                                input.getPathDescription(), false);
+                        // Rollback should be same for all conditions, so creating a new one
+                        RollbackProcessor rollbackProcessor = new RollbackProcessor();
+                        otnDeviceRendering(rollbackProcessor, otnServicePathInputAtoZ, otnServicePathInputZtoA);
+                        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                                input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
+                            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                                OPERATION_FAILED);
                         }
                         break;
                     default:
-                        LOG.warn("Unsupported connection type {}", input.getConnectionType());
+                        LOG.error("unsupported service-type");
+                        break;
                 }
+
                 sendNotificationsWithPathDescription(
                         ServicePathNotificationTypes.ServiceImplementationRequest,
                         input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL,
@@ -254,44 +210,32 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
                             OPERATION_FAILED);
                 }
-                switch (service.getConnectionType()) {
-                    case RoadmLine:
-                    case Service:
-                        if ((ServiceFormat.Ethernet.equals(service.getServiceAEnd().getServiceFormat())
-                                || ServiceFormat.OC.equals(service.getServiceAEnd().getServiceFormat()))
-                            && (Uint32.valueOf("100").equals(service.getServiceAEnd().getServiceRate())
-                                || Uint32.valueOf("400").equals(service.getServiceAEnd().getServiceRate()))) {
-                            if (!manageServicePathDeletion(serviceName, pathDescription)) {
-                                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                        }
-                        if (ServiceFormat.Ethernet.equals(service.getServiceAEnd().getServiceFormat())
-                            && (Uint32.valueOf("10").equals(service.getServiceAEnd().getServiceRate())
-                                || Uint32.valueOf("1").equals(service.getServiceAEnd().getServiceRate()))) {
-                            if (!manageOtnServicePathDeletion(serviceName, pathDescription, service)) {
-                                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
+
+                String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
+                    service.getServiceAEnd().getServiceRate(), null);
+                switch (serviceType) {
+                    case StringConstants.SERVICE_TYPE_100GE_T:
+                    case StringConstants.SERVICE_TYPE_400GE:
+                    case StringConstants.SERVICE_TYPE_OTU4:
+                    case StringConstants.SERVICE_TYPE_OTUC4:
+                        if (!manageServicePathDeletion(serviceName, pathDescription)) {
+                            return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
+                                OPERATION_FAILED);
                         }
                         break;
-                    case Infrastructure:
-                        if (ServiceFormat.OTU.equals(service.getServiceAEnd().getServiceFormat())) {
-                            if (!manageServicePathDeletion(serviceName, pathDescription)) {
-                                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                        } else if (ServiceFormat.ODU.equals(service.getServiceAEnd().getServiceFormat())) {
-                            if (!manageOtnServicePathDeletion(serviceName, pathDescription, service)) {
-                                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
+                    case StringConstants.SERVICE_TYPE_1GE:
+                    case StringConstants.SERVICE_TYPE_10GE:
+                    case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC4:
+                        if (!manageOtnServicePathDeletion(serviceName, pathDescription, service)) {
+                            return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
+                                OPERATION_FAILED);
                         }
                         break;
                     default:
-                        LOG.error("Unmanaged connection-type for deletion of service {}", serviceName);
+                        LOG.error("unsupported service-type");
                         break;
-                    }
+                }
                 return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
             }
         });
@@ -652,9 +596,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private boolean manageOtnServicePathDeletion(String serviceName, PathDescription pathDescription,
         Services service) {
         OtnServicePathInput ospi = null;
-        ospi = ModelMappingUtils.rendererCreateOtnServiceInput(serviceName,
+        if (ConnectionType.Infrastructure.equals(service.getConnectionType())) {
+            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(
+                serviceName, service.getServiceAEnd().getServiceFormat().getName(), Uint32.valueOf(100),
+                pathDescription, true);
+        } else if (ConnectionType.Service.equals(service.getConnectionType())) {
+            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(serviceName,
                 service.getServiceAEnd().getServiceFormat().getName(),
-                service.getServiceAEnd().getServiceRate().toString() + "G", pathDescription, true);
+                service.getServiceAEnd().getServiceRate(), pathDescription, true);
+        }
         LOG.info("Deleting otn-service path {} via renderer", serviceName);
         sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
                 "Deleting otn-service path via renderer");
