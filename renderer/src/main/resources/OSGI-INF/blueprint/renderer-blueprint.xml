@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
 
   <odl:rpc-service id="olmService"
-      interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService"/>
+      interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
 
   <bean id="openRoadmInterface121"
         class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121">

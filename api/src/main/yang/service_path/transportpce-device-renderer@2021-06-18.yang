@@ -22,8 +22,8 @@ module transportpce-device-renderer {
 
   revision 2021-06-18 {
     description
-      "replace service-type by service-format,
-        and change service-rate type";
+      "Replace service-type by service-format.
+       Change service-rate type";
   }
   revision 2020-01-28 {
       description
@@ -38,22 +38,26 @@ module transportpce-device-renderer {
       "Initial revision of renderer model version 1.5";
   }
 
+  typedef action {
+    type enumeration {
+      enum create {
+        value 1;
+      }
+      enum delete {
+        value 2;
+      }
+    }
+  }
+
   rpc service-path {
     input {
       leaf modulation-format {
         type string;
       }
       leaf operation {
-        type enumeration {
-          enum create {
-            value 1;
-          }
-          enum delete {
-            value 2;
-          }
-        }
+        type action;
       }
-      uses org-transportpce-common-types:olm-renderer-input;
+      uses org-transportpce-common-types:optical-renderer-input;
     }
     output {
       leaf success {
@@ -63,6 +67,7 @@ module transportpce-device-renderer {
         type string;
       }
       uses org-transportpce-common-types:node-interfaces;
+      uses org-transportpce-common-types:link-tp;
     }
   }
 
@@ -93,14 +98,7 @@ module transportpce-device-renderer {
         type int16;
       }
       leaf operation {
-        type enumeration {
-          enum create {
-            value 1;
-          }
-          enum delete {
-            value 2;
-          }
-        }
+        type action;
       }
       container a-end-api-info {
         leaf node-id {
@@ -124,6 +122,7 @@ module transportpce-device-renderer {
         type string;
       }
       uses org-transportpce-common-types:node-interfaces;
+      uses org-transportpce-common-types:link-tp;
     }
   }
 
