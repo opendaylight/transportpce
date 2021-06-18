@@ -18,10 +18,10 @@ import org.opendaylight.transportpce.common.NodeIdPair;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutput;
@@ -214,8 +214,8 @@ public final class ModelMappingUtils {
     }
 
     // Adding createOtnServiceInputpath for A-Z and Z-A directions as one method
-    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceType,
-        String serviceRate, PathDescription pathDescription, boolean asideToZside) {
+    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceFormat,
+        Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.otn.renderer.input.Nodes> nodes =
             new ArrayList<>();
@@ -235,7 +235,7 @@ public final class ModelMappingUtils {
         }
         OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
             .setServiceName(serviceName)
-            .setServiceType(serviceType)
+            .setServiceFormat(serviceFormat)
             .setServiceRate(serviceRate)
             .setNodes(nodes);
 

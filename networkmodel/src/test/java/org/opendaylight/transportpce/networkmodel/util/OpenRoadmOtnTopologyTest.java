@@ -295,7 +295,7 @@ public class OpenRoadmOtnTopologyTest {
     public void createOtnLinksForODU4NormalTest() {
         TopologyShard topoShard = OpenRoadmOtnTopology
             .createOtnLinks(
-                NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, 100000),
+                NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(100000)),
                 NetworkmodelTestUtil.createTpList(false));
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
@@ -398,7 +398,7 @@ public class OpenRoadmOtnTopologyTest {
 
     @Test
     public void createOtnLinksForODU4WhenOTU4HaveBadBWParamsTest() {
-        List<Link> otu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, 100000);
+        List<Link> otu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(100000));
         List<Link> otu4LinksWithBadBWParam = new ArrayList<>();
         for (Link link : otu4Links) {
             otu4LinksWithBadBWParam.add(new LinkBuilder(link).removeAugmentation(Link1.class).build());
@@ -413,7 +413,7 @@ public class OpenRoadmOtnTopologyTest {
         otu4LinksWithBadBWParam.clear();
         topoShard =
             OpenRoadmOtnTopology.createOtnLinks(
-                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, 99000),
+                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(99000)),
                     NetworkmodelTestUtil.createTpList(false));
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
@@ -424,7 +424,7 @@ public class OpenRoadmOtnTopologyTest {
     public void deleteOtnLinksForODU4NormalTest() {
         TopologyShard topoShard =
             OpenRoadmOtnTopology.deleteOtnLinks(
-                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, 0),
+                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(0)),
                     NetworkmodelTestUtil.createTpList(true));
         assertNotNull("TopologyShard should never be null", topoShard);
         assertEquals("list of links should contain 2 links", 2, topoShard.getLinks().size());
@@ -458,7 +458,7 @@ public class OpenRoadmOtnTopologyTest {
 
     @Test
     public void deleteOtnLinksForODU4WhenOTU4HaveBadBWParamsTest() {
-        List<Link> otu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, 0);
+        List<Link> otu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(0));
         List<Link> otu4LinksWithBadBWParam = new ArrayList<>();
         for (Link link : otu4Links) {
             otu4LinksWithBadBWParam.add(new LinkBuilder(link).removeAugmentation(Link1.class).build());
@@ -476,9 +476,9 @@ public class OpenRoadmOtnTopologyTest {
         // tests update for 10G creation
         TopologyShard topoShard =
             OpenRoadmOtnTopology.updateOtnLinks(
-                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, 100000),
+                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(100000)),
                     NetworkmodelTestUtil.createTpList(true),
-                    "10G", (short)1, (short)1, false);
+                    Uint32.valueOf(10), (short)1, (short)1, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         List<Link> sortedLinks = topoShard.getLinks().stream()
@@ -549,8 +549,8 @@ public class OpenRoadmOtnTopologyTest {
 
         // tests update for 10G deletion
         sortedLinks.clear();
-        topoShard = OpenRoadmOtnTopology.updateOtnLinks(topoShard.getLinks(), topoShard.getTps(), "10G", (short)1,
-            (short)1, true);
+        topoShard = OpenRoadmOtnTopology.updateOtnLinks(topoShard.getLinks(), topoShard.getTps(), Uint32.valueOf(10),
+            (short)1, (short)1, true);
         sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
@@ -614,9 +614,9 @@ public class OpenRoadmOtnTopologyTest {
         // tests update for 1G creation
         TopologyShard topoShard =
             OpenRoadmOtnTopology.updateOtnLinks(
-                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, 100000),
+                    NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(100000)),
                     NetworkmodelTestUtil.createTpList(true),
-                    "1G", (short)1, (short)1, false);
+                    Uint32.valueOf(1), (short)1, (short)1, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         List<Link> sortedLinks = topoShard.getLinks().stream()
@@ -690,7 +690,7 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     topoShard.getLinks(),
                     topoShard.getTps(),
-                    "1G", (short)1, (short)1, true);
+                    Uint32.valueOf(1), (short)1, (short)1, true);
         sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
@@ -751,7 +751,7 @@ public class OpenRoadmOtnTopologyTest {
 
     @Test
     public void updateOtnLinksForODU4WhenBWParamsNotPresentTest() {
-        List<Link> odu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, 100000);
+        List<Link> odu4Links = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(100000));
         List<Link> odu4LinksWithBadBWParam = new ArrayList<>();
         for (Link link : odu4Links) {
             odu4LinksWithBadBWParam.add(new LinkBuilder(link).removeAugmentation(Link1.class).build());
@@ -760,7 +760,7 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     odu4LinksWithBadBWParam,
                     NetworkmodelTestUtil.createTpList(true),
-                    "1G", (short)1, (short)1, false);
+                    Uint32.valueOf(1), (short)1, (short)1, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
@@ -769,12 +769,13 @@ public class OpenRoadmOtnTopologyTest {
 
     @Test
     public void updateOtnLinksForODU4WhenAvailBWNotSufficientTest() {
-        List<Link> odu4LinksWithBadBWParam = NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, 8000);
+        List<Link> odu4LinksWithBadBWParam = NetworkmodelTestUtil
+            .createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(8000));
         TopologyShard topoShard =
             OpenRoadmOtnTopology.updateOtnLinks(
                     odu4LinksWithBadBWParam,
                     NetworkmodelTestUtil.createTpList(true),
-                    "10G", (short)1, (short)1, false);
+                    Uint32.valueOf(10), (short)1, (short)1, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());

@@ -86,7 +86,7 @@ public final class NetworkmodelTestUtil {
         return mappingNode;
     }
 
-    public static List<Link> createSuppOTNLinks(OtnLinkType type, int availBW) {
+    public static List<Link> createSuppOTNLinks(OtnLinkType type, Uint32 availBW) {
         String prefix = null;
         if (OtnLinkType.OTU4.equals(type)) {
             prefix = "OTU4-";
@@ -108,8 +108,8 @@ public final class NetworkmodelTestUtil {
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder()
-                    .setAvailableBandwidth(Uint32.valueOf(availBW))
-                    .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
+                    .setAvailableBandwidth(availBW)
+                    .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1Builder()
@@ -131,8 +131,8 @@ public final class NetworkmodelTestUtil {
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder()
-                    .setAvailableBandwidth(Uint32.valueOf(availBW))
-                    .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
+                    .setAvailableBandwidth(availBW)
+                    .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1Builder()
