@@ -53,7 +53,7 @@ import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmOutput;
@@ -139,7 +139,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         this.olmService = Mockito.spy(this.olmService);
         this.deviceRenderer = Mockito.spy(this.deviceRenderer);
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
-            this.otnDeviceRendererService, this.olmService, getDataBroker(), notificationPublishService);
+            this.otnDeviceRendererService, this.olmService, getDataBroker(), notificationPublishService, null);
 
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);

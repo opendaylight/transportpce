@@ -20,9 +20,14 @@ module transportpce-device-renderer {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
-  revision 2020-01-28 {
+  revision 2021-06-18 {
     description
-      "Complement rpc otn-service-path";
+      "replace service-type by service-format,
+        and change service-rate type";
+  }
+  revision 2020-01-28 {
+      description
+        "Complement rpc otn-service-path";
   }
   revision 2019-12-12 {
     description
@@ -64,9 +69,9 @@ module transportpce-device-renderer {
   rpc otn-service-path {
     input {
       leaf service-rate {
-        type string;
+        type uint32;
       }
-      leaf service-type {
+      leaf service-format {
         type string;
       }
       leaf ethernet-encoding {

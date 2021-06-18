@@ -180,12 +180,12 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory,
                 crossConnect, openRoadmInterfaces, deviceTransactionManager, networkModelService);
         rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService,
-                otnDeviceRendererService);
+                otnDeviceRendererService, portMapping);
 
         LOG.info("Creating service-handler beans ...");
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService,
                 otnDeviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(),
-                lightyServices.getBindingNotificationPublishService());
+                lightyServices.getBindingNotificationPublishService(), portMapping);
         ServiceDataStoreOperations serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(
                 lightyServices.getBindingDataBroker());
         RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(pathComputationService,
@@ -290,12 +290,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     }
 
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
-            DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService) {
+            DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService,
+            PortMapping portMapping) {
         DeviceRendererRPCImpl deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService,
                 otnDeviceRendererService);
         RendererServiceOperationsImpl rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
-                lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService());
+                lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
+                portMapping);
         return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC,
                 rendererServiceOperations);
     }

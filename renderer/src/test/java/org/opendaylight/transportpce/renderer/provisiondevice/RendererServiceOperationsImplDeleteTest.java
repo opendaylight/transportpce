@@ -151,7 +151,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
-            this.otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService);
+            this.otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService, null);
 
     }
 
