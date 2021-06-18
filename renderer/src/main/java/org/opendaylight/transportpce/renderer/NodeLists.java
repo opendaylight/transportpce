@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.renderer;
 
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
 
 public class NodeLists {
 
