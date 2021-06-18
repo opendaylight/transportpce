@@ -18,17 +18,18 @@ import org.opendaylight.transportpce.common.NodeIdPair;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.Action;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
@@ -41,9 +42,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.NodesKey;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -118,7 +119,7 @@ public final class ModelMappingUtils {
         NodeLists nodeLists = getNodesListAToZ(atoZDirection.nonnullAToZ().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
-            .setOperation(ServicePathInput.Operation.Create)
+            .setOperation(Action.Create)
             .setNodes(nodeLists.getList())
             .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
         if (atoZDirection.getAToZWavelengthNumber() != null) {
@@ -169,7 +170,7 @@ public final class ModelMappingUtils {
         LOG.info("Building ServicePathInputData for z to a direction {}", ztoADirection);
         NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
-            .setOperation(ServicePathInput.Operation.Create)
+            .setOperation(Action.Create)
             .setServiceName(serviceName)
             .setNodes(nodeLists.getList())
             .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
@@ -217,7 +218,7 @@ public final class ModelMappingUtils {
     public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceFormat,
         Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
-        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.otn.renderer.input.Nodes> nodes =
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.Nodes> nodes =
             new ArrayList<>();
         NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
         if (!asideToZside) {
@@ -225,9 +226,8 @@ public final class ModelMappingUtils {
         }
         LOG.info("These are node-lists {}, {}", nodeLists.getList(), nodeLists.getOlmList());
         for (Nodes node: nodeLists.getList()) {
-            nodes.add(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.otn.renderer.input
-                        .NodesBuilder()
+            nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
+                .NodesBuilder()
                             .setNodeId(node.getNodeId())
                             .setClientTp(node.getSrcTp())
                             .setNetworkTp(node.getDestTp())

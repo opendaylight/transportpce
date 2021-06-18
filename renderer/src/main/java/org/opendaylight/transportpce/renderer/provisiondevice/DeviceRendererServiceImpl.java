@@ -68,10 +68,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterface;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.node.interfaces.NodeInterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.node.interfaces.NodeInterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.node.interfaces.NodeInterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;

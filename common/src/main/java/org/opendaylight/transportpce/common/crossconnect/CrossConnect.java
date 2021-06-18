@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.otn.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.Nodes;
 
 public interface CrossConnect {
 
