@@ -16,6 +16,9 @@ module transportpce-renderer {
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
   }
+  import transportpce-common-types {
+      prefix org-transportpce-common-types;
+    }
 
   organization
     "transportPCE";
@@ -52,11 +55,15 @@ module transportpce-renderer {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2021-06-18 {
+    description
+      "Version 1.6.3.
+       Add optical-renderer-nodes to the notification";
+  }
   revision 2020-11-25 {
     description
       "Version 1.6.2";
   }
-
   revision 2020-05-20 {
     description
       "Version 1.6.1";
@@ -68,6 +75,25 @@ module transportpce-renderer {
   revision 2017-02-28 {
     description
       "Initial revision of renderer model version 1.5";
+  }
+
+  grouping link-for-notif {
+    container a-termination {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
+    }
+    container z-termination {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
+    }
   }
 
   rpc service-implementation-request {
@@ -126,5 +152,11 @@ module transportpce-renderer {
     uses transportpce-pathDescription:path-description;
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
+    container link {
+      uses link-for-notif;
+    }
+    leaf service-type {
+        type string;
+    }
   }
 }

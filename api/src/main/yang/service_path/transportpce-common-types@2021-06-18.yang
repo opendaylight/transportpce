@@ -15,11 +15,16 @@ module transportpce-common-types {
     revision-date 2018-10-19;
   }
 
+  revision 2021-06-18 {
+    description
+      "Replace olm-renderer-input by optical-rendrer-input.
+       Create optical-renderer-nodes and otn-renderer-nodes groupings";
+  }
   revision 2020-12-11 {
     description
       "Update grouping olm-renderer-input, adding min, max frequencies
-        lower spectral slot number and higher spectral slot number
-         fix center-freq unit";
+       lower spectral slot number and higher spectral slot number
+       fix center-freq unit";
   }
   revision 2020-06-15 {
     description
@@ -415,7 +420,69 @@ module transportpce-common-types {
     }
   }
 
-  grouping olm-renderer-input {
+  grouping link-tp {
+    list link-tp {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
+    }
+  }
+
+  grouping optical-renderer-nodes {
+    list nodes {
+      key "node-id";
+      ordered-by user;
+      leaf node-id {
+        type string;
+        description
+          "Gloabally unique identifier for the node";
+      }
+      leaf src-tp {
+        type string;
+        mandatory true;
+        description
+          "Source termination point ";
+      }
+      leaf dest-tp {
+        type string;
+        mandatory true;
+        description
+          "Destination termination point ";
+      }
+    }
+  }
+
+  grouping otn-renderer-nodes {
+    list nodes {
+      key "node-id";
+      ordered-by user;
+      leaf node-id {
+        type string;
+        description
+          "Globally unique identifier for the node";
+      }
+      leaf network-tp {
+        type string;
+        description
+          "Source termination point ";
+      }
+      leaf client-tp {
+        type string;
+        description
+          "Destination termination point for end nodes";
+      }
+      leaf network2-tp {
+        type string;
+        description
+          "Destination termination point for intermediate switch";
+      }
+    }
+  }
+
+  grouping optical-renderer-input {
     description
       "Type to be used by OLM and Renderer RPCs";
     leaf service-name {
@@ -444,48 +511,8 @@ module transportpce-common-types {
     leaf higher-spectral-slot-number {
       type uint32;
     }
-    list nodes {
-      key "node-id";
-      ordered-by user;
-      leaf node-id {
-        type string;
-        description
-          "Gloabally unique identifier for the node";
-      }
-      leaf src-tp {
-        type string;
-        mandatory true;
-        description
-          "Source termination point ";
-      }
-      leaf dest-tp {
-        type string;
-        mandatory true;
-        description
-          "Destination termination point ";
-      }
-    }
-    list node-interface {
-      key "node-id";
-      leaf node-id {
-        type string;
-      }
-      leaf-list och-interface-id {
-        type string;
-      }
-      leaf-list otu-interface-id {
-        type string;
-      }
-      leaf-list odu-interface-id {
-        type string;
-      }
-      leaf-list eth-interface-id {
-        type string;
-      }
-      leaf-list connection-id {
-        type string;
-      }
-    }
+    uses optical-renderer-nodes;
+    uses node-interfaces;
   }
 
   grouping otn-renderer-input {
@@ -494,31 +521,7 @@ module transportpce-common-types {
     leaf service-name {
       type string;
     }
-    list nodes {
-      key "node-id";
-      ordered-by user;
-      leaf node-id {
-        type string;
-        description
-          "Globally unique identifier for the node";
-      }
-      leaf network-tp {
-        type string;
-        description
-          "Source termination point ";
-      }
-      leaf client-tp {
-        type string;
-        description
-          "Destination termination point for end nodes";
-        //mandatory true;
-      }
-      leaf network2-tp {
-        type string;
-        description
-          "Destination termination point for intermediate switch";
-      }
-    }
+    uses otn-renderer-nodes;
   }
 
   grouping olm-get-pm-input {
