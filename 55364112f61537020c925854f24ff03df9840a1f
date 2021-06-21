@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b58ed975_cdca4b8b",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-21T20:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05a45a69_41a61623",
+      "range": {
+        "startLine": 242,
+        "startChar": 97,
+        "endLine": 242,
+        "endChar": 98
+      },
+      "revId": "55364112f61537020c925854f24ff03df9840a1f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fc3582c_ad5d4bdc",
         "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
         "patchSetId": 3
