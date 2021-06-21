@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b2bb892a_6f3d0e21",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-21T21:02:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e1d9392_2c087a32",
+      "range": {
+        "startLine": 310,
+        "startChar": 14,
+        "endLine": 310,
+        "endChar": 99
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8757156e_bd2da3b7",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 4
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "ab4a80d6_8b448ec1",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-21T21:02:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c93338c1_c3561912",
+      "range": {
+        "startLine": 383,
+        "startChar": 35,
+        "endLine": 383,
+        "endChar": 62
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6475479c_19c9192a",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 4
@@ -140,6 +188,30 @@
       "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8a0acc_f2435eca",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-21T21:02:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "335cb880_fa01103f",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 51
+      },
+      "revId": "3e2dd11948bede40f8ed3edfbb1930e3398ea6dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
