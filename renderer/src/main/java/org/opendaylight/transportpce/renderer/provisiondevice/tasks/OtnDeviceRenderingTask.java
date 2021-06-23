@@ -24,24 +24,35 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
     private final OtnServicePathInput otnServicePathInput;
 
     public OtnDeviceRenderingTask(OtnDeviceRendererService otnDeviceRendererService,
-        OtnServicePathInput otnServicePathInput) {
+            OtnServicePathInput otnServicePathInput) {
         this.otnDeviceRenderer = otnDeviceRendererService;
         this.otnServicePathInput = otnServicePathInput;
-
     }
 
     @Override
     public OtnDeviceRenderingResult call() throws Exception {
-        OtnServicePathOutput output = this.otnDeviceRenderer.setupOtnServicePath(this.otnServicePathInput);
-        if (Boolean.TRUE.equals(output.getSuccess())) {
-            LOG.info("Device rendering finished successfully.");
-            return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()));
-
-        } else {
-            //false or null case
-            LOG.warn("Device rendering not successfully finished.");
-            return OtnDeviceRenderingResult.failed("Operation Failed");
+        OtnServicePathOutput output;
+        switch (this.otnServicePathInput.getOperation()) {
+            case Create:
+                output = this.otnDeviceRenderer.setupOtnServicePath(this.otnServicePathInput);
+                if (!output.getSuccess()) {
+                    LOG.error("Device rendering setup otn service path failed.");
+                    return OtnDeviceRenderingResult.failed("Operation Failed");
+                }
+                LOG.info("Device rendering setup otn service path finished successfully.");
+                return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()),
+                    new ArrayList<>(output.nonnullLinkTp()));
+            case Delete:
+                output = this.otnDeviceRenderer.deleteOtnServicePath(this.otnServicePathInput);
+                if (!output.getSuccess()) {
+                    LOG.error("Device rendering delete otn service path failed.");
+                    return OtnDeviceRenderingResult.failed("Operation Failed");
+                }
+                LOG.info("Device rendering delete otn service path finished successfully.");
+                return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()),
+                    new ArrayList<>(output.nonnullLinkTp()));
+            default:
+                return OtnDeviceRenderingResult.failed("Device rendering failed - unknwon operation");
         }
     }
-
 }
