@@ -62,8 +62,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.Spans;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.SpansBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
