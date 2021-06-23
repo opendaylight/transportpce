@@ -15,7 +15,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 return openRoadmInterface710.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             default:
                 return null;
@@ -88,7 +88,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
                         spectrumInformation);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 // In the case of 710 device, we logically combine the OTSi and OTSiGroup interface and represent
                 // as OCh
                 String interfaceOtsiName = openRoadmInterface710.createOpenRoadmOtsiInterface(nodeId, logicalConnPoint,
@@ -119,7 +119,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
                         supportingOtuInterface);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 // Here ODUCn and ODUflex are combined
                 String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(nodeId,
                     logicalConnPoint, supportingOtuInterface);
@@ -152,7 +152,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint,
                     asupportingOtuInterface, znodeId, zlogicalConnPoint);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 // Here ODUCn and ODUflex are combined
                 String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(anodeId,
                     alogicalConnPoint, asupportingOtuInterface, znodeId, zlogicalConnPoint);
@@ -182,7 +182,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221
                         .createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 return openRoadmInterface710.createOpenRoadmOtucnInterface(nodeId, logicalConnPoint,
                     supportOchInterface);
             default:
@@ -213,7 +213,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOtu4Interface(anodeId, alogicalConnPoint,
                         asupportOchInterface, znodeId, zlogicalConnPoint);
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1_0:
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 return openRoadmInterface710.createOpenRoadmOtucnInterface(anodeId, alogicalConnPoint,
                     asupportOchInterface, znodeId, zlogicalConnPoint);
             default:
