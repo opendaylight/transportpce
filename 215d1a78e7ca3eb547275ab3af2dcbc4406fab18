@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44ea7d68_6df30780",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T19:26:18Z",
+      "side": 1,
+      "message": "switch/case would be more adpated here now",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "215d1a78e7ca3eb547275ab3af2dcbc4406fab18",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6529c6e9_58f183f6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T19:26:18Z",
+      "side": 1,
+      "message": "input.getServiceRate().equals(\"100G\") is evaluated twice\n\nWhat about this rather\n\nif (input.getServiceRate().equals(\"100G\")){\n    if(!supportedInterface.contains(\"ODUC4\")){\n        interfacesToDelete.add(supportedInterface);\n    }\n} else {\n    if(!supportedInterface.contains(\"ODU4\")){\n        interfacesToDelete.add(supportedInterface);\n    }\n}",
+      "range": {
+        "startLine": 225,
+        "startChar": 33,
+        "endLine": 225,
+        "endChar": 70
+      },
+      "revId": "215d1a78e7ca3eb547275ab3af2dcbc4406fab18",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
