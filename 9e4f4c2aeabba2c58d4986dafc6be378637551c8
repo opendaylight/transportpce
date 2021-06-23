@@ -250,6 +250,24 @@
     },
     {
       "key": {
+        "uuid": "b17e6377_5b821a7c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-23T14:32:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c915be01_968a9911",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "babc5a63_a60beefe",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 4
@@ -282,6 +300,24 @@
       "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d30efe27_fce10a34",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-23T14:32:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e4944ac_c3be5b11",
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -329,6 +365,30 @@
       "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe7b44d2_a33581e1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-23T14:32:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a9fbfc_e146e7e1",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 10
+      },
+      "revId": "9e4f4c2aeabba2c58d4986dafc6be378637551c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
