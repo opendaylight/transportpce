@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -55,7 +55,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                             .http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder.class);
                 openRoadmInterfacesImpl221.postInterface(nodeId,ifBuilder22);
                 return;
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 LOG.info("postInterface for 7.1.0 device {}", nodeId);
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder
                     ifBuilder71 = convertInstanceOfInterface(ifBuilder, org.opendaylight.yang.gen.v1
@@ -79,7 +79,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                 return (Optional<T>) openRoadmInterfacesImpl121.getInterface(nodeId,interfaceName);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 return (Optional<T>) openRoadmInterfacesImpl710.getInterface(nodeId,interfaceName);
             default:
                 LOG.error("getInterface unknown ordm version error device {}", nodeId);
@@ -100,7 +100,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
                 return;
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 openRoadmInterfacesImpl710.deleteInterface(nodeId,interfaceName);
                 return;
             default:
@@ -123,7 +123,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 openRoadmInterfacesImpl710.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
             default:
@@ -146,7 +146,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                             .http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder) ifBuilder;
                 openRoadmInterfacesImpl221.postInterface(nodeId, ifBuilder22);
                 return;
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder
                     ifBuilder71 = (org.opendaylight.yang.gen.v1
                             .http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder) ifBuilder;
@@ -169,7 +169,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 openRoadmInterfacesImpl710.postEquipmentState(nodeId, circuitPackName, activate);
                 return;
             default:

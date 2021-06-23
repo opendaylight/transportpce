@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.common.mapping;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.util.Map;
 import java.util.Optional;
@@ -20,14 +20,14 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.NodesKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public class PortMappingImpl implements PortMapping {
                 return portMappingVersion121.createMappingData(nodeId);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return portMappingVersion22.createMappingData(nodeId);
-            case OPENROADM_DEVICE_VERSION_7_1_0:
+            case OPENROADM_DEVICE_VERSION_7_1:
                 return portMappingVersion710.createMappingData(nodeId);
             default:
                 LOG.error("Unable to create mapping data for unmanaged openroadm device version");

@@ -125,7 +125,7 @@
                     "node-model": "model2",
                     "node-ip-address": "1.2.3.4",
                     "node-clli": "NodeA",
-                    "openroadm-version": "7.1.0",
+                    "openroadm-version": "7.1",
                     "node-vendor": "vendorA"
                 }
             },
@@ -163,7 +163,7 @@
                     "node-model": "model2",
                     "node-ip-address": "1.2.3.4",
                     "node-clli": "NodeC",
-                    "openroadm-version": "7.1.0",
+                    "openroadm-version": "7.1",
                     "node-vendor": "vendorA"
                 }
             },

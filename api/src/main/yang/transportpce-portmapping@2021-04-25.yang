@@ -34,10 +34,15 @@ module transportpce-portmapping {
   contact
     "transportPCE committers - ODL";
   description
-    "YANG definitions of RPCs supported by OLM. Copyright (c) 2017
-     AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
-     ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
+    "YANG definitions for defining port mapping in TransportPCE.
+     Copyright (c) 2017 AT&T and others. All rights reserved.
+     authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
+              Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2021-04-25 {
+      description
+      "OpenROADM version fix 7.1.0 -> 7.1";
+  }
   revision 2021-03-15 {
     description
       "Refacto model to use grouping";
@@ -95,12 +100,16 @@ module transportpce-portmapping {
         description
           "Version 2.2.1";
       }
-      enum 7.1.0 {
+      enum 7.1 {
         value 3;
         description
-          "Version 7.1.0";
+          "Version 7.1";
       }
     }
+    description
+        "YANG enumerations for OpenROADM models;
+         enums should be same as OpenROADM models
+         defined in org-openroadm-common-types";
   }
 
   grouping node-info {
