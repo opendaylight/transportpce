@@ -12,20 +12,20 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618
 
 public class NodeLists {
 
-    private List<Nodes> olmList;
-    private List<Nodes> list;
+    private List<Nodes> olmNodeList;
+    private List<Nodes> rendererNodelist;
 
     public NodeLists(List<Nodes> olmList, List<Nodes> list) {
-        this.olmList = olmList;
-        this.list = list;
+        this.olmNodeList = olmList;
+        this.rendererNodelist = list;
     }
 
-    public List<Nodes> getOlmList() {
-        return olmList;
+    public List<Nodes> getOlmNodeList() {
+        return olmNodeList;
     }
 
-    public List<Nodes> getList() {
-        return list;
+    public List<Nodes> getRendererNodeList() {
+        return rendererNodelist;
     }
 
 }
