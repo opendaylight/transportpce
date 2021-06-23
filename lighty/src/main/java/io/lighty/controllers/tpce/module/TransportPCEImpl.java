@@ -189,7 +189,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         ServiceDataStoreOperations serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(
                 lightyServices.getBindingDataBroker());
         RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(pathComputationService,
-            lightyServices.getBindingNotificationPublishService());
+            lightyServices.getBindingNotificationPublishService(), networkModelService);
         PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
             lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(

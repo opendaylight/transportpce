@@ -10,22 +10,27 @@ package org.opendaylight.transportpce.servicehandler.listeners;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +50,16 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private PCEServiceWrapper pceServiceWrapper;
     private Boolean tempService;
     private NotificationPublishService notificationPublishService;
+    private final NetworkModelService networkModelService;
+
 
     public RendererListenerImpl(PathComputationService pathComputationService,
-            NotificationPublishService notificationPublishService) {
+            NotificationPublishService notificationPublishService, NetworkModelService networkModelService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         setServiceInput(null);
         setTempService(false);
         this.notificationPublishService = notificationPublishService;
+        this.networkModelService = networkModelService;
     }
 
     @Override
@@ -86,6 +94,28 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         switch (serviceRpcResultSp.getStatus()) {
             case Successful:
                 LOG.info("Service '{}' deleted !", notification.getServiceName());
+                String serviceType = notification.getServiceType();
+                switch (serviceType) {
+                    case StringConstants.SERVICE_TYPE_1GE:
+                    case StringConstants.SERVICE_TYPE_10GE:
+                    case StringConstants.SERVICE_TYPE_100GE_M:
+                        Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                                .split("\\.")[0]);
+                        Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                                .split("\\.")[1]);
+                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(),
+                            notification.getAToZDirection().getRate(), tribPort, minTribSlot);
+                        break;
+                    case StringConstants.SERVICE_TYPE_OTU4:
+                    case StringConstants.SERVICE_TYPE_OTUC4:
+                    case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC4:
+                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(), null, null,
+                            null);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case Failed:
                 LOG.error("Renderer service delete failed !");
@@ -151,6 +181,27 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.debug("serviceDataStoreOperations is null");
             return;
         }
+        String serviceType = notification.getServiceType();
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_1GE:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_100GE_M:
+                Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                        .split("\\.")[0]);
+                Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                        .split("\\.")[1]);
+                updateOtnTopology(notification.getLink(), false, notification.getServiceType(),
+                    notification.getAToZDirection().getRate(), tribPort, minTribSlot);
+                break;
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                updateOtnTopology(notification.getLink(), false, notification.getServiceType(), null, null, null);
+                break;
+            default:
+                break;
+        }
         PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
@@ -158,11 +209,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
                 .setTopic(TOPIC);
         OperationResult operationResult;
-        String serviceType = "";
+        String serviceTemp = "";
         if (tempService) {
             operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
-            serviceType = "Temp ";
+            serviceTemp = "Temp ";
         } else {
             operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
@@ -178,9 +229,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
             }
         } else {
-            LOG.warn("{}Service status not updated in datastore !", serviceType);
+            LOG.warn("{}Service status not updated in datastore !", serviceTemp);
             sendNbiNotification(nbiNotificationBuilder
-                    .setResponseFailed(serviceType + "Service status not updated in datastore !")
+                    .setResponseFailed(serviceTemp + "Service status not updated in datastore !")
                     .setMessage("ServiceCreate request failed ...")
                     .setOperationalState(org.opendaylight.yang.gen.v1.http
                             .org.openroadm.common.state.types.rev181130.State.OutOfService)
@@ -295,4 +346,57 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             Thread.currentThread().interrupt();
         }
     }
+
+    private void updateOtnTopology(Link link, boolean isDeletion, String serviceType, Uint32 rate, Short portNb,
+            Short slotNb) {
+        if (link == null) {
+            return;
+        }
+        OtnLinkType otnLinkType;
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_OTU4:
+                otnLinkType = OtnLinkType.OTU4;
+                break;
+            case StringConstants.SERVICE_TYPE_OTUC4:
+                otnLinkType = OtnLinkType.OTUC4;
+                break;
+            case StringConstants.SERVICE_TYPE_ODU4:
+                otnLinkType = OtnLinkType.ODTU4;
+                break;
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                otnLinkType = OtnLinkType.ODUC4;
+                break;
+            default:
+                otnLinkType = null;
+                LOG.warn("No otn-link-type corresponds to service-type {}", serviceType);
+                break;
+        }
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                if (isDeletion) {
+                    LOG.info("updating otn-topology removing links");
+                    this.networkModelService.deleteOtnLinks(link.getATermination().getNodeId(),
+                        link.getATermination().getTpId(), link.getZTermination().getNodeId(),
+                        link.getZTermination().getTpId(), otnLinkType);
+                } else {
+                    LOG.info("updating otn-topology adding links");
+                    this.networkModelService.createOtnLinks(link.getATermination().getNodeId(),
+                        link.getATermination().getTpId(), link.getZTermination().getNodeId(),
+                        link.getZTermination().getTpId(), otnLinkType);
+                }
+                break;
+            case StringConstants.SERVICE_TYPE_1GE:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_100GE_M:
+                LOG.info("updating otn-topology node tps -tps and tpn pools");
+                this.networkModelService.updateOtnLinks(link, rate, portNb, slotNb, isDeletion);
+                break;
+            default:
+                break;
+        }
+    }
+
 }
