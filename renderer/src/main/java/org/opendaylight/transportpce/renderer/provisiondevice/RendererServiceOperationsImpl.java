@@ -142,7 +142,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_400GE:
                     case StringConstants.SERVICE_TYPE_OTU4:
                     case StringConstants.SERVICE_TYPE_OTUC4:
-                        if (!createServicepathInput(input)) {
+                        if (!manageServicePathCreation(input)) {
                             return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
                                 OPERATION_FAILED);
                         }
@@ -536,7 +536,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
-    private boolean createServicepathInput(ServiceImplementationRequestInput input) {
+    private boolean manageServicePathCreation(ServiceImplementationRequestInput input) {
         ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
             .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
         ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
