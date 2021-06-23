@@ -172,7 +172,7 @@ public final class ModelMappingUtils {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(Action.Create)
             .setServiceName(serviceName)
-            .setNodes(nodeLists.getList())
+            .setNodes(nodeLists.getRendererNodeList())
             .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
         if (ztoADirection.getZToAWavelengthNumber() != null) {
             servicePathInputBuilder
@@ -224,8 +224,8 @@ public final class ModelMappingUtils {
         if (!asideToZside) {
             nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         }
-        LOG.info("These are node-lists {}, {}", nodeLists.getList(), nodeLists.getOlmList());
-        for (Nodes node: nodeLists.getList()) {
+        LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
+        for (Nodes node: nodeLists.getRendererNodeList()) {
             nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
                 .NodesBuilder()
                             .setNodeId(node.getNodeId())

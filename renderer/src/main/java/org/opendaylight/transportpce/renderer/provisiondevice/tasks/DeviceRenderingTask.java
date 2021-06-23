@@ -42,7 +42,7 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
             LOG.warn("Device rendering not successfully finished.");
             return DeviceRenderingResult.failed("Operation Failed");
         }
-        List<Nodes> olmList = this.servicePathInputData.getNodeLists().getOlmList();
+        List<Nodes> olmList = this.servicePathInputData.getNodeLists().getOlmNodeList();
         LOG.info("Device rendering finished successfully.");
         return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()));
     }
