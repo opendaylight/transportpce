@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49694461_2560588d",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-05-31.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T10:03:57Z",
+      "side": 1,
+      "message": "7.1 ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 84,
+        "endLine": 251,
+        "endChar": 89
+      },
+      "revId": "cef12361ba625a4a5ad3332d64ef3673037af3a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
