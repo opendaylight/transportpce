@@ -15,11 +15,11 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210315.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GE;
@@ -60,8 +60,8 @@ public class MappingUtilsImpl implements MappingUtils {
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.get();
                 switch (nodInfo.getOpenroadmVersion()) {
-                    case _710:
-                        return StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
+                    case _71:
+                        return StringConstants.OPENROADM_DEVICE_VERSION_7_1;
                     case _221:
                         return StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
                     case _121:
