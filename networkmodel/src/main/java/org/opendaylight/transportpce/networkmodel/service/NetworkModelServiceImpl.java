@@ -44,6 +44,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -514,10 +516,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void updateOtnLinks(List<String> nodeTps, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb,
-            boolean isDeletion) {
-        List<Link> supportedOdu4Links = getSupportingOdu4Links(nodeTps);
-        List<TerminationPoint> tps = getOtnNodeTps(nodeTps);
+    public void updateOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link
+            notifLink, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
+
+        LinkTp atermination = new LinkTpBuilder()
+            .setNodeId(notifLink.getATermination().getNodeId())
+            .setTpId(notifLink.getATermination().getTpId())
+            .build();
+        LinkTp ztermination = new LinkTpBuilder()
+            .setNodeId(notifLink.getZTermination().getNodeId())
+            .setTpId(notifLink.getZTermination().getTpId())
+            .build();
+        List<LinkTp> linkTerminations = new ArrayList<>();
+        linkTerminations.add(atermination);
+        linkTerminations.add(ztermination);
+
+        List<Link> supportedOdu4Links = getSupportingOdu4Links(linkTerminations);
+        List<TerminationPoint> tps = getOtnNodeTps(linkTerminations);
         TopologyShard otnTopologyShard;
         otnTopologyShard = OpenRoadmOtnTopology.updateOtnLinks(supportedOdu4Links, tps, serviceRate, tribPortNb,
             tribSoltNb, isDeletion);
@@ -648,11 +664,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         return tps;
     }
 
-    private List<TerminationPoint> getOtnNodeTps(List<String> nodeTopoTps) {
+    private List<TerminationPoint> getOtnNodeTps(List<LinkTp> linkTerminations) {
         List<TerminationPoint> tps = new ArrayList<>();
-        for (String str : nodeTopoTps) {
-            String nodeId = str.split("--")[0];
-            String tp = str.split("--")[1];
+        for (LinkTp linkTp : linkTerminations) {
+            String tp = linkTp.getTpId();
+            String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
+                .append(tp.split("-")[0]).toString();
             InstanceIdentifier<TerminationPoint> iiTp = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
                 .child(Node.class, new NodeKey(new NodeId(nodeId)))
@@ -700,7 +717,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
-    private List<Link> getSupportingOdu4Links(List<String> nodesTopoTps) {
+    private List<Link> getSupportingOdu4Links(List<LinkTp> nodesTopoTps) {
         InstanceIdentifier<Network1> iiOtnTopologyLinks = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
             .augmentation(Network1.class)
@@ -725,21 +742,19 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
         List<Link> links = new ArrayList<>();
         if (odu4links != null) {
-            for (String str : nodesTopoTps) {
-                String[] nodeAndTp = str.split("--");
-                if (nodeAndTp.length >= 2) {
-                    String nodeId = nodeAndTp[0];
-                    String tp = nodeAndTp[1];
-                    Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
-                        .equals(nodeId) && lk.getSource().getSourceTp().toString().equals(tp)).findFirst().get();
-                    if (!links.contains(slink)) {
-                        links.add(slink);
-                    }
-                    Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
-                        .equals(nodeId) && lk.getDestination().getDestTp().toString().equals(tp)).findFirst().get();
-                    if (!links.contains(dlink)) {
-                        links.add(dlink);
-                    }
+            for (LinkTp linkTp : nodesTopoTps) {
+                String tp = linkTp.getTpId();
+                String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
+                    .append(tp.split("-")[0]).toString();
+                Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
+                    .equals(nodeId) && lk.getSource().getSourceTp().toString().equals(tp)).findFirst().get();
+                if (!links.contains(slink)) {
+                    links.add(slink);
+                }
+                Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
+                    .equals(nodeId) && lk.getDestination().getDestTp().toString().equals(tp)).findFirst().get();
+                if (!links.contains(dlink)) {
+                    links.add(dlink);
                 }
             }
             LOG.debug("odu4links = {}", links.toString());
