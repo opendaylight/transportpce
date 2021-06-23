@@ -15,6 +15,10 @@ module transportpce-portmapping {
      prefix org-openroadm-device-types;
      revision-date 2019-11-29;
   }
+  import org-openroadm-otn-common-types {
+      prefix org-openroadm-otn-common-types;
+      revision-date 2020-03-27;
+  }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
     revision-date 2019-11-29;
@@ -22,10 +26,6 @@ module transportpce-portmapping {
   import org-openroadm-port-types {
     prefix org-openroadm-port-types;
     revision-date 2020-03-27;
-  }
-  import transportpce-common-types {
-    prefix org-transportpce-common-types;
-    revision-date 2020-12-11;
   }
 
 
@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2021-04-26 {
+      description
+      "Adding mux-profile information to support 400G Muxponder";
+  }
   revision 2021-04-25 {
       description
       "OpenROADM version fix 7.1.0 -> 7.1";
@@ -204,6 +208,11 @@ module transportpce-portmapping {
         description
           "ODU4 interface provisioned on the port";
       }
+      leaf supporting-oduc4 {
+        type string;
+        description
+          "ODUC4 interface provisioned on the port for B100G support";
+      }
       leaf rate {
         type string;
         description
@@ -214,6 +223,7 @@ module transportpce-portmapping {
           base org-openroadm-port-types:supported-if-capability;
         }
       }
+      uses mpdr-restrictions-grp;
       leaf xponder-type {
         type org-openroadm-device-types:xpdr-node-types;
       }
@@ -234,6 +244,27 @@ module transportpce-portmapping {
         description
           "Hash value generated from node-id and lcp. This value will be used to map-
            back SAPI and DAPI resource";
+      }
+    }
+  }
+
+  grouping mpdr-restrictions-grp {
+    container mpdr-restrictions {
+      when "../port-qual = 'switch-client' and ../../node-info/openroadm-version = '7.1'";
+      description
+        "This container provides the information about multiplexing of LO ODUs to HO ODUs
+        Caveat: If port advertizes multiple rates, this container does not work and results could
+        be wrong, meaning if the supported-interface-capabilities include, if-100GE-ODU4, if-OTU4-ODU4,
+        if-200GE-oduflexcbr, then min/max-trib-slot could be different";
+      leaf min-trib-slot {
+          type org-openroadm-otn-common-types:opucn-trib-slot-def;
+          description
+              "Minimum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
+      }
+      leaf max-trib-slot {
+          type org-openroadm-otn-common-types:opucn-trib-slot-def;
+          description
+              "Maximum OPUCn 5G trib slots in the form of TS #A.B (G.709)";
       }
     }
   }
