@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d26ef1c0_efc42cd3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T12:57:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0184d19_47bd512e",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91c779f7_9240a428",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
         "patchSetId": 7
