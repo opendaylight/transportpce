@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9efa5ab_3ca193cf",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T20:01:23Z",
+      "side": 1,
+      "message": "this method is starting to be too long... some refactoring a,d/or intermediate methods are needed",
+      "range": {
+        "startLine": 119,
+        "startChar": 19,
+        "endLine": 119,
+        "endChar": 53
+      },
+      "revId": "93e863055cd1c3301401bdbd64ae97777dbacdef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
