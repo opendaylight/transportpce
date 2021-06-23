@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa7a23a5_f4028016",
+        "filename": "tests/transportpce_tests/7.1/test_portmapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T10:26:43Z",
+      "side": 1,
+      "message": "it seems that this cannot be changed for the moment and was related to other changes in the stack.",
+      "range": {
+        "startLine": 68,
+        "startChar": 52,
+        "endLine": 68,
+        "endChar": 57
+      },
+      "revId": "c40ca6fd7387d5af798bfb015b43594f9a4dde20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
