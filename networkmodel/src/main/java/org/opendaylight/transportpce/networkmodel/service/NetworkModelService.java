@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.networkmodel.service;
 
-import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -94,9 +94,8 @@ public interface NetworkModelService {
     /**
      * update otn links from otn-topology.
      *
-     * @param nodeTps
-     *     List containing a string composed of the netconf nodeId , and the
-     *       termination point supporting the service
+     * @param link
+     *     link containing termination points to be updated
      * @param serviceRate
      *     Service rate may be 1G, 10G or 100G
      * @param tribPortNb
@@ -106,7 +105,8 @@ public interface NetworkModelService {
      * @param isDeletion
      *       True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(List<String> nodeTps, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb,
-        boolean isDeletion);
+    void updateOtnLinks(
+        Link
+            link, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion);
 
 }
