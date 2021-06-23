@@ -112,14 +112,14 @@ public final class ModelMappingUtils {
     }
 
     public static ServicePathInputData rendererCreateServiceInputAToZ(String serviceName,
-            PathDescription pathDescription) {
+            PathDescription pathDescription, Action operation) {
         int scale = GridConstant.FIXED_GRID_FREQUENCY_PRECISION;
         AToZDirection atoZDirection = pathDescription.getAToZDirection();
         LOG.info("Building ServicePathInputData for a to z direction {}", atoZDirection);
         NodeLists nodeLists = getNodesListAToZ(atoZDirection.nonnullAToZ().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
-            .setOperation(Action.Create)
+            .setOperation(operation)
             .setNodes(nodeLists.getRendererNodeList())
             .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
         if (atoZDirection.getAToZWavelengthNumber() != null) {
@@ -164,13 +164,13 @@ public final class ModelMappingUtils {
     }
 
     public static ServicePathInputData rendererCreateServiceInputZToA(String serviceName,
-            PathDescription pathDescription) {
+            PathDescription pathDescription, Action operation) {
         int scale = GridConstant.FIXED_GRID_FREQUENCY_PRECISION;
         ZToADirection ztoADirection = pathDescription.getZToADirection();
         LOG.info("Building ServicePathInputData for z to a direction {}", ztoADirection);
         NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
-            .setOperation(Action.Create)
+            .setOperation(operation)
             .setServiceName(serviceName)
             .setNodes(nodeLists.getRendererNodeList())
             .setWidth(new FrequencyGHz(GridConstant.WIDTH_40));
@@ -215,13 +215,15 @@ public final class ModelMappingUtils {
     }
 
     // Adding createOtnServiceInputpath for A-Z and Z-A directions as one method
-    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceFormat,
-        Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
+    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, Action operation,
+        String serviceFormat, Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.Nodes> nodes =
             new ArrayList<>();
-        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
-        if (!asideToZside) {
+        NodeLists nodeLists;
+        if (asideToZside) {
+            nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
+        } else {
             nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         }
         LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
@@ -235,6 +237,7 @@ public final class ModelMappingUtils {
         }
         OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
             .setServiceName(serviceName)
+            .setOperation(operation)
             .setServiceFormat(serviceFormat)
             .setServiceRate(serviceRate)
             .setNodes(nodes);

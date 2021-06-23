@@ -36,15 +36,31 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
 
     @Override
     public DeviceRenderingResult call() throws Exception {
-        ServicePathOutput output = this.deviceRenderer.setupServicePath(this.servicePathInputData.getServicePathInput(),
-                this.direction);
-        if (!output.getSuccess()) {
-            LOG.warn("Device rendering not successfully finished.");
-            return DeviceRenderingResult.failed("Operation Failed");
+        ServicePathOutput output;
+        switch (this.servicePathInputData.getServicePathInput().getOperation()) {
+            case Create:
+                output = this.deviceRenderer.setupServicePath(this.servicePathInputData.getServicePathInput(),
+                    this.direction);
+                if (!output.getSuccess()) {
+                    LOG.error("Device rendering setup service path failed.");
+                    return DeviceRenderingResult.failed("Operation Failed");
+                }
+                List<Nodes> olmList = this.servicePathInputData.getNodeLists().getOlmNodeList();
+                LOG.info("Device rendering setup service path finished successfully.");
+                return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()),
+                    new ArrayList<>(output.nonnullLinkTp()));
+            case Delete:
+                output = this.deviceRenderer.deleteServicePath(this.servicePathInputData.getServicePathInput());
+                if (!output.getSuccess()) {
+                    LOG.error("Device rendering delete service path failed.");
+                    return DeviceRenderingResult.failed("Operation Failed");
+                }
+                LOG.info("Device rendering delete service path finished successfully.");
+                return DeviceRenderingResult.ok(null, new ArrayList<>(output.nonnullNodeInterface().values()),
+                    new ArrayList<>(output.nonnullLinkTp()));
+            default:
+                return DeviceRenderingResult.failed("Device rendering failed - unknwon operation");
         }
-        List<Nodes> olmList = this.servicePathInputData.getNodeLists().getOlmNodeList();
-        LOG.info("Device rendering finished successfully.");
-        return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()));
     }
 
 }
