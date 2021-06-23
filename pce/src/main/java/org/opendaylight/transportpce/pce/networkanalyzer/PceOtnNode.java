@@ -128,55 +128,52 @@ public class PceOtnNode implements PceNode {
                 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1.class);
             //TODO many nested if-structures below, this needs to be reworked
-            if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
-                    && (StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType))) {
+            if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
                 } else {
                     continue;
                 }
-                if (checkTpForOdtuTermination(ontTp1)) {
-                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
-                    this.availableXpdrNWTps.add(tp.getTpId());
-                } else {
-                    LOG.error("TP {} of {} does not allow ODU4 termination creation", tp.getTpId().getValue(),
-                        node.getNodeId().getValue());
+                switch (this.otnServiceType) {
+                    case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC4:
+                        if (!checkTpForOdtuTermination(ontTp1)) {
+                            LOG.error("TP {} of {} does not allow ODU4 termination creation",
+                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                            continue;
+                        }
+                        break;
+
+                    case StringConstants.SERVICE_TYPE_10GE:
+                        if (!checkOdtuTTPforLoOduCreation(ontTp1, 10)) {
+                            LOG.error("TP {} of {} does not allow OD2e termination creation",
+                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                            continue;
+                        }
+                        break;
+                    case StringConstants.SERVICE_TYPE_100GE_M:
+                        if (!checkOdtuTTPforLoOduCreation(ontTp1, 20)) {
+                            LOG.error("TP {} of {} does not allow ODU4 termination creation",
+                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                            continue;
+                        }
+                        break;
+                    case StringConstants.SERVICE_TYPE_1GE:
+                        if (!checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
+                            LOG.error("TP {} of {} does not allow ODU0 termination creation",
+                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                            continue;
+                        }
+                        break;
+
+                    default:
+                        LOG.error("TP {} of {} does not allow any termination creation",
+                            tp.getTpId().getValue(), node.getNodeId().getValue());
+                        continue;
                 }
-            } else if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
-                && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
-                TerminationPoint1 ontTp1;
-                if (tp.augmentation(TerminationPoint1.class) != null) {
-                    ontTp1 = tp.augmentation(TerminationPoint1.class);
-                } else {
-                    continue;
-                }
-                if ((StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)
-                        && checkOdtuTTPforLoOduCreation(ontTp1, 10))
-                    || (StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)
-                        && checkOdtuTTPforLoOduCreation(ontTp1, 1))
-                    || (StringConstants.SERVICE_TYPE_100GE_M.equals(otnServiceType)
-                        && checkOdtuTTPforLoOduCreation(ontTp1, 20))) {
-                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
-                    this.availableXpdrNWTps.add(tp.getTpId());
-                } else {
-                    if (StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)) {
-                        LOG.error("TP {} of {} does not allow OD2e termination creation", tp.getTpId().getValue(),
-                            node.getNodeId().getValue());
-                    } else if (StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)) {
-                        LOG.error("TP {} of {} does not allow ODU0 termination creation", tp.getTpId().getValue(),
-                            node.getNodeId().getValue());
-                    } else if (StringConstants.SERVICE_TYPE_100GE_M.equals(otnServiceType)) {
-                        LOG.error("TP {} of {} does not allow ODU4 termination creation", tp.getTpId().getValue(),
-                            node.getNodeId().getValue());
-                    } else {
-                        LOG.error("TP {} of {} does not allow any termination creation", tp.getTpId().getValue(),
-                            node.getNodeId().getValue());
-                    }
-                }
+                LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                this.availableXpdrNWTps.add(tp.getTpId());
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
                 && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
