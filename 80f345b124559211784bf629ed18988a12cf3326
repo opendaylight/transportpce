@@ -198,6 +198,30 @@
       "revId": "80f345b124559211784bf629ed18988a12cf3326",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d13fc117_c521eb41",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-23T18:54:07Z",
+      "side": 1,
+      "message": "cf 96631",
+      "parentUuid": "a38416f1_2979a323",
+      "range": {
+        "startLine": 131,
+        "startChar": 15,
+        "endLine": 131,
+        "endChar": 73
+      },
+      "revId": "80f345b124559211784bf629ed18988a12cf3326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
