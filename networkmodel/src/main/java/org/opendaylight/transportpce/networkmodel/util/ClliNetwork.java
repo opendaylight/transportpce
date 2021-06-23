@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210425.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
