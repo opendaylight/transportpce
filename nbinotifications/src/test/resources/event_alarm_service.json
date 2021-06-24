@@ -1,0 +1,8 @@
+{
+    "notification-alarm-service": {
+        "service-name": "service1",
+        "operational-state": "inService",
+        "message": "The service is now inService",
+        "connection-type": "service"
+    }
+}
