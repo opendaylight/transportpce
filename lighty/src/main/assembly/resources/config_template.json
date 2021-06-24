@@ -1,0 +1,7 @@
+{
+    "restconf":{
+        "inetAddress": "127.0.0.1",
+        "httpPort": ODL_RESTCONF_PORT,
+        "webSocketPort": ODL_WEBSOCKET_PORT
+    }
+}
