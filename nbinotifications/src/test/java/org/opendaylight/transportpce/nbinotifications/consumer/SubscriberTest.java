@@ -22,24 +22,31 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.get.notifications.alarm.service.output.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.get.notifications.service.output.NotificationService;
 
 public class SubscriberTest extends AbstractTest {
     private static final String TOPIC = "topic";
     private static final int PARTITION = 0;
     private MockConsumer<String, NotificationService> mockConsumer;
-    private Subscriber subscriber;
+    private MockConsumer<String, NotificationAlarmService> mockConsumerAlarm;
+    private Subscriber<org.opendaylight.yang.gen.v1
+            .nbi.notifications.rev201130.NotificationService, NotificationService> subscriberService;
+    private Subscriber<org.opendaylight.yang.gen.v1
+            .nbi.notifications.rev201130.NotificationAlarmService, NotificationAlarmService> subscriberAlarmService;
 
     @Before
     public void setUp() {
         mockConsumer = new MockConsumer<>(OffsetResetStrategy.EARLIEST);
-        subscriber = new Subscriber(mockConsumer);
+        mockConsumerAlarm = new MockConsumer<>(OffsetResetStrategy.EARLIEST);
+        subscriberService = new Subscriber<>(mockConsumer);
+        subscriberAlarmService = new Subscriber<>(mockConsumerAlarm);
     }
 
     @Test
     public void subscribeServiceShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
-        ConsumerRecord<String, NotificationService> record = new ConsumerRecord<String, NotificationService>(
+        ConsumerRecord<String, NotificationService> record = new ConsumerRecord<>(
                 TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedEvent());
         mockConsumer.schedulePollTask(() -> {
             mockConsumer.rebalance(Collections.singletonList(new TopicPartition(TOPIC, PARTITION)));
@@ -50,8 +57,27 @@ public class SubscriberTest extends AbstractTest {
         TopicPartition tp = new TopicPartition(TOPIC, PARTITION);
         startOffsets.put(tp, 0L);
         mockConsumer.updateBeginningOffsets(startOffsets);
-        List<NotificationService> result = subscriber.subscribeService(TOPIC);
+        List<NotificationService> result = subscriberService.subscribe(TOPIC, NotificationService.QNAME);
         assertEquals("There should be 1 record", 1, result.size());
         assertTrue("Consumer should be closed", mockConsumer.closed());
+    }
+
+    @Test
+    public void subscribeAlarmShouldBeSuccessful() {
+        // from https://www.baeldung.com/kafka-mockconsumer
+        ConsumerRecord<String, NotificationAlarmService> record = new ConsumerRecord<>(
+                TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedAlarmEvent());
+        mockConsumerAlarm.schedulePollTask(() -> {
+            mockConsumerAlarm.rebalance(Collections.singletonList(new TopicPartition(TOPIC, PARTITION)));
+            mockConsumerAlarm.addRecord(record);
+        });
+
+        Map<TopicPartition, Long> startOffsets = new HashMap<>();
+        TopicPartition tp = new TopicPartition(TOPIC, PARTITION);
+        startOffsets.put(tp, 0L);
+        mockConsumerAlarm.updateBeginningOffsets(startOffsets);
+        List<NotificationAlarmService> result = subscriberAlarmService.subscribe(TOPIC, NotificationAlarmService.QNAME);
+        assertEquals("There should be 1 record", 1, result.size());
+        assertTrue("Consumer should be closed", mockConsumerAlarm.closed());
     }
 }

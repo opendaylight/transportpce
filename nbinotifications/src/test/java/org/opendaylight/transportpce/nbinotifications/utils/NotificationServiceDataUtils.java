@@ -58,6 +58,20 @@ public final class NotificationServiceDataUtils {
         return notificationServiceBuilder.build();
     }
 
+    public static org.opendaylight.yang.gen.v1
+            .nbi.notifications.rev201130.get.notifications.alarm.service.output.NotificationAlarmService
+            buildReceivedAlarmEvent() {
+        org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev201130.get.notifications.alarm.service.output.NotificationAlarmServiceBuilder
+                notificationAlarmServiceBuilder = new org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev201130.get.notifications.alarm.service.output.NotificationAlarmServiceBuilder()
+                .setMessage("message")
+                .setServiceName("service1")
+                .setOperationalState(State.InService)
+                .setConnectionType(ConnectionType.Service);
+        return notificationAlarmServiceBuilder.build();
+    }
+
     public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
                 .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))

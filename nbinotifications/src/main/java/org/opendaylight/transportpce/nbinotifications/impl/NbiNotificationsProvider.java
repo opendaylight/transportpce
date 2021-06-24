@@ -16,9 +16,11 @@ import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
-import org.opendaylight.transportpce.nbinotifications.producer.PublisherAlarm;
+import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
+import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationAlarmService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
@@ -27,8 +29,9 @@ import org.slf4j.LoggerFactory;
 public class NbiNotificationsProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsProvider.class);
-    private static Map<String, Publisher> publishersServiceMap =  new HashMap<>();
-    private static Map<String, PublisherAlarm> publishersAlarmMap =  new HashMap<>();
+    private static Map<String, Publisher<org.opendaylight.yang.gen.v1
+            .nbi.notifications.rev201130.NotificationService>> publishersServiceMap =  new HashMap<>();
+    private static Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap =  new HashMap<>();
 
     private final RpcProviderService rpcService;
     private ObjectRegistration<NbiNotificationsService> rpcRegistration;
@@ -36,8 +39,7 @@ public class NbiNotificationsProvider {
     private NotificationService notificationService;
     private final JsonStringConverter<org.opendaylight.yang.gen.v1
         .nbi.notifications.rev201130.NotificationService> converterService;
-    private final JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev201130.NotificationAlarmService> converterAlarmService;
+    private final JsonStringConverter<NotificationAlarmService> converterAlarmService;
     private final String subscriberServer;
 
 
@@ -50,12 +52,14 @@ public class NbiNotificationsProvider {
         converterService =  new JsonStringConverter<>(bindingDOMCodecServices);
         for (String topic: topicsService) {
             LOG.info("Creating publisher for topic {}", topic);
-            publishersServiceMap.put(topic, new Publisher(topic, publisherServer, converterService));
+            publishersServiceMap.put(topic, new Publisher<>(topic, publisherServer, converterService,
+                    NotificationServiceSerializer.class));
         }
         converterAlarmService = new JsonStringConverter<>(bindingDOMCodecServices);
         for (String topic: topicsAlarm) {
             LOG.info("Creating publisher for topic {}", topic);
-            publishersAlarmMap.put(topic, new PublisherAlarm(topic, publisherServer, converterAlarmService));
+            publishersAlarmMap.put(topic, new Publisher<>(topic, publisherServer, converterAlarmService,
+                    NotificationAlarmServiceSerializer.class));
         }
         this.subscriberServer = subscriberServer;
     }
@@ -75,10 +79,11 @@ public class NbiNotificationsProvider {
      * Method called when the blueprint container is destroyed.
      */
     public void close() {
-        for (Publisher publisher : publishersServiceMap.values()) {
+        for (Publisher<org.opendaylight.yang.gen.v1
+                .nbi.notifications.rev201130.NotificationService> publisher : publishersServiceMap.values()) {
             publisher.close();
         }
-        for (PublisherAlarm publisherAlarm : publishersAlarmMap.values()) {
+        for (Publisher<NotificationAlarmService> publisherAlarm : publishersAlarmMap.values()) {
             publisherAlarm.close();
         }
         rpcRegistration.close();

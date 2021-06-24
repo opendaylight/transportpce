@@ -11,7 +11,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.consumer.Subscriber;
-import org.opendaylight.transportpce.nbinotifications.consumer.SubscriberAlarm;
+import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceDeserializer;
+import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.GetNotificationsAlarmServiceInput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.GetNotificationsAlarmServiceOutput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.GetNotificationsAlarmServiceOutputBuilder;
@@ -51,9 +52,11 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.success(new GetNotificationsServiceOutputBuilder().build()).buildFuture();
         }
-        Subscriber subscriber = new Subscriber(input.getIdConsumer(), input.getGroupId(), server, converterService);
+        Subscriber<org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationService,
+                NotificationService> subscriber = new Subscriber<>(input.getIdConsumer(), input.getGroupId(), server,
+                converterService, NotificationServiceDeserializer.class);
         List<NotificationService> notificationServiceList = subscriber
-                .subscribeService(input.getConnectionType().getName());
+                .subscribe(input.getConnectionType().getName(), NotificationService.QNAME);
         GetNotificationsServiceOutputBuilder output = new GetNotificationsServiceOutputBuilder()
                 .setNotificationService(notificationServiceList);
         return RpcResultBuilder.success(output.build()).buildFuture();
@@ -67,10 +70,11 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder().build()).buildFuture();
         }
-        SubscriberAlarm subscriberAlarm = new SubscriberAlarm(input.getIdConsumer(), input.getGroupId(), server,
-                converterAlarmService);
-        List<NotificationAlarmService> notificationAlarmServiceList = subscriberAlarm
-                .subscribeAlarm("alarm" + input.getConnectionType().getName());
+        Subscriber<org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationAlarmService,
+                NotificationAlarmService> subscriber = new Subscriber<>(input.getIdConsumer(), input.getGroupId(),
+                server, converterAlarmService, NotificationAlarmServiceDeserializer.class);
+        List<NotificationAlarmService> notificationAlarmServiceList = subscriber
+                .subscribe("alarm" + input.getConnectionType().getName(), NotificationAlarmService.QNAME);
         GetNotificationsAlarmServiceOutputBuilder output = new GetNotificationsAlarmServiceOutputBuilder()
                 .setNotificationAlarmService(notificationAlarmServiceList);
         return RpcResultBuilder.success(output.build()).buildFuture();

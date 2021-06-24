@@ -9,9 +9,10 @@ package org.opendaylight.transportpce.nbinotifications.listener;
 
 import java.util.Map;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
-import org.opendaylight.transportpce.nbinotifications.producer.PublisherAlarm;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.NotificationServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishNotificationService;
@@ -20,11 +21,11 @@ import org.slf4j.LoggerFactory;
 
 public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
-    private Map<String, Publisher> publishersServiceMap;
-    private Map<String, PublisherAlarm> publishersAlarmMap;
+    private final Map<String, Publisher<NotificationService>> publishersServiceMap;
+    private final Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
 
-    public NbiNotificationsListenerImpl(Map<String, Publisher> publishersServiceMap,
-                                        Map<String, PublisherAlarm> publishersAlarmMap) {
+    public NbiNotificationsListenerImpl(Map<String, Publisher<NotificationService>> publishersServiceMap,
+                                        Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap) {
         this.publishersServiceMap = publishersServiceMap;
         this.publishersAlarmMap = publishersAlarmMap;
     }
@@ -37,14 +38,14 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
             LOG.error("Unknown topic {}", topic);
             return;
         }
-        Publisher publisher = publishersServiceMap.get(topic);
+        Publisher<NotificationService> publisher = publishersServiceMap.get(topic);
         publisher.sendEvent(new NotificationServiceBuilder().setCommonId(notification.getCommonId())
                 .setConnectionType(notification.getConnectionType()).setMessage(notification.getMessage())
                 .setOperationalState(notification.getOperationalState())
                 .setResponseFailed(notification.getResponseFailed())
                 .setServiceAEnd(notification.getServiceAEnd())
                 .setServiceName(notification.getServiceName())
-                .setServiceZEnd(notification.getServiceZEnd()).build());
+                .setServiceZEnd(notification.getServiceZEnd()).build(), notification.getConnectionType().getName());
     }
 
     @Override
@@ -55,12 +56,12 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
             LOG.error("Unknown topic {}", topic);
             return;
         }
-        PublisherAlarm publisherAlarm = publishersAlarmMap.get(topic);
+        Publisher<NotificationAlarmService> publisherAlarm = publishersAlarmMap.get(topic);
         publisherAlarm.sendEvent(new NotificationAlarmServiceBuilder().setConnectionType(notification
                 .getConnectionType())
                 .setMessage(notification.getMessage())
                 .setOperationalState(notification.getOperationalState())
                 .setServiceName(notification.getServiceName())
-                .build());
+                .build(), "alarm" + notification.getConnectionType().getName());
     }
 }
