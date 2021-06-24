@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "70fbbae8_3e507334",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-24T15:44:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0184d19_47bd512e",
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91c779f7_9240a428",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
         "patchSetId": 7
@@ -253,6 +271,30 @@
       "writtenOn": "2021-06-23T18:50:48Z",
       "side": 1,
       "message": "was ODUC case intentionnally removed here ?\nif yes, I think we can close this comment by creating a JIRA ticket for refactoring needed here.",
+      "parentUuid": "4fb93868_40c22835",
+      "range": {
+        "startLine": 137,
+        "startChar": 72,
+        "endLine": 137,
+        "endChar": 75
+      },
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a17209_3c2c06a4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-24T15:44:07Z",
+      "side": 1,
+      "message": "Sorry this was a bug and I have fixed it in the latest patch, where the serviceType will be \"ODU\", but the serviceRate would be 400G. Please refer to the latest patch for this.",
       "parentUuid": "4fb93868_40c22835",
       "range": {
         "startLine": 137,
