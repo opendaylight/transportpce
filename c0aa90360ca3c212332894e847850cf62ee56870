@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6fa75811_c49cad6f",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 26
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-24T14:53:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96778161_7fe4cf53",
+      "range": {
+        "startLine": 201,
+        "startChar": 47,
+        "endLine": 201,
+        "endChar": 60
+      },
+      "revId": "c0aa90360ca3c212332894e847850cf62ee56870",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3a32dbc_28e1d11f",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 26
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "de8519a6_1c3756aa",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 26
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-24T14:53:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a32dbc_28e1d11f",
+      "range": {
+        "startLine": 358,
+        "startChar": 47,
+        "endLine": 358,
+        "endChar": 54
+      },
+      "revId": "c0aa90360ca3c212332894e847850cf62ee56870",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27506cb0_130fc424",
         "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
         "patchSetId": 26
@@ -68,6 +116,30 @@
       "revId": "c0aa90360ca3c212332894e847850cf62ee56870",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45396ec_a22ca5d9",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRA2.xml",
+        "patchSetId": 26
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-24T14:53:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27506cb0_130fc424",
+      "range": {
+        "startLine": 377,
+        "startChar": 20,
+        "endLine": 377,
+        "endChar": 25
+      },
+      "revId": "c0aa90360ca3c212332894e847850cf62ee56870",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
