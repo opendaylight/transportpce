@@ -31,7 +31,6 @@ KARAF_OK_START_MSG = re.escape(
     "Blueprint container for bundle org.opendaylight.netconf.restconf")+".* was successfully created"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
-RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
@@ -65,6 +64,12 @@ KARAF_LOG = os.path.join(
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
 process_list = []
+
+
+if "USE_ODL_ALT_RESTCONF_PORT" in os.environ:
+    RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/restconf"
+else:
+    RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
     TPCE_LOG = 'odl.log'
