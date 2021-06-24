@@ -44,6 +44,7 @@ URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
 URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
 URL_GET_NBINOTIFICATIONS_SERV = "{}/operations/nbi-notifications:get-notifications-service/"
+URL_GET_NBINOTIFICATIONS_ALARM_SERV = "{}/operations/nbi-notifications:get-notifications-alarm-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
 URL_SERV_DELETE = "{}/operations/org-openroadm-service:service-delete"
 URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
@@ -343,6 +344,10 @@ def portmapping_request(suffix: str):
 
 def get_notifications_service_request(attr):
     return post_request(URL_GET_NBINOTIFICATIONS_SERV, attr)
+
+
+def get_notifications_alarm_service_request(attr):
+    return post_request(URL_GET_NBINOTIFICATIONS_ALARM_SERV, attr)
 
 
 def get_service_list_request(suffix: str):
