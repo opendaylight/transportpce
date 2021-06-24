@@ -72,7 +72,7 @@ else:
     RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
-    TPCE_LOG = 'odl.log'
+    TPCE_LOG = 'odl-' + str(os.getpid()) + '.log'
 else:
     TPCE_LOG = KARAF_LOG
 
@@ -102,7 +102,7 @@ def start_tpce():
     else:
         process = start_karaf()
         start_msg = KARAF_OK_START_MSG
-    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=120):
+    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=300):
         print("OpenDaylight started !")
     else:
         print("OpenDaylight failed to start !")
@@ -130,7 +130,7 @@ def start_lighty():
         os.path.dirname(os.path.realpath(__file__)),
         "..", "..", "..", "lighty", "target", "tpce",
         "clean-start-controller.sh")
-    with open('odl.log', 'w') as outfile:
+    with open(TPCE_LOG, 'w') as outfile:
         return subprocess.Popen(
             ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
 
@@ -233,7 +233,7 @@ def mount_device(node_id, sim):
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
     response = put_request(url, body)
-    if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node " + node_id), 60):
+    if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node " + node_id), 180):
         print("Node " + node_id + " correctly added to tpce topology", end='... ', flush=True)
     else:
         print("Node " + node_id + " still not added to tpce topology", end='... ', flush=True)
@@ -246,7 +246,7 @@ def mount_device(node_id, sim):
 def unmount_device(node_id):
     url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
     response = delete_request(url)
-    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: " + node_id), 60):
+    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: " + node_id), 180):
         print("Node " + node_id + " correctly deleted from tpce topology", end='... ', flush=True)
     else:
         print("Node " + node_id + " still not deleted from tpce topology", end='... ', flush=True)
@@ -454,7 +454,7 @@ def start_honeynode(log_file: str, sim):
     return None
 
 
-def wait_until_log_contains(log_file, regexp, time_to_wait=20):
+def wait_until_log_contains(log_file, regexp, time_to_wait=60):
     # pylint: disable=lost-exception
     stringfound = False
     filefound = False
