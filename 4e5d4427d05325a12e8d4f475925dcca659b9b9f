@@ -46,6 +46,23 @@
       "revId": "4e5d4427d05325a12e8d4f475925dcca659b9b9f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80503a47_3a643e72",
+        "filename": "api/src/main/yang/transportpce-portmapping@2021-04-26.yang",
+        "patchSetId": 25
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-06-24T08:40:06Z",
+      "side": 1,
+      "message": "revision 2021-04-25 \"OpenROADM version fix 7.1.0 -\u003e 7.1\" is missing",
+      "revId": "4e5d4427d05325a12e8d4f475925dcca659b9b9f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
