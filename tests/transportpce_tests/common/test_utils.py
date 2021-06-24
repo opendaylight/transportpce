@@ -71,7 +71,7 @@ else:
     RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
-    TPCE_LOG = 'odl.log'
+    TPCE_LOG = 'odl.log.' + str(os.getpid())
 else:
     TPCE_LOG = KARAF_LOG
 
@@ -101,7 +101,7 @@ def start_tpce():
     else:
         process = start_karaf()
         start_msg = KARAF_OK_START_MSG
-    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=120):
+    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=240):
         print("OpenDaylight started !")
     else:
         print("OpenDaylight failed to start !")
@@ -129,7 +129,7 @@ def start_lighty():
         os.path.dirname(os.path.realpath(__file__)),
         "..", "..", "..", "lighty", "target", "tpce",
         "clean-start-controller.sh")
-    with open('odl.log', 'w') as outfile:
+    with open(TPCE_LOG, 'w') as outfile:
         return subprocess.Popen(
             ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
 
