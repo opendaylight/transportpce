@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af5b7d41_b71e1d3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-25T09:22:40Z",
+      "side": 1,
+      "message": "FYI this remark about tox -p auto strategy is related to this work in LFN releng\n\nhttps://gerrit.linuxfoundation.org/infra/c/releng/global-jjb/+/68044",
+      "revId": "12080f8a992c408b2b870fabcede0e183517bf39",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
