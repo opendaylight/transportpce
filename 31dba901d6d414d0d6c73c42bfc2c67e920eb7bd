@@ -308,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "ad5cc9b2_42be5413",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-25T07:01:59Z",
+      "side": 1,
+      "message": "no worry\nticket created, let\u0027s close this\nhttps://jira.opendaylight.org/browse/TRNSPRTPCE-483",
+      "parentUuid": "f6a17209_3c2c06a4",
+      "range": {
+        "startLine": 137,
+        "startChar": 72,
+        "endLine": 137,
+        "endChar": 75
+      },
+      "revId": "31dba901d6d414d0d6c73c42bfc2c67e920eb7bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff706334_0a826e91",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 7
