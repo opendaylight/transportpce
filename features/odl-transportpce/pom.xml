@@ -98,19 +98,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-restconf-all</artifactId>
+      <artifactId>odl-restconf</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-netconf-all</artifactId>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-netconf-connector-all</artifactId>
+      <artifactId>odl-netconf-connector</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
