@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04f59e32_b591eed7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-26T15:10:14Z",
+      "side": 1,
+      "message": "I think the reason of this deviation from the device whitepaper is explained in comments here.\nShoudn\u0027t this be removed ?",
+      "range": {
+        "startLine": 336,
+        "startChar": 40,
+        "endLine": 336,
+        "endChar": 92
+      },
+      "revId": "efadc150976c129747415eb3d56ebd16c5dabbb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
