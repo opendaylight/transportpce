@@ -16,6 +16,29 @@
       "revId": "432d582fa1a1108fae537219ae119f614bd942c3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713bc50f_1ebdb0fe",
+        "filename": "ordmodels/device/src/main/yang/org-openroadm-device@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-26T10:38:49Z",
+      "side": 1,
+      "message": "I think we should leave a comment here to state clearly it diverges from official models",
+      "range": {
+        "startLine": 1304,
+        "startChar": 0,
+        "endLine": 1304,
+        "endChar": 11
+      },
+      "revId": "432d582fa1a1108fae537219ae119f614bd942c3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
