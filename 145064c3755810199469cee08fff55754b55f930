@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edf8cbf3_2c81a769",
+        "filename": "karaf/src/main/assembly/ressources/post_install_for_tests.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-28T09:03:00Z",
+      "side": 1,
+      "message": "please let me know if you have any trouble after this update with MAC OS X default sed command",
+      "revId": "145064c3755810199469cee08fff55754b55f930",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
