@@ -98,7 +98,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-restconf</artifactId>
+      <artifactId>odl-restconf-nb-rfc8040</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
