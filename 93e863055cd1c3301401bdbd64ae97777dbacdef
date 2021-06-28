@@ -22,6 +22,30 @@
       "revId": "93e863055cd1c3301401bdbd64ae97777dbacdef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74778e9_563a26f8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-28T18:15:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d9efa5ab_3ca193cf",
+      "range": {
+        "startLine": 119,
+        "startChar": 19,
+        "endLine": 119,
+        "endChar": 53
+      },
+      "revId": "93e863055cd1c3301401bdbd64ae97777dbacdef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
