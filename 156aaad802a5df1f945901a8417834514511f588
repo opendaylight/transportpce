@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c67a8b97_967e73d9",
+        "filename": "api/src/main/yang/nbi-notifications@2020-11-30.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-28T16:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72e6cc33_0f76bc1f",
+      "revId": "156aaad802a5df1f945901a8417834514511f588",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8704344_ad0f5605",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/consumer/SubscriberAlarm.java",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "4f015b80_d07e8243",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/consumer/SubscriberAlarm.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-28T16:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8704344_ad0f5605",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "156aaad802a5df1f945901a8417834514511f588",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e741013_39b86511",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/producer/PublisherAlarm.java",
         "patchSetId": 6
@@ -62,6 +104,30 @@
       "revId": "156aaad802a5df1f945901a8417834514511f588",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3786b9cb_42b92923",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/producer/PublisherAlarm.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-28T16:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e741013_39b86511",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "156aaad802a5df1f945901a8417834514511f588",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
