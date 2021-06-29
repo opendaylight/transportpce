@@ -75,7 +75,7 @@ public final class PowerMgmtVersion221 {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
             Ports port = portObject.get();
-            if (port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
+            if (port.getTransponderPort() != null && port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
                 powerRangeMap.put("MaxTx", port.getTransponderPort().getPortPowerCapabilityMaxTx().getValue()
                         .doubleValue());
                 powerRangeMap.put("MinTx", port.getTransponderPort().getPortPowerCapabilityMinTx().getValue()
