@@ -239,8 +239,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
                     // node transformation
                     Map<NodeKey, Node> nodeMap = new HashMap<>(transformXpdrToTapiNode(
-                        nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXponderType(), oorOduSwitchingPool,
-                        mapping.getSupportedInterfaceCapability()));
+                        nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXponderType(), oorOduSwitchingPool));
 
                     // add nodes and sips to tapi context
                     mergeNodeinTopology(nodeMap);
@@ -253,9 +252,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Map<NodeKey, Node> transformXpdrToTapiNode(String nodeId, List<Mapping> xpdrClMaps,
                                                        List<Mapping> xpdrNetMaps, XpdrNodeTypes xponderType,
-                                                       OduSwitchingPools oorOduSwitchingPool,
-                                                       List<Class<? extends SupportedIfCapability>>
-                                                           supportedInterfaceCapability) {
+                                                       OduSwitchingPools oorOduSwitchingPool) {
         Map<NodeKey, Node> nodeMap = new HashMap<>();
         LOG.info("creation of a DSR/ODU node for {}", nodeId);
         Uuid nodeUuidDsr = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, DSR))
@@ -266,8 +263,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LayerProtocolName.ODU);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
             .Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols,
-            nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool,
-            supportedInterfaceCapability);
+            nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
 
         nodeMap.put(dsrNode.key(), dsrNode);
 
@@ -280,8 +276,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
             .Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols,
-            nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null,
-            supportedInterfaceCapability);
+            nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null);
 
         nodeMap.put(otsiNode.key(), otsiNode);
 
@@ -448,8 +443,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Node createTapiXpdrNode(Map<NameKey, Name> nameMap, List<LayerProtocolName> layerProtocols,
                                     String nodeId, Uuid nodeUuid, List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps,
-                                    XpdrNodeTypes xponderType, OduSwitchingPools oorOduSwitchingPool,
-                                    List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+                                    XpdrNodeTypes xponderType, OduSwitchingPools oorOduSwitchingPool) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
         Map<RuleKey, Rule> ruleList = new HashMap<>();
@@ -462,13 +456,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         if (layerProtocols.contains(LayerProtocolName.DSR)) {
             // neps for dsr/odu layer
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> dsroduNeps =
-                    createXpdrDsrOduNeps(nodeId, xpdrClMaps, xpdrNetMaps, xponderType, supportedInterfaceCapability);
+                    createXpdrDsrOduNeps(nodeId, xpdrClMaps, xpdrNetMaps, xponderType);
             onepl.putAll(dsroduNeps);
             nodeRuleGroupList = createNodeRuleGroupForDsrNode(nodeId, oorOduSwitchingPool, ruleList, onepl);
         } else if (layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA)) {
             // neps for photonic layer
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> phtmdNeps =
-                    createXpdrPhtnMdNeps(nodeId, xpdrNetMaps, supportedInterfaceCapability);
+                    createXpdrPhtnMdNeps(nodeId, xpdrNetMaps);
             onepl.putAll(phtmdNeps);
             nodeRuleGroupList = createNodeRuleGroupForOtsiNode(nodeId, xpdrNetMaps, ruleList);
         } else {
@@ -509,7 +503,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createXpdrPhtnMdNeps(String nodeId,
-            List<Mapping> xpdrNetMaps, List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+                                                                                List<Mapping> xpdrNetMaps) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
 
         // iNep creation on otsi node
@@ -525,7 +519,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid1, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    true, String.join("+", nodeId, I_OTSI), supportedInterfaceCapability);
+                    true, String.join("+", nodeId, I_OTSI),
+                xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         // eNep creation on otsi node
@@ -540,7 +535,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid2, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    false, String.join("+", nodeId, E_OTSI), supportedInterfaceCapability);
+                    false, String.join("+", nodeId, E_OTSI),
+                xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         // Photonic Media Nep creation on otsi node
@@ -555,15 +551,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid3, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    false, String.join("+", nodeId, PHTNC_MEDIA), supportedInterfaceCapability);
+                    false, String.join("+", nodeId, PHTNC_MEDIA),
+                xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         return onepl;
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createXpdrDsrOduNeps(String nodeId, List<Mapping> xpdrClMaps,
-            List<Mapping> xpdrNetMaps, XpdrNodeTypes xponderType,
-            List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+                                                                                List<Mapping> xpdrNetMaps,
+                                                                                XpdrNodeTypes xponderType) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         // client nep creation on DSR node
         for (int i = 0; i < xpdrClMaps.size(); i++) {
@@ -582,7 +579,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(name.key(), name), LayerProtocolName.DSR, LayerProtocolName.DSR, true,
-                    String.join("+", nodeId, DSR), supportedInterfaceCapability);
+                    String.join("+", nodeId, DSR), xpdrClMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         // network nep creation on I_ODU node
@@ -599,12 +596,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName),
                     LayerProtocolName.ODU, LayerProtocolName.DSR, false,
-                    String.join("+", nodeId, I_ODU), supportedInterfaceCapability);
+                    String.join("+", nodeId, I_ODU), xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         // network nep creation on E_ODU node
         for (int i = 0; i < xpdrNetMaps.size(); i++) {
-            LOG.info("eODU NEP = {}", String.join("+", nodeId, E_ODU, xpdrNetMaps.get(i).getLogicalConnectionPoint()));
+            LOG.info("eODU NEP = {}", String.join("+", nodeId, E_ODU,
+                xpdrNetMaps.get(i).getLogicalConnectionPoint()));
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                     (String.join("+", nodeId, E_ODU, xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                             .getBytes(Charset.forName("UTF-8"))).toString());
@@ -616,7 +614,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName),
                     LayerProtocolName.ODU, LayerProtocolName.DSR, true,
-                    String.join("+", nodeId, E_ODU), supportedInterfaceCapability);
+                    String.join("+", nodeId, E_ODU), xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             onepl.put(onep.key(), onep);
         }
         return onepl;
