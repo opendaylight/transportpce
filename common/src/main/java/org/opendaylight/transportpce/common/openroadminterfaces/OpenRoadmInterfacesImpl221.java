@@ -91,7 +91,7 @@ public class OpenRoadmInterfacesImpl221 {
     }
 
 
-    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         LOG.info("deleting interface {} on device221 {}", interfaceName, nodeId);
         Optional<Interface> intf2DeleteOpt;
         try {
