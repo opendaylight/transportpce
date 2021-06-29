@@ -101,108 +101,116 @@ public final class TopologyUtils {
     public Topology createFullOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
-        List<Link> linkList = new ArrayList<>();
-        if (openroadmTopo.augmentation(Network1.class) != null) {
-            linkList.addAll(openroadmTopo.augmentation(Network1.class).getLink().values());
-        }
-        List<Link> xponderOutLinkList = linkList.stream()
-            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-            .collect(Collectors.toList());
-        List<Link> xponderInLinkList = linkList.stream()
-            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
-            .collect(Collectors.toList());
-        // read otn-topology
-        Network otnTopo = readTopology(InstanceIdentifiers.OTN_NETWORK_II);
-        Map<NodeId, org.opendaylight.yang.gen.v1.urn
-            .ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node> otnNodeMap = otnTopo.nonnullNode()
-            .values().stream().collect(Collectors.toMap(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                .ietf.network.rev180226.networks.network.Node::getNodeId, node -> node));
-
-        Map<String, List<String>> networkPortMap = new HashMap<>();
-        Iterator<Map.Entry<NodeId, org.opendaylight.yang.gen.v1.urn
-            .ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node>> itOtnNodeMap = otnNodeMap
-            .entrySet().iterator();
-        while (itOtnNodeMap.hasNext()) {
-            Map.Entry<NodeId, org.opendaylight.yang.gen.v1.urn
-                .ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node> entry = itOtnNodeMap.next();
-            String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
-                .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
-                .findFirst()
-                .get().getNodeRef().getValue();
-            List<String> networkPortList = new ArrayList<>();
-            for (TerminationPoint tp: entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
-                // TODO -> why are we checking with respect to XPDR links?? Is there a real purpose on doing that?
-                if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
-                    && checkTp(entry.getKey().getValue(), portMappingNodeId, tp, xponderOutLinkList,
-                    xponderInLinkList)) {
-                    networkPortList.add(tp.getTpId().getValue());
-                }
-            }
-            if (!networkPortList.isEmpty()) {
-                networkPortMap.put(entry.getKey().getValue(), networkPortList);
-            }
-        }
-        Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
-            tapiNodeList = new HashMap<>();
-        Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
-            tapiLinkList = new HashMap<>();
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid);
-        Iterator<Map.Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
-        while (it.hasNext()) {
-            String nodeId = it.next().getKey();
-            tapiFactory.convertNode(otnNodeMap.get(new NodeId(nodeId)), networkPortMap.get(nodeId));
-            tapiNodeList.putAll(tapiFactory.getTapiNodes());
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
-        }
-        // roadm infrastructure not abstracted
-        // read openroadm-network
-        Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II);
-        if (openroadmNet != null && openroadmNet.nonnullNode().values().stream().filter(nt ->
-                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
-                        .getNodeType().equals(OpenroadmNodeType.ROADM)).count() > 0) {
-            // map roadm nodes
-            for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node
-                    roadm:openroadmNet.nonnullNode().values().stream().filter(
-                            nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.common.network.rev200529.Node1.class)
-                            .getNodeType().equals(OpenroadmNodeType.ROADM))
-                    .collect(Collectors.toList())) {
-                tapiFactory.convertRoadmNode(roadm, openroadmTopo);
-                tapiNodeList.putAll(tapiFactory.getTapiNodes());
+        Name name = new NameBuilder().setValue(TopologyUtils.T0_FULL_MULTILAYER).setValueName("TAPI Topology Name")
+            .build();
+        if (openroadmTopo != null) {
+            List<Link> linkList = new ArrayList<>();
+            if (openroadmTopo.augmentation(Network1.class) != null) {
+                linkList.addAll(openroadmTopo.augmentation(Network1.class).getLink().values());
             }
-        } else {
-            LOG.warn("No roadm nodes exist in the network");
-        }
-        // map roadm to roadm link
-        List<Link> rdmTordmLinkList = linkList.stream()
+            List<Link> xponderOutLinkList = linkList.stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
+                .collect(Collectors.toList());
+            List<Link> xponderInLinkList = linkList.stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
+                .collect(Collectors.toList());
+            // read otn-topology
+            Network otnTopo = readTopology(InstanceIdentifiers.OTN_NETWORK_II);
+            Map<NodeId, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                .ietf.network.rev180226.networks.network.Node> otnNodeMap = otnTopo.nonnullNode()
+                .values().stream().collect(Collectors.toMap(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                    .ietf.network.rev180226.networks.network.Node::getNodeId, node -> node));
+
+            Map<String, List<String>> networkPortMap = new HashMap<>();
+            Iterator<Map.Entry<NodeId, org.opendaylight.yang.gen.v1.urn
+                .ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node>> itOtnNodeMap = otnNodeMap
+                .entrySet().iterator();
+            while (itOtnNodeMap.hasNext()) {
+                Map.Entry<NodeId, org.opendaylight.yang.gen.v1.urn
+                    .ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node> entry = itOtnNodeMap.next();
+                String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
+                    .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                    .findFirst()
+                    .get().getNodeRef().getValue();
+                List<String> networkPortList = new ArrayList<>();
+                for (TerminationPoint tp: entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
+                    // TODO -> why are we checking with respect to XPDR links?? Is there a real purpose on doing that?
+                    if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
+                        && checkTp(entry.getKey().getValue(), portMappingNodeId, tp, xponderOutLinkList,
+                        xponderInLinkList)) {
+                        networkPortList.add(tp.getTpId().getValue());
+                    }
+                }
+                if (!networkPortList.isEmpty()) {
+                    networkPortMap.put(entry.getKey().getValue(), networkPortList);
+                }
+            }
+            Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+                tapiNodeList = new HashMap<>();
+            Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
+                tapiLinkList = new HashMap<>();
+            ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid);
+            Iterator<Map.Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
+            while (it.hasNext()) {
+                String nodeId = it.next().getKey();
+                tapiFactory.convertNode(otnNodeMap.get(new NodeId(nodeId)), networkPortMap.get(nodeId));
+                tapiNodeList.putAll(tapiFactory.getTapiNodes());
+                tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            }
+            // roadm infrastructure not abstracted
+            // read openroadm-network
+            Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II);
+            if (openroadmNet != null && openroadmNet.nonnullNode().values().stream().filter(nt ->
+                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+                    .getNodeType().equals(OpenroadmNodeType.ROADM)).count() > 0) {
+                // map roadm nodes
+                for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                    .ietf.network.rev180226.networks.network.Node roadm:openroadmNet.nonnullNode().values().stream()
+                    .filter(nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http
+                        .org.openroadm.common.network.rev200529.Node1.class)
+                        .getNodeType().equals(OpenroadmNodeType.ROADM))
+                    .collect(Collectors.toList())) {
+                    tapiFactory.convertRoadmNode(roadm, openroadmTopo);
+                    tapiNodeList.putAll(tapiFactory.getTapiNodes());
+                }
+            } else {
+                LOG.warn("No roadm nodes exist in the network");
+            }
+            // map roadm to roadm link
+            List<Link> rdmTordmLinkList = linkList.stream()
                 .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
                 .collect(Collectors.toList());
-        tapiFactory.convertRdmToRdmLinks(rdmTordmLinkList);
-        tapiLinkList.putAll(tapiFactory.getTapiLinks());
-        // map xpdr_input to roadm and xpdr_output to roadm links.
-        xponderInLinkList.addAll(xponderOutLinkList);
-        tapiFactory.convertXpdrToRdmLinks(xponderInLinkList);
-        tapiLinkList.putAll(tapiFactory.getTapiLinks());
-
-        if (otnTopo.augmentation(Network1.class) != null) {
-            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                    .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
-            tapiFactory.convertLinks(otnLinkMap);
+            tapiFactory.convertRdmToRdmLinks(rdmTordmLinkList);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
-        }
-        Name name = new NameBuilder().setValue(TopologyUtils.T0_FULL_MULTILAYER).setValueName("TAPI Topology Name")
-                .build();
-        // Retrieve created sips map in TapiFactory when mapping all the nodes
-        this.tapiSips = tapiFactory.getTapiSips();
-        return new TopologyBuilder()
+            // map xpdr_input to roadm and xpdr_output to roadm links.
+            xponderInLinkList.addAll(xponderOutLinkList);
+            tapiFactory.convertXpdrToRdmLinks(xponderInLinkList);
+            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+
+            if (otnTopo.augmentation(Network1.class) != null) {
+                Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+                    .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
+                tapiFactory.convertLinks(otnLinkMap);
+                tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            }
+            // Retrieve created sips map in TapiFactory when mapping all the nodes
+            this.tapiSips = tapiFactory.getTapiSips();
+            return new TopologyBuilder()
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
                 .setNode(tapiNodeList)
                 .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
-                        LayerProtocolName.DSR))
+                    LayerProtocolName.DSR))
                 .setLink(tapiLinkList).build();
+        }
+        return new TopologyBuilder()
+            .setName(Map.of(name.key(), name))
+            .setUuid(topoUuid)
+            .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
+                LayerProtocolName.DSR))
+            .build();
     }
 
     public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
@@ -312,5 +320,4 @@ public final class TopologyUtils {
         topologyBuilder.setNode(mapNode);
         return topologyBuilder.build();
     }
-
 }
