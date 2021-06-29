@@ -398,6 +398,7 @@ public class TapiContext {
         try {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectivityServIID);
             this.networkTransactionService.commit().get();
+            LOG.info("Connectivity service deleted");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to delete Connectivity service", e);
         }
