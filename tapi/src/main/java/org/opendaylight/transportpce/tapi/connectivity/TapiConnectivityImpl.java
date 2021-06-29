@@ -271,27 +271,36 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             DeleteConnectivityServiceInput input) {
         //TODO Auto-generated method stub
         // TODO add try
-        Uuid serviceUuid = new Uuid(input.getServiceIdOrName());
-        this.tapiContext.deleteConnectivityService(serviceUuid);
-        ListenableFuture<RpcResult<ServiceDeleteOutput>> output =
-            this.serviceHandler.serviceDelete(new ServiceDeleteInputBuilder()
-                .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                    .setServiceName(input.getServiceIdOrName())
-                    .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
-                    .build())
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder()
-                    .setRequestId("request-1")
-                    .setRpcAction(RpcActions.ServiceDelete)
-                    .setNotificationUrl("notification url")
-                    .setRequestSystemId("appname")
-                    .build())
-                .build());
-        if (output == null) {
-            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                "Failed to delete Link").buildFuture();
+        if (input.getServiceIdOrName() != null) {
+            try {
+                Uuid serviceUuid = new Uuid(input.getServiceIdOrName());
+                this.tapiContext.deleteConnectivityService(serviceUuid);
+                ListenableFuture<RpcResult<ServiceDeleteOutput>> output =
+                    this.serviceHandler.serviceDelete(new ServiceDeleteInputBuilder()
+                        .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
+                            .setServiceName(input.getServiceIdOrName())
+                            .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
+                            .build())
+                        .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                            .setRequestId("request-1")
+                            .setRpcAction(RpcActions.ServiceDelete)
+                            .setNotificationUrl("notification url")
+                            .setRequestSystemId("appname")
+                            .build())
+                        .build());
+                RpcResult<ServiceDeleteOutput> rpcResult =output.get();
+                if (!rpcResult.getResult().getConfigurationResponseCommon().getResponseCode()
+                        .equals(ResponseCodes.RESPONSE_FAILED)) {
+                    LOG.info("Service is being deleted and devices are being rolled back");
+                    return RpcResultBuilder.success(new DeleteConnectivityServiceOutputBuilder().build()).buildFuture();
+                }
+                LOG.error("Failed to delete service. Deletion process failed");
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Failed to delete service.", e);
+            }
         }
-        LOG.info("Service is being deleted and devices are being rolled back");
-        return RpcResultBuilder.success(new DeleteConnectivityServiceOutputBuilder().build()).buildFuture();
+        return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
+            "Failed to delete Service").buildFuture();
     }
 
     @Override
