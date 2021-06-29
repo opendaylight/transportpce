@@ -1261,7 +1261,7 @@ public class ConvertORTopoToTapiFullTopo {
         String sourceNode = getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue());
         String sourceTp = link.getSource().getSourceTp().getValue();
         String destNode = getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue());
-        String destTp = link.getDestination().getDestTp().toString();
+        String destTp = link.getDestination().getDestTp().getValue();
         AdminStates oppositeLinkAdminState = null;
         State oppositeLinkOperState = null;
         if (oppositeLink != null) {
