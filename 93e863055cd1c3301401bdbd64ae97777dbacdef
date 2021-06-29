@@ -70,6 +70,30 @@
       "revId": "93e863055cd1c3301401bdbd64ae97777dbacdef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ab92c7_7283002f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-06-29T12:25:01Z",
+      "side": 1,
+      "message": "Yes, good idea. Here is the JIRA: TRNSPRTPCE-484",
+      "parentUuid": "463a7cfd_382b53b6",
+      "range": {
+        "startLine": 119,
+        "startChar": 19,
+        "endLine": 119,
+        "endChar": 53
+      },
+      "revId": "93e863055cd1c3301401bdbd64ae97777dbacdef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
