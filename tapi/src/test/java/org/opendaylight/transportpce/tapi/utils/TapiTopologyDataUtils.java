@@ -8,6 +8,17 @@
 
 package org.opendaylight.transportpce.tapi.utils;
 
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInputBuilder;
 
@@ -23,7 +34,39 @@ public final class TapiTopologyDataUtils {
         return builtInput.build();
     }
 
-    private TapiTopologyDataUtils() {
+    public static GetNodeDetailsInput buildGetNodeDetailsInput(String topoName, String nodeName) {
+        GetNodeDetailsInputBuilder builtInput = new GetNodeDetailsInputBuilder();
+        builtInput.setTopologyIdOrName(topoName);
+        builtInput.setNodeIdOrName(nodeName);
+        return builtInput.build();
     }
 
+    public static GetLinkDetailsInput buildGetLinkDetailsInput(String topoName, String linkName) {
+        GetLinkDetailsInputBuilder builtInput = new GetLinkDetailsInputBuilder();
+        builtInput.setTopologyIdOrName(topoName);
+        builtInput.setLinkIdOrName(linkName);
+        return builtInput.build();
+    }
+
+    public static GetServiceInterfacePointListInput buildServiceInterfacePointListInput() {
+        return new GetServiceInterfacePointListInputBuilder().build();
+    }
+
+    public static GetServiceInterfacePointDetailsInput buildGetServiceInterfacePointDetailsInput(Uuid sipUuid) {
+        GetServiceInterfacePointDetailsInputBuilder builtInput = new GetServiceInterfacePointDetailsInputBuilder();
+        builtInput.setSipIdOrName(sipUuid.getValue());
+        return builtInput.build();
+    }
+
+    public static GetNodeEdgePointDetailsInput buildGetNodeEdgePointDetailsInput(String topoName,
+                                                                                 String nodeName, String onepName) {
+        GetNodeEdgePointDetailsInputBuilder builtInput = new GetNodeEdgePointDetailsInputBuilder();
+        builtInput.setTopologyIdOrName(topoName);
+        builtInput.setNodeIdOrName(nodeName);
+        builtInput.setEpIdOrName(onepName);
+        return builtInput.build();
+    }
+
+    private TapiTopologyDataUtils() {
+    }
 }
