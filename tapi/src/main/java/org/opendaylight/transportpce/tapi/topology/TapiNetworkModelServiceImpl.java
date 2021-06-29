@@ -681,19 +681,19 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .getBytes(Charset.forName("UTF-8")))
                 .toString());
         Name nepName = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
+                .setValueName(PHTNC_MEDIA + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, PHTNC_MEDIA, tpId))
                 .build();
-        OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
-                .setUuid(nepUuid)
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
-                .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(adminState).setOperationalState(operState)
-                .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
-        OwnedNodeEdgePoint onep = onepBldr.build();
+        OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
+            .setUuid(nepUuid)
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+            .setName(Map.of(nepName.key(), nepName))
+            .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
+            .setAdministrativeState(adminState).setOperationalState(operState)
+            .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+            .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
+            .build();
         onepMap.put(onep.key(), onep);
 
         // MC nep
@@ -701,7 +701,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .getBytes(Charset.forName("UTF-8")))
                 .toString());
         Name nepName1 = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
+                .setValueName(MC + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, MC, tpId))
                 .build();
         OwnedNodeEdgePointBuilder onepBldr1 = new OwnedNodeEdgePointBuilder()
@@ -725,19 +725,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .getBytes(Charset.forName("UTF-8")))
                 .toString());
         Name nepName2 = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
+                .setValueName(OTSI_MC + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, OTSI_MC, tpId))
                 .build();
-        OwnedNodeEdgePointBuilder onepBldr2 = new OwnedNodeEdgePointBuilder()
-                .setUuid(nepUuid2)
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName2.key(), nepName2))
-                .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
-                .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(adminState).setOperationalState(operState)
-                .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
-        OwnedNodeEdgePoint onep2 = onepBldr2.build();
+
+        OwnedNodeEdgePoint onep2 = new OwnedNodeEdgePointBuilder()
+            .setUuid(nepUuid2)
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+            .setName(Map.of(nepName2.key(), nepName2))
+            .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
+            .setAdministrativeState(adminState).setOperationalState(operState)
+            .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+            .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
+            .build();
         onepMap.put(onep2.key(), onep2);
         return onepMap;
     }
@@ -817,7 +818,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(oneplist)
-            .setNodeRuleGroup(createNodeRuleGroupForRdmNode(nodeUuid, oneplist.values()))
+            .setNodeRuleGroup(createNodeRuleGroupForRdmNode(orNodeId, nodeUuid, oneplist.values()))
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setErrorCharacteristic("error")
@@ -829,7 +830,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .build();
     }
 
-    private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(Uuid nodeUuid,
+    private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(String orNodeId, Uuid nodeUuid,
                                                                                Collection<OwnedNodeEdgePoint> onepl) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
@@ -853,7 +854,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .build();
         ruleList.put(rule.key(), rule);
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(("rdm infra node rule group")
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((orNodeId + " node rule group")
                         .getBytes(Charset.forName("UTF-8"))).toString()))
                 .setRule(ruleList)
                 .setNodeEdgePoint(nepMap)
