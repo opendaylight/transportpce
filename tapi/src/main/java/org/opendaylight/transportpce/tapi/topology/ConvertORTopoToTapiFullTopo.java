@@ -258,7 +258,10 @@ public class ConvertORTopoToTapiFullTopo {
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .Link link : rdmTordmLinkList) {
             if (!linksToNotConvert.contains(link.getLinkId().getValue())) {
-                Link tapiLink = createTapiOmsLink(link);
+                Link tapiLink = createTapiOmsLink(link, rdmTordmLinkList.stream()
+                    .filter(l -> l.getLinkId().equals(link.augmentation(org.opendaylight.yang.gen.v1.http
+                        .org.openroadm.common.network.rev200529.Link1.class).getOppositeLink()))
+                    .findAny().orElse(null));
                 linksToNotConvert.add(link
                     .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
                     .getOppositeLink().getValue());
@@ -268,6 +271,7 @@ public class ConvertORTopoToTapiFullTopo {
     }
 
     public void convertRoadmNode(Node roadm, Network openroadmTopo) {
+        this.ietfNodeId = roadm.getNodeId().getValue();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
         if (openroadmTopo.getNode() == null) {
@@ -279,9 +283,9 @@ public class ConvertORTopoToTapiFullTopo {
         List<Node> nodeList = new ArrayList<Node>(openroadmTopo.getNode().values());
         for (Node node:nodeList) {
             if (node.getSupportingNode().values().stream().noneMatch(sp -> sp.getNodeRef().getValue()
-                .equals(roadm.getNodeId().getValue()))) {
+                .equals(this.ietfNodeId))) {
                 LOG.warn("Abstracted node {} is not part of {}",
-                    node.getNodeId().getValue(), roadm.getNodeId().getValue());
+                    node.getNodeId().getValue(), this.ietfNodeId);
                 continue;
             }
             if (node.augmentation(Node1.class) == null
@@ -312,7 +316,7 @@ public class ConvertORTopoToTapiFullTopo {
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Degree port List: {}", degPortList);
                     // TODO: deg port could be sip. e.g. MDONS
-                    oneplist.putAll(populateNepsForRdmNode(roadm.getNodeId().getValue(), degPortList, false));
+                    oneplist.putAll(populateNepsForRdmNode(degPortList, false));
                     // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), degPortList, false));
                     numNeps += degPortList.size() * 3;
                     break;
@@ -329,7 +333,7 @@ public class ConvertORTopoToTapiFullTopo {
                         .collect(Collectors.toList());
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Srg port List: {}", srgPortList);
-                    oneplist.putAll(populateNepsForRdmNode(roadm.getNodeId().getValue(), srgPortList, true));
+                    oneplist.putAll(populateNepsForRdmNode(srgPortList, true));
                     // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), srgPortList, true));
                     numNeps += srgPortList.size() * 3;
                     numSips += srgPortList.size();
@@ -781,92 +785,85 @@ public class ConvertORTopoToTapiFullTopo {
         return onepBldr.build();
     }
 
-    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(String nodeId,
-                                                                                  List<TerminationPoint> tpList,
+    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(List<TerminationPoint> tpList,
                                                                                   boolean withSip) {
         // create neps for MC and OTSiMC and Photonic Media
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-        for (int i = 0; i < tpList.size(); i++) {
+        for (TerminationPoint tp:tpList) {
+            // Admin and oper state common for all tps
+            AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
+            State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
             // PHOTONIC MEDIA nep
-            LOG.info("NEP = {}", String.join("+", nodeId, PHTNC_MEDIA, tpList.get(i).getTpId().getValue()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, PHTNC_MEDIA,
-                tpList.get(i).getTpId().getValue()))
-                .getBytes(Charset.forName("UTF-8")))
-                .toString());
+            LOG.info("PHOTO NEP = {}", String.join("+", this.ietfNodeId, PHTNC_MEDIA, tp.getTpId().getValue()));
             Name nepName = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
-                .setValue(String.join("+", nodeId, PHTNC_MEDIA, tpList.get(i).getTpId().getValue()))
+                .setValueName(PHTNC_MEDIA + "NodeEdgePoint")
+                .setValue(String.join("+", this.ietfNodeId, PHTNC_MEDIA, tp.getTpId().getValue()))
                 .build();
-            OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
-                .setUuid(nepUuid)
+
+            OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, PHTNC_MEDIA,
+                    tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(admin))
+                .setOperationalState(setTapiOperationalState(oper))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
-            OwnedNodeEdgePoint onep = onepBldr.build();
-            onepMap.put(onep.key(), onep);
-        }
-        for (int i = 0; i < tpList.size(); i++) {
-            // MC nep
-            LOG.info("NEP = {}", String.join("+", nodeId, MC, tpList.get(i).getTpId().getValue()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, MC,
-                tpList.get(i).getTpId().getValue()))
-                .getBytes(Charset.forName("UTF-8")))
-                .toString());
-            Name nepName = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
-                .setValue(String.join("+", nodeId, MC, tpList.get(i).getTpId().getValue()))
+                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
                 .build();
-            OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
-                .setUuid(nepUuid)
+            onepMap.put(onep.key(), onep);
+
+            // MC nep
+            LOG.info("MC NEP = {}", String.join("+", this.ietfNodeId, MC, tp.getTpId().getValue()));
+            Name nepName1 = new NameBuilder()
+                .setValueName(MC + "NodeEdgePoint")
+                .setValue(String.join("+", this.ietfNodeId, MC, tp.getTpId().getValue()))
+                .build();
+            OwnedNodeEdgePointBuilder onepBldr1 = new OwnedNodeEdgePointBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, MC,
+                    tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName.key(), nepName))
+                .setName(Map.of(nepName1.key(), nepName1))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(admin))
+                .setOperationalState(setTapiOperationalState(oper))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
                 .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
             if (withSip) {
-                onepBldr.setMappedServiceInterfacePoint(createMSIP(1, LayerProtocolName.PHOTONICMEDIA,
-                    tpList.get(i), String.join("+", nodeId, MC)));
+                onepBldr1.setMappedServiceInterfacePoint(createMSIP(1, LayerProtocolName.PHOTONICMEDIA,
+                    tp, String.join("+", this.ietfNodeId, MC)));
             }
-            OwnedNodeEdgePoint onep = onepBldr.build();
-            onepMap.put(onep.key(), onep);
-        }
-        for (int i = 0; i < tpList.size(); i++) {
+            OwnedNodeEdgePoint onep1 = onepBldr1.build();
+            onepMap.put(onep1.key(), onep1);
+
             // OTSiMC nep
-            LOG.info("NEP = {}", String.join("+", nodeId, OTSI_MC, tpList.get(i).getTpId().getValue()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, OTSI_MC,
-                tpList.get(i).getTpId().getValue()))
-                .getBytes(Charset.forName("UTF-8")))
-                .toString());
-            Name nepName = new NameBuilder()
-                .setValueName("NodeEdgePoint name")
-                .setValue(String.join("+", nodeId, OTSI_MC, tpList.get(i).getTpId().getValue()))
+            LOG.info("OTSi NEP = {}", String.join("+", this.ietfNodeId, OTSI_MC, tp.getTpId().getValue()));
+            Name nepName2 = new NameBuilder()
+                .setValueName(OTSI_MC + "NodeEdgePoint")
+                .setValue(String.join("+", this.ietfNodeId, OTSI_MC, tp.getTpId().getValue()))
                 .build();
-            OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
-                .setUuid(nepUuid)
+
+            OwnedNodeEdgePoint onep2 = new OwnedNodeEdgePointBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, OTSI_MC,
+                    tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName.key(), nepName))
+                .setName(Map.of(nepName2.key(), nepName2))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(setTapiAdminState(admin))
+                .setOperationalState(setTapiOperationalState(oper))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
-            OwnedNodeEdgePoint onep = onepBldr.build();
-            onepMap.put(onep.key(), onep);
+                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
+                .build();
+            onepMap.put(onep2.key(), onep2);
         }
         return onepMap;
     }
@@ -895,8 +892,8 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
         ruleList.put(rule.key(), rule);
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes(("rdm infra node rule group").getBytes(Charset.forName("UTF-8")))
-                .toString()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((this.ietfNodeId + " node rule group")
+                .getBytes(Charset.forName("UTF-8"))).toString()))
             .setRule(ruleList)
             .setNodeEdgePoint(nepMap)
             .build();
@@ -935,8 +932,10 @@ public class ConvertORTopoToTapiFullTopo {
             .setUuid(sipUuid)
             .setName(Map.of(sipName.key(), sipName))
             .setLayerProtocolName(layerProtocol)
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
+            .setAdministrativeState(setTapiAdminState(
+                tp.augmentation(TerminationPoint1.class).getAdministrativeState()))
+            .setOperationalState(setTapiOperationalState(
+                tp.augmentation(TerminationPoint1.class).getOperationalState()))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setAvailableCapacity(new AvailableCapacityBuilder().build())
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().build())
@@ -1181,8 +1180,6 @@ public class ConvertORTopoToTapiFullTopo {
                     .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                         .setRestorationPolicy(RestorationPolicy.NA)
                         .build())
-                    .setAdministrativeState(AdministrativeState.UNLOCKED)
-                    .setOperationalState(OperationalState.ENABLED)
                     .setLifecycleState(LifecycleState.INSTALLED)
                     .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
                     .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
@@ -1241,8 +1238,6 @@ public class ConvertORTopoToTapiFullTopo {
                     .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                         .setRestorationPolicy(RestorationPolicy.NA)
                         .build())
-                    .setAdministrativeState(AdministrativeState.UNLOCKED)
-                    .setOperationalState(OperationalState.ENABLED)
                     .setLifecycleState(LifecycleState.INSTALLED)
                     .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
                     .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
@@ -1262,11 +1257,23 @@ public class ConvertORTopoToTapiFullTopo {
     }
 
     private Link createTapiOmsLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                                       .ietf.network.topology.rev180226.networks.network.Link link) {
+                                       .ietf.network.topology.rev180226.networks.network.Link link,
+                                   org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                                       .ietf.network.topology.rev180226.networks.network.Link oppositeLink) {
         String sourceNode = getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue());
         String sourceTp = link.getSource().getSourceTp().getValue();
         String destNode = getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue());
-        String destTp = link.getDestination().getDestTp().getValue();
+        String destTp = link.getDestination().getDestTp().toString();
+        AdminStates oppositeLinkAdminState = null;
+        State oppositeLinkOperState = null;
+        if (oppositeLink != null) {
+            oppositeLinkAdminState = oppositeLink.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getAdministrativeState();
+            oppositeLinkOperState = oppositeLink.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getOperationalState();
+        }
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
         Uuid sourceUuidNode = new Uuid(UUID.nameUUIDFromBytes((String.join("+", sourceNode,
             PHTNC_MEDIA)).getBytes(Charset.forName("UTF-8"))).toString());
@@ -1324,8 +1331,14 @@ public class ConvertORTopoToTapiFullTopo {
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                 .setRestorationPolicy(RestorationPolicy.NA)
                 .build())
-            .setAdministrativeState(AdministrativeState.UNLOCKED)
-            .setOperationalState(OperationalState.ENABLED)
+            .setAdministrativeState(setTapiAdminState(link
+                .augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getAdministrativeState(), oppositeLinkAdminState))
+            .setOperationalState(setTapiOperationalState(link
+                .augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                .getOperationalState(), oppositeLinkOperState))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                 new TotalSizeBuilder().setUnit(CapacityUnit.GBPS)
@@ -1355,6 +1368,22 @@ public class ConvertORTopoToTapiFullTopo {
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
             .ietf.network.topology.rev180226.networks.network.Link link:xpdrRdmLinkList) {
             if (!linksToNotConvert.contains(link.getLinkId().getValue())) {
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                    .ietf.network.topology.rev180226.networks.network.Link oppositeLink = xpdrRdmLinkList.stream()
+                    .filter(l -> l.getLinkId().equals(link.augmentation(org.opendaylight.yang.gen.v1.http
+                        .org.openroadm.common.network.rev200529.Link1.class).getOppositeLink())).findAny().orElse(null);
+
+                AdminStates oppositeLinkAdminState = null;
+                State oppositeLinkOperState = null;
+                if (oppositeLink != null) {
+                    oppositeLinkAdminState = oppositeLink.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                        .getAdministrativeState();
+                    oppositeLinkOperState = oppositeLink.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                        .getOperationalState();
+                }
+
                 String sourceNode = (link.getSource().getSourceNode().getValue().contains("ROADM"))
                     ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
                     : link.getSource().getSourceNode().getValue();
@@ -1425,8 +1454,14 @@ public class ConvertORTopoToTapiFullTopo {
                     .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                         .setRestorationPolicy(RestorationPolicy.NA)
                         .build())
-                    .setAdministrativeState(AdministrativeState.UNLOCKED)
-                    .setOperationalState(OperationalState.ENABLED)
+                    .setAdministrativeState(setTapiAdminState(link
+                        .augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                        .getAdministrativeState(), oppositeLinkAdminState))
+                    .setOperationalState(setTapiOperationalState(link
+                        .augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
+                        .getOperationalState(), oppositeLinkOperState))
                     .setLifecycleState(LifecycleState.INSTALLED)
                     .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                         new TotalSizeBuilder().setUnit(CapacityUnit.GBPS)
