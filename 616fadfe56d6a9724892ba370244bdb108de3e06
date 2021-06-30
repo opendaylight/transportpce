@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da531aa6_b9f48044",
+        "filename": "nbinotifications/src/test/resources/expected_event_alarm_service.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T08:54:27Z",
+      "side": 1,
+      "message": "please can this be expanded on, several lines?",
+      "revId": "616fadfe56d6a9724892ba370244bdb108de3e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e31459f3_a462ba0a",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T08:54:27Z",
+      "side": 1,
+      "message": "NS split",
+      "revId": "616fadfe56d6a9724892ba370244bdb108de3e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
