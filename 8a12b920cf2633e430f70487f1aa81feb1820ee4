@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ed97981e_7da49dc3",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T11:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d461e8_2fb361cc",
+      "revId": "8a12b920cf2633e430f70487f1aa81feb1820ee4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "457c5e91_6c7fed0e",
         "filename": "tox.ini",
         "patchSetId": 16
@@ -39,6 +57,30 @@
       "revId": "8a12b920cf2633e430f70487f1aa81feb1820ee4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76429382_54812a22",
+        "filename": "tox.ini",
+        "patchSetId": 16
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T11:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "457c5e91_6c7fed0e",
+      "range": {
+        "startLine": 76,
+        "startChar": 72,
+        "endLine": 76,
+        "endChar": 82
+      },
+      "revId": "8a12b920cf2633e430f70487f1aa81feb1820ee4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
