@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "53c23167_ea473d81",
+        "filename": "api/src/main/yang/nbi-notifications@2021-06-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T08:51:10Z",
+      "side": 1,
+      "message": "sent",
+      "range": {
+        "startLine": 148,
+        "startChar": 47,
+        "endLine": 148,
+        "endChar": 51
+      },
+      "revId": "264ab61407235db060b18b979a4777cbcce0fa25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e77d0669_7a4807c8",
+        "filename": "api/src/main/yang/nbi-notifications@2021-06-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T08:51:10Z",
+      "side": 1,
+      "message": "through connection type filtering \u003d\u003e avoid redundant \"by\"",
+      "range": {
+        "startLine": 148,
+        "startChar": 71,
+        "endLine": 148,
+        "endChar": 107
+      },
+      "revId": "264ab61407235db060b18b979a4777cbcce0fa25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1ac80dc_ddac6ef1",
         "filename": "nbinotifications/src/test/resources/expected_event.json",
         "patchSetId": 7
@@ -13,6 +59,24 @@
       "writtenOn": "2021-06-28T16:33:49Z",
       "side": 1,
       "message": "difficult to read.\nPlease can this be expanded on several lines ?",
+      "revId": "264ab61407235db060b18b979a4777cbcce0fa25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e2e52ad_c2c4d3af",
+        "filename": "nbinotifications/src/test/resources/expected_event.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T08:51:10Z",
+      "side": 1,
+      "message": "\u003d\u003e vote -1",
+      "parentUuid": "c1ac80dc_ddac6ef1",
       "revId": "264ab61407235db060b18b979a4777cbcce0fa25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
