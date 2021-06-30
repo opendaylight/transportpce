@@ -22,6 +22,30 @@
       "revId": "a8d3b0cd1f14d5a12b8cb9a02ff882af4e86993c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0890324e_0fcaecc0",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-06-30T10:21:12Z",
+      "side": 0,
+      "message": "Done\nodl-netconf-topology must be added to remove \"-all\"\ncf next change in the chain",
+      "parentUuid": "a91e54ad_8020642e",
+      "range": {
+        "startLine": 113,
+        "startChar": 18,
+        "endLine": 113,
+        "endChar": 43
+      },
+      "revId": "a8d3b0cd1f14d5a12b8cb9a02ff882af4e86993c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
