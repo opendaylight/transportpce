@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7e045b4f_6e4f2bef",
+        "filename": "nbinotifications/src/test/resources/expected_event_alarm_service.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-01T14:47:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da531aa6_b9f48044",
+      "revId": "616fadfe56d6a9724892ba370244bdb108de3e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e31459f3_a462ba0a",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "616fadfe56d6a9724892ba370244bdb108de3e06",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d52903b8_d4e87404",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-01T14:47:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e31459f3_a462ba0a",
+      "revId": "616fadfe56d6a9724892ba370244bdb108de3e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
