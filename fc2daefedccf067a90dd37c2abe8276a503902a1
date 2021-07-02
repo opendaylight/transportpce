@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "167f90c4_250dd09e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-02T09:42:41Z",
+      "side": 1,
+      "message": "not ODUFLEX ? and ODUC4 ?",
+      "range": {
+        "startLine": 381,
+        "startChar": 85,
+        "endLine": 381,
+        "endChar": 88
+      },
+      "revId": "fc2daefedccf067a90dd37c2abe8276a503902a1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
