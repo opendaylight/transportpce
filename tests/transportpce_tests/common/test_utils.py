@@ -58,9 +58,6 @@ CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
 
 SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log")
-KARAF_LOG = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
 process_list = []
 
@@ -69,6 +66,15 @@ if "USE_ODL_ALT_RESTCONF_PORT" in os.environ:
     RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/restconf"
 else:
     RESTCONF_BASE_URL = "http://localhost:8181/restconf"
+
+if "USE_ODL_ALT_KARAF_INSTALL_DIR" in os.environ:
+    KARAF_INSTALLDIR = os.environ['USE_ODL_ALT_KARAF_INSTALL_DIR']
+else:
+    KARAF_INSTALLDIR = "karaf"
+
+KARAF_LOG = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "..", "..", "..", KARAF_INSTALLDIR, "target", "assembly", "data", "log", "karaf.log")
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
     TPCE_LOG = 'odl-' + str(os.getpid()) + '.log'
@@ -117,7 +123,7 @@ def start_karaf():
     print("starting KARAF TransportPCE build...")
     executable = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
-        "..", "..", "..", "karaf", "target", "assembly", "bin", "karaf")
+        "..", "..", "..", KARAF_INSTALLDIR, "target", "assembly", "bin", "karaf")
     with open('odl.log', 'w') as outfile:
         return subprocess.Popen(
             ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
