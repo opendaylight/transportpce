@@ -41,6 +41,12 @@ else\
     WEBSOCKET_PORT=$USE_ODL_ALT_WEBSOCKET_PORT\
 fi\
 sed -e "s/ODL_WEBSOCKET_PORT/$WEBSOCKET_PORT/" \$(dirname \$0)/\.\./ressources/org.opendaylight.restconf._template.cfg  >\$(dirname \$0)/\.\./etc/org.opendaylight.restconf.cfg\
+if [ -z "$USE_ODL_ALT_KARAF_LOGDIR" ]; then\
+    KARAF_LOGDIR=""\
+else\
+    KARAF_LOGDIR=$USE_ODL_ALT_KARAF_LOGDIR\
+fi\
+sed -e "s/ODL_KARAF_LOGDIR/$KARAF_LOGDIR/" \$(dirname \$0)/\.\./ressources/org.ops4j.pax.logging._template.cfg >\$(dirname \$0)/\.\./etc/org.ops4j.pax.logging.cfg\
 ' ../bin/karaf
 
 sed 's/2550/ODL_AKKA_PORT/' ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-akkaconf.xml >akka-default_template.conf
@@ -49,3 +55,4 @@ sed 's/8181/ODL_RESTCONF_PORT/' ../etc/jetty.xml > jetty_template.xml
 sed 's/8101/ODL_SHELL_PORT/' ../etc/org.apache.karaf.shell.cfg > org.apache.karaf.shell._template.cfg
 sed -e 's/1099/ODL_RMI_REGISTRY_PORT/' -e 's/44444/ODL_RMI_SERVER_PORT/' ../etc/org.apache.karaf.management.cfg > org.apache.karaf.management._template.cfg
 sed 's/^[#|]websocket-port=8185/websocket-port=ODL_WEBSOCKET_PORT/' ../system/org/opendaylight/netconf/sal-rest-connector-config/1.13.2/sal-rest-connector-config-1.13.2-restconf.cfg >org.opendaylight.restconf._template.cfg
+sed -e 's@^log4j2.appender.rolling.fileName =.*@log4j2.appender.rolling.fileName = ${karaf.data}/log/ODL_KARAF_LOGDIR/karaf.log@' -e 's@^log4j2.appender.rolling.filePattern =.*@log4j2.appender.rolling.filePattern = ${karaf.data}/log/ODL_KARAF_LOGDIR/karaf.log.%i@' ../etc/org.ops4j.pax.logging.cfg > org.ops4j.pax.logging._template.cfg
