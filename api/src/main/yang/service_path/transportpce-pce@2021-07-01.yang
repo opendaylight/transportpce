@@ -54,6 +54,10 @@ module transportpce-pce {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2021-07-01 {
+    description
+      "Version 1.8";
+  }
   revision 2020-01-28 {
     description
       "Version 1.7";
@@ -207,6 +211,29 @@ module transportpce-pce {
     list pathDescriptions {
       key "path-name";
       uses stubpce-path-description;
+    }
+  }
+
+  container spectrum-assignment {
+    description
+      "Spectrum assignment management using index steps and flexgrid property";
+    leaf begin-index {
+      type uint16;
+      mandatory true;
+      description
+        "Begin index of spectrum assignment";
+    }
+    leaf stop-index {
+      type uint16;
+      mandatory true;
+      description
+        "End index of spectrum assignment";
+    }
+    leaf flex-grid {
+      type boolean;
+      mandatory true;
+      description
+        "Set it to true for flexgrid, false otherwise";
     }
   }
 }
