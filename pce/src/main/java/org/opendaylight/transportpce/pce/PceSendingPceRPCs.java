@@ -20,9 +20,9 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.graph.PceGraph;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
@@ -105,9 +105,8 @@ public class PceSendingPceRPCs {
             return;
         }
         LOG.info("PceGraph ...");
-        PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(),
-                nwAnalizer.getzendPceNode(), nwAnalizer.getAllPceNodes(),
-                hardConstraints, softConstraints, rc, serviceType);
+        PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
+                nwAnalizer.getAllPceNodes(), hardConstraints, softConstraints, rc, serviceType);
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {
