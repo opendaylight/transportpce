@@ -27,8 +27,9 @@ import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
@@ -127,8 +128,9 @@ public class PceCalculation {
     }
 
     private boolean parseInput() {
-        if (input.getServiceAEnd().getServiceFormat() == null || input.getServiceZEnd().getServiceFormat() == null
-            || input.getServiceAEnd().getServiceRate() == null) {
+        if (!PceComplianceCheck.checkString(input.getServiceAEnd().getServiceFormat().getName())
+                || !PceComplianceCheck.checkString(input.getServiceZEnd().getServiceFormat().getName())
+                || !PceComplianceCheck.checkString(input.getServiceAEnd().getServiceRate().toString())) {
             LOG.error("Service Format and Service Rate are required for a path calculation");
             return false;
         }
@@ -139,6 +141,14 @@ public class PceCalculation {
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
 
         setServiceType();
+        getAZnodeId();
+
+        returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
+        returnStructure.setServiceFormat(input.getServiceAEnd().getServiceFormat());
+        return true;
+    }
+
+    private void getAZnodeId() {
         if (StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType)
                 || StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)
@@ -150,10 +160,6 @@ public class PceCalculation {
             anodeId = input.getServiceAEnd().getNodeId();
             znodeId = input.getServiceZEnd().getNodeId();
         }
-
-        returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
-        returnStructure.setServiceFormat(input.getServiceAEnd().getServiceFormat());
-        return true;
     }
 
     private void setServiceType() {
