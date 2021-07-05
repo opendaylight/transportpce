@@ -23,9 +23,10 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
-import org.opendaylight.transportpce.pce.model.SpectrumAssignment;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.SpectrumAssignment;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -66,24 +67,25 @@ public class PostAlgoPathValidator {
             //fallthrough
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                spectrumAssignment = getSpectrumAssignment(path,
-                        allPceNodes, spectralWidthSlotNumber);
+                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
-                if (spectrumAssignment.getBeginIndex() == 0 && spectrumAssignment.getStopIndex() == 0) {
+                if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
+                        && spectrumAssignment.getStopIndex().equals(Uint16.valueOf(0))) {
                     pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
                 }
-                if (spectrumAssignment.isFlexGrid()) {
+                if (spectrumAssignment.getFlexGrid()) {
                     LOG.info("Spectrum assignment flexgrid mode");
                     pceResult.setResultWavelength(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER);
                 } else {
                     LOG.info("Spectrum assignment fixedgrid mode");
                     pceResult.setResultWavelength(
-                            GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()));
+                            GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()
+                                .toJava()));
                 }
-                pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex()));
-                pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex()));
+                pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex().toJava()));
+                pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex().toJava()));
                 LOG.info("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
 
                 // Check the OSNR
@@ -442,8 +444,10 @@ public class PostAlgoPathValidator {
      */
     private SpectrumAssignment computeBestSpectrumAssignment(BitSet spectrumOccupation, int spectralWidthSlotNumber,
             boolean isFlexGrid) {
-        SpectrumAssignment spectrumAssignment = new SpectrumAssignment(0, 0);
-        spectrumAssignment.setFlexGrid(isFlexGrid);
+        SpectrumAssignmentBuilder spectrumAssignmentBldr = new SpectrumAssignmentBuilder()
+            .setBeginIndex(Uint16.valueOf(0))
+            .setStopIndex(Uint16.valueOf(0))
+            .setFlexGrid(isFlexGrid);
         BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
         referenceBitSet.set(0, spectralWidthSlotNumber);
         int nbSteps = 1;
@@ -455,12 +459,11 @@ public class PostAlgoPathValidator {
         //so we have to loop from the last element of the spectrum occupation
         for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber; i -= nbSteps) {
             if (spectrumOccupation.get(i - spectralWidthSlotNumber, i).equals(referenceBitSet)) {
-                spectrumAssignment.setBeginIndex(i - spectralWidthSlotNumber);
-                spectrumAssignment.setStopIndex(i - 1);
+                spectrumAssignmentBldr.setBeginIndex(Uint16.valueOf(i - spectralWidthSlotNumber));
+                spectrumAssignmentBldr.setStopIndex(Uint16.valueOf(i - 1));
                 break;
             }
         }
-        return spectrumAssignment;
+        return spectrumAssignmentBldr.build();
     }
-
 }
