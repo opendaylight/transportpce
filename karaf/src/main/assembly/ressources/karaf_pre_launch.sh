@@ -1,9 +1,5 @@
 #!/bin/sh
 
-. $(dirname $0)/../../../../tests/reflectwarn.sh
-
-echo 'karaf exec tainted for tests'
-
 mkdir -p $(dirname $0)/../configuration/initial/
 if [ -z "$USE_ODL_ALT_RESTCONF_PORT" ]; then
     RESTCONF_PORT=8181
@@ -42,3 +38,4 @@ else
 fi
 sed -e "s/ODL_WEBSOCKET_PORT/$WEBSOCKET_PORT/" $(dirname $0)/../ressources/org.opendaylight.restconf._template.cfg  >$(dirname $0)/../etc/org.opendaylight.restconf.cfg
 
+touch $(dirname $0)/../ressources/karaf_configured
