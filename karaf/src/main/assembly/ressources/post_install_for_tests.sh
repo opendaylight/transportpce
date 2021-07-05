@@ -9,7 +9,13 @@ sed 's/8101/ODL_SHELL_PORT/' ../etc/org.apache.karaf.shell.cfg > org.apache.kara
 sed -e 's/1099/ODL_RMI_REGISTRY_PORT/' -e 's/44444/ODL_RMI_SERVER_PORT/' ../etc/org.apache.karaf.management.cfg > org.apache.karaf.management._template.cfg
 sed 's/^[#|]websocket-port=8185/websocket-port=ODL_WEBSOCKET_PORT/' ../system/org/opendaylight/netconf/sal-rest-connector-config/[0-9.]*/sal-rest-connector-config-[0-9.]*-restconf.cfg >org.opendaylight.restconf._template.cfg
 
-cp ../bin/karaf  ../bin/karaf_
-cat karaf_pre_launch.sh ../bin/karaf_ > ../bin/karaf
-chmod +x  ../bin/karaf
-
+sed -i'_' -e '1 a\
+\
+. \$(dirname \$0)/\.\./\.\./\.\./\.\./tests/reflectwarn.sh\
+\
+if [ ! -f \$(dirname \$0)/\.\./ressources/karaf_configured ]; then\
+    \$(dirname \$0)/\.\./ressources/karaf_pre_launch.sh\
+fi\
+echo "karaf exec tainted for tests"\
+\
+' ../bin/karaf
