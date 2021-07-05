@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ "$USE_LIGHTY" != "True" ]; then
+    ./build_karaf_for_tests.sh
+fi
+
 for arg in $@; do
     if [ -z "$test_suite" ]; then
         test_suite=$1
