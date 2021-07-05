@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.TransportpcePceService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 
 public class PceProviderTest extends AbstractTest {
