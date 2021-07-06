@@ -44,7 +44,7 @@ do
     #complete source code can be found at https://gitlab.com/Orange-OpenSource/lfn/odl/honeynode-simulator.git
 
     echo "Installing honeynode for $VERSION devices to $INSTALL_DIR directory "
-    curl --retry-delay 10 --retry 3 -sS --location --request GET $TARGET_URL -o $ARTIFACT_ZIPFILE
+    curl --retry-delay 10 --retry 3 -sS --location --request GET $TARGET_URL -o $ARTIFACT_ZIPFILE || exit 2
     unzip -q $ARTIFACT_ZIPFILE -d $TARGET_DIR
     rm -f $ARTIFACT_ZIPFILE
 
