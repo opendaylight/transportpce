@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddb2bb98_7f424f51",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2021-07-05.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-07T17:56:48Z",
+      "side": 1,
+      "message": "tab here",
+      "revId": "650dde3af288deda36f4c7485f00ec6e4b5b5d8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
