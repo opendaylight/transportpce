@@ -57,11 +57,11 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.syn
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.Resource;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -229,11 +229,11 @@ public class GnpyServiceImpl {
         Long idx = index;
         if (resource
             instanceof
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                     .pce.resource.resource.resource.Node) {
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                 .pce.resource.resource.resource.Node node =
-                (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                     .pce.resource.resource.resource.Node) resource;
             if (node.getNodeId() == null) {
                 throw new GnpyException("In gnpyServiceImpl: nodeId is null");
@@ -243,11 +243,11 @@ public class GnpyServiceImpl {
 
         if (resource
             instanceof
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                     .pce.resource.resource.resource.Link) {
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                 .pce.resource.resource.resource.Link link =
-                (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                     .pce.resource.resource.resource.Link) resource;
             idx = addLinkToRouteObject(link.getLinkId(),idx);
         }
