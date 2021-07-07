@@ -35,12 +35,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Fr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev201211.olm.renderer.input.NodesKey;
@@ -240,10 +240,14 @@ public final class ModelMappingUtils {
             .setNodes(nodes);
 
         // set the trib-slots and trib-ports for the lower oder odu
-        if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
+        if (serviceRate.intValue() == 1 || (serviceRate.intValue() == 10)) {
+            Short tribPort = Short.valueOf(pathDescription.getAToZDirection().getMinTribSlot().getValue()
+                .split("\\.")[0]);
+            Short minTribSlot = Short.valueOf(pathDescription.getAToZDirection().getMinTribSlot().getValue()
+                .split("\\.")[1]);
             otnServicePathInputBuilder
-                .setTribPortNumber(pathDescription.getAToZDirection().getTribPortNumber().shortValue())
-                .setTribSlot(pathDescription.getAToZDirection().getTribSlotNumber().shortValue());
+                .setTribPortNumber(tribPort)
+                .setTribSlot(minTribSlot);
         }
         return otnServicePathInputBuilder.build();
     }
