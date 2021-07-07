@@ -450,8 +450,8 @@ class TransportPCEtesting(unittest.TestCase):
                 "transportpce-renderer:path-description": {
                     "aToZ-direction": {
                         "rate": 10,
-                        "trib-port-number": 1,
-                        "trib-slot-number": 1,
+                        "min-trib-slot": "1.1",
+                        "max-trib-slot": "1.8",
                         "aToZ": [
                             {
                                 "id": "0",
@@ -486,8 +486,8 @@ class TransportPCEtesting(unittest.TestCase):
                     },
                     "transportpce-renderer:zToA-direction": {
                         "rate": "10",
-                        "trib-port-number": 1,
-                        "trib-slot-number": 1,
+                        "min-trib-slot": "1.1",
+                        "max-trib-slot": "1.8",
                         "zToA": [
                             {
                                 "id": "0",
