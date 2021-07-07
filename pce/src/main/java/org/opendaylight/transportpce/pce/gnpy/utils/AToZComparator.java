@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.gnpy.utils;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
