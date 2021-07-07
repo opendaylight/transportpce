@@ -47,8 +47,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
@@ -217,7 +217,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 AToZDirection atoz = pathDescription.getAToZDirection();
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
                     LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
-                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                             .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
                         LOG.debug("Impl AtoZ Notification: [{}] {}", key, atoz.getAToZ().get(key));
                     }
@@ -225,7 +225,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 ZToADirection ztoa = pathDescription.getZToADirection();
                 if ((ztoa != null) && (ztoa.getZToA() != null)) {
                     LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
-                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                             .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
                         LOG.debug("Impl ZtoA Notification: [{}] {}", key, ztoa.getZToA().get(key));
                     }

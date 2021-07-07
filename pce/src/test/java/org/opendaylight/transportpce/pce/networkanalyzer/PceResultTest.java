@@ -7,10 +7,13 @@
  */
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
 
 public class PceResultTest extends AbstractTest {
 
@@ -30,9 +33,14 @@ public class PceResultTest extends AbstractTest {
 
     @Test
     public void setResultTribSlotNbTest() {
-        int nb = 10;
-        pceResult.setResultTribSlotNb(nb);
-        Assert.assertEquals(pceResult.getResultTribSlotNb(), nb);
+        OpucnTribSlotDef minOpucnTs = new OpucnTribSlotDef("1.1");
+        OpucnTribSlotDef maxOpucnTs = new OpucnTribSlotDef("1.20");
+        List<OpucnTribSlotDef> minmaxTpTsList = new ArrayList<>();
+        minmaxTpTsList.add(minOpucnTs);
+        minmaxTpTsList.add(maxOpucnTs);
+        pceResult.setResultTribPortTribSlot(minmaxTpTsList);
+        Assert.assertEquals(pceResult.getResultTribPortTribSlot().get(0), new OpucnTribSlotDef("1.1"));
+        Assert.assertEquals(pceResult.getResultTribPortTribSlot().get(1), new OpucnTribSlotDef("1.20"));
     }
 
     @Test
