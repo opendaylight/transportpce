@@ -232,8 +232,10 @@ class TransportPCE400Gtesting(unittest.TestCase):
                          ['aToZ-direction']['rate'])
         self.assertEqual(1, res['output']['response-parameters']['path-description']
                          ['aToZ-direction']['trib-port-number'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['trib-slot-number'])
+        self.assertEqual('1', res['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['opucn-trib-slots'][0])
+        self.assertEqual('20', res['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['opucn-trib-slots'][1])
         self.assertEqual('dp-qpsk', res['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
@@ -241,8 +243,10 @@ class TransportPCE400Gtesting(unittest.TestCase):
                          ['zToA-direction']['rate'])
         self.assertEqual(1, res['output']['response-parameters']['path-description']
                          ['zToA-direction']['trib-port-number'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['trib-slot-number'])
+        self.assertEqual('1', res['output']['response-parameters']['path-description']
+                         ['zToA-direction']['opucn-trib-slots'][0])
+        self.assertEqual('20', res['output']['response-parameters']['path-description']
+                         ['zToA-direction']['opucn-trib-slots'][1])
         self.assertEqual('dp-qpsk', res['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
         time.sleep(5)
