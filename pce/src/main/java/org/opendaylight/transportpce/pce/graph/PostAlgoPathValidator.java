@@ -28,6 +28,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
@@ -118,18 +119,27 @@ public class PostAlgoPathValidator {
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
-                tribSlotNb = StringConstants.SERVICE_TYPE_10GE.equals(serviceType) ? 8 : 20;
-            //fallthrough
             case StringConstants.SERVICE_TYPE_1GE:
+                if (StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)) {
+                    tribSlotNb = 20;
+                } else if (StringConstants.SERVICE_TYPE_10GE.equals(serviceType)) {
+                    tribSlotNb = 8;
+                } else if (StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
+                    tribSlotNb = 1;
+                } else {
+                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
+                        serviceType, path);
+                    break;
+                }
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
-                Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes);
                 Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
+                Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot, tribSlotNb);
+                List<OpucnTribSlotDef> resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
 
-                if (tribPort != null && tribSlot != null) {
-                    pceResult.setResultTribPort(tribPort);
-                    pceResult.setResultTribSlot(tribSlot);
-                    pceResult.setResultTribSlotNb(tribSlotNb);
+                if (resultTribPortTribSlot.get(0) != null && resultTribPortTribSlot.get(1) != null) {
+                    pceResult.setResultTribPortTribSlot(resultTribPortTribSlot);
                     pceResult.setRC(ResponseCodes.RESPONSE_OK);
                     LOG.info("In PostAlgoPathValidator: found TribPort {} - tribSlot {} - tribSlotNb {}",
                         tribPort, tribSlot, tribSlotNb);
@@ -273,7 +283,7 @@ public class PostAlgoPathValidator {
     }
 
     private Map<String, Uint16> chooseTribPort(GraphPath<String,
-        PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes) {
+        PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
         LOG.info("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
 
@@ -287,14 +297,20 @@ public class PostAlgoPathValidator {
             List<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
             List<Uint16> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
             List<Uint16> commonEdgeTpnPool = new ArrayList<>();
-            for (Uint16 integer : srcTpnPool) {
-                if (destTpnPool.contains(integer)) {
-                    commonEdgeTpnPool.add(integer);
+            for (Uint16 srcTpn : srcTpnPool) {
+                if (destTpnPool.contains(srcTpn)) {
+                    commonEdgeTpnPool.add(srcTpn);
                 }
             }
             Collections.sort(commonEdgeTpnPool);
             if (!commonEdgeTpnPool.isEmpty()) {
-                tribPortMap.put(edge.link().getLinkId().getValue(), commonEdgeTpnPool.get(0));
+                Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
+                Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
+                for (Uint16 commonTribPort : commonEdgeTpnPool) {
+                    if (tribPort.equals(commonTribPort.toJava())) {
+                        tribPortMap.put(edge.link().getLinkId().getValue(), commonTribPort);
+                    }
+                }
             }
         }
         tribPortMap.forEach((k,v) -> LOG.info("TribPortMap : k = {}, v = {}", k, v));
@@ -315,27 +331,37 @@ public class PostAlgoPathValidator {
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
             List<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
             List<Uint16> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
-            List<Uint16> commonEdgeTsPool = new ArrayList<>();
+            List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
             List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 integer : srcTsPool) {
                 if (destTsPool.contains(integer)) {
-                    commonEdgeTsPool.add(integer);
+                    commonEdgeTsPoolList.add(integer);
                 }
             }
-            Collections.sort(commonEdgeTsPool);
-            boolean discontinue = true;
-            int index = 0;
-            while (discontinue && (commonEdgeTsPool.size() - index >= nbSlot)) {
-                discontinue = false;
-                Integer val = commonEdgeTsPool.get(index).toJava();
-                for (int i = 0; i < nbSlot; i++) {
-                    if (commonEdgeTsPool.get(index + i).equals(Uint16.valueOf(val + i))) {
-                        tribSlotList.add(commonEdgeTsPool.get(index + i));
-                    } else {
-                        discontinue = true;
-                        tribSlotList.clear();
-                        index += i;
-                        break;
+            Collections.sort(commonEdgeTsPoolList);
+            List<Uint16> commonGoodStartEdgeTsPoolList = new ArrayList<>();
+            for (Uint16 startEdgeTsPool : commonEdgeTsPoolList) {
+                if (Integer.valueOf(1).equals(startEdgeTsPool.toJava() % nbSlot)) {
+                    commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
+                } else if (nbSlot == 1) {
+                    commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
+                }
+            }
+            Collections.sort(commonGoodStartEdgeTsPoolList);
+            boolean goodTsList = false;
+            for (Uint16 goodStartTsPool : commonGoodStartEdgeTsPoolList) {
+                int goodStartIndex = commonEdgeTsPoolList.indexOf(Uint16.valueOf(goodStartTsPool.intValue()));
+                if (!goodTsList && commonEdgeTsPoolList.size() - goodStartIndex >= nbSlot) {
+                    for (int i = 0; i < nbSlot; i++) {
+                        if (commonEdgeTsPoolList.get(goodStartIndex + i)
+                                .equals(Uint16.valueOf(goodStartTsPool.toJava() + i))) {
+                            tribSlotList.add(commonEdgeTsPoolList.get(goodStartIndex + i));
+                            goodTsList = true;
+                        } else {
+                            goodTsList = false;
+                            tribSlotList.clear();
+                            break;
+                        }
                     }
                 }
             }
@@ -343,6 +369,20 @@ public class PostAlgoPathValidator {
         }
         tribSlotMap.forEach((k,v) -> LOG.info("TribSlotMap : k = {}, v = {}", k, v));
         return tribSlotMap;
+    }
+
+    private List<OpucnTribSlotDef> getMinMaxTpTs(Map<String, Uint16> tribPort, Map<String, List<Uint16>> tribSlot) {
+        String tribport = tribPort.values().toArray()[0].toString();
+        @SuppressWarnings("unchecked")
+        List<Uint16> tsList = (List<Uint16>) tribSlot.values().toArray()[0];
+        OpucnTribSlotDef minOpucnTs = OpucnTribSlotDef
+            .getDefaultInstance(String.join(".", tribport, tsList.get(0).toString()));
+        OpucnTribSlotDef maxOpucnTs = OpucnTribSlotDef
+            .getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()));
+        List<OpucnTribSlotDef> minmaxTpTsList = new ArrayList<>();
+        minmaxTpTsList.add(minOpucnTs);
+        minmaxTpTsList.add(maxOpucnTs);
+        return minmaxTpTsList;
     }
 
     // Check the path OSNR

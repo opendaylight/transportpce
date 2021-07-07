@@ -10,13 +10,12 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201210.path.description.ZToADirection;
-import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +25,7 @@ public class PceResult {
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = GridConstant.IRRELEVANT_WAVELENGTH_NUMBER;
-    private Map<String, Uint16> resultTribPort;
-    private Map<String, List<Uint16>> resultTribSlot;
-    private Integer resultTribSlotNb = -1;
+    private List<OpucnTribSlotDef> resultTribSlotDefList;
     private String serviceType = "";
     private BigDecimal minFreq;
     private BigDecimal maxFreq;
@@ -132,28 +129,12 @@ public class PceResult {
         this.calcMessage = calcMessage;
     }
 
-    public Map<String, Uint16> getResultTribPort() {
-        return resultTribPort;
+    public List<OpucnTribSlotDef> getResultTribPortTribSlot() {
+        return resultTribSlotDefList;
     }
 
-    public void setResultTribPort(Map<String, Uint16> resultTribPort) {
-        this.resultTribPort = resultTribPort;
-    }
-
-    public Map<String, List<Uint16>> getResultTribSlot() {
-        return resultTribSlot;
-    }
-
-    public void setResultTribSlot(Map<String, List<Uint16>> resultTribSlot) {
-        this.resultTribSlot = resultTribSlot;
-    }
-
-    public int getResultTribSlotNb() {
-        return resultTribSlotNb;
-    }
-
-    public void setResultTribSlotNb(int resultTribSlotNb) {
-        this.resultTribSlotNb = resultTribSlotNb;
+    public void setResultTribPortTribSlot(List<OpucnTribSlotDef> resultTribPortTribSlot) {
+        this.resultTribSlotDefList = resultTribPortTribSlot;
     }
 
     public String getServiceType() {
