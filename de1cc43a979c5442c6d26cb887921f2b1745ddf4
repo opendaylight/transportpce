@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29827f05_0f97f8ad",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-08T10:03:22Z",
+      "side": 1,
+      "message": "do we really need 2 subscriptions? \u003d\u003e vote -1",
+      "revId": "de1cc43a979c5442c6d26cb887921f2b1745ddf4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
