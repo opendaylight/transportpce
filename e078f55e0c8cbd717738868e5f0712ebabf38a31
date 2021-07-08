@@ -153,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "12a7f5da_c7257457",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-08T10:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0005293d_aead5c8b",
+      "revId": "e078f55e0c8cbd717738868e5f0712ebabf38a31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ca9a97d_f0da335f",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
         "patchSetId": 3
