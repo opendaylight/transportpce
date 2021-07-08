@@ -22,6 +22,30 @@
       "revId": "abc2a7932adbe1b21ef0d961d89e38e42398bdc8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a33b4f8e_eef971b7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-07-08T08:11:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5723972f_18f8c68b",
+      "range": {
+        "startLine": 87,
+        "startChar": 43,
+        "endLine": 87,
+        "endChar": 52
+      },
+      "revId": "abc2a7932adbe1b21ef0d961d89e38e42398bdc8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
