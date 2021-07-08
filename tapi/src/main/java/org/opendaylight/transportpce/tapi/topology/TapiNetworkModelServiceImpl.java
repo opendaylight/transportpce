@@ -24,8 +24,10 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
@@ -203,6 +205,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // create tapi Node
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node roadmNode =
                     createRoadmTapiNode(orNodeId, onepMap);
+            mergeNodeinTopology(Map.of(roadmNode.key(), roadmNode));
+            mergeSipsinContext(this.sipMap);
             // TODO add states corresponding to device config -> based on mapping.
             //  This should be possible after Gilles work is merged
 
@@ -210,8 +214,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.info("checking if neighbor roadm exists");
             Map<LinkKey, Link> rdm2rdmLinks = this.linkDiscovery.readLLDP(new NodeId(orNodeId), orNodeVersion,
                 this.tapiTopoUuid);
-            mergeNodeinTopology(Map.of(roadmNode.key(), roadmNode));
-            mergeSipsinContext(this.sipMap);
             if (!rdm2rdmLinks.isEmpty()) {
                 mergeLinkinTopology(rdm2rdmLinks);
             }
@@ -324,7 +326,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     continue;
                 }
                 Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> srgNeps =
-                    createRoadmNeps(orNodeId, m.getLogicalConnectionPoint(), true);
+                    createRoadmNeps(orNodeId, m.getLogicalConnectionPoint(), true,
+                            transformOperState(m.getPortOperState()), transformAdminState(m.getPortAdminState()));
                 onepMap.putAll(srgNeps);
             }
         }
@@ -342,7 +345,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     continue;
                 }
                 Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> degNeps =
-                    createRoadmNeps(orNodeId, m.getLogicalConnectionPoint(), false);
+                    createRoadmNeps(orNodeId, m.getLogicalConnectionPoint(), false,
+                            transformOperState(m.getPortOperState()), transformAdminState(m.getPortAdminState()));
                 onepMap.putAll(degNeps);
             }
         }
@@ -525,7 +529,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid1, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    true, String.join("+", nodeId, I_OTSI), supportedInterfaceCapability);
+                    true, String.join("+", nodeId, I_OTSI), supportedInterfaceCapability,
+                    transformOperState(xpdrNetMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         // eNep creation on otsi node
@@ -540,7 +546,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid2, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    false, String.join("+", nodeId, E_OTSI), supportedInterfaceCapability);
+                    false, String.join("+", nodeId, E_OTSI), supportedInterfaceCapability,
+                    transformOperState(xpdrNetMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         // Photonic Media Nep creation on otsi node
@@ -555,7 +563,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid3, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                    false, String.join("+", nodeId, PHTNC_MEDIA), supportedInterfaceCapability);
+                    false, String.join("+", nodeId, PHTNC_MEDIA), supportedInterfaceCapability,
+                    transformOperState(xpdrNetMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         return onepl;
@@ -582,7 +592,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(name.key(), name), LayerProtocolName.DSR, LayerProtocolName.DSR, true,
-                    String.join("+", nodeId, DSR), supportedInterfaceCapability);
+                    String.join("+", nodeId, DSR), supportedInterfaceCapability,
+                    transformOperState(xpdrClMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrClMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         // network nep creation on I_ODU node
@@ -599,7 +611,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName),
                     LayerProtocolName.ODU, LayerProtocolName.DSR, false,
-                    String.join("+", nodeId, I_ODU), supportedInterfaceCapability);
+                    String.join("+", nodeId, I_ODU), supportedInterfaceCapability,
+                    transformOperState(xpdrNetMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         // network nep creation on E_ODU node
@@ -616,36 +630,51 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                     Map.of(onedName.key(), onedName),
                     LayerProtocolName.ODU, LayerProtocolName.DSR, true,
-                    String.join("+", nodeId, E_ODU), supportedInterfaceCapability);
+                    String.join("+", nodeId, E_ODU), supportedInterfaceCapability,
+                    transformOperState(xpdrNetMaps.get(i).getPortOperState()),
+                    transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         return onepl;
     }
 
+    private OperationalState transformOperState(String operString) {
+        State operState = org.opendaylight.transportpce.networkmodel.util.TopologyUtils.setNetworkOperState(operString);
+        return operState.equals(State.InService) ? OperationalState.ENABLED : OperationalState.DISABLED;
+    }
+
+    private AdministrativeState transformAdminState(String adminString) {
+        AdminStates adminState = org.opendaylight.transportpce.networkmodel.util.TopologyUtils
+                .setNetworkAdminState(adminString);
+        return adminState.equals(AdminStates.InService) ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
+    }
+
     private OwnedNodeEdgePoint createNep(Uuid nepUuid, String tpid, Map<NameKey, Name> nepNames,
                                          LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip,
                                          String keyword,
-                                         List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+                                         List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                                         OperationalState operState, AdministrativeState adminState) {
         OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
                 .setUuid(nepUuid)
                 .setLayerProtocolName(nepProtocol)
                 .setName(nepNames);
         if (withSip) {
             onepBldr.setMappedServiceInterfacePoint(createMSIP(1, nepProtocol, tpid, keyword,
-                    supportedInterfaceCapability));
+                    supportedInterfaceCapability, operState, adminState));
         }
         LOG.debug("Node layer {}", nodeProtocol.getName());
         onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedLayerProtocolQualifier(
                 supportedInterfaceCapability, nodeProtocol));
         onepBldr.setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
                 .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         return onepBldr.build();
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createRoadmNeps(String orNodeId, String tpId,
-                                                                           boolean withSip) {
+                                                                           boolean withSip, OperationalState operState,
+                                                                           AdministrativeState adminState) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         // PHOTONIC MEDIA nep
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", orNodeId, PHTNC_MEDIA, tpId))
@@ -661,7 +690,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
                 .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         OwnedNodeEdgePoint onep = onepBldr.build();
@@ -681,12 +710,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setName(Map.of(nepName1.key(), nepName1))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
                 .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         if (withSip) {
             onepBldr1.setMappedServiceInterfacePoint(createMSIP(1, LayerProtocolName.PHOTONICMEDIA,
-                    tpId, String.join("+", orNodeId, MC), null));
+                    tpId, String.join("+", orNodeId, MC), null, operState, adminState));
         }
         OwnedNodeEdgePoint onep1 = onepBldr1.build();
         onepMap.put(onep1.key(), onep1);
@@ -705,7 +734,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setName(Map.of(nepName2.key(), nepName2))
                 .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
                 .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         OwnedNodeEdgePoint onep2 = onepBldr2.build();
@@ -713,9 +742,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return onepMap;
     }
 
-    private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(int nb,
-                                            LayerProtocolName layerProtocol, String tpid, String nodeid,
-                                            List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+    private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint>
+        createMSIP(int nb, LayerProtocolName layerProtocol, String tpid, String nodeid,
+                   List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                   OperationalState operState, AdministrativeState adminState) {
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
         for (int i = 0; i < nb; i++) {
             Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", nodeid,
@@ -723,7 +753,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             MappedServiceInterfacePoint msip = new MappedServiceInterfacePointBuilder()
                     .setServiceInterfacePointUuid(sipUuid).build();
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint sip
-                    = createSIP(sipUuid, layerProtocol, tpid, nodeid, supportedInterfaceCapability);
+                    = createSIP(sipUuid, layerProtocol, tpid, nodeid, supportedInterfaceCapability,
+                    operState, adminState);
             this.sipMap.put(sip.key(), sip);
             LOG.info("SIP created {}", sip.getUuid());
             // this.tapiSips.put(sip.key(), sip);
@@ -733,7 +764,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private ServiceInterfacePoint createSIP(Uuid sipUuid, LayerProtocolName layerProtocol, String tpid, String nodeid,
-                                            List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability) {
+                                            List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                                            OperationalState operState, AdministrativeState adminState) {
         // TODO: what value should be set in total capacity and available capacity
         LOG.info("SIP name = {}", String.join("+", nodeid, tpid));
         Name sipName = new NameBuilder()
@@ -744,8 +776,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setUuid(sipUuid)
                 .setName(Map.of(sipName.key(), sipName))
                 .setLayerProtocolName(layerProtocol)
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(adminState)
+                .setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setAvailableCapacity(new AvailableCapacityBuilder().build())
                 .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().build())
@@ -896,8 +928,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTON)
                     .setRestorationPolicy(RestorationPolicy.NA)
                     .build())
-                .setAdministrativeState(AdministrativeState.UNLOCKED)
-                .setOperationalState(OperationalState.ENABLED)
+                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                .setOperationalState(transformOperState(mapping.getPortOperState()))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CapacityUnit.GBPS).setValue(Uint64.valueOf(100)).build())
