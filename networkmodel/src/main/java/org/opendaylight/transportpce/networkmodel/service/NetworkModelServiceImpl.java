@@ -390,18 +390,25 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         TopologyShard otnTopologyShard;
         switch (linkType) {
             case OTU4:
+            case OTUC4:
                 otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(nodeA, tpA, nodeZ, tpZ, linkType);
                 break;
             case ODTU4:
+            case ODUC4:
                 String nodeTopoA = new StringBuilder(nodeA).append("-").append(tpA.split("-")[0]).toString();
                 String nodeTopoZ = new StringBuilder(nodeZ).append("-").append(tpZ.split("-")[0]).toString();
                 List<LinkId> linkIdList = new ArrayList<>();
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, "OTU4"));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, "OTU4"));
+                String prefix;
+                if (OtnLinkType.ODTU4.equals(linkType)) {
+                    prefix = OtnLinkType.OTU4.getName();
+                } else {
+                    prefix = OtnLinkType.OTUC4.getName();
+                }
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
                 List<Link> supportedOtu4links = getOtnLinks(linkIdList);
                 List<TerminationPoint> tps = getOtnNodeTps(nodeTopoA, tpA, nodeTopoZ, tpZ);
-
-                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(supportedOtu4links, tps);
+                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(supportedOtu4links, tps, linkType);
                 break;
             default:
                 LOG.error("unknown otn link type {}", linkType);
@@ -446,32 +453,48 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         TopologyShard otnTopologyShard;
         String nodeTopoA = new StringBuilder(nodeA).append("-").append(tpA.split("-")[0]).toString();
         String nodeTopoZ = new StringBuilder(nodeZ).append("-").append(tpZ.split("-")[0]).toString();
-        List<Link> otu4Links;
+        List<Link> otuLinks;
         List<LinkId> linkIdList = new ArrayList<>();
+        String prefix;
         switch (linkType) {
             case OTU4:
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, "OTU4"));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, "OTU4"));
-                otu4Links = getOtnLinks(linkIdList);
-                if (checkLinks(otu4Links)) {
-                    deleteLinks(otu4Links);
+            case OTUC4:
+                if (OtnLinkType.OTU4.equals(linkType)) {
+                    prefix = OtnLinkType.OTU4.getName();
+                } else {
+                    prefix = OtnLinkType.OTUC4.getName();
+                }
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
+                otuLinks = getOtnLinks(linkIdList);
+                if (checkLinks(otuLinks)) {
+                    deleteLinks(otuLinks);
                 } else {
                     LOG.error("Error deleting OTU4 links");
                 }
                 otnTopologyShard = new TopologyShard(null, null);
                 break;
             case ODTU4:
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, "ODU4"));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, "ODU4"));
-                List<Link> odu4Links = getOtnLinks(linkIdList);
+            case ODUC4:
+                String prefix2;
+                if (OtnLinkType.ODTU4.equals(linkType)) {
+                    prefix = OtnLinkType.ODTU4.getName();
+                    prefix2 = OtnLinkType.OTU4.getName();
+                } else {
+                    prefix = OtnLinkType.ODUC4.getName();
+                    prefix2 = OtnLinkType.OTUC4.getName();
+                }
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
+                List<Link> oduLinks = getOtnLinks(linkIdList);
                 List<TerminationPoint> tps = getOtnNodeTps(nodeTopoA, tpA, nodeTopoZ, tpZ);
-                if (checkLinks(odu4Links) && checkTerminationPoints(tps)) {
-                    deleteLinks(odu4Links);
+                if (checkLinks(oduLinks) && checkTerminationPoints(tps)) {
+                    deleteLinks(oduLinks);
                     linkIdList.clear();
-                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, "OTU4"));
-                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, "OTU4"));
-                    otu4Links = getOtnLinks(linkIdList);
-                    otnTopologyShard = OpenRoadmOtnTopology.deleteOtnLinks(otu4Links, tps);
+                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix2));
+                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix2));
+                    otuLinks = getOtnLinks(linkIdList);
+                    otnTopologyShard = OpenRoadmOtnTopology.deleteOtnLinks(otuLinks, tps, linkType);
                 } else {
                     LOG.error("Error deleting ODU4 links");
                     otnTopologyShard = new TopologyShard(null, null);
@@ -518,7 +541,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     @Override
     public void updateOtnLinks(
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link
-            notifLink, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
+            notifLink, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSlotNb,
+            boolean isDeletion) {
 
         LinkTp atermination = new LinkTpBuilder()
             .setNodeId(notifLink.getATermination().getNodeId())
@@ -536,7 +560,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         List<TerminationPoint> tps = getOtnNodeTps(linkTerminations);
         TopologyShard otnTopologyShard;
         otnTopologyShard = OpenRoadmOtnTopology.updateOtnLinks(supportedOdu4Links, tps, serviceRate, tribPortNb,
-            tribSoltNb, isDeletion);
+            minTribSoltNb, maxTribSlotNb, isDeletion);
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("creating and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
@@ -737,7 +761,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             odu4links = netw1Opt
                 .get()
                 .nonnullLink().values()
-                .stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODU4"))
+                .stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODTU4"))
                 .collect(Collectors.toList());
         }
         List<Link> links = new ArrayList<>();
