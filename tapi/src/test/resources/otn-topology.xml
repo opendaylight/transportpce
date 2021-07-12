@@ -1452,7 +1452,7 @@
     <otn-link-type xmlns="http://transportpce/topology">OTU4</otn-link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1</link-id>
+    <link-id>ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1</link-id>
     <source>
       <source-node>SPDR-SC1-XPDR1</source-node>
       <source-tp>XPDR1-NETWORK1</source-tp>
@@ -1461,7 +1461,7 @@
     <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</used-bandwidth>
     <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
     <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
-    <opposite-link xmlns="http://org/openroadm/common/network">ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</opposite-link>
     <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
     <destination>
       <dest-tp>XPDR1-NETWORK1</dest-tp>
@@ -1470,7 +1470,7 @@
     <otn-link-type xmlns="http://transportpce/topology">ODTU4</otn-link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</link-id>
+    <link-id>ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</link-id>
     <source>
       <source-node>SPDR-SA1-XPDR1</source-node>
       <source-tp>XPDR1-NETWORK1</source-tp>
@@ -1479,7 +1479,7 @@
     <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</used-bandwidth>
     <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
     <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
-    <opposite-link xmlns="http://org/openroadm/common/network">ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1</opposite-link>
     <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
     <destination>
       <dest-tp>XPDR1-NETWORK1</dest-tp>
