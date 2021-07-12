@@ -787,7 +787,7 @@ public class ConvertORTopoToTapiTopo {
                         .setValue(Uint64.valueOf(link.augmentation(Link1.class).getAvailableBandwidth())).build())
                     .build())
                 .build();
-            case "ODU4":
+            case "ODTU4":
                 sourceUuidTp = this.uuidMap.get(String.join("+", sourceNode, DSR, sourceTp));
                 sourceUuidNode = this.uuidMap.get(String.join("+", sourceNode, DSR));
                 NodeEdgePoint sourceNep2 = new NodeEdgePointBuilder()

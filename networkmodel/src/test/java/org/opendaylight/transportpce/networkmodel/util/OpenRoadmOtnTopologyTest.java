@@ -296,7 +296,7 @@ public class OpenRoadmOtnTopologyTest {
         TopologyShard topoShard = OpenRoadmOtnTopology
             .createOtnLinks(
                 NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(100000)),
-                NetworkmodelTestUtil.createTpList(false));
+                NetworkmodelTestUtil.createTpList(false), OtnLinkType.ODTU4);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         List<Link> sortedLinks = topoShard.getLinks().stream()
@@ -314,10 +314,10 @@ public class OpenRoadmOtnTopologyTest {
             sortedLinks.get(2).augmentation(Link1.class).getUsedBandwidth());
 
         assertEquals(
-            "ODU4-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1",
+            "ODTU4-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1",
             sortedLinks.get(0).getLinkId().getValue());
         assertEquals(
-            "ODU4-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1",
+            "ODTU4-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1",
             sortedLinks.get(1).getLinkId().getValue());
         assertEquals("SPDRA-XPDR1", sortedLinks.get(0).getSource().getSourceNode().getValue());
         assertEquals("SPDRZ-XPDR1", sortedLinks.get(0).getDestination().getDestNode().getValue());
@@ -339,7 +339,7 @@ public class OpenRoadmOtnTopologyTest {
                 .getLinkType());
         assertEquals(
             "opposite link must be present",
-            "ODU4-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1",
+            "ODTU4-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1",
             sortedLinks.get(0)
                 .augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class)
@@ -404,7 +404,8 @@ public class OpenRoadmOtnTopologyTest {
             otu4LinksWithBadBWParam.add(new LinkBuilder(link).removeAugmentation(Link1.class).build());
         }
         TopologyShard topoShard =
-            OpenRoadmOtnTopology.createOtnLinks(otu4LinksWithBadBWParam, NetworkmodelTestUtil.createTpList(false));
+            OpenRoadmOtnTopology.createOtnLinks(otu4LinksWithBadBWParam, NetworkmodelTestUtil.createTpList(false),
+                OtnLinkType.OTU4);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
@@ -414,7 +415,7 @@ public class OpenRoadmOtnTopologyTest {
         topoShard =
             OpenRoadmOtnTopology.createOtnLinks(
                     NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(99000)),
-                    NetworkmodelTestUtil.createTpList(false));
+                    NetworkmodelTestUtil.createTpList(false), OtnLinkType.OTU4);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
         assertNull("list of tps should be null", topoShard.getTps());
@@ -425,7 +426,7 @@ public class OpenRoadmOtnTopologyTest {
         TopologyShard topoShard =
             OpenRoadmOtnTopology.deleteOtnLinks(
                     NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.OTU4, Uint32.valueOf(0)),
-                    NetworkmodelTestUtil.createTpList(true));
+                    NetworkmodelTestUtil.createTpList(true), OtnLinkType.OTU4);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertEquals("list of links should contain 2 links", 2, topoShard.getLinks().size());
         assertEquals(
@@ -464,7 +465,8 @@ public class OpenRoadmOtnTopologyTest {
             otu4LinksWithBadBWParam.add(new LinkBuilder(link).removeAugmentation(Link1.class).build());
         }
         TopologyShard topoShard =
-            OpenRoadmOtnTopology.deleteOtnLinks(otu4LinksWithBadBWParam, NetworkmodelTestUtil.createTpList(true));
+            OpenRoadmOtnTopology.deleteOtnLinks(otu4LinksWithBadBWParam, NetworkmodelTestUtil.createTpList(true),
+                OtnLinkType.OTU4);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
@@ -478,14 +480,14 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(100000)),
                     NetworkmodelTestUtil.createTpList(true),
-                    Uint32.valueOf(10), (short)1, (short)1, false);
+                    Uint32.valueOf(10), (short)1, (short)1, (short)8, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         List<Link> sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
         assertEquals("list of links should contain 2 links", 2, sortedLinks.size());
-        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODU4-"));
+        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODTU4-"));
         assertEquals(
             "after 10G creation, available BW of supported ODU4 should be 90000",
             Uint32.valueOf(90000),
@@ -550,12 +552,12 @@ public class OpenRoadmOtnTopologyTest {
         // tests update for 10G deletion
         sortedLinks.clear();
         topoShard = OpenRoadmOtnTopology.updateOtnLinks(topoShard.getLinks(), topoShard.getTps(), Uint32.valueOf(10),
-            (short)1, (short)1, true);
+            (short)1, (short)1, (short)8, true);
         sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
         assertEquals("list of links should contain 2 links", 2, sortedLinks.size());
-        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODU4-"));
+        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODTU4-"));
         assertEquals(
             "after 10G deletion, available BW of supported ODU4 should be 100 000",
             Uint32.valueOf(100000),
@@ -616,14 +618,14 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     NetworkmodelTestUtil.createSuppOTNLinks(OtnLinkType.ODTU4, Uint32.valueOf(100000)),
                     NetworkmodelTestUtil.createTpList(true),
-                    Uint32.valueOf(1), (short)1, (short)1, false);
+                    Uint32.valueOf(1), (short)1, (short)1, (short)1, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         List<Link> sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
         assertEquals("list of links should contain 2 links", 2, sortedLinks.size());
-        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODU4-"));
+        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODTU4-"));
         assertEquals(
             "after 1G creation, available BW of supported ODU4 should be 99000",
             Uint32.valueOf(99000),
@@ -690,12 +692,12 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     topoShard.getLinks(),
                     topoShard.getTps(),
-                    Uint32.valueOf(1), (short)1, (short)1, true);
+                    Uint32.valueOf(1), (short)1, (short)1, (short)1, true);
         sortedLinks = topoShard.getLinks().stream()
             .sorted((l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()))
             .collect(Collectors.toList());
         assertEquals("list of links should contain 2 links", 2, sortedLinks.size());
-        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODU4-"));
+        assertTrue(sortedLinks.get(0).getLinkId().getValue().startsWith("ODTU4-"));
         assertEquals(
             "after 1G deletion, available BW of supported ODU4 should be 100 000",
             Uint32.valueOf(100000),
@@ -760,7 +762,7 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     odu4LinksWithBadBWParam,
                     NetworkmodelTestUtil.createTpList(true),
-                    Uint32.valueOf(1), (short)1, (short)1, false);
+                    Uint32.valueOf(1), (short)1, (short)1, (short)10, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
@@ -775,7 +777,7 @@ public class OpenRoadmOtnTopologyTest {
             OpenRoadmOtnTopology.updateOtnLinks(
                     odu4LinksWithBadBWParam,
                     NetworkmodelTestUtil.createTpList(true),
-                    Uint32.valueOf(10), (short)1, (short)1, false);
+                    Uint32.valueOf(10), (short)1, (short)1, (short)10, false);
         assertNotNull("TopologyShard should never be null", topoShard);
         assertNull("list of nodes should be null", topoShard.getNodes());
         assertNull("list of links should be null", topoShard.getLinks());
