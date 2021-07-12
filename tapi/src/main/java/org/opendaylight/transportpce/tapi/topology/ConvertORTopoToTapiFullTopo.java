@@ -1195,7 +1195,7 @@ public class ConvertORTopoToTapiFullTopo {
                     .setServerIntegrityProcessCharacteristic("server integrity process")
                     .setValidationMechanism(Map.of(validationMechanism.key(), validationMechanism))
                     .build();
-            case "ODU4":
+            case "ODTU4":
                 sourceUuidTp = this.uuidMap.get(String.join("+", sourceNode, E_ODU, sourceTp));
                 sourceUuidNode = this.uuidMap.get(String.join("+", sourceNode, DSR));
                 NodeEdgePoint sourceNep2 = new NodeEdgePointBuilder()

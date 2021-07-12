@@ -309,7 +309,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
             link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))), null, null);
+                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
 
         ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topologyUuid);
@@ -346,7 +346,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
             link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))), null, null);
+                new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
 
         ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topologyUuid);
@@ -383,7 +383,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
             link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
+                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
 
@@ -423,7 +423,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
             link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
+                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.Maintenance, State.Degraded);
         otnLinksAlt.replace(link.key(), link);
 
@@ -463,7 +463,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
             link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))),
+                new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
 
@@ -629,7 +629,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
+            new Uuid(UUID.nameUUIDFromBytes("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
                 .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link2Uuid =
             new Uuid(UUID.nameUUIDFromBytes("OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
@@ -639,7 +639,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         checkOtnLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
-            "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
+            "ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
         checkOtnLink(links.get(2), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
             "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
     }
@@ -1240,7 +1240,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         if ("OTU4".equals(prefix)) {
             assertEquals("Available capacity -total size value should be 0",
                 Uint64.valueOf(0), link.getAvailableCapacity().getTotalSize().getValue());
-        } else if ("ODU4".equals(prefix)) {
+        } else if ("ODTU4".equals(prefix)) {
             assertEquals("Available capacity -total size value should be 100 000",
                 Uint64.valueOf(100000), link.getAvailableCapacity().getTotalSize().getValue());
         }
@@ -1251,7 +1251,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         if ("OTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
                 LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
-        } else if ("ODU4".equals(prefix)) {
+        } else if ("ODTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers ODU",
                 LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
         }
