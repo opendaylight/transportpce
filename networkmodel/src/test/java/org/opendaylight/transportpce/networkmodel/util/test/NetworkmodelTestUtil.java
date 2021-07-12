@@ -87,14 +87,8 @@ public final class NetworkmodelTestUtil {
     }
 
     public static List<Link> createSuppOTNLinks(OtnLinkType type, Uint32 availBW) {
-        String prefix = null;
-        if (OtnLinkType.OTU4.equals(type)) {
-            prefix = "OTU4-";
-        } else if (OtnLinkType.ODTU4.equals(type)) {
-            prefix = "ODU4-";
-        }
         Link linkAZ = new LinkBuilder()
-            .setLinkId(new LinkId(prefix + "SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
+            .setLinkId(new LinkId(type.getName() + "-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
             .setSource(new SourceBuilder()
                     .setSourceNode(new NodeId("SPDRA-XPDR1"))
                     .setSourceTp("XPDR1-NETWORK1").build())
@@ -104,7 +98,8 @@ public final class NetworkmodelTestUtil {
             .addAugmentation(
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
-                    .setOppositeLink(new LinkId(prefix + "SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
+                    .setOppositeLink(new LinkId(type.getName()
+                        + "-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder()
@@ -117,7 +112,7 @@ public final class NetworkmodelTestUtil {
                     .build())
             .build();
         Link linkZA = new LinkBuilder()
-            .setLinkId(new LinkId(prefix + "SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
+            .setLinkId(new LinkId(type.getName() + "-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
             .setSource(new SourceBuilder()
                     .setSourceNode(new NodeId("SPDRZ-XPDR1"))
                     .setSourceTp("XPDR1-NETWORK1").build())
@@ -127,7 +122,8 @@ public final class NetworkmodelTestUtil {
             .addAugmentation(
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
-                    .setOppositeLink(new LinkId(prefix + "SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
+                    .setOppositeLink(new LinkId(type.getName()
+                        + "-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
                     .build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder()
