@@ -237,7 +237,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
+            new Uuid(UUID.nameUUIDFromBytes("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
                 .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link2Uuid =
             new Uuid(UUID.nameUUIDFromBytes("OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
@@ -248,7 +248,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         checkOtnLink(links.get(0), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
-            "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
+            "ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
         checkOtnLink(links.get(1), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
             "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
     }
@@ -263,7 +263,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         if ("OTU4".equals(prefix)) {
             assertEquals("Available capacity -total size value should be 0",
                 Uint64.valueOf(0), link.getAvailableCapacity().getTotalSize().getValue());
-        } else if ("ODU4".equals(prefix)) {
+        } else if ("ODTU4".equals(prefix)) {
             assertEquals("Available capacity -total size value should be 100 000",
                 Uint64.valueOf(100000), link.getAvailableCapacity().getTotalSize().getValue());
         }
@@ -274,7 +274,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         if ("OTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
                 LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
-        } else if ("ODU4".equals(prefix)) {
+        } else if ("ODTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers ODU",
                 LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
         }
