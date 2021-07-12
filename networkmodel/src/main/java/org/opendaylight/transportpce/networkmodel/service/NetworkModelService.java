@@ -105,8 +105,6 @@ public interface NetworkModelService {
      * @param isDeletion
      *       True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(
-        Link
-            link, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion);
-
+    void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSoltNb,
+            boolean isDeletion);
 }
