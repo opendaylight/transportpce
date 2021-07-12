@@ -36,10 +36,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.x
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTUCnTs;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OdtuTypeIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OduRateIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder;
@@ -122,32 +124,36 @@ public final class OpenRoadmOtnTopology {
     public static TopologyShard createOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ,
         OtnLinkType linkType) {
         List<Link> links = null;
-        if (OtnLinkType.OTU4.equals(linkType)) {
-            links = initialiseOtnLinks(nodeA, tpA, nodeZ, tpZ, linkType, "OTU4");
+        if (OtnLinkType.OTU4.equals(linkType) || OtnLinkType.OTUC4.equals(linkType)) {
+            links = initialiseOtnLinks(nodeA, tpA, nodeZ, tpZ, linkType);
         }
         return new TopologyShard(null, links);
     }
 
-    public static TopologyShard createOtnLinks(List<Link> suppOtu4Links, List<TerminationPoint> oldTps) {
+    public static TopologyShard createOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
+            OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
-        for (Link link : suppOtu4Links) {
-            if (link.augmentation(Link1.class) != null
+        for (Link link : suppOtuLinks) {
+            if (OtnLinkType.ODTU4.equals(linkType) && link.augmentation(Link1.class) != null
                 && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(100000))) {
                 links.add(updateOtnLinkBwParameters(link, 0L, 100000L));
+            } else if (OtnLinkType.ODUC4.equals(linkType) && link.augmentation(Link1.class) != null
+                && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(400000))) {
+                links.add(updateOtnLinkBwParameters(link, 0L, 400000L));
             } else {
                 LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
             }
         }
         if (links.size() == 2) {
-            links.addAll(initialiseOtnLinks(suppOtu4Links.get(0).getSource().getSourceNode().getValue(),
-                suppOtu4Links.get(0).getSource().getSourceTp().toString(),
-                suppOtu4Links.get(0).getDestination().getDestNode().getValue(),
-                suppOtu4Links.get(0).getDestination().getDestTp().toString(),
-                OtnLinkType.ODTU4, "ODU4"));
+            links.addAll(initialiseOtnLinks(suppOtuLinks.get(0).getSource().getSourceNode().getValue(),
+                suppOtuLinks.get(0).getSource().getSourceTp().toString(),
+                suppOtuLinks.get(0).getDestination().getDestNode().getValue(),
+                suppOtuLinks.get(0).getDestination().getDestTp().toString(),
+                linkType));
         }
         List<TerminationPoint> tps = new ArrayList<>();
         for (TerminationPoint tp : oldTps) {
-            tps.add(updateTp(tp, true));
+            tps.add(updateTp(tp, true, linkType));
         }
         if (links.size() == 4 && tps.size() == 2) {
             return new TopologyShard(null, links, tps);
@@ -156,14 +162,25 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    public static TopologyShard updateOtnLinks(List<Link> suppOdu4Links, List<TerminationPoint> oldTps,
-        Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
+    public static TopologyShard updateOtnLinks(List<Link> suppOduLinks, List<TerminationPoint> oldTps,
+        Uint32 serviceRate, Short tribPortNb, Short minTribSlotNb, Short maxTribSlotNb, boolean isDeletion) {
         List<Link> links = new ArrayList<>();
-        Long bwIncr = 10000L;
-        if (serviceRate.intValue() == 1) {
-            bwIncr = 1000L;
+        Long bwIncr;
+        switch (serviceRate.intValue()) {
+            case 1:
+                bwIncr = 1000L;
+                break;
+            case 10:
+                bwIncr = 10000L;
+                break;
+            case 100:
+                bwIncr = 100000L;
+                break;
+            default:
+                LOG.warn("Error with not managed service rate {}", serviceRate.toString());
+                return new TopologyShard(null, null, null);
         }
-        for (Link link : suppOdu4Links) {
+        for (Link link : suppOduLinks) {
             if (link.augmentation(Link1.class) != null && link.augmentation(Link1.class).getAvailableBandwidth() != null
                 && link.augmentation(Link1.class).getUsedBandwidth() != null) {
                 Uint32 avlBw = link.augmentation(Link1.class).getAvailableBandwidth();
@@ -185,7 +202,7 @@ public final class OpenRoadmOtnTopology {
         List<TerminationPoint> tps = new ArrayList<>();
         for (TerminationPoint tp : oldTps) {
             if (bwIncr != 0) {
-                tps.add(updateNodeTpTsPool(tp, serviceRate, tribPortNb, tribSoltNb, isDeletion));
+                tps.add(updateNodeTpTsPool(tp, serviceRate, tribPortNb, minTribSlotNb, maxTribSlotNb, isDeletion));
             }
         }
         if (!links.isEmpty() && !tps.isEmpty()) {
@@ -196,18 +213,30 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    public static TopologyShard deleteOtnLinks(List<Link> suppOtu4Links, List<TerminationPoint> oldTps) {
+    public static TopologyShard deleteOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
+            OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
-        for (Link link : suppOtu4Links) {
-            if (link.augmentation(Link1.class) != null) {
-                links.add(updateOtnLinkBwParameters(link, 100000L, 0L));
+        OtnLinkType otnLinkType = null;
+        for (Link link : suppOtuLinks) {
+            if (link.augmentation(Link1.class) != null && link.augmentation(
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1.class) != null) {
+                otnLinkType = link.augmentation(
+                        org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1.class).getOtnLinkType();
+                if (OtnLinkType.OTU4.equals(otnLinkType)) {
+                    links.add(updateOtnLinkBwParameters(link, 100000L, 0L));
+                } else if (OtnLinkType.OTUC4.equals(otnLinkType)) {
+                    links.add(updateOtnLinkBwParameters(link, 400000L, 0L));
+                } else {
+                    LOG.warn("Unexpected otn-link-type {} for link {}", otnLinkType, link.getLinkId());
+                }
             } else {
                 LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
+                return new TopologyShard(null, null, null);
             }
         }
         List<TerminationPoint> tps = new ArrayList<>();
         for (TerminationPoint tp : oldTps) {
-            tps.add(updateTp(tp, false));
+            tps.add(updateTp(tp, false, linkType));
         }
         if (links.size() == 2 && tps.size() == 2) {
             return new TopologyShard(null, links, tps);
@@ -217,29 +246,33 @@ public final class OpenRoadmOtnTopology {
     }
 
     private static List<Link> initialiseOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ,
-        OtnLinkType linkType, String linkIdPrefix) {
+            OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
+        String nodeATopo = formatNodeName(nodeA, tpA);
+        String nodeZTopo = formatNodeName(nodeZ, tpZ);
         org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1 tpceLink1
             = new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.Link1Builder()
             .setOtnLinkType(linkType).build();
-        Link1 otnLink1 = new Link1Builder()
-            .setAvailableBandwidth(Uint32.valueOf(100000))
-            .setUsedBandwidth(Uint32.valueOf(0))
-            .build();
-        // create link A-Z
-        String nodeATopo;
-        String nodeZTopo;
-        if (nodeA.contains(XPDR) && nodeZ.contains(XPDR)) {
-            nodeATopo = nodeA;
-            nodeZTopo = nodeZ;
-        } else {
-            nodeATopo = nodeA + "-" + tpA.split("-")[0];
-            nodeZTopo = nodeZ + "-" + tpZ.split("-")[0];
+        Link1Builder otnLink1Bldr = new Link1Builder()
+            .setUsedBandwidth(Uint32.valueOf(0));
+        switch (linkType) {
+            case OTU4:
+            case ODTU4:
+                otnLink1Bldr.setAvailableBandwidth(Uint32.valueOf(100000));
+                break;
+            case OTUC4:
+            case ODUC4:
+                otnLink1Bldr.setAvailableBandwidth(Uint32.valueOf(400000));
+                break;
+            default:
+                LOG.error("unable to set available bandwidth to unknown link type");
+                break;
         }
-        LinkBuilder ietfLinkAZBldr = TopologyUtils.createLink(nodeATopo, nodeZTopo, tpA, tpZ, linkIdPrefix);
+        // create link A-Z
+        LinkBuilder ietfLinkAZBldr = TopologyUtils.createLink(nodeATopo, nodeZTopo, tpA, tpZ, linkType.getName());
         ietfLinkAZBldr
             .addAugmentation(tpceLink1)
-            .addAugmentation(otnLink1)
+            .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
                         ietfLinkAZBldr.augmentation(
@@ -250,10 +283,10 @@ public final class OpenRoadmOtnTopology {
                         .build());
         links.add(ietfLinkAZBldr.build());
         // create link Z-A
-        LinkBuilder ietfLinkZABldr = TopologyUtils.createLink(nodeZTopo, nodeATopo, tpZ, tpA, linkIdPrefix);
+        LinkBuilder ietfLinkZABldr = TopologyUtils.createLink(nodeZTopo, nodeATopo, tpZ, tpA, linkType.getName());
         ietfLinkZABldr
             .addAugmentation(tpceLink1)
-            .addAugmentation(otnLink1)
+            .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
                         ietfLinkZABldr.augmentation(
@@ -276,7 +309,8 @@ public final class OpenRoadmOtnTopology {
         return updatedLinkBldr.build();
     }
 
-    private static TerminationPoint updateTp(TerminationPoint originalTp, boolean addingTsTpnPoolTermination) {
+    private static TerminationPoint updateTp(TerminationPoint originalTp, boolean addingTsTpnPoolTermination,
+            OtnLinkType linkType) {
         LOG.debug("in updateTp");
         TerminationPointBuilder tpBldr = new TerminationPointBuilder(originalTp);
         TerminationPoint1Builder otnTp1Bldr = new TerminationPoint1Builder(
@@ -285,12 +319,16 @@ public final class OpenRoadmOtnTopology {
             .getXpdrTpPortConnectionAttributes());
         if (addingTsTpnPoolTermination) {
             List<Uint16> tsPool = new ArrayList<>();
-            for (int i = 0; i < NB_TRIB_SLOTS; i++) {
-                tsPool.add(Uint16.valueOf(i + 1));
+            for (int i = 1; i <= NB_TRIB_SLOTS; i++) {
+                tsPool.add(Uint16.valueOf(i));
             }
             xtpcaBldr.setTsPool(tsPool);
             List<Uint16> tpnPool = new ArrayList<>();
-            for (int i = 1; i <= NB_TRIB_PORTS; i++) {
+            int nbTribPort = NB_TRIB_PORTS;
+            if (OtnLinkType.ODUC4.equals(linkType)) {
+                nbTribPort = 4;
+            }
+            for (int i = 1; i <= nbTribPort; i++) {
                 tpnPool.add(Uint16.valueOf(i));
             }
             OdtuTpnPool oduTpnPool = new OdtuTpnPoolBuilder().setOdtuType(ODTU4TsAllocated.class)
@@ -304,35 +342,21 @@ public final class OpenRoadmOtnTopology {
     }
 
     private static TerminationPoint updateNodeTpTsPool(TerminationPoint tp, Uint32 serviceRate, Short tribPortNb,
-        Short tribSlotNb, boolean isDeletion) {
+        Short minTribSlotNb, Short maxTribSlotNb, boolean isDeletion) {
         LOG.debug("in updateNodeTpTsPool");
         TerminationPointBuilder tpBldr = new TerminationPointBuilder(tp);
         @Nullable
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder(
             tpBldr.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes());
         List<Uint16> tsPool = new ArrayList<>(xtpcaBldr.getTsPool());
-        switch (serviceRate.intValue()) {
-            case 1:
-                if (isDeletion) {
-                    tsPool.add(Uint16.valueOf(tribSlotNb));
-                } else {
-                    tsPool.remove(Uint16.valueOf(tribSlotNb));
-                }
-                break;
-            case 10:
-                if (isDeletion) {
-                    for (int i = 0; i < NB_TRIB_SLOT_PER_10GE; i++) {
-                        tsPool.add(Uint16.valueOf(tribSlotNb + i));
-                    }
-                } else {
-                    for (int i = 0; i < NB_TRIB_SLOT_PER_10GE; i++) {
-                        tsPool.remove(Uint16.valueOf(tribSlotNb + i));
-                    }
-                }
-                break;
-            default:
-                LOG.error("error updating tpn and ts pool for tp {}", tp.getTpId().getValue());
-                break;
+        if (isDeletion) {
+            for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
+                tsPool.add(Uint16.valueOf(i));
+            }
+        } else {
+            for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
+                tsPool.remove(Uint16.valueOf(i));
+            }
         }
         xtpcaBldr.setTsPool(tsPool);
         List<Uint16> tpnPool;
@@ -347,7 +371,20 @@ public final class OpenRoadmOtnTopology {
         } else {
             tpnPool = new ArrayList<>();
         }
-        OdtuTpnPool odtuTpnPool = new OdtuTpnPoolBuilder().setOdtuType(ODTU4TsAllocated.class)
+        Class<? extends OdtuTypeIdentity> odtuType = null;
+        switch (serviceRate.intValue()) {
+            case 1:
+            case 10:
+                odtuType = ODTU4TsAllocated.class;
+                break;
+            case 100:
+                odtuType = ODTUCnTs.class;
+                break;
+            default:
+                LOG.warn("Unable to set the odtu-type");
+                break;
+        }
+        OdtuTpnPool odtuTpnPool = new OdtuTpnPoolBuilder().setOdtuType(odtuType)
             .setTpnPool(tpnPool).build();
         xtpcaBldr.setOdtuTpnPool(ImmutableMap.of(odtuTpnPool.key(),odtuTpnPool));
 
@@ -720,5 +757,15 @@ public final class OpenRoadmOtnTopology {
             .addAugmentation(otnTp1)
             .addAugmentation(ocnTp);
         return ietfTpBldr.build();
+    }
+
+    private static String formatNodeName(String nodeName, String tpName) {
+        String newNodeName = null;
+        if (nodeName.contains(XPDR)) {
+            newNodeName = nodeName;
+        } else {
+            newNodeName = new StringBuilder(nodeName).append("-").append(tpName.split("-")[0]).toString();
+        }
+        return newNodeName;
     }
 }
