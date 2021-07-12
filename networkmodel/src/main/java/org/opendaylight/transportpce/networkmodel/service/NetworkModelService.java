@@ -97,14 +97,16 @@ public interface NetworkModelService {
      * @param link
      *     link containing termination points to be updated
      * @param serviceRate
-     *     Service rate may be 1G, 10G or 100G
+     *     Service rate may be 1G, 10G, 100G or 400G
      * @param tribPortNb
      *     Trib port number allocated by the service
-     * @param tribSoltNb
-     *     First trib slot number allocated by the service
+     * @param minTribSoltNb
+     *     First contiguous trib slot number allocated by the service
+     * @param maxTribSoltNb
+     *     Last contiguous trib slot number allocated by the service
      * @param isDeletion
      *       True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion);
-
+    void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSoltNb,
+            boolean isDeletion);
 }

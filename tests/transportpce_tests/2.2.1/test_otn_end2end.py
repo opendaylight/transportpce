@@ -542,8 +542,8 @@ class TransportPCEtesting(unittest.TestCase):
                     link['org-openroadm-otn-network-topology:available-bandwidth'], 0)
                 self.assertEqual(
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 100000)
-            elif (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
-                             'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
+            elif (linkId in ('ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                             'ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
                 self.assertEqual(
                     link['org-openroadm-otn-network-topology:available-bandwidth'], 100000)
                 self.assertEqual(
@@ -553,8 +553,8 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(
                     link['org-openroadm-common-network:link-type'], 'OTN-LINK')
                 self.assertIn(link['org-openroadm-common-network:opposite-link'],
-                              ['ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
-                               'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'])
+                              ['ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                               'ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'])
             else:
                 self.fail("this link should not exist")
 

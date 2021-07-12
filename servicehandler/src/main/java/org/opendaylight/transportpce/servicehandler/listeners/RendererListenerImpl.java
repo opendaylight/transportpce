@@ -93,25 +93,26 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private void onServiceDeleteResult(RendererRpcResultSp notification) {
         switch (serviceRpcResultSp.getStatus()) {
             case Successful:
-                LOG.info("Service '{}' deleted !", notification.getServiceName());
                 String serviceType = notification.getServiceType();
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_1GE:
                     case StringConstants.SERVICE_TYPE_10GE:
                     case StringConstants.SERVICE_TYPE_100GE_M:
                         Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                                .split("\\.")[0]);
+                            .split("\\.")[0]);
                         Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                                .split("\\.")[1]);
+                            .split("\\.")[1]);
+                        Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
+                            .split("\\.")[1]);
                         updateOtnTopology(notification.getLink(), true, notification.getServiceType(),
-                            notification.getAToZDirection().getRate(), tribPort, minTribSlot);
+                            notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
                         break;
                     case StringConstants.SERVICE_TYPE_OTU4:
                     case StringConstants.SERVICE_TYPE_OTUC4:
                     case StringConstants.SERVICE_TYPE_ODU4:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         updateOtnTopology(notification.getLink(), true, notification.getServiceType(), null, null,
-                            null);
+                            null, null);
                         break;
                     default:
                         break;
@@ -187,17 +188,19 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_100GE_M:
                 Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                        .split("\\.")[0]);
+                    .split("\\.")[0]);
                 Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                        .split("\\.")[1]);
+                    .split("\\.")[1]);
+                Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
+                    .split("\\.")[1]);
                 updateOtnTopology(notification.getLink(), false, notification.getServiceType(),
-                    notification.getAToZDirection().getRate(), tribPort, minTribSlot);
+                    notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
                 break;
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
-                updateOtnTopology(notification.getLink(), false, notification.getServiceType(), null, null, null);
+                updateOtnTopology(notification.getLink(), false, notification.getServiceType(), null, null, null, null);
                 break;
             default:
                 break;
@@ -348,7 +351,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     }
 
     private void updateOtnTopology(Link link, boolean isDeletion, String serviceType, Uint32 rate, Short portNb,
-            Short slotNb) {
+            Short minSlotNb, Short maxSlotNb) {
         if (link == null) {
             return;
         }
@@ -392,7 +395,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_100GE_M:
                 LOG.info("updating otn-topology node tps -tps and tpn pools");
-                this.networkModelService.updateOtnLinks(link, rate, portNb, slotNb, isDeletion);
+                this.networkModelService.updateOtnLinks(link, rate, portNb, minSlotNb, maxSlotNb, isDeletion);
                 break;
             default:
                 break;
