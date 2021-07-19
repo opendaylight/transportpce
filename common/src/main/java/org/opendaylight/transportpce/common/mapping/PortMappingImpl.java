@@ -132,7 +132,7 @@ public class PortMappingImpl implements PortMapping {
                 LOG.info("Found MC-cap for {} - {}. Mapping: {}", nodeId, mcLcp, mcCap.toString());
                 return mcCap;
             }
-            LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", mcLcp, nodeId);
+            LOG.warn("Could not find mc-capabilities for logical connection point {} for nodeId {}", mcLcp, nodeId);
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", mcLcp,
                 nodeId, ex);
