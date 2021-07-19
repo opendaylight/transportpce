@@ -8,9 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,6 +24,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.O
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +51,8 @@ public class PceLink implements Serializable {
     private final OpenroadmLinkType linkType;
     private final NodeId sourceId;
     private final NodeId destId;
-    private transient Object sourceTP;
-    private transient Object destTP;
+    private final TpId sourceTP;
+    private final TpId destTP;
     private final String sourceNetworkSupNodeId;
     private final String destNetworkSupNodeId;
     private final String sourceCLLI;
@@ -225,11 +223,11 @@ public class PceLink implements Serializable {
         return state;
     }
 
-    public Object getSourceTP() {
+    public TpId getSourceTP() {
         return sourceTP;
     }
 
-    public Object getDestTP() {
+    public TpId getDestTP() {
         return destTP;
     }
 
@@ -408,17 +406,5 @@ public class PceLink implements Serializable {
     @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency;
-    }
-
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(this.sourceTP);
-        out.writeObject(this.destTP);
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException {
-        in.defaultReadObject();
-        this.sourceTP = in.readObject();
-        this.destTP = in.readObject();
     }
 }

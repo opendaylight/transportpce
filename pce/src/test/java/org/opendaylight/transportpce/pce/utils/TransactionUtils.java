@@ -67,6 +67,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1Builder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
@@ -203,9 +204,9 @@ public final class TransactionUtils {
         // create the roadm-to-roadm link to be measured
         Link roadm2roadmLink = new LinkBuilder().setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
                 .setSource(new SourceBuilder().setSourceNode(ietfNodeA.getNodeId())
-                        .setSourceTp("DEG2-TTP-TXRX").build())
-                .setDestination(
-                        new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX").build())
+                        .setSourceTp(new TpId("DEG2-TTP-TXRX")).build())
+                .setDestination(new DestinationBuilder().setDestNode(ietfNodeC.getNodeId())
+                        .setDestTp(new TpId("DEG1-TTP-TXRX")).build())
                 .addAugmentation(aug11)
                 .addAugmentation(aug12)
                 .addAugmentation(aug21)
