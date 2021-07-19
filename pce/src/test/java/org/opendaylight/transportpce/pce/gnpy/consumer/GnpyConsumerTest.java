@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -27,6 +28,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class GnpyConsumerTest extends JerseyTest {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerTest.class);
     private JsonStringConverter<GnpyApi> gnpyApiConverter;

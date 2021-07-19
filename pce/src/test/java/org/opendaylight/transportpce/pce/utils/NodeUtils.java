@@ -84,10 +84,10 @@ public class NodeUtils {
     public static LinkBuilder createLinkBuilder(
             String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
         SourceBuilder ietfSrcLinkBldr =
-                new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp);
+                new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(new TpId(srcTp));
         //create destination link
         DestinationBuilder ietfDestLinkBldr =
-                new DestinationBuilder().setDestNode(new NodeId(destNode)).setDestTp(destTp);
+                new DestinationBuilder().setDestNode(new NodeId(destNode)).setDestTp(new TpId(destTp));
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
         LinkId oppositeLinkId = new LinkId("OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1");
@@ -255,11 +255,11 @@ public class NodeUtils {
                 .setSource(
                         new SourceBuilder()
                                 .setSourceNode(new NodeId("OpenROADM-3-2-DEG1"))
-                                .setSourceTp("DEG1-TTP-TX").build())
+                                .setSourceTp(new TpId("DEG1-TTP-TX")).build())
                 .setDestination(
                         new DestinationBuilder()
                                 .setDestNode(new NodeId("OpenROADM-3-1-DEG1"))
-                                .setDestTp("DEG1-TTP-RX").build())
+                                .setDestTp(new TpId("DEG1-TTP-RX")).build())
                 .addAugmentation(aug11)
                 .addAugmentation(aug111)
                 .build();

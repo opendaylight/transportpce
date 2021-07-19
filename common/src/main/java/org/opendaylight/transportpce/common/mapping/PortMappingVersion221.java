@@ -259,7 +259,7 @@ public class PortMappingVersion221 {
                 for (XpdrPort xpdrPort : xponder.nonnullXpdrPort().values().stream()
                         .sorted((xp1, xp2) -> xp1.getIndex().compareTo(xp2.getIndex())).collect(Collectors.toList())) {
                     String circuitPackName = xpdrPort.getCircuitPackName();
-                    String portName = xpdrPort.getPortName().toString();
+                    String portName = xpdrPort.getPortName();
                     // If there xponder-subtree has missing circuit-packs or ports,
                     // This gives a null-pointer expection,
                     if (device.nonnullCircuitPacks().values().stream()
@@ -481,7 +481,7 @@ public class PortMappingVersion221 {
                             InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                                 .child(CircuitPacks.class,
                                     new CircuitPacksKey(port.getPartnerPort().getCircuitPackName()))
-                                .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName().toString()));
+                                .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName()));
                             Optional<Ports> port2Object = this.deviceTransactionManager
                                 .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
                                     Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -489,7 +489,7 @@ public class PortMappingVersion221 {
                                 || port2Object.get().getPortQual().getIntValue()
                                     != PortQual.RoadmExternal.getIntValue()) {
                                 LOG.error("{} : port {} on {} - error getting partner",
-                                        nodeId, port.getPartnerPort().getPortName().toString(),
+                                        nodeId, port.getPartnerPort().getPortName(),
                                         port.getPartnerPort().getCircuitPackName());
                                 continue;
                             }
@@ -908,7 +908,7 @@ public class PortMappingVersion221 {
             return null;
         }
         Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
-            .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
+            .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName()))
             .findFirst();
         if (!poOpt.isPresent()) {
             LOG.error("{} : Error fetching port {} on {}",
@@ -1046,7 +1046,7 @@ public class PortMappingVersion221 {
                         .child(CircuitPacks.class,
                             new CircuitPacksKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName()))
                         .child(Ports.class,
-                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString()));
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
                     LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
                             nodeId,
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(),
@@ -1092,7 +1092,7 @@ public class PortMappingVersion221 {
                     InstanceIdentifier<Ports> port1ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp1Name))
                         .child(Ports.class,
-                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString()));
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
                     LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(), cp1Name);
                     Optional<Ports> port1Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
@@ -1101,7 +1101,7 @@ public class PortMappingVersion221 {
                     InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
                         .child(Ports.class,
-                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName().toString()));
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName()));
                     LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
