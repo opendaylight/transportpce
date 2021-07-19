@@ -130,23 +130,22 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.portmapping_request("XPDR-A2/mapping/XPDR2-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn(
-            {'supported-interface-capability':
-               ['org-openroadm-port-types:if-100GE-ODU4',
-                'org-openroadm-port-types:if-OCH-OTU4-ODU4'],
-             'supporting-port': 'C1',
-             'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR2-CLIENT1',
-             'port-direction': 'bidirectional',
-              'port-qual': 'switch-client',
-             'lcp-hash-val': 'AK+Cna4EclRH',
-             'port-admin-state': 'InService',
-             'port-oper-state': 'InService',
-             "mpdr-restrictions": {
+        self.assertIn('org-openroadm-port-types:if-100GE-ODU4',
+            res['mapping'][0]['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-OCH-OTU4-ODU4',
+            res['mapping'][0]['supported-interface-capability'])
+        self.assertEqual('C1', res['mapping'][0]['supporting-port'])
+        self.assertEqual('1/2/1/1-PLUG-CLIENT', res['mapping'][0]['supporting-circuit-pack-name'])
+        self.assertEqual('XPDR2-CLIENT1', res['mapping'][0]['logical-connection-point'])
+        self.assertEqual('bidirectional', res['mapping'][0]['port-direction'])
+        self.assertEqual('switch-client', res['mapping'][0]['port-qual'])
+        self.assertEqual('AK+Cna4EclRH', res['mapping'][0]['lcp-hash-val'])
+        self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
+        self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
+        self.assertEqual({
                "min-trib-slot": "1.1",
                "max-trib-slot": "1.20"
-             }},
-            res['mapping'])
+             }, res['mapping'][0]['mpdr-restrictions'])
 
     # Added test to check mc-capability-profile for a transponder
     def test_08_check_mccapprofile(self):

@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.opendaylight.mdsal</groupId>
         <artifactId>binding-parent</artifactId>
-        <version>7.0.9</version>
+        <version>8.0.4</version>
         <relativePath />
     </parent>
 
@@ -25,7 +25,7 @@
             <dependency>
                 <groupId>org.opendaylight.netconf</groupId>
                 <artifactId>netconf-artifacts</artifactId>
-                <version>1.13.4</version>
+                <version>2.0.3</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -57,7 +57,7 @@
         </dependency>
         <dependency>
             <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-binding-generator-impl</artifactId>
+            <artifactId>mdsal-binding-generator</artifactId>
         </dependency>
         <!-- Aluminium bump: undocumented new dependencies -->
         <dependency>

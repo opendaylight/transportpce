@@ -54,6 +54,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1Builder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
@@ -178,11 +179,11 @@ public final class TransactionUtils {
     public static Network1 getNetwork() {
         Map<SupportingLinkKey,SupportingLink> supportingLinks = new HashMap<>();
         SupportingLink supportingLink1 = new SupportingLinkBuilder()
-                .setLinkRef("ref1")
+                .setLinkRef(new LinkId("ref1"))
                 .setNetworkRef(new NetworkId("net1"))
                 .build();
         SupportingLink supportingLink2 = new SupportingLinkBuilder()
-                .setLinkRef("ref2")
+                .setLinkRef(new LinkId("ref2"))
                 .setNetworkRef(new NetworkId("net2"))
                 .build();
         supportingLinks.put(supportingLink1.key(),supportingLink1);
@@ -193,11 +194,11 @@ public final class TransactionUtils {
                 .setDestination(
                     new DestinationBuilder()
                         .setDestNode(new NodeId("node 1"))
-                        .setDestTp("dest tp").build())
+                        .setDestTp(new TpId("dest tp")).build())
                 .setSource(
                     new SourceBuilder()
                         .setSourceNode(new NodeId("node 2"))
-                        .setSourceTp("src tp")
+                        .setSourceTp(new TpId("src tp"))
                         .build())
             .setSupportingLink(supportingLinks)
             .build();
@@ -207,12 +208,12 @@ public final class TransactionUtils {
                 .setDestination(
                     new DestinationBuilder()
                         .setDestNode(new NodeId("node 3"))
-                        .setDestTp("dest tp")
+                        .setDestTp(new TpId("dest tp"))
                         .build())
                 .setSource(
                     new SourceBuilder()
                         .setSourceNode(new NodeId("node 4"))
-                        .setSourceTp("src tp")
+                        .setSourceTp(new TpId("src tp"))
                         .build())
                 .setSupportingLink(supportingLinks)
                 .build();
@@ -294,27 +295,27 @@ public final class TransactionUtils {
             .build();
 
         Map<SupportingLinkKey,SupportingLink> supportingLinks = new HashMap<>();
-        SupportingLink supportingLink = new SupportingLinkBuilder().setLinkRef("ref1")
+        SupportingLink supportingLink = new SupportingLinkBuilder().setLinkRef(new LinkId("ref1"))
             .setNetworkRef(new NetworkId("net1")).build();
-        SupportingLink supportingLink2 = new SupportingLinkBuilder().setLinkRef("ref2")
+        SupportingLink supportingLink2 = new SupportingLinkBuilder().setLinkRef(new LinkId("ref2"))
             .setNetworkRef(new NetworkId("net1")).build();
         supportingLinks.put(supportingLink.key(),supportingLink);
         supportingLinks.put(supportingLink2.key(),supportingLink2);
         Map<LinkKey,Link> links = new HashMap<>();
         Link link1 = new LinkBuilder().setLinkId(new LinkId("link 1"))
             .setDestination(new DestinationBuilder().setDestNode(new NodeId("node 1"))
-                .setDestTp("dest tp").build())
+                .setDestTp(new TpId("dest tp")).build())
             .setSource(new SourceBuilder().setSourceNode(new NodeId("node 2"))
-                .setSourceTp("src tp").build())
+                .setSourceTp(new TpId("src tp")).build())
             .setSupportingLink(supportingLinks)
             .addAugmentation(aug1)
             .addAugmentation(aug2).build();
 
         Link link2 = new LinkBuilder().setLinkId(new LinkId("link 2"))
             .setDestination(new DestinationBuilder().setDestNode(new NodeId("node 3"))
-                .setDestTp("dest tp").build())
+                .setDestTp(new TpId("dest tp")).build())
             .setSource(new SourceBuilder().setSourceNode(new NodeId("node 4"))
-                .setSourceTp("src tp").build())
+                .setSourceTp(new TpId("src tp")).build())
             .setSupportingLink(supportingLinks).build();
         links.put(link1.key(),link1);
         links.put(link2.key(),link2);
