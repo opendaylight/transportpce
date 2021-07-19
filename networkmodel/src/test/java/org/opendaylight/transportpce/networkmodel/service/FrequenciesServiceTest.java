@@ -41,7 +41,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.a
 import org.opendaylight.yang.gen.v1.pathdescription.stub.rev201211.PathDescription;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ public class FrequenciesServiceTest extends AbstractTest {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(PATH_DESCRIPTION_FILE, StandardCharsets.UTF_8)) {
-            NormalizedNode<? extends PathArgument, ?> normalizedNode = dataObjectConverter
+            NormalizedNode normalizedNode = dataObjectConverter
                     .transformIntoNormalizedNode(reader).get();
             pathDescription = (PathDescription) getDataStoreContextUtil()
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier

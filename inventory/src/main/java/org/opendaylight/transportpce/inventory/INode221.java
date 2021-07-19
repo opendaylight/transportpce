@@ -538,7 +538,7 @@ public class INode221 {
         String circuitId = deviceInterface.getCircuitId();
         String supportingInterface = deviceInterface.getSupportingInterface();
         String supportingCircuitPackName = deviceInterface.getSupportingCircuitPackName();
-        String supportingPort = deviceInterface.getSupportingPort().toString();
+        String supportingPort = deviceInterface.getSupportingPort();
         String ethernetSpeed = "";
         String ethernetFec = "";
         String ethernetMtu = "";
@@ -1107,9 +1107,9 @@ public class INode221 {
             InternalLink internalLink = entry.getValue();
             String internalLinkName = internalLink.getInternalLinkName();
             String sourceCircuitPackName = internalLink.getSource().getCircuitPackName();
-            String sourcePortName = internalLink.getSource().getPortName().toString();
+            String sourcePortName = internalLink.getSource().getPortName();
             String destinationCircuitPackName = internalLink.getDestination().getCircuitPackName();
-            String destinationPortName = internalLink.getDestination().getPortName().toString();
+            String destinationPortName = internalLink.getDestination().getPortName();
 
             Object[] parameters = {nodeId,
                 internalLinkName,
@@ -1205,9 +1205,9 @@ public class INode221 {
             PhysicalLink physicalLink = entry.getValue();
             String physicalLinkName = physicalLink.getPhysicalLinkName();
             String sourceCircuitPackName = physicalLink.getSource().getCircuitPackName();
-            String sourcePortName = physicalLink.getSource().getPortName().toString();
+            String sourcePortName = physicalLink.getSource().getPortName();
             String destinationCircuitPackName = physicalLink.getDestination().getCircuitPackName();
-            String destinationPortName = physicalLink.getDestination().getPortName().toString();
+            String destinationPortName = physicalLink.getDestination().getPortName();
 
             Object[] parameters = {nodeId,
                 physicalLinkName,
@@ -1252,7 +1252,7 @@ public class INode221 {
             String degreeNumber = degree.getDegreeNumber().toString();
             String maxWavelengths = degree.getMaxWavelengths().toString();
             String otdrPortCircuitPackName = degree.getOtdrPort().getCircuitPackName();
-            String otdrPortPortName = degree.getOtdrPort().getPortName().toString();
+            String otdrPortPortName = degree.getOtdrPort().getPortName();
             persistDevDegreeCircuitPack(nodeId, degree, degreeNumber, connection);
             persistDevDegreeConnectionPort(nodeId, degree, degreeNumber, connection);
             //String mcCapabilitiesSlotWidthGranularity = "";
@@ -1339,7 +1339,7 @@ public class INode221 {
             ConnectionPorts connectionPorts = entry.getValue();
             String connectionPortIndex = connectionPorts.getIndex().toString();
             String circuitPackName = connectionPorts.getCircuitPackName();
-            String portName = connectionPorts.getPortName().toString();
+            String portName = connectionPorts.getPortName();
 
             Object[] parameters = {nodeId,
                 degreeNumber,
