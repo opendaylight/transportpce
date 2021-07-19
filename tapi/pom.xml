@@ -15,7 +15,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>7.0.8</version>
+    <version>8.0.1</version>
     <relativePath/>
   </parent>
 
@@ -29,7 +29,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <dependency>
         <groupId>org.opendaylight.mdsal</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>7.0.8</version>
+        <version>8.0.1</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

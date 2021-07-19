@@ -61,6 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
@@ -97,14 +98,14 @@ public class OpenRoadmTopologyTest {
         assertEquals("Should contain 2 express links", 2, links.size());
         assertEquals("ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX", links.get(0).getLinkId().getValue());
         assertEquals("ROADMA01-DEG1", links.get(0).getSource().getSourceNode().getValue());
-        assertEquals("DEG1-CTP-TXRX", links.get(0).getSource().getSourceTp());
+        assertEquals("DEG1-CTP-TXRX", links.get(0).getSource().getSourceTp().getValue());
         assertEquals("ROADMA01-DEG2", links.get(0).getDestination().getDestNode().getValue());
-        assertEquals("DEG2-CTP-TXRX", links.get(0).getDestination().getDestTp());
+        assertEquals("DEG2-CTP-TXRX", links.get(0).getDestination().getDestTp().getValue());
         assertEquals("ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX", links.get(1).getLinkId().getValue());
         assertEquals("ROADMA01-DEG2", links.get(1).getSource().getSourceNode().getValue());
-        assertEquals("DEG2-CTP-TXRX", links.get(1).getSource().getSourceTp());
+        assertEquals("DEG2-CTP-TXRX", links.get(1).getSource().getSourceTp().getValue());
         assertEquals("ROADMA01-DEG1", links.get(1).getDestination().getDestNode().getValue());
-        assertEquals("DEG1-CTP-TXRX", links.get(1).getDestination().getDestTp());
+        assertEquals("DEG1-CTP-TXRX", links.get(1).getDestination().getDestTp().getValue());
     }
 
     @Test
@@ -197,8 +198,9 @@ public class OpenRoadmTopologyTest {
             new Link1Builder().build();
         Link link = new LinkBuilder()
             .setLinkId(linkId)
-            .setSource(new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp).build())
-            .setDestination(new DestinationBuilder().setDestNode(new NodeId(dstNode)).setDestTp(destTp).build())
+            .setSource(new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(new TpId(srcTp)).build())
+            .setDestination(new DestinationBuilder().setDestNode(new NodeId(dstNode)).setDestTp(new TpId(destTp))
+                .build())
             .addAugmentation(link1)
             .build();
         InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
