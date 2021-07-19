@@ -40,7 +40,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
 import org.opendaylight.yangtools.yang.data.api.schema.MapEntryNode;
@@ -62,11 +61,11 @@ public final class PceTestUtils {
 
         DataObjectConverter dataObjectConverter = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContext);
         InputStream resourceAsStream = PceTestUtils.class.getClassLoader().getResourceAsStream(topologyDataPath);
-        Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> normalizedNode
+        Optional<NormalizedNode> normalizedNode
                 = dataObjectConverter.transformIntoNormalizedNode(resourceAsStream);
-        DataContainerChild<? extends YangInstanceIdentifier.PathArgument, ?> next
-                = ((ContainerNode) normalizedNode.get()).getValue().iterator().next();
-        MapEntryNode mapNode = ((MapNode) next).getValue().iterator().next();
+        DataContainerChild next
+                = ((ContainerNode) normalizedNode.get()).body().iterator().next();
+        MapEntryNode mapNode = ((MapNode) next).body().iterator().next();
         Optional<DataObject> dataObject = dataObjectConverter.getDataObject(mapNode, Network.QNAME);
         InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))

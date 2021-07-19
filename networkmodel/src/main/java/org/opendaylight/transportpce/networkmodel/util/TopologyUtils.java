@@ -61,13 +61,13 @@ public final class TopologyUtils {
 
         // Create Destination for link
         DestinationBuilder dstNodeBldr = new DestinationBuilder()
-            .setDestTp(destTp)
+            .setDestTp(new TpId(destTp))
             .setDestNode(new NodeId(dstNode));
 
         // Create Source for the link
         SourceBuilder srcNodeBldr = new SourceBuilder()
             .setSourceNode(new NodeId(srcNode))
-            .setSourceTp(srcTp);
+            .setSourceTp(new TpId(srcTp));
 
         LinkId linkId;
         LinkId oppositeLinkId;
@@ -190,9 +190,9 @@ public final class TopologyUtils {
         // update links terminating on the given termination-point
         List<Link> filteredTopoLinks = links.values().stream()
             .filter(l1 -> (l1.getSource().getSourceNode().getValue().equals(abstractNodeid)
-                && l1.getSource().getSourceTp().toString().equals(tpId))
+                && l1.getSource().getSourceTp().getValue().equals(tpId))
                 || (l1.getDestination().getDestNode().getValue().equals(abstractNodeid)
-                && l1.getDestination().getDestTp().toString().equals(tpId)))
+                && l1.getDestination().getDestTp().getValue().equals(tpId)))
             .collect(Collectors.toList());
         List<Link> topoLinks = new ArrayList<>();
         for (Link link : filteredTopoLinks) {
@@ -202,13 +202,13 @@ public final class TopologyUtils {
                     .get(new NodeKey(new NodeId(link.getDestination().getDestNode().getValue())))
                     .augmentation(Node1.class)
                     .getTerminationPoint()
-                    .get(new TerminationPointKey(new TpId(link.getDestination().getDestTp().toString())));
+                    .get(new TerminationPointKey(new TpId(link.getDestination().getDestTp().getValue())));
             } else {
                 otherLinkTp = nodes
                     .get(new NodeKey(new NodeId(link.getSource().getSourceNode().getValue())))
                     .augmentation(Node1.class)
                     .getTerminationPoint()
-                    .get(new TerminationPointKey(new TpId(link.getSource().getSourceTp().toString())));
+                    .get(new TerminationPointKey(new TpId(link.getSource().getSourceTp().getValue())));
             }
             Link1Builder link1Bldr = new Link1Builder(link.augmentation(Link1.class));
             if (tpBldr.augmentation(TerminationPoint1.class).getAdministrativeState().equals(AdminStates.InService)
