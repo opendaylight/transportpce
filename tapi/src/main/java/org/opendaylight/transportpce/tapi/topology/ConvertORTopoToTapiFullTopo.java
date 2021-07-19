@@ -1092,9 +1092,9 @@ public class ConvertORTopoToTapiFullTopo {
                                     .ietf.network.topology.rev180226.networks.network.Link oppositeLink) {
         String prefix = link.getLinkId().getValue().split("-")[0];
         String sourceNode = link.getSource().getSourceNode().getValue();
-        String sourceTp = link.getSource().getSourceTp().toString();
+        String sourceTp = link.getSource().getSourceTp().getValue();
         String destNode = link.getDestination().getDestNode().getValue();
-        String destTp = link.getDestination().getDestTp().toString();
+        String destTp = link.getDestination().getDestTp().getValue();
         LOG.info("prefix = {}, sourceNode = {}, sourceTp = {}, destNode = {}, destTp = {}",
                 prefix, sourceNode, sourceTp, destNode, destTp);
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
@@ -1264,9 +1264,9 @@ public class ConvertORTopoToTapiFullTopo {
     private Link createTapiOmsLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                                        .ietf.network.topology.rev180226.networks.network.Link link) {
         String sourceNode = getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue());
-        String sourceTp = link.getSource().getSourceTp().toString();
+        String sourceTp = link.getSource().getSourceTp().getValue();
         String destNode = getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue());
-        String destTp = link.getDestination().getDestTp().toString();
+        String destTp = link.getDestination().getDestTp().getValue();
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
         Uuid sourceUuidNode = new Uuid(UUID.nameUUIDFromBytes((String.join("+", sourceNode,
             PHTNC_MEDIA)).getBytes(Charset.forName("UTF-8"))).toString());
@@ -1358,11 +1358,11 @@ public class ConvertORTopoToTapiFullTopo {
                 String sourceNode = (link.getSource().getSourceNode().getValue().contains("ROADM"))
                     ? getIdBasedOnModelVersion(link.getSource().getSourceNode().getValue())
                     : link.getSource().getSourceNode().getValue();
-                String sourceTp = link.getSource().getSourceTp().toString();
+                String sourceTp = link.getSource().getSourceTp().getValue();
                 String destNode = (link.getDestination().getDestNode().getValue().contains("ROADM"))
                     ? getIdBasedOnModelVersion(link.getDestination().getDestNode().getValue())
                     : link.getDestination().getDestNode().getValue();
-                String destTp = link.getDestination().getDestTp().toString();
+                String destTp = link.getDestination().getDestTp().getValue();
                 Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
                 Uuid sourceUuidNode = (sourceNode.contains("ROADM")) ? new Uuid(UUID.nameUUIDFromBytes((
                     String.join("+", sourceNode, PHTNC_MEDIA)).getBytes(Charset.forName("UTF-8"))).toString())

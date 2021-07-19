@@ -24,7 +24,6 @@ import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
@@ -35,7 +34,7 @@ public class JsonStringConverterTest extends AbstractTest {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader("src/test/resources/gnpy_request.json", StandardCharsets.UTF_8)) {
-            NormalizedNode<? extends PathArgument, ?> normalizedNode = dataObjectConverter
+            NormalizedNode normalizedNode = dataObjectConverter
                     .transformIntoNormalizedNode(reader).get();
             GnpyApi gnpyRequest = (GnpyApi) getDataStoreContextUtil().getBindingDOMCodecServices()
                     .fromNormalizedNode(YangInstanceIdentifier.of(GnpyApi.QNAME), normalizedNode).getValue();
