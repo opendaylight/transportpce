@@ -26,7 +26,6 @@ import org.opendaylight.mdsal.dom.api.DOMDataTreeWriteTransaction;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNodes;
 import org.slf4j.Logger;
@@ -125,7 +124,7 @@ public final class DeviceWrapper {
 
     private static void insertDataIntoDS(XMLDataObjectConverter xmlConverter, InputStream xmlDataInputStream,
             QName dataQName, DOMDataBroker domDataBroker) {
-        Optional<NormalizedNode<? extends PathArgument, ?>> initialDataNormalizedNodes =
+        Optional<NormalizedNode> initialDataNormalizedNodes =
                 xmlConverter.transformIntoNormalizedNode(xmlDataInputStream);
         Preconditions.checkArgument(initialDataNormalizedNodes.isPresent(),
                 "Initial data could not be converted to normalized nodes");
@@ -133,7 +132,7 @@ public final class DeviceWrapper {
 
         YangInstanceIdentifier initialDataIi = YangInstanceIdentifier.of(dataQName);
         LOG.debug("Searching for {} inside {}", initialDataIi, initialDataNormalizedNodes.get());
-        Optional<NormalizedNode<?, ?>> dataNormalizedNodes =
+        Optional<NormalizedNode> dataNormalizedNodes =
                 NormalizedNodes.findNode(initialDataNormalizedNodes.get(), initialDataIi);
         Preconditions.checkArgument(dataNormalizedNodes.isPresent());
         LOG.info("Initial data was successfully stored into ds");
