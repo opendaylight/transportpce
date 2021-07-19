@@ -140,9 +140,9 @@ public final class OpenRoadmOtnTopology {
         }
         if (links.size() == 2) {
             links.addAll(initialiseOtnLinks(suppOtu4Links.get(0).getSource().getSourceNode().getValue(),
-                suppOtu4Links.get(0).getSource().getSourceTp().toString(),
+                suppOtu4Links.get(0).getSource().getSourceTp().getValue(),
                 suppOtu4Links.get(0).getDestination().getDestNode().getValue(),
-                suppOtu4Links.get(0).getDestination().getDestTp().toString(),
+                suppOtu4Links.get(0).getDestination().getDestTp().getValue(),
                 OtnLinkType.ODTU4, "ODU4"));
         }
         List<TerminationPoint> tps = new ArrayList<>();
@@ -634,7 +634,7 @@ public final class OpenRoadmOtnTopology {
                 SupportingTerminationPoint stp = new SupportingTerminationPointBuilder()
                     .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
                     .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
-                    .setTpRef(tpId.getValue())
+                    .setTpRef(tpId)
                     .build();
                 TerminationPoint ietfTpNw = buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, Map.of(stp.key(), stp),
                     mapping);

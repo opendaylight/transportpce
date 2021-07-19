@@ -731,12 +731,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     String nodeId = nodeAndTp[0];
                     String tp = nodeAndTp[1];
                     Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
-                        .equals(nodeId) && lk.getSource().getSourceTp().toString().equals(tp)).findFirst().get();
+                        .equals(nodeId) && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst().get();
                     if (!links.contains(slink)) {
                         links.add(slink);
                     }
                     Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
-                        .equals(nodeId) && lk.getDestination().getDestTp().toString().equals(tp)).findFirst().get();
+                        .equals(nodeId) && lk.getDestination().getDestTp().getValue().equals(tp)).findFirst().get();
                     if (!links.contains(dlink)) {
                         links.add(dlink);
                     }

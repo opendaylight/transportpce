@@ -53,7 +53,7 @@ public class ServiceListTopology {
             circuitPackName = port.getCircuitPackName();
 
             //Get port name
-            portName = port.getPortName().toString();
+            portName = port.getPortName();
 
             AToZBuilder a2zBldr = new AToZBuilder();
 
@@ -113,7 +113,7 @@ public class ServiceListTopology {
             circuitPackName = port.getCircuitPackName();
 
             //Get port name
-            portName = port.getPortName().toString();
+            portName = port.getPortName();
 
             ZToABuilder z2aBldr = new ZToABuilder();
 

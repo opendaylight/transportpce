@@ -200,7 +200,7 @@ public class PcePathDescription {
             atozMap.put(srcResource.key(),srcResource);
 
             // source TP
-            tpName = pcelink.getSourceTP().toString();
+            tpName = pcelink.getSourceTP().getValue();
             stp = new TerminationPointBuilder()
                     .setTpNodeId(srcName).setTpId(tpName)
                     .build();
@@ -228,7 +228,7 @@ public class PcePathDescription {
 
             String destName = pcelink.getDestId().getValue();
             // target TP
-            tpName = pcelink.getDestTP().toString();
+            tpName = pcelink.getDestTP().getValue();
             TerminationPoint dtp = new TerminationPointBuilder()
                 .setTpNodeId(destName).setTpId(tpName)
                 .build();
@@ -313,7 +313,7 @@ public class PcePathDescription {
             ztoaList.put(srcResource.key(),srcResource);
 
             // source TP
-            tpName = pcelink.getSourceTP().toString();
+            tpName = pcelink.getSourceTP().getValue();
             stp = new TerminationPointBuilder()
                     .setTpNodeId(srcName).setTpId(tpName)
                     .build();
@@ -340,7 +340,7 @@ public class PcePathDescription {
 
             String destName = pcelink.getDestId().getValue();
             // target TP
-            tpName = pcelink.getDestTP().toString();
+            tpName = pcelink.getDestTP().getValue();
             TerminationPoint ttp = new TerminationPointBuilder()
                     .setTpNodeId(destName).setTpId(tpName).build();
 

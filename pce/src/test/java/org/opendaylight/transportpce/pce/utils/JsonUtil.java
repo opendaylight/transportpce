@@ -62,7 +62,7 @@ public final class JsonUtil {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
                 JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
-                        JSONCodecFactorySupplier.RFC7951.getShared(schemaCtx), schemaCtx);) {
+                    JSONCodecFactorySupplier.RFC7951.getShared(schemaCtx));) {
             jsonParser.parse(reader);
             YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
             if (bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult()) != null) {

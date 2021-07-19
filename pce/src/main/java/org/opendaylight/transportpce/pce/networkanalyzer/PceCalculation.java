@@ -253,7 +253,7 @@ public class PceCalculation {
             Network1 nw1 = readTopology(nwInstanceIdentifier).augmentation(Network1.class);
             if (nw1 != null) {
                 allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
-                    -> l1.getSource().getSourceTp().toString().compareTo(l2.getSource().getSourceTp().toString()))
+                    -> l1.getSource().getSourceTp().getValue().compareTo(l2.getSource().getSourceTp().getValue()))
                         .collect(Collectors.toList());
             } else {
                 LOG.warn("no otn links in otn-topology");
@@ -638,12 +638,12 @@ public class PceCalculation {
                     pcelink.getlinkType(), pcelink);
                 break;
             case ADDLINK:
-                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
+                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().getValue()));
                 addLinks.add(pcelink);
                 LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
                 break;
             case DROPLINK:
-                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
+                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().getValue()));
                 dropLinks.add(pcelink);
                 LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
                 break;
@@ -651,13 +651,13 @@ public class PceCalculation {
                 // store separately all SRG links directly
                 azSrgs.add(sourceId);
                 // connected to A/Z
-                if (!dest.checkTP(pcelink.getDestTP().toString())) {
+                if (!dest.checkTP(pcelink.getDestTP().getValue())) {
                     LOG.debug(
                         "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
-                    pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().toString()));
+                if (dest.getXpdrClient(pcelink.getDestTP().getValue()) != null) {
+                    pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().getValue()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -668,13 +668,13 @@ public class PceCalculation {
                 // store separately all SRG links directly
                 azSrgs.add(destId);
                 // connected to A/Z
-                if (!source.checkTP(pcelink.getSourceTP().toString())) {
+                if (!source.checkTP(pcelink.getSourceTP().getValue())) {
                     LOG.debug(
                         "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
-                    pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().toString()));
+                if (source.getXpdrClient(pcelink.getSourceTP().getValue()) != null) {
+                    pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().getValue()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -704,8 +704,8 @@ public class PceCalculation {
 
         switch (pceOtnLink.getlinkType()) {
             case OTNLINK:
-                if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
-                    pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().toString()));
+                if (dest.getXpdrClient(pceOtnLink.getDestTP().getValue()) != null) {
+                    pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().getValue()));
                 }
 
                 allPceLinks.put(linkId, pceOtnLink);
