@@ -187,9 +187,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 if (inputLink != null) {
                     RoadmLinks roadmLink = new RoadmLinks();
                     roadmLink.setSrcNodeId(inputLink.getSource().getSourceNode().getValue());
-                    roadmLink.setSrcTpId(inputLink.getSource().getSourceTp().toString());
+                    roadmLink.setSrcTpId(inputLink.getSource().getSourceTp().getValue());
                     roadmLink.setDestNodeId(inputLink.getDestination().getDestNode().getValue());
-                    roadmLink.setDestTpid(inputLink.getDestination().getDestTp().toString());
+                    roadmLink.setDestTpid(inputLink.getDestination().getDestTp().getValue());
                     roadmLink.setLinkId(inputLink.getLinkId());
                     roadmLinks.add(roadmLink);
                     spanLossResult = getLinkSpanloss(roadmLinks);
@@ -214,9 +214,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                         // Only calculate spanloss for Roadm-to-Roadm links
                         RoadmLinks roadmLink = new RoadmLinks();
                         roadmLink.setSrcNodeId(link.getSource().getSourceNode().getValue());
-                        roadmLink.setSrcTpId(link.getSource().getSourceTp().toString());
+                        roadmLink.setSrcTpId(link.getSource().getSourceTp().getValue());
                         roadmLink.setDestNodeId(link.getDestination().getDestNode().getValue());
-                        roadmLink.setDestTpid(link.getDestination().getDestTp().toString());
+                        roadmLink.setDestTpid(link.getDestination().getDestTp().getValue());
                         roadmLink.setLinkId(link.getLinkId());
                         roadmLinks.add(roadmLink);
                     }
@@ -271,9 +271,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 // Only calculate spanloss for Roadm-to-Roadm links
                 RoadmLinks roadmLink = new RoadmLinks();
                 roadmLink.setSrcNodeId(link.getSource().getSourceNode().getValue());
-                roadmLink.setSrcTpId(link.getSource().getSourceTp().toString());
+                roadmLink.setSrcTpId(link.getSource().getSourceTp().getValue());
                 roadmLink.setDestNodeId(link.getDestination().getDestNode().getValue());
-                roadmLink.setDestTpid(link.getDestination().getDestTp().toString());
+                roadmLink.setDestTpid(link.getDestination().getDestTp().getValue());
                 roadmLinks.add(roadmLink);
             }
         }

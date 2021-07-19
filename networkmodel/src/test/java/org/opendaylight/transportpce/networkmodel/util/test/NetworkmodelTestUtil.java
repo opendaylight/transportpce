@@ -91,10 +91,10 @@ public final class NetworkmodelTestUtil {
             .setLinkId(new LinkId(type.getName() + "-SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
             .setSource(new SourceBuilder()
                     .setSourceNode(new NodeId("SPDRA-XPDR1"))
-                    .setSourceTp("XPDR1-NETWORK1").build())
+                    .setSourceTp(new TpId("XPDR1-NETWORK1")).build())
             .setDestination(new DestinationBuilder()
                     .setDestNode(new NodeId("SPDRZ-XPDR1"))
-                    .setDestTp("XPDR1-NETWORK1").build())
+                    .setDestTp(new TpId("XPDR1-NETWORK1")).build())
             .addAugmentation(
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
@@ -115,10 +115,10 @@ public final class NetworkmodelTestUtil {
             .setLinkId(new LinkId(type.getName() + "-SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
             .setSource(new SourceBuilder()
                     .setSourceNode(new NodeId("SPDRZ-XPDR1"))
-                    .setSourceTp("XPDR1-NETWORK1").build())
+                    .setSourceTp(new TpId("XPDR1-NETWORK1")).build())
             .setDestination(new DestinationBuilder()
                     .setDestNode(new NodeId("SPDRA-XPDR1"))
-                    .setDestTp("XPDR1-NETWORK1").build())
+                    .setDestTp(new TpId("XPDR1-NETWORK1")).build())
             .addAugmentation(
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
@@ -175,7 +175,7 @@ public final class NetworkmodelTestUtil {
         SupportingTerminationPoint supTermPointA = new SupportingTerminationPointBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
             .setNodeRef(new NodeId("SPDRA-XPDR1"))
-            .setTpRef("XPDR1-NETWORK1")
+            .setTpRef(new TpId("XPDR1-NETWORK1"))
             .build();
         Map<SupportingTerminationPointKey,SupportingTerminationPoint> supTermPointMapA =
                 Map.of(supTermPointA.key(), supTermPointA);
@@ -191,7 +191,7 @@ public final class NetworkmodelTestUtil {
         SupportingTerminationPoint supTermPointZ = new SupportingTerminationPointBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
             .setNodeRef(new NodeId("SPDRZ-XPDR1"))
-            .setTpRef("XPDR1-NETWORK1")
+            .setTpRef(new TpId("XPDR1-NETWORK1"))
             .build();
         Map<SupportingTerminationPointKey,SupportingTerminationPoint> supTermPointMapZ =
                 Map.of(supTermPointZ.key(), supTermPointZ);

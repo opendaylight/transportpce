@@ -203,11 +203,11 @@ public class PceLinkTest extends AbstractTest {
     private static LinkBuilder createLinkBuilder(
             String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
         SourceBuilder ietfSrcLinkBldr =
-                new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp);
+                new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(new TpId(srcTp));
         //create destination link
         DestinationBuilder ietfDestLinkBldr =
                 new DestinationBuilder().setDestNode(new NodeId(destNode))
-                        .setDestTp(destTp);
+                        .setDestTp(new TpId(destTp));
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
         //For setting up attributes for openRoadm augment

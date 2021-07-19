@@ -764,28 +764,27 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODTU4"))
                 .collect(Collectors.toList());
         }
-        List<Link> links = new ArrayList<>();
-        if (odu4links != null) {
-            for (LinkTp linkTp : nodesTopoTps) {
-                String tp = linkTp.getTpId();
-                String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
-                    .append(tp.split("-")[0]).toString();
-                Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
-                    .equals(nodeId) && lk.getSource().getSourceTp().toString().equals(tp)).findFirst().get();
-                if (!links.contains(slink)) {
-                    links.add(slink);
-                }
-                Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
-                    .equals(nodeId) && lk.getDestination().getDestTp().toString().equals(tp)).findFirst().get();
-                if (!links.contains(dlink)) {
-                    links.add(dlink);
-                }
-            }
-            LOG.debug("odu4links = {}", links.toString());
-            return links;
-        } else {
+        if (odu4links == null) {
             return null;
         }
+        List<Link> links = new ArrayList<>();
+        for (LinkTp linkTp : nodesTopoTps) {
+            String tp = linkTp.getTpId();
+            String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
+                .append(tp.split("-")[0]).toString();
+            Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
+                .equals(nodeId) && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst().get();
+            if (!links.contains(slink)) {
+                links.add(slink);
+            }
+            Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
+                .equals(nodeId) && lk.getDestination().getDestTp().getValue().equals(tp)).findFirst().get();
+            if (!links.contains(dlink)) {
+                links.add(dlink);
+            }
+        }
+        LOG.debug("odu4links = {}", links.toString());
+        return links;
     }
 
     private void createOpenRoadmOtnNode(String nodeId) {
