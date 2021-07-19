@@ -724,9 +724,9 @@ public class ConvertORTopoToTapiTopo {
                                     .ietf.network.topology.rev180226.networks.network.Link oppositeLink) {
         String prefix = link.getLinkId().getValue().split("-")[0];
         String sourceNode = link.getSource().getSourceNode().getValue();
-        String sourceTp = link.getSource().getSourceTp().toString();
+        String sourceTp = link.getSource().getSourceTp().getValue();
         String destNode = link.getDestination().getDestNode().getValue();
-        String destTp = link.getDestination().getDestTp().toString();
+        String destTp = link.getDestination().getDestTp().getValue();
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
         Uuid sourceUuidTp;
         Uuid sourceUuidNode;

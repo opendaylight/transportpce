@@ -39,7 +39,7 @@ public final class TopologyDataUtils {
         if (topoFile.exists()) {
             String fileName = topoFile.getName();
             try (InputStream targetStream = new FileInputStream(topoFile)) {
-                Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = XMLDataObjectConverter
+                Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(targetStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
                     throw new IllegalStateException(String.format(
@@ -82,7 +82,7 @@ public final class TopologyDataUtils {
         if (portmappingFile.exists()) {
             String fileName = portmappingFile.getName();
             try (InputStream targetStream = new FileInputStream(portmappingFile)) {
-                Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
+                Optional<NormalizedNode> transformIntoNormalizedNode = null;
                 transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                     .transformIntoNormalizedNode(targetStream);
                 if (!transformIntoNormalizedNode.isPresent()) {

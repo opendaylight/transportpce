@@ -281,9 +281,9 @@ public class PostAlgoPathValidator {
 
         for (PceGraphEdge edge : path.getEdgeList()) {
             NodeId linkSrcNode = edge.link().getSourceId();
-            String linkSrcTp = edge.link().getSourceTP().toString();
+            String linkSrcTp = edge.link().getSourceTP().getValue();
             NodeId linkDestNode = edge.link().getDestId();
-            String linkDestTp = edge.link().getDestTP().toString();
+            String linkDestTp = edge.link().getDestTP().getValue();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
             List<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
@@ -316,9 +316,9 @@ public class PostAlgoPathValidator {
 
         for (PceGraphEdge edge : path.getEdgeList()) {
             NodeId linkSrcNode = edge.link().getSourceId();
-            String linkSrcTp = edge.link().getSourceTP().toString();
+            String linkSrcTp = edge.link().getSourceTP().getValue();
             NodeId linkDestNode = edge.link().getDestId();
-            String linkDestTp = edge.link().getDestTP().toString();
+            String linkDestTp = edge.link().getDestTP().getValue();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
             List<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
