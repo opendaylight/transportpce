@@ -497,7 +497,7 @@ public class INode121 {
         String parentPortCircuitPackName = (cpPort.getPartnerPort() == null ? "" :
             (cpPort.getPartnerPort().getCircuitPackName() == null ? "" : cpPort.getPartnerPort().getCircuitPackName()));
         String partnerPortPortName = (cpPort.getPartnerPort() == null ? "" :
-            (cpPort.getPartnerPort().getPortName() == null ? "" : cpPort.getPartnerPort().getPortName().toString()));
+            (cpPort.getPartnerPort().getPortName() == null ? "" : cpPort.getPartnerPort().getPortName()));
         String partnerPortCircuitPackName = (cpPort.getParentPort() == null ? "" :
             (cpPort.getParentPort().getCircuitPackName() == null ? "" : cpPort.getParentPort().getCircuitPackName()));
         String parentPortPortName = (cpPort.getParentPort() == null ? "" :
@@ -728,7 +728,7 @@ public class INode121 {
         String circuitId = deviceInterface.getCircuitId();
         String supportingInterface = deviceInterface.getSupportingInterface();
         String supportingCircuitPackName = deviceInterface.getSupportingCircuitPackName();
-        String supportingPort = deviceInterface.getSupportingPort().toString();
+        String supportingPort = deviceInterface.getSupportingPort();
 
         switch (deviceInterface.getType().toString()) {
 
@@ -1225,9 +1225,9 @@ public class INode121 {
             InternalLink internalLink = internalLinkEntry.getValue();
             String internalLinkName = internalLink.getInternalLinkName();
             String sourceCircuitPackName = internalLink.getSource().getCircuitPackName();
-            String sourcePortName = internalLink.getSource().getPortName().toString();
+            String sourcePortName = internalLink.getSource().getPortName();
             String destinationCircuitPackName = internalLink.getDestination().getCircuitPackName();
-            String destinationPortName = internalLink.getDestination().getPortName().toString();
+            String destinationPortName = internalLink.getDestination().getPortName();
 
             Object[] parameters = { nodeId, internalLinkName, sourceCircuitPackName, sourcePortName,
                 destinationCircuitPackName, destinationPortName, startTimestamp, startTimestamp };
@@ -1325,9 +1325,9 @@ public class INode121 {
             PhysicalLink physicalLink = physicalLinkEntry.getValue();
             String physicalLinkName = physicalLink.getPhysicalLinkName();
             String sourceCircuitPackName = physicalLink.getSource().getCircuitPackName();
-            String sourcePortName = physicalLink.getSource().getPortName().toString();
+            String sourcePortName = physicalLink.getSource().getPortName();
             String destinationCircuitPackName = physicalLink.getDestination().getCircuitPackName();
-            String destinationPortName = physicalLink.getDestination().getPortName().toString();
+            String destinationPortName = physicalLink.getDestination().getPortName();
 
             Object[] parameters = {nodeId,
                 physicalLinkName,
@@ -1381,7 +1381,7 @@ public class INode121 {
             String otdrPortCircuitPackName =
                     (degree.getOtdrPort() == null ? "" : degree.getOtdrPort().getCircuitPackName());
             String otdrPortPortName =
-                    (degree.getOtdrPort() == null ? "" : degree.getOtdrPort().getPortName().toString());
+                    (degree.getOtdrPort() == null ? "" : degree.getOtdrPort().getPortName());
             // String mcCapabilitiesSlotWidthGranularity = "";
             // String mcCapabilitiesCenterFreqGranularity = "";
             // String mcCapabilitiesMinSlots = "-1";
@@ -1458,7 +1458,7 @@ public class INode121 {
         for (Map.Entry<ConnectionPortsKey, ConnectionPorts> portEntry : connectionPortsMap.entrySet()) {
             String connectionPortIndex = portEntry.getValue().getIndex().toString();
             String circuitPackName = portEntry.getValue().getCircuitPackName();
-            String portName = portEntry.getValue().getPortName().toString();
+            String portName = portEntry.getValue().getPortName();
 
             Object[] parameters = {nodeId,
                 degreeNumber,

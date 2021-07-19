@@ -408,10 +408,11 @@ public final class OpenRoadmTopology {
 
     private static LinkBuilder createLink(String srcNode, String destNode, String srcTp, String destTp) {
         //create source link
-        SourceBuilder ietfSrcLinkBldr = new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp);
+        SourceBuilder ietfSrcLinkBldr = new SourceBuilder().setSourceNode(new NodeId(srcNode))
+            .setSourceTp(new TpId(srcTp));
         //create destination link
         DestinationBuilder ietfDestLinkBldr = new DestinationBuilder().setDestNode(new NodeId(destNode))
-            .setDestTp(destTp);
+            .setDestTp(new TpId(destTp));
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
         return new LinkBuilder()
             .setSource(ietfSrcLinkBldr.build())
