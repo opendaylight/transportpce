@@ -35,7 +35,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
-import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,22 +105,14 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
-                if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
-                    @SuppressWarnings("unchecked")
-                    List<Uint16> tsList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
-                    String tribport = rc.getResultTribPort().values().toArray()[0].toString();
-                    OpucnTribSlotDef minOpucnTs = OpucnTribSlotDef
-                            .getDefaultInstance(String.join(".", tribport, tsList.get(0).toString()));
-                    OpucnTribSlotDef maxOpucnTs = OpucnTribSlotDef
-                            .getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()));
+                if (rc.getResultTribPortTribSlot().get(0) != null && rc.getResultTribPortTribSlot().get(1) != null) {
                     atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
-                            .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
-                            .setTribSlotNumber(tsList.get(0))
-                            .setMinTribSlot(minOpucnTs)
-                            .setMaxTribSlot(maxOpucnTs);
+                            .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
+                            .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {
                     LOG.error("Trib port and trib slot number should be present");
-                    atoZDirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
+                    atoZDirectionBldr.setMinTribSlot(new OpucnTribSlotDef("0.0"))
+                        .setMaxTribSlot(new OpucnTribSlotDef("0.0"));
                 }
                 break;
             default:
@@ -154,22 +145,14 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
-                if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
-                    @SuppressWarnings("unchecked")
-                    List<Uint16> tsList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
-                    String tribport = rc.getResultTribPort().values().toArray()[0].toString();
-                    OpucnTribSlotDef minOpucnTs = OpucnTribSlotDef
-                            .getDefaultInstance(String.join(".", tribport, tsList.get(0).toString()));
-                    OpucnTribSlotDef maxOpucnTs = OpucnTribSlotDef
-                            .getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()));
+                if (rc.getResultTribPortTribSlot().get(0) != null && rc.getResultTribPortTribSlot().get(1) != null) {
                     ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
-                            .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
-                            .setTribSlotNumber(tsList.get(0))
-                            .setMinTribSlot(minOpucnTs)
-                            .setMaxTribSlot(maxOpucnTs);
+                            .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
+                            .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {
                     LOG.error("Trib port and trib slot number should be present");
-                    ztoADirectionBldr.setTribSlotNumber(Uint16.valueOf(0)).setTribPortNumber(Uint16.valueOf(0));
+                    ztoADirectionBldr.setMinTribSlot(new OpucnTribSlotDef("0.0"))
+                        .setMaxTribSlot(new OpucnTribSlotDef("0.0"));
                 }
                 break;
             default:

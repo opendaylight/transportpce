@@ -136,12 +136,6 @@ module transportpce-pathDescription {
          description
          "Maximum frequency in THz.";
       }
-      leaf trib-port-number {
-        type uint16;
-      }
-      leaf trib-slot-number {
-        type uint16;
-      }
       leaf min-trib-slot {
           type org-openroadm-otn-common-types:opucn-trib-slot-def;
           description
@@ -183,12 +177,6 @@ module transportpce-pathDescription {
            type org-openroadm-common-optical-channel-types:frequency-THz;
          description
          "Maximum frequency in THz.";
-      }
-      leaf trib-port-number {
-        type uint16;
-      }
-      leaf trib-slot-number {
-        type uint16;
       }
       leaf min-trib-slot {
           type org-openroadm-otn-common-types:opucn-trib-slot-def;

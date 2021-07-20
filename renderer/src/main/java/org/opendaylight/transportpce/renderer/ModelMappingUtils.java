@@ -244,9 +244,13 @@ public final class ModelMappingUtils {
 
         // set the trib-slots and trib-ports for the lower oder odu
         if (serviceRate.intValue() == 1 || (serviceRate.intValue() == 10)) {
+            Short tribPort = Short.valueOf(pathDescription.getAToZDirection().getMinTribSlot().getValue()
+                .split("\\.")[0]);
+            Short minTribSlot = Short.valueOf(pathDescription.getAToZDirection().getMinTribSlot().getValue()
+                .split("\\.")[1]);
             otnServicePathInputBuilder
-                .setTribPortNumber(pathDescription.getAToZDirection().getTribPortNumber().shortValue())
-                .setTribSlot(pathDescription.getAToZDirection().getTribSlotNumber().shortValue());
+                .setTribPortNumber(tribPort)
+                .setTribSlot(minTribSlot);
         }
         return otnServicePathInputBuilder.build();
     }

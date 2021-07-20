@@ -230,10 +230,6 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
         self.assertEqual(100, res['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['trib-port-number'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['trib-slot-number'])
         self.assertEqual('1.1', res['output']['response-parameters']['path-description']
                          ['aToZ-direction']['min-trib-slot'])
         self.assertEqual('1.20', res['output']['response-parameters']['path-description']
@@ -243,10 +239,6 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
         self.assertEqual(100, res['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['trib-port-number'])
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['trib-slot-number'])
         self.assertEqual('1.1', res['output']['response-parameters']['path-description']
                          ['zToA-direction']['min-trib-slot'])
         self.assertEqual('1.20', res['output']['response-parameters']['path-description']
