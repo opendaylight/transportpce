@@ -18,7 +18,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>odl-transportpce-tapi</artifactId>
-  <version>3.1.0-SNAPSHOT</version>
+  <version>3.2.0-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: transportpce :: tapi</name>
