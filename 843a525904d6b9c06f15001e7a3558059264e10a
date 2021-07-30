@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "afe75016_64d48425",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-07-30T16:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a06591f_aaea63ab",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 13
+      },
+      "revId": "843a525904d6b9c06f15001e7a3558059264e10a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "916c8be8_39999e37",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "843a525904d6b9c06f15001e7a3558059264e10a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b63b0353_0ff1ec55",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-07-30T16:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "916c8be8_39999e37",
+      "revId": "843a525904d6b9c06f15001e7a3558059264e10a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "843a525904d6b9c06f15001e7a3558059264e10a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bb13694_8d31498f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRenderingResult.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-07-30T16:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d694d32e_0723eb2a",
+      "range": {
+        "startLine": 59,
+        "startChar": 55,
+        "endLine": 59,
+        "endChar": 62
+      },
+      "revId": "843a525904d6b9c06f15001e7a3558059264e10a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
