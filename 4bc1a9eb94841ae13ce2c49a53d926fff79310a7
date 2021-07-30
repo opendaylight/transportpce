@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2937592_a1fa133f",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/rpcs/DeviceRendererRPCImplTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-07-30T12:10:13Z",
+      "side": 1,
+      "message": "Action.Delete ?\nFor more consistency even it has no impact on the test...",
+      "range": {
+        "startLine": 53,
+        "startChar": 70,
+        "endLine": 53,
+        "endChar": 79
+      },
+      "revId": "4bc1a9eb94841ae13ce2c49a53d926fff79310a7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
