@@ -11,10 +11,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -92,6 +94,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.NodeEdgePointRef;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
@@ -112,6 +115,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
@@ -233,6 +237,136 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.info("TAPI node for or node {} successfully merged", orNodeId);
         }
         // Device not managed yet
+    }
+
+    @Override
+    public void updateTapiTopology(String nodeId, Mapping mapping) {
+        List<Uuid> uuids = getChangedNodeUuids(nodeId, mapping);
+        if (uuids == null) {
+            return;
+        }
+
+        List<Uuid> changedOneps = updateNeps(mapping, uuids);
+        updateLinks(changedOneps, nodeId, mapping);
+
+        LOG.info("Updated TAPI topology successfully.");
+    }
+
+    private void updateLinks(List<Uuid> changedOneps, String nodeId, Mapping mapping) {
+        try {
+            InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class).child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                    .build();
+            Optional<Topology> optTopology = this.networkTransactionService
+                    .read(LogicalDatastoreType.OPERATIONAL, topoIID).get();
+            if (optTopology.isEmpty()) {
+                LOG.error("Could not update TAPI links");
+                return;
+            }
+            Map<LinkKey, Link> links = optTopology.get().getLink();
+            if (links != null && links.values().size() > 0) {
+                for (Link link : links.values()) {
+                    List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
+                            .map(NodeEdgePointRef::getNodeEdgePointUuid).collect(Collectors.toList());
+                    if (!Collections.disjoint(changedOneps, linkNeps)) {
+                        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
+                                .augmentation(Context1.class).child(TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Link.class, new LinkKey(link.getUuid())).build();
+                        Link linkblr = new LinkBuilder().setUuid(link.getUuid())
+                                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                                .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
+                    }
+                }
+            }
+            this.networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Could not update TAPI links");
+        }
+    }
+
+    private List<Uuid> updateNeps(Mapping mapping, List<Uuid> uuids) {
+        List<Uuid> changedOneps = new ArrayList<>();
+        for (Uuid nodeUuid : uuids) {
+            try {
+                InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class).child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                        .build();
+                Optional<Node> optionalNode = this.networkTransactionService.read(
+                        LogicalDatastoreType.OPERATIONAL, nodeIID).get();
+                if (optionalNode.isPresent()) {
+                    Node node = optionalNode.get();
+                    List<OwnedNodeEdgePoint> oneps = node.getOwnedNodeEdgePoint().values().stream()
+                            .filter(onep -> ((Name) onep.getName().values().toArray()[0]).getValue()
+                                    .contains(mapping.getLogicalConnectionPoint())).collect(Collectors.toList());
+                    for (OwnedNodeEdgePoint onep : oneps) {
+                        changedOneps.add(onep.getUuid());
+                        updateSips(mapping, onep);
+                        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                                .augmentation(Context1.class).child(TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Node.class, new NodeKey(nodeUuid))
+                                .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
+                                .build();
+                        OwnedNodeEdgePoint onepblr = new OwnedNodeEdgePointBuilder().setUuid(onep.getUuid())
+                                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                                .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onepblr);
+                    }
+                    this.networkTransactionService.commit().get();
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Could not update TAPI NEP");
+            }
+        }
+        return changedOneps;
+    }
+
+    private List<Uuid> getChangedNodeUuids(String nodeId, Mapping mapping) {
+        List<Uuid> uuids = new ArrayList<>();
+        if (nodeId.contains("ROADM")) {
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else if (nodeId.contains("PDR") && mapping.getLogicalConnectionPoint().contains("CLIENT")) {
+            int xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+            String xpdrNodeId = nodeId + TapiStringConstants.XPDR + xpdrNb;
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, TapiStringConstants.DSR))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else if (nodeId.contains("PDR") && mapping.getLogicalConnectionPoint().contains("NETWORK")) {
+            int xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+            String xpdrNodeId = nodeId + TapiStringConstants.XPDR + xpdrNb;
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, TapiStringConstants.DSR))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, TapiStringConstants.OTSI))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else {
+            LOG.error("Updating this device is currently not supported");
+            return null;
+        }
+        return uuids;
+    }
+
+    private void updateSips(Mapping mapping, OwnedNodeEdgePoint onep) {
+        if (onep.getMappedServiceInterfacePoint() == null
+                || onep.getMappedServiceInterfacePoint().size() == 0) {
+            return;
+        }
+        for (MappedServiceInterfacePoint msip : onep.getMappedServiceInterfacePoint().values()) {
+            InstanceIdentifier<ServiceInterfacePoint> sipIID = InstanceIdentifier
+                    .builder(Context.class)
+                    .child(ServiceInterfacePoint.class,
+                            new ServiceInterfacePointKey(msip.getServiceInterfacePointUuid()))
+                    .build();
+            ServiceInterfacePoint sipblr = new ServiceInterfacePointBuilder()
+                    .setUuid(msip.getServiceInterfacePointUuid())
+                    .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                    .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, sipIID, sipblr);
+        }
+
     }
 
     private Map<NodeKey, Node> transformXpdrToTapiNode(String nodeId, List<Mapping> xpdrClMaps,
