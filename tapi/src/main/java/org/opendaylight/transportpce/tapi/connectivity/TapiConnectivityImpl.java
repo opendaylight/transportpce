@@ -180,6 +180,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             .setOperationalState(OperationalState.DISABLED)
             .setLifecycleState(LifecycleState.PLANNED)
             .setServiceLayer(input.getConnectivityConstraint().getServiceLayer())
+            .setServiceLevel(input.getConnectivityConstraint().getServiceLevel())
             .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY)
             .setConnectivityDirection(ForwardingDirection.BIDIRECTIONAL)
             .setName(Map.of(name.key(), name))
