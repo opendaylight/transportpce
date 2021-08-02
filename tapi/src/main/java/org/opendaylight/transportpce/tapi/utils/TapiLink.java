@@ -132,13 +132,13 @@ public class TapiLink {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue("12345678")
+            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic("12345678")
-            .setQueingLatencyCharacteristic("12345678")
-            .setJitterCharacteristic("12345678")
-            .setWanderCharacteristic("12345678")
+            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
+            .setQueingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()

@@ -35,7 +35,13 @@ public final class TapiStringConstants {
     public static final String LGX_PORT_NAME = "Some lgx-port-name";
     public static final String PORT_TYPE = "some port type";
     public static final String LGX_DEVICE_NAME = "Some lgx-device-name";
+    // TODO: static values until they are implemented
     public static final String PORT_RACK_VALUE = "000000.00";
+    public static final String FIXED_LATENCY_VALUE = "12345678";
+    public static final String COST_HOP_VALUE = "12345678";
+    public static final String JITTER_VALUE = "12345678";
+    public static final String WANDER_VALUE = "12345678";
+    public static final String QUEING_LATENCY_VALUE = "12345678";
 
     private TapiStringConstants() {
         // hiding the default constructor
