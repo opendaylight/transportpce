@@ -16,6 +16,24 @@
       "revId": "2a29f9ab006d8806f77b1a1e073b478e5351cc5f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1e7a13_0afc2887",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T12:53:24Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97051",
+      "parentUuid": "d4820743_e458a90a",
+      "revId": "2a29f9ab006d8806f77b1a1e073b478e5351cc5f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
