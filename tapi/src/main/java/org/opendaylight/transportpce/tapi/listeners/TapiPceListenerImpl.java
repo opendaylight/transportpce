@@ -715,7 +715,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 qualifier, id.split("\\+")[1])).getBytes(Charset.forName("UTF-8")))
                 .toString()))
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+",id.split("\\+")[0],
-                qualifier)).getBytes(Charset.forName("UTF-8")))
+                    "PHOTONIC_MEDIA")).getBytes(Charset.forName("UTF-8")))
                 .toString()))
             .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
                 .getBytes(Charset.forName("UTF-8"))).toString()))
