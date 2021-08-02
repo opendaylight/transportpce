@@ -80,6 +80,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
@@ -222,10 +223,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 new TapiNetconfTopologyListener(tapiNetworkModelService);
         TapiPortMappingListener tapiPortMappingListener =
             new TapiPortMappingListener(tapiNetworkModelService);
+        TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl =
+                new TapiNetworkModelListenerImpl(networkTransaction);
 
         tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
                 tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, tapiPceListenerImpl,
-                tapiRendererListenerImpl, tapiServiceHandlerListener, lightyServices.getNotificationService());
+                tapiRendererListenerImpl, tapiServiceHandlerListener, lightyServices.getNotificationService(),
+                tapiNetworkModelListenerImpl);
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(

@@ -76,6 +76,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
@@ -85,6 +90,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationBuilder;
@@ -367,13 +374,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     for (OwnedNodeEdgePoint onep : oneps) {
                         changedOneps.add(onep.getUuid());
                         updateSips(mapping, onep);
+                        CepList cepList = getUpdatedCeps(mapping, onep);
                         InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
                                 .augmentation(Context1.class).child(TopologyContext.class)
                                 .child(Topology.class, new TopologyKey(tapiTopoUuid))
                                 .child(Node.class, new NodeKey(nodeUuid))
                                 .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
                                 .build();
+                        OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
                         OwnedNodeEdgePoint onepblr = new OwnedNodeEdgePointBuilder().setUuid(onep.getUuid())
+                                .addAugmentation(onep1Bldr)
                                 .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
                                 .setOperationalState(transformOperState(mapping.getPortOperState())).build();
                         this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onepblr);
@@ -385,6 +395,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         return changedOneps;
+    }
+
+    private CepList getUpdatedCeps(Mapping mapping, OwnedNodeEdgePoint onep) {
+        OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
+        Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
+        if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null) {
+            for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> entry : onep1.getCepList().getConnectionEndPoint()
+                    .entrySet()) {
+                ConnectionEndPoint cep = new ConnectionEndPointBuilder(entry.getValue())
+                        .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                cepMap.put(entry.getKey(), cep);
+            }
+        }
+        return new CepListBuilder().setConnectionEndPoint(cepMap).build();
     }
 
     private List<Uuid> getChangedNodeUuids(String nodeId, Mapping mapping) {
