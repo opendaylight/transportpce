@@ -31,7 +31,6 @@ import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
@@ -138,16 +137,14 @@ public class PceCalculation {
         serviceFormatA = input.getServiceAEnd().getServiceFormat().getName();
         serviceFormatZ = input.getServiceZEnd().getServiceFormat().getName();
         serviceRate = input.getServiceAEnd().getServiceRate();
-        if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+        serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate,
+            (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
             && input.getServiceAEnd().getTxDirection() != null
             && input.getServiceAEnd().getTxDirection().getPort() != null
-            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
-            Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(),
-                input.getServiceAEnd().getTxDirection().getPort().getPortName());
-            serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate, mapping);
-        } else {
-            serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate, null);
-        }
+            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null)
+                ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+                    input.getServiceAEnd().getTxDirection().getPort().getPortName())
+                : null);
 
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
 
@@ -159,16 +156,19 @@ public class PceCalculation {
     }
 
     private void getAZnodeId() {
-        if (StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_ODUC4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_10GE.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
-            anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
-            znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
-        } else {
-            anodeId = input.getServiceAEnd().getNodeId();
-            znodeId = input.getServiceZEnd().getNodeId();
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
+                znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
+                break;
+            default:
+                anodeId = input.getServiceAEnd().getNodeId();
+                znodeId = input.getServiceZEnd().getNodeId();
+                break;
         }
     }
 
@@ -198,36 +198,36 @@ public class PceCalculation {
                 break;
         }
 
-        if (readTopology(nwInstanceIdentifier) != null) {
-            allNodes = readTopology(nwInstanceIdentifier).nonnullNode().values().stream().sorted((n1, n2)
-                -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue())).collect(Collectors.toList());
-            Network1 nw1 = readTopology(nwInstanceIdentifier).augmentation(Network1.class);
-            if (nw1 != null) {
-                allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
-                    -> l1.getSource().getSourceTp().toString().compareTo(l2.getSource().getSourceTp().toString()))
-                        .collect(Collectors.toList());
-            } else {
-                LOG.warn("no otn links in otn-topology");
-            }
-            if (allNodes == null || allNodes.isEmpty()) {
-                LOG.error("readMdSal: no nodes ");
-                return false;
-            }
-            LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
-            LOG.debug("readMdSal: network nodes: {} nodes added", allNodes);
-
-            if (allLinks == null || allLinks.isEmpty()) {
-                LOG.error("readMdSal: no links ");
-                return false;
-            }
-            LOG.info("readMdSal: network links: {} links added", allLinks.size());
-            LOG.debug("readMdSal: network links: {} links added", allLinks);
-
-            return true;
-        } else {
+        if (readTopology(nwInstanceIdentifier) == null) {
             LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
             return false;
         }
+
+        allNodes = readTopology(nwInstanceIdentifier).nonnullNode().values().stream().sorted((n1, n2)
+            -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue())).collect(Collectors.toList());
+        Network1 nw1 = readTopology(nwInstanceIdentifier).augmentation(Network1.class);
+        if (nw1 == null) {
+            LOG.warn("no otn links in otn-topology");
+        } else {
+            allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
+                -> l1.getSource().getSourceTp().toString().compareTo(l2.getSource().getSourceTp().toString()))
+                    .collect(Collectors.toList());
+        }
+        if (allNodes == null || allNodes.isEmpty()) {
+            LOG.error("readMdSal: no nodes ");
+            return false;
+        }
+        LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
+        LOG.debug("readMdSal: network nodes: {} nodes added", allNodes);
+
+        if (allLinks == null || allLinks.isEmpty()) {
+            LOG.error("readMdSal: no links ");
+            return false;
+        }
+        LOG.info("readMdSal: network links: {} links added", allLinks.size());
+        LOG.debug("readMdSal: network links: {} links added", allLinks);
+
+        return true;
     }
 
     private Network readTopology(InstanceIdentifier<Network> nwInstanceIdentifier) {
@@ -253,56 +253,58 @@ public class PceCalculation {
     private boolean analyzeNw() {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_100GE_T:
+            case  StringConstants.SERVICE_TYPE_OTU4:
+            case  StringConstants.SERVICE_TYPE_400GE:
+            case  StringConstants.SERVICE_TYPE_OTUC4:
+                // 100GE service and OTU4 service are handled at the openroadm-topology layer
+                for (Node node : allNodes) {
+                    validateNode(node);
+                }
 
-        if (StringConstants.SERVICE_TYPE_100GE_T.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_OTU4.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_400GE.equals(serviceType)
-                || StringConstants.SERVICE_TYPE_OTUC4.equals(serviceType)) {
-            // 100GE service and OTU4 service are handled at the openroadm-topology layer
-            for (Node node : allNodes) {
-                validateNode(node);
-            }
+                LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
 
-            LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
+                if (aendPceNode == null || zendPceNode == null) {
+                    LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    return false;
+                }
+                for (Link link : allLinks) {
+                    validateLink(link);
+                }
+                // debug prints
+                LOG.debug("analyzeNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
+                // debug prints
+                LOG.debug("analyzeNw: azSrgs size = {}", azSrgs.size());
+                for (NodeId srg : azSrgs) {
+                    LOG.debug("analyzeNw: A/Z Srgs SRG = {}", srg.getValue());
+                }
+                // debug prints
+                for (PceLink link : addLinks) {
+                    filteraddLinks(link);
+                }
+                for (PceLink link : dropLinks) {
+                    filterdropLinks(link);
+                }
+                break;
 
-            if (aendPceNode == null || zendPceNode == null) {
-                LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
-                return false;
-            }
-            for (Link link : allLinks) {
-                validateLink(link);
-            }
-            // debug prints
-            LOG.debug("analyzeNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
-            // debug prints
-            LOG.debug("analyzeNw: azSrgs size = {}", azSrgs.size());
-            for (NodeId srg : azSrgs) {
-                LOG.debug("analyzeNw: A/Z Srgs SRG = {}", srg.getValue());
-            }
-            // debug prints
-            for (PceLink link : addLinks) {
-                filteraddLinks(link);
-            }
-            for (PceLink link : dropLinks) {
-                filterdropLinks(link);
-            }
+            default:
+                // ODU4, 10GE/ODU2e or 1GE/ODU0 services are handled at openroadm-otn layer
 
-        } else {
-            // ODU4, 10GE/ODU2e or 1GE/ODU0 services are handled at openroadm-otn layer
+                for (Node node : allNodes) {
+                    validateOtnNode(node);
+                }
 
-            for (Node node : allNodes) {
-                validateOtnNode(node);
-            }
+                LOG.info("analyzeNw: allPceNodes {}", allPceNodes);
 
-            LOG.info("analyzeNw: allPceNodes {}", allPceNodes);
-
-            if (aendPceNode == null || zendPceNode == null) {
-                LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
-                return false;
-            }
-            for (Link link : allLinks) {
-                validateLink(link);
-            }
+                if (aendPceNode == null || zendPceNode == null) {
+                    LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    return false;
+                }
+                for (Link link : allLinks) {
+                    validateLink(link);
+                }
+                break;
         }
 
         LOG.info("analyzeNw: allPceNodes size {}, allPceLinks size {}", allPceNodes.size(), allPceLinks.size());
@@ -473,32 +475,32 @@ public class PceCalculation {
     private void validateOtnNode(Node node) {
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
-        if (node.augmentation(Node1.class) != null) {
-            OpenroadmNodeType nodeType = node.augmentation(Node1.class).getNodeType();
-
-            PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType);
-            pceOtnNode.validateXponder(anodeId, znodeId);
-
-            if (!pceOtnNode.isValid()) {
-                LOG.warn(" validateOtnNode: Node {} is ignored", node.getNodeId().getValue());
-                return;
-            }
-            if (validateNodeConstraints(pceOtnNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                return;
-            }
-            if (pceOtnNode.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null) {
-                this.aendPceNode = pceOtnNode;
-            }
-            if (pceOtnNode.getNodeId().getValue().equals(znodeId) && this.zendPceNode == null) {
-                this.zendPceNode = pceOtnNode;
-            }
-            allPceNodes.put(pceOtnNode.getNodeId(), pceOtnNode);
-            LOG.info("validateOtnNode: node {} is saved", node.getNodeId().getValue());
-            return;
-        } else {
+        if (node.augmentation(Node1.class) == null) {
             LOG.error("ValidateOtnNode: no node-type augmentation. Node {} is ignored", node.getNodeId().getValue());
             return;
         }
+
+        OpenroadmNodeType nodeType = node.augmentation(Node1.class).getNodeType();
+
+        PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType);
+        pceOtnNode.validateXponder(anodeId, znodeId);
+
+        if (!pceOtnNode.isValid()) {
+            LOG.warn(" validateOtnNode: Node {} is ignored", node.getNodeId().getValue());
+            return;
+        }
+        if (validateNodeConstraints(pceOtnNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
+            return;
+        }
+        if (pceOtnNode.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null) {
+            this.aendPceNode = pceOtnNode;
+        }
+        if (pceOtnNode.getNodeId().getValue().equals(znodeId) && this.zendPceNode == null) {
+            this.zendPceNode = pceOtnNode;
+        }
+        allPceNodes.put(pceOtnNode.getNodeId(), pceOtnNode);
+        LOG.info("validateOtnNode: node {} is saved", node.getNodeId().getValue());
+        return;
     }
 
     private ConstraintTypes validateNodeConstraints(PceNode pcenode) {
