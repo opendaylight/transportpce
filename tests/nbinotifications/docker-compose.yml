@@ -10,6 +10,7 @@ services:
     container_name: nbinotifications_kafka
     ports:
       - "9092:9092"
+    expose: [9092]
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
