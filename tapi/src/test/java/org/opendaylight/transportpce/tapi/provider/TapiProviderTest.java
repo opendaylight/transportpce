@@ -23,6 +23,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
@@ -69,6 +70,9 @@ public class TapiProviderTest extends AbstractTest {
     @Mock
     TapiServiceHandlerListenerImpl serviceHandlerListenerImpl;
 
+    @Mock
+    TapiNetworkModelListenerImpl networkModelListener;
+
     private AutoCloseable closeable;
 
     @Before
@@ -87,7 +91,7 @@ public class TapiProviderTest extends AbstractTest {
         TapiProvider provider =  new TapiProvider(getDataBroker(), rpcProviderRegistry, serviceHandler,
             serviceDataStoreOperations, tapiListener, networkTransactionService, topologyListener,
             tapiPortMappingListener, tapiNetworkUtils, pceListenerImpl, rendererListenerImpl,
-            serviceHandlerListenerImpl, getNotificationService());
+            serviceHandlerListenerImpl, getNotificationService(), networkModelListener);
 
         provider.init();
 
