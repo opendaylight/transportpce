@@ -43,15 +43,26 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                 Map<MappingKey, Mapping> mappingBef = nodesBef.getMapping();
                 LOG.info("Change in node {} with OR version = {}", nodeId,
                     nodesAft.getNodeInfo().getOpenroadmVersion().getName());
-                if (mappingAft != null && mappingBef == null) {
+                if (mappingAft == null) {
+                    LOG.warn("Mapping already existed in the datastore, which means that node {} already existed "
+                        + "in TAPI topology. The action to take will be different", nodeId);
+                    continue;
+                }
+                if (mappingBef == null) {
                     LOG.info("New mapping for node {} = {}", nodeId, mappingAft);
                     LOG.info("As the mapping is now created for the first time, "
                         + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
                     this.tapiNetworkModelService.createTapiNode(nodeId,
                         nodesAft.getNodeInfo().getOpenroadmVersion().getIntValue(), nodesAft);
                 } else {
-                    LOG.warn("Mapping already existed in the datastore, which means that node {} already existed "
-                        + "in TAPI topology. The action to take will be different", nodeId);
+                    for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
+                        Mapping oldMapping = mappingBef.get(entry.getKey());
+                        Mapping newMapping = mappingAft.get(entry.getKey());
+                        if (!oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
+                                || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
+                            this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());
+                        }
+                    }
                 }
             }
         }
