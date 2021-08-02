@@ -55,7 +55,6 @@ public class PostAlgoPathValidator {
             pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
             return pceResult;
         }
-        int tribSlotNb = 1;
         int spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
             .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
         SpectrumAssignment spectrumAssignment = null;
@@ -120,18 +119,11 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
-                if (StringConstants.SERVICE_TYPE_100GE_M.equals(serviceType)) {
-                    tribSlotNb = 20;
-                } else if (StringConstants.SERVICE_TYPE_10GE.equals(serviceType)) {
-                    tribSlotNb = 8;
-                } else if (StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
-                    tribSlotNb = 1;
-                } else {
-                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
-                    LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
-                        serviceType, path);
-                    break;
-                }
+                Map<String, Integer> tribSlotNbMap = Map.of(
+                    StringConstants.SERVICE_TYPE_100GE_M, 20,
+                    StringConstants.SERVICE_TYPE_10GE, 8,
+                    StringConstants.SERVICE_TYPE_1GE, 1);
+                int tribSlotNb = tribSlotNbMap.get(serviceType);
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
                 Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
@@ -341,9 +333,8 @@ public class PostAlgoPathValidator {
             Collections.sort(commonEdgeTsPoolList);
             List<Uint16> commonGoodStartEdgeTsPoolList = new ArrayList<>();
             for (Uint16 startEdgeTsPool : commonEdgeTsPoolList) {
-                if (Integer.valueOf(1).equals(startEdgeTsPool.toJava() % nbSlot)) {
-                    commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
-                } else if (nbSlot == 1) {
+                if (Integer.valueOf(1).equals(startEdgeTsPool.toJava() % nbSlot)
+                        || nbSlot == 1) {
                     commonGoodStartEdgeTsPoolList.add(startEdgeTsPool);
                 }
             }
@@ -353,15 +344,14 @@ public class PostAlgoPathValidator {
                 int goodStartIndex = commonEdgeTsPoolList.indexOf(Uint16.valueOf(goodStartTsPool.intValue()));
                 if (!goodTsList && commonEdgeTsPoolList.size() - goodStartIndex >= nbSlot) {
                     for (int i = 0; i < nbSlot; i++) {
-                        if (commonEdgeTsPoolList.get(goodStartIndex + i)
+                        if (!commonEdgeTsPoolList.get(goodStartIndex + i)
                                 .equals(Uint16.valueOf(goodStartTsPool.toJava() + i))) {
-                            tribSlotList.add(commonEdgeTsPoolList.get(goodStartIndex + i));
-                            goodTsList = true;
-                        } else {
                             goodTsList = false;
                             tribSlotList.clear();
                             break;
                         }
+                        tribSlotList.add(commonEdgeTsPoolList.get(goodStartIndex + i));
+                        goodTsList = true;
                     }
                 }
             }
@@ -412,15 +402,12 @@ public class PostAlgoPathValidator {
     }
 
     private double getOsnrDb(double osnrLu) {
-        double osnrDb;
-        osnrDb = 10 * Math.log10(osnrLu);
-        return osnrDb;
+        return (10 * Math.log10(osnrLu));
     }
 
     private double getInverseOsnrLinkLu(double linkOsnrDb) {
         // 1 over the link OSNR, in linear units
-        double linkOsnrLu;
-        linkOsnrLu = Math.pow(10, (linkOsnrDb / 10.0));
+        double linkOsnrLu = Math.pow(10, (linkOsnrDb / 10.0));
         LOG.debug("In retrieveosnr: the inverse of link osnr is {} (Linear Unit)", linkOsnrLu);
         return (CONST_OSNR / linkOsnrLu);
     }
@@ -490,10 +477,7 @@ public class PostAlgoPathValidator {
             .setFlexGrid(isFlexGrid);
         BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
         referenceBitSet.set(0, spectralWidthSlotNumber);
-        int nbSteps = 1;
-        if (isFlexGrid) {
-            nbSteps = spectralWidthSlotNumber;
-        }
+        int nbSteps = isFlexGrid ? spectralWidthSlotNumber : 1;
         //higher is the frequency, smallest is the wavelength number
         //in operational, the allocation is done through wavelength starting from the smallest
         //so we have to loop from the last element of the spectrum occupation
