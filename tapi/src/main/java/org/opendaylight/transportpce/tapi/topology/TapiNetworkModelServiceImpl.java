@@ -11,14 +11,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
@@ -84,6 +87,12 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
@@ -91,6 +100,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.NodeEdgePointRef;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ProtectionType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RestorationPolicy;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
@@ -129,6 +139,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.validation.pac.ValidationMechanism;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.validation.pac.ValidationMechanismBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint64;
@@ -155,12 +166,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final NetworkTransactionService networkTransactionService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
     private final R2RTapiLinkDiscovery linkDiscovery;
+    private final NotificationPublishService notificationPublishService;
 
     public TapiNetworkModelServiceImpl(final R2RTapiLinkDiscovery linkDiscovery,
-                                       NetworkTransactionService networkTransactionService) {
+                                       NetworkTransactionService networkTransactionService,
+                                       final NotificationPublishService notificationPublishService) {
         this.networkTransactionService = networkTransactionService;
         this.sipMap = new HashMap<>();
         this.linkDiscovery = linkDiscovery;
+        this.notificationPublishService = notificationPublishService;
     }
 
     @Override
@@ -251,6 +265,170 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         // Device not managed yet
+    }
+
+    @Override
+    public void updateTapiTopology(String nodeId, Mapping mapping) {
+        List<Uuid> uuids = getChangedNodeUuids(nodeId, mapping);
+        if (uuids == null) {
+            return;
+        }
+
+        List<Uuid> changedOneps = updateNeps(mapping, uuids);
+        updateLinks(changedOneps, nodeId, mapping);
+        sendNotification(changedOneps, mapping);
+
+        LOG.info("Updated TAPI topology successfully.");
+    }
+
+    private void sendNotification(List<Uuid> changedOneps, Mapping mapping) {
+        Notification notification = new NotificationBuilder()
+                .setNotificationType(NotificationType.ATTRIBUTEVALUECHANGE)
+                .setTargetObjectType(ObjectType.TOPOLOGY)
+                .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
+                .setUuid(tapiTopoUuid)
+                .build();
+        try {
+            notificationPublishService.putNotification(notification);
+        } catch (InterruptedException e) {
+            LOG.error("Could not send notification");
+        }
+    }
+
+    private Map<ChangedAttributesKey, ChangedAttributes> getChangedAttributes(List<Uuid> changedOneps,
+                                                                              Mapping mapping) {
+        Map<ChangedAttributesKey, ChangedAttributes> changedAttributes = new HashMap<>();
+        for (Uuid nep : changedOneps) {
+            changedAttributes.put(new ChangedAttributesKey(nep.getValue()),
+                    new ChangedAttributesBuilder().setValueName(nep.getValue()).setOldValue("")
+                            .setNewValue("").build());
+        }
+        changedAttributes.put(new ChangedAttributesKey("administrative"), new ChangedAttributesBuilder()
+                .setValueName("administrative")
+                .setOldValue("")
+                .setNewValue(mapping.getPortAdminState()).build());
+        changedAttributes.put(new ChangedAttributesKey("operational"), new ChangedAttributesBuilder()
+                .setValueName("operational")
+                .setOldValue("")
+                .setNewValue(mapping.getPortOperState()).build());
+        return changedAttributes;
+    }
+
+    private void updateLinks(List<Uuid> changedOneps, String nodeId, Mapping mapping) {
+        try {
+            InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class).child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                    .build();
+            Optional<Topology> optTopology = this.networkTransactionService
+                    .read(LogicalDatastoreType.OPERATIONAL, topoIID).get();
+            if (optTopology.isEmpty()) {
+                LOG.error("Could not update TAPI links");
+                return;
+            }
+            Map<LinkKey, Link> links = optTopology.get().getLink();
+            if (links != null && links.values().size() > 0) {
+                for (Link link : links.values()) {
+                    List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
+                            .map(NodeEdgePointRef::getNodeEdgePointUuid).collect(Collectors.toList());
+                    if (!Collections.disjoint(changedOneps, linkNeps)) {
+                        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
+                                .augmentation(Context1.class).child(TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Link.class, new LinkKey(link.getUuid())).build();
+                        Link linkblr = new LinkBuilder().setUuid(link.getUuid())
+                                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                                .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
+                    }
+                }
+            }
+            this.networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Could not update TAPI links");
+        }
+    }
+
+    private List<Uuid> updateNeps(Mapping mapping, List<Uuid> uuids) {
+        List<Uuid> changedOneps = new ArrayList<>();
+        for (Uuid nodeUuid : uuids) {
+            try {
+                InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class).child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
+                        .build();
+                Optional<Node> optionalNode = this.networkTransactionService.read(
+                        LogicalDatastoreType.OPERATIONAL, nodeIID).get();
+                if (optionalNode.isPresent()) {
+                    Node node = optionalNode.get();
+                    List<OwnedNodeEdgePoint> oneps = node.getOwnedNodeEdgePoint().values().stream()
+                            .filter(onep -> ((Name) onep.getName().values().toArray()[0]).getValue()
+                                    .contains(mapping.getLogicalConnectionPoint())).collect(Collectors.toList());
+                    for (OwnedNodeEdgePoint onep : oneps) {
+                        changedOneps.add(onep.getUuid());
+                        updateSips(mapping, onep);
+                        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                                .augmentation(Context1.class).child(TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Node.class, new NodeKey(nodeUuid))
+                                .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
+                                .build();
+                        OwnedNodeEdgePoint onepblr = new OwnedNodeEdgePointBuilder().setUuid(onep.getUuid())
+                                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                                .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onepblr);
+                    }
+                    this.networkTransactionService.commit().get();
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Could not update TAPI NEP");
+            }
+        }
+        return changedOneps;
+    }
+
+    private List<Uuid> getChangedNodeUuids(String nodeId, Mapping mapping) {
+        List<Uuid> uuids = new ArrayList<>();
+        if (nodeId.contains("ROADM")) {
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, PHTNC_MEDIA))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else if (nodeId.contains("PDR") && mapping.getLogicalConnectionPoint().contains("CLIENT")) {
+            int xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+            String xpdrNodeId = nodeId + XPDR + xpdrNb;
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, DSR))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else if (nodeId.contains("PDR") && mapping.getLogicalConnectionPoint().contains("NETWORK")) {
+            int xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+            String xpdrNodeId = nodeId + XPDR + xpdrNb;
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, DSR))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+            uuids.add(new Uuid(UUID.nameUUIDFromBytes((String.join("+", xpdrNodeId, OTSI))
+                    .getBytes(Charset.forName("UTF-8"))).toString()));
+        } else {
+            LOG.error("Updating this device is currently not supported");
+            return null;
+        }
+        return uuids;
+    }
+
+    private void updateSips(Mapping mapping, OwnedNodeEdgePoint onep) {
+        if (onep.getMappedServiceInterfacePoint() == null
+                || onep.getMappedServiceInterfacePoint().size() == 0) {
+            return;
+        }
+        for (MappedServiceInterfacePoint msip : onep.getMappedServiceInterfacePoint().values()) {
+            InstanceIdentifier<ServiceInterfacePoint> sipIID = InstanceIdentifier
+                    .builder(Context.class)
+                    .child(ServiceInterfacePoint.class,
+                            new ServiceInterfacePointKey(msip.getServiceInterfacePointUuid()))
+                    .build();
+            ServiceInterfacePoint sipblr = new ServiceInterfacePointBuilder()
+                    .setUuid(msip.getServiceInterfacePointUuid())
+                    .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                    .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, sipIID, sipblr);
+        }
+
     }
 
     private Map<NodeKey, Node> transformXpdrToTapiNode(String nodeId, List<Mapping> xpdrClMaps,
