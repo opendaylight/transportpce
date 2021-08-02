@@ -20,6 +20,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
@@ -82,6 +83,7 @@ public class TapiProvider {
     private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
     private ListenerRegistration<TransportpceServicehandlerListener> servicehandlerlistenerRegistration;
+    private ListenerRegistration<TapiNetworkModelListenerImpl> tapinetworkmodellistenerRegistration;
     private final OrgOpenroadmServiceService serviceHandler;
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiListener tapiListener;
@@ -94,6 +96,7 @@ public class TapiProvider {
     private TapiRendererListenerImpl rendererListenerImpl;
     private TapiServiceHandlerListenerImpl serviceHandlerListenerImpl;
     private final NotificationService notificationService;
+    private TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
             OrgOpenroadmServiceService serviceHandler, ServiceDataStoreOperations serviceDataStoreOperations,
@@ -101,7 +104,8 @@ public class TapiProvider {
             TapiNetconfTopologyListener topologyListener, TapiPortMappingListener tapiPortMappingListener,
             TransportpceTapinetworkutilsService tapiNetworkUtils, TapiPceListenerImpl pceListenerImpl,
             TapiRendererListenerImpl rendererListenerImpl, TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
-            NotificationService notificationService, TapiOrLinkListener orLinkListener) {
+            NotificationService notificationService, TapiOrLinkListener orLinkListener,
+                        TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.serviceHandler = serviceHandler;
@@ -116,6 +120,7 @@ public class TapiProvider {
         this.serviceHandlerListenerImpl = serviceHandlerListenerImpl;
         this.notificationService = notificationService;
         this.orLinkListener = orLinkListener;
+        this.tapiNetworkModelListenerImpl = tapiNetworkModelListenerImpl;
     }
 
     /**
@@ -161,6 +166,8 @@ public class TapiProvider {
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
         servicehandlerlistenerRegistration =
                 notificationService.registerNotificationListener(serviceHandlerListenerImpl);
+        tapinetworkmodellistenerRegistration =
+                notificationService.registerNotificationListener(tapiNetworkModelListenerImpl);
     }
 
     /**
@@ -184,5 +191,6 @@ public class TapiProvider {
         rendererlistenerRegistration.close();
         servicehandlerlistenerRegistration.close();
         rpcRegistration.close();
+        tapinetworkmodellistenerRegistration.close();
     }
 }
