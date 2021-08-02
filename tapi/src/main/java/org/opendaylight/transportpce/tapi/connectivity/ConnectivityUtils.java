@@ -130,6 +130,9 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection>
         connectionFullMap; // this variable is for complete connection objects
     private final NetworkTransactionService networkTransactionService;
+    private Connection topConnRdmRdm;
+    private Connection topConnXpdrXpdrPhtn;
+    private Connection topConnXpdrXpdrOdu;
 
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
     public ConnectivityUtils(ServiceDataStoreOperations serviceDataStoreOperations,
@@ -140,6 +143,9 @@ public final class ConnectivityUtils {
         this.sipMap = sipMap;
         this.connectionFullMap = new HashMap<>();
         this.networkTransactionService = networkTransactionService;
+        this.topConnRdmRdm = null;
+        this.topConnXpdrXpdrPhtn = null;
+        this.topConnXpdrXpdrOdu = null;
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
@@ -466,11 +472,16 @@ public final class ConnectivityUtils {
                 // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                 // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
                 connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
+                this.topConnRdmRdm = null;
                 break;
             case ODU:
+                // TODO: verify if this is correct
                 // - XC Connection OTSi betwwen iODU and eODU of xpdr
                 // - Top connection in the ODU layer, between xpdr eODU ports (?)
-                connectionServMap.putAll(createXpdrCepsAndConnectionsOdu(xpdrNetworkTplist, xpdrNodelist));
+                if (openroadmNodeType.equals(OpenroadmNodeType.MUXPDR)) {
+                    connectionServMap.putAll(createXpdrCepsAndConnectionsOdu(xpdrNetworkTplist, xpdrNodelist));
+                    this.topConnXpdrXpdrPhtn = null;
+                }
                 break;
             case Ethernet:
                 // Check if OC, OTU and ODU are created
@@ -479,23 +490,26 @@ public final class ConnectivityUtils {
                     connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
                         edgeRoadm1, edgeRoadm2));
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
+                    this.topConnRdmRdm = null;
                     xpdrClientTplist = getAssociatedClientsPort(xpdrNetworkTplist);
                     LOG.info("Associated client ports = {}", xpdrClientTplist);
                     connectionServMap.putAll(createXpdrCepsAndConnectionsEth(xpdrClientTplist, xpdrNodelist,
                         connectionServMap));
+                    this.topConnXpdrXpdrPhtn = null;
                 }
                 if (openroadmNodeType.equals(OpenroadmNodeType.SWITCH)) {
                     // TODO: We create both ODU and DSR because there is no ODU service creation for the switch
                     // - XC Connection OTSi betwwen iODU and eODU of xpdr
                     // - Top connection in the ODU layer, between xpdr eODU ports (?)
-                    connectionServMap.putAll(createXpdrCepsAndConnectionsOdu(xpdrNetworkTplist, xpdrNodelist));
                     connectionServMap.putAll(createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist,
                         xpdrNodelist));
+                    this.topConnXpdrXpdrPhtn = null;
                 }
                 if (openroadmNodeType.equals(OpenroadmNodeType.MUXPDR)) {
                     // TODO: OTN service but mux has 3 steps at rendering. Verify that things exist
                     connectionServMap.putAll(createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist,
                         xpdrNodelist));
+                    this.topConnXpdrXpdrOdu = null;
                 }
                 break;
             default:
@@ -537,7 +551,7 @@ public final class ConnectivityUtils {
         // DSR top connection between edge xpdr CLIENT DSR
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connectionDsr = createTopConnection(spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
-            LayerProtocolName.DSR, xcMap);
+            LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
 
         // DSR top connection that will be added to the service object
@@ -598,7 +612,7 @@ public final class ConnectivityUtils {
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connectionOdu = createTopConnection(spcXpdr1, spcXpdr2, cepMapOdu, TapiStringConstants.E_ODU,
-            LayerProtocolName.ODU, xcMap);
+            LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrOdu);
         this.connectionFullMap.put(connectionOdu.key(), connectionOdu);
 
         // ODU top connection that will be added to the service object
@@ -609,7 +623,7 @@ public final class ConnectivityUtils {
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connectionDsr = createTopConnection(spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
-                LayerProtocolName.DSR, xcMap);
+            LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
 
         // DSR top connection that will be added to the service object
@@ -649,12 +663,13 @@ public final class ConnectivityUtils {
             .get(xpdrNodelist.size() - 1))).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_ODU,
-            LayerProtocolName.ODU, xcMap);
+            LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connection.key(), connection);
 
         // ODU top connection that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         connServMap.put(conn.key(), conn);
+        this.topConnXpdrXpdrOdu = conn;
 
         return connServMap;
     }
@@ -709,13 +724,13 @@ public final class ConnectivityUtils {
             .get(xpdrNodelist.size() - 1))).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_OTSI,
-            LayerProtocolName.PHOTONICMEDIA, xcMap);
+            LayerProtocolName.PHOTONICMEDIA, xcMap, this.topConnRdmRdm);
         this.connectionFullMap.put(connection.key(), connection);
 
         // OTSi top connection that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         connServMap.put(conn.key(), conn);
-
+        this.topConnXpdrXpdrPhtn = conn;
 
         return connServMap;
     }
@@ -728,7 +743,7 @@ public final class ConnectivityUtils {
         Map<ConnectionKey, Connection> connServMap = new HashMap<>();
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey,
             ConnectionEndPoint> cepMap = new HashMap<>();
-        Map<LowerConnectionKey, LowerConnection> xcMap = new HashMap<>();
+        Map<LowerConnectionKey, LowerConnection> xcLowerMap = new HashMap<>();
         // create ceps and x connections within roadm
         for (String roadm : rdmNodelist) {
             LOG.info("Creating ceps and xc for roadm {}", roadm);
@@ -780,10 +795,11 @@ public final class ConnectivityUtils {
             LowerConnection conn1 = new LowerConnectionBuilder().setConnectionUuid(connection1.getUuid()).build();
             LowerConnection conn2 = new LowerConnectionBuilder().setConnectionUuid(connection2.getUuid()).build();
 
-            xcMap.put(conn1.key(), conn1);
-            xcMap.put(conn2.key(), conn2);
+            xcLowerMap.put(conn1.key(), conn1);
+            xcLowerMap.put(conn2.key(), conn2);
         }
         LOG.info("Going to create top connections betwee roadms");
+        Map<LowerConnectionKey, LowerConnection> topLowerMap = new HashMap<>();
         // create top connections between roadms: MC connections between AD MC CEPs of roadms
         for (int i = 0; i < rdmNodelist.size(); i++) {
             if (rdmNodelist.size() <= (i + 1)) {
@@ -796,11 +812,11 @@ public final class ConnectivityUtils {
             String roadm2 = rdmNodelist.get(i + 1);
             String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm2)).findFirst().get();
             LOG.info("Creating top connection from {} to {} between tps: {}-{}", roadm1, roadm2, spcRdmAD1, spcRdmAD2);
-
+            Map<LowerConnectionKey, LowerConnection> xcLowerMap1 = getXcFromPort(spcRdmAD1, spcRdmAD2, xcLowerMap);
             // Create top connections between MC for full map
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
                 connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.MC,
-                LayerProtocolName.PHOTONICMEDIA, xcMap);
+                LayerProtocolName.PHOTONICMEDIA, xcLowerMap1, null);
             this.connectionFullMap.put(connection.key(), connection);
             LOG.info("Top connection created = {}", connection);
 
@@ -808,7 +824,7 @@ public final class ConnectivityUtils {
             Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
             connServMap.put(conn.key(), conn);
             LowerConnection conn1 = new LowerConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
-            xcMap.put(conn1.key(), conn1);
+            topLowerMap.put(conn1.key(), conn1);
         }
 
         // OTSiMC top connection between edge roadms
@@ -817,14 +833,37 @@ public final class ConnectivityUtils {
         String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.OTSI_MC,
-            LayerProtocolName.PHOTONICMEDIA, xcMap);
+            LayerProtocolName.PHOTONICMEDIA, topLowerMap, null);
         this.connectionFullMap.put(connection.key(), connection);
         LOG.info("Top connection created = {}", connection);
 
         // OTSiMC top connections that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         connServMap.put(conn.key(), conn);
+        this.topConnRdmRdm = conn;
         return connServMap;
+    }
+
+    private Map<LowerConnectionKey, LowerConnection> getXcFromPort(
+            String spcRdmAD1, String spcRdmAD2, Map<LowerConnectionKey, LowerConnection> xcLowerMap) {
+        Map<LowerConnectionKey, LowerConnection> foundLowerConn = new HashMap<>();
+        for (LowerConnection lowerConn:xcLowerMap.values()) {
+            org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection newConn
+                    = this.connectionFullMap.get(new org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey(
+                            lowerConn.getConnectionUuid())); // Current state of connection
+            // updated connection state if it contains a nep that has changed
+            LOG.info("Connection = {}", newConn.toString());
+            LOG.info("AD ports to check against = {} & {}", spcRdmAD1, spcRdmAD2);
+            if (newConn.getName().entrySet().stream().anyMatch(
+                name -> name.getValue().getValue().contains(spcRdmAD1)
+                    || name.getValue().getValue().contains(spcRdmAD2))) {
+                LOG.info("XC connection contains a NEP of the TOP connection to be created");
+                foundLowerConn.put(lowerConn.key(), lowerConn);
+            }
+        }
+        return foundLowerConn;
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
@@ -832,7 +871,7 @@ public final class ConnectivityUtils {
                         Map<org.opendaylight.yang.gen.v1.urn
                             .onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey,
                             ConnectionEndPoint> cepMap, String qual, LayerProtocolName topPortocol,
-                                Map<LowerConnectionKey, LowerConnection> xcMap) {
+                                Map<LowerConnectionKey, LowerConnection> xcMap, Connection additionalLowerConn) {
         // find cep for each AD MC of roadm 1 and 2
         LOG.info("Top connection name = {}", String.join("+", "TOP", tp1, tp2, qual));
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ConnectionEndPoint adCep1 =
@@ -882,6 +921,10 @@ public final class ConnectivityUtils {
             .setValue(String.join("+", "TOP", tp1, tp2, qual))
             .build();
         // TODO: lower connection, supported link.......
+        if (additionalLowerConn != null) {
+            xcMap.putIfAbsent(new LowerConnectionKey(additionalLowerConn.getConnectionUuid()),
+                new LowerConnectionBuilder().setConnectionUuid(additionalLowerConn.getConnectionUuid()).build());
+        }
         return new org.opendaylight.yang.gen.v1.urn
             .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionBuilder()
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", "TOP", tp1, tp2, qual))
