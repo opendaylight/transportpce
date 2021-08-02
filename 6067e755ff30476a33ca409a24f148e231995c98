@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a2e1553_7c36efb4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T13:01:11Z",
+      "side": 1,
+      "message": "this line is no more useful",
+      "range": {
+        "startLine": 58,
+        "startChar": 7,
+        "endLine": 58,
+        "endChar": 27
+      },
+      "revId": "6067e755ff30476a33ca409a24f148e231995c98",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "daf85727_f4322683",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 10
