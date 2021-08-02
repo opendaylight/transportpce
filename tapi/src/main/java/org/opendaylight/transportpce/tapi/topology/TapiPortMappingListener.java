@@ -49,6 +49,15 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                         + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
                     this.tapiNetworkModelService.createTapiNode(nodeId,
                         nodesAft.getNodeInfo().getOpenroadmVersion().getIntValue(), nodesAft);
+                } else if (mappingAft != null) {
+                    for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
+                        Mapping oldMapping = mappingBef.get(entry.getKey());
+                        Mapping newMapping = mappingAft.get(entry.getKey());
+                        if (!oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
+                                || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
+                            this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());
+                        }
+                    }
                 } else {
                     LOG.warn("Mapping already existed in the datastore, which means that node {} already existed "
                         + "in TAPI topology. The action to take will be different", nodeId);
