@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7df09da2_3d882996",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T07:02:38Z",
+      "side": 1,
+      "message": "what about ternary operator here ?",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 1
+      },
+      "revId": "3e2029fe2f4ccc019f2d05e58ba3ae69481b3a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdbbea67_05b3395a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T07:02:38Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "3e2029fe2f4ccc019f2d05e58ba3ae69481b3a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63c4c520_2a811113",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T07:02:38Z",
+      "side": 1,
+      "message": "what about ternary operator here ?",
+      "revId": "3e2029fe2f4ccc019f2d05e58ba3ae69481b3a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
