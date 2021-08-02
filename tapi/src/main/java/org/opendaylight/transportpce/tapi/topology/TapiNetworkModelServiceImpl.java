@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
@@ -74,6 +75,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
@@ -83,9 +89,17 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
@@ -128,6 +142,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.timing.pac.LatencyCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -142,13 +157,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
+    private final NotificationPublishService notificationPublishService;
 
     public TapiNetworkModelServiceImpl(final R2RTapiLinkDiscovery linkDiscovery,
-                                       NetworkTransactionService networkTransactionService, TapiLink tapiLink) {
+                                       NetworkTransactionService networkTransactionService, TapiLink tapiLink,
+                                       final NotificationPublishService notificationPublishService) {
         this.networkTransactionService = networkTransactionService;
         this.sipMap = new HashMap<>();
         this.linkDiscovery = linkDiscovery;
         this.tapiLink = tapiLink;
+        this.notificationPublishService = notificationPublishService;
     }
 
     @Override
@@ -248,8 +266,36 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
         List<Uuid> changedOneps = updateNeps(mapping, uuids);
         updateLinks(changedOneps, nodeId, mapping);
+        sendNotification(changedOneps, mapping);
 
         LOG.info("Updated TAPI topology successfully.");
+    }
+
+    private void sendNotification(List<Uuid> changedOneps, Mapping mapping) {
+        Notification notification = new NotificationBuilder()
+            .setNotificationType(NotificationType.ATTRIBUTEVALUECHANGE)
+            .setTargetObjectType(ObjectType.NODEEDGEPOINT)
+            .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
+            .setUuid(tapiTopoUuid)
+            .build();
+        try {
+            notificationPublishService.putNotification(notification);
+        } catch (InterruptedException e) {
+            LOG.error("Could not send notification");
+        }
+    }
+
+    private Map<ChangedAttributesKey, ChangedAttributes> getChangedAttributes(List<Uuid> changedOneps,
+                                                                              Mapping mapping) {
+        Map<ChangedAttributesKey, ChangedAttributes> changedAttributes = new HashMap<>();
+        for (Uuid nep : changedOneps) {
+            changedAttributes.put(new ChangedAttributesKey(nep.getValue()),
+                new ChangedAttributesBuilder().setValueName(nep.getValue())
+                    .setOldValue(mapping.getPortOperState().equals("InService") ? "OutOfService" : "InService")
+                    .setNewValue(mapping.getPortOperState())
+                    .build());
+        }
+        return changedAttributes;
     }
 
     private void updateLinks(List<Uuid> changedOneps, String nodeId, Mapping mapping) {
@@ -305,6 +351,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     for (OwnedNodeEdgePoint onep : oneps) {
                         changedOneps.add(onep.getUuid());
                         updateSips(mapping, onep);
+                        CepList cepList = getUpdatedCeps(mapping, onep);
                         InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
                                 .augmentation(Context1.class).child(TopologyContext.class)
                                 .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -312,6 +359,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
                                 .build();
                         OwnedNodeEdgePoint onepblr = new OwnedNodeEdgePointBuilder().setUuid(onep.getUuid())
+                                .addAugmentation(new OwnedNodeEdgePoint1Builder().setCepList(cepList).build())
                                 .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
                                 .setOperationalState(transformOperState(mapping.getPortOperState())).build();
                         this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onepblr);
@@ -323,6 +371,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         return changedOneps;
+    }
+
+    private CepList getUpdatedCeps(Mapping mapping, OwnedNodeEdgePoint onep) {
+        OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
+        Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
+        if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null) {
+            for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> entry : onep1.getCepList().getConnectionEndPoint()
+                    .entrySet()) {
+                ConnectionEndPoint cep = new ConnectionEndPointBuilder(entry.getValue())
+                        .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                cepMap.put(entry.getKey(), cep);
+            }
+        }
+        return new CepListBuilder().setConnectionEndPoint(cepMap).build();
     }
 
     private List<Uuid> getChangedNodeUuids(String nodeId, Mapping mapping) {
