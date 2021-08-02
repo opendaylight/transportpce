@@ -42,6 +42,8 @@ public final class TapiStringConstants {
     public static final String JITTER_VALUE = "12345678";
     public static final String WANDER_VALUE = "12345678";
     public static final String QUEING_LATENCY_VALUE = "12345678";
+    public static final String TAPI_CONNECTION_UPDATE_ERROR = "Could not update TAPI connections";
+    public static final String TAPI_CONNECTION_READ_ERROR = "Could not read TAPI connection data";
 
     private TapiStringConstants() {
         // hiding the default constructor
