@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daf85727_f4322683",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T07:23:50Z",
+      "side": 1,
+      "message": "an array would be more indicated here",
+      "revId": "6067e755ff30476a33ca409a24f148e231995c98",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ad3ed5_56489293",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-02T07:23:50Z",
+      "side": 1,
+      "message": "the else condition is never met -\u003e rhis portion of code is dead and can be removed",
+      "revId": "6067e755ff30476a33ca409a24f148e231995c98",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
