@@ -285,6 +285,8 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.eth.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.$YangModuleInfoImpl
+                    .getInstance(),
 
             // API models / opendaylight
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
