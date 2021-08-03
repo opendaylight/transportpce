@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec446035_35d07432",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T19:50:50Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97077",
+      "parentUuid": "6b38742c_8c724a6a",
+      "range": {
+        "startLine": 137,
+        "startChar": 37,
+        "endLine": 137,
+        "endChar": 41
+      },
+      "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba6354aa_a4de5f9a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 8
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "0b9b8251_73bd04fb",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T19:50:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba6354aa_a4de5f9a",
+      "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "368368fe_ced5c35e",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 8
@@ -56,6 +98,24 @@
       "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dff324b_e89dab91",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T19:50:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "368368fe_ced5c35e",
+      "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
