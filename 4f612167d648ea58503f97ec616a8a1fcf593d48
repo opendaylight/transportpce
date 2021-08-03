@@ -34,6 +34,24 @@
       "revId": "4f612167d648ea58503f97ec616a8a1fcf593d48",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61fc7591_b821bfa6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T14:42:30Z",
+      "side": 1,
+      "message": "also apart for the OC and SERVICE_TYPE_100GE_T cases, getOtnServiceType and getServiceType give pretty much the same result.",
+      "parentUuid": "ef5dcc9b_b5350937",
+      "revId": "4f612167d648ea58503f97ec616a8a1fcf593d48",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
