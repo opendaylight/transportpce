@@ -22,6 +22,40 @@
       "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba6354aa_a4de5f9a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T19:21:34Z",
+      "side": 1,
+      "message": "useless variable allocation",
+      "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "368368fe_ced5c35e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T19:21:34Z",
+      "side": 1,
+      "message": "what about ternary operator here ?",
+      "revId": "8bedfde5204149babc3ce3ccabf0f1db0bf5ae3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
