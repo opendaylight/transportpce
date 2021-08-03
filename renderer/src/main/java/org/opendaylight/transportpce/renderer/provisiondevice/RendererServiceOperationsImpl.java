@@ -47,7 +47,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteInput;
@@ -126,20 +125,17 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
-                String serviceType;
-                if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
+                String serviceType = ServiceTypes.getServiceType(
+                    input.getServiceAEnd().getServiceFormat().getName(),
+                    serviceRate,
+                    (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
                         .getNodeInfo().getNodeType())
-                    && input.getServiceAEnd().getTxDirection() != null
-                    && input.getServiceAEnd().getTxDirection().getPort() != null
-                    && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
-                    Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(),
-                        input.getServiceAEnd().getTxDirection().getPort().getPortName());
-                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
-                        serviceRate, mapping);
-                } else {
-                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
-                        serviceRate, null);
-                }
+                            && input.getServiceAEnd().getTxDirection() != null
+                            && input.getServiceAEnd().getTxDirection().getPort() != null
+                            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null)
+                        ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+                                input.getServiceAEnd().getTxDirection().getPort().getPortName())
+                        : null);
 
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
@@ -185,16 +181,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 Optional<
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service
                     .path.PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
-                PathDescription pathDescription;
-                if (pathDescriptionOpt.isPresent()) {
-                    pathDescription = pathDescriptionOpt.get();
-                } else {
+                if (!pathDescriptionOpt.isPresent()) {
                     LOG.error("Unable to get path description for service {}!", serviceName);
                     sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
                             RpcStatusEx.Failed, "Unable to get path description for service");
                     return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
                             OPERATION_FAILED);
                 }
+                PathDescription pathDescription = pathDescriptionOpt.get();
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
                     service.getServiceAEnd().getServiceRate(), null);
                 switch (serviceType) {
@@ -459,13 +453,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     private List<Measurements> getMeasurements(String nodeId, String tp) {
-        GetPmInputBuilder getPmIpBldr = new GetPmInputBuilder();
-        getPmIpBldr.setNodeId(nodeId);
-        getPmIpBldr.setGranularity(PmGranularity._15min);
-        ResourceIdentifierBuilder rsrcBldr = new ResourceIdentifierBuilder();
-        rsrcBldr.setResourceName(tp + "-OTU");
-        getPmIpBldr.setResourceIdentifier(rsrcBldr.build());
-        getPmIpBldr.setResourceType(ResourceTypeEnum.Interface);
+        GetPmInputBuilder getPmIpBldr = new GetPmInputBuilder()
+            .setNodeId(nodeId)
+            .setGranularity(PmGranularity._15min)
+            .setResourceIdentifier(new ResourceIdentifierBuilder().setResourceName(tp + "-OTU").build())
+            .setResourceType(ResourceTypeEnum.Interface);
 
         try {
             Future<RpcResult<GetPmOutput>> getPmFuture = this.olmService.getPm(getPmIpBldr.build());
@@ -549,18 +541,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         Nodes sourceNode = nodes.get(0);
         Nodes destNode = nodes.get(nodes.size() - 1);
-        String srcNetworkTp;
-        String dstNetowrkTp;
-        if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-            srcNetworkTp = sourceNode.getDestTp();
-        } else {
-            srcNetworkTp = sourceNode.getSrcTp();
-        }
-        if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-            dstNetowrkTp = destNode.getDestTp();
-        } else {
-            dstNetowrkTp = destNode.getSrcTp();
-        }
+        String srcNetworkTp =
+            sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)
+                ? sourceNode.getDestTp()
+                : sourceNode.getSrcTp();
+        String dstNetowrkTp =
+            destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)
+                ? destNode.getDestTp()
+                : destNode.getSrcTp();
+
         if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
             || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
             rollbackProcessor.rollbackAll();
