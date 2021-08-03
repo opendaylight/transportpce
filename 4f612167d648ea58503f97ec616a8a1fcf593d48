@@ -52,6 +52,24 @@
       "revId": "4f612167d648ea58503f97ec616a8a1fcf593d48",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d723c5_c6f9e7b8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-03T15:20:21Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97066",
+      "parentUuid": "61fc7591_b821bfa6",
+      "revId": "4f612167d648ea58503f97ec616a8a1fcf593d48",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
