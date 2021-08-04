@@ -146,24 +146,18 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 nodeId, destTp, spectrumInformation);
                         createdOchInterfaces.add(supportingOchInterface);
                         // Here we pass logical connection-point of z-end to set SAPI and DAPI
-                        Nodes tgtNode = null;
-                        if (nodeIndex + 1 == nodes.size()) {
-                            // For the end node, tgtNode becomes the first node in the list
-                            tgtNode = nodes.get(0);
-                        } else {
-                            tgtNode = nodes.get(nodeIndex + 1);
-                        }
-                        // tgtNode srcTp is null in this if cond
+                        Nodes tgtNode =
+                            nodeIndex + 1 == nodes.size()
+                                // For the end node, tgtNode becomes the first node in the list
+                                ? nodes.get(0)
+                                : nodes.get(nodeIndex + 1);
+                                // tgtNode srcTp is null in this last cond
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface,
                                     tgtNode.getNodeId(), tgtNode.getDestTp());
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (srcTp == null) {
-                            LinkTp linkTp = new LinkTpBuilder()
-                                .setNodeId(nodeId)
-                                .setTpId(destTp)
-                                .build();
-                            otnLinkTps.add(linkTp);
+                            otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                     destTp, supportingOtuInterface));
@@ -184,21 +178,21 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, spectrumInformation);
                         createdOchInterfaces.add(supportingOchInterface);
-                        String supportingOtuInterface = this.openRoadmInterfaceFactory
-                                .createOpenRoadmOtu4Interface(nodeId, srcTp, supportingOchInterface);
+                        String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
+                                nodeId, srcTp, supportingOchInterface);
                         createdOtuInterfaces.add(supportingOtuInterface);
-                        createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
-                                srcTp, supportingOtuInterface));
+                        createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
+                                nodeId, srcTp, supportingOtuInterface));
                         Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
-                        if (mapping != null && mapping.getXponderType() != null
+                        createdOduInterfaces.add(
+                            mapping != null
+                            && mapping.getXponderType() != null
                             && (mapping.getXponderType().getIntValue() == 3
-                            || mapping.getXponderType().getIntValue() == 2)) {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
-                                .createOpenRoadmOtnOdu4Interface(nodeId, destTp, supportingOtuInterface));
-                        } else {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
-                                    destTp, supportingOtuInterface));
-                        }
+                                || mapping.getXponderType().getIntValue() == 2)
+                            ? this.openRoadmInterfaceFactory.createOpenRoadmOtnOdu4Interface(
+                                    nodeId, destTp, supportingOtuInterface)
+                            : this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
+                                    nodeId, destTp, supportingOtuInterface));
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         LOG.info("Adding supporting EThernet interface for node {}, dest tp {}", nodeId, destTp);
@@ -273,12 +267,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
             LOG.error("Alarm suppresion node removal failed!!!!");
         }
-        ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder()
-            .setNodeInterface(nodeInterfaces)
-            .setSuccess(success.get())
-            .setResult(String.join("\n", results))
-            .setLinkTp(otnLinkTps);
-        return setServBldr.build();
+        return new ServicePathOutputBuilder()
+                .setNodeInterface(nodeInterfaces)
+                .setSuccess(success.get())
+                .setResult(String.join("\n", results))
+                .setLinkTp(otnLinkTps)
+                .build();
     }
 
     private ConcurrentLinkedQueue<String> processErrorMessage(String message, ForkJoinPool forkJoinPool,
@@ -308,18 +302,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             if (node.getDestTp() == null) {
                 LOG.error("Destination termination point must not be null.");
                 return;
-            } else {
-                destTp = node.getDestTp();
             }
+            destTp = node.getDestTp();
             if (node.getSrcTp() != null) {
                 srcTp = node.getSrcTp();
             } else {
                 srcTp = "";
-                LinkTp linkTp = new LinkTpBuilder()
-                    .setNodeId(nodeId)
-                    .setTpId(destTp)
-                    .build();
-                otnLinkTps.add(linkTp);
+                otnLinkTps.add(new LinkTpBuilder()
+                        .setNodeId(nodeId)
+                        .setTpId(destTp)
+                        .build());
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
@@ -355,14 +347,14 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
             LOG.error("Alarm suppresion node removal failed!!!!");
         }
-        ServicePathOutputBuilder delServBldr = new ServicePathOutputBuilder()
-            .setSuccess(success.get())
-            .setLinkTp(otnLinkTps);
-        if (results.isEmpty()) {
-            return delServBldr.setResult("Request processed").build();
-        } else {
-            return delServBldr.setResult(String.join("\n", results)).build();
-        }
+        return new ServicePathOutputBuilder()
+                .setSuccess(success.get())
+                .setLinkTp(otnLinkTps)
+                .setResult(
+                    results.isEmpty()
+                    ? "Request processed"
+                    : String.join("\n", results))
+                .build();
     }
 
     private List<String>  getInterfaces2delete(
@@ -498,7 +490,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     .setNodeId(nodeId).setInterface(failedInterfaces).build();
             failedToRollbackList.put(failedToRollack.key(),failedToRollack);
         }
-        return new RendererRollbackOutputBuilder().setSuccess(success).setFailedToRollback(failedToRollbackList)
+        return new RendererRollbackOutputBuilder()
+                .setSuccess(success)
+                .setFailedToRollback(failedToRollbackList)
                 .build();
     }
 
@@ -507,10 +501,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             .withKey(new NodelistKey(input.getServiceName()))
             .setServiceName(input.getServiceName());
         Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
-            .nodelist.nodelist.NodesKey,
+                .nodelist.nodelist.NodesKey,
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
-            .nodelist.nodelist.Nodes> nodeList =
-                new HashMap<>();
+                .nodelist.nodelist.Nodes> nodeList = new HashMap<>();
         if (input.getNodes() != null) {
             for (Nodes node : input.getNodes()) {
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
@@ -590,6 +583,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String result = "";
         Boolean success = false;
         // if the node is currently mounted then proceed.
+        // TODO use guard clause style here to decrease complexity
         if (this.deviceTransactionManager.isDeviceMounted(input.getNodeId())) {
             Mapping oldMapping = null;
             Mapping newMapping = null;
@@ -630,26 +624,25 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             oldMapping.getLogicalConnectionPoint(), input.getNodeId());
                 }
             } else {
-                result = "Logical Connection point " + input.getLogicalConnectionPoint() + " does not exist for "
-                        + input.getNodeId();
+                result = "Logical Connection point " + input.getLogicalConnectionPoint()
+                         + " does not exist for " + input.getNodeId();
             }
         } else {
             result = input.getNodeId() + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
-            LOG.warn("{} is not mounted on the controller",input.getNodeId());
+            LOG.warn("{} is not mounted on the controller", input.getNodeId());
         }
         return output.setResult(result).setSuccess(success).build();
     }
 
     private Boolean isSupportingOtsPresent(Mapping mapping) {
-        Boolean result = false;
-        if (mapping != null) {
-            if (mapping.getSupportingOts() != null) {
-                LOG.info("SupportingOts info is present in mapping {}", mapping);
-                result = true;
-            } else {
-                LOG.warn("SupportingOts info not present in mapping {}", mapping);
-            }
+        if (mapping == null) {
+            return false;
         }
-        return result;
+        if (mapping.getSupportingOts() == null) {
+            LOG.warn("SupportingOts info not present in mapping {}", mapping);
+            return false;
+        }
+        LOG.info("SupportingOts info is present in mapping {}", mapping);
+        return true;
     }
 }
