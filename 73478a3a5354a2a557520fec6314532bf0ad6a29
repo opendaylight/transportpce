@@ -250,6 +250,23 @@
     },
     {
       "key": {
+        "uuid": "1764cdcb_046eccf7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-04T21:38:39Z",
+      "side": 1,
+      "message": "if empty, size should be 0 thus different from 2",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d529c78f_196b1e75",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/DeviceRenderingTask.java",
         "patchSetId": 10
