@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3acd989a_1ca0d520",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-04T14:00:41Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97081",
+      "parentUuid": "b673f3c0_6046fe2c",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fea290bc_95dbb8e8",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 10
