@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1054dbbd_c3cc27c4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-04T14:47:14Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97082",
+      "parentUuid": "fea290bc_95dbb8e8",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "abcc6f63_8b6f414a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 10
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "88762849_db44fc85",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-04T14:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abcc6f63_8b6f414a",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2019f7ae_f554e859",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 10
@@ -85,6 +121,24 @@
       "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1d24a2_9255e2c1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-04T14:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2019f7ae_f554e859",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
