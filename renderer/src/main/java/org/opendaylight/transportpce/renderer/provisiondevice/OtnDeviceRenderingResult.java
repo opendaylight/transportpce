@@ -20,18 +20,16 @@ public final class OtnDeviceRenderingResult extends OperationResult {
 
 
     private OtnDeviceRenderingResult(boolean success, String message, List<NodeInterface> renderedNodeInterfaces,
-        List<LinkTp> otnLinkTps) {
+            List<LinkTp> otnLinkTps) {
         super(success, message);
-        if (renderedNodeInterfaces != null) {
-            this.renderedNodeInterfaces = Collections.unmodifiableList(renderedNodeInterfaces);
-        } else {
-            this.renderedNodeInterfaces = Collections.emptyList();
-        }
-        if (otnLinkTps != null) {
-            this.otnLinkTps = Collections.unmodifiableList(otnLinkTps);
-        } else {
-            this.otnLinkTps = Collections.emptyList();
-        }
+        this.renderedNodeInterfaces =
+            renderedNodeInterfaces == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(renderedNodeInterfaces);
+        this.otnLinkTps =
+            otnLinkTps == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(otnLinkTps);
     }
 
     public List<NodeInterface> getRenderedNodeInterfaces() {
