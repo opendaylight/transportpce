@@ -23,21 +23,18 @@ public final class DeviceRenderingResult extends OperationResult {
     private DeviceRenderingResult(boolean success, String message, List<Nodes> olmList,
             List<NodeInterface> renderedNodeInterfaces, List<LinkTp> otnLinkTps) {
         super(success, message);
-        if (olmList != null) {
-            this.olmList = Collections.unmodifiableList(olmList);
-        } else {
-            this.olmList = Collections.emptyList();
-        }
-        if (renderedNodeInterfaces != null) {
-            this.renderedNodeInterfaces = Collections.unmodifiableList(renderedNodeInterfaces);
-        } else {
-            this.renderedNodeInterfaces = Collections.emptyList();
-        }
-        if (otnLinkTps != null) {
-            this.otnLinkTps = Collections.unmodifiableList(otnLinkTps);
-        } else {
-            this.otnLinkTps = Collections.emptyList();
-        }
+        this.olmList =
+            olmList == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(olmList);
+        this.renderedNodeInterfaces =
+            renderedNodeInterfaces == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(renderedNodeInterfaces);
+        this.otnLinkTps =
+            otnLinkTps == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(otnLinkTps);
     }
 
     public List<Nodes> getOlmList() {
@@ -57,7 +54,7 @@ public final class DeviceRenderingResult extends OperationResult {
     }
 
     public static DeviceRenderingResult ok(List<Nodes> olmNodeList, List<NodeInterface> renderedNodeInterfaces,
-        List<LinkTp> otnLinkTps) {
+            List<LinkTp> otnLinkTps) {
         return new DeviceRenderingResult(true, "", olmNodeList, renderedNodeInterfaces, otnLinkTps);
     }
 
