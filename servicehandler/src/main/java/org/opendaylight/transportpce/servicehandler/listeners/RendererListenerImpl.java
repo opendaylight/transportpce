@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Map;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -30,7 +31,6 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
-import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,30 +93,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private void onServiceDeleteResult(RendererRpcResultSp notification) {
         switch (serviceRpcResultSp.getStatus()) {
             case Successful:
-                String serviceType = notification.getServiceType();
-                switch (serviceType) {
-                    case StringConstants.SERVICE_TYPE_1GE:
-                    case StringConstants.SERVICE_TYPE_10GE:
-                    case StringConstants.SERVICE_TYPE_100GE_M:
-                        Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                            .split("\\.")[0]);
-                        Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                            .split("\\.")[1]);
-                        Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
-                            .split("\\.")[1]);
-                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(),
-                            notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
-                        break;
-                    case StringConstants.SERVICE_TYPE_OTU4:
-                    case StringConstants.SERVICE_TYPE_OTUC4:
-                    case StringConstants.SERVICE_TYPE_ODU4:
-                    case StringConstants.SERVICE_TYPE_ODUC4:
-                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(), null, null,
-                            null, null);
-                        break;
-                    default:
-                        break;
-                }
+                updateOtnTopology(notification, true);
                 break;
             case Failed:
                 LOG.error("Renderer service delete failed !");
@@ -151,6 +128,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceDeleteResult);
     }
 
+
     /**
      * Process service implementation result for serviceName.
      * @param notification RendererRpcResultSp
@@ -182,29 +160,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.debug("serviceDataStoreOperations is null");
             return;
         }
-        String serviceType = notification.getServiceType();
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_1GE:
-            case StringConstants.SERVICE_TYPE_10GE:
-            case StringConstants.SERVICE_TYPE_100GE_M:
-                Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                    .split("\\.")[0]);
-                Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                    .split("\\.")[1]);
-                Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
-                    .split("\\.")[1]);
-                updateOtnTopology(notification.getLink(), false, notification.getServiceType(),
-                    notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
-                break;
-            case StringConstants.SERVICE_TYPE_OTU4:
-            case StringConstants.SERVICE_TYPE_OTUC4:
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                updateOtnTopology(notification.getLink(), false, notification.getServiceType(), null, null, null, null);
-                break;
-            default:
-                break;
-        }
+
+        updateOtnTopology(notification, false);
+
         PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
@@ -307,19 +265,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         value = "ES_COMPARING_STRINGS_WITH_EQ",
         justification = "false positives, not strings but real object references comparisons")
     private Boolean compareServiceRpcResultSp(RendererRpcResultSp notification) {
-        if (serviceRpcResultSp == null) {
-            return false;
-        }
-        if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
+        if (serviceRpcResultSp == null
+                || serviceRpcResultSp.getNotificationType() != notification.getNotificationType()
+                || serviceRpcResultSp.getServiceName() != notification.getServiceName()
+                || serviceRpcResultSp.getStatus() != notification.getStatus()
+                || serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
             return false;
         }
         return true;
@@ -350,52 +300,48 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         }
     }
 
-    private void updateOtnTopology(Link link, boolean isDeletion, String serviceType, Uint32 rate, Short portNb,
-            Short minSlotNb, Short maxSlotNb) {
+
+    private void updateOtnTopology(RendererRpcResultSp notification, boolean isDeletion) {
+        Link link = notification.getLink();
         if (link == null) {
             return;
         }
-        OtnLinkType otnLinkType;
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_OTU4:
-                otnLinkType = OtnLinkType.OTU4;
-                break;
-            case StringConstants.SERVICE_TYPE_OTUC4:
-                otnLinkType = OtnLinkType.OTUC4;
-                break;
-            case StringConstants.SERVICE_TYPE_ODU4:
-                otnLinkType = OtnLinkType.ODTU4;
-                break;
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                otnLinkType = OtnLinkType.ODUC4;
-                break;
-            default:
-                otnLinkType = null;
-                LOG.warn("No otn-link-type corresponds to service-type {}", serviceType);
-                break;
-        }
+
+        String serviceType = notification.getServiceType();
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
+                Map<String, OtnLinkType> otnLinkTypeMap = Map.of(
+                    StringConstants.SERVICE_TYPE_OTU4, OtnLinkType.OTU4,
+                    StringConstants.SERVICE_TYPE_OTUC4, OtnLinkType.OTUC4,
+                    StringConstants.SERVICE_TYPE_ODU4, OtnLinkType.ODTU4,
+                    StringConstants.SERVICE_TYPE_ODUC4, OtnLinkType.ODUC4);
                 if (isDeletion) {
                     LOG.info("updating otn-topology removing links");
                     this.networkModelService.deleteOtnLinks(link.getATermination().getNodeId(),
                         link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkType);
+                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
                 } else {
                     LOG.info("updating otn-topology adding links");
                     this.networkModelService.createOtnLinks(link.getATermination().getNodeId(),
                         link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkType);
+                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
                 }
                 break;
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_100GE_M:
+                Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                    .split("\\.")[0]);
+                Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                    .split("\\.")[1]);
+                Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
+                    .split("\\.")[1]);
                 LOG.info("updating otn-topology node tps -tps and tpn pools");
-                this.networkModelService.updateOtnLinks(link, rate, portNb, minSlotNb, maxSlotNb, isDeletion);
+                this.networkModelService.updateOtnLinks(link, notification.getAToZDirection().getRate(),
+                    tribPort, minTribSlot, maxTribSlot, isDeletion);
                 break;
             default:
                 break;
