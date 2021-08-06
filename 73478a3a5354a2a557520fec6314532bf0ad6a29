@@ -381,6 +381,24 @@
     },
     {
       "key": {
+        "uuid": "ba82b4d1_f631d1ac",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T07:01:05Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97090",
+      "parentUuid": "96bc169d_89bd5db4",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f18c5b3b_56e2605a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 10
@@ -395,6 +413,24 @@
       "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6821c249_a899940f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T07:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f18c5b3b_56e2605a",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -430,6 +466,24 @@
       "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac5e979_ef6eb828",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T07:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa3d5463_d62ff3ae",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
