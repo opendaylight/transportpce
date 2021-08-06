@@ -558,6 +558,29 @@
       "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b44ac4_90fe8da2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T08:15:42Z",
+      "side": 1,
+      "message": "so why do we manage Ethernet service types in the simlar next switch/case structure ?\nShouldn\u0027t that be an info or debug log rather ?",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 371,
+        "endChar": 3
+      },
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
