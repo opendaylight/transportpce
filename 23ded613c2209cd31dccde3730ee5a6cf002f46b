@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f9b3d93_d3927b51",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-08-06T08:13:53Z",
+      "side": 1,
+      "message": "Maybe directly use \"pathDescriptionOpt.isEmpty()\" ?",
+      "range": {
+        "startLine": 184,
+        "startChar": 20,
+        "endLine": 184,
+        "endChar": 51
+      },
+      "revId": "23ded613c2209cd31dccde3730ee5a6cf002f46b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
