@@ -504,6 +504,24 @@
     },
     {
       "key": {
+        "uuid": "82bc666e_e7abfc8b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/DeviceRenderingTask.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T08:17:34Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97091",
+      "parentUuid": "d529c78f_196b1e75",
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afeac1c3_d2b84869",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
         "patchSetId": 10
@@ -524,6 +542,30 @@
       "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04361487_e3190125",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T08:17:34Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/97091",
+      "parentUuid": "afeac1c3_d2b84869",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "73478a3a5354a2a557520fec6314532bf0ad6a29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
