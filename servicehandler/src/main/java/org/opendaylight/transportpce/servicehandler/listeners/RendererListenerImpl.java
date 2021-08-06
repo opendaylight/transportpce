@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Map;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -93,30 +94,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private void onServiceDeleteResult(RendererRpcResultSp notification) {
         switch (serviceRpcResultSp.getStatus()) {
             case Successful:
-                String serviceType = notification.getServiceType();
-                switch (serviceType) {
-                    case StringConstants.SERVICE_TYPE_1GE:
-                    case StringConstants.SERVICE_TYPE_10GE:
-                    case StringConstants.SERVICE_TYPE_100GE_M:
-                        Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                            .split("\\.")[0]);
-                        Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                            .split("\\.")[1]);
-                        Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
-                            .split("\\.")[1]);
-                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(),
-                            notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
-                        break;
-                    case StringConstants.SERVICE_TYPE_OTU4:
-                    case StringConstants.SERVICE_TYPE_OTUC4:
-                    case StringConstants.SERVICE_TYPE_ODU4:
-                    case StringConstants.SERVICE_TYPE_ODUC4:
-                        updateOtnTopology(notification.getLink(), true, notification.getServiceType(), null, null,
-                            null, null);
-                        break;
-                    default:
-                        break;
-                }
+                updateTopoOnServiceResultSuccess(notification, true);
                 break;
             case Failed:
                 LOG.error("Renderer service delete failed !");
@@ -151,6 +129,33 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceDeleteResult);
     }
 
+    private void updateTopoOnServiceResultSuccess(RendererRpcResultSp notification, boolean bool) {
+        String serviceType = notification.getServiceType();
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_1GE:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_100GE_M:
+                Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                    .split("\\.")[0]);
+                Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
+                    .split("\\.")[1]);
+                Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
+                    .split("\\.")[1]);
+                updateOtnTopology(notification.getLink(), bool, serviceType,
+                    notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
+                break;
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                updateOtnTopology(notification.getLink(), bool, serviceType, null, null, null, null);
+                break;
+            default:
+                break;
+        }
+    }
+
+
     /**
      * Process service implementation result for serviceName.
      * @param notification RendererRpcResultSp
@@ -182,29 +187,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.debug("serviceDataStoreOperations is null");
             return;
         }
-        String serviceType = notification.getServiceType();
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_1GE:
-            case StringConstants.SERVICE_TYPE_10GE:
-            case StringConstants.SERVICE_TYPE_100GE_M:
-                Short tribPort = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                    .split("\\.")[0]);
-                Short minTribSlot = Short.valueOf(notification.getAToZDirection().getMinTribSlot().getValue()
-                    .split("\\.")[1]);
-                Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
-                    .split("\\.")[1]);
-                updateOtnTopology(notification.getLink(), false, notification.getServiceType(),
-                    notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot);
-                break;
-            case StringConstants.SERVICE_TYPE_OTU4:
-            case StringConstants.SERVICE_TYPE_OTUC4:
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                updateOtnTopology(notification.getLink(), false, notification.getServiceType(), null, null, null, null);
-                break;
-            default:
-                break;
-        }
+
+        updateTopoOnServiceResultSuccess(notification, false);
+
         PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
@@ -307,19 +292,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         value = "ES_COMPARING_STRINGS_WITH_EQ",
         justification = "false positives, not strings but real object references comparisons")
     private Boolean compareServiceRpcResultSp(RendererRpcResultSp notification) {
-        if (serviceRpcResultSp == null) {
-            return false;
-        }
-        if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
-            return false;
-        }
-        if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
+        if (serviceRpcResultSp == null
+                || serviceRpcResultSp.getNotificationType() != notification.getNotificationType()
+                || serviceRpcResultSp.getServiceName() != notification.getServiceName()
+                || serviceRpcResultSp.getStatus() != notification.getStatus()
+                || serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
             return false;
         }
         return true;
@@ -355,25 +332,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         if (link == null) {
             return;
         }
-        OtnLinkType otnLinkType;
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_OTU4:
-                otnLinkType = OtnLinkType.OTU4;
-                break;
-            case StringConstants.SERVICE_TYPE_OTUC4:
-                otnLinkType = OtnLinkType.OTUC4;
-                break;
-            case StringConstants.SERVICE_TYPE_ODU4:
-                otnLinkType = OtnLinkType.ODTU4;
-                break;
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                otnLinkType = OtnLinkType.ODUC4;
-                break;
-            default:
-                otnLinkType = null;
-                LOG.warn("No otn-link-type corresponds to service-type {}", serviceType);
-                break;
-        }
+        Map<String, OtnLinkType> otnLinkTypeMap = Map.of(
+            StringConstants.SERVICE_TYPE_OTU4, OtnLinkType.OTU4,
+            StringConstants.SERVICE_TYPE_OTUC4, OtnLinkType.OTUC4,
+            StringConstants.SERVICE_TYPE_ODU4, OtnLinkType.ODTU4,
+            StringConstants.SERVICE_TYPE_ODUC4, OtnLinkType.ODUC4);
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTUC4:
@@ -383,12 +346,12 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                     LOG.info("updating otn-topology removing links");
                     this.networkModelService.deleteOtnLinks(link.getATermination().getNodeId(),
                         link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkType);
+                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
                 } else {
                     LOG.info("updating otn-topology adding links");
                     this.networkModelService.createOtnLinks(link.getATermination().getNodeId(),
                         link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkType);
+                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
                 }
                 break;
             case StringConstants.SERVICE_TYPE_1GE:
