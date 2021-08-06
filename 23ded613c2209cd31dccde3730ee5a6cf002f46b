@@ -22,6 +22,30 @@
       "revId": "23ded613c2209cd31dccde3730ee5a6cf002f46b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82f142d3_4ca0d7c4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-06T08:26:50Z",
+      "side": 1,
+      "message": "why not !\nadressed in step 2 at https://git.opendaylight.org/gerrit/c/transportpce/+/97090\n\nThere were many other places to refactor here.\nThis will avoid rerunning jenkins on the whole stack",
+      "parentUuid": "5f9b3d93_d3927b51",
+      "range": {
+        "startLine": 184,
+        "startChar": 20,
+        "endLine": 184,
+        "endChar": 51
+      },
+      "revId": "23ded613c2209cd31dccde3730ee5a6cf002f46b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
