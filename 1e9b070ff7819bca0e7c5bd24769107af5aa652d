@@ -57,6 +57,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44f740af_ba23124a",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-09T10:10:55Z",
+      "side": 1,
+      "message": "@Jonas @Olivier: LGTM \u003d\u003e if there is no other objection, I propose we merge this change",
+      "parentUuid": "83e4f9c1_5131f74f",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
