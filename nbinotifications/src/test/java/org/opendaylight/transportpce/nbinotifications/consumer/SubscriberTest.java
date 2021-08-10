@@ -22,8 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.service.output.NotificationService;
 
 public class SubscriberTest extends AbstractTest {
     private static final String TOPIC = "topic";
@@ -31,9 +31,9 @@ public class SubscriberTest extends AbstractTest {
     private MockConsumer<String, NotificationService> mockConsumer;
     private MockConsumer<String, NotificationAlarmService> mockConsumerAlarm;
     private Subscriber<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationService, NotificationService> subscriberService;
+            .nbi.notifications.rev210813.NotificationService, NotificationService> subscriberService;
     private Subscriber<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationAlarmService, NotificationAlarmService> subscriberAlarmService;
+            .nbi.notifications.rev210813.NotificationAlarmService, NotificationAlarmService> subscriberAlarmService;
 
     @Before
     public void setUp() {
