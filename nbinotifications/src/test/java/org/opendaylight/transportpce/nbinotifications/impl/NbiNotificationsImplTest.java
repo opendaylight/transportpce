@@ -16,10 +16,10 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsServiceOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -28,10 +28,10 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Before
     public void setUp() {
         JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationService> converter = new JsonStringConverter<>(
+            .nbi.notifications.rev210813.NotificationService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
+                .nbi.notifications.rev210813.NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
     }

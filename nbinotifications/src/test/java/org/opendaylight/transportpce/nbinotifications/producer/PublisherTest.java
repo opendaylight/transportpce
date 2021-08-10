@@ -22,8 +22,8 @@ import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConsta
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationService;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 

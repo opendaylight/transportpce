@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.dmaap.client.impl;
 
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.dmaap.client.listener.NbiNotificationsListenerImpl;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

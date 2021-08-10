@@ -28,17 +28,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
-    private static final String TOPIC = "PceListener";
+    private static final String PUBLISHER = "PceListener";
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
@@ -185,7 +185,7 @@ public class PceListenerImpl implements TransportpcePceListener {
         } else {
             nbiNotificationBuilder.setServiceName(notification.getServiceName());
         }
-        nbiNotificationBuilder.setTopic(TOPIC);
+        nbiNotificationBuilder.setPublisherName(PUBLISHER);
         return nbiNotificationBuilder.build();
     }
 
@@ -208,7 +208,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                 .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
                 .setCommonId(service.getCommonId())
                 .setConnectionType(service.getConnectionType())
-                .setTopic(TOPIC);
+                .setPublisherName(PUBLISHER);
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.info("PCE cancel resource failed !");
             sendNbiNotification(nbiNotificationBuilder
