@@ -10,15 +10,21 @@ package org.opendaylight.transportpce.nbinotifications.utils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class NotificationServiceDataUtils {
@@ -26,8 +32,8 @@ public final class NotificationServiceDataUtils {
     private NotificationServiceDataUtils() {
     }
 
-    public static NotificationService buildSendEventInput() {
-        NotificationServiceBuilder notificationServiceBuilder = new NotificationServiceBuilder()
+    public static NotificationProcessService buildSendEventInput() {
+        return new NotificationProcessServiceBuilder()
                 .setMessage("message")
                 .setServiceName("service1")
                 .setOperationalState(State.InService)
@@ -35,17 +41,12 @@ public final class NotificationServiceDataUtils {
                 .setCommonId("commond-id")
                 .setConnectionType(ConnectionType.Service)
                 .setServiceZEnd(getServiceZEndBuild().build())
-                .setServiceAEnd(getServiceAEndBuild().build());
-
-        return notificationServiceBuilder.build();
+                .setServiceAEnd(getServiceAEndBuild().build())
+                .build();
     }
 
-    public static org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev210628.get.notifications.service.output.NotificationService buildReceivedEvent() {
-        org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder
-            notificationServiceBuilder = new org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder()
+    public static NotificationsProcessService buildReceivedEvent() {
+        return new NotificationsProcessServiceBuilder()
                 .setMessage("message")
                 .setServiceName("service1")
                 .setOperationalState(State.InService)
@@ -53,28 +54,24 @@ public final class NotificationServiceDataUtils {
                 .setCommonId("commond-id")
                 .setConnectionType(ConnectionType.Service)
                 .setServiceZEnd(getServiceZEndBuild().build())
-                .setServiceAEnd(getServiceAEndBuild().build());
-
-        return notificationServiceBuilder.build();
+                .setServiceAEnd(getServiceAEndBuild().build())
+                .build();
     }
 
-    public static org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService
-            buildReceivedAlarmEvent() {
-        org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmServiceBuilder
-                notificationAlarmServiceBuilder = new org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmServiceBuilder()
+    public static NotificationsAlarmService buildReceivedAlarmEvent() {
+        return new NotificationsAlarmServiceBuilder()
                 .setMessage("message")
                 .setServiceName("service1")
                 .setOperationalState(State.InService)
-                .setConnectionType(ConnectionType.Service);
-        return notificationAlarmServiceBuilder.build();
+                .setConnectionType(ConnectionType.Service)
+                .build();
     }
 
     public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                .setClli("clli")
+                .setServiceFormat(ServiceFormat.OC)
+                .setServiceRate(Uint32.valueOf(1))
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection());
@@ -82,31 +79,51 @@ public final class NotificationServiceDataUtils {
 
     public static ServiceZEndBuilder getServiceZEndBuild() {
         return new ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                .setClli("clli")
+                .setServiceFormat(ServiceFormat.OC)
+                .setServiceRate(Uint32.valueOf(1))
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection());
     }
 
     private static TxDirection getTxDirection() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .endpoint.TxDirectionBuilder().setPort(new PortBuilder().setPortDeviceName("device name")
-                .setPortName("port name").setPortRack("port rack").setPortShelf("port shelf")
-                .setPortSlot("port slot").setPortSubSlot("port subslot").setPortType("port type").build())
-                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name").setLgxPortName("lgx port name")
-                        .setLgxPortRack("lgx port rack").setLgxPortShelf("lgx port shelf").build())
+        return new TxDirectionBuilder()
+                .setPort(new PortBuilder()
+                        .setPortDeviceName("device name")
+                        .setPortName("port name")
+                        .setPortRack("port rack")
+                        .setPortShelf("port shelf")
+                        .setPortSlot("port slot")
+                        .setPortSubSlot("port subslot")
+                        .setPortType("port type")
+                        .build())
+                .setLgx(new LgxBuilder()
+                        .setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name")
+                        .setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf")
+                        .build())
                 .build();
     }
 
     private static RxDirection getRxDirection() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .endpoint.RxDirectionBuilder()
-                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                        .setLgxPortShelf("lgx port shelf").build())
+        return new RxDirectionBuilder()
+                .setPort(new PortBuilder()
+                        .setPortDeviceName("device name")
+                        .setPortName("port name")
+                        .setPortRack("port rack")
+                        .setPortShelf("port shelf")
+                        .setPortSlot("port slot")
+                        .setPortSubSlot("port subslot")
+                        .setPortType("port type")
+                        .build())
+                .setLgx(new LgxBuilder()
+                        .setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name")
+                        .setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf")
+                        .build())
                 .build();
     }
 }

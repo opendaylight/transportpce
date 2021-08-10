@@ -27,10 +27,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RendererListenerImpl implements TransportpceRendererListener {
 
-    private static final String TOPIC = "RendererListener";
+    private static final String PUBLISHER = "RendererListener";
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
     private RendererRpcResultSp serviceRpcResultSp;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -98,7 +98,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             case Failed:
                 LOG.error("Renderer service delete failed !");
                 Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
-                sendNbiNotification(new PublishNotificationServiceBuilder()
+                sendNbiNotification(new PublishNotificationProcessServiceBuilder()
                         .setServiceName(service.getServiceName())
                         .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
                         .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
@@ -107,7 +107,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         .setResponseFailed("Renderer service delete failed !")
                         .setMessage("ServiceDelete request failed ...")
                         .setOperationalState(service.getOperationalState())
-                        .setTopic(TOPIC)
+                        .setPublisherName(PUBLISHER)
                         .build());
                 return;
             case Pending:
@@ -162,12 +162,12 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
         updateOtnTopology(notification, false);
 
-        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
+        PublishNotificationProcessServiceBuilder nbiNotificationBuilder = new PublishNotificationProcessServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
                 .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
-                .setTopic(TOPIC);
+                .setPublisherName(PUBLISHER);
         OperationResult operationResult;
         String serviceTemp = "";
         if (tempService) {
@@ -231,7 +231,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private void onFailedServiceImplementation(String serviceName) {
         LOG.error("Renderer implementation failed !");
         Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
-        sendNbiNotification(new PublishNotificationServiceBuilder()
+        sendNbiNotification(new PublishNotificationProcessServiceBuilder()
                 .setServiceName(service.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
@@ -240,7 +240,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 .setResponseFailed("Renderer implementation failed !")
                 .setMessage("ServiceCreate request failed ...")
                 .setOperationalState(service.getOperationalState())
-                .setTopic(TOPIC)
+                .setPublisherName(PUBLISHER)
                 .build());
         OperationResult deleteServicePathOperationResult =
                 this.serviceDataStoreOperations.deleteServicePath(serviceName);
@@ -290,7 +290,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      * Send notification to NBI notification in order to publish message.
      * @param service PublishNotificationService
      */
-    private void sendNbiNotification(PublishNotificationService service) {
+    private void sendNbiNotification(PublishNotificationProcessService service) {
         try {
             notificationPublishService.putNotification(service);
         } catch (InterruptedException e) {

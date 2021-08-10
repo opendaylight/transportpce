@@ -19,16 +19,17 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Test;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApiStub;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.LoggerFactory;
 
@@ -47,15 +48,15 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
         listAppender.start();
         logger.addAppender(listAppender);
         NbiNotificationsListener listener = new NbiNotificationsListenerImpl("http://localhost:9998", null, null);
-        PublishNotificationService notification = new PublishNotificationServiceBuilder().setCommonId("CommonId")
+        PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
+                .setCommonId("CommonId")
                 .setMessage("Service implemented")
                 .setOperationalState(State.InService)
-                .setTopic("topic")
+                .setPublisherName("publisher")
                 .setConnectionType(ConnectionType.Service)
                 .setServiceAEnd(new ServiceAEndBuilder()
                         .setClli("clli")
-                        .setNodeId(new org.opendaylight.yang.gen.v1.http
-                                .org.openroadm.common.node.types.rev181130.NodeIdType("nodeidtype"))
+                        .setNodeId(new NodeIdType("nodeidtype"))
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(100))
                         .setRxDirection(new RxDirectionBuilder().build())
@@ -63,16 +64,15 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
                         .build())
                 .setServiceZEnd(new ServiceZEndBuilder()
                         .setClli("clli")
-                        .setNodeId(new org.opendaylight.yang.gen.v1.http
-                                .org.openroadm.common.node.types.rev181130.NodeIdType("nodeidtype"))
+                        .setNodeId(new NodeIdType("nodeidtype"))
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(100))
                         .setRxDirection(new RxDirectionBuilder().build())
                         .setTxDirection(new TxDirectionBuilder().build())
                         .build())
                 .build();
-        listener.onPublishNotificationService(notification);
-        // as onPublishNotificationService is a void method, we check log message to be sur everything went well
+        listener.onPublishNotificationProcessService(notification);
+        // as onPublishNotificationService is a void method, we check log message to be sure everything went well
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals("Response received CreatedEvent [serverTimeMs=1, count=1]", logsList.get(1).getFormattedMessage());
 

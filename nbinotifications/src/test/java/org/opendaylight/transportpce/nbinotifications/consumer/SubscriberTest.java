@@ -22,18 +22,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessService;
 
 public class SubscriberTest extends AbstractTest {
     private static final String TOPIC = "topic";
     private static final int PARTITION = 0;
-    private MockConsumer<String, NotificationService> mockConsumer;
-    private MockConsumer<String, NotificationAlarmService> mockConsumerAlarm;
-    private Subscriber<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationService, NotificationService> subscriberService;
-    private Subscriber<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationAlarmService, NotificationAlarmService> subscriberAlarmService;
+    private MockConsumer<String, NotificationsProcessService> mockConsumer;
+    private MockConsumer<String, NotificationsAlarmService> mockConsumerAlarm;
+    private Subscriber<NotificationProcessService, NotificationsProcessService> subscriberService;
+    private Subscriber<NotificationAlarmService, NotificationsAlarmService> subscriberAlarmService;
 
     @Before
     public void setUp() {
@@ -46,7 +46,7 @@ public class SubscriberTest extends AbstractTest {
     @Test
     public void subscribeServiceShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
-        ConsumerRecord<String, NotificationService> record = new ConsumerRecord<>(
+        ConsumerRecord<String, NotificationsProcessService> record = new ConsumerRecord<>(
                 TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedEvent());
         mockConsumer.schedulePollTask(() -> {
             mockConsumer.rebalance(Collections.singletonList(new TopicPartition(TOPIC, PARTITION)));
@@ -57,7 +57,8 @@ public class SubscriberTest extends AbstractTest {
         TopicPartition tp = new TopicPartition(TOPIC, PARTITION);
         startOffsets.put(tp, 0L);
         mockConsumer.updateBeginningOffsets(startOffsets);
-        List<NotificationService> result = subscriberService.subscribe(TOPIC, NotificationService.QNAME);
+        List<NotificationsProcessService> result = subscriberService.subscribe(TOPIC,
+                NotificationsProcessService.QNAME);
         assertEquals("There should be 1 record", 1, result.size());
         assertTrue("Consumer should be closed", mockConsumer.closed());
     }
@@ -65,7 +66,7 @@ public class SubscriberTest extends AbstractTest {
     @Test
     public void subscribeAlarmShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
-        ConsumerRecord<String, NotificationAlarmService> record = new ConsumerRecord<>(
+        ConsumerRecord<String, NotificationsAlarmService> record = new ConsumerRecord<>(
                 TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedAlarmEvent());
         mockConsumerAlarm.schedulePollTask(() -> {
             mockConsumerAlarm.rebalance(Collections.singletonList(new TopicPartition(TOPIC, PARTITION)));
@@ -76,7 +77,8 @@ public class SubscriberTest extends AbstractTest {
         TopicPartition tp = new TopicPartition(TOPIC, PARTITION);
         startOffsets.put(tp, 0L);
         mockConsumerAlarm.updateBeginningOffsets(startOffsets);
-        List<NotificationAlarmService> result = subscriberAlarmService.subscribe(TOPIC, NotificationAlarmService.QNAME);
+        List<NotificationsAlarmService> result = subscriberAlarmService.subscribe(TOPIC,
+                NotificationsAlarmService.QNAME);
         assertEquals("There should be 1 record", 1, result.size());
         assertTrue("Consumer should be closed", mockConsumerAlarm.closed());
     }

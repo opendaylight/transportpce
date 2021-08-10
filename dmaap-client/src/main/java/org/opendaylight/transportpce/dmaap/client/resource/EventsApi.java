@@ -14,7 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
 
 @Path("/events")
 public interface EventsApi {
@@ -23,6 +23,6 @@ public interface EventsApi {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{topic}")
-    CreatedEvent sendEvent(@PathParam("topic") String topic, PublishNotificationService event);
+    CreatedEvent sendEvent(@PathParam("topic") String topic, PublishNotificationProcessService event);
 
 }

@@ -13,15 +13,17 @@ import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.consumer.Subscriber;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceDeserializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NbiNotificationsService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -29,37 +31,32 @@ import org.slf4j.LoggerFactory;
 
 public class NbiNotificationsImpl implements NbiNotificationsService {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsImpl.class);
-    private final JsonStringConverter<org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev210628.NotificationService> converterService;
-    private final JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationAlarmService> converterAlarmService;
+    private final JsonStringConverter<NotificationProcessService> converterService;
+    private final JsonStringConverter<NotificationAlarmService> converterAlarmService;
     private final String server;
 
-    public NbiNotificationsImpl(JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationService> converterService,
-                                JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationAlarmService> converterAlarmService, String server) {
+    public NbiNotificationsImpl(JsonStringConverter<NotificationProcessService> converterService,
+                                JsonStringConverter<NotificationAlarmService> converterAlarmService, String server) {
         this.converterService = converterService;
         this.converterAlarmService = converterAlarmService;
         this.server = server;
     }
 
     @Override
-    public ListenableFuture<RpcResult<GetNotificationsServiceOutput>> getNotificationsService(
-            GetNotificationsServiceInput input) {
+    public ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> getNotificationsProcessService(
+            GetNotificationsProcessServiceInput input) {
         LOG.info("RPC getNotificationsService received");
         if (input == null || input.getIdConsumer() == null || input.getGroupId() == null) {
             LOG.warn("Missing mandatory params for input {}", input);
-            return RpcResultBuilder.success(new GetNotificationsServiceOutputBuilder().build()).buildFuture();
+            return RpcResultBuilder.success(new GetNotificationsProcessServiceOutputBuilder().build()).buildFuture();
         }
-        Subscriber<org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService,
-                NotificationService> subscriber = new Subscriber<>(input.getIdConsumer(), input.getGroupId(), server,
-                converterService, NotificationServiceDeserializer.class);
-        List<NotificationService> notificationServiceList = subscriber
-                .subscribe(input.getConnectionType().getName(), NotificationService.QNAME);
-        GetNotificationsServiceOutputBuilder output = new GetNotificationsServiceOutputBuilder()
-                .setNotificationService(notificationServiceList);
-        return RpcResultBuilder.success(output.build()).buildFuture();
+        Subscriber<NotificationProcessService, NotificationsProcessService> subscriber = new Subscriber<>(
+                input.getIdConsumer(), input.getGroupId(), server, converterService,
+                NotificationServiceDeserializer.class);
+        List<NotificationsProcessService> notificationServiceList = subscriber
+                .subscribe(input.getConnectionType().getName(), NotificationsProcessService.QNAME);
+        return RpcResultBuilder.success(new GetNotificationsProcessServiceOutputBuilder()
+                .setNotificationsProcessService(notificationServiceList).build()).buildFuture();
     }
 
     @Override
@@ -70,13 +67,12 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder().build()).buildFuture();
         }
-        Subscriber<org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService,
-                NotificationAlarmService> subscriber = new Subscriber<>(input.getIdConsumer(), input.getGroupId(),
-                server, converterAlarmService, NotificationAlarmServiceDeserializer.class);
-        List<NotificationAlarmService> notificationAlarmServiceList = subscriber
-                .subscribe("alarm" + input.getConnectionType().getName(), NotificationAlarmService.QNAME);
-        GetNotificationsAlarmServiceOutputBuilder output = new GetNotificationsAlarmServiceOutputBuilder()
-                .setNotificationAlarmService(notificationAlarmServiceList);
-        return RpcResultBuilder.success(output.build()).buildFuture();
+        Subscriber<NotificationAlarmService, NotificationsAlarmService> subscriber = new Subscriber<>(
+                input.getIdConsumer(), input.getGroupId(), server, converterAlarmService,
+                NotificationAlarmServiceDeserializer.class);
+        List<NotificationsAlarmService> notificationAlarmServiceList = subscriber
+                .subscribe("alarm" + input.getConnectionType().getName(), NotificationsAlarmService.QNAME);
+        return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder()
+                .setNotificationsAlarmService(notificationAlarmServiceList).build()).buildFuture();
     }
 }
