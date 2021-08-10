@@ -11,8 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.service.output.NotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.service.output.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.service.output.NotificationServiceBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class NotificationServiceDeserializer implements Deserializer<NotificationService> {
     private static final Logger LOG = LoggerFactory.getLogger(NotificationServiceDeserializer.class);
     private JsonStringConverter<org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev210628.NotificationService> converter;
+        .nbi.notifications.rev210813.NotificationService> converter;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -30,8 +30,7 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
         if (configs.containsKey(ConfigConstants.CONVERTER)
                 && configs.get(ConfigConstants.CONVERTER) instanceof JsonStringConverter<?>) {
             converter = (JsonStringConverter<org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev210628.NotificationService>) configs
-                    .get(ConfigConstants.CONVERTER);
+                    .nbi.notifications.rev210813.NotificationService>) configs.get(ConfigConstants.CONVERTER);
         }
     }
 
@@ -47,21 +46,25 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
         // we have to map it to
         // org.opendaylight.yang.gen
         // .v1.nbi.notifications.rev201130.get.notifications.service.output.NotificationService
-        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService mappedString = converter
+        org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationService mappedString = converter
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(
-                        org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService.QNAME),
+                        org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationService.QNAME),
                         value,
                         JSONCodecFactorySupplier.RFC7951);
-        if (mappedString != null) {
-            LOG.info("Reading event {}", mappedString);
-            return new NotificationServiceBuilder().setCommonId(mappedString.getCommonId())
-                    .setConnectionType(mappedString.getConnectionType()).setMessage(mappedString.getMessage())
-                    .setOperationalState(mappedString.getOperationalState())
-                    .setResponseFailed(mappedString.getResponseFailed()).setServiceName(mappedString.getServiceName())
-                    .setServiceAEnd(mappedString.getServiceAEnd()).setServiceZEnd(mappedString.getServiceZEnd())
-                    .build();
+        if (mappedString == null) {
+            return null;
         }
-        return null;
+        LOG.info("Reading event {}", mappedString);
+        return new NotificationServiceBuilder()
+                .setCommonId(mappedString.getCommonId())
+                .setConnectionType(mappedString.getConnectionType())
+                .setMessage(mappedString.getMessage())
+                .setOperationalState(mappedString.getOperationalState())
+                .setResponseFailed(mappedString.getResponseFailed())
+                .setServiceName(mappedString.getServiceName())
+                .setServiceAEnd(mappedString.getServiceAEnd())
+                .setServiceZEnd(mappedString.getServiceZEnd())
+                .build();
     }
 
 }

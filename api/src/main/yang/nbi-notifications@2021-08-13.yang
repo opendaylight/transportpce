@@ -24,6 +24,11 @@ module nbi-notifications {
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
 
+  revision 2021-08-13 {
+    description
+      "Replace the attribute name 'topic' to 'publisher-name'";
+  }
+
   revision 2021-06-28 {
     description
       "Implement new models, RPC for service alarms";
@@ -174,23 +179,23 @@ module nbi-notifications {
   }
 
   notification publish-notification-service {
-    description "Publish the notifications service for topic";
-    leaf topic {
+    description "Publish the notifications service through a publisher";
+    leaf publisher-name {
       type string;
       mandatory true;
       description
-        "Topic where to send the notification service";
+        "Name of the publisher";
      }
      uses notification-service;
   }
 
   notification publish-notification-alarm-service {
-    description "Publish the notifications service alarm for topic";
-    leaf topic {
+    description "Publish the notifications service alarm through a publisher";
+    leaf publisher-name {
       type string;
       mandatory true;
       description
-        "Topic where to send the notification service alarm";
+        "Name of the publisher";
      }
      uses notification-alarm-service;
   }
