@@ -75,6 +75,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f51cd65_7092a3ea",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2021-08-10T19:33:48Z",
+      "side": 1,
+      "message": "\u003e Input width here refers to MC/slot width and not NMC width\n\nWidth is defined in transportpce-common-types@2021-06-18.yang:\n\n leaf width {\n   description\n    \" Width of nmc\";\n   type org-openroadm-common-types:frequency-GHz;\n }\n\nSo I think it is confusing when input.getWidth() is compared to 87.5 GHz slot width. Also, this patch partly reverts an earlier change in https://git.opendaylight.org/gerrit/c/transportpce/+/94560, which said \"Update setPower in PowerMgmtImpl as now we use width instead of slot-width\" in the commit message. I do think using slot width for the power calculation is more consistent with the OpenROADM MSA but then it is not consistent with the description in the yang module and I don\u0027t understand why it is being changed back and forth.",
+      "parentUuid": "44f740af_ba23124a",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
