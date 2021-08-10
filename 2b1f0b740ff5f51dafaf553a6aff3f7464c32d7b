@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e39a867d_8f8fc501",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-08-10T12:52:27Z",
+      "side": 1,
+      "message": "You may have deleted a comment accidentally \"// Adding SAPI/DAPI information to the\" ?",
+      "revId": "2b1f0b740ff5f51dafaf553a6aff3f7464c32d7b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76b4a8ef_e441f693",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-08-10T12:52:27Z",
+      "side": 1,
+      "message": "You may have deleted a comment accidentally \"// Adding SAPI/DAPI information to the\" ?",
+      "revId": "2b1f0b740ff5f51dafaf553a6aff3f7464c32d7b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
