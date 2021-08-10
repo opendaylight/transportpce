@@ -37,8 +37,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmServiceBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 @RunWith(MockitoJUnitRunner.StrictStubs.class)
@@ -128,16 +128,18 @@ public class ServiceListenerTest {
 
     private Services buildService(State state, AdminStates adminStates) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd
-                serviceAEnd = getServiceAEndBuild()
-                .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1
-                .http.org.openroadm.common.service.types.rev190531.service.ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
-                .setNodeId(new NodeIdType("XPONDER-3-2"))
-                .setTxDirection(getTxDirection())
-                .setRxDirection(getRxDirection())
-                .build();
+                serviceAEnd = getServiceAEndBuild().build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd
+                serviceZEnd =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
+                .ServiceZEndBuilder()
+                    .setClli("clli")
+                    .setServiceFormat(ServiceFormat.OC)
+                    .setServiceRate(Uint32.valueOf(1))
+                    .setNodeId(new NodeIdType("XPONDER-3-2"))
+                    .setTxDirection(getTxDirection())
+                    .setRxDirection(getRxDirection())
+                    .build();
 
         ServicesBuilder builtInput = new ServicesBuilder()
                 .setCommonId("commonId")
@@ -190,7 +192,7 @@ public class ServiceListenerTest {
                 .setConnectionType(ConnectionType.Service)
                 .setMessage(message)
                 .setOperationalState(services.getOperationalState())
-                .setTopic("ServiceListener")
+                .setPublisherName("ServiceListener")
                 .build();
     }
 }
