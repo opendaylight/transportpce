@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0f1a7cc9_2ad0faa0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-10T14:43:17Z",
+      "side": 1,
+      "message": "It is not an accident.\nI considered it as a mistake since the sentence was truncated (to the ???)",
+      "parentUuid": "e39a867d_8f8fc501",
+      "revId": "2b1f0b740ff5f51dafaf553a6aff3f7464c32d7b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76b4a8ef_e441f693",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "2b1f0b740ff5f51dafaf553a6aff3f7464c32d7b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8247454c_87c7e0c8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-10T14:43:17Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "76b4a8ef_e441f693",
+      "revId": "2b1f0b740ff5f51dafaf553a6aff3f7464c32d7b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
