@@ -1,5 +1,5 @@
 {
-    "notification-service": {
+    "notification-process-service": {
         "service-z-end": {
             "service-format": "OC",
             "node-id": "XPONDER-1-2",

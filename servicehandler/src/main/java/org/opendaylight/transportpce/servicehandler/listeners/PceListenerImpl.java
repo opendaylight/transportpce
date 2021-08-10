@@ -28,17 +28,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
-    private static final String TOPIC = "PceListener";
+    private static final String PUBLISHER = "PceListener";
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
@@ -147,13 +147,14 @@ public class PceListenerImpl implements TransportpcePceListener {
      * @return true is status is Successful, false otherwise.
      */
     private boolean checkStatus(ServicePathRpcResult notification) {
-        PublishNotificationService nbiNotification = getPublishNotificationService(notification);
-        PublishNotificationServiceBuilder publishNotificationServiceBuilder = new PublishNotificationServiceBuilder(
-                nbiNotification);
+        PublishNotificationProcessService nbiNotification = getPublishNotificationProcessService(notification);
+        PublishNotificationProcessServiceBuilder publishNotificationProcessServiceBuilder =
+                new PublishNotificationProcessServiceBuilder(nbiNotification);
         switch (servicePathRpcResult.getStatus()) {
             case Failed:
                 LOG.error("PCE path computation failed !");
-                nbiNotification = publishNotificationServiceBuilder.setMessage("ServiceCreate request failed ...")
+                nbiNotification = publishNotificationProcessServiceBuilder
+                        .setMessage("ServiceCreate request failed ...")
                         .setResponseFailed("PCE path computation failed !")
                         .setOperationalState(State.Degraded).build();
                 sendNbiNotification(nbiNotification);
@@ -167,7 +168,8 @@ public class PceListenerImpl implements TransportpcePceListener {
             default:
                 LOG.error("PCE path computation returned an unknown RpcStatusEx code {}",
                         servicePathRpcResult.getStatus());
-                nbiNotification = publishNotificationServiceBuilder.setMessage("ServiceCreate request failed ...")
+                nbiNotification = publishNotificationProcessServiceBuilder
+                        .setMessage("ServiceCreate request failed ...")
                         .setResponseFailed("PCE path computation returned an unknown RpcStatusEx code!")
                         .setOperationalState(State.Degraded).build();
                 sendNbiNotification(nbiNotification);
@@ -175,17 +177,19 @@ public class PceListenerImpl implements TransportpcePceListener {
         }
     }
 
-    private PublishNotificationService getPublishNotificationService(ServicePathRpcResult notification) {
-        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder();
+    private PublishNotificationProcessService getPublishNotificationProcessService(ServicePathRpcResult notification) {
+        PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
+                new PublishNotificationProcessServiceBuilder();
         if (input != null) {
             nbiNotificationBuilder.setServiceName(input.getServiceName())
                     .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                     .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                    .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType());
+                    .setCommonId(input.getCommonId())
+                    .setConnectionType(input.getConnectionType());
         } else {
             nbiNotificationBuilder.setServiceName(notification.getServiceName());
         }
-        nbiNotificationBuilder.setTopic(TOPIC);
+        nbiNotificationBuilder.setPublisherName(PUBLISHER);
         return nbiNotificationBuilder.build();
     }
 
@@ -202,13 +206,13 @@ public class PceListenerImpl implements TransportpcePceListener {
             return;
         }
         Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
-        PublishNotificationServiceBuilder nbiNotificationBuilder = new PublishNotificationServiceBuilder()
+        PublishNotificationProcessServiceBuilder nbiNotificationBuilder = new PublishNotificationProcessServiceBuilder()
                 .setServiceName(service.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
                 .setCommonId(service.getCommonId())
                 .setConnectionType(service.getConnectionType())
-                .setTopic(TOPIC);
+                .setPublisherName(PUBLISHER);
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.info("PCE cancel resource failed !");
             sendNbiNotification(nbiNotificationBuilder
@@ -302,7 +306,7 @@ public class PceListenerImpl implements TransportpcePceListener {
      * Send notification to NBI notification in order to publish message.
      * @param service PublishNotificationService
      */
-    private void sendNbiNotification(PublishNotificationService service) {
+    private void sendNbiNotification(PublishNotificationProcessService service) {
         try {
             notificationPublishService.putNotification(service);
         } catch (InterruptedException e) {

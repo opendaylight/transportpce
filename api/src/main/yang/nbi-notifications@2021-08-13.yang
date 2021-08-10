@@ -24,6 +24,11 @@ module nbi-notifications {
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
 
+  revision 2021-08-13 {
+    description
+      "Rename the groupings, containers and RPCs";
+  }
+
   revision 2021-06-28 {
     description
       "Implement new models, RPC for service alarms";
@@ -34,7 +39,7 @@ module nbi-notifications {
       "Initial revision of NBI notifications";
   }
 
-  grouping notification-service {
+  grouping notification-process-service {
     leaf message {
       type string;
       mandatory true;
@@ -103,10 +108,10 @@ module nbi-notifications {
     }
   }
 
-  container notification-service {
+  container notification-process-service {
     description
       "Model used to send a notification from a service request";
-    uses notification-service;
+    uses notification-process-service;
   }
 
   container notification-alarm-service {
@@ -115,7 +120,7 @@ module nbi-notifications {
     uses notification-alarm-service;
     }
 
-  rpc get-notifications-service {
+  rpc get-notifications-process-service {
     description "Get the notifications service sent by ServiceHandler through filtering connection type";
     input {
       leaf connection-type {
@@ -138,8 +143,8 @@ module nbi-notifications {
       }
     }
     output {
-      list notification-service {
-        uses notification-service;
+      list notifications-process-service {
+        uses notification-process-service;
       }
     }
   }
@@ -167,30 +172,30 @@ module nbi-notifications {
       }
     }
     output {
-      list notification-alarm-service {
+      list notifications-alarm-service {
         uses notification-alarm-service;
       }
     }
   }
 
-  notification publish-notification-service {
-    description "Publish the notifications service for topic";
-    leaf topic {
+  notification publish-notification-process-service {
+    description "Publish the notifications service through a publisher";
+    leaf publisher-name {
       type string;
       mandatory true;
       description
-        "Topic where to send the notification service";
+        "Name of the publisher";
      }
-     uses notification-service;
+     uses notification-process-service;
   }
 
   notification publish-notification-alarm-service {
-    description "Publish the notifications service alarm for topic";
-    leaf topic {
+    description "Publish the notifications service alarm through a publisher";
+    leaf publisher-name {
       type string;
       mandatory true;
       description
-        "Topic where to send the notification service alarm";
+        "Name of the publisher";
      }
      uses notification-alarm-service;
   }

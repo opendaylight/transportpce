@@ -207,7 +207,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                 "group-id": "transportpceTest"
             }
         }
-        response = test_utils.get_notifications_service_request(data)
+        response = test_utils.get_notifications_process_service_request(data)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(2)
 
@@ -228,13 +228,14 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                 "group-id": "transportpceTest"
             }
         }
-        response = test_utils.get_notifications_service_request(data)
+        response = test_utils.get_notifications_process_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-1]['message'], 'ServiceCreate request failed ...')
-        self.assertEqual(res['output']['notification-service'][-1]['response-failed'],
+        self.assertEqual(res['output']['notifications-process-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['connection-type'], 'service')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['message'],
+                         'ServiceCreate request failed ...')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['response-failed'],
                          'PCE path computation failed !')
         time.sleep(2)
 
@@ -300,12 +301,12 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                 "group-id": "transportpceTest"
             }
         }
-        response = test_utils.get_notifications_service_request(data)
+        response = test_utils.get_notifications_process_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-1]['message'], 'Service implemented !')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['connection-type'], 'service')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['message'], 'Service implemented !')
         time.sleep(2)
 
     def test_17_get_notifications_alarm_service1(self):
@@ -319,10 +320,10 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.get_notifications_alarm_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['operational-state'], 'inService')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['message'], 'The service is now inService')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['connection-type'], 'service')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['operational-state'], 'inService')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['message'], 'The service is now inService')
         time.sleep(2)
 
     def test_18_change_status_port_roadma_srg(self):
@@ -351,10 +352,10 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.get_notifications_alarm_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['operational-state'], 'outOfService')
-        self.assertEqual(res['output']['notification-alarm-service'][-1]['message'], 'The service is now outOfService')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['connection-type'], 'service')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['operational-state'], 'outOfService')
+        self.assertEqual(res['output']['notifications-alarm-service'][-1]['message'], 'The service is now outOfService')
         time.sleep(2)
 
     def test_20_restore_status_port_roadma_srg(self):
@@ -391,12 +392,12 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                 "group-id": "transportpceTest"
             }
         }
-        response = test_utils.get_notifications_service_request(data)
+        response = test_utils.get_notifications_process_service_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(res['output']['notification-service'][-1]['service-name'], 'service1')
-        self.assertEqual(res['output']['notification-service'][-1]['connection-type'], 'service')
-        self.assertEqual(res['output']['notification-service'][-1]['message'], 'Service deleted !')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['service-name'], 'service1')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['connection-type'], 'service')
+        self.assertEqual(res['output']['notifications-process-service'][-1]['message'], 'Service deleted !')
         time.sleep(2)
 
     def test_24_disconnect_XPDRA(self):

@@ -122,9 +122,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     /**
      * List of publisher topics.
      */
-    private final List<String> publisherTopicList = Arrays.asList("PceListener", "ServiceHandlerOperations",
+    private final List<String> publisherServiceList = Arrays.asList("PceListener", "ServiceHandlerOperations",
             "ServiceHandler", "RendererListener");
-    private final List<String> publisherTopicAlarmList = Arrays.asList("ServiceListener");
+    private final List<String> publisherAlarmList = Arrays.asList("ServiceListener");
 
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification) {
         LOG.info("Initializing transaction providers ...");
@@ -200,7 +200,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
             pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, "N/A");
+            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
@@ -229,7 +229,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
-                    publisherTopicList, publisherTopicAlarmList, null, null, lightyServices.getRpcProviderService(),
+                    publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
                     lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer());
         }
     }

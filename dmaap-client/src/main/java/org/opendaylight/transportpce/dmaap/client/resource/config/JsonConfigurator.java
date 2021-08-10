@@ -22,7 +22,7 @@ public class JsonConfigurator implements ContextResolver<ObjectMapper> {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.registerModule(new JavaTimeModule());
-        mapper.registerModule(new PublishNotificationServiceModule());
+        mapper.registerModule(new PublishNotificationProcessServiceModule());
     }
 
     @Override
