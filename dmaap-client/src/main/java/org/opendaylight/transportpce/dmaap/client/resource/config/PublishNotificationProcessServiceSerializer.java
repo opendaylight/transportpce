@@ -11,19 +11,19 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
 
 // This class is a temporary workaround while waiting jackson
 // support in yang tools https://git.opendaylight.org/gerrit/c/yangtools/+/94852
-public class PublishNotificationServiceSerializer extends StdSerializer<PublishNotificationService> {
+public class PublishNotificationProcessServiceSerializer extends StdSerializer<PublishNotificationProcessService> {
     private static final long serialVersionUID = 1L;
 
-    public PublishNotificationServiceSerializer() {
-        super(PublishNotificationService.class);
+    public PublishNotificationProcessServiceSerializer() {
+        super(PublishNotificationProcessService.class);
     }
 
     @Override
-    public void serialize(PublishNotificationService value, JsonGenerator gen, SerializerProvider provider)
+    public void serialize(PublishNotificationProcessService value, JsonGenerator gen, SerializerProvider provider)
             throws IOException {
         if (value != null) {
             gen.writeStartObject();
@@ -31,7 +31,7 @@ public class PublishNotificationServiceSerializer extends StdSerializer<PublishN
             gen.writeStringField("message", value.getMessage());
             gen.writeStringField("response-failed", value.getResponseFailed());
             gen.writeStringField("service-name", value.getServiceName());
-            gen.writeStringField("topic", value.getTopic());
+            gen.writeStringField("publisher-name", value.getPublisherName());
             if (value.getOperationalState() != null) {
                 gen.writeStringField("operational-state", value.getOperationalState().getName());
             }

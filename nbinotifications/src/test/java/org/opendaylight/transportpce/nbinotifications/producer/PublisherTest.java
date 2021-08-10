@@ -22,17 +22,17 @@ import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConsta
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
 public class PublisherTest extends AbstractTest {
-    private JsonStringConverter<NotificationService> converterService;
+    private JsonStringConverter<NotificationProcessService> converterService;
     private JsonStringConverter<NotificationAlarmService> converterAlarm;
-    private Publisher<NotificationService> publisherService;
+    private Publisher<NotificationProcessService> publisherService;
     private Publisher<NotificationAlarmService> publisherAlarm;
-    private MockProducer<String, NotificationService> mockProducer;
+    private MockProducer<String, NotificationProcessService> mockProducer;
     private MockProducer<String, NotificationAlarmService> mockAlarmProducer;
 
     @Before
@@ -54,10 +54,10 @@ public class PublisherTest extends AbstractTest {
     @Test
     public void sendEventServiceShouldBeSuccessful() throws IOException {
         String json = Files.readString(Paths.get("src/test/resources/event.json"));
-        NotificationService notificationService = converterService
-                .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationService.QNAME),
+        NotificationProcessService notificationProcessService = converterService
+                .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationProcessService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
-        publisherService.sendEvent(notificationService, notificationService.getConnectionType().name());
+        publisherService.sendEvent(notificationProcessService, notificationProcessService.getConnectionType().name());
         assertEquals("We should have one message", 1, mockProducer.history().size());
         assertEquals("Key should be test", "test", mockProducer.history().get(0).key());
     }

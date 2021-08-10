@@ -16,19 +16,19 @@ import java.util.Map;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.get.notifications.alarm.service.output.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
 
 public class NotificationAlarmServiceDeserializerTest extends AbstractTest {
 
     @Test
     public void deserializeTest() throws IOException {
-        JsonStringConverter<org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.NotificationAlarmService> converter =
+        JsonStringConverter<NotificationAlarmService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         NotificationAlarmServiceDeserializer deserializer = new NotificationAlarmServiceDeserializer();
         Map<String, Object> configs = Map.of(ConfigConstants.CONVERTER, converter);
         deserializer.configure(configs, false);
-        NotificationAlarmService readEvent = deserializer.deserialize("Test",
+        NotificationsAlarmService readEvent = deserializer.deserialize("Test",
                 Files.readAllBytes(Paths.get("src/test/resources/event_alarm_service.json")));
         deserializer.close();
         assertEquals("Service name should be service1", "service1", readEvent.getServiceName());

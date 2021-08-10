@@ -68,7 +68,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="rendererListener" />
         <argument ref="networkModelListener" />
         <argument ref="serviceDatastoreOperation" />
-        <argument value="ServiceHandler" />
     </bean>
 
     <bean id="provider"

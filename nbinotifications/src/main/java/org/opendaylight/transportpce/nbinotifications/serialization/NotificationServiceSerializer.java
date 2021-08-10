@@ -12,15 +12,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NotificationServiceSerializer implements Serializer<NotificationService> {
+public class NotificationServiceSerializer implements Serializer<NotificationProcessService> {
     private static final Logger LOG = LoggerFactory.getLogger(NotificationServiceSerializer.class);
-    private JsonStringConverter<NotificationService> converter;
+    private JsonStringConverter<NotificationProcessService> converter;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -28,21 +28,21 @@ public class NotificationServiceSerializer implements Serializer<NotificationSer
         LOG.info("Deserializer configuration {}", configs);
         if (configs.containsKey(ConfigConstants.CONVERTER)
                 && configs.get(ConfigConstants.CONVERTER) instanceof JsonStringConverter<?>) {
-            converter = (JsonStringConverter<NotificationService>) configs.get(ConfigConstants.CONVERTER);
+            converter = (JsonStringConverter<NotificationProcessService>) configs.get(ConfigConstants.CONVERTER);
         }
     }
 
     @Override
-    public byte[] serialize(String topic, NotificationService data) {
+    public byte[] serialize(String topic, NotificationProcessService data) {
         if (converter == null) {
-            throw new IllegalArgumentException(
-                    "Converter should be" + "configured through configure method of serializer");
+            throw new IllegalArgumentException("Converter should be configured through configure method of serializer");
         }
         if (data == null) {
             return new byte[0];
         }
         try {
-            InstanceIdentifier<NotificationService> iid = InstanceIdentifier.builder(NotificationService.class).build();
+            InstanceIdentifier<NotificationProcessService> iid = InstanceIdentifier
+                    .builder(NotificationProcessService.class).build();
             String serialized = converter.createJsonStringFromDataObject(iid, data, JSONCodecFactorySupplier.RFC7951);
             LOG.info("Serialized event {}", serialized);
             return serialized.getBytes(StandardCharsets.UTF_8);

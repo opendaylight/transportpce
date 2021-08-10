@@ -16,10 +16,12 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.GetNotificationsServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -27,31 +29,30 @@ public class NbiNotificationsImplTest extends AbstractTest {
 
     @Before
     public void setUp() {
-        JsonStringConverter<org.opendaylight.yang.gen.v1
-            .nbi.notifications.rev210628.NotificationService> converter = new JsonStringConverter<>(
+        JsonStringConverter<NotificationProcessService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        JsonStringConverter<org.opendaylight.yang.gen.v1
-                .nbi.notifications.rev210628.NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
+        JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
     }
 
     @Test
     public void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
-        ListenableFuture<RpcResult<GetNotificationsServiceOutput>> result =
-                nbiNotificationsImpl.getNotificationsService(new GetNotificationsServiceInputBuilder().build());
-        assertNull("Should be null", result.get().getResult().getNotificationService());
+        ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
+                nbiNotificationsImpl.getNotificationsProcessService(
+                        new GetNotificationsProcessServiceInputBuilder().build());
+        assertNull("Should be null", result.get().getResult().getNotificationsProcessService());
     }
 
     @Test
     public void getNotificationsServiceTest() throws InterruptedException, ExecutionException {
-        GetNotificationsServiceInputBuilder builder = new GetNotificationsServiceInputBuilder()
+        GetNotificationsProcessServiceInputBuilder builder = new GetNotificationsProcessServiceInputBuilder()
                 .setGroupId("groupId")
                 .setIdConsumer("consumerId")
                 .setConnectionType(ConnectionType.Service);
-        ListenableFuture<RpcResult<GetNotificationsServiceOutput>> result =
-                nbiNotificationsImpl.getNotificationsService(builder.build());
-        assertNull("Should be null", result.get().getResult().getNotificationService());
+        ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
+                nbiNotificationsImpl.getNotificationsProcessService(builder.build());
+        assertNull("Should be null", result.get().getResult().getNotificationsProcessService());
     }
 
     @Test
@@ -62,6 +63,6 @@ public class NbiNotificationsImplTest extends AbstractTest {
                 .setConnectionType(ConnectionType.Service);
         ListenableFuture<RpcResult<GetNotificationsAlarmServiceOutput>> result =
                 nbiNotificationsImpl.getNotificationsAlarmService(builder.build());
-        assertNull("Should be null", result.get().getResult().getNotificationAlarmService());
+        assertNull("Should be null", result.get().getResult().getNotificationsAlarmService());
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
@@ -28,11 +28,11 @@ public class NotificationServiceSerializerTest extends AbstractTest {
 
     @Test
     public void serializeTest() throws IOException {
-        JsonStringConverter<NotificationService> converter =
+        JsonStringConverter<NotificationProcessService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         String json = Files.readString(Paths.get("src/test/resources/event.json"));
-        NotificationService notificationService = converter
-                .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationService.QNAME),
+        NotificationProcessService notificationService = converter
+                .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationProcessService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
         NotificationServiceSerializer serializer = new NotificationServiceSerializer();
         Map<String, Object> configs = Map.of(ConfigConstants.CONVERTER, converter);

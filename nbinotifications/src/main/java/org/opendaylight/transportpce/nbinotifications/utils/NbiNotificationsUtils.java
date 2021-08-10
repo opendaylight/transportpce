@@ -22,8 +22,7 @@ public final class NbiNotificationsUtils {
 
     public static Properties loadProperties(String propertyFileName) {
         Properties props = new Properties();
-        InputStream inputStream = NbiNotificationsUtils.class.getClassLoader()
-                .getResourceAsStream(propertyFileName);
+        InputStream inputStream = NbiNotificationsUtils.class.getClassLoader().getResourceAsStream(propertyFileName);
         try {
             if (inputStream != null) {
                 props.load(inputStream);
