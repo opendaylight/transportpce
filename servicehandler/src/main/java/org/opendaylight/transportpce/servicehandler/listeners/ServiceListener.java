@@ -15,15 +15,15 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmServiceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ServiceListener implements DataTreeChangeListener<Services> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceListener.class);
-    private static final String TOPIC = "ServiceListener";
+    private static final String PUBLISHER = "ServiceListener";
     private final DataBroker dataBroker;
     private NotificationPublishService notificationPublishService;
 
@@ -54,7 +54,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                                 .setConnectionType(input.getConnectionType())
                                 .setMessage("The service is now outOfService")
                                 .setOperationalState(State.OutOfService)
-                                .setTopic(TOPIC)
+                                .setPublisherName(PUBLISHER)
                                 .build());
                     }
                     else if (rootService.getDataBefore().getOperationalState() == State.OutOfService
@@ -65,7 +65,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                                 .setConnectionType(input.getConnectionType())
                                 .setMessage("The service is now inService")
                                 .setOperationalState(State.InService)
-                                .setTopic(TOPIC)
+                                .setPublisherName(PUBLISHER)
                                 .build());
                     }
                     break;
