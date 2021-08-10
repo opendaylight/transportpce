@@ -24,11 +24,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.PublishNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.notification.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
         PublishNotificationService notification = new PublishNotificationServiceBuilder().setCommonId("CommonId")
                 .setMessage("Service implemented")
                 .setOperationalState(State.InService)
-                .setTopic("topic")
+                .setPublisherName("publisher")
                 .setConnectionType(ConnectionType.Service)
                 .setServiceAEnd(new ServiceAEndBuilder()
                         .setClli("clli")
@@ -72,7 +72,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
                         .build())
                 .build();
         listener.onPublishNotificationService(notification);
-        // as onPublishNotificationService is a void method, we check log message to be sur everything went well
+        // as onPublishNotificationService is a void method, we check log message to be sure everything went well
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals("Response received CreatedEvent [serverTimeMs=1, count=1]", logsList.get(1).getFormattedMessage());
 

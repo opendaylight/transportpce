@@ -1,90 +1,90 @@
 {
-  "notification-service": {
-    "service-z-end": {
-      "clli": "clli",
-      "service-rate": 1,
-      "node-id": "XPONDER-1-2",
-      "rx-direction": {
-        "lgx": {
-          "lgx-port-name": "lgx port name",
-          "lgx-port-shelf": "lgx port shelf",
-          "lgx-port-rack": "lgx port rack",
-          "lgx-device-name": "lgx device name"
+  "notification-service":{
+    "common-id":"commond-id",
+    "message":"message",
+    "operational-state":"inService",
+    "service-z-end":{
+      "node-id":"XPONDER-1-2",
+      "service-rate":1,
+      "clli":"clli",
+      "service-format":"OC",
+      "tx-direction":{
+        "port":{
+          "port-name":"port name",
+          "port-slot":"port slot",
+          "port-sub-slot":"port subslot",
+          "port-device-name":"device name",
+          "port-shelf":"port shelf",
+          "port-type":"port type",
+          "port-rack":"port rack"
         },
-        "port": {
-          "port-shelf": "port shelf",
-          "port-rack": "port rack",
-          "port-device-name": "device name",
-          "port-name": "port name",
-          "port-slot": "port slot",
-          "port-type": "port type",
-          "port-sub-slot": "port subslot"
+        "lgx":{
+          "lgx-port-shelf":"lgx port shelf",
+          "lgx-port-rack":"lgx port rack",
+          "lgx-port-name":"lgx port name",
+          "lgx-device-name":"lgx device name"
         }
       },
-      "service-format": "OC",
-      "tx-direction": {
-        "lgx": {
-          "lgx-port-name": "lgx port name",
-          "lgx-port-shelf": "lgx port shelf",
-          "lgx-port-rack": "lgx port rack",
-          "lgx-device-name": "lgx device name"
+      "rx-direction":{
+        "port":{
+          "port-name":"port name",
+          "port-slot":"port slot",
+          "port-sub-slot":"port subslot",
+          "port-device-name":"device name",
+          "port-shelf":"port shelf",
+          "port-type":"port type",
+          "port-rack":"port rack"
         },
-        "port": {
-          "port-shelf": "port shelf",
-          "port-rack": "port rack",
-          "port-device-name": "device name",
-          "port-name": "port name",
-          "port-slot": "port slot",
-          "port-type": "port type",
-          "port-sub-slot": "port subslot"
+        "lgx":{
+          "lgx-port-shelf":"lgx port shelf",
+          "lgx-port-rack":"lgx port rack",
+          "lgx-port-name":"lgx port name",
+          "lgx-device-name":"lgx device name"
         }
       }
     },
-    "connection-type": "service",
-    "operational-state": "inService",
-    "common-id": "commond-id",
-    "service-a-end": {
-      "clli": "clli",
-      "service-rate": 1,
-      "node-id": "XPONDER-1-2",
-      "rx-direction": {
-        "lgx": {
-          "lgx-port-name": "lgx port name",
-          "lgx-port-shelf": "lgx port shelf",
-          "lgx-port-rack": "lgx port rack",
-          "lgx-device-name": "lgx device name"
+    "service-name":"service1",
+    "connection-type":"service",
+    "service-a-end":{
+      "node-id":"XPONDER-1-2",
+      "service-rate":1,
+      "clli":"clli",
+      "service-format":"OC",
+      "tx-direction":{
+        "port":{
+          "port-name":"port name",
+          "port-slot":"port slot",
+          "port-sub-slot":"port subslot",
+          "port-device-name":"device name",
+          "port-shelf":"port shelf",
+          "port-type":"port type",
+          "port-rack":"port rack"
         },
-        "port": {
-          "port-shelf": "port shelf",
-          "port-rack": "port rack",
-          "port-device-name": "device name",
-          "port-name": "port name",
-          "port-slot": "port slot",
-          "port-type": "port type",
-          "port-sub-slot": "port subslot"
+        "lgx":{
+          "lgx-port-shelf":"lgx port shelf",
+          "lgx-port-rack":"lgx port rack",
+          "lgx-port-name":"lgx port name",
+          "lgx-device-name":"lgx device name"
         }
       },
-      "service-format": "OC",
-      "tx-direction": {
-        "lgx": {
-          "lgx-port-name": "lgx port name",
-          "lgx-port-shelf": "lgx port shelf",
-          "lgx-port-rack": "lgx port rack",
-          "lgx-device-name": "lgx device name"
+      "rx-direction":{
+        "port":{
+          "port-name":"port name",
+          "port-slot":"port slot",
+          "port-sub-slot":"port subslot",
+          "port-device-name":"device name",
+          "port-shelf":"port shelf",
+          "port-type":"port type",
+          "port-rack":"port rack"
         },
-        "port": {
-          "port-shelf": "port shelf",
-          "port-rack": "port rack",
-          "port-device-name": "device name",
-          "port-name": "port name",
-          "port-slot": "port slot",
-          "port-type": "port type",
-          "port-sub-slot": "port subslot"
+        "lgx":{
+          "lgx-port-shelf":"lgx port shelf",
+          "lgx-port-rack":"lgx port rack",
+          "lgx-port-name":"lgx port name",
+          "lgx-device-name":"lgx device name"
         }
       }
     },
-    "service-name": "service1",
-    "response-failed": "",
-    "message": "message"
+    "response-failed":""
   }
 }
