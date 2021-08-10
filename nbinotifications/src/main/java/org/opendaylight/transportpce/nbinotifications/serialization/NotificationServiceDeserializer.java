@@ -30,8 +30,7 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
         if (configs.containsKey(ConfigConstants.CONVERTER)
                 && configs.get(ConfigConstants.CONVERTER) instanceof JsonStringConverter<?>) {
             converter = (JsonStringConverter<org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev210628.NotificationService>) configs
-                    .get(ConfigConstants.CONVERTER);
+                    .nbi.notifications.rev210628.NotificationService>) configs.get(ConfigConstants.CONVERTER);
         }
     }
 
@@ -54,11 +53,15 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
                         JSONCodecFactorySupplier.RFC7951);
         if (mappedString != null) {
             LOG.info("Reading event {}", mappedString);
-            return new NotificationServiceBuilder().setCommonId(mappedString.getCommonId())
-                    .setConnectionType(mappedString.getConnectionType()).setMessage(mappedString.getMessage())
+            return new NotificationServiceBuilder()
+                    .setCommonId(mappedString.getCommonId())
+                    .setConnectionType(mappedString.getConnectionType())
+                    .setMessage(mappedString.getMessage())
                     .setOperationalState(mappedString.getOperationalState())
-                    .setResponseFailed(mappedString.getResponseFailed()).setServiceName(mappedString.getServiceName())
-                    .setServiceAEnd(mappedString.getServiceAEnd()).setServiceZEnd(mappedString.getServiceZEnd())
+                    .setResponseFailed(mappedString.getResponseFailed())
+                    .setServiceName(mappedString.getServiceName())
+                    .setServiceAEnd(mappedString.getServiceAEnd())
+                    .setServiceZEnd(mappedString.getServiceZEnd())
                     .build();
         }
         return null;

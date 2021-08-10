@@ -35,8 +35,7 @@ public class NotificationServiceSerializer implements Serializer<NotificationSer
     @Override
     public byte[] serialize(String topic, NotificationService data) {
         if (converter == null) {
-            throw new IllegalArgumentException(
-                    "Converter should be" + "configured through configure method of serializer");
+            throw new IllegalArgumentException("Converter should be configured through configure method of serializer");
         }
         if (data == null) {
             return new byte[0];

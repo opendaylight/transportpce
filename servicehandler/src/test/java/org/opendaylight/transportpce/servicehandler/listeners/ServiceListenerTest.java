@@ -133,7 +133,8 @@ public class ServiceListenerTest {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
                 .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1
                 .http.org.openroadm.common.service.types.rev190531.service.ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                .setClli("clli").setServiceFormat(ServiceFormat.OC)
+                .setServiceRate(Uint32.valueOf(1))
                 .setNodeId(new NodeIdType("XPONDER-3-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection())
@@ -190,7 +191,7 @@ public class ServiceListenerTest {
                 .setConnectionType(ConnectionType.Service)
                 .setMessage(message)
                 .setOperationalState(services.getOperationalState())
-                .setTopic("ServiceListener")
+                .setPublisherName("ServiceListener")
                 .build();
     }
 }

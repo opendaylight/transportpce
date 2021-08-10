@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
-    private static final String TOPIC = "PceListener";
+    private static final String PUBLISHER = "PceListener";
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
@@ -185,7 +185,7 @@ public class PceListenerImpl implements TransportpcePceListener {
         } else {
             nbiNotificationBuilder.setServiceName(notification.getServiceName());
         }
-        nbiNotificationBuilder.setTopic(TOPIC);
+        nbiNotificationBuilder.setPublisherName(PUBLISHER);
         return nbiNotificationBuilder.build();
     }
 
@@ -208,7 +208,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                 .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
                 .setCommonId(service.getCommonId())
                 .setConnectionType(service.getConnectionType())
-                .setTopic(TOPIC);
+                .setPublisherName(PUBLISHER);
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.info("PCE cancel resource failed !");
             sendNbiNotification(nbiNotificationBuilder

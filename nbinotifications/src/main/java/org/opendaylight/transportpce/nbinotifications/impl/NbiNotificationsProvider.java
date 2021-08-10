@@ -32,34 +32,33 @@ public class NbiNotificationsProvider {
     private static Map<String, Publisher<org.opendaylight.yang.gen.v1
             .nbi.notifications.rev210628.NotificationService>> publishersServiceMap =  new HashMap<>();
     private static Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap =  new HashMap<>();
-
     private final RpcProviderService rpcService;
-    private ObjectRegistration<NbiNotificationsService> rpcRegistration;
-    private ListenerRegistration<NbiNotificationsListener> listenerRegistration;
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
     private final JsonStringConverter<org.opendaylight.yang.gen.v1
-        .nbi.notifications.rev210628.NotificationService> converterService;
+            .nbi.notifications.rev210628.NotificationService> converterService;
     private final JsonStringConverter<NotificationAlarmService> converterAlarmService;
     private final String subscriberServer;
+    private ObjectRegistration<NbiNotificationsService> rpcRegistration;
+    private ListenerRegistration<NbiNotificationsListener> listenerRegistration;
 
 
-    public NbiNotificationsProvider(List<String> topicsService, List<String> topicsAlarm,
+    public NbiNotificationsProvider(List<String> publishersService, List<String> publishersAlarm,
             String subscriberServer, String publisherServer,
             RpcProviderService rpcProviderService, NotificationService notificationService,
             BindingDOMCodecServices bindingDOMCodecServices) {
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
         converterService =  new JsonStringConverter<>(bindingDOMCodecServices);
-        for (String topic: topicsService) {
-            LOG.info("Creating publisher for topic {}", topic);
-            publishersServiceMap.put(topic, new Publisher<>(topic, publisherServer, converterService,
-                    NotificationServiceSerializer.class));
+        for (String publisherService: publishersService) {
+            LOG.info("Creating publisher for the following class {}", publisherService);
+            publishersServiceMap.put(publisherService, new Publisher<>(publisherService, publisherServer,
+                    converterService, NotificationServiceSerializer.class));
         }
         converterAlarmService = new JsonStringConverter<>(bindingDOMCodecServices);
-        for (String topic: topicsAlarm) {
-            LOG.info("Creating publisher for topic {}", topic);
-            publishersAlarmMap.put(topic, new Publisher<>(topic, publisherServer, converterAlarmService,
-                    NotificationAlarmServiceSerializer.class));
+        for (String publisherAlarm: publishersAlarm) {
+            LOG.info("Creating publisher for the following class {}", publisherAlarm);
+            publishersAlarmMap.put(publisherAlarm, new Publisher<>(publisherAlarm, publisherServer,
+                    converterAlarmService, NotificationAlarmServiceSerializer.class));
         }
         this.subscriberServer = subscriberServer;
     }

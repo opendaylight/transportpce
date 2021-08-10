@@ -43,20 +43,30 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     public void onPublishNotificationServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm));
-        PublishNotificationService notification = new PublishNotificationServiceBuilder().setTopic("test")
-                .setCommonId("commonId").setConnectionType(ConnectionType.Service).setMessage("Service deleted")
-                .setOperationalState(State.OutOfService).setServiceName("service name").build();
+        PublishNotificationService notification = new PublishNotificationServiceBuilder()
+                .setPublisherName("test")
+                .setCommonId("commonId")
+                .setConnectionType(ConnectionType.Service)
+                .setMessage("Service deleted")
+                .setOperationalState(State.OutOfService)
+                .setServiceName("service name")
+                .build();
         listener.onPublishNotificationService(notification);
         verify(publisherService, times(1)).sendEvent(any(), anyString());
     }
 
     @Test
-    public void onPublishNotificationServiceWrongTopicTest() {
+    public void onPublishNotificationServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm));
-        PublishNotificationService notification = new PublishNotificationServiceBuilder().setTopic("wrongtopic")
-                .setCommonId("commonId").setConnectionType(ConnectionType.Service).setMessage("Service deleted")
-                .setOperationalState(State.OutOfService).setServiceName("service name").build();
+        PublishNotificationService notification = new PublishNotificationServiceBuilder()
+                .setPublisherName("wrongPublisher")
+                .setCommonId("commonId")
+                .setConnectionType(ConnectionType.Service)
+                .setMessage("Service deleted")
+                .setOperationalState(State.OutOfService)
+                .setServiceName("service name")
+                .build();
         listener.onPublishNotificationService(notification);
         verify(publisherService, times(0)).sendEvent(any(), anyString());
     }
@@ -65,21 +75,28 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     public void onPublishNotificationAlarmServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm));
-        PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder().setTopic("test")
-                .setConnectionType(ConnectionType.Service).setMessage("The service is now inService")
-                .setOperationalState(State.OutOfService).setServiceName("service name").build();
+        PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
+                .setPublisherName("test")
+                .setConnectionType(ConnectionType.Service)
+                .setMessage("The service is now inService")
+                .setOperationalState(State.OutOfService)
+                .setServiceName("service name")
+                .build();
         listener.onPublishNotificationAlarmService(notification);
         verify(publisherAlarm, times(1)).sendEvent(any(), anyString());
     }
 
     @Test
-    public void onPublishNotificationAlarmServiceWrongTopicTest() {
+    public void onPublishNotificationAlarmServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm));
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
-                .setTopic("wrongtopic").setConnectionType(ConnectionType.Service)
-                .setMessage("The service is now inService").setOperationalState(State.OutOfService)
-                .setServiceName("service name").build();
+                .setPublisherName("wrongPublisher")
+                .setConnectionType(ConnectionType.Service)
+                .setMessage("The service is now inService")
+                .setOperationalState(State.OutOfService)
+                .setServiceName("service name")
+                .build();
         listener.onPublishNotificationAlarmService(notification);
         verify(publisherAlarm, times(0)).sendEvent(any(), anyString());
     }

@@ -54,7 +54,8 @@ public class NotificationAlarmServiceDeserializer implements Deserializer<Notifi
                         JSONCodecFactorySupplier.RFC7951);
         if (mappedString != null) {
             LOG.info("Reading event {}", mappedString);
-            return new NotificationAlarmServiceBuilder().setConnectionType(mappedString.getConnectionType())
+            return new NotificationAlarmServiceBuilder()
+                    .setConnectionType(mappedString.getConnectionType())
                     .setMessage(mappedString.getMessage())
                     .setOperationalState(mappedString.getOperationalState())
                     .setServiceName(mappedString.getServiceName())

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RendererListenerImpl implements TransportpceRendererListener {
 
-    private static final String TOPIC = "RendererListener";
+    private static final String PUBLISHER = "RendererListener";
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
     private RendererRpcResultSp serviceRpcResultSp;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -130,7 +130,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         .setResponseFailed("Renderer service delete failed !")
                         .setMessage("ServiceDelete request failed ...")
                         .setOperationalState(service.getOperationalState())
-                        .setTopic(TOPIC)
+                        .setPublisherName(PUBLISHER)
                         .build());
                 return;
             case Pending:
@@ -210,7 +210,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
                 .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
-                .setTopic(TOPIC);
+                .setPublisherName(PUBLISHER);
         OperationResult operationResult;
         String serviceTemp = "";
         if (tempService) {
@@ -283,7 +283,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 .setResponseFailed("Renderer implementation failed !")
                 .setMessage("ServiceCreate request failed ...")
                 .setOperationalState(service.getOperationalState())
-                .setTopic(TOPIC)
+                .setPublisherName(PUBLISHER)
                 .build());
         OperationResult deleteServicePathOperationResult =
                 this.serviceDataStoreOperations.deleteServicePath(serviceName);

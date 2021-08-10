@@ -95,11 +95,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerImpl.class);
+    private static final String PUBLISHER = "ServiceHandler";
     private static final String TEMP_SERVICE_CREATE_MSG = "tempServiceCreate: {}";
     private static final String TEMP_SERVICE_DELETE_MSG = "tempServiceDelete: {}";
     private static final String SERVICE_RESTORATION_MSG = "serviceRestoration: {}";
     private static final String SERVICE_RECONFIGURE_MSG = "serviceReconfigure: {}";
-    private static final String SERVICE_FEASABILITY_CHECK_MSG = "serviceFeasabilityCheck: {}";
+    private static final String SERVICE_FEASIBILITY_CHECK_MSG = "serviceFeasibilityCheck: {}";
     private static final String SERVICE_DELETE_MSG = "serviceDelete: {}";
     private static final String SERVICE_CREATE_MSG = "serviceCreate: {}";
 
@@ -111,15 +112,13 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererListenerImpl rendererListenerImpl;
     private NetworkModelListenerImpl networkModelListenerImpl;
     private NotificationPublishService notificationPublishService;
-    private final String topic;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations,
-            String topic) {
+            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations) {
         this.db = databroker;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
@@ -128,7 +127,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
         this.notificationPublishService =  notificationPublishService;
-        this.topic = topic;
     }
 
 
@@ -192,10 +190,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     .setServiceName(input.getServiceName())
                     .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                     .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                    .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
+                    .setCommonId(input.getCommonId())
+                    .setConnectionType(input.getConnectionType())
                     .setResponseFailed(LogMessages.ABORT_PCE_FAILED)
                     .setMessage("ServiceCreate request failed ...")
                     .setOperationalState(State.Degraded)
+                    .setPublisherName(PUBLISHER)
                     .build());
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
@@ -230,7 +230,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         //Check presence of service to be deleted
         Optional<Services> serviceOpt = this.serviceDataStoreOperations.getService(serviceName);
         Services service;
-        if (!serviceOpt.isPresent()) {
+        if (serviceOpt.isEmpty()) {
             LOG.warn(SERVICE_DELETE_MSG, LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
@@ -257,10 +257,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     .setServiceName(service.getServiceName())
                     .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
                     .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
-                    .setCommonId(service.getCommonId()).setConnectionType(service.getConnectionType())
+                    .setCommonId(service.getCommonId())
+                    .setConnectionType(service.getConnectionType())
                     .setMessage("ServiceDelete request failed ...")
                     .setOperationalState(State.InService)
                     .setResponseFailed(LogMessages.RENDERER_DELETE_FAILED)
+                    .setPublisherName(PUBLISHER)
                     .build());
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
@@ -283,7 +285,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(serviceInput,
                 RpcActions.ServiceFeasibilityCheck);
         if (! validationResult.isSuccess()) {
-            LOG.warn(SERVICE_FEASABILITY_CHECK_MSG, LogMessages.ABORT_VALID_FAILED);
+            LOG.warn(SERVICE_FEASIBILITY_CHECK_MSG, LogMessages.ABORT_VALID_FAILED);
             return ModelMappingUtils.createCreateServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
@@ -295,10 +297,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
-        LOG.debug(SERVICE_FEASABILITY_CHECK_MSG, LogMessages.PCE_CALLING);
+        LOG.debug(SERVICE_FEASIBILITY_CHECK_MSG, LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
-            LOG.warn(SERVICE_FEASABILITY_CHECK_MSG, LogMessages.ABORT_PCE_FAILED);
+            LOG.warn(SERVICE_FEASIBILITY_CHECK_MSG, LogMessages.ABORT_PCE_FAILED);
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
@@ -314,7 +316,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         String serviceName = input.getServiceName();
         LOG.info("RPC serviceReconfigure received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
-        if (!servicesObject.isPresent()) {
+        if (servicesObject.isEmpty()) {
             LOG.warn(SERVICE_RECONFIGURE_MSG, LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createCreateServiceReply(
                 input,
@@ -402,13 +404,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             if (softConstraints == null) {
                 LOG.warn("service '{}' SoftConstraints is not set !", serviceName);
                 serviceInput.setSoftConstraints(DowngradeConstraints.convertToSoftConstraints(hardConstraints));
-                serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
             } else {
                 LOG.info("converting hard constraints to soft constraints ...");
                 serviceInput.setSoftConstraints(
                         DowngradeConstraints.updateSoftConstraints(hardConstraints, softConstraints));
-                serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
             }
+            serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
         }
         this.pceListenerImpl.setInput(serviceInput);
         this.pceListenerImpl.setServiceReconfigure(true);
@@ -453,7 +454,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         String serviceName = input.getServiceName();
         LOG.info("RPC serviceReroute received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
-        if (!servicesObject.isPresent()) {
+        if (servicesObject.isEmpty()) {
             LOG.warn("serviceReroute: {}", LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createRerouteServiceReply(
                     input, ResponseCodes.FINAL_ACK_NO,
@@ -528,7 +529,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
-         * header compliancy are verified.
+         * header compliance are verified.
          */
         LOG.debug("checking Service Compliance ...");
         ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerComplianceCheck.check(
@@ -546,7 +547,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services>
                 service =
             this.serviceDataStoreOperations.getTempService(commonId);
-        if (!service.isPresent()) {
+        if (service.isEmpty()) {
             LOG.error(TEMP_SERVICE_DELETE_MSG, LogMessages.serviceNotInDS(commonId));
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,

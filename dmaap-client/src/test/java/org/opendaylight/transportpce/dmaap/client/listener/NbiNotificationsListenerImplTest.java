@@ -50,7 +50,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
         PublishNotificationService notification = new PublishNotificationServiceBuilder().setCommonId("CommonId")
                 .setMessage("Service implemented")
                 .setOperationalState(State.InService)
-                .setTopic("topic")
+                .setPublisherName("publisher")
                 .setConnectionType(ConnectionType.Service)
                 .setServiceAEnd(new ServiceAEndBuilder()
                         .setClli("clli")
@@ -72,7 +72,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
                         .build())
                 .build();
         listener.onPublishNotificationService(notification);
-        // as onPublishNotificationService is a void method, we check log message to be sur everything went well
+        // as onPublishNotificationService is a void method, we check log message to be sure everything went well
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals("Response received CreatedEvent [serverTimeMs=1, count=1]", logsList.get(1).getFormattedMessage());
 

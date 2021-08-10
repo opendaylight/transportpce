@@ -31,7 +31,7 @@ public class PublishNotificationServiceSerializer extends StdSerializer<PublishN
             gen.writeStringField("message", value.getMessage());
             gen.writeStringField("response-failed", value.getResponseFailed());
             gen.writeStringField("service-name", value.getServiceName());
-            gen.writeStringField("topic", value.getTopic());
+            gen.writeStringField("publisher-name", value.getPublisherName());
             if (value.getOperationalState() != null) {
                 gen.writeStringField("operational-state", value.getOperationalState().getName());
             }

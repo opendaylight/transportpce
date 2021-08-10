@@ -75,8 +75,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
                 server, converterAlarmService, NotificationAlarmServiceDeserializer.class);
         List<NotificationAlarmService> notificationAlarmServiceList = subscriber
                 .subscribe("alarm" + input.getConnectionType().getName(), NotificationAlarmService.QNAME);
-        GetNotificationsAlarmServiceOutputBuilder output = new GetNotificationsAlarmServiceOutputBuilder()
-                .setNotificationAlarmService(notificationAlarmServiceList);
-        return RpcResultBuilder.success(output.build()).buildFuture();
+        return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder()
+                .setNotificationAlarmService(notificationAlarmServiceList).build()).buildFuture();
     }
 }
