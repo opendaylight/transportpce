@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210628.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
@@ -36,8 +36,7 @@ public class NotificationAlarmServiceSerializer implements Serializer<Notificati
     @Override
     public byte[] serialize(String topic, NotificationAlarmService data) {
         if (converter == null) {
-            throw new IllegalArgumentException(
-                    "Converter should be" + "configured through configure method of serializer");
+            throw new IllegalArgumentException("Converter should be configured through configure method of serializer");
         }
         if (data == null) {
             return new byte[0];
