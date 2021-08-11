@@ -15,6 +15,14 @@ module nbi-notifications {
     prefix org-openroadm-common-state-types;
     revision-date 2018-11-30;
   }
+  import tapi-common {
+    prefix tapi-common;
+    revision-date 2018-12-10;
+   }
+  import tapi-notification {
+    prefix tapi-notification;
+    revision-date 2018-12-10;
+  }
 
   organization
     "transportPCE";
@@ -108,6 +116,80 @@ module nbi-notifications {
     }
   }
 
+  grouping notification {
+      leaf notification-type {
+        type tapi-notification:notification-type;
+        description "none";
+      }
+      leaf target-object-type {
+        type tapi-notification:object-type;
+        description "none";
+      }
+      leaf target-object-identifier {
+        type tapi-common:uuid;
+        description "none";
+      }
+      list target-object-name {
+        key 'value-name';
+        min-elements 1;
+        uses tapi-common:name-and-value;
+        description "none";
+      }
+      leaf event-time-stamp {
+        type tapi-common:date-and-time;
+        description "none";
+      }
+      leaf sequence-number {
+        type uint64;
+        config false;
+        description "A monotonous increasing sequence number associated with the notification.
+            The exact semantics of how this sequence number is assigned (per channel or subscription or source or system) is left undefined.";
+      }
+      leaf source-indicator {
+        type tapi-notification:source-indicator;
+        description "none";
+      }
+      leaf layer-protocol-name {
+        type tapi-common:layer-protocol-name;
+        description "none";
+      }
+      list changed-attributes {
+        key 'value-name';
+        uses tapi-notification:name-and-value-change;
+        description "none";
+      }
+      list additional-info {
+        key 'value-name';
+        uses tapi-common:name-and-value;
+        description "none";
+      }
+      leaf additional-text {
+        type string;
+        description "none";
+      }
+      container tca-info {
+        uses tapi-notification:tca-info;
+        description "none";
+      }
+      container alarm-info {
+        uses tapi-notification:alarm-info;
+        description "none";
+      }
+      leaf uuid {
+        type tapi-common:uuid;
+        description "UUID: An identifier that is universally unique within an identifier space, where the identifier space is itself globally unique, and immutable. An UUID carries no semantics with respect to the purpose or state of the entity.
+            UUID here uses string representation as defined in RFC 4122.  The canonical representation uses lowercase characters.
+            Pattern: [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-' + '[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+            Example of a UUID in string representation: f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+      }
+      list name {
+        key 'value-name';
+        uses tapi-common:name-and-value;
+        description "List of names. A property of an entity with a value that is unique in some namespace but may change during the life of the entity. A name carries no semantics with respect to the purpose of the entity.";
+      }
+      description "none";
+    }
+
   container notification-process-service {
     description
       "Model used to send a notification from a service request";
@@ -118,6 +200,12 @@ module nbi-notifications {
     description
       "Model used to send a notification from the service listener";
     uses notification-alarm-service;
+    }
+
+  container notification {
+      description
+        "Model used to send a tapi notification";
+      uses notification;
     }
 
   rpc get-notifications-process-service {
@@ -198,5 +286,16 @@ module nbi-notifications {
         "Name of the publisher";
      }
      uses notification-alarm-service;
+  }
+
+  notification publish-tapi-notification-service {
+    description "Publish the TAPI notifications service for topic";
+    leaf topic {
+      type string;
+      mandatory true;
+      description
+        "Topic where to send the notification service";
+    }
+    uses tapi-notification:notification;
   }
 }
