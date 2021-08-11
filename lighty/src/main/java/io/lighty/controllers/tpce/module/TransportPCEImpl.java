@@ -215,7 +215,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
             deviceTransactionManager, tapiLink);
         TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
-                .getBindingDataBroker());
+                .getBindingDataBroker(), lightyServices.getBindingNotificationPublishService());
         TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
         TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(lightyServices
                 .getBindingDataBroker());
@@ -238,8 +238,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
-                publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
-                lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer());
+                    publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
+                    lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer(),
+                    networkTransaction);
         }
     }
 
