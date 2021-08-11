@@ -52,6 +52,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <bean id="tapiRendererListener" class="org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl">
         <argument ref="dataBroker" />
+        <argument ref="notificationPublishService" />
     </bean>
 
     <bean id="tapiServiceHandlerListener" class="org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl">
@@ -60,6 +61,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <bean id="tapiNetworkModelListenerImpl" class="org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl">
         <argument ref="networkTransactionImpl" />
+        <argument ref="notificationPublishService" />
     </bean>
 
     <bean id="tapiNetworkModelService" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl">
