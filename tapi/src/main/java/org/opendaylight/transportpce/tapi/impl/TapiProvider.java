@@ -16,6 +16,7 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.connectivity.TapiConnectivityImpl;
@@ -23,6 +24,7 @@ import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl
 import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
+import org.opendaylight.transportpce.tapi.notification.TapiNotificationImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyImpl;
@@ -39,6 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetwo
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TapiCommonService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.ServiceInterfacePoints;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
@@ -126,8 +129,11 @@ public class TapiProvider {
         TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
                 pceListenerImpl, rendererListenerImpl, serviceHandlerListenerImpl);
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils);
+        TapiNotificationImpl notif = new TapiNotificationImpl(this.networkTransactionService,
+                TopicManager.getInstance());
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
+        rpcProviderService.registerRpcImplementation(TapiNotificationService.class, notif);
         rpcProviderService.registerRpcImplementation(TapiCommonService.class, topo);
         dataTreeChangeListenerRegistration =
             dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
