@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEnd;
 
 // This class is a temporary workaround while waiting jackson
 // support in yang tools https://git.opendaylight.org/gerrit/c/yangtools/+/94852

@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +22,12 @@ import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 
 public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Mock
@@ -42,7 +43,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("test")
                 .setCommonId("commonId")
@@ -58,7 +59,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("wrongPublisher")
                 .setCommonId("commonId")
@@ -74,7 +75,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationAlarmServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("test")
                 .setConnectionType(ConnectionType.Service)
@@ -89,7 +90,9 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationAlarmServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>(
+
+        ));
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("wrongPublisher")
                 .setConnectionType(ConnectionType.Service)
