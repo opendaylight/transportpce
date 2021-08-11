@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("test")
                 .setCommonId("commonId")
@@ -58,7 +59,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("wrongPublisher")
                 .setCommonId("commonId")
@@ -74,7 +75,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationAlarmServiceTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>());
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("test")
                 .setConnectionType(ConnectionType.Service)
@@ -89,7 +90,9 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Test
     public void onPublishNotificationAlarmServiceWrongPublisherTest() {
         NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
-                Map.of("test", publisherAlarm));
+                Map.of("test", publisherAlarm), new HashMap<>(
+
+        ));
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("wrongPublisher")
                 .setConnectionType(ConnectionType.Service)
