@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -73,6 +74,9 @@ public class TapiProviderTest extends AbstractTest {
     @Mock
     TapiNetworkModelListenerImpl networkModelListener;
 
+    @Mock
+    private NotificationPublishService notificationPublishService;
+
     private AutoCloseable closeable;
 
     @Before
@@ -91,7 +95,7 @@ public class TapiProviderTest extends AbstractTest {
         TapiProvider provider =  new TapiProvider(getDataBroker(), rpcProviderRegistry, serviceHandler,
             serviceDataStoreOperations, tapiListener, networkTransactionService, topologyListener,
             tapiPortMappingListener, tapiNetworkUtils, pceListenerImpl, rendererListenerImpl,
-            serviceHandlerListenerImpl, getNotificationService(), networkModelListener);
+            serviceHandlerListenerImpl, getNotificationService(), networkModelListener, notificationPublishService);
 
         provider.init();
 

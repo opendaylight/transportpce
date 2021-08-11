@@ -312,11 +312,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         changedAttributes.put(new ChangedAttributesKey("administrative"), new ChangedAttributesBuilder()
                 .setValueName("administrative")
-                .setOldValue("")
+                .setOldValue(mapping.getPortAdminState().equals("InService") ? "OutOfService" : "InService")
                 .setNewValue(mapping.getPortAdminState()).build());
         changedAttributes.put(new ChangedAttributesKey("operational"), new ChangedAttributesBuilder()
                 .setValueName("operational")
-                .setOldValue("")
+                .setOldValue(mapping.getPortOperState().equals("InService") ? "OutOfService" : "InService")
                 .setNewValue(mapping.getPortOperState()).build());
         return changedAttributes;
     }
