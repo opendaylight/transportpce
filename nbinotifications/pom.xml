@@ -36,6 +36,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>transportpce-tapimodels</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}.ordmodels</groupId>
             <artifactId>transportpce-ordmodels-service</artifactId>
             <version>${project.version}</version>

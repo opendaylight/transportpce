@@ -85,12 +85,15 @@ public class TapiProvider {
     private TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
-            OrgOpenroadmServiceService serviceHandler, ServiceDataStoreOperations serviceDataStoreOperations,
-            TapiListener tapiListener, NetworkTransactionService networkTransactionService,
-            TapiNetconfTopologyListener topologyListener, TapiPortMappingListener tapiPortMappingListener,
-            TransportpceTapinetworkutilsService tapiNetworkUtils, TapiPceListenerImpl pceListenerImpl,
-            TapiRendererListenerImpl rendererListenerImpl, TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
-            NotificationService notificationService, TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl) {
+                        OrgOpenroadmServiceService serviceHandler,
+                        ServiceDataStoreOperations serviceDataStoreOperations,
+                        TapiListener tapiListener, NetworkTransactionService networkTransactionService,
+                        TapiNetconfTopologyListener topologyListener, TapiPortMappingListener tapiPortMappingListener,
+                        TransportpceTapinetworkutilsService tapiNetworkUtils, TapiPceListenerImpl pceListenerImpl,
+                        TapiRendererListenerImpl rendererListenerImpl,
+                        TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
+                        NotificationService notificationService,
+                        TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.serviceHandler = serviceHandler;
@@ -105,6 +108,7 @@ public class TapiProvider {
         this.serviceHandlerListenerImpl = serviceHandlerListenerImpl;
         this.notificationService = notificationService;
         this.tapiNetworkModelListenerImpl = tapiNetworkModelListenerImpl;
+        //this.notificationPublishService = notificationPublishService;
     }
 
     /**
@@ -126,6 +130,7 @@ public class TapiProvider {
         TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
                 pceListenerImpl, rendererListenerImpl, serviceHandlerListenerImpl);
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils);
+
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
         rpcProviderService.registerRpcImplementation(TapiCommonService.class, topo);
