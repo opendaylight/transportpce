@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.context.NotificationContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
@@ -98,13 +99,22 @@ public class TapiContext {
                         .build())
                     .build();
 
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1 notificationContext
+                = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1Builder()
+                    .setNotificationContext(new NotificationContextBuilder()
+                        .setNotification(new HashMap<>())
+                        .setNotifSubscription(new HashMap<>())
+                        .build())
+                    .build();
+
             ContextBuilder contextBuilder = new ContextBuilder()
                     .setName(Map.of(contextName.key(), contextName))
                     .setUuid(
                         new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(Charset.forName("UTF-8"))).toString()))
                     .setServiceInterfacePoint(new HashMap<>())
                     .addAugmentation(connectivityContext)
-                    .addAugmentation(topologyContext);
+                    .addAugmentation(topologyContext)
+                    .addAugmentation(notificationContext);
 
             // todo: add notification context
             InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
