@@ -230,7 +230,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
                 tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, tapiPceListenerImpl,
                 tapiRendererListenerImpl, tapiServiceHandlerListener, lightyServices.getNotificationService(),
-                tapiNetworkModelListenerImpl);
+                tapiNetworkModelListenerImpl, lightyServices.getBindingNotificationPublishService());
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
@@ -291,11 +291,12 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                                   TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl,
                                   TapiPceListenerImpl pceListenerImpl, TapiRendererListenerImpl rendererListenerImpl,
                                   TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
-                                  NotificationService notificationService) {
+                                  NotificationService notificationService,
+                                  NotificationPublishService notificationPublishService) {
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
             servicehandler, serviceDataStoreOperations, new TapiListener(), networkTransactionService,
             tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, pceListenerImpl,
-            rendererListenerImpl, serviceHandlerListenerImpl, notificationService);
+            rendererListenerImpl, serviceHandlerListenerImpl, notificationService, notificationPublishService);
     }
 
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,

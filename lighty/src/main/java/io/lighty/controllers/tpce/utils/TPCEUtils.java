@@ -350,7 +350,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.$YangModuleInfoImpl
                     .getInstance());
 
     private static final Set<YangModuleInfo> TPCE_YANG_MODEL = Stream.concat(
