@@ -65,6 +65,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>transportpce-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-nbinotifications</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Sodium bump: javax.annotation.Nullable and friends -->
     <dependency>

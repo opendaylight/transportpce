@@ -10,24 +10,30 @@ package org.opendaylight.transportpce.nbinotifications.listener;
 import java.util.Map;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.Notification;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
-    private final Map<String, Publisher<NotificationProcessService>> publishersServiceMap;
-    private final Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
+    private Map<String, Publisher<NotificationProcessService>> publishersServiceMap;
+    private Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
+    private Map<String, Publisher<Notification>> tapiPublisherMap;
 
     public NbiNotificationsListenerImpl(Map<String, Publisher<NotificationProcessService>> publishersServiceMap,
-                                        Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap) {
+                                        Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap,
+                                        Map<String, Publisher<Notification>> tapiPublisherMap) {
         this.publishersServiceMap = publishersServiceMap;
         this.publishersAlarmMap = publishersAlarmMap;
+        this.tapiPublisherMap = tapiPublisherMap;
     }
 
     @Override
@@ -66,5 +72,45 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
                 .setOperationalState(notification.getOperationalState())
                 .setServiceName(notification.getServiceName())
                         .build(), "alarm" + notification.getConnectionType().getName());
+    }
+
+    @Override
+    public void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
+        LOG.info("Receiving request for publishing TAPI notification");
+        String topic = notification.getTopic();
+        if (!tapiPublisherMap.containsKey(topic)) {
+            LOG.error("Unknown topic {}", topic);
+            return;
+        }
+        Publisher publisher = tapiPublisherMap.get(topic);
+        publisher.sendEvent(new NotificationBuilder()
+                .setAlarmInfo(notification.getAlarmInfo())
+                .setAdditionalText(notification.getAdditionalText())
+                .setAdditionalInfo(notification.getAdditionalInfo())
+                .setNotificationType(notification.getNotificationType())
+                .setChangedAttributes(notification.getChangedAttributes())
+                .setEventTimeStamp(notification.getEventTimeStamp())
+                .setLayerProtocolName(notification.getLayerProtocolName())
+                .setName(notification.getName())
+                .setSequenceNumber(notification.getSequenceNumber())
+                .setSourceIndicator(notification.getSourceIndicator())
+                .setTargetObjectIdentifier(notification.getTargetObjectIdentifier())
+                .setTargetObjectName(notification.getTargetObjectName())
+                .setTargetObjectType(notification.getTargetObjectType())
+                .setTcaInfo(notification.getTcaInfo())
+                .setUuid(notification.getUuid())
+                .build(), topic);
+    }
+
+    public void setPublishersServiceMap(Map<String, Publisher<NotificationProcessService>> publishersServiceMap) {
+        this.publishersServiceMap = publishersServiceMap;
+    }
+
+    public void setPublishersAlarmMap(Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap) {
+        this.publishersAlarmMap = publishersAlarmMap;
+    }
+
+    public void setTapiPublishersMap(Map<String, Publisher<Notification>> tapiPublishersMap) {
+        this.tapiPublisherMap = tapiPublishersMap;
     }
 }
