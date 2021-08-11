@@ -17,14 +17,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.process.service.output.NotificationsProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.alarm.service.output.NotificationsAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.process.service.output.NotificationsProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class NotificationServiceDataUtils {
