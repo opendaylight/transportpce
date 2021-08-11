@@ -16,10 +16,10 @@ import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
-import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
-import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
+import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.Notification;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
@@ -36,9 +36,11 @@ public class NbiNotificationsProvider {
     private final NotificationService notificationService;
     private final JsonStringConverter<NotificationProcessService> converterService;
     private final JsonStringConverter<NotificationAlarmService> converterAlarmService;
+    private final JsonStringConverter<Notification> converterTapiService;
     private final String subscriberServer;
     private ObjectRegistration<NbiNotificationsService> rpcRegistration;
     private ListenerRegistration<NbiNotificationsListener> listenerRegistration;
+    private TopicManager topicManager = TopicManager.getInstance();
 
 
     public NbiNotificationsProvider(List<String> publishersService, List<String> publishersAlarm,
@@ -47,19 +49,27 @@ public class NbiNotificationsProvider {
             BindingDOMCodecServices bindingDOMCodecServices) {
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
+        this.topicManager.setPublisherServer(publisherServer);
         converterService =  new JsonStringConverter<>(bindingDOMCodecServices);
+        this.topicManager.setProcessConverter(converterService);
         for (String publisherService: publishersService) {
             LOG.info("Creating publisher for the following class {}", publisherService);
-            publishersServiceMap.put(publisherService, new Publisher<>(publisherService, publisherServer,
-                    converterService, NotificationServiceSerializer.class));
+            //publishersServiceMap.put(publisherService, new Publisher<>(publisherService, publisherServer,
+            //        converterService, NotificationServiceSerializer.class));
+            this.topicManager.addProcessTopic(publisherService);
         }
         converterAlarmService = new JsonStringConverter<>(bindingDOMCodecServices);
+        this.topicManager.setAlarmConverter(converterAlarmService);
         for (String publisherAlarm: publishersAlarm) {
             LOG.info("Creating publisher for the following class {}", publisherAlarm);
-            publishersAlarmMap.put(publisherAlarm, new Publisher<>(publisherAlarm, publisherServer,
-                    converterAlarmService, NotificationAlarmServiceSerializer.class));
+            //publishersAlarmMap.put(publisherAlarm, new Publisher<>(publisherAlarm, publisherServer,
+            //        converterAlarmService, NotificationAlarmServiceSerializer.class));
+            this.topicManager.addAlarmTopic(publisherAlarm);
         }
         this.subscriberServer = subscriberServer;
+        converterTapiService = new JsonStringConverter<>(bindingDOMCodecServices);
+        LOG.info("baozhi tapi converter: {}", converterTapiService);
+        this.topicManager.setTapiConverter(converterTapiService);
     }
 
     /**
@@ -69,8 +79,11 @@ public class NbiNotificationsProvider {
         LOG.info("NbiNotificationsProvider Session Initiated");
         rpcRegistration = rpcService.registerRpcImplementation(NbiNotificationsService.class,
                 new NbiNotificationsImpl(converterService, converterAlarmService, subscriberServer));
-        listenerRegistration = notificationService.registerNotificationListener(
-                new NbiNotificationsListenerImpl(publishersServiceMap, publishersAlarmMap));
+        NbiNotificationsListenerImpl nbiNotificationsListener =
+                new NbiNotificationsListenerImpl(this.topicManager.getProcessTopicMap(),
+                        this.topicManager.getAlarmTopicMap(), this.topicManager.getTapiTopicMap());
+        listenerRegistration = notificationService.registerNotificationListener(nbiNotificationsListener);
+        this.topicManager.setNbiNotificationsListener(nbiNotificationsListener);
     }
 
     /**

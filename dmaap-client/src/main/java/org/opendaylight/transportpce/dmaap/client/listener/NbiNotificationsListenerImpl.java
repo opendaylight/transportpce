@@ -20,6 +20,7 @@ import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishTapiNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,10 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
 
     @Override
     public void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
+    }
 
+    @Override
+    public void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
     }
 
 }
