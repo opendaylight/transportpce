@@ -237,8 +237,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
-                publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
-                lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer());
+                    publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
+                    lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer(),
+                    networkTransaction);
         }
     }
 
