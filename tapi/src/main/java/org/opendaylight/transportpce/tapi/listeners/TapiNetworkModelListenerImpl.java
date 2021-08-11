@@ -8,6 +8,9 @@
 package org.opendaylight.transportpce.tapi.listeners;
 
 import java.nio.charset.Charset;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,15 +22,21 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
@@ -42,6 +51,12 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationListener;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.NodeEdgePointRef;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
@@ -64,12 +79,14 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
     private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
     private final List<LayerProtocolName> orderedServiceLayerList;
+    private final NotificationPublishService notificationPublishService;
 
-
-    public TapiNetworkModelListenerImpl(NetworkTransactionService networkTransactionService) {
+    public TapiNetworkModelListenerImpl(NetworkTransactionService networkTransactionService,
+                                        NotificationPublishService notificationPublishService) {
         this.networkTransactionService = networkTransactionService;
         this.orderedServiceLayerList = List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
             LayerProtocolName.DSR, LayerProtocolName.ETH);
+        this.notificationPublishService = notificationPublishService;
     }
 
     @Override
@@ -88,7 +105,66 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                     .map(NameAndValueChange::getNewValue)
                     .collect(Collectors.toList()));
             updateConnectivityServices();
-            // todo  create NotificationPublishSerivce (Tapi) object + send Notification
+            // todo set attributes
+            for (ConnectivityService connService : this.connectivityServiceChanges) {
+                sendNbiNotification(createNbiNotification(connService, notification.getChangedAttributes()));
+            }
+        }
+    }
+
+    private PublishTapiNotificationService createNbiNotification(ConnectivityService connService,
+                                                                 Map<ChangedAttributesKey, ChangedAttributes>
+                                                                         changedAttributesMap) {
+        if (connService == null) {
+            LOG.error("ConnService is null");
+            return null;
+        }
+        Map<ChangedAttributesKey, ChangedAttributes> changedStates = new HashMap<>();
+        changedStates.put(new ChangedAttributesKey("administrativeState"),
+            new ChangedAttributesBuilder()
+                .setNewValue(connService.getAdministrativeState().getName())
+                .setOldValue(connService.getAdministrativeState().equals(AdministrativeState.UNLOCKED)
+                    ? AdministrativeState.LOCKED.getName() : AdministrativeState.UNLOCKED.getName())
+                .setValueName("administrativeState").build());
+        changedStates.put(new ChangedAttributesKey("operationalState"),
+            new ChangedAttributesBuilder()
+                .setNewValue(connService.getOperationalState().getName())
+                .setOldValue(connService.getOperationalState().equals(OperationalState.ENABLED)
+                    ? OperationalState.DISABLED.getName() : OperationalState.ENABLED.getName())
+                .setValueName("operationalState").build());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+        Map<TargetObjectNameKey, TargetObjectName> targetObjectNames = new HashMap<>();
+        if (connService.getName() != null) {
+            for (Map.Entry<NameKey, Name> entry : connService.getName().entrySet()) {
+                targetObjectNames.put(new TargetObjectNameKey(entry.getKey().getValueName()),
+                    new TargetObjectNameBuilder()
+                        .setValueName(entry.getValue().getValueName())
+                        .setValue(entry.getValue().getValue())
+                        .build());
+            }
+        }
+
+        return new PublishTapiNotificationServiceBuilder()
+            .setUuid(new Uuid(UUID.randomUUID().toString()))
+            .setTopic(connService.getUuid().getValue())
+            .setTargetObjectIdentifier(connService.getUuid())
+            .setNotificationType(NotificationType.ATTRIBUTEVALUECHANGE)
+            .setChangedAttributes(changedStates)
+            .setEventTimeStamp(datetime)
+            .setTargetObjectName(targetObjectNames)
+            .setTargetObjectType(ObjectType.CONNECTIVITYSERVICE)
+            .setLayerProtocolName(connService.getServiceLayer())
+            .build();
+    }
+
+    private void sendNbiNotification(PublishTapiNotificationService service) {
+        try {
+            this.notificationPublishService.putNotification(service);
+        } catch (InterruptedException e) {
+            LOG.warn("Cannot send notification to nbi", e);
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -113,7 +189,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 return;
             }
             for (ConnectivityService connService : connContext.getConnectivityService()
-                .values()) {
+                    .values()) {
                 LOG.info("Connectivity service = {}", connService.toString());
                 // TODO: maybe we need to check lower connections if my new code doesnt work
                 states.put(connService.getUuid(), getStates(connService));
