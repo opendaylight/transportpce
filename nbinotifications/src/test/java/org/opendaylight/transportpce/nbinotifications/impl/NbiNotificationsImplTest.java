@@ -13,27 +13,39 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.GetNotificationsProcessServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
     private NbiNotificationsImpl nbiNotificationsImpl;
+    public static NetworkTransactionService networkTransactionService;
+
+    @Mock
+    private TopicManager topicManager;
 
     @Before
     public void setUp() {
+        networkTransactionService = new NetworkTransactionImpl(
+            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
         JsonStringConverter<NotificationProcessService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080",
+            networkTransactionService, topicManager);
     }
 
     @Test
