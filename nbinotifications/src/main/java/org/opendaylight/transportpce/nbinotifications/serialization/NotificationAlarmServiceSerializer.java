@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
