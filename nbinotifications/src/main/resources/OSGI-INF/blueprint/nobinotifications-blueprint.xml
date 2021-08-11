@@ -15,6 +15,8 @@ xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
     <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
     <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
     <reference id="bindingDOMCodecServices" interface="org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices" />
+    <reference id="networkTransactionImpl"
+               interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
     <bean id="provider"
         class="org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider"
         init-method="init" destroy-method="close">
@@ -36,5 +38,6 @@ xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
         <argument ref="rpcService" />
         <argument ref="notificationService" />
         <argument ref="bindingDOMCodecServices" />
+        <argument ref="networkTransactionImpl" />
     </bean>
 </blueprint>
