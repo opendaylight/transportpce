@@ -1471,20 +1471,12 @@ progress of a service creation.
    :alt: Example of service notifications using the feature nbinotifications in TransportPCE
 
 
-Depending of the success of the service creation, different notifications will be published
+Depending on the success of the service creation, different notifications will be published
 to the topic 'service' of the Kafka server.
 
-
--  **ServiceCreate request received** : Indicates that TransportPCE received an RPC request service-create
-   and started the process of creation. The notification contains all information concerning
-   the new service to create.
+If the service was correctly implemented, the following notification will be published :
 
 
-If the service was correctly implemented, these notifications will be published :
-
-
--  **PCE calculation done OK !** : Indicates that the PCE calculation requested by the service-create
-   was successful. It also contains all information concerning the new service to create.
 -  **Service implemented !** : Indicates that the service was successfully implemented.
    It also contains all information concerning the new service.
 
@@ -1492,8 +1484,8 @@ If the service was correctly implemented, these notifications will be published 
 Otherwise, this notification will be published :
 
 
--  **ServiceCreate failed ...** : Indicates that the process of service-create failed.
-   It contains the failure response.
+-  **ServiceCreate failed ...** : Indicates that the process of service-create failed, and also contains
+   the failure cause.
 
 To retrieve these service notifications stored in the Kafka server :
 
