@@ -3,7 +3,7 @@
   <netconf xmlns="urn:ietf:params:xml:ns:netmod:notification">
       <streams>
           <stream>
-              <name>OPENROADM</name>
+              <name>NETCONF</name>
           </stream>
     </streams>
   </netconf>
