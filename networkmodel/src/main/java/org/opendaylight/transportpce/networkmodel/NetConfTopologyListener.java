@@ -22,7 +22,9 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -31,10 +33,13 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.NotificationsService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.StreamNameType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +128,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             notificationService.get(), this.dataBroker, this.portMapping);
         nodeRegistration.registerListeners();
         registrations.put(nodeId, nodeRegistration);
-        String streamName = "NETCONF";
+        String streamName = getSupportedStream(nodeId);
         subscribeStream(mountPoint, streamName, nodeId);
     }
 
@@ -165,5 +170,30 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
         this.registrations = registrations;
+    }
+
+    private String getSupportedStream(String nodeId) {
+        InstanceIdentifier<Streams> streamsIID = InstanceIdentifier.create(Netconf.class).child(Streams.class);
+        try {
+            Optional<Streams> ordmInfoObject =
+                    deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, streamsIID,
+                            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!ordmInfoObject.isPresent()) {
+                LOG.error("List of streams supports by device is not present");
+                return "NETCONF";
+            }
+            for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf
+                    .streams.Stream strm : ordmInfoObject.get().getStream().values()) {
+                LOG.debug("Streams are {}",strm);
+                if ("OPENROADM".equalsIgnoreCase(strm.getName().getValue())) {
+                    return strm.getName().getValue();
+                }
+            }
+            return "NETCONF";
+        } catch (NullPointerException ex) {
+            LOG.error("NullPointerException thrown while getting  streams from device {}. Opening NETCONF Stream "
+                    + "for the node.", nodeId);
+            return "NETCONF";
+        }
     }
 }
