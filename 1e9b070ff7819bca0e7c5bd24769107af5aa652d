@@ -129,6 +129,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61065bab_21aa67a4",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T08:39:16Z",
+      "side": 1,
+      "message": "Thx for the feedbacks.\n\nFair enough for me.\nI am putting a -1 to state clearly the disagreements pointed here on Gerrit dashboards.",
+      "parentUuid": "838e8d89_11b6e0fe",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
