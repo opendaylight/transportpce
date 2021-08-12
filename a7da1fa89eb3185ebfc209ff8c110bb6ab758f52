@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb9309a8_33557535",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:05:34Z",
+      "side": 1,
+      "message": "refactoring",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 13
+      },
+      "revId": "a7da1fa89eb3185ebfc209ff8c110bb6ab758f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0e7b6a_3484e6ae",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationServiceDeserializer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:05:34Z",
+      "side": 1,
+      "message": "if (mappedString \u003d\u003d null) { return null; } \nGuard clause would make more sense in my opinion here.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 35
+      },
+      "revId": "a7da1fa89eb3185ebfc209ff8c110bb6ab758f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe80ecca_84621940",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:05:34Z",
+      "side": 1,
+      "message": "indent -4 this line so that we can easily detect the line with \u003d just before",
+      "revId": "a7da1fa89eb3185ebfc209ff8c110bb6ab758f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c552b98_38503c99",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:05:34Z",
+      "side": 1,
+      "message": "keep one setter per line for coherency",
+      "revId": "a7da1fa89eb3185ebfc209ff8c110bb6ab758f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
