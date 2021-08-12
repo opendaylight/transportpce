@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "9ba51cd2_08b79263",
+        "filename": "api/src/main/yang/nbi-notifications@2021-06-28.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T14:57:34Z",
+      "side": 1,
+      "message": "revision date must be changed \u003d\u003e vote -1",
+      "revId": "a7da1fa89eb3185ebfc209ff8c110bb6ab758f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7b0e7b6a_3484e6ae",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationServiceDeserializer.java",
         "patchSetId": 1
