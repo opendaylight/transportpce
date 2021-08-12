@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bce8ada8_a244b194",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:10:07Z",
+      "side": 1,
+      "message": "dash not needed",
+      "revId": "bb4790b20577cfd4b5c0d00e6a0222a497c4dfc7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f05f50f_cedba22d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:10:07Z",
+      "side": 1,
+      "message": "Depending on\n\n\"a different notification\" or \"different notifications\"",
+      "range": {
+        "startLine": 1474,
+        "startChar": 10,
+        "endLine": 1474,
+        "endChar": 12
+      },
+      "revId": "bb4790b20577cfd4b5c0d00e6a0222a497c4dfc7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fda86cc_85ddde12",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-12T13:10:07Z",
+      "side": 1,
+      "message": "and also\n\nalso is an adverb, not a conjunction.",
+      "range": {
+        "startLine": 1487,
+        "startChar": 87,
+        "endLine": 1487,
+        "endChar": 91
+      },
+      "revId": "bb4790b20577cfd4b5c0d00e6a0222a497c4dfc7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
