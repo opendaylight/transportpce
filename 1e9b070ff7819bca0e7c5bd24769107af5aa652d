@@ -111,6 +111,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838e8d89_11b6e0fe",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-08-12T08:28:34Z",
+      "side": 1,
+      "message": "Agree with Jonas. This is somewhat confusing. Power setting shall be made according to OpenROADM MSA recommendation, so the power difference shall be calculated on the base of slot width. But input.getwidth is supposed to be a nmc width (according to what is in olm-renderer-input grouping (transport-pce-common-type). Probably need to check that service Handler really provides a value corresponding to a NMC (as defined in yang model), and then if we use width to make decision on the power calculation, it shall be compared to NMC width we are supposed to experience (To be checked : 40 GHz for initialy defined 100G channels with Gaussian profile? 37.5 GHz for new 100G channels based on Nyquist profile?,....)",
+      "parentUuid": "714d1c59_505c50a2",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
