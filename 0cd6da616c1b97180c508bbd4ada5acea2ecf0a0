@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb37d6a8_bdb2dd7e",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-13T13:17:58Z",
+      "side": 1,
+      "message": "here is a propsal to align code with the previous serviceAend declaration and to separate clearly the Builder from setters here",
+      "revId": "0cd6da616c1b97180c508bbd4ada5acea2ecf0a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
