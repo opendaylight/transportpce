@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1bdbff05_437fe5df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-13T09:19:03Z",
+      "side": 1,
+      "message": "openroadm",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "432d582fa1a1108fae537219ae119f614bd942c3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7afb749e_835511dd",
         "filename": "ordmodels/device/src/main/yang/org-openroadm-device@2020-05-29.yang",
         "patchSetId": 1
