@@ -41,6 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.NodesBuilder;
@@ -57,6 +58,7 @@ public final class ModelMappingUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelMappingUtils.class);
     private static final String TERMINATION_POINT = "TerminationPoint";
+    private static final String LINK = "Link";
 
     private ModelMappingUtils() {
     }
@@ -220,12 +222,10 @@ public final class ModelMappingUtils {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.Nodes> nodes =
             new ArrayList<>();
-        NodeLists nodeLists;
-        if (asideToZside) {
-            nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
-        } else {
-            nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
-        }
+        NodeLists nodeLists =
+            (asideToZside)
+            ? getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator())
+            : getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
         for (Nodes node: nodeLists.getRendererNodeList()) {
             nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
@@ -265,47 +265,14 @@ public final class ModelMappingUtils {
         Map<Integer, NodeIdPair> treeMap = new TreeMap<>();
         List<Nodes> olmList = new ArrayList<>();
         List<Nodes> list = new ArrayList<>();
-        String resourceType;
-        TerminationPoint tp;
-        String tpID = "";
-        String nodeID = "";
-        String sortId = "";
+
         while (iterator.hasNext()) {
             ZToA pathDesObj = iterator.next();
-            resourceType = pathDesObj.getResource().getResource().implementedInterface().getSimpleName();
-            LOG.info("Inside ZtoA {}", resourceType);
-
             try {
-                if (TERMINATION_POINT.equals(resourceType)) {
-                    tp = (TerminationPoint) pathDesObj.getResource().getResource();
-                    LOG.info(" TP is {} {}", tp.getTpId(),
-                            tp.getTpNodeId());
-                    tpID = tp.getTpId();
-                    sortId = pathDesObj.getId();
-
-                    //TODO: do not rely on ID to be in certain format
-                    if (tpID.contains("CTP") || tpID.contains("CP")) {
-                        continue;
-                    }
-                    if (tpID.contains(StringConstants.TTP_TOKEN)) {
-                        nodeID = tp.getTpNodeId().split("-DEG")[0];
-                    } else if (tpID.contains(StringConstants.PP_TOKEN)) {
-                        nodeID = tp.getTpNodeId().split("-SRG")[0];
-                    } else if (tpID.contains(StringConstants.NETWORK_TOKEN)
-                        || tpID.contains(StringConstants.CLIENT_TOKEN) || tpID.isEmpty()) {
-                        nodeID = tp.getTpNodeId().split("-XPDR")[0];
-                    } else {
-                        continue;
-                    }
-                    int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID, tpID));
-                } else if ("Link".equals(resourceType)) {
-                    LOG.info("The type is link");
-                } else {
-                    LOG.info("The type is not identified: {}", resourceType);
-                }
+                populateTreeMap(treeMap, pathDesObj.getResource().getResource(), pathDesObj.getId(), "ZtoA");
             } catch (IllegalArgumentException | SecurityException e) {
-                LOG.error("Dont find the getResource method", e);
+                //TODO: Auto-generated catch block
+                LOG.error("Did not find the getResource method", e);
             }
         }
         populateNodeLists(treeMap, list, olmList, false);
@@ -316,45 +283,11 @@ public final class ModelMappingUtils {
         Map<Integer, NodeIdPair> treeMap = new TreeMap<>();
         List<Nodes> list = new ArrayList<>();
         List<Nodes> olmList = new ArrayList<>();
-        String resourceType;
-        TerminationPoint tp;
-        String tpID = "";
-        String nodeID = "";
-        String sortId = "";
 
         while (iterator.hasNext()) {
             AToZ pathDesObj = iterator.next();
-            resourceType = pathDesObj.getResource().getResource().implementedInterface().getSimpleName();
-            LOG.info("Inside AtoZ {}", resourceType);
             try {
-                if (TERMINATION_POINT.equals(resourceType)) {
-                    tp = (TerminationPoint) pathDesObj.getResource().getResource();
-                    LOG.info("TP is {} {}", tp.getTpId(),
-                            tp.getTpNodeId());
-                    tpID = tp.getTpId();
-                    sortId = pathDesObj.getId();
-
-                    //TODO: do not rely on ID to be in certain format
-                    if (tpID.contains("CTP") || tpID.contains("CP")) {
-                        continue;
-                    }
-                    if (tpID.contains(StringConstants.TTP_TOKEN)) {
-                        nodeID = tp.getTpNodeId().split("-DEG")[0];
-                    } else if (tpID.contains(StringConstants.PP_TOKEN)) {
-                        nodeID = tp.getTpNodeId().split("-SRG")[0];
-                    } else if (tpID.contains(StringConstants.NETWORK_TOKEN)
-                        || tpID.contains(StringConstants.CLIENT_TOKEN) || tpID.isEmpty()) {
-                        nodeID = tp.getTpNodeId().split("-XPDR")[0];
-                    } else {
-                        continue;
-                    }
-                    int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID, tpID));
-                } else if ("Link".equals(resourceType)) {
-                    LOG.info("The type is link");
-                } else {
-                    LOG.info("The type is not identified: {}", resourceType);
-                }
+                populateTreeMap(treeMap, pathDesObj.getResource().getResource(), pathDesObj.getId(), "AtoZ");
             } catch (IllegalArgumentException | SecurityException e) {
                 //TODO: Auto-generated catch block
                 LOG.error("Did not find the getResource method", e);
@@ -364,12 +297,49 @@ public final class ModelMappingUtils {
         return new NodeLists(olmList, list);
     }
 
+    private static void populateTreeMap(Map<Integer, NodeIdPair> treeMap, Resource rsrc, String sortId,
+            String direction) {
+        String resourceType = rsrc.implementedInterface().getSimpleName();
+        LOG.info("Inside {} {}", direction, resourceType);
+        switch (resourceType) {
+            case TERMINATION_POINT:
+                TerminationPoint tp = (TerminationPoint) rsrc;
+                LOG.info(" TP is {} {}", tp.getTpId(), tp.getTpNodeId());
+                String tpID = tp.getTpId();
+
+                //TODO: do not rely on ID to be in certain format
+                if (tpID.contains("CTP") || tpID.contains("CP")) {
+                    return;
+                }
+                String nodeID = "";
+                if (tpID.contains(StringConstants.TTP_TOKEN)) {
+                    nodeID = tp.getTpNodeId().split("-DEG")[0];
+                } else if (tpID.contains(StringConstants.PP_TOKEN)) {
+                    nodeID = tp.getTpNodeId().split("-SRG")[0];
+                } else if (tpID.contains(StringConstants.NETWORK_TOKEN)
+                        || tpID.contains(StringConstants.CLIENT_TOKEN) || tpID.isEmpty()) {
+                    nodeID = tp.getTpNodeId().split("-XPDR")[0];
+                } else {
+                    return;
+                }
+                int id = Integer.parseInt(sortId);
+                treeMap.put(id, new NodeIdPair(nodeID, tpID));
+                return;
+            case LINK:
+                LOG.info("The type is link");
+                return;
+            default:
+                LOG.info("The type is not identified: {}", resourceType);
+                return;
+        }
+    }
+
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
         value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"},
         justification = "loop when value is not always null - "
                 + "TODO: check if something exists in Java lib")
     private static void populateNodeLists(Map<Integer, NodeIdPair> treeMap, List<Nodes> list, List<Nodes> olmList,
-        boolean isAToz) {
+            boolean isAToz) {
         String desID = null;
         String srcID = null;
         LOG.info("treeMap values = {}", treeMap.values());
@@ -412,7 +382,7 @@ public final class ModelMappingUtils {
                 srcID = null;
                 desID = null;
             } else {
-                LOG.warn("both, the source and destination id are null!");
+                LOG.warn("both, the source and destination id are not null!");
             }
         }
     }
@@ -420,7 +390,7 @@ public final class ModelMappingUtils {
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
             value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
-            justification = "not relevant to return and zero length array"
+            justification = "not relevant to return a zero length array"
                     + " as we need real pos")
     public static int[] findTheLongestSubstring(String s1, String s2) {
         if ((s1 == null) || (s2 == null)) {

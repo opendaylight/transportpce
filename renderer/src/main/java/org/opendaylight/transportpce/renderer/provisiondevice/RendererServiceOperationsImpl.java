@@ -13,6 +13,7 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -47,7 +48,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteInput;
@@ -126,20 +126,17 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
-                String serviceType;
-                if (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
+                String serviceType = ServiceTypes.getServiceType(
+                    input.getServiceAEnd().getServiceFormat().getName(),
+                    serviceRate,
+                    (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
                         .getNodeInfo().getNodeType())
-                    && input.getServiceAEnd().getTxDirection() != null
-                    && input.getServiceAEnd().getTxDirection().getPort() != null
-                    && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
-                    Mapping mapping = portMapping.getMapping(input.getServiceAEnd().getNodeId(),
-                        input.getServiceAEnd().getTxDirection().getPort().getPortName());
-                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
-                        serviceRate, mapping);
-                } else {
-                    serviceType = ServiceTypes.getServiceType(input.getServiceAEnd().getServiceFormat().getName(),
-                        serviceRate, null);
-                }
+                            && input.getServiceAEnd().getTxDirection() != null
+                            && input.getServiceAEnd().getTxDirection().getPort() != null
+                            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null)
+                        ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+                                input.getServiceAEnd().getTxDirection().getPort().getPortName())
+                        : null);
 
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
@@ -163,7 +160,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         break;
                     default:
                         LOG.error("unsupported service-type");
-                        break;
+                        return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                            OPERATION_FAILED);
                 }
                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_OK,
                     OPERATION_SUCCESSFUL);
@@ -185,16 +183,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 Optional<
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service
                     .path.PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
-                PathDescription pathDescription;
-                if (pathDescriptionOpt.isPresent()) {
-                    pathDescription = pathDescriptionOpt.get();
-                } else {
+                if (pathDescriptionOpt.isEmpty()) {
                     LOG.error("Unable to get path description for service {}!", serviceName);
                     sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
                             RpcStatusEx.Failed, "Unable to get path description for service");
                     return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
                             OPERATION_FAILED);
                 }
+                PathDescription pathDescription = pathDescriptionOpt.get();
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
                     service.getServiceAEnd().getServiceRate(), null);
                 switch (serviceType) {
@@ -219,7 +215,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         break;
                     default:
                         LOG.error("unsupported service-type");
-                        break;
+                        return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
+                            OPERATION_FAILED);
                 }
                 return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
             }
@@ -237,43 +234,33 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         if (input.getServiceAEnd().getServiceRate() != null) {
             return input.getServiceAEnd().getServiceRate();
         }
-        if (ServiceFormat.OTU.equals(input.getServiceAEnd().getServiceFormat())
-                && input.getServiceAEnd().getOtuServiceRate() != null) {
-            switch (input.getServiceAEnd().getOtuServiceRate().getSimpleName()) {
-                case "OTUCn":
-                    return Uint32.valueOf(400);
-                case "OTU4":
-                    return Uint32.valueOf(100);
-                case "OTU2":
-                case "OTU2e":
-                    return Uint32.valueOf(10);
-                default:
-                    LOG.warn("otu-service-rate {} not managed yet", input.getServiceAEnd().getOtuServiceRate()
-                        .getSimpleName());
-                    return Uint32.ZERO;
-            }
-        } else if (ServiceFormat.ODU.equals(input.getServiceAEnd().getServiceFormat())
-                && input.getServiceAEnd().getOduServiceRate() != null) {
-            switch (input.getServiceAEnd().getOduServiceRate().getSimpleName()) {
-                case "ODUCn":
-                    return Uint32.valueOf(400);
-                case "ODU4":
-                    return Uint32.valueOf(100);
-                case "ODU2":
-                case "ODU2e":
-                    return Uint32.valueOf(10);
-                case "ODU0":
-                    return Uint32.valueOf(1);
-                default:
-                    LOG.warn("odu-service-rate {} not managed yet", input.getServiceAEnd().getOduServiceRate()
-                        .getSimpleName());
-                    return Uint32.ZERO;
-            }
-        } else {
-            LOG.warn("Unable to get service-rate for service {} - otu-service-rate should not be null",
-                input.getServiceName());
+        Map<ServiceFormat, Map<String, Uint32>> formatRateMap  = Map.of(
+                ServiceFormat.OTU, Map.of(
+                    "OTUCn", Uint32.valueOf(400),
+                    "OTU4", Uint32.valueOf(100),
+                    "OTU2", Uint32.valueOf(10),
+                    "OTU2e", Uint32.valueOf(10)),
+                ServiceFormat.ODU, Map.of(
+                    "ODUCn",Uint32.valueOf(400),
+                    "ODU4", Uint32.valueOf(100),
+                    "ODU2", Uint32.valueOf(10),
+                    "ODU2e", Uint32.valueOf(10),
+                    "ODU0", Uint32.valueOf(1)));
+        if (!formatRateMap.containsKey(input.getServiceAEnd().getServiceFormat())) {
+            LOG.warn("Unable to get service-rate for service {} - unsupported service format {}",
+                input.getServiceName(), input.getServiceAEnd().getServiceFormat());
             return Uint32.ZERO;
         }
+        String serviceName =
+            ServiceFormat.OTU.equals(input.getServiceAEnd().getServiceFormat())
+                ? input.getServiceAEnd().getOtuServiceRate().getSimpleName()
+                : input.getServiceAEnd().getOduServiceRate().getSimpleName();
+        if (!formatRateMap.get(input.getServiceAEnd().getServiceFormat()).containsKey(serviceName)) {
+            LOG.warn("Unable to get service-rate for service {} - unsupported service name {}",
+                input.getServiceName(), serviceName);
+            return Uint32.ZERO;
+        }
+        return formatRateMap.get(input.getServiceAEnd().getServiceFormat()).get(serviceName);
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
@@ -441,17 +428,17 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         LOG.info("Starting service activation test on node {} and tp {}", nodeId, tpId);
         for (int i = 0; i < 3; i++) {
             List<Measurements> measurements = getMeasurements(nodeId, tpId);
-            if ((measurements != null) && verifyPreFecBer(measurements)) {
-                return true;
-            } else if (measurements == null) {
+            if (measurements == null) {
                 LOG.warn("Device {} is not reporting PreFEC on TP: {}", nodeId, tpId);
                 return true;
-            } else {
-                try {
-                    Thread.sleep(Timeouts.SERVICE_ACTIVATION_TEST_RETRY_TIME);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
+            }
+            if (verifyPreFecBer(measurements)) {
+                return true;
+            }
+            try {
+                Thread.sleep(Timeouts.SERVICE_ACTIVATION_TEST_RETRY_TIME);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
             }
         }
         LOG.error("Service activation test failed on node {} and termination point {}!", nodeId, tpId);
@@ -459,13 +446,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     private List<Measurements> getMeasurements(String nodeId, String tp) {
-        GetPmInputBuilder getPmIpBldr = new GetPmInputBuilder();
-        getPmIpBldr.setNodeId(nodeId);
-        getPmIpBldr.setGranularity(PmGranularity._15min);
-        ResourceIdentifierBuilder rsrcBldr = new ResourceIdentifierBuilder();
-        rsrcBldr.setResourceName(tp + "-OTU");
-        getPmIpBldr.setResourceIdentifier(rsrcBldr.build());
-        getPmIpBldr.setResourceType(ResourceTypeEnum.Interface);
+        GetPmInputBuilder getPmIpBldr = new GetPmInputBuilder()
+            .setNodeId(nodeId)
+            .setGranularity(PmGranularity._15min)
+            .setResourceIdentifier(new ResourceIdentifierBuilder().setResourceName(tp + "-OTU").build())
+            .setResourceType(ResourceTypeEnum.Interface);
 
         try {
             Future<RpcResult<GetPmOutput>> getPmFuture = this.olmService.getPm(getPmIpBldr.build());
@@ -490,11 +475,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         double fecUncorrectableBlocks = Double.MIN_VALUE;
 
         for (Measurements measurement : measurements) {
-            if (measurement.getPmparameterName().equals("preFECCorrectedErrors")) {
-                preFecCorrectedErrors = Double.parseDouble(measurement.getPmparameterValue());
-            }
-            if (measurement.getPmparameterName().equals("FECUncorrectableBlocks")) {
-                fecUncorrectableBlocks = Double.parseDouble(measurement.getPmparameterValue());
+            switch (measurement.getPmparameterName()) {
+                case "preFECCorrectedErrors":
+                    preFecCorrectedErrors = Double.parseDouble(measurement.getPmparameterValue());
+                    break;
+                case "FECUncorrectableBlocks":
+                    fecUncorrectableBlocks = Double.parseDouble(measurement.getPmparameterValue());
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -504,13 +493,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         if (fecUncorrectableBlocks > Double.MIN_VALUE) {
             LOG.error("Data has uncorrectable errors, BER test failed");
             return false;
-        } else {
-            double numOfBitsPerSecond = 112000000000d;
-            double threshold = 0.00002d;
-            double result = preFecCorrectedErrors / numOfBitsPerSecond;
-            LOG.info("PreFEC value is {}", Double.toString(result));
-            return result <= threshold;
         }
+
+        double numOfBitsPerSecond = 112000000000d;
+        double threshold = 0.00002d;
+        double result = preFecCorrectedErrors / numOfBitsPerSecond;
+        LOG.info("PreFEC value is {}", Double.toString(result));
+        return result <= threshold;
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
@@ -549,18 +538,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         Nodes sourceNode = nodes.get(0);
         Nodes destNode = nodes.get(nodes.size() - 1);
-        String srcNetworkTp;
-        String dstNetowrkTp;
-        if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-            srcNetworkTp = sourceNode.getDestTp();
-        } else {
-            srcNetworkTp = sourceNode.getSrcTp();
-        }
-        if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-            dstNetowrkTp = destNode.getDestTp();
-        } else {
-            dstNetowrkTp = destNode.getSrcTp();
-        }
+        String srcNetworkTp =
+            sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)
+                ? sourceNode.getDestTp()
+                : sourceNode.getSrcTp();
+        String dstNetowrkTp =
+            destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)
+                ? destNode.getDestTp()
+                : destNode.getSrcTp();
+
         if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
             || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
             rollbackProcessor.rollbackAll();
@@ -774,10 +760,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     private Link createLinkForNotif(List<LinkTp> otnLinkTerminationPoints) {
-        if (otnLinkTerminationPoints.size() != 2 || otnLinkTerminationPoints.isEmpty()) {
+        if (otnLinkTerminationPoints == null || otnLinkTerminationPoints.size() != 2) {
             return null;
-        } else {
-            return new LinkBuilder()
+        }
+        return new LinkBuilder()
                 .setATermination(new ATerminationBuilder()
                     .setNodeId(otnLinkTerminationPoints.get(0).getNodeId())
                     .setTpId(otnLinkTerminationPoints.get(0).getTpId())
@@ -787,6 +773,5 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     .setTpId(otnLinkTerminationPoints.get(1).getTpId())
                     .build())
                 .build();
-        }
     }
 }
