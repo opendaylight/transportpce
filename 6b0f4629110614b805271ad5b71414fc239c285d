@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f9dddb2_606222c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-16T09:03:51Z",
+      "side": 1,
+      "message": "@Bala\n\nAccording to the latest status of build logs mentionned at https://wiki.opendaylight.org/display/ODL/Silicon+SR2+Release+Approval\nthe netconf version to use for Si SR2 will be actually 1.13.4\n\n\nhttps://logs.opendaylight.org/releng/vex-yul-odl-jenkins-1/autorelease-release-silicon-mvn35-openjdk11/377/integration/distribution/features/repos/index/target/feature/feature.xml.gz",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "6b0f4629110614b805271ad5b71414fc239c285d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
