@@ -165,6 +165,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5a94b9a_13059ff0",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2021-08-17T18:20:08Z",
+      "side": 1,
+      "message": "Current code is not compliant with OpenROADM MSA since the commit I mentioned earlier:\n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/94560\n\nIt increases the power with 3 dB for 87.5 GHz slot-width compared to 50 GHz while the MSA says it should be increased by 10*log(87.5/50). Also note that before the mentioned commit, olm-renderer-input in transportpce-common-types included slot-width instead of width (\"Width of nmc\" according to the description) and the power calculation was done according to the MSA recommendation.",
+      "parentUuid": "f789e29a_ddcc51e5",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
