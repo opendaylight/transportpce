@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dd8151a_3bfcae1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "streams\n\nline length \u003e72char",
+      "range": {
+        "startLine": 9,
+        "startChar": 55,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a1f457_e7b4420e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "line length \u003e 72 char",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 11,
+        "endChar": 69
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90bd841d_50f2a352",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "shouldn\u0027t the revision date be changed ?",
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "728735cc_49c959e1",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "trailing blanks\n\n\ncf logs pre-commit tox job failure",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 10
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

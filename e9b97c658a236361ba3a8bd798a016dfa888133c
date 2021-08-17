@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0f36ea9e_4367a8d7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a9fc447a_ea8a34a1",
+      "range": {
+        "startLine": 181,
+        "startChar": 16,
+        "endLine": 181,
+        "endChar": 43
+      },
+      "revId": "e9b97c658a236361ba3a8bd798a016dfa888133c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c45e138_616ab67d",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "e9b97c658a236361ba3a8bd798a016dfa888133c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05ea4e64_d0ee509f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T22:12:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c45e138_616ab67d",
+      "range": {
+        "startLine": 193,
+        "startChar": 1,
+        "endLine": 193,
+        "endChar": 43
+      },
+      "revId": "e9b97c658a236361ba3a8bd798a016dfa888133c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
