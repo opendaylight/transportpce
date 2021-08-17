@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31982d8a_7e597ea2",
+        "filename": "karaf/src/main/assembly/ressources/post_install_for_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-17T09:50:42Z",
+      "side": 1,
+      "message": "depends on netconf version",
+      "range": {
+        "startLine": 51,
+        "startChar": 162,
+        "endLine": 51,
+        "endChar": 168
+      },
+      "revId": "c23a9c7ad62cae8da77310f4f4fca72678c7d226",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
