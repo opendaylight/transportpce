@@ -149,6 +149,24 @@
     },
     {
       "key": {
+        "uuid": "baf68088_37c95278",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T12:09:52Z",
+      "side": 1,
+      "message": "I\u0027ve put this modification in a separate https://git.opendaylight.org/gerrit/c/transportpce/+/97246/1\ncause I am pretty sure it is not directly used here.\nIt seems there is an issue with the devicenotifs functional test.",
+      "parentUuid": "ad345087_3beb59b8",
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "728735cc_49c959e1",
         "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
         "patchSetId": 2
