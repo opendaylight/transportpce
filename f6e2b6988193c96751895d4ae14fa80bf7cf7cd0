@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d2035f4_b79ddc26",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridConstant.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2021-08-18T17:54:43Z",
+      "side": 1,
+      "message": "Why is the width different for 400G compared to 300G and 200G when they all use the same symbol rate?",
+      "revId": "f6e2b6988193c96751895d4ae14fa80bf7cf7cd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
