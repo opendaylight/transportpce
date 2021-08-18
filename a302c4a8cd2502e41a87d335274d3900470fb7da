@@ -69,6 +69,24 @@
       "revId": "a302c4a8cd2502e41a87d335274d3900470fb7da",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7c8d8c2_eb70f938",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/ServiceListenerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2021-08-18T14:21:10Z",
+      "side": 1,
+      "message": "I implemented it in patch 3 but it seems to bring some issue :\n\nServiceListenerTest.java:[134,13] (indentation) Indentation: \u0027new\u0027 child has incorrect indentation level 12, expected level should be 16.",
+      "parentUuid": "45cbb813_3cc18583",
+      "revId": "a302c4a8cd2502e41a87d335274d3900470fb7da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
