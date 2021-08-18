@@ -183,6 +183,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09dce282_19f9cc96",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T07:31:21Z",
+      "side": 1,
+      "message": "Thanks a lot for the details and your investigations Jonas. It helps.\nThat\u0027s also what I have understood from our talk of last week but I am not a specialist.\nPlease feel free to join us at our weekly call tomorrow and/or to propose a change to fix that.\n\nAccording to Olivier and if I have well understood, it might be possible that an approximation was made for this particular case. But we definitely need to check that.\nFrom an optical standpoint, I cannot find a clear trace of the reason behind neither in Git Log nor the code comments,  whatever this reason was valid or not.\nOnly that in itself is already problematic in my opinion and we probably need to open a JIRA ticket to clarify things here.",
+      "parentUuid": "e5a94b9a_13059ff0",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
