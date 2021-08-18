@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1216f274_9decaecc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T06:52:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dd8151a_3bfcae1e",
+      "range": {
+        "startLine": 9,
+        "startChar": 55,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37a1f457_e7b4420e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080c0a9a_620c3ff1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T06:52:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37a1f457_e7b4420e",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 11,
+        "endChar": 69
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +131,24 @@
     },
     {
       "key": {
+        "uuid": "ad345087_3beb59b8",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T06:52:18Z",
+      "side": 1,
+      "message": "the change should pass the gate now but this issue is still open",
+      "parentUuid": "c3e17677_0d88abaa",
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "728735cc_49c959e1",
         "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
         "patchSetId": 2
@@ -103,6 +169,30 @@
       "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2cdc5ec_a98be33a",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T06:52:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "728735cc_49c959e1",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 10
+      },
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
