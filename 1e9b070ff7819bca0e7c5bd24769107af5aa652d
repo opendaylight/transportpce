@@ -201,6 +201,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87c8d8f0_c49d8ca2",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-08-18T08:51:01Z",
+      "side": 1,
+      "message": "Hello,\nThe approximation is about using the spacing rather than the signal width @-20 dBm to make the calculation in OpenROADM. We make this because basically we don\u0027t have all the elements to qualify the signal width for all modulation format (different filter shapes, unkown exact Roll off factor...). Agree with Jonas rule for calculation.",
+      "parentUuid": "09dce282_19f9cc96",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
