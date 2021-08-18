@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "c3e17677_0d88abaa",
+        "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-18T06:37:15Z",
+      "side": 1,
+      "message": "It seems IETF has reworked these models since then.\nThe version here looks like the draft ietf-5277-netmod@2016-03-21.yang\nat http://www.watersprings.org/pub/id/draft-gonzalez-netconf-5277bis-01.html",
+      "parentUuid": "90bd841d_50f2a352",
+      "revId": "305b799888bbf856db4ba1f58b8440dd3a43f8d2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "728735cc_49c959e1",
         "filename": "karaf/src/main/assembly/cache/schema/nc-notifications@2008-07-14.yang",
         "patchSetId": 2
