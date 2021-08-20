@@ -44,6 +44,7 @@ public class PostAlgoPathValidator {
     public static final Long CONST_OSNR = 1L;
     public static final double SYS_MARGIN = 0;
 
+    @SuppressWarnings("fallthrough")
     @SuppressFBWarnings(
         value = "SF_SWITCH_FALLTHROUGH",
         justification = "intentional fallthrough")
