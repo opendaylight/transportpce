@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e31fa38_5b52d422",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-20T14:03:28Z",
+      "side": 1,
+      "message": "kinds of elements\n\n(or change the next sentence by using the singular)",
+      "range": {
+        "startLine": 1455,
+        "startChar": 32,
+        "endLine": 1455,
+        "endChar": 40
+      },
+      "revId": "6297be925b9975ad76ad7408e77f79dc0ceb6b88",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8837f96_5bdf3e2e",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-20T14:03:28Z",
+      "side": 1,
+      "message": "Then are the \u0027subscribers\u0027 that are in charge",
+      "range": {
+        "startLine": 1458,
+        "startChar": 5,
+        "endLine": 1458,
+        "endChar": 7
+      },
+      "revId": "6297be925b9975ad76ad7408e77f79dc0ceb6b88",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "634d98c3_a8e54ec8",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1514,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-20T14:03:28Z",
+      "side": 1,
+      "message": "plural",
+      "range": {
+        "startLine": 1514,
+        "startChar": 30,
+        "endLine": 1514,
+        "endChar": 42
+      },
+      "revId": "6297be925b9975ad76ad7408e77f79dc0ceb6b88",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d916088_27d3cadd",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-20T14:03:28Z",
+      "side": 1,
+      "message": "breaks",
+      "range": {
+        "startLine": 1515,
+        "startChar": 18,
+        "endLine": 1515,
+        "endChar": 23
+      },
+      "revId": "6297be925b9975ad76ad7408e77f79dc0ceb6b88",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
