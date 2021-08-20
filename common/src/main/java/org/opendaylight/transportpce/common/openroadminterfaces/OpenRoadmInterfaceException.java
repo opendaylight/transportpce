@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
+@SuppressWarnings("serial")
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")

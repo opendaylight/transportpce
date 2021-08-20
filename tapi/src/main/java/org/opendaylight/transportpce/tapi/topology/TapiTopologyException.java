@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 
+@SuppressWarnings("serial")
 public class TapiTopologyException extends Exception {
 
     public TapiTopologyException(String message) {

@@ -17,6 +17,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.Port;
  * @author Martial Coulibaly (martial.coulibaly@gfi.com) on behalf of Orange
  *
  */
+@SuppressWarnings("serial")
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
