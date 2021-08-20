@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 
+@SuppressWarnings("serial")
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
