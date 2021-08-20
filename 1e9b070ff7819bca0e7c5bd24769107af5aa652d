@@ -219,6 +219,24 @@
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "357582aa_0c2f9aaf",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-20T15:17:42Z",
+      "side": 1,
+      "message": "FYI I\u0027ve created a JIRA ticket at https://jira.opendaylight.org/browse/TRNSPRTPCE-494\nFeel free to amend it according to your needs.\nI will mention it in a FIXME comment in the current OLM refactoring change at \nhttps://git.opendaylight.org/gerrit/c/transportpce/+/97100\ntill it is fixed.",
+      "parentUuid": "87c8d8f0_c49d8ca2",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
