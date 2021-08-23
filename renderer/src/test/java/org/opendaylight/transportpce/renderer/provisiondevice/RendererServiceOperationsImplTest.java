@@ -129,7 +129,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void setUp() throws OpenRoadmInterfaceException {
         setMountPoint(new MountPointStub(getDataBroker()));
         this.olmService = new OlmServiceStub();
-        this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(), this.deviceTransactionManager,
+        this.deviceRenderer = new DeviceRendererServiceImpl(getDataBroker(), this.deviceTransactionManager,
             openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping, null);
         this.otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory, this.crossConnect,
             openRoadmInterfaces, this.deviceTransactionManager, null);

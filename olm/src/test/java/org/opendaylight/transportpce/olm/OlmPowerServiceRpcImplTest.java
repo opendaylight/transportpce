@@ -103,7 +103,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
 
     @Before
     public void setUp() {
-        this.mountPoint = new MountPointStub(this.getDataBroker());
+        this.mountPoint = new MountPointStub(getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
@@ -130,9 +130,9 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
-        this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
+        this.powerMgmt = new PowerMgmtImpl(getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
             this.deviceTransactionManager);
-        this.olmPowerService = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmt,
+        this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
             this.deviceTransactionManager, this.portMapping,mappingUtils,openRoadmInterfaces);
         this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService);
         //TODO

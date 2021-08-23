@@ -89,8 +89,9 @@ public class PcePathDescriptionTests extends AbstractTest {
 
     @Test
     public void mapUtil() {
-        PceConstraints pceConstraintsCalc = new PceConstraintsCalc(PceTestData
-                .getPCERequest(), new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())))
+        PceConstraints pceConstraintsCalc = new PceConstraintsCalc(
+                    PceTestData.getPCERequest(),
+                    new NetworkTransactionImpl(new RequestProcessor(getDataBroker())))
                 .getPceHardConstraints();
         MapUtils.mapDiversityConstraints(List.of(node), List.of(link), pceConstraintsCalc);
         MapUtils.getSupLink(link);
