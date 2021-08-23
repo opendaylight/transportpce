@@ -82,9 +82,9 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
                 this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
-        this.olmPowerService = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmt,
+        this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
-        this.dataBroker = this.getDataBroker();
+        this.dataBroker = getDataBroker();
         MockitoAnnotations.initMocks(this);
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1).when(this.mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
