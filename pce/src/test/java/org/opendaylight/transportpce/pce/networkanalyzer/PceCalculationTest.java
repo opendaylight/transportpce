@@ -52,10 +52,10 @@ public class PceCalculationTest extends AbstractTest {
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
         pceResult.setRC("200");
-        PceTestUtils.writeNetworkIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil(),
+        PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData.getPCERequest(),
-                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())));
+                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
         mapping = new MappingBuilder().setLogicalConnectionPoint("logicalConnectionPoint").setPortQual("xpdr-client")
             .build();
         NodeInfo info = new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).build();
@@ -68,7 +68,7 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues() {
         pceCalculation = new PceCalculation(
             PceTestData.getPCERequest(),
-            new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
+            new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
             pceConstraintsCalc.getPceHardConstraints(),
             pceConstraintsCalc.getPceSoftConstraints(),
             pceResult,
@@ -85,7 +85,7 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues2() {
         pceCalculation = new PceCalculation(
                 PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral(),
-                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
+                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult, portMapping);
@@ -101,10 +101,10 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues42() {
         PathComputationRequestInput input = PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2();
         pceConstraintsCalc = new PceConstraintsCalc(input,
-                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())));
+                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
         pceCalculation = new PceCalculation(
                 PceTestData.getPCE_test3_request_54(),
-                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
+                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult, portMapping);
