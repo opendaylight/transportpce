@@ -39,10 +39,10 @@ public class PceServiceRPCImplTest extends AbstractTest {
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
-        PceTestUtils.writeNetworkIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil(),
+        PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         notificationPublishService = new NotificationPublishServiceMock();
-        networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
+        networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(getDataBroker()));
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, portMapping);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);

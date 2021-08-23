@@ -22,12 +22,12 @@ import org.opendaylight.transportpce.test.AbstractTest;
 public class PceConstraintsCalcTest extends AbstractTest {
     private static PceConstraintsCalc pceConstraintsCalc;
     private static NetworkTransactionService networkTransactionService = null;
-    private DataBroker dataBroker = this.getDataBroker();
+    private DataBroker dataBroker = getDataBroker();
 
     @Before
     public void setup() throws Exception {
         // networkTransactionService = Mockito.mock(NetworkTransactionService.class);
-        PceTestUtils.writeNetworkIntoDataStore(dataBroker, this.getDataStoreContextUtil(),
+        PceTestUtils.writeNetworkIntoDataStore(dataBroker, getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         networkTransactionService = new NetworkTransactionImpl(new RequestProcessor(dataBroker));
 
