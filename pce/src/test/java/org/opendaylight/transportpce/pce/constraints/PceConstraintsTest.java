@@ -26,72 +26,72 @@ public class PceConstraintsTest extends AbstractTest {
 
     @Test
     public void setAndGetMaxLatencyTest() {
-        Assert.assertEquals(-1, this.pceConstraints.getMaxLatency().intValue());
+        Assert.assertEquals(-1, pceConstraints.getMaxLatency().intValue());
         pceConstraints.setMaxLatency(-2L);
-        Assert.assertEquals(-2, this.pceConstraints.getMaxLatency().intValue());
+        Assert.assertEquals(-2, pceConstraints.getMaxLatency().intValue());
     }
 
     @Test
     public void setAndGetExcludeSupNodesTest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeSupNodes().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeSupNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setExcludeSupNodes(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeSupNodes().size());
+        pceConstraints.setExcludeSupNodes(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeSupNodes().size());
     }
 
     @Test
     public void setAndGetExcludeSRLGTest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeSRLG().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeSRLG().size());
         List<Long> nodes = new ArrayList<>();
         nodes.add(1L);
-        this.pceConstraints.setExcludeSRLG(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeSRLG().size());
+        pceConstraints.setExcludeSRLG(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeSRLG().size());
     }
 
     @Test
     public void setAndGetExcludeCLLITest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeCLLI().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeCLLI().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setExcludeCLLI(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeCLLI().size());
+        pceConstraints.setExcludeCLLI(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeCLLI().size());
     }
 
     @Test
     public void setAndGetExcludeClliNodesTest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeClliNodes().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeClliNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setExcludeClliNodes(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeClliNodes().size());
+        pceConstraints.setExcludeClliNodes(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeClliNodes().size());
     }
 
     @Test
     public void setAndGetExcludeSrlgLinksTest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeSrlgLinks().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeSrlgLinks().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setExcludeSrlgLinks(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeSrlgLinks().size());
+        pceConstraints.setExcludeSrlgLinks(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeSrlgLinks().size());
     }
 
     @Test
     public void setAndGetExcludeNodesTest() {
-        Assert.assertEquals(0, this.pceConstraints.getExcludeNodes().size());
+        Assert.assertEquals(0, pceConstraints.getExcludeNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setExcludeNodes(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getExcludeNodes().size());
+        pceConstraints.setExcludeNodes(nodes);
+        Assert.assertEquals(1, pceConstraints.getExcludeNodes().size());
     }
 
     @Test
     public void setAndGetIncludeNodesTest() {
-        Assert.assertEquals(0, this.pceConstraints.getIncludeNodes().size());
+        Assert.assertEquals(0, pceConstraints.getIncludeNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
-        this.pceConstraints.setIncludeNodes(nodes);
-        Assert.assertEquals(1, this.pceConstraints.getIncludeNodes().size());
+        pceConstraints.setIncludeNodes(nodes);
+        Assert.assertEquals(1, pceConstraints.getIncludeNodes().size());
     }
 
     @Test
