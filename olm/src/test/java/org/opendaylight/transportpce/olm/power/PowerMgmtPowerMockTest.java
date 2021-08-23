@@ -96,7 +96,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     @Before
     public void setUp() {
-        this.mountPoint = new MountPointStub(this.getDataBroker());
+        this.mountPoint = new MountPointStub(getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
@@ -123,7 +123,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
-        this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
+        this.powerMgmt = new PowerMgmtImpl(getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
                 this.deviceTransactionManager);
     }
 
@@ -247,7 +247,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 this.mappingUtils, openRoadmInterfacesImpl121Spy, this.openRoadmInterfacesImpl22,
             this.openRoadmInterfacesImpl710);
         openRoadmInterfacesSpy = PowerMockito.spy(openRoadmInterfacesSpy);
-        return new PowerMgmtImpl(this.getDataBroker(), openRoadmInterfacesSpy, crossConnectMock,
+        return new PowerMgmtImpl(getDataBroker(), openRoadmInterfacesSpy, crossConnectMock,
                 this.deviceTransactionManager);
     }
 
