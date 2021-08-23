@@ -39,8 +39,8 @@ public class PathComputationServiceImplTest extends AbstractTest {
     private static NetworkTransactionService networkTransactionService = null;
     private static GnpyTopoImpl gnpyTopoImpl = null;
     private static GnpyResult gnpyResult = null;
-    private DataStoreContext dataStoreContext = this.getDataStoreContextUtil();
-    private DataBroker dataBroker = this.getDataBroker();
+    private DataStoreContext dataStoreContext = getDataStoreContextUtil();
+    private DataBroker dataBroker = getDataBroker();
 
     @Before
     public void setUp() {
