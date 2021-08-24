@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "87c10ded_77845b2b",
+        "filename": "docs/tox-guide.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-24T15:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4562aa3b_1962c1d5",
+      "range": {
+        "startLine": 203,
+        "startChar": 52,
+        "endLine": 203,
+        "endChar": 53
+      },
+      "revId": "db810e696df757f39e497de2724f3761f2dff3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "750866da_62d5a141",
         "filename": "docs/tox-guide.rst",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "db810e696df757f39e497de2724f3761f2dff3cd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bd243df_45054db1",
+        "filename": "docs/tox-guide.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-24T15:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "750866da_62d5a141",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 213,
+        "endChar": 20
+      },
+      "revId": "db810e696df757f39e497de2724f3761f2dff3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
