@@ -33,29 +33,29 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-device</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>transportpce-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>transportpce-tapimodels</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.opendaylight.yangtools</groupId>
+            <artifactId>yang-data-codec-xml</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.opendaylight.netconf</groupId>
-            <artifactId>sal-netconf-connector</artifactId>
+            <groupId>org.opendaylight.yangtools</groupId>
+            <artifactId>yang-data-codec-gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.mdsal</groupId>
+            <artifactId>mdsal-binding-runtime-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-binding-dom-adapter</artifactId>
         </dependency>
         <dependency>
+            <!-- This dependency is declared unused by maven at build-time. -->
+            <!-- Though, removing it causes common module Junit tests failures -->
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-binding-generator</artifactId>
         </dependency>
