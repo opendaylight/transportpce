@@ -102,6 +102,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         this.networkModelService = networkModelService;
     }
 
+    @SuppressWarnings("rawtypes")
+    // FIXME check if the ForkJoinTask raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
         LOG.info("setup service path for input {} and direction {}", input, direction);
@@ -281,6 +285,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         return messages;
     }
 
+    @SuppressWarnings("rawtypes")
+    // FIXME check if the ForkJoinTask raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     @Override
     public ServicePathOutput deleteServicePath(ServicePathInput input) {
         if (!alarmSuppressionNodeRegistration(input)) {

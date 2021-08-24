@@ -75,7 +75,10 @@ public final class TransactionUtils {
 
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked","rawtypes"})
+    // FIXME check if the InstanceIdentifier raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     public static boolean writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
         DataObject object) {
         ReadWriteTransaction transaction = dataBroker.newReadWriteTransaction();
