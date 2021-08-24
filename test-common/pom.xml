@@ -33,18 +33,8 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-device</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>transportpce-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>transportpce-tapimodels</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
