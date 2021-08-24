@@ -29,7 +29,7 @@ public class NodeIdPairTest {
     }
 
     @Parameterized.Parameters
-    public static Collection nodes() {
+    public static Collection<?> nodes() {
         NodeIdPair same = new NodeIdPair("nodeS", "CLIENT");
         return Arrays.asList(new Object[][] {
                 { new NodeIdPair("",""), null, false },
