@@ -30,6 +30,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-renderer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
@@ -39,9 +44,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-renderer</artifactId>
-      <version>${project.version}</version>
+       <groupId>org.opendaylight.mdsal</groupId>
+       <artifactId>mdsal-binding-generator</artifactId>
+       <scope>test</scope>
     </dependency>
   </dependencies>
 
