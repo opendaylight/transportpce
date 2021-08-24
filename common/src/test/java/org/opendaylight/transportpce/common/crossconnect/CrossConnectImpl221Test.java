@@ -87,7 +87,7 @@ public class CrossConnectImpl221Test {
         spectrumInformation.setWaveLength(Uint32.valueOf(1));
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
-        Optional res = crossConnectImpl221.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
+        Optional<String> res = crossConnectImpl221.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
         Assert.assertEquals(res.get(), "srcTp-destTp-761:768");
     }
 
@@ -116,7 +116,7 @@ public class CrossConnectImpl221Test {
         Mockito.when(nodes.getNodeId()).thenReturn("nodeId");
         Mockito.when(deviceTransactionManager.getDeviceTransaction(any()))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
-        Optional res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
+        Optional<String> res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
         Assert.assertTrue("Optional value should have a value", res.isPresent());
     }
 

@@ -32,6 +32,10 @@ public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
 
+    @SuppressWarnings({"unchecked","rawtypes"})
+    // FIXME check if the InstanceIdentifier raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
         InstanceIdentifier ii) throws InterruptedException, ExecutionException {
         Networks networks = null;
@@ -67,7 +71,10 @@ public final class TopologyDataUtils {
         LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked","rawtypes"})
+    // FIXME check if the InstanceIdentifier raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     private static FluentFuture<? extends CommitInfo> writeTransaction(DataBroker dataBroker,
         InstanceIdentifier instanceIdentifier, DataObject object) {
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();

@@ -244,7 +244,8 @@ public class PortMappingVersion710 {
         OduSwitchingPools osp = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
             ospIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
         Uint16 ospNumber = osp.getSwitchingPoolNumber();
-        Map<SwitchingPoolLcpKey, SwitchingPoolLcp> splMap = new HashMap(portmappingNode.nonnullSwitchingPoolLcp());
+        Map<SwitchingPoolLcpKey, SwitchingPoolLcp> splMap =
+            new HashMap<SwitchingPoolLcpKey, SwitchingPoolLcp>(portmappingNode.nonnullSwitchingPoolLcp());
         SwitchingPoolLcpBuilder splBldr = splMap.containsKey(new SwitchingPoolLcpKey(ospNumber))
             ? new SwitchingPoolLcpBuilder(splMap.get(new SwitchingPoolLcpKey(ospNumber)))
             : new SwitchingPoolLcpBuilder().setSwitchingPoolNumber(ospNumber)
