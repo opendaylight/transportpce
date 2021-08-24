@@ -38,6 +38,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}.ordmodels</groupId>
+            <artifactId>transportpce-ordmodels-network</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>transportpce-api</artifactId>
             <version>${project.version}</version>
@@ -48,21 +53,23 @@
         </dependency>
         <dependency>
             <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-binding-dom-adapter</artifactId>
+            <artifactId>mdsal-binding-dom-codec-spi</artifactId>
         </dependency>
-        <!-- Aluminium bump: undocumented new dependencies -->
-        <!-- dependency>
-            <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-dom-broker</artifactId>
-        </dependency-->
-        <!-- dependency>
-            <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-dom-inmemory-datastore</artifactId>
-        </dependency-->
+        <!-- Testing dependencies -->
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>test-common</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.mdsal</groupId>
+            <artifactId>mdsal-binding-generator</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.mdsal</groupId>
+            <artifactId>mdsal-binding-runtime-spi</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
