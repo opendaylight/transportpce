@@ -33,21 +33,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>transportpce-networkmodel</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>
-
-    <!-- Sodium bump: javax.annotation.Nullable and friends -->
-    <dependency>
-        <groupId>com.google.code.findbugs</groupId>
-        <artifactId>jsr305</artifactId>
-        <version>3.0.2</version>
-        <optional>true</optional>
     </dependency>
   </dependencies>
 

@@ -89,14 +89,14 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-renderer</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>org.opendaylight.mdsal</groupId>
+       <artifactId>mdsal-binding-generator</artifactId>
+       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

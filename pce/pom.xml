@@ -34,19 +34,9 @@
             <artifactId>jgrapht-core</artifactId>
             <version>1.2.0</version>
         </dependency>
-
-        <!-- Aluminium bump -->
         <dependency>
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-binding-runtime-spi</artifactId>
-        </dependency>
-
-        <!-- Sodium bump: javax.annotation.Nullable and friends -->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -68,6 +58,11 @@
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>test-common</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.mdsal</groupId>
+            <artifactId>mdsal-binding-generator</artifactId>
             <scope>test</scope>
         </dependency>
 
