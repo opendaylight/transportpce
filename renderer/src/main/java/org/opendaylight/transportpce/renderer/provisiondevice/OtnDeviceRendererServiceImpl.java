@@ -136,6 +136,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 .build();
     }
 
+    @SuppressWarnings("rawtypes")
+    // FIXME check if the ForkJoinTask raw type can be avoided
+    // Raw types use are discouraged since they lack type safety.
+    // Resulting Problems are observed at run time and not at compile time
     public OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input) {
         if (input.getNodes() == null) {
             LOG.error("Unable to delete otn service path. input nodes = null");
