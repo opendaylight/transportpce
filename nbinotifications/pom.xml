@@ -49,10 +49,6 @@
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-binding-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-binding-dom-adapter</artifactId>
-        </dependency>
         <!-- Testing Dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
