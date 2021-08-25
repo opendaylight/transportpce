@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9feee5e5_88dd070e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-25T15:43:32Z",
+      "side": 1,
+      "message": "what about this?\n\n         String message \u003d new StringBuilder(notification.getResource().getDevice().getNodeId().getValue())\n             .append(PIPE)\n             .append(buildCause(notification.getProbableCause()))\n             .append(String.join(PIPE,\n                notification.getId() !\u003d null ? notification.getId() : \"\",\n                notification.getRaiseTime() !\u003d null ? notification.getRaiseTime().toString() : \"\",\n                notification.getSeverity() !\u003d null ? notification.getSeverity().getName() : \"\",\n                notification.getCircuitId() !\u003d null ? notification.getCircuitId() : \"\"))\n             .append(buildType(notification))\n             .toString();",
+      "revId": "9e0be41c7a159d435d6982817716909f8b1328b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f10839_cecb31fc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-25T15:43:32Z",
+      "side": 1,
+      "message": "what about this ?\n\nprivate String buildCause(ProbableCause probableCause) {\n        if (probableCause \u003d\u003d null) {\n            return \"||||\";\n        }\n        return new StringBuilder()\n                .append(String.join(PIPE,\n                    (probableCause.getCause() !\u003d null) ? probableCause.getCause().getName() : \"\",\n                    (probableCause.getDirection() !\u003d null) ? probableCause.getDirection().getName() : \"\",\n                    (probableCause.getExtension() !\u003d null) ? probableCause.getExtension() : \"\",\n                    (probableCause.getLocation() !\u003d null) ? probableCause.getLocation().getName() : \"\"))\n                .toString();\n    }",
+      "revId": "9e0be41c7a159d435d6982817716909f8b1328b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c1861f_21d2946f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-25T15:43:32Z",
+      "side": 1,
+      "message": "what about ?\n        return new StringBuilder(circuitPack)\n             .append(String.join(PIPE, connection, degree, iface, internalLink, physicalLink, service, shelf,\n                sharedRiskGroup, port, portCircuitPack))\n             .toString();",
+      "revId": "9e0be41c7a159d435d6982817716909f8b1328b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
