@@ -88,12 +88,11 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
         if (probableCause == null) {
             return "||||";
         }
-        String probableCauseStr = String.join(PIPE,
+        return String.join(PIPE,
                 (probableCause.getCause() != null) ? probableCause.getCause().getName() : "",
                 (probableCause.getDirection() != null) ? probableCause.getDirection().getName() : "",
                 (probableCause.getExtension() != null) ? probableCause.getExtension() : "",
                 (probableCause.getLocation() != null) ? probableCause.getLocation().getName() : "");
-        return probableCauseStr;
     }
 
     @SuppressWarnings("unchecked")
@@ -101,13 +100,14 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
             Resource resource) {
         if (resource == null) {
             LOG.error("Resource is null.");
-        } else if (!resourceClass.isInstance(resource)) {
+            return Optional.empty();
+        }
+        if (!resourceClass.isInstance(resource)) {
             LOG.error("Resource implement different type than expected. Expected {}, actual {}.",
                     resourceClass.getSimpleName(), resource.getClass().getSimpleName());
-        } else {
-            return Optional.of((T) resource);
+            return Optional.empty();
         }
-        return Optional.empty();
+        return Optional.of((T) resource);
     }
 
     private static String buildType(AlarmNotification notification) {
@@ -201,8 +201,7 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
             default:
                 LOG.warn("Unknown resource type {}", wantedResourceType);
         }
-        String buildTyeStr = String.join(PIPE, circuitPack, connection, degree, iface, internalLink, physicalLink,
+        return String.join(PIPE, circuitPack, connection, degree, iface, internalLink, physicalLink,
                 service, shelf, sharedRiskGroup, port, portCircuitPack);
-        return buildTyeStr;
     }
 }
