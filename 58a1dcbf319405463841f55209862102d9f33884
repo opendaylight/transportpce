@@ -45,6 +45,30 @@
       "revId": "58a1dcbf319405463841f55209862102d9f33884",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22d7e942_963f8e5a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-26T07:45:44Z",
+      "side": 1,
+      "message": "Ack\nadressed in https://git.opendaylight.org/gerrit/c/transportpce/+/97332/1",
+      "parentUuid": "f94df7c8_3941adee",
+      "range": {
+        "startLine": 204,
+        "startChar": 15,
+        "endLine": 204,
+        "endChar": 26
+      },
+      "revId": "58a1dcbf319405463841f55209862102d9f33884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
