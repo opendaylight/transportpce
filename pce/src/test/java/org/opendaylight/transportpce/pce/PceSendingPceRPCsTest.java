@@ -36,7 +36,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
@@ -44,8 +43,6 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
     private Mapping mapping;
-    @Mock
-    private YangParserFactory yangParserFactory;
     @Mock
     private BindingDOMCodecServices bindingDOMCodecServices;
     private JerseyServer jerseyServer = new JerseyServer();
