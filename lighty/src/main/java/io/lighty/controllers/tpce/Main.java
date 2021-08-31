@@ -46,19 +46,21 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     private static final String RESTCONF_OPTION_NAME = "restconf";
-
     private static final String NBINOTIFICATION_OPTION_NAME = "nbinotification";
+    private static final String OLMTIMER1_OPTION_NAME = "olmtimer1";
+    private static final String OLMTIMER2_OPTION_NAME = "olmtimer2";
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private ShutdownHook shutdownHook;
 
     public void start() {
-        start(null, false, false);
+        start(null, false, null, null, false);
     }
 
     @SuppressWarnings("checkstyle:Illegalcatch")
-    public void start(String restConfConfigurationFile, boolean activateNbiNotification, boolean registerShutdownHook) {
+    public void start(String restConfConfigurationFile, boolean activateNbiNotification,
+                      String olmtimer1, String olmtimer2, boolean registerShutdownHook) {
         long startTime = System.nanoTime();
         TpceBanner.print();
         RestConfConfiguration restConfConfig = null;
@@ -83,7 +85,7 @@ public class Main {
             // 3. NETCONF SBP configuration
             NetconfConfiguration netconfSBPConfig = NetconfConfigUtils.createDefaultNetconfConfiguration();
             startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook,
-                    activateNbiNotification);
+                    activateNbiNotification, olmtimer1, olmtimer2);
             float duration = (System.nanoTime() - startTime) / 1_000_000f;
             LOG.info("lighty.io and RESTCONF-NETCONF started in {}ms", duration);
         } catch (ConfigurationException | ExecutionException | IOException e) {
@@ -119,15 +121,29 @@ public class Main {
                 .hasArg(false)
                 .required(false)
                 .build();
+        Option olmTimer1Option = Option.builder(OLMTIMER1_OPTION_NAME)
+                .desc("OLM timer 1 value")
+                .argName(OLMTIMER1_OPTION_NAME)
+                .hasArg(true)
+                .required(false)
+                .build();
+        Option olmTimer2Option = Option.builder(OLMTIMER2_OPTION_NAME)
+                .desc("OLM timer 2 value")
+                .argName(OLMTIMER1_OPTION_NAME)
+                .hasArg(true)
+                .required(false)
+                .build();
         Options options = new Options();
         options.addOption(restconfFileOption);
         options.addOption(useNbiNotificationsOption);
+        options.addOption(olmTimer1Option);
+        options.addOption(olmTimer2Option);
         return options;
     }
 
     private void startLighty(ControllerConfiguration controllerConfiguration,
             RestConfConfiguration restConfConfiguration, NetconfConfiguration netconfSBPConfiguration,
-            boolean registerShutdownHook, boolean activateNbiNotification)
+            boolean registerShutdownHook, boolean activateNbiNotification, String olmtimer1, String olmtimer2)
                     throws ConfigurationException, ExecutionException, InterruptedException {
 
         // 1. initialize and start Lighty controller (MD-SAL, Controller, YangTools,
@@ -156,7 +172,8 @@ public class Main {
         netconfSouthboundPlugin.start().get();
 
         // 4. start TransportPCE beans
-        TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices(), activateNbiNotification);
+        TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices(), activateNbiNotification,
+            olmtimer1, olmtimer2);
         transportPCE.start().get();
 
         // 5. Register shutdown hook for graceful shutdown.
@@ -176,15 +193,18 @@ public class Main {
             CommandLine commandLine = new DefaultParser().parse(options, args);
             String restConfConfigurationFile = commandLine.getOptionValue(RESTCONF_OPTION_NAME, null);
             boolean useNbiNotifications = commandLine.hasOption(NBINOTIFICATION_OPTION_NAME);
+            String olmtimer1 = commandLine.getOptionValue(OLMTIMER1_OPTION_NAME, null);
+            String olmtimer2 = commandLine.getOptionValue(OLMTIMER2_OPTION_NAME, null);
             Main app = new Main();
-            app.start(restConfConfigurationFile, useNbiNotifications, true);
+            app.start(restConfConfigurationFile, useNbiNotifications, olmtimer1, olmtimer2, true);
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(
                     "java -ms<size> -mx<size> -XX:MaxMetaspaceSize=<size> -jar tpce.jar "
                     + "[-restconf <restconfConfigurationFile>] [-nbinotification]"
                     + " e.g. java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar"
-                    + "-restconf ../src/test/resources/config.json -nbinotification",
+                    + "-restconf ../src/test/resources/config.json -nbinotification"
+                    + "-olmtimer1 120000 -olmtimer2 20000",
                     options);
             System.exit(1);
         }

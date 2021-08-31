@@ -9,6 +9,9 @@ sed 's/8101/ODL_SHELL_PORT/' ../etc/org.apache.karaf.shell.cfg > org.apache.kara
 sed -e 's/1099/ODL_RMI_REGISTRY_PORT/' -e 's/44444/ODL_RMI_SERVER_PORT/' ../etc/org.apache.karaf.management.cfg > org.apache.karaf.management._template.cfg
 sed 's/^[#|]websocket-port=8185/websocket-port=ODL_WEBSOCKET_PORT/' ../system/org/opendaylight/netconf/sal-rest-connector-config/[0-9.]*/sal-rest-connector-config-[0-9.]*-restconf.cfg >org.opendaylight.restconf._template.cfg
 
+echo 'timer1=3000' >../etc/org.opendaylight.transportpce.olm.cfg
+echo 'timer2=2000' >>../etc/org.opendaylight.transportpce.olm.cfg
+
 sed -i'_' -e '1 a\
 \
 . \$(dirname \$0)/\.\./\.\./\.\./\.\./tests/reflectwarn.sh\

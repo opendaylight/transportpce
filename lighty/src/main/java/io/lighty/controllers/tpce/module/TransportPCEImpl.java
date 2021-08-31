@@ -112,7 +112,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final List<String> publisherTopicList =
             Arrays.asList("PceListener", "ServiceHandlerOperations", "ServiceHandler", "RendererListener");
 
-    public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification) {
+    public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification,
+                            String olmtimer1, String olmtimer2) {
         LOG.info("Initializing transaction providers ...");
         deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(),
                 MAX_DURATION_TO_SUBMIT_TRANSACTION);
@@ -152,7 +153,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         PowerMgmt powerMgmt = new PowerMgmtImpl(lightyServices.getBindingDataBroker(), openRoadmInterfaces,
-                crossConnect, deviceTransactionManager);
+                crossConnect, deviceTransactionManager, olmtimer1, olmtimer2);
         OlmPowerService olmPowerService = new OlmPowerServiceImpl(lightyServices.getBindingDataBroker(), powerMgmt,
                 deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
         olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerService);

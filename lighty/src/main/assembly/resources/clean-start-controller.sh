@@ -33,4 +33,4 @@ cat config_template.json | sed -e "s/ODL_RESTCONF_PORT/$RESTCONF_PORT/" -e "s/OD
 cat akka-default_template.conf | sed -e "s/ODL_AKKA_PORT/$AKKA_PORT/" -e "s/ODL_AKKA_MGT_PORT/$AKKA_MGT_PORT/" >singlenode/akka-default.conf
 
 #start controller
-java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar -restconf config.json
+java -ms128m -mx512m -XX:MaxMetaspaceSize=128m -jar tpce.jar -restconf config.json -olmtimer1 3000 -olmtimer2 2000
