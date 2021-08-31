@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e57c9e8_20c2929c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-31T16:48:45Z",
+      "side": 1,
+      "message": "I guess it is ended now.\nMaybe rather \"Phosphorous migration\" only ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "7471b41f8e5f1a1bd3070bb0735a5d66fc64e8fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b739818_595e0ff5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-31T16:48:45Z",
+      "side": 1,
+      "message": "since there is a new revision of GNPy API YANG model,\nI think we should put related modifications in a separate change so that it can be easily backported.",
+      "revId": "7471b41f8e5f1a1bd3070bb0735a5d66fc64e8fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "565671c0_55deefd2",
+        "filename": "dmaap-client/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-31T16:48:45Z",
+      "side": 1,
+      "message": "useless empty line",
+      "revId": "7471b41f8e5f1a1bd3070bb0735a5d66fc64e8fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3830ab10_8d8d869b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-31T16:48:45Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "7471b41f8e5f1a1bd3070bb0735a5d66fc64e8fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64a17028_205cd536",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-08-31T16:48:45Z",
+      "side": 1,
+      "message": "not mentioned in the commit message \u003d\u003e vote -1\n\nDo we still need to ignore this test ?\nIf so, I think it is wishable to annotate it with @ignore in a separate change.",
+      "revId": "7471b41f8e5f1a1bd3070bb0735a5d66fc64e8fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
