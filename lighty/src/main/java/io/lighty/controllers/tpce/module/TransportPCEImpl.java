@@ -167,7 +167,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         PowerMgmt powerMgmt = new PowerMgmtImpl(lightyServices.getBindingDataBroker(), openRoadmInterfaces,
-                crossConnect, deviceTransactionManager);
+                crossConnect, deviceTransactionManager, 3000, 2000);
         OlmPowerService olmPowerService = new OlmPowerServiceImpl(lightyServices.getBindingDataBroker(), powerMgmt,
                 deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
         olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerService);
