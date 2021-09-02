@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2c92e09_a8fa2ab8",
+        "filename": "tapi/pom.xml",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2021-09-02T11:42:00Z",
+      "side": 1,
+      "message": "I don\u0027t think this block is needed -- it is already inherited from binding-parent",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "f3114f251ed1a25a44b3d43ea6acb2af4a6378f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
