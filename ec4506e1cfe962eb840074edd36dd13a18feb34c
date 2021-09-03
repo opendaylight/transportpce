@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5bfccd8_0aed1c77",
+        "filename": "tests/dockercomposecmd.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-03T10:13:55Z",
+      "side": 1,
+      "message": "this seems to give issues with nbinotifications tests\n(CODES 204 instead of 200)\nMaybe buildah would be preferable here",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 68
+      },
+      "revId": "ec4506e1cfe962eb840074edd36dd13a18feb34c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
