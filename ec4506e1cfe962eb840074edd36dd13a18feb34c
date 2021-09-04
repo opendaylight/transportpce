@@ -22,6 +22,30 @@
       "revId": "ec4506e1cfe962eb840074edd36dd13a18feb34c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d39554_d1c62ef1",
+        "filename": "tests/dockercomposecmd.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-04T20:50:46Z",
+      "side": 1,
+      "message": "eventually the issue seems more related to\nhttps://www.hadoopinrealworld.com/how-to-fix-the-leader_not_available-error-in-kafka/\n\nIt appears docker and podman socket services do not behave exactly the same.\n\nThe following standalone docker container seems more indicated in this context.\nhttps://teivah.medium.com/kafka-1-1-docker-image-5e4e9aac201d",
+      "parentUuid": "a5bfccd8_0aed1c77",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 68
+      },
+      "revId": "ec4506e1cfe962eb840074edd36dd13a18feb34c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
