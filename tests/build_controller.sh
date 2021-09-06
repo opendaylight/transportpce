@@ -11,7 +11,7 @@ which mvn >/dev/null || ./installMavenCentOS.sh
 cd ../
 
 if [ "$USE_LIGHTY" != "True" ]; then
-    for suffix in 121 221 71; do
+    for suffix in 121 221 71 _hybrid; do
         rm -rf "karaf$suffix"
         cp -r karaf "karaf$suffix"
     done
