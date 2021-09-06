@@ -131,6 +131,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        time.sleep(10)
 
     def setUp(self):  # instruction executed before each test method
         print("execution of {}".format(self.id().split(".")[-1]))
