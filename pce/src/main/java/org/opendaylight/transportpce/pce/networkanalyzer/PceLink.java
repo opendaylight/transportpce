@@ -335,6 +335,7 @@ public class PceLink implements Serializable {
                 neededType = OtnLinkType.OTUC4;
                 break;
             case "ODU4":
+            case "100GEs":
                 if (this.usedBandwidth != 0L) {
                     return false;
                 }

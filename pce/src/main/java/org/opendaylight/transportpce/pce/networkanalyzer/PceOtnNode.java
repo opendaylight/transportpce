@@ -136,6 +136,8 @@ public class PceOtnNode implements PceNode {
                     continue;
                 }
                 switch (this.otnServiceType) {
+                    case StringConstants.SERVICE_TYPE_100GE_S:
+                        // TODO verify the capability of network port to support ODU4 CTP interface creation
                     case StringConstants.SERVICE_TYPE_ODU4:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!checkTpForOdtuTermination(ontTp1)) {
@@ -177,6 +179,7 @@ public class PceOtnNode implements PceNode {
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
                 && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
+                    || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
@@ -201,7 +204,10 @@ public class PceOtnNode implements PceNode {
                     || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))
                 && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
                      || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
-               )) {
+               )
+            || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                && (mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1)))
+            ) {
             this.valid = true;
         } else {
             this.valid = false;
@@ -264,7 +270,7 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkOdtuTTPforLoOduCreation(TerminationPoint1 ontTp1, int tsNb) {
-        if (ontTp1.getXpdrTpPortConnectionAttributes() != null
+        return (ontTp1.getXpdrTpPortConnectionAttributes() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
             && (ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
@@ -276,10 +282,7 @@ public class PceOtnNode implements PceNode {
                 .equals(ODTUCnTs.class))
             && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
                 .stream().findFirst().get().getTpnPool().isEmpty()
-            && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb)) {
-            return true;
-        }
-        return false;
+            && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb));
     }
 
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
@@ -300,6 +303,7 @@ public class PceOtnNode implements PceNode {
                     break;
                 case StringConstants.SERVICE_TYPE_100GE_T:
                 case StringConstants.SERVICE_TYPE_100GE_M:
+                case StringConstants.SERVICE_TYPE_100GE_S:
                     if (sic.getIfCapType().equals(If100GEODU4.class)) {
                         return true;
                     }
@@ -315,11 +319,10 @@ public class PceOtnNode implements PceNode {
         if (!isValid()) {
             return;
         }
-        if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
-            initXndrTps("intermediate");
-        }
         if (this.nodeId.getValue().equals(anodeId) || (this.nodeId.getValue().equals(znodeId))) {
             initXndrTps("AZ");
+        } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
+            initXndrTps("intermediate");
         } else {
             LOG.info("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
             valid = false;
@@ -460,13 +463,10 @@ public class PceOtnNode implements PceNode {
             return true;
         }
 
-        if ((pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
-                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE))
-                && (isAz(pceOtnNode) || isIntermediate(pceOtnNode))) {
-            return true;
-        }
-
-        return false;
+        return ((pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
+                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
+                && (isAz(pceOtnNode) || isIntermediate(pceOtnNode)));
     }
 
     private boolean isIntermediate(PceOtnNode pceOtnNode) {
