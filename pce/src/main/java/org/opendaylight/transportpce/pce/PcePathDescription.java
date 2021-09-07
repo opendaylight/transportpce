@@ -101,6 +101,7 @@ public class PcePathDescription {
                 atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
@@ -142,6 +143,7 @@ public class PcePathDescription {
                 ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:

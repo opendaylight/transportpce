@@ -140,6 +140,7 @@ public class PostAlgoPathValidator {
                 break;
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_100GE_S:
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 LOG.info("In PostAlgoPathValidator: ODU4/ODUC4 path found {}", path);
                 break;
