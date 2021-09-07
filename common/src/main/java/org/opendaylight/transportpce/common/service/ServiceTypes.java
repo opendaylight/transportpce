@@ -12,6 +12,7 @@ import java.util.Map;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,11 @@ public final class ServiceTypes {
                 if (Uint32.valueOf(100).equals(serviceRate)
                         && (mapping == null || !PortQual.SwitchClient.getName().equals(mapping.getPortQual()))) {
                     return StringConstants.SERVICE_TYPE_100GE_T;
+                }
+                if (Uint32.valueOf(100).equals(serviceRate)
+                        && PortQual.SwitchClient.getName().equals(mapping.getPortQual())
+                        && XpdrNodeTypes.Switch.equals(mapping.getXponderType())) {
+                    return StringConstants.SERVICE_TYPE_100GE_S;
                 }
                 return getOtnServiceType(serviceFormat, serviceRate);
 
