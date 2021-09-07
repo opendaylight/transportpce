@@ -160,6 +160,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
                 anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
@@ -184,6 +185,7 @@ public class PceCalculation {
                     .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_10GE:
@@ -390,6 +392,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_1GE:
                 return processPceOtnLink(link, source, dest);
