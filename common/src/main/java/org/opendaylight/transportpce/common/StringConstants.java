@@ -27,6 +27,7 @@ public final class StringConstants {
 
     public static final String SERVICE_TYPE_100GE_T = "100GEt";
     public static final String SERVICE_TYPE_100GE_M = "100GEm";
+    public static final String SERVICE_TYPE_100GE_S = "100GEs";
 
     public static final String SERVICE_TYPE_OTU4 = "OTU4";
     public static final String SERVICE_TYPE_OTUC4 = "OTUC4";
