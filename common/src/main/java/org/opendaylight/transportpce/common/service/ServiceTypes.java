@@ -40,6 +40,10 @@ public final class ServiceTypes {
                         && (mapping == null || !PortQual.SwitchClient.getName().equals(mapping.getPortQual()))) {
                     return StringConstants.SERVICE_TYPE_100GE_T;
                 }
+                if (Uint32.valueOf(100).equals(serviceRate)
+                        && PortQual.SwitchClient.getName().equals(mapping.getPortQual())) {
+                    return StringConstants.SERVICE_TYPE_100GE_S;
+                }
                 return getOtnServiceType(serviceFormat, serviceRate);
 
             //case "ODU":
