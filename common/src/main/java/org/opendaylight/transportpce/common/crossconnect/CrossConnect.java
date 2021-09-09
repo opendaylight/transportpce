@@ -57,7 +57,7 @@ public interface CrossConnect {
      * @param isOtn
      *            True for odu-connection, False for roadm-connection.
      *
-     * @return true/false based on status of operation.
+     * @return the list of interface-names that were supporting the connection.
      */
     List<String> deleteCrossConnect(String deviceId, String connectionNumber, Boolean isOtn);
 
