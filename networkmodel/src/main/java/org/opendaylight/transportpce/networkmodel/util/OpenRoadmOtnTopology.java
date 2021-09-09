@@ -213,6 +213,29 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
+    public static TopologyShard updateOtnLinks(List<Link> suppOtuLinks, boolean isDeletion) {
+        List<Link> links = new ArrayList<>();
+        for (Link link : suppOtuLinks) {
+            if (link.augmentation(Link1.class) == null
+                || link.augmentation(Link1.class).getAvailableBandwidth() == null
+                || link.augmentation(Link1.class).getUsedBandwidth() == null) {
+                LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
+            } else {
+                if (isDeletion) {
+                    links.add(updateOtnLinkBwParameters(link, Long.valueOf(100000), Long.valueOf(0)));
+                } else {
+                    links.add(updateOtnLinkBwParameters(link, Long.valueOf(0), Long.valueOf(100000)));
+                }
+            }
+        }
+        if (links.isEmpty()) {
+            LOG.error("unable to update otn links");
+            return new TopologyShard(null, null, null);
+        } else {
+            return new TopologyShard(null, links, null);
+        }
+    }
+
     public static TopologyShard deleteOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
             OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
