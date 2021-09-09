@@ -48,6 +48,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteInput;
@@ -151,6 +152,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_1GE:
                     case StringConstants.SERVICE_TYPE_10GE:
                     case StringConstants.SERVICE_TYPE_100GE_M:
+                    case StringConstants.SERVICE_TYPE_100GE_S:
                     case StringConstants.SERVICE_TYPE_ODU4:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!manageOtnServicePathCreation(input, serviceType, serviceRate)) {
@@ -191,9 +193,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             OPERATION_FAILED);
                 }
                 PathDescription pathDescription = pathDescriptionOpt.get();
+                Mapping mapping = portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
+                    service.getServiceAEnd().getTxDirection().getPort().getPortName());
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
-                    service.getServiceAEnd().getServiceRate(), portMapping.getMapping(service.getServiceAEnd()
-                        .getNodeId().getValue(), service.getServiceAEnd().getTxDirection().getPort().getPortName()));
+                    service.getServiceAEnd().getServiceRate(), mapping);
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
@@ -207,6 +210,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_1GE:
                     case StringConstants.SERVICE_TYPE_10GE:
                     case StringConstants.SERVICE_TYPE_100GE_M:
+                    case StringConstants.SERVICE_TYPE_100GE_S:
                     case StringConstants.SERVICE_TYPE_ODU4:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!manageOtnServicePathDeletion(serviceName, pathDescription, service, serviceType)) {
@@ -346,19 +350,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
     private List<OtnDeviceRenderingResult> otnDeviceRendering(RollbackProcessor rollbackProcessor,
-        OtnServicePathInput otnServicePathAtoZ, OtnServicePathInput otnServicePathZtoA) {
+        OtnServicePathInput otnServicePathAtoZ, OtnServicePathInput otnServicePathZtoA, String serviceType) {
         LOG.info(RENDERING_DEVICES_A_Z_MSG);
         sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
             otnServicePathAtoZ.getServiceName(), RpcStatusEx.Pending,
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<OtnDeviceRenderingResult> atozrenderingFuture =
-            this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathAtoZ));
+            this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathAtoZ, serviceType));
         LOG.info(RENDERING_DEVICES_Z_A_MSG);
         sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
             otnServicePathZtoA.getServiceName(), RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<OtnDeviceRenderingResult> ztoarenderingFuture =
-            this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathZtoA));
+            this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathZtoA, serviceType));
         ListenableFuture<List<OtnDeviceRenderingResult>> renderingCombinedFuture =
             Futures.allAsList(atozrenderingFuture, ztoarenderingFuture);
         List<OtnDeviceRenderingResult> otnRenderingResults = new ArrayList<>(2);
@@ -639,7 +643,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         // Rollback should be same for all conditions, so creating a new one
         RollbackProcessor rollbackProcessor = new RollbackProcessor();
         List<OtnDeviceRenderingResult> renderingResults =
-            otnDeviceRendering(rollbackProcessor, otnServicePathInputAtoZ, otnServicePathInputZtoA);
+            otnDeviceRendering(rollbackProcessor, otnServicePathInputAtoZ, otnServicePathInputZtoA, serviceType);
         if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
             rollbackProcessor.rollbackAll();
             sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -679,7 +683,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         RollbackProcessor rollbackProcessor = new RollbackProcessor();
         List<OtnDeviceRenderingResult> renderingResults =
-            otnDeviceRendering(rollbackProcessor, otnServicePathInputAtoZ, otnServicePathInputZtoA);
+            otnDeviceRendering(rollbackProcessor, otnServicePathInputAtoZ, otnServicePathInputZtoA, serviceType);
 
         List<LinkTp> otnLinkTerminationPoints = new ArrayList<>();
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
