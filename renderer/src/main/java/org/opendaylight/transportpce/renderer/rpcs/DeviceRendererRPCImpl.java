@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.CreateOtsOmsInput;
@@ -84,15 +85,16 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
 
     @Override
     public ListenableFuture<RpcResult<OtnServicePathOutput>> otnServicePath(OtnServicePathInput input) {
-        if (input.getOperation() != null) {
+        if (input.getOperation() != null && input.getServiceFormat() != null && input.getServiceRate() != null) {
+            String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
             if (input.getOperation().getIntValue() == 1) {
                 LOG.info("Create operation request received");
                 return RpcResultBuilder.success(this.otnDeviceRendererService
-                        .setupOtnServicePath(input)).buildFuture();
+                        .setupOtnServicePath(input, serviceType)).buildFuture();
             } else if (input.getOperation().getIntValue() == 2) {
                 LOG.info("Delete operation request received");
                 return RpcResultBuilder.success(this.otnDeviceRendererService
-                        .deleteOtnServicePath(input)).buildFuture();
+                        .deleteOtnServicePath(input, serviceType)).buildFuture();
             }
         }
         return RpcResultBuilder.success(new OtnServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
