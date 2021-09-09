@@ -53,8 +53,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interface
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.OtsAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUTTP;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUTTPCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OTU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OduFunctionIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.PayloadTypeDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
@@ -237,6 +240,46 @@ public class OpenRoadmInterface221 {
         }
 
         return ochInterfaceBldr.getName();
+    }
+
+    public String createOpenRoadmOdu4HOInterface(String nodeId, String logicalConnPoint, boolean isNetworkPort,
+            String supportingInterface) throws OpenRoadmInterfaceException {
+        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (mapping == null) {
+            throw new OpenRoadmInterfaceException(
+                    String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+        }
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+            logicalConnPoint + "-ODU4");
+        if (supportingInterface != null) {
+            oduInterfaceBldr.setSupportingInterface(supportingInterface);
+        }
+
+        // ODU interface specific data
+        // Set Opu attributes
+        Class<? extends OduFunctionIdentity> oduFunction;
+        if (isNetworkPort) {
+            oduFunction = ODUCTP.class;
+        } else {
+            oduFunction = ODUTTPCTP.class;
+        }
+        OpuBuilder opuBldr = new OpuBuilder()
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"));
+        OduBuilder oduIfBuilder = new OduBuilder()
+                .setRate(ODU4.class)
+                .setOduFunction(oduFunction)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+                .setOpu(opuBldr.build());
+        // Create Interface1 type object required for adding as augmentation
+        // TODO look at imports of different versions of class
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
+        oduInterfaceBldr.addAugmentation(oduIf1Builder.setOdu(oduIfBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(nodeId, oduInterfaceBldr);
+        return oduInterfaceBldr.getName();
     }
 
     public String createOpenRoadmOdu4Interface(String nodeId, String logicalConnPoint, String supportingOtuInterface)
