@@ -92,7 +92,10 @@ public interface NetworkModelService {
     void deleteOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType);
 
     /**
-     * update otn links from otn-topology.
+     * Update otn links from otn-topology.
+     * For services using low-order odu, updates bandwidth parameters
+     * for both the direct parent high-order odu link, and also its server
+     * otu link.
      *
      * @param link
      *     link containing termination points to be updated
@@ -109,4 +112,16 @@ public interface NetworkModelService {
      */
     void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSoltNb,
             boolean isDeletion);
+
+    /**
+     * Update otn links from otn-topology.
+     * For services using directly a high-order odu, updates bandwidth parameters
+     * of the direct parent otu link.
+     *
+     * @param link
+     *     link containing termination points to be updated
+     * @param isDeletion
+     *       True indicates if the low-order otn service must be deleted
+     */
+    void updateOtnLinks(Link link, boolean isDeletion);
 }
