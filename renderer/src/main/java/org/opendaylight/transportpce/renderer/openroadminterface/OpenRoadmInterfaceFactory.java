@@ -169,6 +169,30 @@ public class OpenRoadmInterfaceFactory {
     }
 
     /**
+     * This methods creates an ODU interface on the given termination point.
+     *
+     * @param nodeId                 node ID
+     * @param logicalConnPoint       logical connection point
+     * @param supportingOtuInterface supporting OTU4 or 100GE interface
+     * @return Name of the interface if successful, otherwise return null.
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     */
+
+    public String createOpenRoadmOdu4HOInterface(String nodeId, String logicalConnPoint, boolean isNetworkPort,
+            String supportingInterface) throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
+                return null;
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.createOpenRoadmOdu4HOInterface(nodeId, logicalConnPoint, isNetworkPort,
+                    supportingInterface);
+            default:
+                return null;
+        }
+    }
+
+    /**
      * This methods creates an OTU interface on the given termination point.
      *
      * @param nodeId              node ID

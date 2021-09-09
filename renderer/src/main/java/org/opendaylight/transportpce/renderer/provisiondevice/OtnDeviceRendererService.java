@@ -11,7 +11,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathOutput;
 
 public interface OtnDeviceRendererService {
-    OtnServicePathOutput setupOtnServicePath(OtnServicePathInput input);
+    OtnServicePathOutput setupOtnServicePath(OtnServicePathInput input, String serviceType);
 
-    OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input);
+    OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input, String serviceType);
 }

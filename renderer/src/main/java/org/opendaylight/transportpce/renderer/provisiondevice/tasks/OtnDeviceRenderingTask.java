@@ -22,11 +22,13 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
 
     private final OtnDeviceRendererService otnDeviceRenderer;
     private final OtnServicePathInput otnServicePathInput;
+    private final String serviceType;
 
     public OtnDeviceRenderingTask(OtnDeviceRendererService otnDeviceRendererService,
-            OtnServicePathInput otnServicePathInput) {
+            OtnServicePathInput otnServicePathInput, String serviceType) {
         this.otnDeviceRenderer = otnDeviceRendererService;
         this.otnServicePathInput = otnServicePathInput;
+        this.serviceType = serviceType;
     }
 
     @Override
@@ -36,11 +38,11 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
         switch (this.otnServicePathInput.getOperation()) {
             case Create:
                 operation = "setup";
-                output = this.otnDeviceRenderer.setupOtnServicePath(this.otnServicePathInput);
+                output = this.otnDeviceRenderer.setupOtnServicePath(this.otnServicePathInput, this.serviceType);
                 break;
             case Delete:
                 operation = "delete";
-                output = this.otnDeviceRenderer.deleteOtnServicePath(this.otnServicePathInput);
+                output = this.otnDeviceRenderer.deleteOtnServicePath(this.otnServicePathInput, this.serviceType);
                 break;
             default:
                 return OtnDeviceRenderingResult.failed("Device rendering failed - unknown operation");

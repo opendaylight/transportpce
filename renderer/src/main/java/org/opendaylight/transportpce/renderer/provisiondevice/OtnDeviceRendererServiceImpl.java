@@ -25,7 +25,6 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
@@ -65,7 +64,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
 //TODO Align log messages and returned results messages
     @Override
-    public OtnServicePathOutput setupOtnServicePath(OtnServicePathInput input) {
+    public OtnServicePathOutput setupOtnServicePath(OtnServicePathInput input, String serviceType) {
         LOG.info("Calling setup otn-service path");
         if (input.getServiceFormat() == null || input.getServiceRate() == null) {
             return new OtnServicePathOutputBuilder()
@@ -75,7 +74,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         }
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
-        String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
         try {
             switch (serviceType) {
                 case StringConstants.SERVICE_TYPE_1GE:
@@ -95,6 +93,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     break;
                 case StringConstants.SERVICE_TYPE_ODUC4:
                     createOduc4TtpInterface(input, nodeInterfaces, otnLinkTps);
+                    break;
+                case StringConstants.SERVICE_TYPE_100GE_S:
+                    LOG.info("Calling Node interface for service-type {}", serviceType);
+                    if (input.getNodes() != null) {
+                        createHighOrderInterfaces(input, nodeInterfaces, otnLinkTps);
+                        LOG.info("Node interfaces created");
+                    }
                     break;
                 default:
                     LOG.error("Service-type {} not managed yet", serviceType);
@@ -140,7 +145,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     // FIXME check if the ForkJoinTask raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
-    public OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input) {
+    public OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input, String serviceType) {
         if (input.getNodes() == null) {
             LOG.error("Unable to delete otn service path. input nodes = null");
             return new OtnServicePathOutputBuilder()
@@ -174,34 +179,34 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             // if the node is currently mounted then proceed.
             List<String> interfacesToDelete = new LinkedList<>();
             String connectionNumber = "";
-            switch (input.getServiceRate().intValue()) {
-                case 100:
-                    if ("ODU".equals(input.getServiceFormat())) {
-                        interfacesToDelete.add(networkTp + "-ODU4");
-                        if (node.getNetwork2Tp() != null) {
-                            interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
-                        }
-                    } else if ("Ethernet".equals(input.getServiceFormat())) {
-                        connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU4");
+            switch (serviceType) {
+                case StringConstants.SERVICE_TYPE_100GE_S:
+                    connectionNumber = getConnectionNumber(null, node, networkTp, "ODU4");
+                    break;
+                case StringConstants.SERVICE_TYPE_100GE_M:
+                    connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU4");
+                    break;
+                case StringConstants.SERVICE_TYPE_ODU4:
+                    interfacesToDelete.add(networkTp + "-ODU4");
+                    if (node.getNetwork2Tp() != null) {
+                        interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
                     }
                     break;
-                case 400:
-                    if ("ODU".equals(input.getServiceFormat())) {
-                        interfacesToDelete.add(networkTp + "-ODUC4");
-                        if (node.getNetwork2Tp() != null) {
-                            interfacesToDelete.add(node.getNetwork2Tp() + "-ODUC4");
-                        }
+                case StringConstants.SERVICE_TYPE_ODUC4:
+                    interfacesToDelete.add(networkTp + "-ODUC4");
+                    if (node.getNetwork2Tp() != null) {
+                        interfacesToDelete.add(node.getNetwork2Tp() + "-ODUC4");
                     }
                     break;
-                case 10:
+                case StringConstants.SERVICE_TYPE_10GE:
                     connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU2e");
                     break;
-                case 1:
+                case StringConstants.SERVICE_TYPE_1GE:
                     connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU0");
                     break;
                 default:
-                    LOG.error("service rate {} not managed yet", input.getServiceRate());
-                    String result = input.getServiceRate() + " is not supported";
+                    LOG.error("service-type {} not managed yet", serviceType);
+                    String result = serviceType + " is not supported";
                     results.add(result);
                     success.set(false);
                     return;
@@ -213,11 +218,11 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     interfacesToDelete.add(interf);
                     String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
                     if (input.getServiceRate().intValue() == 100) {
-                        if (!supportedInterface.contains("ODUC4")) {
+                        if (supportedInterface != null && !supportedInterface.contains("ODUC4")) {
                             interfacesToDelete.add(supportedInterface);
                         }
                     } else {
-                        if (!supportedInterface.contains("ODU4")) {
+                        if (supportedInterface != null && !supportedInterface.contains("ODU4")) {
                             interfacesToDelete.add(supportedInterface);
                         }
                     }
@@ -266,10 +271,14 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     }
 
     private String getConnectionNumber(String serviceName, Nodes node, String networkTp, String oduType) {
-        if (node.getClientTp() != null) {
+        if (node.getClientTp() != null && serviceName != null) {
             return String.join("-", node.getClientTp(), oduType, serviceName, "x", networkTp, oduType, serviceName);
-        } else if (node.getNetwork2Tp() != null) {
+        } else if (node.getNetwork2Tp() != null && serviceName != null) {
             return String.join("-", networkTp, oduType, serviceName, "x", node.getNetwork2Tp(), oduType, serviceName);
+        } else if (node.getClientTp() != null && serviceName == null) {
+            return String.join("-", node.getClientTp(), oduType, "x", networkTp, oduType);
+        } else if (node.getNetwork2Tp() != null && serviceName == null) {
+            return String.join("-", networkTp, oduType, "x", node.getNetwork2Tp(), oduType);
         } else {
             return "";
         }
@@ -371,6 +380,59 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                             openRoadmInterfaceFactory.createOpenRoadmOtnOdu4LoInterface(node.getNodeId(),
                                 node.getNetwork2Tp(), input.getServiceName(), PT_07, true, minOpucnTs,
                                 maxOpucnTs));
+                        linkTpList.add(
+                            new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
+                    }
+                    break;
+                default:
+                    LOG.error("service rate {} not managed yet", input.getServiceRate());
+                    return;
+            }
+
+            // implement cross connect
+            List<String> createdConnections = new ArrayList<>();
+            if (!createdOduInterfaces.isEmpty()) {
+                Optional<String> connectionNameOpt = postCrossConnect(createdOduInterfaces, node);
+                createdConnections.add(connectionNameOpt.get());
+                LOG.info("Created cross connects");
+            }
+            nodeInterfaces.add(new NodeInterfaceBuilder()
+                    .withKey(new NodeInterfaceKey(node.getNodeId()))
+                    .setNodeId(node.getNodeId())
+                    .setConnectionId(createdConnections)
+                    .setEthInterfaceId(createdEthInterfaces)
+                    .setOduInterfaceId(createdOduInterfaces)
+                    .build());
+        }
+    }
+
+    private void createHighOrderInterfaces(OtnServicePathInput input, List<NodeInterface> nodeInterfaces,
+            CopyOnWriteArrayList<LinkTp> linkTpList) throws OpenRoadmInterfaceException {
+        for (Nodes node : input.getNodes()) {
+            // check if the node is mounted or not?
+            List<String> createdEthInterfaces = new ArrayList<>();
+            List<String> createdOduInterfaces = new ArrayList<>();
+            switch (input.getServiceRate().intValue()) {
+                case 100:
+                    LOG.info("Input service is 100G");
+                    if (node.getClientTp() != null) {
+                        String supEthInter = openRoadmInterfaceFactory.createOpenRoadmEth100GInterface(
+                                node.getNodeId(), node.getClientTp());
+                        createdEthInterfaces.add(supEthInter);
+                        createdOduInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
+                                node.getNodeId(), node.getClientTp(), false, supEthInter));
+                    }
+                    createdOduInterfaces.add(
+                        // supporting interface? payload ?
+                        openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(node.getNodeId(), node.getNetworkTp(),
+                                true, null));
+                    linkTpList.add(
+                        new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
+                    if (node.getNetwork2Tp() != null) {
+                        createdOduInterfaces.add(
+                            // supporting interface? payload ?
+                            openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(node.getNodeId(),
+                                node.getNetwork2Tp(), true, null));
                         linkTpList.add(
                             new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
                     }
