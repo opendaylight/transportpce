@@ -395,8 +395,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 break;
             case ODTU4:
             case ODUC4:
-                String nodeTopoA = new StringBuilder(nodeA).append("-").append(tpA.split("-")[0]).toString();
-                String nodeTopoZ = new StringBuilder(nodeZ).append("-").append(tpZ.split("-")[0]).toString();
                 List<LinkId> linkIdList = new ArrayList<>();
                 String prefix;
                 if (OtnLinkType.ODTU4.equals(linkType)) {
@@ -404,10 +402,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 } else {
                     prefix = OtnLinkType.OTUC4.getName();
                 }
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA,
+                    convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ,
+                    convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA, prefix));
                 List<Link> supportedOtu4links = getOtnLinks(linkIdList);
-                List<TerminationPoint> tps = getOtnNodeTps(nodeTopoA, tpA, nodeTopoZ, tpZ);
+                List<TerminationPoint> tps = getOtnNodeTps(convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA,
+                    convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ);
                 otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(supportedOtu4links, tps, linkType);
                 break;
             default:
@@ -597,6 +598,43 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error updating OTN links in otn-topology", e);
         }
+    }
+
+    @Override
+    public void updateOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link
+            notifLink, boolean isDeletion) {
+
+        List<LinkId> linkIdList = new ArrayList<>();
+        String nodeTopoA = convertNetconfNodeIdToTopoNodeId(notifLink.getATermination().getNodeId(),
+            notifLink.getATermination().getTpId());
+        String nodeTopoZ = convertNetconfNodeIdToTopoNodeId(notifLink.getZTermination().getNodeId(),
+            notifLink.getZTermination().getTpId());
+        linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, notifLink.getATermination().getTpId(),
+            nodeTopoZ, notifLink.getZTermination().getTpId(), OtnLinkType.OTU4.getName()));
+        linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, notifLink.getZTermination().getTpId(),
+            nodeTopoA, notifLink.getATermination().getTpId(), OtnLinkType.OTU4.getName()));
+        List<Link> supportedOtu4links = getOtnLinks(linkIdList);
+
+        TopologyShard otnTopologyShard = OpenRoadmOtnTopology.updateOtnLinks(supportedOtu4links, isDeletion);
+        if (otnTopologyShard.getLinks() != null) {
+            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
+                LOG.info("creating and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                InstanceIdentifier<Link> iiOtnTopologyLink = InstanceIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, otnTopologyLink.key())
+                    .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink, otnTopologyLink);
+            }
+        }
+        try {
+            networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error adding OTN links in otn-topology", e);
+        }
+        LOG.info("OTN links updated");
     }
 
     private List<Link> getOtnLinks(List<LinkId> linkIds) {
@@ -814,6 +852,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         } else {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
         }
+    }
+
+    private String convertNetconfNodeIdToTopoNodeId(String nodeId, String tpId) {
+        return new StringBuilder(nodeId).append("-").append(tpId.split("-")[0]).toString();
     }
 
     @SuppressFBWarnings(

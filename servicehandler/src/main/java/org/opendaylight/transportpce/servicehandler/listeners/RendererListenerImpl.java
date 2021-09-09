@@ -342,7 +342,11 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 this.networkModelService.updateOtnLinks(link, notification.getAToZDirection().getRate(),
                     tribPort, minTribSlot, maxTribSlot, isDeletion);
                 break;
+            case StringConstants.SERVICE_TYPE_100GE_S:
+                this.networkModelService.updateOtnLinks(link, isDeletion);
+                break;
             default:
+                LOG.warn("service-type {} not managed yet", serviceType);
                 break;
         }
     }
