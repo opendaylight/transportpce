@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03d8911a_5e53bb2a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-13T09:06:36Z",
+      "side": 1,
+      "message": "There are unused imports here\ncf logs at https://jenkins.opendaylight.org/releng/job/transportpce-maven-verify-phosphorus-mvn35-openjdk11/1518/console\n\n20:05:34 [ERROR] src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java:[26,8] (imports) UnusedImports: Unused import - org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishTapiNotificationService.\n20:05:34 [ERROR] src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java:[27,8] (imports) UnusedImports: Unused import - org.opendaylight.yang.gen.v1.nbi.notifications.rev201130.PublishTapiNotificationServiceBuilder.",
+      "revId": "d898ba98a3bb44b8db14bf8330769c739e7e5f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b42666ad_c8e80587",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-13T09:06:36Z",
+      "side": 1,
+      "message": "These packages revision was bumped\ncf logs at https://jenkins.opendaylight.org/releng/job/transportpce-tox-verify-phosphorus/1515/console\n\n19:52:35 [ERROR] /w/workspace/transportpce-tox-verify-phosphorus/tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java:[26,64] package org.opendaylight.yang.gen.v1.nbi.notifications.rev201130 does not exist\n19:52:35 [ERROR] /w/workspace/transportpce-tox-verify-phosphorus/tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java:[27,64] package org.opendaylight.yang.gen.v1.nbi.notifications.rev201130 does not exist",
+      "revId": "d898ba98a3bb44b8db14bf8330769c739e7e5f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a578540_0a0a4fe2",
+        "filename": "tests/nbinotifications/docker-compose.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-13T09:06:36Z",
+      "side": 1,
+      "message": "I also identified issues here and I proposed a different fix at https://git.opendaylight.org/gerrit/c/transportpce/+/97384",
+      "revId": "d898ba98a3bb44b8db14bf8330769c739e7e5f52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
