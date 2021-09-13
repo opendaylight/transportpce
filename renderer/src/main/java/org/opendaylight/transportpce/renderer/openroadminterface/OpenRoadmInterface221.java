@@ -60,6 +60,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev17121
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OduFunctionIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.PayloadTypeDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes.MonitoringMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
@@ -256,14 +257,23 @@ public class OpenRoadmInterface221 {
         }
 
         // ODU interface specific data
-        Class<? extends OduFunctionIdentity> oduFunction = isNetworkPort ? ODUCTP.class : ODUTTPCTP.class;
+        Class<? extends OduFunctionIdentity> oduFunction;
+        MonitoringMode monitoringMode;
+        if (isNetworkPort) {
+            oduFunction = ODUCTP.class;
+            monitoringMode = MonitoringMode.Monitored;
+        } else {
+            oduFunction = ODUTTPCTP.class;
+            monitoringMode = MonitoringMode.Terminated;
+        }
+        // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
         oduInterfaceBldr.addAugmentation(
             new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder()
                 .setOdu(new OduBuilder()
                     .setRate(ODU4.class)
                     .setOduFunction(oduFunction)
-                    .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+                    .setMonitoringMode(monitoringMode)
                     .setOpu(
                         new OpuBuilder()
                         .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
