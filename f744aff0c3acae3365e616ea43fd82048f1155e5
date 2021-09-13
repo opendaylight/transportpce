@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "919b1fe1_90f77095",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiPortMappingListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-13T08:59:26Z",
+      "side": 1,
+      "message": "what about this rather ?\n\nif (mappingAft \u003d\u003d null) {\n    LOG.warn(\"Mapping already existed in the datastore, which means that node {} already existed \"\n             + \"in TAPI topology. The action to take will be different\", nodeId);\n    continue;\n}\nif (mappingBef \u003d\u003d null) {\n    LOG.info(\"New mapping for node {} \u003d {}\", nodeId, mappingAft);\n    LOG.info(\"As the mapping is now created for the first time, \"\n            + \"we can proceed with the creation of the node {} in the TAPI topology\", nodeId);\n            this.tapiNetworkModelService.createTapiNode(nodeId,\n            nodesAft.getNodeInfo().getOpenroadmVersion().getIntValue(), nodesAft);\n} else {\n...\n}",
+      "revId": "f744aff0c3acae3365e616ea43fd82048f1155e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ab09086_b72be4cd",
+        "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-13T08:59:26Z",
+      "side": 1,
+      "message": "trailing blank\n\nsee pre-commit tox profile error in logs\nhttps://jenkins.opendaylight.org/releng/job/transportpce-tox-verify-phosphorus/1517/consoleFull\n\n19:52:20 [INFO] Installing environment for https://github.com/Lucas-C/pre-commit-hooks.\n19:52:20 [INFO] Once installed this environment will be reused.\n19:52:20 [INFO] This may take a few minutes...\n19:52:20 ✔ OK gitlint in 7.618 seconds\n19:52:21   Updating   : 1:java-11-openjdk-headless-11.0.12.0.7-0.el7_9.x86_64        1/6Trim Trailing Whitespace.................................................Failed\n19:52:23 - hook id: trailing-whitespace\n19:52:23 - exit code: 1\n19:52:23 - files were modified by this hook\n19:52:23 \n19:52:23 Fixing tapimodels/src/main/yang/tapi-notification@2018-12-10.yang\n19:52:23 \n19:52:23 Tabs remover.............................................................Passed\n19:52:23 pre-commit hook(s) made changes.\n19:52:23 If you are seeing this message in CI, reproduce locally with: `pre-commit run --all-files`.\n19:52:23 To run `pre-commit` as part of git workflow, use `pre-commit install`.\n19:52:23 All changes made by hooks:\n19:52:23 diff --git a/tapimodels/src/main/yang/tapi-notification@2018-12-10.yang b/tapimodels/src/main/yang/tapi-notification@2018-12-10.yang\n19:52:23 index 14758615..e88877ec 100644\n19:52:23 --- a/tapimodels/src/main/yang/tapi-notification@2018-12-10.yang\n19:52:23 +++ b/tapimodels/src/main/yang/tapi-notification@2018-12-10.yang\n19:52:23 @@ -595,5 +595,5 @@ module tapi-notification {\n19:52:23                  description \"none\";\n19:52:23              }\n19:52:23          }\n19:52:23 -    }    \n19:52:23 +    }\n19:52:23  }\n19:52:23 ERROR: InvocationError for command /w/workspace/transportpce-tox-verify-phosphorus/.tox/pre-commit/bin/pre-commit run --all-files --show-diff-on-failure (exited with code 1)\n19:52:23 ERROR: invocation failed (exit code 1)\n19:52:23 ✖ FAIL pre-commit in 22.293 seconds",
+      "range": {
+        "startLine": 598,
+        "startChar": 4,
+        "endLine": 598,
+        "endChar": 9
+      },
+      "revId": "f744aff0c3acae3365e616ea43fd82048f1155e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
