@@ -106,18 +106,19 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC4:
-                if (rc.getResultTribPortTribSlot().get(0) != null && rc.getResultTribPortTribSlot().get(1) != null) {
+                if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
+                    && rc.getResultTribPortTribSlot().get(1) != null) {
                     atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
                             .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
                             .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {
-                    LOG.error("Trib port and trib slot number should be present");
+                    LOG.warn("Trib port and trib slot number should be present");
                     atoZDirectionBldr.setMinTribSlot(new OpucnTribSlotDef("0.0"))
                         .setMaxTribSlot(new OpucnTribSlotDef("0.0"));
                 }
                 break;
             default:
-                LOG.warn("unknown service type : unable to set Min/Max frequencies");
+                LOG.warn("unknown service type : unable to set Min/Max frequencies or trib-port/trib-slot");
                 break;
         }
         return atoZDirectionBldr;
@@ -147,12 +148,13 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
-                if (rc.getResultTribPortTribSlot().get(0) != null && rc.getResultTribPortTribSlot().get(1) != null) {
+                if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
+                    && rc.getResultTribPortTribSlot().get(1) != null) {
                     ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
                             .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
                             .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {
-                    LOG.error("Trib port and trib slot number should be present");
+                    LOG.warn("Trib port and trib slot number should be present");
                     ztoADirectionBldr.setMinTribSlot(new OpucnTribSlotDef("0.0"))
                         .setMaxTribSlot(new OpucnTribSlotDef("0.0"));
                 }

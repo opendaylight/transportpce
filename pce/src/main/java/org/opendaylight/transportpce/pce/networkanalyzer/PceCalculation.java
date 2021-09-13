@@ -660,10 +660,12 @@ public class PceCalculation {
 
         switch (pceOtnLink.getlinkType()) {
             case OTNLINK:
+                if (source.getXpdrClient(pceOtnLink.getSourceTP().getValue()) != null) {
+                    pceOtnLink.setClient(source.getXpdrClient(pceOtnLink.getSourceTP().getValue()));
+                }
                 if (dest.getXpdrClient(pceOtnLink.getDestTP().getValue()) != null) {
                     pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().getValue()));
                 }
-
                 allPceLinks.put(linkId, pceOtnLink);
                 source.addOutgoingLink(pceOtnLink);
                 LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
