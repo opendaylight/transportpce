@@ -207,6 +207,8 @@ public class PceOtnNode implements PceNode {
                )
             || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
                 && (mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1)))
+            || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                && (mode.equals("intermediate") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 0, 2)))
             ) {
             this.valid = true;
         } else {
@@ -237,7 +239,7 @@ public class PceOtnNode implements PceNode {
             }
 
         }
-        if (clientTps == null && netwTps != null && nbClient == 0 && nbNetw == 2) {
+        if (netwTps != null && nbClient == 0 && nbNetw == 2) {
             netwTps.sort(Comparator.comparing(TpId::getValue));
             @Nullable
             List<NonBlockingList> nblList = new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
