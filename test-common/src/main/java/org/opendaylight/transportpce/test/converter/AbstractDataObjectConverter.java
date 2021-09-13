@@ -75,13 +75,13 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @Override
     @SuppressWarnings("unchecked")
     public <T extends DataObject> Optional<T> getDataObject(
-            @Nonnull NormalizedNode<?, ?> normalizedNode,
+            @Nonnull NormalizedNode normalizedNode,
             @Nonnull QName rootNode) {
         //Preconditions.checkNotNull(normalizedNode);
         if (normalizedNode instanceof ContainerNode) {
             YangInstanceIdentifier.PathArgument directChildIdentifier =
                     YangInstanceIdentifier.of(rootNode).getLastPathArgument();
-            Optional<NormalizedNode<?, ?>> directChild =
+            Optional<NormalizedNode> directChild =
                     NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier);
             if (!directChild.isPresent()) {
                 throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
@@ -101,7 +101,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @Override
     @SuppressWarnings("unchecked")
     public <T extends DataObject> Optional<T> getDataObjectFromRpc(
-            @Nonnull NormalizedNode<?, ?> normalizedNode,
+            @Nonnull NormalizedNode normalizedNode,
             @Nonnull SchemaPath rpcSchemaPath) {
 
         if (! (normalizedNode instanceof ContainerNode)) {
@@ -117,9 +117,9 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     }
 
     @Override
-    public <T extends DataObject> Optional<NormalizedNode<?, ?>> toNormalizedNodes(@Nonnull T object,
+    public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
             Class<T> dataObjectClass) {
-        Entry<YangInstanceIdentifier, NormalizedNode<?, ?>> normalizedNode =
+        Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =
                 codecRegistry.toNormalizedNode(InstanceIdentifier.create(dataObjectClass), object);
         return Optional.ofNullable(normalizedNode.getValue());
     }
@@ -127,7 +127,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @Override
     public <T extends DataObject> ConvertType<T> dataContainer() {
         return (object, objectClass) -> {
-            NormalizedNode<?, ?> value =
+            NormalizedNode value =
                     getCodecRegistry().toNormalizedNode(InstanceIdentifier.create(objectClass), object).getValue();
             return Optional.ofNullable(value);
         };

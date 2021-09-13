@@ -41,12 +41,40 @@ public class PowerMgmtImpl implements PowerMgmt {
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
 
+    private long timer1 = 120000;
+    // openroadm spec value is 120000, functest value is 3000
+    private long timer2 = 20000;
+    // openroadm spec value is 20000, functest value is 2000
+
     public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
                          CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager) {
         this.db = db;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
+    }
+
+    public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
+                         CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager,
+                         String timer1, String timer2) {
+        this.db = db;
+        this.openRoadmInterfaces = openRoadmInterfaces;
+        this.crossConnect = crossConnect;
+        this.deviceTransactionManager = deviceTransactionManager;
+        try {
+            this.timer1 = Long.parseLong(timer1);
+        } catch (NumberFormatException e) {
+            this.timer1 = 120000;
+            LOG.warn("Failed to retrieve Olm timer1 value from configuration - using default value {}",
+                this.timer1, e);
+        }
+        try {
+            this.timer2 = Long.parseLong(timer2);
+        } catch (NumberFormatException e) {
+            this.timer2 = 20000;
+            LOG.warn("Failed to retrieve Olm timer2 value from configuration - using default value {}",
+                this.timer2, e);
+        }
     }
 
     /**
@@ -108,7 +136,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                     try {
                         LOG.info("Now going in sleep mode");
-                        Thread.sleep(OlmUtils.OLM_TIMER_1);
+                        Thread.sleep(timer1);
                     } catch (InterruptedException e) {
                         LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                         // FIXME shouldn't it be LOG.warn  or LOG.error?
@@ -159,7 +187,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             return false;
                         }
                         LOG.info("Roadm-connection: {} updated ", connectionNumber);
-                        Thread.sleep(OlmUtils.OLM_TIMER_2);
+                        Thread.sleep(timer2);
                         // TODO make this timer value configurable via OSGi blueprint
                         // although the value recommended by the white paper is 20 seconds.
                         // At least one vendor product needs 60 seconds
@@ -395,7 +423,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
-                    Thread.sleep(OlmUtils.OLM_TIMER_2);
+                    Thread.sleep(timer2);
                     if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null, connectionNumber)) {
                         LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         return false;

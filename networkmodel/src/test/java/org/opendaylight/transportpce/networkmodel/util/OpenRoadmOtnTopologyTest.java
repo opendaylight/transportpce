@@ -916,7 +916,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             "XPDR" + xpdrNb + "-NETWORK1",
             tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst()
-            .get().getTpRef().toString());
+            .get().getTpRef().getValue());
         if (xpdrNb.equals(Uint16.valueOf(1))) {
             assertEquals("should contain 5 TPs", 5, tpList.size());
             assertEquals("XPDR1-CLIENT1", tpList.get(0).getTpId().getValue());

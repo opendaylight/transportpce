@@ -428,9 +428,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         switch (networkPortDirection) {
             case "bidirectional":
                 count += xpdOut.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeIdTopo)
-                    && lk.getSource().getSourceTp().equals(networkLcp)).count();
+                    && lk.getSource().getSourceTp().getValue().equals(networkLcp)).count();
                 count += xpdIn.stream().filter(lk -> lk.getDestination().getDestNode().getValue().equals(nodeIdTopo)
-                    && lk.getDestination().getDestTp().equals(networkLcp)).count();
+                    && lk.getDestination().getDestTp().getValue().equals(networkLcp)).count();
                 return (count == 2);
             case "tx":
             case "rx":
@@ -438,15 +438,15 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 String partnerLcp = mapping.getPartnerLcp();
                 if (mapping.getPortQual().equals("tx")) {
                     count += xpdOut.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeIdTopo)
-                        && lk.getSource().getSourceTp().equals(networkLcp)).count();
+                        && lk.getSource().getSourceTp().getValue().equals(networkLcp)).count();
                     count += xpdIn.stream().filter(lk -> lk.getDestination().getDestNode().getValue().equals(nodeIdTopo)
-                        && lk.getDestination().getDestTp().equals(partnerLcp)).count();
+                        && lk.getDestination().getDestTp().getValue().equals(partnerLcp)).count();
                 }
                 if (mapping.getPortQual().equals("rx")) {
                     count += xpdIn.stream().filter(lk -> lk.getDestination().getDestNode().getValue().equals(nodeIdTopo)
-                        && lk.getDestination().getDestTp().equals(networkLcp)).count();
+                        && lk.getDestination().getDestTp().getValue().equals(networkLcp)).count();
                     count += xpdOut.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeIdTopo)
-                        && lk.getSource().getSourceTp().equals(partnerLcp)).count();
+                        && lk.getSource().getSourceTp().getValue().equals(partnerLcp)).count();
                 }
                 return (count == 2);
             default:

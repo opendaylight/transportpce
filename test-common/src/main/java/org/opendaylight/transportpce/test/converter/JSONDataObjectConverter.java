@@ -22,7 +22,6 @@ import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSeriali
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.QName;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeWriter;
@@ -34,6 +33,7 @@ import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeS
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
+import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,20 +76,20 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      * @return {@link Optional} instance of {@link NormalizedNode}.
      */
     @Override
-    public Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> transformIntoNormalizedNode(
+    public Optional<NormalizedNode> transformIntoNormalizedNode(
             @Nonnull InputStream inputStream) {
         JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         return parseInputJSON(reader);
     }
 
     @Override
-    public Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> transformIntoNormalizedNode(
+    public Optional<NormalizedNode> transformIntoNormalizedNode(
             @Nonnull Reader inputReader, SchemaNode parentSchema) {
         throw new UnsupportedOperationException("Not Implemented yet");
     }
 
     @Override
-    public Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> transformIntoNormalizedNode(
+    public Optional<NormalizedNode> transformIntoNormalizedNode(
             @Nonnull Reader inputReader) {
         JsonReader reader = new JsonReader(inputReader);
         return parseInputJSON(reader);
@@ -104,7 +104,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
             JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createLazy(getSchemaContext());
         NormalizedNodeStreamWriter create =
             JSONNormalizedNodeStreamWriter.createExclusiveWriter(jsonCodecFactory,
-            (org.opendaylight.yangtools.yang.model.api.DataNodeContainer)null, null, jsonWriter);
+            (SchemaPath)null, null, jsonWriter);
 
         try (NormalizedNodeWriter normalizedNodeWriter = NormalizedNodeWriter.forStreamWriter(create);) {
             normalizedNodeWriter
@@ -127,13 +127,12 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      * @param reader of the given JSON
      *
      */
-    private Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> parseInputJSON(
+    private Optional<NormalizedNode> parseInputJSON(
             JsonReader reader) {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
             JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
-                JSONCodecFactorySupplier.RFC7951.getShared(getSchemaContext()),
-                getSchemaContext())) {
+                JSONCodecFactorySupplier.RFC7951.getShared(getSchemaContext()))) {
             jsonParser.parse(reader);
         } catch (IOException e) {
             LOG.warn("An error occured during parsing Json input stream", e);
