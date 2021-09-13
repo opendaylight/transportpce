@@ -229,12 +229,15 @@ public final class ModelMappingUtils {
             : getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
         for (Nodes node: nodeLists.getRendererNodeList()) {
-            nodes.add(new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
-                .NodesBuilder()
-                            .setNodeId(node.getNodeId())
-                            .setClientTp(node.getSrcTp())
-                            .setNetworkTp(node.getDestTp())
-                            .build());
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.NodesBuilder nb
+                = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
+                    .NodesBuilder().setNodeId(node.getNodeId()).setNetworkTp(node.getDestTp());
+            if (node.getSrcTp() != null && node.getSrcTp().contains("NETWORK")) {
+                nb.setNetwork2Tp(node.getSrcTp());
+            } else {
+                nb.setClientTp(node.getSrcTp());
+            }
+            nodes.add(nb.build());
         }
         OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
             .setServiceName(serviceName)
