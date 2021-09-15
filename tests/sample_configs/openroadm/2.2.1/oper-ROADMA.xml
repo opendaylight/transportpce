@@ -814,6 +814,66 @@
       </measurement>
     </current-pm>
   </current-pm-entry>
+  <current-pm-entry>
+    <pm-resource-instance xmlns:d="http://org/openroadm/device">/d:org-openroadm-device/d:interface[d:name='OTS-DEG1-TTP-TXRX']</pm-resource-instance>
+    <pm-resource-type>interface</pm-resource-type>
+    <pm-resource-type-extension></pm-resource-type-extension>
+    <retrieval-time>2018-06-07T13:22:58+00:00</retrieval-time>
+    <current-pm>
+      <type>opticalPowerOutput</type>
+      <extension></extension>
+      <location>nearEnd</location>
+      <direction>tx</direction>
+      <measurement>
+        <granularity>15min</granularity>
+        <pmParameterValue>2.5</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+      <measurement>
+        <granularity>24Hour</granularity>
+        <pmParameterValue>2.23</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+    </current-pm>
+    <current-pm>
+      <type>opticalPowerInput</type>
+      <extension></extension>
+      <location>nearEnd</location>
+      <direction>rx</direction>
+      <measurement>
+        <granularity>15min</granularity>
+        <pmParameterValue>-21.1</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+      <measurement>
+        <granularity>24Hour</granularity>
+        <pmParameterValue>-49.3</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+    </current-pm>
+    <current-pm>
+      <type>opticalReturnLoss</type>
+      <extension></extension>
+      <location>nearEnd</location>
+      <direction>rx</direction>
+      <measurement>
+        <granularity>15min</granularity>
+        <pmParameterValue>40</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+      <measurement>
+        <granularity>24Hour</granularity>
+        <pmParameterValue>44</pmParameterValue>
+        <pmParameterUnit>dBm</pmParameterUnit>
+        <validity>complete</validity>
+      </measurement>
+    </current-pm>
+  </current-pm-entry>
   </current-pm-list>
 
  </data>

@@ -235,7 +235,7 @@ class TransportTapitesting(unittest.TestCase):
         response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
-        self.assertNotIn("node", res["output"]["topology"], 'Topology should contain no node')
+        self.assertEqual(len(res["output"]["topology"]["node"]), 1, 'Topology should contain 1 node')
         self.assertNotIn("link", res["output"]["topology"], 'Topology should contain no link')
 
     def test_05_disconnect_roadmb(self):
@@ -249,7 +249,17 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(10)
 
     def test_07_check_tapi_topos(self):
-        self.test_04_check_tapi_topos()
+        url = "{}/operations/tapi-topology:get-topology-details"
+        data = {
+            "tapi-topology:input": {
+                "tapi-topology:topology-id-or-name": "T0 - Multi-layer topology"
+            }
+        }
+        response = test_utils.post_request(url, data)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        res = response.json()
+        self.assertNotIn("node", res["output"]["topology"], 'Topology should contain no node')
+        self.assertNotIn("link", res["output"]["topology"], 'Topology should contain no link')
 
     def test_08_connect_rdma(self):
         response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
