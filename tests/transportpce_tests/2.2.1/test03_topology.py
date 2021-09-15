@@ -629,7 +629,7 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         # Tests related to links
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 26)
+        self.assertEqual(nbLink, 30)
         for i in range(0, nbLink):
             link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
             link_type = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
