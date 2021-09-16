@@ -49,16 +49,16 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.link._for.notif.ATerminationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.link._for.notif.ZTerminationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.LinkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.link._for.notif.ATerminationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.link._for.notif.ZTerminationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
@@ -566,7 +566,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceImplementationRequest,
             input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL, input.getPathDescription(),
-            notifLink, serviceType);
+            notifLink, null, serviceType);
         return true;
     }
 
@@ -619,7 +619,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
-                serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription, notifLink, serviceType);
+            serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription, notifLink, null, serviceType);
         return true;
     }
 
@@ -653,10 +653,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<LinkTp> otnLinkTerminationPoints = new ArrayList<>();
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
+        List<String> supportedLinks = null;
+        if (notifLink == null && !otnLinkTerminationPoints.isEmpty()) {
+            supportedLinks = ModelMappingUtils.getLinksFromServicePathDescription(input.getPathDescription());
+        }
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceImplementationRequest,
             input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL, input.getPathDescription(),
-            notifLink, serviceType);
+            notifLink, supportedLinks, serviceType);
         return true;
     }
 
@@ -688,9 +692,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<LinkTp> otnLinkTerminationPoints = new ArrayList<>();
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
+        List<String> supportedLinks = null;
+        if (notifLink == null && !otnLinkTerminationPoints.isEmpty()) {
+            supportedLinks = ModelMappingUtils.getLinksFromServicePathDescription(pathDescription);
+        }
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
-                serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription, notifLink, serviceType);
+                serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription, notifLink, supportedLinks,
+                serviceType);
         return true;
     }
 
@@ -704,7 +713,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
             RpcStatusEx rpcStatusEx, String message) {
         Notification notification = buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                null, null, null);
+                null, null, null, null);
         send(notification);
     }
 
@@ -718,9 +727,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
      */
     private void sendNotificationsWithPathDescription(ServicePathNotificationTypes servicePathNotificationTypes,
             String serviceName, RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription,
-            Link notifLink, String serviceType) {
+            Link notifLink, List<String> supportedLinks, String serviceType) {
         Notification notification = buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                pathDescription, notifLink, serviceType);
+                pathDescription, notifLink, supportedLinks, serviceType);
         send(notification);
     }
 
@@ -735,7 +744,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
      */
     private RendererRpcResultSp buildNotification(ServicePathNotificationTypes servicePathNotificationTypes,
             String serviceName, RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription,
-            Link notifLink, String serviceType) {
+            Link notifLink, List<String> supportedLinks, String serviceType) {
         RendererRpcResultSpBuilder builder = new RendererRpcResultSpBuilder()
                 .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)
                 .setStatusMessage(message)
@@ -746,6 +755,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         }
         if (notifLink != null) {
             builder.setLink(notifLink);
+        }
+        if (supportedLinks != null) {
+            builder.setLinkId(supportedLinks);
         }
         return builder.build();
     }
