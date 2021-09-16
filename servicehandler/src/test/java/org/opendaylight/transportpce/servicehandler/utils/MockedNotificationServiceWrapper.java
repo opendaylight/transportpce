@@ -13,9 +13,9 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.PathTopologyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.PathTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yangtools.yang.binding.Notification;

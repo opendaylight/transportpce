@@ -7,8 +7,9 @@
  */
 package org.opendaylight.transportpce.networkmodel.service;
 
+import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -108,7 +109,7 @@ public interface NetworkModelService {
      * @param maxTribSoltNb
      *     Last contiguous trib slot number allocated by the service
      * @param isDeletion
-     *       True indicates if the low-order otn service must be deleted
+     *     True indicates if the low-order otn service must be deleted
      */
     void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSoltNb,
             boolean isDeletion);
@@ -120,8 +121,10 @@ public interface NetworkModelService {
      *
      * @param link
      *     link containing termination points to be updated
+     * @param supportedLinks
+     *     list of link-id supported the service (used when more than one supported link)
      * @param isDeletion
-     *       True indicates if the low-order otn service must be deleted
+     *     True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(Link link, boolean isDeletion);
+    void updateOtnLinks(Link link, List<String> supportedLinks, boolean isDeletion);
 }
