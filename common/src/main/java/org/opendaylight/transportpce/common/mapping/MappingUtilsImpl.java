@@ -8,7 +8,9 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -107,31 +109,21 @@ public class MappingUtilsImpl implements MappingUtils {
     }
 
     public static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
-        switch (ifCapType) {
-            case "IfOTUCnODUCn":
-                return IfOTUCnODUCn.class;
-            case "IfOCHOTU4ODU4":
-                return IfOCHOTU4ODU4.class;
-            case "IfOCH":
-                return IfOCH.class;
-            case "If100GEODU4":
-                return If100GEODU4.class;
-            case "If10GEODU2e":
-                return If10GEODU2e.class;
-            case "If10GEODU2":
-                return If10GEODU2.class;
-            case "If1GEODU0":
-                return If1GEODU0.class;
-            case "If400GE":
-                return If400GE.class;
-            case "If100GE":
-                return If100GE.class;
-            case "If10GE":
-                return If10GE.class;
-            case "If1GE":
-                return If1GE.class;
-            default:
-                return null;
+        Map<String, Class<? extends SupportedIfCapability>> capTypeClassMap = new HashMap<>();
+        capTypeClassMap.put("IfOTUCnODUCn", IfOTUCnODUCn.class);
+        capTypeClassMap.put("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class);
+        capTypeClassMap.put("IfOCH", IfOCH.class);
+        capTypeClassMap.put("If100GEODU4", If100GEODU4.class);
+        capTypeClassMap.put("If10GEODU2e", If10GEODU2e.class);
+        capTypeClassMap.put("If10GEODU2", If10GEODU2.class);
+        capTypeClassMap.put("If1GEODU0", If1GEODU0.class);
+        capTypeClassMap.put("If400GE", If400GE.class);
+        capTypeClassMap.put("If100GE", If100GE.class);
+        capTypeClassMap.put("If10GE", If10GE.class);
+        capTypeClassMap.put("If1GE", If1GE.class);
+        if (!capTypeClassMap.containsKey(ifCapType)) {
+            return null;
         }
+        return capTypeClassMap.get(ifCapType);
     }
 }
