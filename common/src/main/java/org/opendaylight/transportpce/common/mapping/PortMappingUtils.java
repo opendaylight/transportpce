@@ -21,6 +21,14 @@ public final class PortMappingUtils {
     private static final BigInteger FNV_INIT = new BigInteger("cbf29ce484222325", 16);
     private static final BigInteger FNV_MOD = new BigInteger("2").pow(64);
 
+
+    public static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
+        "{} : port {} on {} is not a correct partner port of {} on  {}";
+    public static final String FETCH_CONNECTIONPORT_LOGMSG =
+        "{} : Fetching connection-port {} at circuit pack {}";
+    public static final String ASSOCIATED_LCP_LOGMSG =
+        "{} : port {} on {} - associated Logical Connection Point is {}";
+
     /**
      * Implements the FNV-1 64bit algorithm.
      * FNV-1 128bit would be ideal for 16 bytes but we need an overhead for Base64 encoding.
