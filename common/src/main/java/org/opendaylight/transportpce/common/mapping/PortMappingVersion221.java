@@ -99,8 +99,13 @@ import org.slf4j.LoggerFactory;
 // FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
 // some mutualization would be helpful
 public class PortMappingVersion221 {
+
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion221.class);
     private static final Map<Direction, String> SUFFIX;
+    private static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
+        "{} : port {} on {} is not a correct partner port of {} on  {}";
+    private static final String FETCH_CONNECTIONPORT_LOGMSG =
+        "{} : Fetching connection-port {} at circuit pack {}";
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -358,33 +363,24 @@ public class PortMappingVersion221 {
     }
 
     private boolean checkPartnerPortNotNull(Ports port) {
-        if (port.getPartnerPort() == null
-            || port.getPartnerPort().getCircuitPackName() == null
-            || port.getPartnerPort().getPortName() == null) {
-            return false;
-        }
-        return true;
+        return (port.getPartnerPort() != null
+            && port.getPartnerPort().getCircuitPackName() != null
+            && port.getPartnerPort().getPortName() != null);
     }
 
     private boolean checkPartnerPortNoDir(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNotNull(port2)
-            || !port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNotNull(port2)
+            && port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
+            && port2.getPartnerPort().getPortName().equals(port1.getPortName()));
     }
 
     private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNoDir(circuitPackName, port1, port2)
-            || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
-                &&
-                (Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()))) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNoDir(circuitPackName, port1, port2)
+            && ((Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue())
+                ||
+                (Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue())));
     }
 
 
@@ -910,7 +906,7 @@ public class PortMappingVersion221 {
         Ports port2 = poOpt.get();
         circuitPackName2.append(cpOpt.get().getCircuitPackName());
         if (!checkPartnerPort(circuitPackName, port, port2)) {
-            LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+            LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                     nodeId, port2.getPortName(), circuitPackName2, port.getPortName(), circuitPackName);
             return null;
         }
@@ -1043,7 +1039,7 @@ public class PortMappingVersion221 {
                             new CircuitPacksKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName()))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId,
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(),
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
@@ -1087,7 +1083,7 @@ public class PortMappingVersion221 {
                         .child(CircuitPacks.class, new CircuitPacksKey(cp1Name))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(), cp1Name);
                     Optional<Ports> port1Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port1ID, Timeouts.DEVICE_READ_TIMEOUT,
@@ -1096,7 +1092,7 @@ public class PortMappingVersion221 {
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port2ID, Timeouts.DEVICE_READ_TIMEOUT,
@@ -1122,13 +1118,13 @@ public class PortMappingVersion221 {
                         continue;
                     }
                     if (!checkPartnerPort(cp1Name, port1, port2)) {
-                        LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+                        LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                                 nodeId, port2.getPortName(), cp2Name, port1.getPortName(), cp1Name);
                         continue;
                     }
                     // Directions checks are the same for cp1 and cp2, no need to check them twice.
                     if (!checkPartnerPortNoDir(cp2Name, port2, port1)) {
-                        LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+                        LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                                 nodeId, port1.getPortName(), cp1Name, port2.getPortName(), cp2Name);
                         continue;
                     }
