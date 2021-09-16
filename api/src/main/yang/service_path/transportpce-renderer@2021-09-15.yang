@@ -55,11 +55,16 @@ module transportpce-renderer {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2021-09-15 {
+      description
+        "Version 1.6.4.
+         Add list of link-id to the notification";
+    }
   revision 2021-06-18 {
-    description
-      "Version 1.6.3.
-       Add optical-renderer-nodes to the notification";
-  }
+      description
+        "Version 1.6.3.
+         Add optical-renderer-nodes to the notification";
+    }
   revision 2020-11-25 {
     description
       "Version 1.6.2";
@@ -78,6 +83,10 @@ module transportpce-renderer {
   }
 
   grouping link-for-notif {
+    description
+      "In most of the cases, only 2 link-termination-points exists.
+       It reveals that the service is supported by a single otn-link
+       to configure. Its properties can be easily transmited by this way.";
     container a-termination {
       leaf node-id {
         type string;
@@ -154,6 +163,14 @@ module transportpce-renderer {
     uses org-openroadm-common-service-types:service-notification-result;
     container link {
       uses link-for-notif;
+    }
+    leaf-list link-id {
+      type string;
+      description
+        "when more than 2 link-termination-points exists,
+         it reveals that the service is supported by multiple
+         links (typically, OTU4). In such a case, it is more appropriated
+         to transmit the list of supported links with their link-id";
     }
     leaf service-type {
         type string;
