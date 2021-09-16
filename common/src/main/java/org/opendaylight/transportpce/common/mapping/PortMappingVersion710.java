@@ -113,6 +113,10 @@ import org.slf4j.LoggerFactory;
 public class PortMappingVersion710 {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion710.class);
     private static final Map<Direction, String> SUFFIX;
+    private static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
+        "{} : port {} on {} is not a correct partner port of {} on  {}";
+    private static final String FETCH_CONNECTIONPORT_LOGMSG =
+        "{} : Fetching connection-port {} at circuit pack {}";
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -454,33 +458,24 @@ public class PortMappingVersion710 {
     }
 
     private boolean checkPartnerPortNotNull(Ports port) {
-        if (port.getPartnerPort() == null
-            || port.getPartnerPort().getCircuitPackName() == null
-            || port.getPartnerPort().getPortName() == null) {
-            return false;
-        }
-        return true;
+        return (port.getPartnerPort() != null
+            && port.getPartnerPort().getCircuitPackName() != null
+            && port.getPartnerPort().getPortName() != null);
     }
 
     private boolean checkPartnerPortNoDir(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNotNull(port2)
-            || !port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNotNull(port2)
+            && port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
+            && port2.getPartnerPort().getPortName().equals(port1.getPortName()));
     }
 
     private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNoDir(circuitPackName, port1, port2)
-            || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
-                &&
-                (Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()))) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNoDir(circuitPackName, port1, port2)
+            && ((Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue())
+                ||
+                (Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue())));
     }
 
 
@@ -844,7 +839,8 @@ public class PortMappingVersion710 {
                 LOG.warn("{} : No MC profiles are found on degree {} - "
                         + "assuming the fixed grid capabilities and a default profile-name",
                     nodeId, degree.getDegreeNumber());
-                String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + "default-profile";
+                String mcNodeName =
+                    PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(), "default-profile");
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -858,7 +854,8 @@ public class PortMappingVersion710 {
             for (String mcCapabilityProfileName : degree.getMcCapabilityProfileName()) {
                 McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
                 McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
-                String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + mcCapabilityProfile;
+                String mcNodeName = PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(),
+                        mcCapabilityProfile.toString());
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -1016,7 +1013,7 @@ public class PortMappingVersion710 {
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                .setLcpHashVal(FnvUtils.fnv1_64(nodeIdLcp));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeIdLcp));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
@@ -1082,7 +1079,7 @@ public class PortMappingVersion710 {
             .collect(Collectors.toList());
         minMaxOpucnTribSlots.add(sortedNtwHoOduOpucnTribSlots.get(0));
         minMaxOpucnTribSlots.add(sortedNtwHoOduOpucnTribSlots.get(sortedNtwHoOduOpucnTribSlots.size() - 1));
-        // LOG.info("Min, Max trib slot list {}", minMaxOpucnTribSlots);
+        LOG.debug("Min, Max trib slot list {}", minMaxOpucnTribSlots);
         return minMaxOpucnTribSlots;
     }
 
@@ -1117,7 +1114,7 @@ public class PortMappingVersion710 {
         Ports port2 = poOpt.get();
         circuitPackName2.append(cpOpt.get().getCircuitPackName());
         if (!checkPartnerPort(circuitPackName, port, port2)) {
-            LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+            LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                     nodeId, port2.getPortName(), circuitPackName2, port.getPortName(), circuitPackName);
             return null;
         }
@@ -1271,7 +1268,7 @@ public class PortMappingVersion710 {
                             new CircuitPacksKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName()))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId,
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(),
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
@@ -1297,10 +1294,8 @@ public class PortMappingVersion710 {
                                 connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
                         continue;
                     }
-                    String logicalConnectionPoint = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-TXRX")
-                        .toString();
+                    String logicalConnectionPoint =
+                            PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(), "TXRX");
                     LOG.info("{} : Logical Connection Point for {} on {} is {}",
                             nodeId,
                             port.getPortName(), connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
@@ -1317,7 +1312,7 @@ public class PortMappingVersion710 {
                         .child(CircuitPacks.class, new CircuitPacksKey(cp1Name))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName(), cp1Name);
                     Optional<Ports> port1Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port1ID, Timeouts.DEVICE_READ_TIMEOUT,
@@ -1326,7 +1321,7 @@ public class PortMappingVersion710 {
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
                         .child(Ports.class,
                             new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName()));
-                    LOG.debug("{} : Fetching connection-port {} at circuit pack {}",
+                    LOG.debug(FETCH_CONNECTIONPORT_LOGMSG,
                             nodeId, connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port2ID, Timeouts.DEVICE_READ_TIMEOUT,
@@ -1352,33 +1347,27 @@ public class PortMappingVersion710 {
                         continue;
                     }
                     if (!checkPartnerPort(cp1Name, port1, port2)) {
-                        LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+                        LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                                 nodeId, port2.getPortName(), cp2Name, port1.getPortName(), cp1Name);
                         continue;
                     }
                     // Directions checks are the same for cp1 and cp2, no need to check them twice.
                     if (!checkPartnerPortNoDir(cp2Name, port2, port1)) {
-                        LOG.error("{} : port {} on {} is not a correct partner port of {} on  {}",
+                        LOG.error(NOT_CORRECT_PARTNERPORT_LOGMSG,
                                 nodeId, port1.getPortName(), cp1Name, port2.getPortName(), cp2Name);
                         continue;
                     }
 
-                    String logicalConnectionPoint1 = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-")
-                        .append(port1.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                        .toString();
+                    String logicalConnectionPoint1 = PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(),
+                            port1.getPortDirection().getName().toUpperCase(Locale.getDefault()));
                     LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
                         connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
                         port1.getPortName(), logicalConnectionPoint1);
                     portMapList.add(createMappingObject(nodeId, port1,
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
                             logicalConnectionPoint1));
-                    String logicalConnectionPoint2 = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-")
-                        .append(port2.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                        .toString();
+                    String logicalConnectionPoint2 = PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(),
+                            port2.getPortDirection().getName().toUpperCase(Locale.getDefault()));
                     LOG.info("{} : Logical Connection Point for {} {} is {}",
                             nodeId,
                             connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(),
@@ -1434,4 +1423,5 @@ public class PortMappingVersion710 {
         }
         return null;
     }
+
 }

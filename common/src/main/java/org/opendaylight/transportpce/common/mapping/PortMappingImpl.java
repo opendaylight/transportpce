@@ -152,7 +152,7 @@ public class PortMappingImpl implements PortMapping {
             rw.commit().get(1, TimeUnit.SECONDS);
             LOG.info("Port mapping removal for node '{}'", nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Error for removing port mapping infos for node '{}'", nodeId);
+            LOG.error("Error for removing port mapping infos for node '{}'", nodeId, e);
         }
 
     }
@@ -185,8 +185,8 @@ public class PortMappingImpl implements PortMapping {
                 return node;
             }
             LOG.warn("Could not find node {} in portmapping.", nodeId);
-        } catch (InterruptedException | ExecutionException ex) {
-            LOG.error("Unable to get node {} in portmapping", nodeId);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Unable to get node {} in portmapping", nodeId, e);
         }
         return null;
     }

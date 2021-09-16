@@ -11,8 +11,9 @@ package org.opendaylight.transportpce.common.mapping;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import org.opendaylight.transportpce.common.StringConstants;
 
-public final class FnvUtils {
+public final class PortMappingUtils {
 
     //FNV1 64 bit hash constants
     private static final BigInteger FNV_PRIME = new BigInteger("100000001b3", 16);
@@ -28,7 +29,7 @@ public final class FnvUtils {
      * @param stringdata the String to be hashed
      * @return the hash string
      */
-    protected static String fnv1_64(String stringdata) {
+    protected static String fnv1size64(String stringdata) {
         BigInteger hash = FNV_INIT;
         byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
 
@@ -40,7 +41,17 @@ public final class FnvUtils {
         return Base64.getEncoder().encodeToString(hash.toByteArray());
     }
 
-    private FnvUtils() {
+    protected static String degreeTtpNodeName(String cpIndex, String direction) {
+        return new StringBuilder("DEG")
+                .append(cpIndex)
+                .append("-")
+                .append(StringConstants.TTP_TOKEN)
+                .append("-")
+                .append(direction)
+                .toString();
+    }
+
+    private PortMappingUtils() {
         //Noop - should not be called
     }
 }
