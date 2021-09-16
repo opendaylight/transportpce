@@ -28,7 +28,7 @@ public final class FnvUtils {
      * @param stringdata the String to be hashed
      * @return the hash string
      */
-    protected static String fnv1_64(String stringdata) {
+    protected static String fnv1size64(String stringdata) {
         BigInteger hash = FNV_INIT;
         byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
 
