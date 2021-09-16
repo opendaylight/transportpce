@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.List;
 import java.util.Map;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
@@ -17,9 +18,9 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.TransportpceRendererListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210618.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
@@ -302,7 +303,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     private void updateOtnTopology(RendererRpcResultSp notification, boolean isDeletion) {
         Link link = notification.getLink();
-        if (link == null) {
+        List<String> supportedLinkIds = notification.getLinkId();
+        if (link == null && supportedLinkIds == null) {
             return;
         }
 
@@ -343,7 +345,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                     tribPort, minTribSlot, maxTribSlot, isDeletion);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_S:
-                this.networkModelService.updateOtnLinks(link, isDeletion);
+                this.networkModelService.updateOtnLinks(link, supportedLinkIds, isDeletion);
                 break;
             default:
                 LOG.warn("service-type {} not managed yet", serviceType);
