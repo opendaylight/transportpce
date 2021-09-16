@@ -99,6 +99,7 @@ import org.slf4j.LoggerFactory;
 // FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
 // some mutualization would be helpful
 public class PortMappingVersion221 {
+
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion221.class);
     private static final Map<Direction, String> SUFFIX;
 
@@ -114,7 +115,7 @@ public class PortMappingVersion221 {
     }
 
     public PortMappingVersion221(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-        OpenRoadmInterfaces openRoadmInterfaces) {
+            OpenRoadmInterfaces openRoadmInterfaces) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaces = openRoadmInterfaces;
@@ -128,7 +129,7 @@ public class PortMappingVersion221 {
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!deviceInfoOptional.isPresent()) {
+        if (deviceInfoOptional.isEmpty()) {
             LOG.warn("{} : Device info subtree is absent", nodeId);
             return false;
         }
@@ -358,33 +359,24 @@ public class PortMappingVersion221 {
     }
 
     private boolean checkPartnerPortNotNull(Ports port) {
-        if (port.getPartnerPort() == null
-            || port.getPartnerPort().getCircuitPackName() == null
-            || port.getPartnerPort().getPortName() == null) {
-            return false;
-        }
-        return true;
+        return (port.getPartnerPort() != null
+            && port.getPartnerPort().getCircuitPackName() != null
+            && port.getPartnerPort().getPortName() != null);
     }
 
     private boolean checkPartnerPortNoDir(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNotNull(port2)
-            || !port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNotNull(port2)
+            && port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
+            && port2.getPartnerPort().getPortName().equals(port1.getPortName()));
     }
 
     private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        if (!checkPartnerPortNoDir(circuitPackName, port1, port2)
-            || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
-                &&
-                (Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()
-                    || Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()))) {
-            return false;
-        }
-        return true;
+        return (checkPartnerPortNoDir(circuitPackName, port1, port2)
+            && ((Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue())
+                ||
+                (Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
+                    && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue())));
     }
 
 

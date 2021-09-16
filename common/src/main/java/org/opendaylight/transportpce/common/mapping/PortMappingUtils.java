@@ -59,7 +59,6 @@ public final class PortMappingUtils {
                 .toString();
     }
 
-
     private PortMappingUtils() {
         //Noop - should not be called
     }
