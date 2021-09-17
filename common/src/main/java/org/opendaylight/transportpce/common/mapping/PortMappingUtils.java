@@ -10,9 +10,11 @@ package org.opendaylight.transportpce.common.mapping;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import org.opendaylight.transportpce.common.StringConstants;
 
-public final class FnvUtils {
+public final class PortMappingUtils {
 
     //FNV1 64 bit hash constants
     private static final BigInteger FNV_PRIME = new BigInteger("100000001b3", 16);
@@ -28,7 +30,7 @@ public final class FnvUtils {
      * @param stringdata the String to be hashed
      * @return the hash string
      */
-    protected static String fnv1_64(String stringdata) {
+    protected static String fnv1size64(String stringdata) {
         BigInteger hash = FNV_INIT;
         byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
 
@@ -40,7 +42,25 @@ public final class FnvUtils {
         return Base64.getEncoder().encodeToString(hash.toByteArray());
     }
 
-    private FnvUtils() {
+    protected static String degreeTtpNodeName(String cpIndex, String direction) {
+        ArrayList<String> array = new ArrayList<>();
+        array.add("DEG" + cpIndex);
+        array.add(StringConstants.TTP_TOKEN);
+        if (direction != null) {
+            array.add(direction);
+        }
+        return String.join("-", array);
+    }
+
+    protected static String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
+        return new StringBuilder("XPDR").append(xponderNb)
+                .append("-")
+                .append(token).append(lcpNb)
+                .toString();
+    }
+
+
+    private PortMappingUtils() {
         //Noop - should not be called
     }
 }
