@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56ddc74c_53443393",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-17T07:16:09Z",
+      "side": 1,
+      "message": "actually there is but it is indirect.\nwebsocket port 8185 can be modified by creating a file target/assembly/etc/org.opendaylight.restconf.cfg (whose is derived from property-placeholder persistent-id in netconf repo blueprint restconf/restconf-nb-bierman02/src/main/resources/OSGI-INF/blueprint/restconf-config.xml )\n\ncf https://git.opendaylight.org/gerrit/c/transportpce/+/96770/5",
+      "revId": "d537fd8ab434161777cb1576acbec2a70e036964",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
