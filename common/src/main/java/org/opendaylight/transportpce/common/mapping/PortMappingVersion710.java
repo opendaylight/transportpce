@@ -628,13 +628,6 @@ public class PortMappingVersion710 {
         return null;
     }
 
-    private String createXpdrLogicalConnectionPort(int xponderNb, int lcpNb, String token) {
-        return new StringBuilder("XPDR").append(xponderNb)
-                .append("-")
-                .append(token).append(lcpNb)
-                .toString();
-    }
-
     private Map<McCapabilityProfileKey, McCapabilityProfile> getMcCapabilityProfiles(String deviceId, Info ordmInfo) {
         Map<McCapabilityProfileKey, McCapabilityProfile>  mcCapabilityProfiles = new HashMap<>();
         InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
@@ -844,7 +837,8 @@ public class PortMappingVersion710 {
                 LOG.warn("{} : No MC profiles are found on degree {} - "
                         + "assuming the fixed grid capabilities and a default profile-name",
                     nodeId, degree.getDegreeNumber());
-                String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + "default-profile";
+                String mcNodeName =
+                    PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(), "default-profile");
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -858,7 +852,8 @@ public class PortMappingVersion710 {
             for (String mcCapabilityProfileName : degree.getMcCapabilityProfileName()) {
                 McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
                 McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
-                String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + mcCapabilityProfile;
+                String mcNodeName = PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(),
+                        mcCapabilityProfile.toString());
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -1016,7 +1011,7 @@ public class PortMappingVersion710 {
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                .setLcpHashVal(FnvUtils.fnv1_64(nodeIdLcp));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeIdLcp));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
@@ -1129,8 +1124,10 @@ public class PortMappingVersion710 {
             Integer xponderNb, XpdrNodeTypes xponderType,
             String circuitPackName, String circuitPackName2, Ports port, Ports port2,
             Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
-        String lcp1 = createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
-        String lcp2 = createXpdrLogicalConnectionPort(xponderNb, line + 1, StringConstants.NETWORK_TOKEN);
+        String lcp1 =
+            PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+        String lcp2 =
+            PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line + 1, StringConstants.NETWORK_TOKEN);
         if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
             LOG.warn("{} : mapping already exists for {} or {}", nodeId, lcp1, lcp2);
             return;
@@ -1159,7 +1156,8 @@ public class PortMappingVersion710 {
 
             case XpdrClient:
             case SwitchClient:
-                String lcp0 = createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
+                String lcp0 =
+                    PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                 mappingMap.put(lcp0,
                     createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, null));
@@ -1189,7 +1187,8 @@ public class PortMappingVersion710 {
         switch (port.getPortDirection()) {
 
             case Bidirectional:
-                String lcp = createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
+                String lcp =
+                    PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, line, StringConstants.NETWORK_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                 mappingMap.put(lcp,
                     createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null, xponderType));
@@ -1297,10 +1296,8 @@ public class PortMappingVersion710 {
                                 connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
                         continue;
                     }
-                    String logicalConnectionPoint = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-TXRX")
-                        .toString();
+                    String logicalConnectionPoint =
+                            PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(), "TXRX");
                     LOG.info("{} : Logical Connection Point for {} on {} is {}",
                             nodeId,
                             port.getPortName(), connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
@@ -1363,22 +1360,16 @@ public class PortMappingVersion710 {
                         continue;
                     }
 
-                    String logicalConnectionPoint1 = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-")
-                        .append(port1.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                        .toString();
+                    String logicalConnectionPoint1 = PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(),
+                            port1.getPortDirection().getName().toUpperCase(Locale.getDefault()));
                     LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
                         connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
                         port1.getPortName(), logicalConnectionPoint1);
                     portMapList.add(createMappingObject(nodeId, port1,
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
                             logicalConnectionPoint1));
-                    String logicalConnectionPoint2 = new StringBuilder("DEG")
-                        .append(cpMapEntry.getKey())
-                        .append("-TTP-")
-                        .append(port2.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                        .toString();
+                    String logicalConnectionPoint2 = PortMappingUtils.degreeTtpNodeName(cpMapEntry.getKey().toString(),
+                            port2.getPortDirection().getName().toUpperCase(Locale.getDefault()));
                     LOG.info("{} : Logical Connection Point for {} {} is {}",
                             nodeId,
                             connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(),
@@ -1434,4 +1425,5 @@ public class PortMappingVersion710 {
         }
         return null;
     }
+
 }
