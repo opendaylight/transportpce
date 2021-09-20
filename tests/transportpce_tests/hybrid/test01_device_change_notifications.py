@@ -239,7 +239,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_change_status_line_port_xpdra(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
                     "port-name": "1",
                     "logical-connection-point": "XPDR1-NETWORK1",
@@ -316,7 +316,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_17_restore_status_line_port_xpdra(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
                     "port-name": "1",
                     "logical-connection-point": "XPDR1-NETWORK1",
@@ -366,7 +366,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_21_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
                     "port-name": "C1",
                     "logical-connection-point": "SRG1-PP1",
@@ -435,7 +435,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
                     "port-name": "C1",
                     "logical-connection-point": "SRG1-PP1",
@@ -459,7 +459,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_28_change_status_line_port_roadma_deg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
         body = {"ports": [{
                     "port-name": "L1",
                     "logical-connection-point": "DEG2-TTP-TXRX",
@@ -528,7 +528,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_31_restore_status_line_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
         body = {"ports": [{
                     "port-name": "L1",
                     "logical-connection-point": "DEG2-TTP-TXRX",
@@ -552,7 +552,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_35_change_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
                     "port-name": "1",
                     "port-type": "CFP2",
@@ -619,7 +619,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_restore_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
                     "port-name": "1",
                     "port-type": "CFP2",
@@ -641,7 +641,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_42_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
         body = {"ports": [{
                     "port-name": "C2",
                     "logical-connection-point": "SRG1-PP2",
@@ -714,7 +714,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_47_disconnect_xponders_from_roadm(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
+        url = "{}/data/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()

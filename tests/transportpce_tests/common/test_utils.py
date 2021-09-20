@@ -35,13 +35,13 @@ ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
-URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
-URL_CONFIG_ORDM_TOPO = "{}/config/ietf-network:networks/network/openroadm-topology/"
-URL_CONFIG_OTN_TOPO = "{}/config/ietf-network:networks/network/otn-topology/"
-URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
-URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network/"
-URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
-URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
+URL_CONFIG_NETCONF_TOPO = "{}/data/network-topology:network-topology/topology/topology-netconf/"
+URL_CONFIG_ORDM_TOPO = "{}/data/ietf-network:networks/network/openroadm-topology/"
+URL_CONFIG_OTN_TOPO = "{}/data/ietf-network:networks/network/otn-topology/"
+URL_CONFIG_CLLI_NET = "{}/data/ietf-network:networks/network/clli-network/"
+URL_CONFIG_ORDM_NET = "{}/data/ietf-network:networks/network/openroadm-network/"
+URL_PORTMAPPING = "{}/data/transportpce-portmapping:network/nodes/"
+URL_OPER_SERV_LIST = "{}/data/org-openroadm-service:service-list/"
 URL_GET_NBINOTIFICATIONS_PROCESS_SERV = "{}/operations/nbi-notifications:get-notifications-process-service/"
 URL_GET_NBINOTIFICATIONS_ALARM_SERV = "{}/operations/nbi-notifications:get-notifications-alarm-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
@@ -50,7 +50,7 @@ URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
 URL_PATH_COMPUTATION_REQUEST = "{}/operations/transportpce-pce:path-computation-request"
-URL_FULL_PORTMAPPING = "{}/config/transportpce-portmapping:network"
+URL_FULL_PORTMAPPING = "{}/data/transportpce-portmapping:network"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -64,9 +64,9 @@ process_list = []
 
 
 if "USE_ODL_ALT_RESTCONF_PORT" in os.environ:
-    RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/restconf"
+    RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/rests"
 else:
-    RESTCONF_BASE_URL = "http://localhost:8181/restconf"
+    RESTCONF_BASE_URL = "http://localhost:8181/rests"
 
 if "USE_ODL_ALT_KARAF_INSTALL_DIR" in os.environ:
     KARAF_INSTALLDIR = os.environ['USE_ODL_ALT_KARAF_INSTALL_DIR']
@@ -303,7 +303,7 @@ def check_netconf_node_request(node: str, suffix: str):
 
 
 def get_netconf_oper_request(node: str):
-    url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/" + node
+    url = "{}/data/network-topology:network-topology/topology/topology-netconf/node/" + node
     return get_request(url)
 
 

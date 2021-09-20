@@ -327,7 +327,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         time.sleep(2)
 
     def test_18_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
@@ -359,7 +359,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         time.sleep(2)
 
     def test_20_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        url = "{}/data/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
