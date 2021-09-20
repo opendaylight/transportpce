@@ -1,5 +1,5 @@
 {
-  "nodes": [
+  "transportpce-portmapping:nodes": [
     {
       "node-id": "OpenROADM-1-1",
       "node-info": {

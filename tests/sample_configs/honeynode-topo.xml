@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <network xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
-    <network-id>openroadm-topology</network-id>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <link-id>ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX</link-id>
         <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX</opposite-link>

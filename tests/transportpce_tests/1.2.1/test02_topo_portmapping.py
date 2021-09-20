@@ -49,23 +49,23 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Verify the termination points of the ROADMA
     def test_02_compare_Openroadm_topology_portmapping_rdm(self):
-        responseTopo = test_utils.get_ordm_topo_request("")
+        responseTopo = test_utils.get_request(test_utils.URL_CONFIG_ORDM_TOPO)
         resTopo = responseTopo.json()
-        nbNode = len(resTopo['network'][0]['node'])
-        for i in range(0, nbNode):
-            nodeId = resTopo['network'][0]['node'][i]['node-id']
+        firstEntry = resTopo['ietf-network:network'][0]['node']
+        for i in range(0, len(firstEntry)):
+            nodeId = firstEntry[i]['node-id']
             nodeMapId = nodeId.split("-")[0]
             test_utils.portmapping_request(nodeMapId)
-            nbTp = len(resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+            nbTp = len(firstEntry[i]['ietf-network-topology:termination-point'])
             for j in range(0, nbTp):
-                tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
+                tpId = firstEntry[i]['ietf-network-topology:termination-point'][j]['tp-id']
                 if((not "CP" in tpId) and (not "CTP" in tpId)):
                     test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
         response = test_utils.unmount_device("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 #     #Connect the XPDRA
     def test_04_connect_xpdr(self):
@@ -79,7 +79,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Disconnect the XPDRA
     def test_06_disconnect_device(self):
         response = test_utils.unmount_device("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
 if __name__ == "__main__":

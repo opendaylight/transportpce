@@ -66,7 +66,8 @@ class TransportPCEtesting(unittest.TestCase):
             if sample_files_parsed:
                 print("sample files content loaded")
 
-        cls.processes = test_utils.start_tpce()
+#        cls.processes = test_utils.start_tpce()
+        cls.processes = None
 
     @classmethod
     def tearDownClass(cls):
@@ -81,27 +82,30 @@ class TransportPCEtesting(unittest.TestCase):
      # Load port mapping
     def test_00_load_port_mapping(self):
         response = test_utils.rawpost_request(test_utils.URL_FULL_PORTMAPPING, self.port_mapping_data)
-        self.assertEqual(response.status_code, requests.codes.no_content)
+        self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(2)
 
      # Load simple bidirectional topology
     def test_01_load_simple_topology_bi(self):
         response = test_utils.put_xmlrequest(test_utils.URL_CONFIG_ORDM_TOPO, self.simple_topo_bi_dir_data)
+        print(response)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
     # Get existing nodeId
     def test_02_get_nodeId(self):
-        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
+        response = test_utils.get_ordm_topo_request("node=ROADMA01-SRG1")
+        print(response)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
+        print(res)
         self.assertEqual(
             res['node'][0]['node-id'], 'ROADMA01-SRG1')
         time.sleep(1)
 
     # Get existing linkId
     def test_03_get_linkId(self):
-        response = test_utils.get_ordm_topo_request("link/XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX")
+        response = test_utils.get_ordm_topo_request("link=XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -143,7 +147,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted topology
     def test_07_test_topology_simple_bi_deleted(self):
-        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
+        response = test_utils.get_ordm_topo_request("node=ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
 
@@ -155,7 +159,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing nodeId
     def test_09_get_nodeId(self):
-        response = test_utils.get_ordm_topo_request("node/XPONDER-1-2")
+        response = test_utils.get_ordm_topo_request("node=XPONDER-1-2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -165,7 +169,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing linkId
     def test_10_get_linkId(self):
-        response = test_utils.get_ordm_topo_request("link/XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX")
+        response = test_utils.get_ordm_topo_request("link=XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -402,7 +406,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted complex topology
     def test_25_test_topology_complex_deleted(self):
-        response = test_utils.get_ordm_topo_request("node/XPONDER-3-2")
+        response = test_utils.get_ordm_topo_request("node=XPONDER-3-2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
 
