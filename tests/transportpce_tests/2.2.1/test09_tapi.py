@@ -674,7 +674,7 @@ class TransportTapitesting(unittest.TestCase):
                          'Topology should contain 0 otn link')
 
     def test_41_disconnect_xponders_from_roadm(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
+        url = "{}/data/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()

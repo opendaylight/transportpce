@@ -35,13 +35,13 @@ ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
-URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
-URL_CONFIG_ORDM_TOPO = "{}/config/ietf-network:networks/network/openroadm-topology/"
-URL_CONFIG_OTN_TOPO = "{}/config/ietf-network:networks/network/otn-topology/"
-URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
-URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network/"
-URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
-URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
+URL_CONFIG_NETCONF_TOPO = "{}/data/network-topology:network-topology/topology=topology-netconf/"
+URL_CONFIG_ORDM_TOPO = "{}/data/ietf-network:networks/network=openroadm-topology/"
+URL_CONFIG_OTN_TOPO = "{}/data/ietf-network:networks/network=otn-topology/"
+URL_CONFIG_CLLI_NET = "{}/data/ietf-network:networks/network=clli-network/"
+URL_CONFIG_ORDM_NET = "{}/data/ietf-network:networks/network=openroadm-network/"
+URL_PORTMAPPING = "{}/data/transportpce-portmapping:network/nodes="
+URL_OPER_SERV_LIST = "{}/data/org-openroadm-service:service-list/"
 URL_GET_NBINOTIFICATIONS_PROCESS_SERV = "{}/operations/nbi-notifications:get-notifications-process-service/"
 URL_GET_NBINOTIFICATIONS_ALARM_SERV = "{}/operations/nbi-notifications:get-notifications-alarm-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
@@ -50,7 +50,7 @@ URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
 URL_PATH_COMPUTATION_REQUEST = "{}/operations/transportpce-pce:path-computation-request"
-URL_FULL_PORTMAPPING = "{}/config/transportpce-portmapping:network"
+URL_FULL_PORTMAPPING = "{}/data/transportpce-portmapping:network"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -64,9 +64,9 @@ process_list = []
 
 
 if "USE_ODL_ALT_RESTCONF_PORT" in os.environ:
-    RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/restconf"
+    RESTCONF_BASE_URL = "http://localhost:" + os.environ['USE_ODL_ALT_RESTCONF_PORT'] + "/rests"
 else:
-    RESTCONF_BASE_URL = "http://localhost:8181/restconf"
+    RESTCONF_BASE_URL = "http://localhost:8181/rests"
 
 if "USE_ODL_ALT_KARAF_INSTALL_DIR" in os.environ:
     KARAF_INSTALLDIR = os.environ['USE_ODL_ALT_KARAF_INSTALL_DIR']
@@ -229,7 +229,7 @@ def delete_request(url):
 
 
 def mount_device(node_id, sim):
-    url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
+    url = URL_CONFIG_NETCONF_TOPO + "node=" + node_id
     body = {"node": [{
         "node-id": node_id,
         "netconf-node-topology:username": NODES_LOGIN,
@@ -250,7 +250,7 @@ def mount_device(node_id, sim):
 
 
 def unmount_device(node_id):
-    url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
+    url = URL_CONFIG_NETCONF_TOPO + "node=" + node_id
     response = delete_request(url)
     if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: " + node_id), 180):
         print("Node " + node_id + " correctly deleted from tpce topology", end='... ', flush=True)
@@ -297,14 +297,13 @@ def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
 
 def check_netconf_node_request(node: str, suffix: str):
     url = URL_CONFIG_NETCONF_TOPO + (
-        "node/" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
+        "node=" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
     )
     return get_request(url)
 
 
 def get_netconf_oper_request(node: str):
-    url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/" + node
-    return get_request(url)
+    return get_request(URL_CONFIG_NETCONF_TOPO + "node=" + node)
 
 
 def get_ordm_topo_request(suffix: str):
@@ -314,14 +313,14 @@ def get_ordm_topo_request(suffix: str):
 
 def add_oms_attr_request(link: str, attr):
     url = URL_CONFIG_ORDM_TOPO + (
-        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+        "ietf-network-topology:link=" + link + "/org-openroadm-network-topology:OMS-attributes/span"
     )
     return put_request(url, attr)
 
 
 def del_oms_attr_request(link: str):
     url = URL_CONFIG_ORDM_TOPO + (
-        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+        "ietf-network-topology:link=" + link + "/org-openroadm-network-topology:OMS-attributes/span"
     )
     return delete_request(url)
 
@@ -339,12 +338,12 @@ def get_otn_topo_request():
 
 
 def del_link_request(link: str):
-    url = URL_CONFIG_ORDM_TOPO + ("ietf-network-topology:link/" + link)
+    url = URL_CONFIG_ORDM_TOPO + ("ietf-network-topology:link=" + link)
     return delete_request(url)
 
 
 def del_node_request(node: str):
-    url = URL_CONFIG_CLLI_NET + ("node/" + node)
+    url = URL_CONFIG_CLLI_NET + ("node=" + node)
     return delete_request(url)
 
 
