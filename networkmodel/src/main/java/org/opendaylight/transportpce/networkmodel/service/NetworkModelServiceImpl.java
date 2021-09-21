@@ -556,7 +556,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         linkTerminations.add(atermination);
         linkTerminations.add(ztermination);
 
-        List<Link> supportedOdu4Links = getSupportingOdu4Links(linkTerminations);
+        List<Link> supportedOdu4Links = getSupportingOdu4Links(linkTerminations, serviceRate);
         List<TerminationPoint> tps = getOtnNodeTps(linkTerminations);
         TopologyShard otnTopologyShard;
         otnTopologyShard = OpenRoadmOtnTopology.updateOtnLinks(supportedOdu4Links, tps, serviceRate, tribPortNb,
@@ -741,7 +741,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
-    private List<Link> getSupportingOdu4Links(List<LinkTp> nodesTopoTps) {
+    private List<Link> getSupportingOdu4Links(List<LinkTp> nodesTopoTps, Uint32 serviceRate) {
         InstanceIdentifier<Network1> iiOtnTopologyLinks = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
             .augmentation(Network1.class)
@@ -761,7 +761,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             odu4links = netw1Opt
                 .get()
                 .nonnullLink().values()
-                .stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODTU4"))
+                .stream().filter(lk -> lk.getLinkId().getValue()
+                    .startsWith(Uint32.valueOf(100).equals(serviceRate) ? "ODUC4" : "ODTU4"))
                 .collect(Collectors.toList());
         }
         if (odu4links == null) {
@@ -783,7 +784,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 links.add(dlink);
             }
         }
-        LOG.debug("odu4links = {}", links.toString());
+        LOG.debug("odu4oduC4links = {}", links);
         return links;
     }
 
