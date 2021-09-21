@@ -192,7 +192,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 }
                 PathDescription pathDescription = pathDescriptionOpt.get();
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
-                    service.getServiceAEnd().getServiceRate(), null);
+                    service.getServiceAEnd().getServiceRate(), portMapping.getMapping(service.getServiceAEnd()
+                        .getNodeId().getValue(), service.getServiceAEnd().getTxDirection().getPort().getPortName()));
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
@@ -352,7 +353,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<OtnDeviceRenderingResult> atozrenderingFuture =
             this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathAtoZ));
-        LOG.info("Rendering devices Z-A");
+        LOG.info(RENDERING_DEVICES_Z_A_MSG);
         sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
             otnServicePathZtoA.getServiceName(), RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);

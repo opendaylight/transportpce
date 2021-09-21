@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
@@ -251,6 +252,12 @@ public final class ModelMappingUtils {
             otnServicePathInputBuilder
                 .setTribPortNumber(tribPort)
                 .setTribSlot(minTribSlot);
+        }
+        if (serviceRate.intValue() == 100) {
+            List<OpucnTribSlotDef> opucnTribSlotDefList = new ArrayList<>();
+            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMinTribSlot());
+            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMaxTribSlot());
+            otnServicePathInputBuilder.setOpucnTribSlots(opucnTribSlotDefList);
         }
         return otnServicePathInputBuilder.build();
     }
