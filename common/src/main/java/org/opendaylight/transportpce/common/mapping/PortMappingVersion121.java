@@ -190,7 +190,7 @@ public class PortMappingVersion121 {
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceObject.isPresent()) {
-            LOG.error("{} : Impossible to get device configuration", nodeId);
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return false;
         }
         OrgOpenroadmDevice device = deviceObject.get();
@@ -293,7 +293,7 @@ public class PortMappingVersion121 {
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
-        LOG.info("{} : Device has {} Srg", deviceId, cpPerSrg.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG, deviceId, cpPerSrg.size(), "SRG");
         return cpPerSrg;
     }
 
@@ -361,9 +361,9 @@ public class PortMappingVersion121 {
                         case Rx:
                         case Tx:
                             if (!checkPartnerPortNotNull(port)) {
-                                LOG.info("{} : port {} on {} is unidirectional but has no valid partnerPort"
+                                LOG.info(PortMappingUtils.NO_VALID_PARTNERPORT_UNIDIR_LOGMSG
                                         + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
-                                        nodeId, port.getPortName(), circuitPackName);
+                                    nodeId, port.getPortName(), circuitPackName);
                                 continue;
                             }
 
@@ -377,19 +377,24 @@ public class PortMappingVersion121 {
                             Optional<Ports> port2Object = this.deviceTransactionManager
                                 .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
                                     Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                            if (!port2Object.isPresent()
+                            if (port2Object.isEmpty()
                                 || port2Object.get().getPortQual().getIntValue()
                                     != Port.PortQual.RoadmExternal.getIntValue()) {
-                                LOG.error("{} : port {} on {} - error getting partner",
-                                        nodeId, port.getPartnerPort().getPortName(),
-                                        port.getPartnerPort().getCircuitPackName());
+                                LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG
+                                        + PortMappingUtils.PARTNERPORT_GET_ERROR_LOGMSG,
+                                    nodeId, port.getPartnerPort().getPortName(),
+                                    port.getPartnerPort().getCircuitPackName(),
+                                    port.getPortName(), circuitPackName);
+
                                 continue;
                             }
 
                             Ports port2 = port2Object.get();
                             if (!checkPartnerPort(circuitPackName, port, port2)) {
-                                LOG.error("{} : port {} on {} - Error with partner port configuration",
-                                        nodeId, port.getPortName(), circuitPackName);
+                                LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG
+                                        + PortMappingUtils.PARTNERPORT_CONF_ERROR_LOGMSG,
+                                    nodeId, port2.getPortName(), port.getPartnerPort().getCircuitPackName(),
+                                    port.getPortName(), circuitPackName);
                                 portIndex++;
                                 continue;
                             }
@@ -442,7 +447,8 @@ public class PortMappingVersion121 {
                 degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
-        LOG.info("{} : Device has {} degree(s)", deviceId, degrees.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG,
+                deviceId, degrees.size(), degrees.size() <= 1 ? "degree" : "degrees");
         return degrees;
     }
 
