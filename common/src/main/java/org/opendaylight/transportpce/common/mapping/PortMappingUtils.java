@@ -28,14 +28,26 @@ public final class PortMappingUtils {
         " - cannot assign Logical Connection Point";
     public static final String CANNOT_CREATE_LCP_LOGMSG =
         "{} : port {} on {} - Impossible to create logical connection point";
+    public static final String CANNOT_GET_DEV_CONF_LOGMSG =
+        "{} : Impossible to get device configuration";
+    public static final String DEVICE_HAS_LOGMSG =
+        "{} : Device has {} {}";
     public static final String FETCH_CONNECTIONPORT_LOGMSG =
         "{} : Fetching connection-port {} at circuit pack {}";
-    public static final String NO_PORT_ON_CP_LOGMSG =
-        "{} : No port {} on circuit pack {}";
-    public static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
-        "{} : port {} on {} is not a correct partner port of {} on  {}";
     public static final String MISSING_CP_LOGMSG =
         "{} : Circuit-pack {} is missing in the device - ignoring it in port-mapping";
+    public static final String NO_MC_LOGMSG =
+        "{} : No MC profile found on {} {} - assuming fixed grid";
+    public static final String NO_PORT_ON_CP_LOGMSG =
+        "{} : No port {} on circuit pack {}";
+    public static final String NO_VALID_PARTNERPORT_UNIDIR_LOGMSG =
+        "{} : port {} on {} is unidirectional but has no valid partnerPort";
+    public static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
+        "{} : port {} on {} is not a correct partner port of {} on  {}";
+    public static final String PARTNERPORT_CONF_ERROR_LOGMSG =
+        " - Error with partner port configuration";
+    public static final String PARTNERPORT_GET_ERROR_LOGMSG =
+        " - Error getting partner port";
     public static final String PORTDIR_ERROR_LOGMSG =
         " - Error in configuration with port-direction";
     public static final String PORTQUAL_ERROR_LOGMSG =
@@ -46,6 +58,7 @@ public final class PortMappingUtils {
         "{} : Unable to create MC capabilities";
     public static final String UNSUPPORTED_DIR_LOGMSG =
         "{} : port {} on {} - unsupported Direction {}";
+
 
     /**
      * Implements the FNV-1 64bit algorithm.
