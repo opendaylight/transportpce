@@ -12,7 +12,16 @@ module org-openroadm-port-types {
   contact
     "OpenROADM.org";
   description
-    "YANG definitions for port types.
+    "This is a modified version of an Open ROADM MSA official YANG model.
+     It contains an unofficial and additional regen identity 'if-OTUCn-ODUCn-regen'
+     found in some non-compliant devices.
+     Though this identity should have been advertised through a YANG deviation,
+     this does not raise any compatibility problem with compliant devices.
+     This file is an ideally temporary work-around until a compliant solution is found.
+     cf https://jira.opendaylight.org/browse/TRNSPRTPCE-532
+
+     Original YANG model description below:
+     YANG definitions for port types.
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
      All other rights reserved.
@@ -372,6 +381,11 @@ module org-openroadm-port-types {
   identity pluggable-type-unspecified {
     base pluggable-identifiers-identity;
   }
+  // The following identity is not present in the original Open ROADM MSA YANG model.
+  identity if-OTUCn-ODUCn-regen {
+    base supported-if-capability;
+  }
+
 
   typedef port-wavelength-types {
     type enumeration {
