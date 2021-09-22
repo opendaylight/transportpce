@@ -28,24 +28,51 @@ public final class PortMappingUtils {
         " - cannot assign Logical Connection Point";
     public static final String CANNOT_CREATE_LCP_LOGMSG =
         "{} : port {} on {} - Impossible to create logical connection point";
+    public static final String CANNOT_GET_DEV_CONF_LOGMSG =
+        "{} : Impossible to get device configuration";
+    public static final String CANNOT_GET_LLDP_CONF_LOGMSG =
+        "- cannot find port config under LLDP";
+    public static final String CREATE_MAPPING_DATA_LOGMSG =
+        "{} : OpenROADM version {} node - Creating Mapping Data";
+    public static final String DEVICE_HAS_LOGMSG =
+        "{} : Device has {} {}";
     public static final String FETCH_CONNECTIONPORT_LOGMSG =
         "{} : Fetching connection-port {} at circuit pack {}";
+    public static final String GETTING_ETH_LIST_LOGMSG =
+        "{} : getting Ethernet interfaces list";
+    public static final String GETTING_MC_CAPA_LOGMSG =
+        "{} : Getting the MC capabilities for {}";
+    public static final String MISSING_CP_LOGMSG =
+        "{} : No Circuit-pack {} in the device";
+    public static final String NO_ASSOC_FOUND_LOGMSG =
+        "{} : port {} on {} - no association found {}";
+    public static final String NO_MC_LOGMSG =
+        "{} : No MC profile found on {} {} - assuming fixed grid";
     public static final String NO_PORT_ON_CP_LOGMSG =
         "{} : No port {} on circuit pack {}";
+    public static final String NO_VALID_PARTNERPORT_UNIDIR_LOGMSG =
+        "{} : port {} on {} is unidirectional but has no valid partnerPort";
     public static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
-        "{} : port {} on {} is not a correct partner port of {} on  {}";
-    public static final String MISSING_CP_LOGMSG =
-        "{} : Circuit-pack {} is missing in the device - ignoring it in port-mapping";
+        "{} : port {} on {} is not a correct partner port of {} on {}";
+    public static final String PARTNERPORT_CONF_ERROR_LOGMSG =
+        " - Error with partner port configuration";
+    public static final String PARTNERPORT_GET_ERROR_LOGMSG =
+        " - Error getting partner port";
     public static final String PORTDIR_ERROR_LOGMSG =
         " - Error in configuration with port-direction";
+    public static final String PORTMAPPING_IGNORE_LOGMSG =
+        " - ignoring it in port-mapping";
     public static final String PORTQUAL_ERROR_LOGMSG =
         " - Error in configuration with port-qual";
+    public static final String PROCESSING_DONE_LOGMSG =
+        "{} : Processing done {}";
     public static final String UNABLE_MAPPING_LOGMSG =
-        "{} : Unable to create mapping for {}";
+        "{} : Unable to {} mapping for {}";
     public static final String UNABLE_MC_CAPA_LOGMSG =
         "{} : Unable to create MC capabilities";
     public static final String UNSUPPORTED_DIR_LOGMSG =
         "{} : port {} on {} - unsupported Direction {}";
+
 
     /**
      * Implements the FNV-1 64bit algorithm.
