@@ -309,7 +309,7 @@ public class PortMappingVersion710 {
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceObject.isPresent()) {
-            LOG.error("{} : Impossible to get device configuration", nodeId);
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return false;
         }
         OrgOpenroadmDevice device = deviceObject.get();
@@ -497,7 +497,7 @@ public class PortMappingVersion710 {
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
-        LOG.info("{} : Device has {} Srg", deviceId, cpPerSrg.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG, deviceId, cpPerSrg.size(), "SRG");
         return cpPerSrg;
     }
 
@@ -633,7 +633,7 @@ public class PortMappingVersion710 {
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         OrgOpenroadmDevice device = null;
         if (!deviceObject.isPresent()) {
-            LOG.error("Impossible to get device configuration for node {}", deviceId);
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, deviceId);
             LOG.warn("MC-capabilities profile will be empty for node {}", deviceId);
             return mcCapabilityProfiles;
         }
@@ -660,7 +660,8 @@ public class PortMappingVersion710 {
                 degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
-        LOG.info("{} : Device has {} degree(s)", deviceId, degrees.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG,
+                deviceId, degrees.size(), degrees.size() <= 1 ? "degree" : "degrees");
         return degrees;
     }
 
@@ -831,11 +832,10 @@ public class PortMappingVersion710 {
         for (Degree degree : degrees.values()) {
 
             if ((degree.getMcCapabilityProfileName() == null) || (degree.getMcCapabilityProfileName().isEmpty())) {
-                LOG.warn("{} : No MC profiles are found on degree {} - "
-                        + "assuming the fixed grid capabilities and a default profile-name",
-                    nodeId, degree.getDegreeNumber());
                 String mcNodeName =
                     PortMappingUtils.degreeTtpNodeName(degree.getDegreeNumber().toString(), "default-profile");
+                LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "degree",
+                        degree.getDegreeNumber() +  " - using " + mcNodeName + " as default MC profile name");
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
@@ -871,10 +871,9 @@ public class PortMappingVersion710 {
         for (SharedRiskGroup srg : srgs) {
 
             if ((srg.getMcCapabilityProfileName() == null) || (srg.getMcCapabilityProfileName().isEmpty())) {
-                LOG.warn("{} : No MC profiles are found on SRG {} - "
-                    + "assuming the fixed grid capabilities and a default MC profile-name",
-                    nodeId, srg.getSrgNumber());
                 String mcNodeName = "SRG" + srg.getSrgNumber().toString() + "-PP-" + "default-profile";
+                LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "SRG",
+                        srg.getSrgNumber() + " - using " + mcNodeName + " as default MC profile name");
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);

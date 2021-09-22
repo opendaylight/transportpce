@@ -190,7 +190,7 @@ public class PortMappingVersion121 {
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceObject.isPresent()) {
-            LOG.error("{} : Impossible to get device configuration", nodeId);
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return false;
         }
         OrgOpenroadmDevice device = deviceObject.get();
@@ -293,7 +293,7 @@ public class PortMappingVersion121 {
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
-        LOG.info("{} : Device has {} Srg", deviceId, cpPerSrg.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG, deviceId, cpPerSrg.size(), "SRG");
         return cpPerSrg;
     }
 
@@ -442,7 +442,8 @@ public class PortMappingVersion121 {
                 degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
-        LOG.info("{} : Device has {} degree(s)", deviceId, degrees.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG,
+                deviceId, degrees.size(), degrees.size() <= 1 ? "degree" : "degrees");
         return degrees;
     }
 
