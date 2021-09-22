@@ -372,6 +372,10 @@ module org-openroadm-port-types {
   identity pluggable-type-unspecified {
     base pluggable-identifiers-identity;
   }
+  identity if-OTUCn-ODUCn-regen {
+      base supported-if-capability;
+  }
+
 
   typedef port-wavelength-types {
     type enumeration {
