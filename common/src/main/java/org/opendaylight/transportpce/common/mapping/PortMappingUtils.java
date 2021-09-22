@@ -46,6 +46,13 @@ public final class PortMappingUtils {
         " - Error in configuration with port-qual";
     public static final String PORTDIR_ERROR_LOGMSG =
         " - Error in configuration with port-direction";
+    public static final String CANNOT_GET_DEV_CONF_LOGMSG =
+        "{} : Impossible to get device configuration";
+    public static final String DEVICE_HAS_LOGMSG =
+        "{} : Device has {} {}";
+    public static final String NO_MC_LOGMSG =
+        "{} : No MC profile found on {} {} - assuming fixed grid";
+
 
     /**
      * Implements the FNV-1 64bit algorithm.

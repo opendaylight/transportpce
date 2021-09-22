@@ -214,7 +214,7 @@ public class PortMappingVersion221 {
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceObject.isPresent()) {
-            LOG.error("{} : Impossible to get device configuration", nodeId);
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return false;
         }
         OrgOpenroadmDevice device = deviceObject.get();
@@ -401,7 +401,7 @@ public class PortMappingVersion221 {
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
-        LOG.info("{} : Device has {} Srg", deviceId, cpPerSrg.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG, deviceId, cpPerSrg.size(), "SRG");
         return cpPerSrg;
     }
 
@@ -547,7 +547,8 @@ public class PortMappingVersion221 {
                 degrees.put(degreeCounter, ordmDegreeObject.get());
             }
         }
-        LOG.info("{} : Device has {} degree(s)", deviceId, degrees.size());
+        LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG,
+                deviceId, degrees.size(), degrees.size() <= 1 ? "degree" : "degrees");
         return degrees;
     }
 
@@ -714,8 +715,7 @@ public class PortMappingVersion221 {
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
         if (degree.getMcCapabilities() == null) {
-            LOG.warn("{} : Media channel capabilities are not advertised for degree {} - assuming fixed grid",
-                    nodeId, degree.getDegreeNumber());
+            LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "degree", degree.getDegreeNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                 .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
@@ -735,8 +735,7 @@ public class PortMappingVersion221 {
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
         if (srg.getMcCapabilities() == null) {
-            LOG.warn("{} : Media channel capabilities are not advertised for SRG {} - assuming fixed grid",
-                    nodeId, srg.getSrgNumber());
+            LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "SRG", srg.getSrgNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                 .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
