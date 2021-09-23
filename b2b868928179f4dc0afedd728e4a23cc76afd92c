@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c3dacec_352b9330",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-23T07:02:42Z",
+      "side": 1,
+      "message": "parenthesis are superfluous\ntypo \u003d\u003e regenerator",
+      "range": {
+        "startLine": 7,
+        "startChar": 30,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee4c6cae_bdc993d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-23T07:02:42Z",
+      "side": 1,
+      "message": "dash useless if only one action is performed",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4f3c5c_0a2b5213",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-port-types@2020-03-27.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-23T07:02:42Z",
+      "side": 1,
+      "message": "revision should be changed\nand comments should be added to state clearly deviation from official models\n\u003d\u003e vote -1",
+      "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
