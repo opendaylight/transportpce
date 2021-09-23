@@ -22,6 +22,52 @@
       "revId": "c59ddcd006eca128c46fe43279fe4baa99bc042c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62f32f4_ab3dc380",
+        "filename": "tests/transportpce_tests/hybrid/test02_B100G_end2end.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-09-23T12:49:16Z",
+      "side": 1,
+      "message": "4",
+      "range": {
+        "startLine": 245,
+        "startChar": 53,
+        "endLine": 245,
+        "endChar": 54
+      },
+      "revId": "c59ddcd006eca128c46fe43279fe4baa99bc042c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a971c9_173d7031",
+        "filename": "tests/transportpce_tests/hybrid/test02_B100G_end2end.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-09-23T12:49:16Z",
+      "side": 1,
+      "message": "we should add another test to check the XPDR2-NETWORK1-OTSI-GROUP interface",
+      "range": {
+        "startLine": 308,
+        "startChar": 54,
+        "endLine": 308,
+        "endChar": 79
+      },
+      "revId": "c59ddcd006eca128c46fe43279fe4baa99bc042c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
