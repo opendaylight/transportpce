@@ -80,6 +80,24 @@
       "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59d25596_1439027c",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-port-types@2020-03-27.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-23T14:34:02Z",
+      "side": 1,
+      "message": "OK why about using deviations ?\n\nhttps://git.opendaylight.org/gerrit/c/netconf/+/82482",
+      "parentUuid": "bc87408e_11b3767d",
+      "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
