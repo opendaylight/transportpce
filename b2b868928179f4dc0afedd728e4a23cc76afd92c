@@ -62,6 +62,24 @@
       "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc87408e_11b3767d",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-port-types@2020-03-27.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2021-09-23T13:03:22Z",
+      "side": 1,
+      "message": "If we change revision date here, there will be lot more changes that needs to be made in other yang files that use this port-types. So it is better to not change the revision date on this file.",
+      "parentUuid": "fc4f3c5c_0a2b5213",
+      "revId": "b2b868928179f4dc0afedd728e4a23cc76afd92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
