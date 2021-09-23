@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed5af995_12c7724c",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-23T07:04:24Z",
+      "side": 1,
+      "message": "revision should be changed\nand comments should be added to state clearly deviation from official models\n\u003d\u003e vote -1",
+      "revId": "708c7421673ea0a22eadc01049056b6711d3811e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
