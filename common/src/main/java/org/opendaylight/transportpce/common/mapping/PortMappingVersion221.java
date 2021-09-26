@@ -232,7 +232,7 @@ public class PortMappingVersion221 {
         List<CircuitPacks> circuitPackList = new ArrayList<>(device.nonnullCircuitPacks().values());
         circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
         if (device.getXponder() == null) {
-            LOG.warn("{} : configuration does not contain a list of Xponders", nodeId);
+            LOG.warn(PortMappingUtils.XPDR_LIST_IN_CONF_LOGMSG, nodeId, "not found");
             // Variables to keep track of number of line ports and client ports
             int line = 1;
             int client = 1;
@@ -255,7 +255,7 @@ public class PortMappingVersion221 {
                 }
             }
         } else {
-            LOG.info("{} : configuration contains a list of xponders", nodeId);
+            LOG.info(PortMappingUtils.XPDR_LIST_IN_CONF_LOGMSG, nodeId, "found");
             for (Xponder xponder : deviceObject.get().nonnullXponder().values()) {
                 // Variables to keep track of number of line ports and client ports
                 int line = 1;
@@ -299,7 +299,7 @@ public class PortMappingVersion221 {
         }
 
         if (device.getConnectionMap() == null) {
-            LOG.warn("{} : No connection-map inside device configuration", nodeId);
+            LOG.warn(PortMappingUtils.NO_CONMAP_LOGMSG, nodeId);
         } else {
             Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
             for (ConnectionMap cm : connectionMap) {
@@ -308,8 +308,7 @@ public class PortMappingVersion221 {
                 Destination destination0 = cm.nonnullDestination().values().iterator().next();
                 String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
                 if (slcp == null) {
-                    LOG.error("{} : Error in connection-map analysis for source {} and destination (CP+port) {}",
-                        nodeId, skey, dkey);
+                    LOG.error(PortMappingUtils.CONMAP_ISSUE_LOGMSG, nodeId, skey, dkey);
                     continue;
                 }
                 String dlcp = lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null;
@@ -395,7 +394,7 @@ public class PortMappingVersion221 {
         for (int srgCounter = 1; srgCounter <= maxSrg; srgCounter++) {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks> srgCps
                 = new ArrayList<>();
-            LOG.debug("{} : Getting Circuitpacks for Srg Number {}", deviceId, srgCounter);
+            LOG.debug(PortMappingUtils.GETTING_CP_LOGMSG, deviceId, srgCounter);
             InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)));
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
@@ -472,7 +471,7 @@ public class PortMappingVersion221 {
                         case Rx:
                         case Tx:
                             if (!checkPartnerPortNotNull(port)) {
-                                LOG.info(PortMappingUtils.NO_VALID_PARTNERPORT_UNIDIR_LOGMSG
+                                LOG.info(PortMappingUtils.NO_VALID_PARTNERPORT_LOGMSG
                                         + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
                                     nodeId, port.getPortName(), circuitPackName);
                                 continue;
@@ -547,7 +546,7 @@ public class PortMappingVersion221 {
         Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
 
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
-            LOG.debug("{} : Getting Connection ports for Degree Number {}", deviceId, degreeCounter);
+            LOG.debug(PortMappingUtils.GETTING_CONPORT_LOGMSG, deviceId, degreeCounter);
             InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
@@ -705,7 +704,7 @@ public class PortMappingVersion221 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("{} : Failed to post {}", nodeId, network, e);
+            LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
     }
@@ -813,8 +812,9 @@ public class PortMappingVersion221 {
             try {
                 Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
                     interfaces.getInterfaceName());
-                if (!openRoadmInterface.isPresent()) {
-                    LOG.warn("{} : Interface {} was null!", nodeId, interfaces.getInterfaceName());
+                if (openRoadmInterface.isEmpty()) {
+                    LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG,
+                        nodeId, interfaces.getInterfaceName() + "- empty interface");
                     continue;
                 }
                 LOG.debug("{} : interface get from device is {} and of type {}",
@@ -832,7 +832,7 @@ public class PortMappingVersion221 {
                     mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
                 }
             } catch (OpenRoadmInterfaceException ex) {
-                LOG.warn("{} : Error while getting interface {} - ", nodeId, interfaces.getInterfaceName(), ex);
+                LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG, nodeId, interfaces.getInterfaceName(), ex);
             }
         }
         return mpBldr;
@@ -888,7 +888,7 @@ public class PortMappingVersion221 {
             //circuitPackName2 will be updated by reference contrary to circuitPackName
             List<CircuitPacks> circuitPackList, Map<String, String> lcpMap) {
         if (!checkPartnerPortNotNull(port)) {
-            LOG.warn("{} : port {} on {} - Error in the configuration ", nodeId, port.getPortName(), circuitPackName);
+            LOG.warn(PortMappingUtils.NO_VALID_PARTNERPORT_LOGMSG, nodeId, port.getPortName(), circuitPackName);
             return null;
         }
         if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
@@ -898,15 +898,15 @@ public class PortMappingVersion221 {
             .filter(
                 cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
             .findFirst();
-        if (!cpOpt.isPresent()) {
-            LOG.error("{} : Error fetching circuit-pack {}", nodeId, port.getPartnerPort().getCircuitPackName());
+        if (cpOpt.isEmpty()) {
+            LOG.error(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, port.getPartnerPort().getCircuitPackName());
             return null;
         }
         Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
             .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName()))
             .findFirst();
-        if (!poOpt.isPresent()) {
-            LOG.error("{} : Error fetching port {} on {}",
+        if (poOpt.isEmpty()) {
+            LOG.error(PortMappingUtils.NO_PORT_ON_CP_LOGMSG,
                 nodeId, port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName());
             return null;
         }
@@ -951,7 +951,7 @@ public class PortMappingVersion221 {
             String circuitPackName,  Ports port,
             List<CircuitPacks> circuitPackList, Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
         if (port.getPortQual() == null) {
-            LOG.warn("{} : port {} on {} - PortQual was not found", nodeId, port.getPortName(), circuitPackName);
+            LOG.warn(PortMappingUtils.PORTQUAL_LOGMSG, nodeId, port.getPortName(), circuitPackName, "not found");
             return new int[] {line, client};
         }
 
@@ -976,8 +976,8 @@ public class PortMappingVersion221 {
                 break;
 
             default:
-                LOG.error("{} : port {} on {} - unsupported PortQual {}",
-                    nodeId, port.getPortName(), circuitPackName, port.getPortQual());
+                LOG.error(PortMappingUtils.PORTQUAL_LOGMSG,
+                    nodeId, port.getPortName(), circuitPackName, port.getPortQual() + " not supported");
         }
         return new int[] {line, client};
     }
@@ -1153,7 +1153,7 @@ public class PortMappingVersion221 {
                     portMapList.add(createMappingObject(nodeId, port2, cp2Name, logicalConnectionPoint2));
                     break;
                 default:
-                    LOG.error("{} : Number of connection port for DEG{} is incorrect", nodeId, cpMapEntry.getKey());
+                    LOG.error(PortMappingUtils.NOT_CORRECT_CONPORT_LOGMSG, nodeId, cpMapEntry.getKey());
                     continue;
             }
         }
@@ -1164,7 +1164,7 @@ public class PortMappingVersion221 {
 
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
-            LOG.error("Node type field is missing");
+            LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "field missing");
             return null;
         }
 
