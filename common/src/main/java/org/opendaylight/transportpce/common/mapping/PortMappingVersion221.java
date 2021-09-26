@@ -299,7 +299,7 @@ public class PortMappingVersion221 {
         }
 
         if (device.getConnectionMap() == null) {
-            LOG.warn("{} : No connection-map inside device configuration", nodeId);
+            LOG.warn(PortMappingUtils.NO_CONMAP_LOGMSG, nodeId);
         } else {
             Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
             for (ConnectionMap cm : connectionMap) {
@@ -308,8 +308,7 @@ public class PortMappingVersion221 {
                 Destination destination0 = cm.nonnullDestination().values().iterator().next();
                 String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
                 if (slcp == null) {
-                    LOG.error("{} : Error in connection-map analysis for source {} and destination (CP+port) {}",
-                        nodeId, skey, dkey);
+                    LOG.error(PortMappingUtils.CONMAP_ISSUE_LOGMSG, nodeId, skey, dkey);
                     continue;
                 }
                 String dlcp = lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null;
@@ -705,7 +704,7 @@ public class PortMappingVersion221 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("{} : Failed to post {}", nodeId, network, e);
+            LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
     }
@@ -1164,7 +1163,7 @@ public class PortMappingVersion221 {
 
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
-            LOG.error("Node type field is missing");
+            LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "field missing");
             return null;
         }
 

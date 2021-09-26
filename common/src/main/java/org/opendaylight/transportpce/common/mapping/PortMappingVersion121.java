@@ -237,8 +237,7 @@ public class PortMappingVersion121 {
             Destination destination0 = cm.nonnullDestination().values().iterator().next();
             String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
             if (slcp == null) {
-                LOG.error("{} : Error in connection-map analysis for source {} and destination (CP+port) {}",
-                    nodeId, skey, dkey);
+                LOG.error(PortMappingUtils.CONMAP_ISSUE_LOGMSG, nodeId, skey, dkey);
                 continue;
             }
             String dlcp = lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null;
@@ -556,7 +555,7 @@ public class PortMappingVersion121 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}", network, e);
+            LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
     }
@@ -945,7 +944,7 @@ public class PortMappingVersion121 {
 
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
-            LOG.error("Node type field is missing");
+            LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "field missing");
             return null;
         }
 
@@ -958,7 +957,7 @@ public class PortMappingVersion121 {
                 nodeInfoBldr.setNodeType(NodeTypes.forValue(deviceInfo.getNodeType().getIntValue()));
                 break;
             default:
-                LOG.error("Error with node-type of {}", deviceInfo.getNodeId());
+                LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "value not supported");
                 // TODO: is this protection useful ? it is not present in Portmapping 221
         }
         if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {

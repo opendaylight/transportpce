@@ -32,6 +32,8 @@ public final class PortMappingUtils {
         "{} : Impossible to get device configuration";
     public static final String CANNOT_GET_LLDP_CONF_LOGMSG =
         "- cannot find port config under LLDP";
+    public static final String CONMAP_ISSUE_LOGMSG =
+        "{} : connection-map analysis for source {} and dest (CP+port) {} - no entry found for source in LCP map";
     public static final String CREATE_MAPPING_DATA_LOGMSG =
         "{} : OpenROADM version {} node - Creating Mapping Data";
     public static final String DEVICE_HAS_LOGMSG =
@@ -46,12 +48,16 @@ public final class PortMappingUtils {
         "{} : No Circuit-pack {} in the device";
     public static final String NO_ASSOC_FOUND_LOGMSG =
         "{} : port {} on {} - no association found {}";
+    public static final String NO_CONMAP_LOGMSG =
+        "{} : No connection-map found inside device configuration";
     public static final String NO_MC_LOGMSG =
         "{} : No MC profile found on {} {} - assuming fixed grid";
     public static final String NO_PORT_ON_CP_LOGMSG =
         "{} : No port {} on circuit pack {}";
     public static final String NO_VALID_PARTNERPORT_UNIDIR_LOGMSG =
         "{} : port {} on {} is unidirectional but has no valid partnerPort";
+    public static final String NODE_TYPE_LOGMSG =
+        "{} : node-type {}";
     public static final String NOT_CORRECT_PARTNERPORT_LOGMSG =
         "{} : port {} on {} is not a correct partner port of {} on {}";
     public static final String PARTNERPORT_CONF_ERROR_LOGMSG =
@@ -62,6 +68,8 @@ public final class PortMappingUtils {
         " - Error in configuration with port-direction";
     public static final String PORTMAPPING_IGNORE_LOGMSG =
         " - ignoring it in port-mapping";
+    public static final String PORTMAPPING_POST_FAIL_LOGMSG =
+        "{} : port-mapping post-treatment failure for {}";
     public static final String PORTQUAL_ERROR_LOGMSG =
         " - Error in configuration with port-qual";
     public static final String PROCESSING_DONE_LOGMSG =
