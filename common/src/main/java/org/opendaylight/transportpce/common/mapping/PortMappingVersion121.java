@@ -237,8 +237,7 @@ public class PortMappingVersion121 {
             Destination destination0 = cm.nonnullDestination().values().iterator().next();
             String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
             if (slcp == null) {
-                LOG.error("{} : Error in connection-map analysis for source {} and destination (CP+port) {}",
-                    nodeId, skey, dkey);
+                LOG.error(PortMappingUtils.CONMAP_ISSUE_LOGMSG, nodeId, skey, dkey);
                 continue;
             }
             String dlcp = lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null;
@@ -556,7 +555,7 @@ public class PortMappingVersion121 {
             commit.get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}", network, e);
+            LOG.warn(PortMappingUtils.PORTMAPPING_POST_FAIL_LOGMSG, nodeId, network, e);
             return false;
         }
     }
@@ -621,8 +620,9 @@ public class PortMappingVersion121 {
             try {
                 Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
                     interfaces.getInterfaceName());
-                if (!openRoadmInterface.isPresent()) {
-                    LOG.warn("{} : Interface {} was null!", nodeId, interfaces.getInterfaceName());
+                if (openRoadmInterface.isEmpty()) {
+                    LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG,
+                        nodeId, interfaces.getInterfaceName() + "- empty interface");
                     continue;
                 }
                 LOG.debug("{} : interface get from device is {} and of type {}",
@@ -637,7 +637,7 @@ public class PortMappingVersion121 {
                     mpBldr.setSupportingOts(interfaces.getInterfaceName());
                 }
             } catch (OpenRoadmInterfaceException ex) {
-                LOG.warn("{} : Error while getting interface {} - ", nodeId, interfaces.getInterfaceName(), ex);
+                LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG, nodeId, interfaces.getInterfaceName(), ex);
             }
         }
         return mpBldr;
@@ -688,14 +688,14 @@ public class PortMappingVersion121 {
         Optional<CircuitPacks> cpOpt = circuitPackList.stream()
             .filter(cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
             .findFirst();
-        if (!cpOpt.isPresent()) {
-            LOG.error("{} : Error fetching circuit-pack {}", nodeId, port.getPartnerPort().getCircuitPackName());
+        if (cpOpt.isEmpty()) {
+            LOG.error(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, port.getPartnerPort().getCircuitPackName());
             return null;
         }
         Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
             .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName()))
             .findFirst();
-        if (!poOpt.isPresent()) {
+        if (poOpt.isEmpty()) {
             LOG.error("{} : Error fetching port {} on {}",
                 nodeId, port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName());
             return null;
@@ -741,7 +741,7 @@ public class PortMappingVersion121 {
             List<CircuitPacks> circuitPackList, Map<String, String> lcpMap, Map<String, Mapping> mappingMap) {
 
         if (port.getPortQual() == null) {
-            LOG.warn("{} : port {} on {} - PortQual was not found", nodeId, port.getPortName(), circuitPackName);
+            LOG.warn(PortMappingUtils.PORTQUAL_LOGMSG, nodeId, port.getPortName(), circuitPackName, "not found");
             return new int[] {line, client};
         }
 
@@ -764,8 +764,8 @@ public class PortMappingVersion121 {
                 break;
 
             default:
-                LOG.error("{} : port {} on {} - unsupported PortQual {}",
-                    nodeId, port.getPortName(), circuitPackName, port.getPortQual());
+                LOG.error(PortMappingUtils.PORTQUAL_LOGMSG,
+                    nodeId, port.getPortName(), circuitPackName, port.getPortQual() + " not supported");
         }
         return new int[] {line, client};
     }
@@ -945,7 +945,7 @@ public class PortMappingVersion121 {
 
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
-            LOG.error("Node type field is missing");
+            LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "field missing");
             return null;
         }
 
@@ -958,7 +958,7 @@ public class PortMappingVersion121 {
                 nodeInfoBldr.setNodeType(NodeTypes.forValue(deviceInfo.getNodeType().getIntValue()));
                 break;
             default:
-                LOG.error("Error with node-type of {}", deviceInfo.getNodeId());
+                LOG.error(PortMappingUtils.NODE_TYPE_LOGMSG, deviceInfo.getNodeId(), "value not supported");
                 // TODO: is this protection useful ? it is not present in Portmapping 221
         }
         if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
