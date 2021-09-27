@@ -30,8 +30,8 @@ import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.TransportpcePceListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
@@ -59,7 +59,7 @@ public class TapiProvider {
 
     private static final InstanceIdentifier<Nodes> MAPPING_II = InstanceIdentifier.create(Network.class)
         .child(org.opendaylight.yang.gen.v1.http
-            .org.opendaylight.transportpce.portmapping.rev210426.network.Nodes.class);
+            .org.opendaylight.transportpce.portmapping.rev210927.network.Nodes.class);
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
