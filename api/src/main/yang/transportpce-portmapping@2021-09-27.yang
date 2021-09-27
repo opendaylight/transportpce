@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2021-09-27 {
+      description
+      "Add supporting-otu interface in mapping";
+  }
   revision 2021-04-26 {
       description
       "Adding mux-profile information to support 400G Muxponder";
@@ -203,11 +207,21 @@ module transportpce-portmapping {
         description
           "Ethernet interface provisioned on the port";
       }
+      leaf supporting-otu4 {
+          type string;
+          description
+            "OTU4 interface provisioned on the port";
+        }
+      leaf supporting-otuc4 {
+          type string;
+          description
+            "OTUC4 interface provisioned on the port";
+        }
       leaf supporting-odu4 {
-        type string;
-        description
-          "ODU4 interface provisioned on the port";
-      }
+          type string;
+          description
+            "ODU4 interface provisioned on the port";
+        }
       leaf supporting-oduc4 {
         type string;
         description

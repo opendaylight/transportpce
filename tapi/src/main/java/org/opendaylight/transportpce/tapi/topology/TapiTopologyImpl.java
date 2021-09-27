@@ -28,10 +28,10 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
@@ -405,7 +405,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         }
         @NonNull
         KeyedInstanceIdentifier<Mapping, MappingKey> pmIID = InstanceIdentifier.create(
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.Network.class)
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network.class)
             .child(Nodes.class, new NodesKey(nodeIdPortMap)).child(Mapping.class, new MappingKey(networkLcp));
         @NonNull
         FluentFuture<Optional<Mapping>> mappingOpt = dataBroker.newReadOnlyTransaction().read(
