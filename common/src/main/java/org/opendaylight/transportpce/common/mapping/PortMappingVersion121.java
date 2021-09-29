@@ -834,17 +834,7 @@ public class PortMappingVersion121 {
                         return false;
                     }
                     Ports port = portObject.get();
-                    if (port.getPortQual() == null) {
-                        continue;
-                    }
-                    if (Port.PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port.getPortName(), cp1Name);
-                        continue;
-                    }
-                    if (Direction.Bidirectional.getIntValue() != port.getPortDirection().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTDIR_ERROR_LOGMSG,
-                            nodeId, port.getPortName(), cp1Name);
+                    if (!checkTtpPort(port, cp1Name, nodeId, true)) {
                         continue;
                     }
 
@@ -868,8 +858,7 @@ public class PortMappingVersion121 {
                     InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
                         .child(Ports.class, new PortsKey(cp2.getPortName()));
-                    LOG.debug(PortMappingUtils.FETCH_CONNECTIONPORT_LOGMSG,
-                        nodeId, cp2.getPortName(), cp2Name);
+                    LOG.debug(PortMappingUtils.FETCH_CONNECTIONPORT_LOGMSG, nodeId, cp2.getPortName(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port2ID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -883,18 +872,11 @@ public class PortMappingVersion121 {
                     }
 
                     Ports port1 = port1Object.get();
+                    if (!checkTtpPort(port1, cp1Name, nodeId, false)) {
+                        continue;
+                    }
                     Ports port2 = port2Object.get();
-                    if (port1.getPortQual() == null || port2.getPortQual() == null) {
-                        continue;
-                    }
-                    if (Port.PortQual.RoadmExternal.getIntValue() != port1.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port1.getPortName(), cp1Name);
-                        continue;
-                    }
-                    if (Port.PortQual.RoadmExternal.getIntValue() != port2.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port2.getPortName(), cp2Name);
+                    if (!checkTtpPort(port2, cp2Name, nodeId, false)) {
                         continue;
                     }
 
@@ -925,6 +907,23 @@ public class PortMappingVersion121 {
                     LOG.error(PortMappingUtils.NOT_CORRECT_CONPORT_LOGMSG, nodeId, cpMapEntry.getKey());
                     continue;
             }
+        }
+        return true;
+    }
+
+    private boolean checkTtpPort(Ports port, String cpName, String nodeId, boolean bidirectional) {
+        if (port.getPortQual() == null) {
+            return false;
+        }
+        if (Port.PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
+            LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
+                nodeId, port.getPortName(), cpName);
+            return false;
+        }
+        if (Direction.Bidirectional.getIntValue() == port.getPortDirection().getIntValue() ^ bidirectional) {
+            LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTDIR_ERROR_LOGMSG,
+                nodeId, port.getPortName(), cpName);
+            return false;
         }
         return true;
     }
