@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
@@ -113,6 +114,7 @@ public class PortMappingVersion710 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion710.class);
     private static final Map<Direction, String> SUFFIX;
+    private static final Set<Integer> TXRX_SET = Set.of(Direction.Tx.getIntValue(), Direction.Rx.getIntValue());
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -470,12 +472,9 @@ public class PortMappingVersion710 {
     }
 
     private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        return (checkPartnerPortNoDir(circuitPackName, port1, port2)
-            && ((Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
-                    && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue())
-                ||
-                (Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
-                    && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue())));
+        return checkPartnerPortNoDir(circuitPackName, port1, port2)
+            && Set.of(port1.getPortDirection().getIntValue(), port2.getPortDirection().getIntValue())
+                .equals(TXRX_SET);
     }
 
 
@@ -535,17 +534,11 @@ public class PortMappingVersion710 {
                 Collections.sort(portList, new SortPort710ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {
+                    if (!checkPortQual(port, circuitPackName, nodeId)) {
+                        continue;
+                    }
+
                     String currentKey = circuitPackName + "-" + port.getPortName();
-                    if (port.getPortQual() == null) {
-                        continue;
-                    }
-
-                    if (PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
-                        LOG.debug(PortMappingUtils.PORT_NOT_RDMEXT_LOGMSG + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
-                            nodeId, port.getPortName(), circuitPackName);
-                        continue;
-                    }
-
                     if (keys.contains(currentKey)) {
                         LOG.debug(PortMappingUtils.PORT_ALREADY_HANDLED_LOGMSG + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
                             nodeId, port.getPortName(), circuitPackName);
@@ -1284,17 +1277,7 @@ public class PortMappingVersion710 {
                         return false;
                     }
                     Ports port = portObject.get();
-                    if (port.getPortQual() == null) {
-                        continue;
-                    }
-                    if (PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port.getPortName(), cp1Name);
-                        continue;
-                    }
-                    if (Direction.Bidirectional.getIntValue() != port.getPortDirection().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTDIR_ERROR_LOGMSG,
-                            nodeId, port.getPortName(), cp1Name);
+                    if (!checkTtpPort(port, cp1Name, nodeId, true)) {
                         continue;
                     }
 
@@ -1332,18 +1315,11 @@ public class PortMappingVersion710 {
                     }
 
                     Ports port1 = port1Object.get();
+                    if (!checkTtpPort(port1, cp1Name, nodeId, false)) {
+                        continue;
+                    }
                     Ports port2 = port2Object.get();
-                    if (port1.getPortQual() == null || port2.getPortQual() == null) {
-                        continue;
-                    }
-                    if (PortQual.RoadmExternal.getIntValue() != port1.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port1.getPortName(), cp1Name);
-                        continue;
-                    }
-                    if (PortQual.RoadmExternal.getIntValue() != port2.getPortQual().getIntValue()) {
-                        LOG.error(PortMappingUtils.CANNOT_CREATE_LCP_LOGMSG + PortMappingUtils.PORTQUAL_ERROR_LOGMSG,
-                            nodeId, port2.getPortName(), cp2Name);
+                    if (!checkTtpPort(port2, cp2Name, nodeId, false)) {
                         continue;
                     }
 
@@ -1374,6 +1350,32 @@ public class PortMappingVersion710 {
                     LOG.error(PortMappingUtils.NOT_CORRECT_CONPORT_LOGMSG, nodeId, cpMapEntry.getKey());
                     continue;
             }
+        }
+        return true;
+    }
+
+    private boolean checkPortQual(Ports port, String cpName, String nodeId) {
+        if (port.getPortQual() == null) {
+            return false;
+        }
+        if (PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
+            //used to be LOG.error when called from createTtpPortMapping
+            LOG.debug(PortMappingUtils.PORT_NOT_RDMEXT_LOGMSG + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
+                nodeId, port.getPortName(), cpName);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkTtpPort(Ports port, String cpName, String nodeId, boolean bidirectional) {
+        if (!checkPortQual(port, cpName, nodeId)) {
+            return false;
+        }
+        if (Direction.Bidirectional.getIntValue() == port.getPortDirection().getIntValue() ^ bidirectional) {
+        // (a ^ b) makes more sense than (!a && b) here since it can also work for unidirectional links
+            LOG.error(PortMappingUtils.PORTDIR_ERROR_LOGMSG + PortMappingUtils.CANNOT_AS_LCP_LOGMSG,
+                nodeId, port.getPortName(), cpName);
+            return false;
         }
         return true;
     }

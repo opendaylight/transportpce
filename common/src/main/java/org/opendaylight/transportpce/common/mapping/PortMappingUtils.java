@@ -26,8 +26,6 @@ public final class PortMappingUtils {
         "{} : port {} on {} - associated Logical Connection Point is {}";
     public static final String CANNOT_AS_LCP_LOGMSG =
         " - cannot assign Logical Connection Point";
-    public static final String CANNOT_CREATE_LCP_LOGMSG =
-        "{} : port {} on {} - Impossible to create logical connection point";
     public static final String CANNOT_GET_DEV_CONF_LOGMSG =
         "{} : impossible to get device configuration";
     public static final String CANNOT_GET_LLDP_CONF_LOGMSG =
@@ -81,13 +79,11 @@ public final class PortMappingUtils {
     public static final String PORT_NOT_RDMEXT_LOGMSG =
         "{} : port {} on {} is not roadm-external";
     public static final String PORTDIR_ERROR_LOGMSG =
-        " - error in configuration with port-direction";
+        "{} : port {} on {} - error in configuration with port-direction";
     public static final String PORTMAPPING_IGNORE_LOGMSG =
         " - ignoring it in port-mapping";
     public static final String PORTMAPPING_POST_FAIL_LOGMSG =
         "{} : port-mapping post-treatment failure for {}";
-    public static final String PORTQUAL_ERROR_LOGMSG =
-        " - error in configuration with port-qual";
     public static final String PORTQUAL_LOGMSG =
         "{} : port {} on {} - PortQual {}";
     public static final String PROCESSING_DONE_LOGMSG =
