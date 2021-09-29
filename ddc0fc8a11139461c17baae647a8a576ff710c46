@@ -22,6 +22,30 @@
       "revId": "ddc0fc8a11139461c17baae647a8a576ff710c46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d49b13_51e20b51",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-09-29T09:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4f69c2e_fe190c00",
+      "range": {
+        "startLine": 876,
+        "startChar": 46,
+        "endLine": 876,
+        "endChar": 70
+      },
+      "revId": "ddc0fc8a11139461c17baae647a8a576ff710c46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
