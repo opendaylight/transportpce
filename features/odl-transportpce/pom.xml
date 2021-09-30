@@ -102,6 +102,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
+    <!-- FIXME apidocs is not strictly needed to run transportpce -->
+    <!-- should be a separate feature https://jira.opendaylight.org/browse/TRNSPRTPCE-534 -->
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-mdsal-apidocs</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-connector</artifactId>
