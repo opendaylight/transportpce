@@ -28,5 +28,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>odl-transportpce-inventory</module>
     <module>odl-transportpce-nbinotifications</module>
     <module>odl-transportpce-dmaap-client</module>
+    <module>odl-transportpce-swagger</module>
   </modules>
 </project>
