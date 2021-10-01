@@ -117,6 +117,22 @@ public class PortMappingImpl implements PortMapping {
         return null;
     }
 
+
+    @Override
+    public void deleteMapping(String nodeId, String logicalConnectionPoint) {
+        LOG.info("Deleting Mapping {} of node '{}'", logicalConnectionPoint, nodeId);
+        WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
+        InstanceIdentifier<Mapping> mappingIID = InstanceIdentifier.create(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnectionPoint));
+        rw.delete(LogicalDatastoreType.CONFIGURATION, mappingIID);
+        try {
+            rw.commit().get(1, TimeUnit.SECONDS);
+            LOG.info("Mapping {} removed for node '{}'", logicalConnectionPoint, nodeId);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Error for removing mapping {} for node '{}'", logicalConnectionPoint, nodeId);
+        }
+    }
+
     @Override
     public McCapabilities getMcCapbilities(String nodeId, String mcLcp) {
         /*
@@ -142,7 +158,7 @@ public class PortMappingImpl implements PortMapping {
 
 
     @Override
-    public void deleteMappingData(String nodeId) {
+    public void deletePortMappingNode(String nodeId) {
         LOG.info("Deleting Mapping Data corresponding at node '{}'", nodeId);
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
@@ -154,7 +170,6 @@ public class PortMappingImpl implements PortMapping {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error for removing port mapping infos for node '{}'", nodeId, e);
         }
-
     }
 
     @Override
