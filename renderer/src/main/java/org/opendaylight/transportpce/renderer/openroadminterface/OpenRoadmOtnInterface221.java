@@ -13,6 +13,8 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
@@ -27,10 +29,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev17121
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUTTPCTP;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OduFunctionIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.PayloadTypeDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes.MonitoringMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.Opu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.parent.odu.allocation.ParentOduAllocation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -40,6 +46,8 @@ import org.slf4j.LoggerFactory;
 
 public class OpenRoadmOtnInterface221 {
 
+    private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
+        "Unable to get mapping from PortMapping for node % and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory
@@ -125,57 +133,65 @@ public class OpenRoadmOtnInterface221 {
         return ethernetInterfaceName;
     }
 
-    public String createOpenRoadmOdu2eInterface(String nodeId,
-            String logicalConnPoint, String serviceName, String payLoad,
-            boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
+    public String createOpenRoadmOdu2eInterface(String nodeId, String logicalConnPoint, String serviceName,
+            boolean isCTP, int tribPortNumber, int tribSlotIndex, AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ)
             throws OpenRoadmInterfaceException {
-        Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
-        if (portMap == null) {
-            throwException(nodeId, logicalConnPoint);
-        }
-        String supportingInterface = null;
 
-        if (isNetworkPort) {
-            supportingInterface = portMap.getSupportingOdu4();
-        } else {
-            supportingInterface = logicalConnPoint + "-ETHERNET10G";
-        }
-
-        if (supportingInterface == null) {
+        Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
+        if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                    "Interface Creation failed because of missing supported "
-                    + "ODU4 on network end or Ethernet on client");
+                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+        }
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+            logicalConnPoint + "-ODU2e-" + serviceName);
+        if (mapping.getSupportingOdu4() != null) {
+            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
+        }
+        if (mapping.getSupportingEthernet() != null) {
+            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
         }
 
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(
-                portMap, OtnOdu.class,
-                logicalConnPoint + "-ODU2e-" + serviceName)
-                        .setSupportingInterface(supportingInterface);
-
-        // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder().setRate(ODU2e.class)
-                .setOduFunction(ODUTTPCTP.class)
-                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-        LOG.debug("Inside the ODU2e creation {} {} {}", isNetworkPort,
-                tribPortNumber, tribSlotIndex);
-        if (isNetworkPort) {
+        Class<? extends OduFunctionIdentity> oduFunction;
+        MonitoringMode monitoringMode;
+        Opu opu = null;
+        ParentOduAllocation parentOduAllocation = null;
+        if (isCTP) {
+            oduFunction = ODUCTP.class;
+            monitoringMode = MonitoringMode.Monitored;
             List<Uint16> tribSlots = new ArrayList<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
             IntStream.range(tribSlotIndex, tribSlotIndex + 8)
                     .forEach(nbr -> tribSlots.add(Uint16.valueOf(nbr)));
-            ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
+            parentOduAllocation = new ParentOduAllocationBuilder()
                     .setTribPortNumber(Uint16.valueOf(tribPortNumber))
-                    .setTribSlots(tribSlots);
-            oduIfBuilder.setOduFunction(ODUCTP.class)
-                    .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
-                    .setParentOduAllocation(parentOduAllocationBuilder.build());
+                    .setTribSlots(tribSlots)
+                    .build();
         } else {
-            // Set Opu attributes
-            OpuBuilder opuBldr = new OpuBuilder()
-                    .setPayloadType(new PayloadTypeDef(payLoad))
-                    .setExpPayloadType(new PayloadTypeDef(payLoad));
-            oduIfBuilder.setOpu(opuBldr.build());
+            oduFunction = ODUTTPCTP.class;
+            monitoringMode = MonitoringMode.Terminated;
+            opu = new OpuBuilder()
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("03"))
+                .setExpPayloadType(PayloadTypeDef.getDefaultInstance("03"))
+                .build();
+        }
+        OduBuilder oduIfBuilder = new OduBuilder()
+            .setRate(ODU2e.class)
+            .setOduFunction(oduFunction)
+            .setMonitoringMode(monitoringMode)
+            .setOpu(opu)
+            .setParentOduAllocation(parentOduAllocation);
+        if (apiInfoA != null) {
+            oduIfBuilder.setTxSapi(apiInfoA.getSapi())
+                .setTxDapi(apiInfoA.getDapi())
+                .setExpectedSapi(apiInfoA.getExpectedSapi())
+                .setExpectedDapi(apiInfoA.getExpectedDapi());
+        }
+        if (apiInfoZ != null) {
+            oduIfBuilder.setTxSapi(apiInfoZ.getSapi())
+                .setTxDapi(apiInfoZ.getDapi())
+                .setExpectedSapi(apiInfoZ.getExpectedSapi())
+                .setExpectedDapi(apiInfoZ.getExpectedDapi());
         }
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -186,7 +202,10 @@ public class OpenRoadmOtnInterface221 {
 
         // Post interface on the device
         this.openRoadmInterfaces.postOTNInterface(nodeId, oduInterfaceBldr);
-        LOG.info("returning the ODU2e inteface {}", oduInterfaceBldr.getName());
+        if (!isCTP) {
+            LOG.info("{}-{} updating mapping with interface {}", nodeId, logicalConnPoint, oduInterfaceBldr.getName());
+            this.portMapping.updateMapping(nodeId, mapping);
+        }
         return oduInterfaceBldr.getName();
     }
 
