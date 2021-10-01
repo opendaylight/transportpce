@@ -1126,7 +1126,9 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
+
 # test service-create for 400GE service from xpdra2 to xpdrc2
+
     def test_72_create_400GE_service(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service-400GE"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "400"
@@ -1304,12 +1306,11 @@ class TransportPCEtesting(unittest.TestCase):
                         ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'}
-        input_dict_2 = {"tx-sapi": "AIGiVAQ4gDil", "rate": "org-openroadm-otn-common-types:OTUCn",
+        input_dict_2 = {"rate": "org-openroadm-otn-common-types:OTUCn",
                         "degthr-percentage": 100,
                         "tim-detect-mode": "Disabled",
                         "otucn-n-rate": 4,
-                        "degm-intervals": 2,
-                        "expected-dapi": "AIGiVAQ4gDil"}
+                        "degm-intervals": 2}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -1317,6 +1318,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-otu-interfaces:otu']),
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
+    @unittest.skip("Temporary skipped waiting for the rest of the functionality in change 97834")
     def test_82_check_interface_ODUC4_xpdra2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A2", "interface/XPDR1-NETWORK1-ODUC4")
