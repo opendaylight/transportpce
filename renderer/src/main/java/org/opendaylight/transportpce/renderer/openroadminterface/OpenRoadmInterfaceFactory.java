@@ -119,8 +119,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
-                        supportingOtuInterface);
+                return openRoadmInterface121.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
                         supportingOtuInterface);
@@ -152,8 +151,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmInterface121.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint,
-                    asupportingOtuInterface);
+                return openRoadmInterface121.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint,
                     asupportingOtuInterface, znodeId, zlogicalConnPoint);
@@ -183,8 +181,7 @@ public class OpenRoadmInterfaceFactory {
             String supportingInterface) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
-                return null;
+                return openRoadmInterface121.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOdu4HOInterface(nodeId, logicalConnPoint, isNetworkPort,
                     supportingInterface);
