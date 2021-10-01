@@ -64,9 +64,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.connection.map.Destination;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.EthernetCsmacd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalTransport;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
@@ -559,9 +562,7 @@ public class PortMappingVersion121 {
     private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping) {
         MappingBuilder mpBldr = new MappingBuilder(oldmapping);
         updateMappingStates(mpBldr, port, oldmapping);
-        if ((port.getInterfaces() == null)
-            || (!oldmapping.getLogicalConnectionPoint().contains(StringConstants.TTP_TOKEN)
-                && !oldmapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN))) {
+        if (port.getInterfaces() == null) {
             return mpBldr.build();
         }
         // Get interfaces provisioned on the port
@@ -582,6 +583,8 @@ public class PortMappingVersion121 {
     }
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
+        mpBldr.setSupportingOtu4(null)
+            .setSupportingOdu4(null);
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId, interfaces.getInterfaceName());
             if (!openRoadmInterface.isPresent()) {
@@ -598,6 +601,15 @@ public class PortMappingVersion121 {
             }
             if (interfaceType.equals(OpticalTransport.class)) {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OtnOtu.class)) {
+                mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OtnOdu.class)) {
+                mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(EthernetCsmacd.class)) {
+                mpBldr.setSupportingEthernet(interfaces.getInterfaceName());
             }
         }
         return mpBldr;

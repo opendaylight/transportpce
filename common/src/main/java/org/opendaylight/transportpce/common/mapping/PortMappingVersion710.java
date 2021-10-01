@@ -89,6 +89,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.Inte
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OpticalTransport;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOdu;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.lldp.PortConfig;
@@ -893,9 +894,7 @@ public class PortMappingVersion710 {
     private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping) {
         MappingBuilder mpBldr = new MappingBuilder(oldmapping);
         updateMappingStates(mpBldr, port, oldmapping);
-        if ((port.getInterfaces() == null)
-            || (!oldmapping.getLogicalConnectionPoint().contains(StringConstants.TTP_TOKEN)
-                && !oldmapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN))) {
+        if (port.getInterfaces() == null) {
             return mpBldr.build();
         }
         // Get interfaces provisioned on the port
@@ -916,6 +915,8 @@ public class PortMappingVersion710 {
     }
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
+        mpBldr.setSupportingOtu4(null)
+            .setSupportingOdu4(null);
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId,
                 interfaces.getInterfaceName());
@@ -935,6 +936,16 @@ public class PortMappingVersion710 {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
             }
             String interfaceName = interfaces.getInterfaceName();
+            if (interfaceType.equals(OtnOtu.class)
+                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
+                .equals("OTU"))) {
+                mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
+            }
+            if ((interfaceType.equals(OtnOtu.class))
+                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
+                .equals("OTUC4"))) {
+                mpBldr.setSupportingOtuc4(interfaces.getInterfaceName());
+            }
             if (interfaceType.equals(OtnOdu.class)
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
                 .equals("ODU"))) {
