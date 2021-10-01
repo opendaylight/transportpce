@@ -21,6 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
@@ -39,8 +40,8 @@ import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetu
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OtnDeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.Action;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
@@ -73,6 +74,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.OtnLinkType;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -653,9 +655,20 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<LinkTp> otnLinkTerminationPoints = new ArrayList<>();
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
+        List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(input.getPathDescription());
         List<String> supportedLinks = null;
-        if (notifLink == null && !otnLinkTerminationPoints.isEmpty()) {
-            supportedLinks = ModelMappingUtils.getLinksFromServicePathDescription(input.getPathDescription());
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_100GE_S:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
+                break;
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
+                break;
+            default:
+                break;
         }
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -692,9 +705,20 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<LinkTp> otnLinkTerminationPoints = new ArrayList<>();
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
+        List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(pathDescription);
         List<String> supportedLinks = null;
-        if (notifLink == null && !otnLinkTerminationPoints.isEmpty()) {
-            supportedLinks = ModelMappingUtils.getLinksFromServicePathDescription(pathDescription);
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_100GE_S:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
+                break;
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
+                break;
+            default:
+                break;
         }
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
