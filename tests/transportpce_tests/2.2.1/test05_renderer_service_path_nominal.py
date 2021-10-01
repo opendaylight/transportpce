@@ -224,21 +224,19 @@ class TransportPCERendererTesting(unittest.TestCase):
                  }, **res['interface'][0]),
             res['interface'][0]
         )
-        input_dict_2 = {'tx-sapi': 'AMkDwQ7xTmRI',
-                        'expected-dapi': 'AMkDwQ7xTmRI',
-                        'rate': 'org-openroadm-otn-common-types:OTU4',
+        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'}
         self.assertDictEqual(input_dict_2,
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_13_service_path_create_xpdr_check(self):
-        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-ODU")
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the 2 following statements replace self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'name': 'XPDR1-NETWORK1-ODU',
+                 'name': 'XPDR1-NETWORK1-ODU4',
                  'administrative-state': 'inService',
                  'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
                  'type': 'org-openroadm-interfaces:otnOdu',
