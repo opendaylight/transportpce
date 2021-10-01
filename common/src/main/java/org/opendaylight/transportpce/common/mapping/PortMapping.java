@@ -56,13 +56,13 @@ public interface PortMapping {
     boolean createMappingData(String nodeId, String nodeVersion);
 
     /**
-     * This method removes mapping data from the datastore after disconnecting ODL
-     * from a Netconf device.
+     * This method removes all mapping data of a given node from the datastore
+     * after disconnecting ODL from a Netconf device.
      *
      * @param nodeId
      *            node ID
      */
-    void deleteMappingData(String nodeId);
+    void deletePortMappingNode(String nodeId);
 
     /**
      * This method for a given node's termination point returns the Mapping object
@@ -104,6 +104,18 @@ public interface PortMapping {
      * @return Result Mapping object if success otherwise null.
      */
     Mapping getMapping(String nodeId, String circuitPackName, String portName);
+
+    /**
+     * This method removes a given mapping data from the mapping list
+     * stored in the datastore while the Netconf device is already
+     * connected to the controller.
+     *
+     * @param nodeId
+     *            node ID
+     * @param logicalConnectionPoint
+     *            key of the mapping inside the mapping list
+     */
+    void deleteMapping(String nodeId, String logicalConnectionPoint);
 
     /**
      * This method, for a given node media channel-capabilities, returns the object
