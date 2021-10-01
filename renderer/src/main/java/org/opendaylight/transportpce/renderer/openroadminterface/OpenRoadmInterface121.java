@@ -147,6 +147,7 @@ public class OpenRoadmInterface121 {
 
         // Post interface on the device
         this.openRoadmInterfaces.postInterface(nodeId, otuInterfaceBldr);
+        this.portMapping.updateMapping(nodeId, portMap);
         return otuInterfaceBldr.getName();
     }
 
@@ -155,13 +156,12 @@ public class OpenRoadmInterface121 {
      *
      * @param nodeId node ID
      * @param logicalConnPoint logical Connection Point
-     * @param supportingOtuInterface supporting OTU Interface
      *
      * @return Name of the interface if successful, otherwise return null.
      * @throws OpenRoadmInterfaceException OpenRoadmInterfaceException
      */
 
-    public String createOpenRoadmOdu4Interface(String nodeId, String logicalConnPoint, String supportingOtuInterface)
+    public String createOpenRoadmOdu4Interface(String nodeId, String logicalConnPoint)
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -169,7 +169,9 @@ public class OpenRoadmInterface121 {
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint
                 + "-ODU");
-        oduInterfaceBldr.setSupportingInterface(supportingOtuInterface);
+        if (portMap.getSupportingOtu4() != null) {
+            oduInterfaceBldr.setSupportingInterface(portMap.getSupportingOtu4());
+        }
 
         // ODU interface specific data
         // Set Opu attributes
