@@ -13,6 +13,7 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
+import time
 #from unittest.result import failfast
 import requests
 import sys
@@ -36,6 +37,9 @@ class TransportPCERendererTesting(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+
+    def setUp(self):
+        time.sleep(2)
 
     def test_01_rdm_device_connected(self):
         response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
