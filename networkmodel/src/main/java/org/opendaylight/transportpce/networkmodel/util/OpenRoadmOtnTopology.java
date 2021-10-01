@@ -130,6 +130,43 @@ public final class OpenRoadmOtnTopology {
         return new TopologyShard(null, links);
     }
 
+    public static TopologyShard createOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, OtnLinkType linkType) {
+        List<Link> links = initialiseOtnLinks(notifLink.getATermination().getNodeId(),
+            notifLink.getATermination().getTpId(), notifLink.getZTermination().getNodeId(),
+            notifLink.getZTermination().getTpId(), linkType);
+        return new TopologyShard(null, links);
+    }
+
+    public static TopologyShard createOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, List<Link> supportedOtu4links, List<TerminationPoint> supportedTPs, OtnLinkType linkType) {
+
+        List<Link> links = null;
+        switch (linkType) {
+            case OTU4:
+            case OTUC4:
+                links = initialiseOtnLinks(
+                        notifLink.getATermination().getNodeId(), notifLink.getATermination().getTpId(),
+                        notifLink.getZTermination().getNodeId(), notifLink.getZTermination().getTpId(), linkType);
+                return new TopologyShard(null, links);
+            case ODTU4:
+            case ODUC4:
+                links = initialiseOtnLinks(
+                    notifLink.getATermination().getNodeId(), notifLink.getATermination().getTpId(),
+                    notifLink.getZTermination().getNodeId(), notifLink.getZTermination().getTpId(), linkType);
+                links.addAll(updateOtnLinkBwParameters(supportedOtu4links, linkType));
+                List<TerminationPoint> updatedTPs = new ArrayList<>();
+                for (TerminationPoint tp : supportedTPs) {
+                    updatedTPs.add(updateTp(tp, true, linkType));
+                }
+                return new TopologyShard(null, links, updatedTPs);
+            default:
+                return null;
+        }
+    }
+
     public static TopologyShard createOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
             OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
@@ -260,7 +297,7 @@ public final class OpenRoadmOtnTopology {
         for (TerminationPoint tp : oldTps) {
             tps.add(updateTp(tp, false, linkType));
         }
-        if (links.size() == 2 && tps.size() == 2) {
+        if (!links.isEmpty() && !tps.isEmpty()) {
             return new TopologyShard(null, links, tps);
         } else {
             return new TopologyShard(null, null, null);
@@ -329,6 +366,32 @@ public final class OpenRoadmOtnTopology {
             .setUsedBandwidth(Uint32.valueOf(usedBw));
         updatedLinkBldr.addAugmentation(updatedLink1Bldr.build());
         return updatedLinkBldr.build();
+    }
+
+    private static List<Link> updateOtnLinkBwParameters(List<Link> supportedLinks, OtnLinkType linkType) {
+        LOG.debug("in updateOtnLinkBwParameters with supportedLinks = {}, linkType = {}", supportedLinks, linkType);
+        Uint32 usedBw;
+        switch (linkType) {
+            case ODTU4:
+                usedBw = Uint32.valueOf(100000);
+                break;
+            case ODUC4:
+                usedBw = Uint32.valueOf(400000);
+                break;
+            default:
+                usedBw = Uint32.valueOf(0);
+                break;
+        }
+        List<Link> updatedlinks = new ArrayList<>();
+        for (Link link : supportedLinks) {
+            LinkBuilder updatedLinkBldr = new LinkBuilder(link);
+            Link1Builder updatedLink1Bldr = new Link1Builder(link.augmentation(Link1.class))
+                .setAvailableBandwidth(Uint32.valueOf(0))
+                .setUsedBandwidth(usedBw);
+            updatedLinkBldr.addAugmentation(updatedLink1Bldr.build());
+            updatedlinks.add(updatedLinkBldr.build());
+        }
+        return updatedlinks;
     }
 
     private static TerminationPoint updateTp(TerminationPoint originalTp, boolean addingTsTpnPoolTermination,
