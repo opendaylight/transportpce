@@ -381,10 +381,10 @@ class TransportPCEtesting(unittest.TestCase):
         # SAPI/DAPI are added in the Otu4 renderer
         input_dict_2 = {'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
                         'rate': 'org-openroadm-otn-common-types:ODU4',
-                        'expected-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'fuYZwEO660g=',
-                        'tx-dapi': 'fuYZwEO660g=',
-                        'tx-sapi': 'Swfw02qXGyI='}
+                        'expected-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'AMf1n5hK6Xkk',
+                        'tx-dapi': 'AMf1n5hK6Xkk',
+                        'tx-sapi': 'H/OelLynehI='}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -409,10 +409,10 @@ class TransportPCEtesting(unittest.TestCase):
         # SAPI/DAPI are added in the Otu4 renderer
         input_dict_2 = {'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
                         'rate': 'org-openroadm-otn-common-types:ODU4',
-                        'tx-sapi': 'fuYZwEO660g=',
-                        'tx-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'Swfw02qXGyI=',
-                        'expected-dapi': 'fuYZwEO660g='
+                        'tx-sapi': 'AMf1n5hK6Xkk',
+                        'tx-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'H/OelLynehI=',
+                        'expected-dapi': 'AMf1n5hK6Xkk'
                         }
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
