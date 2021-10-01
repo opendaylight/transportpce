@@ -449,8 +449,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
-        input_dict_2 = {'tx-sapi': 'exT821pFtOc=',
-                        'expected-dapi': 'exT821pFtOc=',
+        input_dict_2 = {'tx-sapi': 'AOQxIv+6nCD+',
+                        'expected-dapi': 'AOQxIv+6nCD+',
+                        'tx-dapi': 'X+8cRNi+HbE=',
+                        'expected-sapi': 'X+8cRNi+HbE=',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -491,10 +493,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
-        input_dict_2 = {'tx-dapi': 'exT821pFtOc=',
-                        'expected-sapi': 'exT821pFtOc=',
-                        'tx-sapi': 'HPQZi9Cb3Aw=',
-                        'expected-dapi': 'HPQZi9Cb3Aw=',
+        input_dict_2 = {'tx-dapi': 'AOQxIv+6nCD+',
+                        'expected-sapi': 'AOQxIv+6nCD+',
+                        'tx-sapi': 'X+8cRNi+HbE=',
+                        'expected-dapi': 'X+8cRNi+HbE=',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -660,8 +662,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP6-CFP-P1'
                         }
-        input_dict_2 = {'tx-sapi': 'HPQZi9Cb3A8=',
-                        'expected-dapi': 'HPQZi9Cb3A8=',
+        input_dict_2 = {'tx-sapi': 'X+8cRNi+HbI=',
+                        'expected-dapi': 'X+8cRNi+HbI=',
+                        'tx-dapi': 'ALvne1QI5jo4',
+                        'expected-sapi': 'ALvne1QI5jo4',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -702,10 +706,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
-        input_dict_2 = {'tx-dapi': 'HPQZi9Cb3A8=',
-                        'expected-sapi': 'HPQZi9Cb3A8=',
-                        'tx-sapi': 'ALx70DYYfGTx',
-                        'expected-dapi': 'ALx70DYYfGTx',
+        input_dict_2 = {'tx-dapi': 'X+8cRNi+HbI=',
+                        'expected-sapi': 'X+8cRNi+HbI=',
+                        'tx-sapi': 'ALvne1QI5jo4',
+                        'expected-dapi': 'ALvne1QI5jo4',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -896,7 +900,11 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_2 = {
             'odu-function': 'org-openroadm-otn-common-types:ODU-TTP-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU4',
-            'monitoring-mode': 'terminated'}
+            'monitoring-mode': 'terminated',
+            'expected-dapi': 'AItaZ6nmyaKJ',
+            'expected-sapi': 'AKFnJJaijWiz',
+            'tx-dapi': 'AKFnJJaijWiz',
+            'tx-sapi': 'AItaZ6nmyaKJ'}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -904,7 +912,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
+            {u'payload-type': u'21', u'exp-payload-type': u'21'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_50_check_interface_ODU4_NETWORK_spdra(self):
@@ -916,7 +924,9 @@ class TransportPCEtesting(unittest.TestCase):
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'CP5-CFP-P1'}
+                        'supporting-port': 'CP5-CFP-P1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         input_dict_2 = {
             'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU4',
@@ -927,9 +937,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2,
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
-        self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertNotIn('opu',
+                         dict.keys(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']))
 
     def test_51_check_ODU4_connection_spdra(self):
         response = test_utils.check_netconf_node_request(
@@ -978,11 +987,17 @@ class TransportPCEtesting(unittest.TestCase):
                         'supporting-circuit-pack-name': 'CP2-QSFP1',
                         'supporting-interface': 'XPDR2-CLIENT1-ETHERNET',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'CP2-QSFP1-P1'}
+                        'supporting-port': 'CP2-QSFP1-P1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         input_dict_2 = {
-            'odu-function': 'org-openroadm-otn-common-types:ODU-TTP-CTP',
+            'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
             'rate': 'org-openroadm-otn-common-types:ODU4',
-            'monitoring-mode': 'terminated'}
+            'monitoring-mode': 'terminated',
+            'expected-dapi': 'AKFnJJaijWiz',
+            'expected-sapi': 'AItaZ6nmyaKJ',
+            'tx-dapi': 'AItaZ6nmyaKJ',
+            'tx-sapi': 'AKFnJJaijWiz'}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -990,7 +1005,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
+            {u'payload-type': u'21', u'exp-payload-type': u'21'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_54_check_interface_ODU4_NETWORK_spdrc(self):
@@ -1002,7 +1017,9 @@ class TransportPCEtesting(unittest.TestCase):
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'CP5-CFP-P1'}
+                        'supporting-port': 'CP5-CFP-P1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         input_dict_2 = {
             'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU4',
@@ -1013,9 +1030,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2,
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
-        self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertNotIn('opu',
+                         dict.keys(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']))
 
     def test_55_check_ODU4_connection_spdrc(self):
         response = test_utils.check_netconf_node_request(
@@ -1056,9 +1072,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2,
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
-        self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertNotIn('opu',
+                         dict.keys(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']))
 
     def test_57_check_interface_ODU4_NETWORK2_spdrb(self):
         response = test_utils.check_netconf_node_request(
@@ -1080,9 +1095,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2,
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
-        self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertNotIn('opu',
+                         dict.keys(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']))
 
     def test_58_check_ODU4_connection_spdrb(self):
         response = test_utils.check_netconf_node_request(
