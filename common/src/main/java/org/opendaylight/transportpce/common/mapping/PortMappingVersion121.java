@@ -245,9 +245,7 @@ public class PortMappingVersion121 {
                 lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null));
         }
 
-        for (Mapping m : mappingMap.values()) {
-            portMapList.add(m);
-        }
+        mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
     }
 
@@ -458,7 +456,7 @@ public class PortMappingVersion121 {
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
+        if (protocolObject.isEmpty() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
             LOG.warn(PortMappingUtils.PROCESSING_DONE_LOGMSG, nodeId, PortMappingUtils.CANNOT_GET_LLDP_CONF_LOGMSG);
             return new HashMap<>();
         }
@@ -637,16 +635,18 @@ public class PortMappingVersion121 {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(assoLcp).build();
         }
+        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp);
+    }
 
-        // create a new mapping
-        String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
+    private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
+            String logicalConnectionPoint, String partnerLcp) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeIdLcp));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
