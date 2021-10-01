@@ -19,6 +19,8 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacksBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacksKey;
@@ -26,9 +28,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfac
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.States;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,9 +69,30 @@ public class OpenRoadmInterfacesImpl710 {
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+        // TODO: instead of using this infinite loop coupled with this timeout,
+        // it would be better to use a notification mechanism from the device to be advertised
+        // that the new created interface is present in the device circuit-pack/port
+        final Thread current = Thread.currentThread();
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                    current.interrupt();
+                } catch (InterruptedException e) {
+                    LOG.error("Timeout before the new created interface appears on the deivce circuit-pack port", e);
+                }
+            }
+        };
         try {
             txSubmitFuture.get();
             LOG.info("Successfully posted interface {} on node {}", ifBuilder.getName(), nodeId);
+            boolean devicePortIsUptodated = false;
+            while (!devicePortIsUptodated) {
+                devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+            }
+            LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
+                ifBuilder.getName(), ifBuilder.getSupportingPort());
+            timer.interrupt();
         } catch (InterruptedException | ExecutionException e) {
             throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
                 .getName(), nodeId), e);
@@ -216,4 +241,20 @@ public class OpenRoadmInterfacesImpl710 {
         }
     }
 
+    private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {
+        KeyedInstanceIdentifier<Ports, PortsKey> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(ifBuilder.getSupportingCircuitPackName()))
+            .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()));
+        Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+            portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
+        if (port.getInterfaces() == null) {
+            return false;
+        }
+        for (Interfaces interf : port.getInterfaces()) {
+            if (interf.getInterfaceName().equals(ifBuilder.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

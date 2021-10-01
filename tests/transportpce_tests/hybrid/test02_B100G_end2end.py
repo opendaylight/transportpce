@@ -24,7 +24,7 @@ import test_utils
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
-    WAITING = 20  # nominal value is 300
+    WAITING = 15  # nominal value is 300
     NODE_VERSION_221 = '2.2.1'
     NODE_VERSION_71 = '7.1'
 
@@ -146,7 +146,7 @@ class TransportPCEtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(5)
+        time.sleep(2)
 
     def test_01_connect_xpdra2(self):
         response = test_utils.mount_device("XPDR-A2", ('xpdra2', self.NODE_VERSION_71))
@@ -331,9 +331,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
-        input_dict_2 = {'tx-sapi': 'LY9PxYJqUbw=',
-                        'expected-dapi': 'LY9PxYJqUbw=',
-                        'rate': 'org-openroadm-otn-common-types:OTUCn',
+        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTUCn',
                         'degthr-percentage': 100,
                         'degm-intervals': 2,
                         'otucn-n-rate': 4
@@ -397,11 +395,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
-        input_dict_2 = {'tx-dapi': 'LY9PxYJqUbw=',
-                        'expected-sapi': 'LY9PxYJqUbw=',
-                        'tx-sapi': 'Nmbu2MNHvc4=',
-                        'expected-dapi': 'Nmbu2MNHvc4=',
-                        'rate': 'org-openroadm-otn-common-types:OTUCn',
+        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTUCn',
                         'degthr-percentage': 100,
                         'degm-intervals': 2,
                         'otucn-n-rate': 4
@@ -1131,11 +1125,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_72_create_400GE_service(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service-400GE"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "400"
-        self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
-        self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
         self.cr_serv_sample_data["input"]["service-z-end"]["service-rate"] = "400"
-        self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
-        self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -1233,7 +1223,6 @@ class TransportPCEtesting(unittest.TestCase):
                     freq_map_array = [int(x) for x in freq_map]
                     self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
         time.sleep(3)
-
 
     def test_78_check_interface_100GE_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
