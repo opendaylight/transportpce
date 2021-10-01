@@ -386,30 +386,30 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void createOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType) {
+    public void createOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, List<String> suppLinks, OtnLinkType linkType) {
+
         TopologyShard otnTopologyShard;
         switch (linkType) {
             case OTU4:
             case OTUC4:
-                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(nodeA, tpA, nodeZ, tpZ, linkType);
+                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(notifLink, null, null, linkType);
                 break;
             case ODTU4:
             case ODUC4:
                 List<LinkId> linkIdList = new ArrayList<>();
-                String prefix;
-                if (OtnLinkType.ODTU4.equals(linkType)) {
-                    prefix = OtnLinkType.OTU4.getName();
-                } else {
-                    prefix = OtnLinkType.OTUC4.getName();
+                if (suppLinks != null) {
+                    suppLinks.forEach(lk -> linkIdList.add(new LinkId(lk)));
                 }
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA,
-                    convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ, prefix));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ,
-                    convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA, prefix));
                 List<Link> supportedOtu4links = getOtnLinks(linkIdList);
-                List<TerminationPoint> tps = getOtnNodeTps(convertNetconfNodeIdToTopoNodeId(nodeA, tpA), tpA,
-                    convertNetconfNodeIdToTopoNodeId(nodeZ, tpZ), tpZ);
-                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(supportedOtu4links, tps, linkType);
+                String nodeTopoA = convertNetconfNodeIdToTopoNodeId(notifLink.getATermination().getNodeId(),
+                    notifLink.getATermination().getTpId());
+                String nodeTopoZ = convertNetconfNodeIdToTopoNodeId(notifLink.getZTermination().getNodeId(),
+                    notifLink.getZTermination().getTpId());
+                List<TerminationPoint> tps = getOtnNodeTps(nodeTopoA, notifLink.getATermination().getTpId(), nodeTopoZ,
+                    notifLink.getZTermination().getTpId());
+                otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(notifLink, supportedOtu4links, tps, linkType);
                 break;
             default:
                 LOG.error("unknown otn link type {}", linkType);
@@ -450,23 +450,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void deleteOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType) {
+    public void deleteOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, List<String> suppLinks, OtnLinkType linkType) {
+
         TopologyShard otnTopologyShard;
-        String nodeTopoA = new StringBuilder(nodeA).append("-").append(tpA.split("-")[0]).toString();
-        String nodeTopoZ = new StringBuilder(nodeZ).append("-").append(tpZ.split("-")[0]).toString();
+        String nodeTopoA = convertNetconfNodeIdToTopoNodeId(notifLink.getATermination().getNodeId(),
+            notifLink.getATermination().getTpId());
+        String nodeTopoZ = convertNetconfNodeIdToTopoNodeId(notifLink.getZTermination().getNodeId(),
+            notifLink.getZTermination().getTpId());
+        String tpA = notifLink.getATermination().getTpId();
+        String tpZ = notifLink.getZTermination().getTpId();
         List<Link> otuLinks;
         List<LinkId> linkIdList = new ArrayList<>();
-        String prefix;
         switch (linkType) {
             case OTU4:
             case OTUC4:
-                if (OtnLinkType.OTU4.equals(linkType)) {
-                    prefix = OtnLinkType.OTU4.getName();
-                } else {
-                    prefix = OtnLinkType.OTUC4.getName();
-                }
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, linkType.getName()));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, linkType.getName()));
                 otuLinks = getOtnLinks(linkIdList);
                 if (checkLinks(otuLinks)) {
                     deleteLinks(otuLinks);
@@ -477,24 +478,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 break;
             case ODTU4:
             case ODUC4:
-                String prefix2;
-                if (OtnLinkType.ODTU4.equals(linkType)) {
-                    prefix = OtnLinkType.ODTU4.getName();
-                    prefix2 = OtnLinkType.OTU4.getName();
-                } else {
-                    prefix = OtnLinkType.ODUC4.getName();
-                    prefix2 = OtnLinkType.OTUC4.getName();
-                }
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix));
-                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, linkType.getName()));
+                linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, linkType.getName()));
                 List<Link> oduLinks = getOtnLinks(linkIdList);
                 List<TerminationPoint> tps = getOtnNodeTps(nodeTopoA, tpA, nodeTopoZ, tpZ);
                 if (checkLinks(oduLinks) && checkTerminationPoints(tps)) {
                     deleteLinks(oduLinks);
                     linkIdList.clear();
-                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, prefix2));
-                    linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, prefix2));
+                    if (suppLinks != null) {
+                        suppLinks.forEach(lk -> linkIdList.add(new LinkId(lk)));
+                    }
                     otuLinks = getOtnLinks(linkIdList);
+
                     otnTopologyShard = OpenRoadmOtnTopology.deleteOtnLinks(otuLinks, tps, linkType);
                 } else {
                     LOG.error("Error deleting ODU4 links");
@@ -505,6 +500,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.error("unknown otn link type {}", linkType);
                 otnTopologyShard = new TopologyShard(null, null);
         }
+
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("deleting and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
@@ -601,24 +597,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void updateOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
-            notifLink, List<String> suppLinks, boolean isDeletion) {
-
+    public void updateOtnLinks(List<String> suppLinks, boolean isDeletion) {
         List<LinkId> linkIdList = new ArrayList<>();
-        if (notifLink != null) {
-            String nodeTopoA = convertNetconfNodeIdToTopoNodeId(notifLink.getATermination().getNodeId(),
-                notifLink.getATermination().getTpId());
-            String nodeTopoZ = convertNetconfNodeIdToTopoNodeId(notifLink.getZTermination().getNodeId(),
-                notifLink.getZTermination().getTpId());
-            linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, notifLink.getATermination().getTpId(),
-                nodeTopoZ, notifLink.getZTermination().getTpId(), OtnLinkType.OTU4.getName()));
-            linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, notifLink.getZTermination().getTpId(),
-                nodeTopoA, notifLink.getATermination().getTpId(), OtnLinkType.OTU4.getName()));
-        } else if (suppLinks != null) {
+        if (suppLinks != null) {
             suppLinks.forEach(lk -> linkIdList.add(new LinkId(lk)));
-        } else {
-            LOG.error("Impossible to determine supported otn links without correct input data");
         }
         List<Link> supportedOtu4links = getOtnLinks(linkIdList);
 

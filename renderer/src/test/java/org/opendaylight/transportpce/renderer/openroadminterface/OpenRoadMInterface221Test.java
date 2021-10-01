@@ -101,8 +101,8 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         String supportOchInterface = "supportOchInterface";
         Mockito.when(portMapping.getMapping(nodeId, logicalConnPoint))
                 .thenReturn(new MappingBuilder().setLogicalConnectionPoint(logicalConnPoint).build());
-        Assert.assertEquals(
-                openRoadMInterface221.createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface),
+        Assert.assertEquals(openRoadMInterface221.createOpenRoadmOtu4Interface(
+                    nodeId, logicalConnPoint, supportOchInterface, null, null),
                 logicalConnPoint + "-OTU");
 
     }
