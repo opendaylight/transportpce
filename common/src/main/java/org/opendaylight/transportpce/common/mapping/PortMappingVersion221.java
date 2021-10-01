@@ -29,8 +29,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.OpenroadmNodeVersion;
@@ -81,10 +79,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.xponder.XpdrPort;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.EthernetCsmacd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOdu;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
@@ -106,7 +106,6 @@ public class PortMappingVersion221 {
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
-    private final OpenRoadmInterfaces openRoadmInterfaces;
 
     static {
         SUFFIX =  Map.of(
@@ -115,11 +114,9 @@ public class PortMappingVersion221 {
             Direction.Bidirectional, "TXRX");
     }
 
-    public PortMappingVersion221(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-            OpenRoadmInterfaces openRoadmInterfaces) {
+    public PortMappingVersion221(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
-        this.openRoadmInterfaces = openRoadmInterfaces;
     }
 
     public boolean createMappingData(String nodeId) {
@@ -782,30 +779,31 @@ public class PortMappingVersion221 {
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
         for (Interfaces interfaces : port.getInterfaces()) {
-            try {
-                Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
-                    interfaces.getInterfaceName());
-                if (openRoadmInterface.isEmpty()) {
-                    LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG,
-                        nodeId, interfaces.getInterfaceName() + "- empty interface");
-                    continue;
-                }
-                LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
-                    nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
-                Class<? extends InterfaceType> interfaceType
-                    = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
-                // Check if interface type is OMS or OTS
-                if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
-                    mpBldr.setSupportingOms(interfaces.getInterfaceName());
-                }
-                if (interfaceType.equals(OpticalTransport.class)) {
-                    mpBldr.setSupportingOts(interfaces.getInterfaceName());
-                }
-                if (interfaceType.equals(OtnOdu.class)) {
-                    mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
-                }
-            } catch (OpenRoadmInterfaceException ex) {
-                LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG, nodeId, interfaces.getInterfaceName(), ex);
+            Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId,
+                interfaces.getInterfaceName());
+            if (!openRoadmInterface.isPresent()) {
+                LOG.warn("{} : Interface {} was null!", nodeId, interfaces.getInterfaceName());
+                continue;
+            }
+            LOG.debug("{} : interface get from device is {} and of type {}",
+                nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
+            Class<? extends InterfaceType> interfaceType
+                = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
+            // Check if interface type is OMS or OTS
+            if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+                mpBldr.setSupportingOms(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OpticalTransport.class)) {
+                mpBldr.setSupportingOts(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OtnOtu.class)) {
+                mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OtnOdu.class)) {
+                mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(EthernetCsmacd.class)) {
+                mpBldr.setSupportingEthernet(interfaces.getInterfaceName());
             }
         }
         return mpBldr;
@@ -1163,4 +1161,10 @@ public class PortMappingVersion221 {
         return nodeInfoBldr.build();
     }
 
+    private Optional<Interface> getInterfaceFromDevice(String nodeId, String interfaceName) {
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(interfaceName));
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
 }
