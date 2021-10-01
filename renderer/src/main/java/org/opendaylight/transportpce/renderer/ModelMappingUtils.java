@@ -14,15 +14,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.NodeIdPair;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
+import org.opendaylight.transportpce.common.mapping.PortMappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.Action;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.AEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.AEndApiInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.ZEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.ZEndApiInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
@@ -232,7 +238,7 @@ public final class ModelMappingUtils {
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes.NodesBuilder nb
                 = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.otn.renderer.nodes
                     .NodesBuilder().setNodeId(node.getNodeId()).setNetworkTp(node.getDestTp());
-            if (node.getSrcTp().contains("NETWORK")) {
+            if (node.getSrcTp() != null && node.getSrcTp().contains("NETWORK")) {
                 nb.setNetwork2Tp(node.getSrcTp());
             } else {
                 nb.setClientTp(node.getSrcTp());
@@ -244,7 +250,9 @@ public final class ModelMappingUtils {
             .setOperation(operation)
             .setServiceFormat(serviceFormat)
             .setServiceRate(serviceRate)
-            .setNodes(nodes);
+            .setNodes(nodes)
+            .setAEndApiInfo(createAendApiInfo(pathDescription))
+            .setZEndApiInfo(createZendApiInfo(pathDescription));
 
         // set the trib-slots and trib-ports for the lower oder odu
         if (serviceRate.intValue() == 1 || (serviceRate.intValue() == 10)) {
@@ -414,32 +422,68 @@ public final class ModelMappingUtils {
         }
     }
 
+    private static AEndApiInfo createAendApiInfo(PathDescription pathDescription) {
+        String anodeId = extractAendFromPathDescription(pathDescription).get("nodeId");
+        String sapi = PortMappingUtils.fnv1size64(
+                String.join("-", anodeId, extractAendFromPathDescription(pathDescription).get("tpid")));
+        String dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractZendFromPathDescription(pathDescription).get("nodeId"),
+                    extractZendFromPathDescription(pathDescription).get("tpid")));
+        return new AEndApiInfoBuilder()
+            .setSapi(sapi)
+            .setExpectedDapi(sapi)
+            .setDapi(dapi)
+            .setExpectedSapi(dapi)
+            .setNodeId(anodeId)
+            .build();
+    }
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
-            value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
-            justification = "not relevant to return a zero length array"
-                    + " as we need real pos")
-    public static int[] findTheLongestSubstring(String s1, String s2) {
-        if ((s1 == null) || (s2 == null)) {
-            return null;
-        }
-        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
-        int maxLen = 0;
-        int endPos = 0;
-        for (int i = 1; i < dp.length; i++) {
-            for (int j = 1; j < dp[0].length; j++) {
-                char ch1 = s1.charAt(i - 1);
-                char ch2 = s2.charAt(j - 1);
-                if (ch1 == ch2) {
-                    dp[i][j] = dp[i - 1][j - 1] + 1;
-                    if (dp[i][j] >= maxLen) {
-                        maxLen = dp[i][j];
-                        endPos = i;
-                    }
-                }
+    private static ZEndApiInfo createZendApiInfo(PathDescription pathDescription) {
+        String znodeId = extractZendFromPathDescription(pathDescription).get("nodeId");
+        String sapi = PortMappingUtils.fnv1size64(
+                String.join("-", znodeId, extractZendFromPathDescription(pathDescription).get("tpid")));
+        String dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractAendFromPathDescription(pathDescription).get("nodeId"),
+                    extractAendFromPathDescription(pathDescription).get("tpid")));
+        return new ZEndApiInfoBuilder()
+            .setSapi(sapi)
+            .setExpectedDapi(sapi)
+            .setDapi(dapi)
+            .setExpectedSapi(dapi)
+            .setNodeId(znodeId)
+            .build();
+    }
+
+    private static Map<String, String> extractAendFromPathDescription(PathDescription pathDescription) {
+        List<AToZ> tpList = pathDescription.getAToZDirection().getAToZ().values().stream()
+            .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
+                .getSimpleName()))
+            .collect(Collectors.toList());
+        for (AToZ atoZ : tpList) {
+            TerminationPoint tp = (TerminationPoint) atoZ.getResource().getResource();
+            if (!tp.getTpId().isEmpty() && !tp.getTpNodeId().isEmpty()) {
+                String nodeId = tp.getTpNodeId();
+                String lcp = tp.getTpId();
+                return Map.of("nodeId", nodeId, "tpid", lcp);
             }
         }
-        return new int[] { endPos - maxLen, endPos };
+        return null;
+    }
+
+    private static Map<String, String> extractZendFromPathDescription(PathDescription pathDescription) {
+        List<ZToA> tpList = pathDescription.getZToADirection().getZToA().values().stream()
+            .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
+                .getSimpleName()))
+            .collect(Collectors.toList());
+        for (ZToA ztoA : tpList) {
+            TerminationPoint tp = (TerminationPoint) ztoA.getResource().getResource();
+            if (!tp.getTpId().isEmpty() && !tp.getTpNodeId().isEmpty()) {
+                String nodeId = tp.getTpNodeId();
+                String lcp = tp.getTpId();
+                return Map.of("nodeId", nodeId, "tpid", lcp);
+            }
+        }
+        return null;
     }
 
 }
