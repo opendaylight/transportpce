@@ -20,6 +20,10 @@ module transportpce-device-renderer {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2021-10-04 {
+    description
+      "Add source and destinatin API info in service-path";
+  }
   revision 2021-06-18 {
     description
       "Replace service-type by service-format.
@@ -49,6 +53,21 @@ module transportpce-device-renderer {
     }
   }
 
+  grouping az-api-info {
+    container a-end-api-info {
+      leaf node-id {
+        type string;
+      }
+      uses org-transportpce-common-types:api-info;
+    }
+    container z-end-api-info {
+      leaf node-id {
+        type string;
+      }
+      uses org-transportpce-common-types:api-info;
+    }
+  }
+
   rpc service-path {
     input {
       leaf modulation-format {
@@ -57,6 +76,7 @@ module transportpce-device-renderer {
       leaf operation {
         type action;
       }
+      uses az-api-info;
       uses org-transportpce-common-types:optical-renderer-input;
     }
     output {
@@ -100,18 +120,7 @@ module transportpce-device-renderer {
       leaf operation {
         type action;
       }
-      container a-end-api-info {
-        leaf node-id {
-          type string;
-        }
-        uses org-transportpce-common-types:api-info;
-      }
-      container z-end-api-info {
-        leaf node-id {
-          type string;
-        }
-        uses org-transportpce-common-types:api-info;
-      }
+      uses az-api-info;
       uses org-transportpce-common-types:otn-renderer-input;
     }
     output {
