@@ -47,19 +47,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bean id="portMapping121" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion121" >
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmInterfaces" />
     </bean>
 
     <bean id="portMapping221" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion221" >
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmInterfaces" />
     </bean>
 
     <bean id="portMapping710" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion710" >
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmInterfaces" />
     </bean>
 
     <bean id="requestProcessor" class="org.opendaylight.transportpce.common.network.RequestProcessor" scope="singleton" >
