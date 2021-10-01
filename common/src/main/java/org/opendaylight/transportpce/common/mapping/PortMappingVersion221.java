@@ -755,9 +755,7 @@ public class PortMappingVersion221 {
     private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping) {
         MappingBuilder mpBldr = new MappingBuilder(oldmapping);
         updateMappingStates(mpBldr, port, oldmapping);
-        if ((port.getInterfaces() == null)
-            || (!oldmapping.getLogicalConnectionPoint().contains(StringConstants.TTP_TOKEN)
-                && !oldmapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN))) {
+        if (port.getInterfaces() == null) {
             return mpBldr.build();
         }
         // Get interfaces provisioned on the port
@@ -778,6 +776,8 @@ public class PortMappingVersion221 {
     }
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
+        mpBldr.setSupportingOtu4(null)
+            .setSupportingOdu4(null);
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId,
                 interfaces.getInterfaceName());
