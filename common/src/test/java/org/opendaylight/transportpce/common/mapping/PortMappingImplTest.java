@@ -119,7 +119,7 @@ public class PortMappingImplTest {
                 .getMapping("node", "logicalConnectionPoint"), mapping);
 
         //test delete portmapping for existing node
-        portMapping.deleteMappingData("node");
+        portMapping.deletePortMappingNode("node");
 
         //test get portmapping that was deleted above and doesn't exist anymore
         assertNull(portMapping.getMapping("node", "logicalConnectionPoint"));
