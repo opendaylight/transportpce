@@ -13,7 +13,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -33,8 +32,6 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.DataStoreContextImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
@@ -101,7 +98,6 @@ public class PortMappingVersion121Test {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion121Test.class);
     private static DataBroker dataBroker;
     private static DeviceTransactionManager deviceTransactionManager;
-    private static OpenRoadmInterfaces openRoadmInterfaces;
     private static PortMappingVersion121 portMappingVersion121;
     private Random ran = new Random();
 
@@ -111,8 +107,7 @@ public class PortMappingVersion121Test {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
         deviceTransactionManager = mock(DeviceTransactionManager.class);
-        openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
-        portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager, openRoadmInterfaces);
+        portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
     }
 
     @Test
@@ -442,26 +437,10 @@ public class PortMappingVersion121Test {
                 .setType(OpticalTransport.class).build();
         Interface ifc2 = new InterfaceBuilder().withKey(new InterfaceKey("ifc2"))
                 .setType(OpenROADMOpticalMultiplex.class).build();
-        try {
-            when(openRoadmInterfaces.getInterface("node", "i1")).thenReturn(Optional.of(ifc1));
-            when(openRoadmInterfaces.getInterface("node", "i2")).thenReturn(Optional.of(ifc2));
-        } catch (OpenRoadmInterfaceException e) {
-            LOG.error("Failed to mock interafce.", e);
-            fail();
-        }
 
         // test createMappingData with a node with 3 dgree + 3 srg + bidirectional & unidirectional ports
         assertTrue("creating mappingdata for existed node returns true",
                 portMappingVersion121.createMappingData("node"));
-
-        // verify 2 interfaces were processed
-        try {
-            verify(openRoadmInterfaces).getInterface("node", "i1");
-            verify(openRoadmInterfaces).getInterface("node", "i2");
-        } catch (OpenRoadmInterfaceException e) {
-            LOG.error("Failed to read interface", e);
-            fail();
-        }
 
         // assert all portmappings have been created for the roadm node
         ReadTransaction rr = dataBroker.newReadOnlyTransaction();
