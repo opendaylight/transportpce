@@ -49,8 +49,8 @@ import org.opendaylight.transportpce.renderer.utils.CreateOtsOmsDataUtils;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.CreateOtsOmsInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.CreateOtsOmsOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.Nodes;
@@ -94,12 +94,12 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager);
         this.portMappingVersion710 = new PortMappingVersion710(getDataBroker(), deviceTransactionManager);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(this.deviceTransactionManager);
+        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(this.deviceTransactionManager);
         PortMapping portMapping =
             new PortMappingImpl(getDataBroker(), this.portMappingVersion710, this.portMappingVersion22,
                 this.portMappingVersion121);
         this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(this.deviceTransactionManager, portMapping,
             this.portMappingVersion22);
-        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(this.deviceTransactionManager);
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);

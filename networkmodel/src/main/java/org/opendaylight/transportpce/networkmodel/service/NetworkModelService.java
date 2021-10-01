@@ -63,34 +63,32 @@ public interface NetworkModelService {
     /**
      * create new otn link in otn-topology.
      *
-     * @param nodeA
-     *     OpenROADM node ID for link termination point A
-     * @param tpA
-     *     OpenROADM tp id on nodeA for link termination point A
-     * @param nodeZ
-     *     OpenROADM node ID for link termination point Z
-     * @param tpZ
-     *     OpenROADM tp id on nodeZ for link termination point Z
+     * @param notifLink
+     *     Expressed by the means of a link, specifies the
+     *     termination points of the otn link to create.
+     * @param suppLinks
+     *     list of link-id supported the service (used when more than one supported link)
      * @param linkType
      *     OtnLinkType, as OTU4, ODTU, etc
      */
-    void createOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType);
+    void createOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, List<String> suppLinks, OtnLinkType linkType);
 
     /**
      * delete otn links from otn-topology.
      *
-     * @param nodeA
-     *     OpenROADM node ID for link termination point A
-     * @param tpA
-     *     OpenROADM tp id on nodeA for link termination point A
-     * @param nodeZ
-     *     OpenROADM node ID for link termination point Z
-     * @param tpZ
-     *     OpenROADM tp id on nodeZ for link termination point Z
+     * @param notifLink
+     *     Expressed by the means of a link, specifies the
+     *     termination points of the otn link to create.
+     * @param suppLinks
+     *     list of link-id supported the service (used when more than one supported link)
      * @param linkType
      *     OtnLinkType, as OTU4, ODTU, etc
      */
-    void deleteOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType);
+    void deleteOtnLinks(
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        notifLink, List<String> suppLinks, OtnLinkType linkType);
 
     /**
      * Update otn links from otn-topology.
@@ -119,12 +117,10 @@ public interface NetworkModelService {
      * For services using directly a high-order odu, updates bandwidth parameters
      * of the direct parent otu link.
      *
-     * @param link
-     *     link containing termination points to be updated
      * @param supportedLinks
      *     list of link-id supported the service (used when more than one supported link)
      * @param isDeletion
      *     True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(Link link, List<String> supportedLinks, boolean isDeletion);
+    void updateOtnLinks(List<String> supportedLinks, boolean isDeletion);
 }
