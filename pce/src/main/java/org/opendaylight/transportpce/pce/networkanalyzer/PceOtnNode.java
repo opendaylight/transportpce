@@ -197,8 +197,8 @@ public class PceOtnNode implements PceNode {
             }
         }
 
-        if (((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
-                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)) && mode.equals("AZ"))
+        if ((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
+                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType))
             || ((StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))

@@ -20,15 +20,15 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.mapping.PortMappingUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.Action;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.OtnServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.AEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.AEndApiInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.otn.service.path.input.ZEndApiInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
@@ -168,7 +168,9 @@ public final class ModelMappingUtils {
                         optionalModulationFormat.get())));
             }
         }
-        servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat());
+        servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
+            .setAEndApiInfo(createAendApiInfo(pathDescription, false))
+            .setZEndApiInfo(createZendApiInfo(pathDescription, false));
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
@@ -219,7 +221,9 @@ public final class ModelMappingUtils {
                                 optionalModulationFormat.get())));
             }
         }
-        servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat());
+        servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
+            .setAEndApiInfo(createAendApiInfo(pathDescription, false))
+            .setZEndApiInfo(createZendApiInfo(pathDescription, false));
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
@@ -251,8 +255,8 @@ public final class ModelMappingUtils {
             .setServiceFormat(serviceFormat)
             .setServiceRate(serviceRate)
             .setNodes(nodes)
-            .setAEndApiInfo(createAendApiInfo(pathDescription))
-            .setZEndApiInfo(createZendApiInfo(pathDescription));
+            .setAEndApiInfo(createAendApiInfo(pathDescription, true))
+            .setZEndApiInfo(createZendApiInfo(pathDescription, true));
 
         // set the trib-slots and trib-ports for the lower oder odu
         if (serviceRate.intValue() == 1 || (serviceRate.intValue() == 10)) {
@@ -422,13 +426,25 @@ public final class ModelMappingUtils {
         }
     }
 
-    private static AEndApiInfo createAendApiInfo(PathDescription pathDescription) {
-        String anodeId = extractAendFromPathDescription(pathDescription).get("nodeId");
-        String sapi = PortMappingUtils.fnv1size64(
-                String.join("-", anodeId, extractAendFromPathDescription(pathDescription).get("tpid")));
-        String dapi = PortMappingUtils.fnv1size64(
-                String.join("-", extractZendFromPathDescription(pathDescription).get("nodeId"),
-                    extractZendFromPathDescription(pathDescription).get("tpid")));
+    private static AEndApiInfo createAendApiInfo(PathDescription pathDescription, boolean isForOtn) {
+        String anodeId = null;
+        String sapi = null;
+        String dapi = null;
+        if (isForOtn) {
+            anodeId = extractAendFromPathDescriptionForOtn(pathDescription).get("nodeId");
+            sapi = PortMappingUtils.fnv1size64(
+                String.join("-", anodeId, extractAendFromPathDescriptionForOtn(pathDescription).get("tpid")));
+            dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractZendFromPathDescriptionForOtn(pathDescription).get("nodeId"),
+                    extractZendFromPathDescriptionForOtn(pathDescription).get("tpid")));
+        } else {
+            anodeId = extractAendFromPathDescriptionForOptical(pathDescription).get("nodeId");
+            sapi = PortMappingUtils.fnv1size64(
+                String.join("-", anodeId, extractAendFromPathDescriptionForOptical(pathDescription).get("tpid")));
+            dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractZendFromPathDescriptionForOptical(pathDescription).get("nodeId"),
+                    extractZendFromPathDescriptionForOptical(pathDescription).get("tpid")));
+        }
         return new AEndApiInfoBuilder()
             .setSapi(sapi)
             .setExpectedDapi(sapi)
@@ -438,13 +454,25 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    private static ZEndApiInfo createZendApiInfo(PathDescription pathDescription) {
-        String znodeId = extractZendFromPathDescription(pathDescription).get("nodeId");
-        String sapi = PortMappingUtils.fnv1size64(
-                String.join("-", znodeId, extractZendFromPathDescription(pathDescription).get("tpid")));
-        String dapi = PortMappingUtils.fnv1size64(
-                String.join("-", extractAendFromPathDescription(pathDescription).get("nodeId"),
-                    extractAendFromPathDescription(pathDescription).get("tpid")));
+    private static ZEndApiInfo createZendApiInfo(PathDescription pathDescription, boolean isForOtn) {
+        String znodeId = null;
+        String sapi = null;
+        String dapi = null;
+        if (isForOtn) {
+            znodeId = extractZendFromPathDescriptionForOtn(pathDescription).get("nodeId");
+            sapi = PortMappingUtils.fnv1size64(
+                String.join("-", znodeId, extractZendFromPathDescriptionForOtn(pathDescription).get("tpid")));
+            dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractAendFromPathDescriptionForOtn(pathDescription).get("nodeId"),
+                    extractAendFromPathDescriptionForOtn(pathDescription).get("tpid")));
+        } else {
+            znodeId = extractZendFromPathDescriptionForOptical(pathDescription).get("nodeId");
+            sapi = PortMappingUtils.fnv1size64(
+                String.join("-", znodeId, extractZendFromPathDescriptionForOptical(pathDescription).get("tpid")));
+            dapi = PortMappingUtils.fnv1size64(
+                String.join("-", extractAendFromPathDescriptionForOptical(pathDescription).get("nodeId"),
+                    extractAendFromPathDescriptionForOptical(pathDescription).get("tpid")));
+        }
         return new ZEndApiInfoBuilder()
             .setSapi(sapi)
             .setExpectedDapi(sapi)
@@ -454,8 +482,9 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    private static Map<String, String> extractAendFromPathDescription(PathDescription pathDescription) {
+    private static Map<String, String> extractAendFromPathDescriptionForOtn(PathDescription pathDescription) {
         List<AToZ> tpList = pathDescription.getAToZDirection().getAToZ().values().stream()
+            .sorted((az1, az2) -> Integer.compare(Integer.parseInt(az1.getId()), Integer.parseInt(az2.getId())))
             .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
                 .getSimpleName()))
             .collect(Collectors.toList());
@@ -470,8 +499,9 @@ public final class ModelMappingUtils {
         return null;
     }
 
-    private static Map<String, String> extractZendFromPathDescription(PathDescription pathDescription) {
+    private static Map<String, String> extractZendFromPathDescriptionForOtn(PathDescription pathDescription) {
         List<ZToA> tpList = pathDescription.getZToADirection().getZToA().values().stream()
+            .sorted((az1, az2) -> Integer.compare(Integer.parseInt(az1.getId()), Integer.parseInt(az2.getId())))
             .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
                 .getSimpleName()))
             .collect(Collectors.toList());
@@ -486,4 +516,37 @@ public final class ModelMappingUtils {
         return null;
     }
 
+    private static Map<String, String> extractAendFromPathDescriptionForOptical(PathDescription pathDescription) {
+        List<AToZ> tpList = pathDescription.getAToZDirection().getAToZ().values().stream()
+            .sorted((az1, az2) -> Integer.compare(Integer.parseInt(az1.getId()), Integer.parseInt(az2.getId())))
+            .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
+                .getSimpleName()))
+            .collect(Collectors.toList());
+        for (AToZ atoZ : tpList) {
+            TerminationPoint tp = (TerminationPoint) atoZ.getResource().getResource();
+            if (!tp.getTpId().contains("CLIENT") && !tp.getTpId().isEmpty() && !tp.getTpNodeId().isEmpty()) {
+                String nodeId = tp.getTpNodeId();
+                String lcp = tp.getTpId();
+                return Map.of("nodeId", nodeId, "tpid", lcp);
+            }
+        }
+        return null;
+    }
+
+    private static Map<String, String> extractZendFromPathDescriptionForOptical(PathDescription pathDescription) {
+        List<ZToA> tpList = pathDescription.getZToADirection().getZToA().values().stream()
+            .sorted((az1, az2) -> Integer.compare(Integer.parseInt(az1.getId()), Integer.parseInt(az2.getId())))
+            .filter(az -> TERMINATION_POINT.equals(az.getResource().getResource().implementedInterface()
+                .getSimpleName()))
+            .collect(Collectors.toList());
+        for (ZToA ztoA : tpList) {
+            TerminationPoint tp = (TerminationPoint) ztoA.getResource().getResource();
+            if (!tp.getTpId().contains("CLIENT")  && !tp.getTpId().isEmpty() && !tp.getTpNodeId().isEmpty()) {
+                String nodeId = tp.getTpNodeId();
+                String lcp = tp.getTpId();
+                return Map.of("nodeId", nodeId, "tpid", lcp);
+            }
+        }
+        return null;
+    }
 }
