@@ -1126,7 +1126,9 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
+
 # test service-create for 400GE service from xpdra2 to xpdrc2
+
     def test_72_create_400GE_service(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service-400GE"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "400"
@@ -1304,12 +1306,11 @@ class TransportPCEtesting(unittest.TestCase):
                         ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'}
-        input_dict_2 = {"tx-sapi": "AIGiVAQ4gDil", "rate": "org-openroadm-otn-common-types:OTUCn",
+        input_dict_2 = {"rate": "org-openroadm-otn-common-types:OTUCn",
                         "degthr-percentage": 100,
                         "tim-detect-mode": "Disabled",
                         "otucn-n-rate": 4,
-                        "degm-intervals": 2,
-                        "expected-dapi": "AIGiVAQ4gDil"}
+                        "degm-intervals": 2}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -1317,34 +1318,34 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-otu-interfaces:otu']),
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
-    def test_82_check_interface_ODUC4_xpdra2(self):
-        response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR1-NETWORK1-ODUC4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODUC4',
-                        'administrative-state': 'inService',
-                        'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
-                        'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'L1'}
-        input_dict_2 = {"odu-function": "org-openroadm-otn-common-types:ODU-TTP",
-                        "tim-detect-mode": "Disabled",
-                        "degm-intervals": 2,
-                        "degthr-percentage": 100,
-                        "monitoring-mode": "terminated",
-                        "rate": "org-openroadm-otn-common-types:ODUCn",
-                        "oducn-n-rate": 4}
-        input_dict_3 = {"exp-payload-type": "22", "payload-type": "22"}
-
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
-        self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
-        self.assertDictEqual(dict(input_dict_3,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+    # def test_82_check_interface_ODUC4_xpdra2(self):
+    #     response = test_utils.check_netconf_node_request(
+    #         "XPDR-A2", "interface/XPDR1-NETWORK1-ODUC4")
+    #     self.assertEqual(response.status_code, requests.codes.ok)
+    #     res = response.json()
+    #     input_dict_1 = {'name': 'XPDR1-NETWORK1-ODUC4',
+    #                     'administrative-state': 'inService',
+    #                     'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
+    #                     ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
+    #                     'type': 'org-openroadm-interfaces:otnOdu',
+    #                     'supporting-port': 'L1'}
+    #     input_dict_2 = {"odu-function": "org-openroadm-otn-common-types:ODU-TTP",
+    #                     "tim-detect-mode": "Disabled",
+    #                     "degm-intervals": 2,
+    #                     "degthr-percentage": 100,
+    #                     "monitoring-mode": "terminated",
+    #                     "rate": "org-openroadm-otn-common-types:ODUCn",
+    #                     "oducn-n-rate": 4}
+    #     input_dict_3 = {"exp-payload-type": "22", "payload-type": "22"}
+    #
+    #     self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
+    #                          res['interface'][0])
+    #     self.assertDictEqual(dict(input_dict_2,
+    #                               **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+    #                          res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+    #     self.assertDictEqual(dict(input_dict_3,
+    #                               **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu']),
+    #                          res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_83_delete_400GE_service(self):
         response = test_utils.service_delete_request("service-400GE")
