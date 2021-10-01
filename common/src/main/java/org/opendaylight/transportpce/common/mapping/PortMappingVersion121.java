@@ -30,8 +30,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.OpenroadmNodeVersion;
@@ -90,7 +88,6 @@ public class PortMappingVersion121 {
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
-    private final OpenRoadmInterfaces openRoadmInterfaces;
 
     static {
         SUFFIX =  Map.of(
@@ -99,11 +96,9 @@ public class PortMappingVersion121 {
             Direction.Bidirectional, "TXRX");
     }
 
-    public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-            OpenRoadmInterfaces openRoadmInterfaces) {
+    public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
-        this.openRoadmInterfaces = openRoadmInterfaces;
     }
 
     public boolean createMappingData(String nodeId) {
@@ -604,27 +599,21 @@ public class PortMappingVersion121 {
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
         for (Interfaces interfaces : port.getInterfaces()) {
-            try {
-                Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
-                    interfaces.getInterfaceName());
-                if (openRoadmInterface.isEmpty()) {
-                    LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG,
-                        nodeId, interfaces.getInterfaceName() + "- empty interface");
-                    continue;
-                }
-                LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
-                    nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
-                Class<? extends InterfaceType> interfaceType
-                    = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
-                // Check if interface type is OMS or OTS
-                if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
-                    mpBldr.setSupportingOms(interfaces.getInterfaceName());
-                }
-                if (interfaceType.equals(OpticalTransport.class)) {
-                    mpBldr.setSupportingOts(interfaces.getInterfaceName());
-                }
-            } catch (OpenRoadmInterfaceException ex) {
-                LOG.warn(PortMappingUtils.INTF_ISSUE_LOGMSG, nodeId, interfaces.getInterfaceName(), ex);
+            Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId, interfaces.getInterfaceName());
+            if (!openRoadmInterface.isPresent()) {
+                LOG.warn("{} : Interface {} was null!", nodeId, interfaces.getInterfaceName());
+                continue;
+            }
+            LOG.debug("{} : interface get from device is {} and of type {}",
+                nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
+            Class<? extends InterfaceType> interfaceType
+                = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
+            // Check if interface type is OMS or OTS
+            if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+                mpBldr.setSupportingOms(interfaces.getInterfaceName());
+            }
+            if (interfaceType.equals(OpticalTransport.class)) {
+                mpBldr.setSupportingOts(interfaces.getInterfaceName());
             }
         }
         return mpBldr;
@@ -967,4 +956,10 @@ public class PortMappingVersion121 {
         return nodeInfoBldr.build();
     }
 
+    private Optional<Interface> getInterfaceFromDevice(String nodeId, String interfaceName) {
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(interfaceName));
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
 }

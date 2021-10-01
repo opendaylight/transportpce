@@ -107,21 +107,19 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
         this.crossConnectImpl22 = new CrossConnectImpl221(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
                 this.crossConnectImpl22, this.crossConnectImpl710);
+        this.portMappingVersion22 = new PortMappingVersion221(getDataBroker(), deviceTransactionManager);
+        this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), deviceTransactionManager);
+        this.portMappingVersion710 = new PortMappingVersion710(getDataBroker(), deviceTransactionManager);
+        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion710,
+            this.portMappingVersion22, this.portMappingVersion121);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
-        this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
+        this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager, this.portMapping,
+            this.portMappingVersion22);
         this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
                 this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22,
             this.openRoadmInterfacesImpl710);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
-        this.portMappingVersion22 =
-                new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMappingVersion121 =
-                new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMappingVersion710 =
-            new PortMappingVersion710(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion710,
-            this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
                 this.deviceTransactionManager);
