@@ -82,9 +82,6 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
-        this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(this.deviceTransactionManager);
-        this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(this.deviceTransactionManager);
-        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(this.deviceTransactionManager);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(MappingUtils.class);
 
@@ -93,12 +90,12 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
             openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
-        this.portMappingVersion22 = new PortMappingVersion221(getDataBroker(), this.deviceTransactionManager,
-            this.openRoadmInterfaces);
-        this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager,
-            this.openRoadmInterfaces);
-        this.portMappingVersion710 =
-            new PortMappingVersion710(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
+        this.portMappingVersion22 = new PortMappingVersion221(getDataBroker(), this.deviceTransactionManager);
+        this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager);
+        this.portMappingVersion710 = new PortMappingVersion710(getDataBroker(), deviceTransactionManager);
+        this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(this.deviceTransactionManager);
+        this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(this.deviceTransactionManager);
+        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(this.deviceTransactionManager);
         PortMapping portMapping =
             new PortMappingImpl(getDataBroker(), this.portMappingVersion710, this.portMappingVersion22,
                 this.portMappingVersion121);
