@@ -121,7 +121,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
-        this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
+        this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager, this.portMapping,
+            this.portMappingVersion22);
         this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
                 this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22,
