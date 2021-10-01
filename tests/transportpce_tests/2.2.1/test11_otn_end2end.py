@@ -147,6 +147,7 @@ class TransportPCEtesting(unittest.TestCase):
     def setUp(self):
         time.sleep(5)
 
+
     def test_01_connect_spdrA(self):
         response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
@@ -298,8 +299,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
-        input_dict_2 = {'tx-sapi': 'Swfw02qXGyI=',
-                        'expected-dapi': 'Swfw02qXGyI=',
+        input_dict_2 = {'tx-sapi': 'H/OelLynehI=',
+                        'expected-dapi': 'H/OelLynehI=',
+                        'tx-dapi': 'AMf1n5hK6Xkk',
+                        'expected-sapi': 'AMf1n5hK6Xkk',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -340,10 +343,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
-        input_dict_2 = {'tx-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'Swfw02qXGyI=',
-                        'tx-sapi': 'fuYZwEO660g=',
-                        'expected-dapi': 'fuYZwEO660g=',
+        input_dict_2 = {'tx-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'H/OelLynehI=',
+                        'tx-sapi': 'AMf1n5hK6Xkk',
+                        'expected-dapi': 'AMf1n5hK6Xkk',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -470,6 +473,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['services'][0]['lifecycle-state'], 'planned')
         time.sleep(2)
 
+
     def test_25_check_interface_ODU4_spdra(self):
         response = test_utils.check_netconf_node_request(
             "SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
@@ -480,14 +484,17 @@ class TransportPCEtesting(unittest.TestCase):
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-OTU',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'CP1-CFP0-P1'}
+                        'supporting-port': 'CP1-CFP0-P1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         # SAPI/DAPI are added in the Otu4 renderer
         input_dict_2 = {'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
                         'rate': 'org-openroadm-otn-common-types:ODU4',
-                        'expected-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'fuYZwEO660g=',
-                        'tx-dapi': 'fuYZwEO660g=',
-                        'tx-sapi': 'Swfw02qXGyI='}
+                        'monitoring-mode': 'terminated',
+                        'expected-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'AMf1n5hK6Xkk',
+                        'tx-dapi': 'AMf1n5hK6Xkk',
+                        'tx-sapi': 'H/OelLynehI='}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -509,14 +516,17 @@ class TransportPCEtesting(unittest.TestCase):
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-OTU',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'CP1-CFP0-P1'}
+                        'supporting-port': 'CP1-CFP0-P1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         # SAPI/DAPI are added in the Otu4 renderer
         input_dict_2 = {'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
                         'rate': 'org-openroadm-otn-common-types:ODU4',
-                        'tx-sapi': 'fuYZwEO660g=',
-                        'tx-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'Swfw02qXGyI=',
-                        'expected-dapi': 'fuYZwEO660g='
+                        'monitoring-mode': 'terminated',
+                        'tx-sapi': 'AMf1n5hK6Xkk',
+                        'tx-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'H/OelLynehI=',
+                        'expected-dapi': 'AMf1n5hK6Xkk'
                         }
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -527,6 +537,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(
             {u'payload-type': u'21', u'exp-payload-type': u'21'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+
 
     def test_27_check_otn_topo_links(self):
         response = test_utils.get_otn_topo_request()
