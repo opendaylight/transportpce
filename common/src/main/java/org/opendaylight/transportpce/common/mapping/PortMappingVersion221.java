@@ -357,9 +357,7 @@ public class PortMappingVersion221 {
             postPortMapping(nodeId, null, null, null, switchingPoolList, null);
         }
 
-        if (!mappingMap.isEmpty()) {
-            mappingMap.forEach((k,v) -> portMapList.add(v));
-        }
+        mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
     }
 
@@ -832,21 +830,22 @@ public class PortMappingVersion221 {
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
             XpdrNodeTypes xpdrNodeType) {
-
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
         }
+        return createNewXpdrMapping(nodeId, port, circuitPackName, logicalConnectionPoint, partnerLcp, xpdrNodeType);
+    }
 
-        // create a new mapping
-        String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
+    private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
+            String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeIdLcp));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }

@@ -458,7 +458,7 @@ public class PortMappingVersion121 {
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
+        if (protocolObject.isEmpty() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
             LOG.warn(PortMappingUtils.PROCESSING_DONE_LOGMSG, nodeId, PortMappingUtils.CANNOT_GET_LLDP_CONF_LOGMSG);
             return new HashMap<>();
         }
