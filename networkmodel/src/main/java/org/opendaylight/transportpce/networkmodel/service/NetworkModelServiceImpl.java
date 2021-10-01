@@ -257,7 +257,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
 
             LOG.info("deleteOpenROADMnode: {} version {}", nodeId, deviceVersion.getName());
-            this.portMapping.deleteMappingData(nodeId);
+            this.portMapping.deletePortMappingNode(nodeId);
 
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("all nodes and links deleted ! ");
