@@ -321,14 +321,10 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                     StringConstants.SERVICE_TYPE_ODUC4, OtnLinkType.ODUC4);
                 if (isDeletion) {
                     LOG.info("updating otn-topology removing links");
-                    this.networkModelService.deleteOtnLinks(link.getATermination().getNodeId(),
-                        link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
+                    this.networkModelService.deleteOtnLinks(link, supportedLinkIds, otnLinkTypeMap.get(serviceType));
                 } else {
                     LOG.info("updating otn-topology adding links");
-                    this.networkModelService.createOtnLinks(link.getATermination().getNodeId(),
-                        link.getATermination().getTpId(), link.getZTermination().getNodeId(),
-                        link.getZTermination().getTpId(), otnLinkTypeMap.get(serviceType));
+                    this.networkModelService.createOtnLinks(link, supportedLinkIds, otnLinkTypeMap.get(serviceType));
                 }
                 break;
             case StringConstants.SERVICE_TYPE_1GE:
@@ -345,7 +341,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                     tribPort, minTribSlot, maxTribSlot, isDeletion);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_S:
-                this.networkModelService.updateOtnLinks(link, supportedLinkIds, isDeletion);
+                this.networkModelService.updateOtnLinks(supportedLinkIds, isDeletion);
                 break;
             default:
                 LOG.warn("service-type {} not managed yet", serviceType);
