@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4253cdb5_082eed0a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-01T18:59:02Z",
+      "side": 1,
+      "message": "reused in other guard clauses and allocation",
+      "revId": "72cb2020a9597090e5410f38f48690b73461f59f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
