@@ -246,7 +246,7 @@ public class OpenRoadmInterface221 {
     }
 
     public String createOpenRoadmOdu4HOInterface(String nodeId, String logicalConnPoint, boolean isCTP,
-            AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ) throws OpenRoadmInterfaceException {
+            AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ, String payloadType) throws OpenRoadmInterfaceException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
@@ -272,8 +272,8 @@ public class OpenRoadmInterface221 {
             oduFunction = ODUTTP.class;
             monitoringMode = MonitoringMode.Terminated;
             opu = new OpuBuilder()
-                .setPayloadType(PayloadTypeDef.getDefaultInstance("21"))
-                .setExpPayloadType(PayloadTypeDef.getDefaultInstance("21"))
+                .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
+                .setExpPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
                 .build();
         }
         OduBuilder oduIfBuilder = new OduBuilder()
