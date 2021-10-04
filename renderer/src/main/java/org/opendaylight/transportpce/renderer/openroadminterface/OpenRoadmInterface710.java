@@ -20,6 +20,8 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.TrailTraceOther.TimDetectMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
@@ -202,10 +204,10 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmOtucnInterface(String nodeId, String logicalConnPoint,
-            String supportingOtsiGroupInterface)
+            String supportingOtsiGroupInterface, AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ)
             throws OpenRoadmInterfaceException {
-        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
-        if (portMap == null) {
+        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (mapping == null) {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
                     nodeId, logicalConnPoint));
@@ -221,8 +223,20 @@ public class OpenRoadmInterface710 {
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
             .setMaintLoopback(maintLoopbackBuilder.build());
+        if (apiInfoA != null) {
+            otuBuilder.setTxSapi(apiInfoA.getSapi())
+                .setTxDapi(apiInfoA.getDapi())
+                .setExpectedSapi(apiInfoA.getExpectedSapi())
+                .setExpectedDapi(apiInfoA.getExpectedDapi());
+        }
+        if (apiInfoZ != null) {
+            otuBuilder.setTxSapi(apiInfoZ.getSapi())
+                .setTxDapi(apiInfoZ.getDapi())
+                .setExpectedSapi(apiInfoZ.getExpectedSapi())
+                .setExpectedDapi(apiInfoZ.getExpectedDapi());
+        }
 
-        InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOtu.class,
+        InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOtu.class,
             logicalConnPoint + "-OTUC4");
 
         // Create a list
@@ -237,81 +251,18 @@ public class OpenRoadmInterface710 {
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, otuInterfaceBuilder);
-
         // Post the equipment-state change on the device circuit-pack if xpdr node
-        if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
-            this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
+        if (mapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(nodeId, mapping.getSupportingCircuitPackName(), true);
         }
-
+        this.portMapping.updateMapping(nodeId, mapping);
         return otuInterfaceBuilder.getName();
-
     }
 
-    // Adding method to have SAPI/DAPI information for the OTUCn
-    public String createOpenRoadmOtucnInterface(String anodeId, String alogicalConnPoint,
-            String supportingOtsiGroupInterface, String znodeId, String zlogicalConnPoint)
+    public String createOpenRoadmOducnInterface(String nodeId, String logicalConnPoint)
             throws OpenRoadmInterfaceException {
-        Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
-        Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
-        if (portMapA == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
-                    anodeId, alogicalConnPoint));
-        }
-        // On the Zside
-        if (portMapZ == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
-                    znodeId, zlogicalConnPoint));
-
-        }
-        // Create an OTUCn object
-        MaintLoopbackBuilder maintLoopbackBuilder = new MaintLoopbackBuilder();
-        maintLoopbackBuilder.setEnabled(false);
-        OtuBuilder otuBuilder = new OtuBuilder()
-            .setRate(OTUCn.class)
-            .setOtucnNRate(Uint16.valueOf(4))
-            .setTimActEnabled(false)
-            .setTimDetectMode(TimDetectMode.Disabled)
-            .setDegmIntervals(Uint8.valueOf(2))
-            .setDegthrPercentage(Uint16.valueOf(100))
-            .setMaintLoopback(maintLoopbackBuilder.build())
-            .setTxSapi(portMapA.getLcpHashVal())
-            .setTxDapi(portMapZ.getLcpHashVal())
-            // setting expected SAPI and DAPI values
-            .setExpectedDapi(portMapA.getLcpHashVal())
-            .setExpectedSapi(portMapZ.getLcpHashVal());
-
-        InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOtu.class,
-            alogicalConnPoint + "-OTUC4");
-
-        // Create a list
-        List<String> listSupportingOtsiGroupInterface = new ArrayList<>();
-        listSupportingOtsiGroupInterface.add(supportingOtsiGroupInterface);
-
-        otuInterfaceBuilder.setSupportingInterfaceList(listSupportingOtsiGroupInterface);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder otuIf1Builder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder();
-
-        otuInterfaceBuilder.addAugmentation(otuIf1Builder.setOtu(otuBuilder.build()).build());
-
-        // Post interface on the device
-        openRoadmInterfaces.postInterface(anodeId, otuInterfaceBuilder);
-
-        // Post the equipment-state change on the device circuit-pack if xpdr node
-        if (portMapA.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
-            this.openRoadmInterfaces.postEquipmentState(anodeId, portMapA.getSupportingCircuitPackName(), true);
-        }
-
-        return otuInterfaceBuilder.getName();
-
-    }
-
-    public String createOpenRoadmOducnInterface(String nodeId, String logicalConnPoint,
-            String supportingOtucn)
-            throws OpenRoadmInterfaceException {
-        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
-        if (portMap == null) {
+        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (mapping == null) {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
                     nodeId, logicalConnPoint));
@@ -341,12 +292,14 @@ public class OpenRoadmInterface710 {
             .setOpu(opuBuilder.build())
             .setMaintTestsignal(maintTestsignal.build());
 
-        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOdu.class,
             logicalConnPoint + "-ODUC4");
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();
-        listSupportingOtucnInterface.add(supportingOtucn);
+        if (mapping.getSupportingOtuc4() != null) {
+            listSupportingOtucnInterface.add(mapping.getSupportingOtuc4());
+        }
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder oduIf1Builder =
@@ -358,8 +311,8 @@ public class OpenRoadmInterface710 {
         openRoadmInterfaces.postInterface(nodeId, oduInterfaceBuilder);
 
         // Post the equipment-state change on the device circuit-pack if xpdr node
-        if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
-            this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
+        if (mapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(nodeId, mapping.getSupportingCircuitPackName(), true);
         }
 
         return oduInterfaceBuilder.getName();

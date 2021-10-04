@@ -84,6 +84,7 @@ import org.slf4j.LoggerFactory;
 public class DeviceRendererServiceImpl implements DeviceRendererService {
     private static final String IS_NOT_MOUNTED_ON_THE_CONTROLLER = " is not mounted on the controller";
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererServiceImpl.class);
+    private static final String PT_07 = "07";
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaceFactory openRoadmInterfaceFactory;
@@ -165,7 +166,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                    nodeId, destTp, false, apiInfoA, apiInfoZ));
+                                    nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07));
                         }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
@@ -186,18 +187,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
                                 nodeId, srcTp, supportingOchInterface, apiInfoA, apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
-                        createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
-                                nodeId, srcTp, supportingOtuInterface));
-                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
-                        createdOduInterfaces.add(
-                            mapping != null
-                            && mapping.getXponderType() != null
-                            && (mapping.getXponderType().getIntValue() == 3
-                                || mapping.getXponderType().getIntValue() == 2)
-                            ? this.openRoadmInterfaceFactory.createOpenRoadmOtnOdu4Interface(
-                                    nodeId, destTp, supportingOtuInterface)
-                            : this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
-                                    nodeId, destTp, supportingOtuInterface));
+                        if (destTp == null) {
+                            otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(srcTp).build());
+                        } else {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
+                                nodeId, srcTp, false, apiInfoA, apiInfoZ, PT_07));
+                        }
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         LOG.info("Adding supporting EThernet interface for node {}, dest tp {}", nodeId, destTp);
