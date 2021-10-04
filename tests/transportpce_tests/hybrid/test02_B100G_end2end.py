@@ -336,7 +336,11 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
-        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTUCn',
+        input_dict_2 = {'tx-sapi': 'G54UFNImtOE=',
+                        'expected-dapi': 'G54UFNImtOE=',
+                        'tx-dapi': 'J/FIUzQc+4M=',
+                        'expected-sapi': 'J/FIUzQc+4M=',
+                        'rate': 'org-openroadm-otn-common-types:OTUCn',
                         'degthr-percentage': 100,
                         'degm-intervals': 2,
                         'otucn-n-rate': 4
@@ -400,7 +404,11 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
-        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTUCn',
+        input_dict_2 = {'tx-dapi': 'G54UFNImtOE=',
+                        'expected-sapi': 'G54UFNImtOE=',
+                        'tx-sapi': 'J/FIUzQc+4M=',
+                        'expected-dapi': 'J/FIUzQc+4M=',
+                        'rate': 'org-openroadm-otn-common-types:OTUCn',
                         'degthr-percentage': 100,
                         'degm-intervals': 2,
                         'otucn-n-rate': 4
@@ -1090,7 +1098,7 @@ class TransportPCEtesting(unittest.TestCase):
         links = res['network'][0]['ietf-network-topology:link']
         self.assertEqual(22, len(links), 'Topology should contain 22 links')
 
-    def test_68_connect_xprda2_2_N1_to_roadma_PP2(self):
+    def test_68_connect_xprda2_1_N1_to_roadma_PP2(self):
         response = test_utils.connect_xpdr_to_rdm_request("XPDR-A2", "1", "1",
                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1099,7 +1107,7 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_69_connect_roadma_PP2_to_xpdra2_2_N1(self):
+    def test_69_connect_roadma_PP2_to_xpdra2_1_N1(self):
         response = test_utils.connect_rdm_to_xpdr_request("XPDR-A2", "1", "1",
                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1108,7 +1116,7 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_70_connect_xprdc2_2_N1_to_roadmc_PP2(self):
+    def test_70_connect_xprdc2_1_N1_to_roadmc_PP2(self):
         response = test_utils.connect_xpdr_to_rdm_request("XPDR-C2", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1117,7 +1125,7 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_71_connect_roadmc_PP2_to_xpdrc2_2_N1(self):
+    def test_71_connect_roadmc_PP2_to_xpdrc2_1_N1(self):
         response = test_utils.connect_rdm_to_xpdr_request("XPDR-C2", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1306,7 +1314,11 @@ class TransportPCEtesting(unittest.TestCase):
                         ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'}
-        input_dict_2 = {"rate": "org-openroadm-otn-common-types:OTUCn",
+        input_dict_2 = {"tx-sapi": "ANeUjNzWtDLV",
+                        "expected-dapi": "ANeUjNzWtDLV",
+                        'tx-dapi': 'AKsqPmWceByv',
+                        'expected-sapi': 'AKsqPmWceByv',
+                        "rate": "org-openroadm-otn-common-types:OTUCn",
                         "degthr-percentage": 100,
                         "tim-detect-mode": "Disabled",
                         "otucn-n-rate": 4,
@@ -1318,7 +1330,6 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-otu-interfaces:otu']),
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
-    @unittest.skip("Temporary skipped waiting for the rest of the functionality in change 97834")
     def test_82_check_interface_ODUC4_xpdra2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A2", "interface/XPDR1-NETWORK1-ODUC4")
@@ -1327,9 +1338,11 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODUC4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
+                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTUC4',
                         'type': 'org-openroadm-interfaces:otnOdu',
-                        'supporting-port': 'L1'}
+                        'supporting-port': 'L1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
         input_dict_2 = {"odu-function": "org-openroadm-otn-common-types:ODU-TTP",
                         "tim-detect-mode": "Disabled",
                         "degm-intervals": 2,
@@ -1347,6 +1360,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertEqual('XPDR1-NETWORK1-OTUC4', res['interface'][0]['supporting-interface-list'][0])
 
     def test_83_delete_400GE_service(self):
         response = test_utils.service_delete_request("service-400GE")
