@@ -204,10 +204,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
-        input_dict_2 = {'tx-dapi': 'fuYZwEO660g=',
-                        'expected-sapi': 'fuYZwEO660g=',
-                        'tx-sapi': 'Swfw02qXGyI=',
-                        'expected-dapi': 'Swfw02qXGyI=',
+        input_dict_2 = {'tx-dapi': 'AMf1n5hK6Xkk',
+                        'expected-sapi': 'AMf1n5hK6Xkk',
+                        'tx-sapi': 'H/OelLynehI=',
+                        'expected-dapi': 'H/OelLynehI=',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
@@ -247,10 +247,10 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP1-CFP0-P1'
                         }
-        input_dict_2 = {'tx-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'Swfw02qXGyI=',
-                        'tx-sapi': 'fuYZwEO660g=',
-                        'expected-dapi': 'fuYZwEO660g=',
+        input_dict_2 = {'tx-dapi': 'H/OelLynehI=',
+                        'expected-sapi': 'H/OelLynehI=',
+                        'tx-sapi': 'AMf1n5hK6Xkk',
+                        'expected-dapi': 'AMf1n5hK6Xkk',
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
