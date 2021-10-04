@@ -337,19 +337,21 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         createdOduInterfaces.add(
                             // suppporting interface?, payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getClientTp(),
-                                input.getServiceName(), PT_07, false, input.getTribPortNumber(), input.getTribSlot()));
+                                input.getServiceName(), false, input.getTribPortNumber(), input.getTribSlot(), apiInfoA,
+                                apiInfoZ, PT_07));
                     }
                     createdOduInterfaces.add(
                         openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getNetworkTp(),
-                            input.getServiceName(), PT_07, true, input.getTribPortNumber(), input.getTribSlot()));
+                            input.getServiceName(), true, input.getTribPortNumber(), input.getTribSlot(), null, null,
+                            null));
                     linkTpList.add(
                         new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
                     if (node.getNetwork2Tp() != null) {
                         createdOduInterfaces.add(
                             // supporting interface? payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(),
-                                node.getNetwork2Tp(), input.getServiceName(), PT_07, true, input.getTribPortNumber(),
-                                input.getTribSlot()));
+                                node.getNetwork2Tp(), input.getServiceName(), true, input.getTribPortNumber(),
+                                input.getTribSlot(), null, null, null));
                         linkTpList.add(
                             new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
                     }
@@ -363,13 +365,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                             // suppporting interface?, payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(),
                                 node.getClientTp(), input.getServiceName(), false, input.getTribPortNumber(),
-                                input.getTribSlot(), apiInfoA, apiInfoZ));
+                                input.getTribSlot(), apiInfoA, apiInfoZ, PT_03));
                     }
                     createdOduInterfaces.add(
                         // supporting interface? payload ?
                         openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getNetworkTp(),
-                            input.getServiceName(), true, input.getTribPortNumber(), input.getTribSlot(), apiInfoA,
-                            apiInfoZ));
+                            input.getServiceName(), true, input.getTribPortNumber(), input.getTribSlot(), null,
+                            null, null));
                     linkTpList.add(
                         new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
                     if (node.getNetwork2Tp() != null) {
@@ -377,7 +379,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                             // supporting interface? payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(),
                                 node.getNetwork2Tp(), input.getServiceName(), true, input.getTribPortNumber(),
-                                input.getTribSlot(), apiInfoA, apiInfoZ));
+                                input.getTribSlot(), null, null, null));
                         linkTpList.add(
                             new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
                     }
@@ -463,7 +465,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                                 node.getNodeId(), node.getClientTp(), false, apiInfoA, apiInfoZ, "21"));
                         // supporting interface? payload ?
                         createdOduInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                node.getNodeId(), node.getNetworkTp(), true, null, null, "21"));
+                                node.getNodeId(), node.getNetworkTp(), true, null, null, null));
                         linkTpList.add(new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getClientTp())
                                 .build());
                     }
@@ -476,9 +478,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
                         // supporting interface? payload ?
                         createdOduInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                            node.getNodeId(), node.getNetworkTp(), true, null, null, "21"));
+                            node.getNodeId(), node.getNetworkTp(), true, null, null, null));
                         createdOduInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                node.getNodeId(), node.getNetwork2Tp(), true, null, null, "21"));
+                                node.getNodeId(), node.getNetwork2Tp(), true, null, null, null));
                     }
                     break;
                 default:
