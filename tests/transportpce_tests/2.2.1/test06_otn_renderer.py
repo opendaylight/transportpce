@@ -142,11 +142,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'supporting-port': 'CP1-CFP0-P1'
                         }
 
-        input_dict_2 = {'tx-dapi': 'Swfw02qXGyI=',
-                        'expected-sapi': 'Swfw02qXGyI=',
-                        'tx-sapi': 'Swfw02qXGyI=',
-                        'expected-dapi': 'Swfw02qXGyI=',
-                        'rate': 'org-openroadm-otn-common-types:OTU4',
+        input_dict_2 = {'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
 
