@@ -84,6 +84,7 @@ import org.slf4j.LoggerFactory;
 public class DeviceRendererServiceImpl implements DeviceRendererService {
     private static final String IS_NOT_MOUNTED_ON_THE_CONTROLLER = " is not mounted on the controller";
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererServiceImpl.class);
+    private static final String PT_07 = "07";
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaceFactory openRoadmInterfaceFactory;
@@ -165,7 +166,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                    nodeId, destTp, false, apiInfoA, apiInfoZ));
+                                    nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07));
                         }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
