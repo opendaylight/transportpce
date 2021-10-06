@@ -191,7 +191,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(srcTp).build());
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                nodeId, srcTp, false, apiInfoA, apiInfoZ, PT_07));
+                                    nodeId, srcTp, false, apiInfoA, apiInfoZ, PT_07));
                         }
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
