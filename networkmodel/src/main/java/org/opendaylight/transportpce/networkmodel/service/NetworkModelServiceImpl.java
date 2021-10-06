@@ -538,22 +538,44 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     @Override
     public void updateOtnLinks(
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
-            notifLink, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSlotNb,
-            boolean isDeletion) {
+            notifLink, List<String> suppLinks, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb,
+            Short maxTribSlotNb, boolean isDeletion) {
 
-        LinkTp atermination = new LinkTpBuilder()
-            .setNodeId(notifLink.getATermination().getNodeId())
-            .setTpId(notifLink.getATermination().getTpId())
-            .build();
-        LinkTp ztermination = new LinkTpBuilder()
-            .setNodeId(notifLink.getZTermination().getNodeId())
-            .setTpId(notifLink.getZTermination().getTpId())
-            .build();
         List<LinkTp> linkTerminations = new ArrayList<>();
-        linkTerminations.add(atermination);
-        linkTerminations.add(ztermination);
-
-        List<Link> supportedOdu4Links = getSupportingOdu4Links(linkTerminations, serviceRate);
+        List<Link> supportedOdu4Links = null;
+        if (notifLink != null) {
+            // retreive termination-points to be updated
+            LinkTp atermination = new LinkTpBuilder()
+                .setNodeId(notifLink.getATermination().getNodeId())
+                .setTpId(notifLink.getATermination().getTpId())
+                .build();
+            LinkTp ztermination = new LinkTpBuilder()
+                .setNodeId(notifLink.getZTermination().getNodeId())
+                .setTpId(notifLink.getZTermination().getTpId())
+                .build();
+            linkTerminations.add(atermination);
+            linkTerminations.add(ztermination);
+            // retreive supported links
+            supportedOdu4Links = getSupportingOdu4Links(linkTerminations);
+        } else if (suppLinks != null) {
+             // retreive supported links
+            List<LinkId> linkIdList = new ArrayList<>();
+            if (suppLinks != null) {
+                suppLinks.forEach(lk -> linkIdList.add(new LinkId(lk)));
+            }
+            supportedOdu4Links = getOtnLinks(linkIdList);
+            // retreive termination-points to be updated
+            for (Link link : supportedOdu4Links) {
+                LinkTp atermination = new LinkTpBuilder()
+                    .setNodeId(link.getSource().getSourceNode().getValue())
+                    .setTpId(link.getSource().getSourceTp().toString())
+                    .build();
+                linkTerminations.add(atermination);
+            }
+        } else {
+            LOG.error("Impossible to update OTN links and their associated termination points in otn-topology");
+            return;
+        }
         List<TerminationPoint> tps = getOtnNodeTps(linkTerminations);
         TopologyShard otnTopologyShard;
         otnTopologyShard = OpenRoadmOtnTopology.updateOtnLinks(supportedOdu4Links, tps, serviceRate, tribPortNb,
@@ -718,8 +740,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         List<TerminationPoint> tps = new ArrayList<>();
         for (LinkTp linkTp : linkTerminations) {
             String tp = linkTp.getTpId();
-            String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
-                .append(tp.split("-")[0]).toString();
+            String nodeId = formatNodeName(linkTp.getNodeId(), tp);
             InstanceIdentifier<TerminationPoint> iiTp = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
                 .child(Node.class, new NodeKey(new NodeId(nodeId)))
@@ -844,6 +865,16 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     private String convertNetconfNodeIdToTopoNodeId(String nodeId, String tpId) {
         return new StringBuilder(nodeId).append("-").append(tpId.split("-")[0]).toString();
+    }
+
+    private static String formatNodeName(String nodeName, String tpName) {
+        String newNodeName = null;
+        if (nodeName.contains("XPDR")) {
+            newNodeName = nodeName;
+        } else {
+            newNodeName = new StringBuilder(nodeName).append("-").append(tpName.split("-")[0]).toString();
+        }
+        return newNodeName;
     }
 
     @SuppressFBWarnings(
