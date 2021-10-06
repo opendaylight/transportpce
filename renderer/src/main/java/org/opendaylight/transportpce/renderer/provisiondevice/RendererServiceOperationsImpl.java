@@ -658,6 +658,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(input.getPathDescription());
         List<String> supportedLinks = null;
         switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODTU4.getName())).collect(Collectors.toList());
+                break;
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_100GE_S:
                 supportedLinks = allSupportLinks.stream()
@@ -708,6 +713,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(pathDescription);
         List<String> supportedLinks = null;
         switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                supportedLinks = allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODTU4.getName())).collect(Collectors.toList());
+                break;
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_100GE_S:
                 supportedLinks = allSupportLinks.stream()
