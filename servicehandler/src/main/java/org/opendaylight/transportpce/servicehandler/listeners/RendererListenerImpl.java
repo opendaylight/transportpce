@@ -337,8 +337,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 Short maxTribSlot = Short.valueOf(notification.getAToZDirection().getMaxTribSlot().getValue()
                     .split("\\.")[1]);
                 LOG.info("updating otn-topology node tps -tps and tpn pools");
-                this.networkModelService.updateOtnLinks(link, notification.getAToZDirection().getRate(),
-                    tribPort, minTribSlot, maxTribSlot, isDeletion);
+                this.networkModelService.updateOtnLinks(link, supportedLinkIds,
+                    notification.getAToZDirection().getRate(), tribPort, minTribSlot, maxTribSlot, isDeletion);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_S:
                 this.networkModelService.updateOtnLinks(supportedLinkIds, isDeletion);
