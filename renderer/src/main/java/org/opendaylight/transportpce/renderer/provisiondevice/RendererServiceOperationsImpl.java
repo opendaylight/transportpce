@@ -656,20 +656,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
         List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(input.getPathDescription());
-        List<String> supportedLinks = null;
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_100GE_S:
-                supportedLinks = allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
-                break;
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                supportedLinks = allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
-                break;
-            default:
-                break;
-        }
+        List<String> supportedLinks = getSupportedLinks(allSupportLinks, serviceType);
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceImplementationRequest,
             input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL, input.getPathDescription(),
@@ -706,20 +693,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         renderingResults.forEach(rr -> otnLinkTerminationPoints.addAll(rr.getOtnLinkTps()));
         Link notifLink = createLinkForNotif(otnLinkTerminationPoints);
         List<String> allSupportLinks = ModelMappingUtils.getLinksFromServicePathDescription(pathDescription);
-        List<String> supportedLinks = null;
-        switch (serviceType) {
-            case StringConstants.SERVICE_TYPE_ODU4:
-            case StringConstants.SERVICE_TYPE_100GE_S:
-                supportedLinks = allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
-                break;
-            case StringConstants.SERVICE_TYPE_ODUC4:
-                supportedLinks = allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
-                break;
-            default:
-                break;
-        }
+        List<String> supportedLinks = getSupportedLinks(allSupportLinks, serviceType);
 
         sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
                 serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription, notifLink, supportedLinks,
@@ -814,5 +788,26 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     .setTpId(otnLinkTerminationPoints.get(1).getTpId())
                     .build())
                 .build();
+    }
+
+    private List<String> getSupportedLinks(List<String> allSupportLinks, String serviceType) {
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                return allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODTU4.getName())).collect(Collectors.toList());
+            case StringConstants.SERVICE_TYPE_100GE_M:
+                return allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODUC4.getName())).collect(Collectors.toList());
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_100GE_S:
+                return allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
+            case StringConstants.SERVICE_TYPE_ODUC4:
+                return allSupportLinks.stream()
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
+            default:
+                return null;
+        }
     }
 }
