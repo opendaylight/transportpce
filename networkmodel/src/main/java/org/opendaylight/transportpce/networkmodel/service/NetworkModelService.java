@@ -97,7 +97,11 @@ public interface NetworkModelService {
      * otu link.
      *
      * @param link
-     *     link containing termination points to be updated
+     *     link containing termination points to be updated (used for use
+     *     case with a single supported link)
+     * @param supportedLinks
+     *     list of link-id supported the service (used for use case with
+     *     several supported links)
      * @param serviceRate
      *     Service rate may be 1G, 10G, 100G or 400G
      * @param tribPortNb
@@ -109,8 +113,8 @@ public interface NetworkModelService {
      * @param isDeletion
      *     True indicates if the low-order otn service must be deleted
      */
-    void updateOtnLinks(Link link, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb, Short maxTribSoltNb,
-            boolean isDeletion);
+    void updateOtnLinks(Link link, List<String> supportedLinks, Uint32 serviceRate, Short tribPortNb,
+            Short minTribSoltNb, Short maxTribSoltNb, boolean isDeletion);
 
     /**
      * Update otn links from otn-topology.
@@ -118,7 +122,8 @@ public interface NetworkModelService {
      * of the direct parent otu link.
      *
      * @param supportedLinks
-     *     list of link-id supported the service (used when more than one supported link)
+     *     list of link-id supported the service (used for use case with
+     *     several supported links)
      * @param isDeletion
      *     True indicates if the low-order otn service must be deleted
      */
