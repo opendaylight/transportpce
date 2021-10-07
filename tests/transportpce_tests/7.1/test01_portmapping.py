@@ -103,7 +103,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
              'lcp-hash-val': 'AODABTVSOHH0',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+             'port-admin-state': 'InService', 'port-oper-state': 'InService',
+             'xponder-type': 'tpdr'},
             res['mapping'])
 
     # Check the port-mapping for the switch-client and switch-network port-quals
@@ -142,6 +143,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual('AK+Cna4EclRH', res['mapping'][0]['lcp-hash-val'])
         self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
         self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
+        self.assertEqual('mpdr', res['mapping'][0]['xponder-type'])
         self.assertEqual({
                "min-trib-slot": "1.1",
                "max-trib-slot": "1.20"
