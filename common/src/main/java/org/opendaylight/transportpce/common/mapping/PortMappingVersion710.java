@@ -1130,7 +1130,7 @@ public class PortMappingVersion710 {
                     PortMappingUtils.createXpdrLogicalConnectionPort(xponderNb, client, StringConstants.CLIENT_TOKEN);
                 lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
                 mappingMap.put(lcp0,
-                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, null));
+                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, xponderType));
                 client++;
                 break;
 
