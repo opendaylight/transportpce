@@ -261,6 +261,8 @@ public class TapiContext {
             }
             // TODO -> Need to remove CEPs from NEPs. If not error from get Topology details output
             Node node = optNode.get();
+            LOG.debug("NEPs of node before creating map to be returned to the getTapiNode function = {}",
+                node.getOwnedNodeEdgePoint().size());
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
             for (OwnedNodeEdgePoint onep: node.getOwnedNodeEdgePoint().values()) {
                 if (onep.augmentation(OwnedNodeEdgePoint1.class) == null) {
@@ -282,8 +284,11 @@ public class TapiContext {
                 if (onep.getMappedServiceInterfacePoint() != null) {
                     newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
                 }
-                onepMap.put(newOnepBuilder.key(), newOnepBuilder.build());
+                OwnedNodeEdgePoint newOnep = newOnepBuilder.build();
+                onepMap.put(newOnep.key(), newOnep);
             }
+            LOG.debug("NEPs of node after creating map to be returned to the getTapiNode function = {}",
+                onepMap.size());
             return new NodeBuilder(node)
                 .setOwnedNodeEdgePoint(onepMap)
                 .build();
