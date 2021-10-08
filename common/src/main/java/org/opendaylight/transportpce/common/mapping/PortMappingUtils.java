@@ -32,12 +32,14 @@ public final class PortMappingUtils {
         "- cannot find port config under LLDP";
     public static final String CONMAP_ISSUE_LOGMSG =
         "{} : connection-map analysis for source {} and dest (CP+port) {} - no entry found for source in LCP map";
+    public static final String CREATE = "create";
     public static final String CREATE_MAPPING_DATA_LOGMSG =
         "{} : OpenROADM version {} node - Creating Mapping Data";
     public static final String DEVICE_HAS_LOGMSG =
         "{} : device has {} {}";
     public static final String FETCH_CONNECTIONPORT_LOGMSG =
         "{} : fetching connection-port {} at circuit-pack {}";
+    public static final String FOUND = "found";
     public static final String GETTING_CONPORT_LOGMSG =
         "{} : getting connection-ports for degree number {}";
     public static final String GETTING_CP_LOGMSG =
@@ -94,6 +96,7 @@ public final class PortMappingUtils {
         "{} : unable to create MC capabilities";
     public static final String UNSUPPORTED_DIR_LOGMSG =
         "{} : port {} on {} - unsupported Direction {}";
+    public static final String UPDATE = "update";
     public static final String UPDATE_MAPPING_LOGMSG =
         "{} : Updating old mapping data {} for {} by new mapping data {}";
     public static final String XPDR_LIST_IN_CONF_LOGMSG =

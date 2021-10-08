@@ -128,26 +128,26 @@ public class PortMappingVersion121 {
                 // Get TTP port mapping
                 if (!createTtpPortMapping(nodeId, deviceInfo, portMapList)) {
                     // return false if mapping creation for TTP's failed
-                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "create", "TTP's");
+                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "TTP's");
                     return false;
                 }
 
                 // Get PP port mapping
                 if (!createPpPortMapping(nodeId, deviceInfo, portMapList)) {
                     // return false if mapping creation for PP's failed
-                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "create", "PP's");
+                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "PP's");
                     return false;
                 }
                 break;
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
-                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "create", "Xponder");
+                    LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "Xponder");
                     return false;
                 }
                 break;
             default:
                 LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG,
-                    nodeId, "create", deviceInfo.getNodeType() + " - unknown nodetype");
+                    nodeId, PortMappingUtils.CREATE, deviceInfo.getNodeType() + " - unknown nodetype");
                 break;
 
         }
@@ -156,11 +156,11 @@ public class PortMappingVersion121 {
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
         if (nodeId == null) {
-            LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, "node id null" , "update", "a null value");
+            LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, "node id null" , PortMappingUtils.UPDATE, "a null value");
             return false;
         }
         if (oldMapping == null) {
-            LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, "update", "a null value");
+            LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.UPDATE, "a null value");
             return false;
         }
         InstanceIdentifier<Ports> portId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
@@ -182,7 +182,7 @@ public class PortMappingVersion121 {
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG,
-                nodeId, "update", oldMapping.getLogicalConnectionPoint(), e);
+                nodeId, PortMappingUtils.UPDATE, oldMapping.getLogicalConnectionPoint(), e);
             return false;
         }
     }
@@ -199,7 +199,7 @@ public class PortMappingVersion121 {
         }
         OrgOpenroadmDevice device = deviceObject.get();
         if (device.getCircuitPacks() == null) {
-            LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, "found");
+            LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, PortMappingUtils.FOUND);
             return false;
         }
         // Variable to keep track of number of line ports
@@ -214,7 +214,7 @@ public class PortMappingVersion121 {
         for (CircuitPacks cp : circuitPackList) {
             String circuitPackName = cp.getCircuitPackName();
             if (cp.getPorts() == null) {
-                LOG.warn(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, "found", circuitPackName);
+                LOG.warn(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, PortMappingUtils.FOUND, circuitPackName);
                 continue;
             }
             List<Ports> portList = new ArrayList<>(cp.nonnullPorts().values());
@@ -390,7 +390,7 @@ public class PortMappingVersion121 {
             return new ArrayList<>();
         }
         if (circuitPackObject.get().getPorts() == null) {
-            LOG.warn(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, "found", circuitPackName);
+            LOG.warn(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, PortMappingUtils.FOUND, circuitPackName);
             return new ArrayList<>();
         }
         return new ArrayList<>(circuitPackObject.get().nonnullPorts().values());
