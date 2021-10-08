@@ -667,8 +667,11 @@ public final class OpenRoadmOtnTopology {
                     .setSupportedInterfaceCapability(supIfMap)
                     .build();
                 otnTp1Bldr.setTpSupportedInterfaces(tpSupIf);
+                //TODO: It is not logical to assign a priori one of the possible rate to the TP.
+                //Would be worth assigning per default "unallocated" at the tp creation step,
+                //and updating it with correct rate when it supports a specific service.
                 if (withRate) {
-                    xtpcaBldr.setRate(fixRate(mapping.getSupportedInterfaceCapability().get(0)));
+                    xtpcaBldr.setRate(fixRate(mapping.getSupportedInterfaceCapability()));
                     otnTp1Bldr.setXpdrTpPortConnectionAttributes(xtpcaBldr.build());
                 }
             } else {
@@ -713,21 +716,21 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    private static Class<? extends OduRateIdentity> fixRate(Class<? extends
-            SupportedIfCapability> ifCapType) {
-        switch (ifCapType.getSimpleName()) {
-            case "If100GEODU4":
-            case "IfOCHOTU4ODU4":
-                return ODU4.class;
-            case "If1GEODU0":
-                return ODU0.class;
-            case "If10GEODU2":
-                return ODU2.class;
-            case "If10GEODU2e":
-                return ODU2e.class;
-            default:
-                return null;
+    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends SupportedIfCapability>> list) {
+        Map<String, Class<? extends OduRateIdentity>> rateMap = Map.of(
+            "If100GEODU4", ODU4.class,
+            "IfOCHOTU4ODU4", ODU4.class,
+            "If1GEODU0", ODU0.class,
+            "If10GEODU2", ODU2.class,
+            "If10GEODU2e", ODU2e.class);
+        for (Class<? extends SupportedIfCapability> class1 : list) {
+            if (rateMap.containsKey(class1.getSimpleName())) {
+                return rateMap.get(class1.getSimpleName());
+            } else {
+                continue;
+            }
         }
+        return null;
     }
 
     private static Map<SupportingNodeKey,SupportingNode> createSupportingNodes(OtnTopoNode node) {
