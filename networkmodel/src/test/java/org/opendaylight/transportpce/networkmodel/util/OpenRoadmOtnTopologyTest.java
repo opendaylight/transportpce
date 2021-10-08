@@ -965,7 +965,7 @@ public class OpenRoadmOtnTopologyTest {
                     .or(containsString(String.valueOf(If10GEODU2.class)))
                     .or(containsString(String.valueOf(If10GE.class))));
             }
-            assertThat("the rate should be ODU2 or ODU2e or 10GE",
+            assertThat("the rate should be ODU2 or ODU2e",
                 String.valueOf(tpList.get(2)
                     .augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529
