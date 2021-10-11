@@ -59,6 +59,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
@@ -961,7 +963,14 @@ public class ConvertORTopoToTapiFullTopo {
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
+                case "ODU":
                     switch (sic.getIfCapType().getSimpleName()) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqSet.add(ODUTYPEODU0.class);
+                            sclpqSet.add(DIGITALSIGNALTYPEGigE.class);
+                            break;
                         case "If10GEODU2e":
                             sclpqSet.add(ODUTYPEODU2E.class);
                             sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
