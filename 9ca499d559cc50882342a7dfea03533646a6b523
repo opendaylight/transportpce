@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab32c796_1f463bdf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:52:05Z",
+      "side": 1,
+      "message": "intermediate variable not needed",
+      "revId": "9ca499d559cc50882342a7dfea03533646a6b523",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa04f217_75d03a3c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:52:05Z",
+      "side": 1,
+      "message": "Since this is a refactoring, I don\u0027t think the variable \"i\" is used here apart to retrieve the list values with tpList.get(i).\nif so, the syntax \"for ( : )\" is more indicated here.",
+      "revId": "9ca499d559cc50882342a7dfea03533646a6b523",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f98a5c3_c47548fb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:52:05Z",
+      "side": 1,
+      "message": "intermediate variable not needed",
+      "revId": "9ca499d559cc50882342a7dfea03533646a6b523",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0432f21f_b73c21a6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:52:05Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "9ca499d559cc50882342a7dfea03533646a6b523",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
