@@ -84,6 +84,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
@@ -242,7 +244,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     // node transformation
                     Map<NodeKey, Node> nodeMap = new HashMap<>(transformXpdrToTapiNode(
                         nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXponderType(), oorOduSwitchingPool));
-
                     // add nodes and sips to tapi context
                     mergeNodeinTopology(nodeMap);
                     mergeSipsinContext(this.sipMap);
@@ -741,7 +742,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint>
-        createMSIP(int nb, LayerProtocolName layerProtocol, String tpid, String nodeid,
+            createMSIP(int nb, LayerProtocolName layerProtocol, String tpid, String nodeid,
                    List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
                    OperationalState operState, AdministrativeState adminState) {
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
@@ -1163,6 +1164,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 case "DSR":
                 case "ODU":
                     switch (sic.getIfCapType().getSimpleName()) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqList.add(ODUTYPEODU0.class);
+                            sclpqList.add(DIGITALSIGNALTYPEGigE.class);
+                            break;
                         case "If10GEODU2e":
                             sclpqList.add(ODUTYPEODU2E.class);
                             sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
@@ -1252,7 +1259,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error populating TAPI topology: ", e);
         }
-        LOG.info("Roadm Node added succesfully.");
+        LOG.info("Node added succesfully.");
     }
 
     private void mergeLinkinTopology(Map<LinkKey, Link> linkMap) {
