@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -298,20 +299,10 @@ public class PortMappingVersion710 {
 
     private boolean createXpdrPortMapping(String nodeId, List<Mapping> portMapList) {
         // Creating for Xponder Line and Client Ports
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
-        Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, deviceIID,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (deviceObject.isEmpty()) {
-            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
+        OrgOpenroadmDevice device = getXpdrDevice(nodeId);
+        if (device == null) {
             return false;
         }
-        OrgOpenroadmDevice device = deviceObject.get();
-        if (device.getCircuitPacks() == null) {
-            LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, PortMappingUtils.FOUND);
-            return false;
-        }
-
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
         List<CircuitPacks> circuitPackList = new ArrayList<>(device.nonnullCircuitPacks().values());
@@ -341,7 +332,7 @@ public class PortMappingVersion710 {
             }
         } else {
             LOG.info(PortMappingUtils.XPDR_LIST_IN_CONF_LOGMSG, nodeId, PortMappingUtils.FOUND);
-            for (Xponder xponder : deviceObject.get().nonnullXponder().values()) {
+            for (Xponder xponder : device.nonnullXponder().values()) {
                 // Variables to keep track of number of line ports and client ports
                 int line = 1;
                 int client = 1;
@@ -349,37 +340,22 @@ public class PortMappingVersion710 {
                 XpdrNodeTypes xponderType = xponder.getXpdrType();
                 for (XpdrPort xpdrPort : xponder.nonnullXpdrPort().values().stream()
                         .sorted((xp1, xp2) -> xp1.getIndex().compareTo(xp2.getIndex())).collect(Collectors.toList())) {
-                    String circuitPackName = xpdrPort.getCircuitPackName();
-                    String portName = xpdrPort.getPortName();
-                    // If there xponder-subtree has missing circuit-packs or ports,
-                    // This gives a null-pointer expection,
-                    Optional<CircuitPacks> cpList = device.nonnullCircuitPacks().values().stream()
-                            .filter(cp -> cp.getCircuitPackName().equals(circuitPackName)).findFirst();
-                    if (cpList.isEmpty()) {
-                        LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
-                            nodeId, circuitPackName);
-                        continue;
-                    }
-                    Optional<Ports> portsList = cpList.get().nonnullPorts().values().stream()
-                            .filter(p -> p.getPortName().equals(portName)).findFirst();
-                    if (portsList.isEmpty()) {
-                        LOG.warn(PortMappingUtils.NO_ASSOC_FOUND_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
-                            nodeId, portName, circuitPackName, "in the device");
+                    Ports port = getXpdrPorts(device, xpdrPort, nodeId);
+                    if (port == null) {
                         continue;
                     }
                     int[] counters = fillXpdrLcpsMaps(line, client, nodeId,
-                        xponderNb, xponderType, circuitPackName, portsList.get(),
+                        xponderNb, xponderType, xpdrPort.getCircuitPackName(), port,
                         circuitPackList, lcpMap, mappingMap);
                     line = counters[0];
                     client = counters[1];
                 }
             }
         }
-
         if (device.getConnectionMap() == null) {
             LOG.warn(PortMappingUtils.NO_CONMAP_LOGMSG, nodeId);
         } else {
-            for (ConnectionMap cm : deviceObject.get().nonnullConnectionMap().values()) {
+            for (ConnectionMap cm : device.nonnullConnectionMap().values()) {
                 String skey = cm.getSource().getCircuitPackName() + "+" + cm.getSource().getPortName();
                 Destination destination0 = cm.nonnullDestination().values().iterator().next();
                 String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
@@ -396,7 +372,6 @@ public class PortMappingVersion710 {
                         null));
             }
         }
-
         if (device.getOduSwitchingPools() != null) {
             List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
             for (OduSwitchingPools odp : device.nonnullOduSwitchingPools().values()) {
@@ -434,9 +409,47 @@ public class PortMappingVersion710 {
             }
             postPortMapping(nodeId, null, null, null, switchingPoolList, null);
         }
-
         mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
+    }
+
+    private OrgOpenroadmDevice getXpdrDevice(String nodeId) {
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.OPERATIONAL, deviceIID,
+            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (deviceObject.isEmpty()) {
+            LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
+            return null;
+        }
+        OrgOpenroadmDevice device = deviceObject.get();
+        if (device.getCircuitPacks() == null) {
+            LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, PortMappingUtils.FOUND);
+            return null;
+        }
+        return device;
+    }
+
+    private Ports getXpdrPorts(OrgOpenroadmDevice device, XpdrPort xpdrPort, String nodeId) {
+        String circuitPackName = xpdrPort.getCircuitPackName();
+        String portName = xpdrPort.getPortName();
+        // If there xponder-subtree has missing circuit-packs or ports,
+        // This gives a null-pointer expection,
+        Optional<CircuitPacks> cpList = device.nonnullCircuitPacks().values().stream()
+                .filter(cp -> cp.getCircuitPackName().equals(circuitPackName)).findFirst();
+        if (cpList.isEmpty()) {
+            LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
+                nodeId, circuitPackName);
+            return null;
+        }
+        Optional<Ports> portsList = cpList.get().nonnullPorts().values().stream()
+                .filter(p -> p.getPortName().equals(portName)).findFirst();
+        if (portsList.isEmpty()) {
+            LOG.warn(PortMappingUtils.NO_ASSOC_FOUND_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
+                nodeId, portName, circuitPackName, "in the device");
+            return null;
+        }
+        return portsList.get();
     }
 
     private boolean checkPartnerPortNotNull(Ports port) {
@@ -995,12 +1008,12 @@ public class PortMappingVersion710 {
         if (partnerLcp != null) {
             mpBldr.setPartnerLcp(partnerLcp);
         }
-        if (port.augmentation(Ports1.class) != null && port.augmentation(Ports1.class).getPortCapabilities() != null) {
+        Collection<SupportedInterfaceCapability> supIntfCapaList = getSupIntfCapaList(port);
+        if (supIntfCapaList != null) {
             List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
                 .SupportedIfCapability>> supportedIntf = new ArrayList<>();
             SupportedInterfaceCapability sic1 = null;
-            for (SupportedInterfaceCapability sic : port.augmentation(Ports1.class).getPortCapabilities()
-                    .nonnullSupportedInterfaceCapability().values()) {
+            for (SupportedInterfaceCapability sic : supIntfCapaList) {
                 supportedIntf.add(sic.getIfCapType());
                 sic1 = sic;
             }
@@ -1030,6 +1043,14 @@ public class PortMappingVersion710 {
         }
         return mpBldr.build();
     }
+
+    private Collection<SupportedInterfaceCapability> getSupIntfCapaList(Ports port) {
+        return
+            port.augmentation(Ports1.class) == null || port.augmentation(Ports1.class).getPortCapabilities() == null
+                ? null
+                : port.augmentation(Ports1.class).getPortCapabilities().nonnullSupportedInterfaceCapability().values();
+    }
+
 
     private ArrayList<OpucnTribSlotDef> getOpucnTribSlots(String deviceId, String mxpProfileName) {
         ArrayList<OpucnTribSlotDef> minMaxOpucnTribSlots = new ArrayList<>(2);
