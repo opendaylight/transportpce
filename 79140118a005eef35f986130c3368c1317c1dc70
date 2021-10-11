@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40cb9de0_0274a012",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "should be in the try block",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c821eb96_25d76687",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "this failure return is also in catch block and at the end of the method.\nI think only the one at the end of the method is needed and the 2 other should be replaced by LOG messages.",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca23ac2f_1223872e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "the setter can be appended to the previous line\nOther possible improvement are also possible.\nAlso, variable names tpdr1Bldr vs tp1Bldr can be easily confused and complicates the reading.\n\nwhat about simply this?\n\ntpBldr.addAugmentation(\n    new TerminationPoint1Builder(tpBldr.augmentation(TerminationPoint1.class))\n        .setAdministrativeState(admin)\n        .setOperationalState(oper)\n        .build());",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90372536_3302acc4",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3625a3e7_d7070ab8",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiConnectivityDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "wha about just \"return new CreateConnectivityServiceInputBuilder()...\" ?",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f06332ec_b4e98b7b",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiConnectivityDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d98fbc29_f0ca8e17",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiConnectivityDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "intermediates variables not neeeded",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b282aa_3fcaeabc",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TapiConnectivityDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-11T07:40:01Z",
+      "side": 1,
+      "message": "what about just \"return  new ServiceCreateInputBuilder()...\" ?",
+      "revId": "79140118a005eef35f986130c3368c1317c1dc70",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
