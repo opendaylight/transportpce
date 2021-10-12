@@ -69,6 +69,7 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 public class OpenRoadmInterface710 {
     private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
         "Unable to get mapping from PortMapping for node % and logical connection port %s";
+    private static final String ODUC4 = "-ODUC4";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
 
@@ -342,7 +343,7 @@ public class OpenRoadmInterface710 {
             .setMaintTestsignal(maintTestsignal.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
-            logicalConnPoint + "-ODUC4");
+            logicalConnPoint + ODUC4);
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();
@@ -413,7 +414,7 @@ public class OpenRoadmInterface710 {
             .setMaintTestsignal(maintTestsignal.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
-            alogicalConnPoint + "-ODUC4");
+            alogicalConnPoint + ODUC4);
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();
@@ -471,7 +472,7 @@ public class OpenRoadmInterface710 {
             .setMaintTestsignal(maintTestsignal.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
-            logicalConnPoint + "-ODUC4");
+            logicalConnPoint + ODUC4);
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();
@@ -544,7 +545,7 @@ public class OpenRoadmInterface710 {
             .setMaintTestsignal(maintTestsignal.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
-            alogicalConnPoint + "-ODUC4");
+            alogicalConnPoint + ODUC4);
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();

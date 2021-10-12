@@ -192,7 +192,7 @@ public class INode221 {
         } catch (SQLException e) {
             LOG.error("Something wrong when fetching node in DB", e);
         }
-        return nodeExists == 0 ? false : true;
+        return nodeExists != 0;
     }
 
     public void getRoadmShelves(String nodeId) throws InterruptedException, ExecutionException {
