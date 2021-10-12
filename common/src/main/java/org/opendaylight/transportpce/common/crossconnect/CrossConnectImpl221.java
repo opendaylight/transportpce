@@ -50,6 +50,8 @@ import org.slf4j.LoggerFactory;
 public class CrossConnectImpl221 {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl221.class);
+    private static final String DEV_TRANSACTION_NOT_FOUND = "Device transaction for device {} was not found!";
+    private static final String UNABLE_DEV_TRANSACTION = "Unable to obtain device transaction for device {}!";
     private final DeviceTransactionManager deviceTransactionManager;
 
     public CrossConnectImpl221(DeviceTransactionManager deviceTransactionManager) {
@@ -95,11 +97,11 @@ public class CrossConnectImpl221 {
             if (deviceTxOpt.isPresent()) {
                 deviceTx = deviceTxOpt.get();
             } else {
-                LOG.error("Device transaction for device {} was not found!", deviceId);
+                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return Optional.empty();
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
+            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return Optional.empty();
         }
 
@@ -145,11 +147,11 @@ public class CrossConnectImpl221 {
             if (deviceTxOpt.isPresent()) {
                 deviceTx = deviceTxOpt.get();
             } else {
-                LOG.error("Device transaction for device {} was not found!", deviceId);
+                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return null;
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
+            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return null;
         }
 
@@ -309,11 +311,11 @@ public class CrossConnectImpl221 {
             if (deviceTxOpt.isPresent()) {
                 deviceTx = deviceTxOpt.get();
             } else {
-                LOG.error("Device transaction for device {} was not found!", deviceId);
+                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return Optional.empty();
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
+            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return Optional.empty();
         }
 
