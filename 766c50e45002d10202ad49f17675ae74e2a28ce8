@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46850e73_bbe8b4b3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-12T15:51:12Z",
+      "side": 1,
+      "message": "intermdiate builder not needed\n\nOwnedNodeEdgePoint onep2 \u003d new OwnedNodeEdgePointBuilder()\n[..]\n      .build();",
+      "revId": "766c50e45002d10202ad49f17675ae74e2a28ce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
