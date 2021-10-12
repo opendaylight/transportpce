@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9247a054_f6b9f531",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiPortMappingListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-12T16:12:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "919b1fe1_90f77095",
+      "revId": "f744aff0c3acae3365e616ea43fd82048f1155e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ab09086_b72be4cd",
         "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "f744aff0c3acae3365e616ea43fd82048f1155e5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "496ec7f7_bf7af44c",
+        "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-12T16:12:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab09086_b72be4cd",
+      "range": {
+        "startLine": 598,
+        "startChar": 4,
+        "endLine": 598,
+        "endChar": 9
+      },
+      "revId": "f744aff0c3acae3365e616ea43fd82048f1155e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
