@@ -16,6 +16,24 @@
       "revId": "aaf15e5e16767a91cd3522c8ca94ef25baa07ad2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a1ae9e5_c2c0d52d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-12T16:23:52Z",
+      "side": 1,
+      "message": "What would you suggest for improving this for with switch case?? I could create a method such getSupportLayerQual(sicList) which will return the corresponding list for each TP. Any other suggestion?",
+      "parentUuid": "fd556b87_ebc996e5",
+      "revId": "aaf15e5e16767a91cd3522c8ca94ef25baa07ad2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
