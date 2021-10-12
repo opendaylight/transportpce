@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd556b87_ebc996e5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-12T16:10:28Z",
+      "side": 1,
+      "message": "since we are in the area, I think there is room for improvement and an intermediate method here",
+      "revId": "aaf15e5e16767a91cd3522c8ca94ef25baa07ad2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
