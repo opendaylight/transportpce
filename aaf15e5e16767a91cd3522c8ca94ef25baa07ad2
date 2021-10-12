@@ -34,6 +34,24 @@
       "revId": "aaf15e5e16767a91cd3522c8ca94ef25baa07ad2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c9b881_acadef14",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-12T19:30:15Z",
+      "side": 1,
+      "message": "yes for example to remove the nested switch/case block for DSR and ODU lpn.\n\nAlso sicList and sclpqSet declarations should be after guard clauses on tp1.\n\nRethinking about this, I am not completely sure an intermediate method is the best alternative to this nested switch/case block here.\nPlease take a look at the following change\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/97505/9/common/src/main/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImpl.java",
+      "parentUuid": "5a1ae9e5_c2c0d52d",
+      "revId": "aaf15e5e16767a91cd3522c8ca94ef25baa07ad2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
