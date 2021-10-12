@@ -39,7 +39,7 @@ public class INode {
     }
 
     public boolean addNode(String deviceId, String openROADMversion) {
-        boolean sqlResult = false;
+        //boolean sqlResult = false;
         return inode121.addNode(deviceId);
 
     }
@@ -60,7 +60,7 @@ public class INode {
         } catch (SQLException e) {
             LOG.error("Something wrong when fetching node in DB", e);
         }
-        return nodeExists == 0 ? false : true;
+        return nodeExists != 0;
     }
 
     public boolean dataExists(String tableName, String searchKeys) {
@@ -79,7 +79,7 @@ public class INode {
         } catch (SQLException e) {
             LOG.error("Something wrong when fetching data in DB", e);
         }
-        return dataExists == 0 ? false : true;
+        return dataExists != 0;
     }
 
   /*  public void getRoadmShelves(String nodeId, String openRoadmVersion)

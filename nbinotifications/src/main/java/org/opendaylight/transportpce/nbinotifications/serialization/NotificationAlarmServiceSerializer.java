@@ -48,6 +48,7 @@ public class NotificationAlarmServiceSerializer implements Serializer<Notificati
             LOG.info("Serialized event {}", serialized);
             return serialized.getBytes(StandardCharsets.UTF_8);
         } catch (IOException e) {
+            LOG.error("exception raised during serialization", e);
             return new byte[0];
         }
     }

@@ -143,7 +143,7 @@ public class GnpyResult {
                         counter++;
                     }
                 } catch (IllegalArgumentException e) {
-                    LOG.debug(" in GnpyResult: the element {} is not a ipv4Address ", nodeIp);
+                    LOG.error(" in GnpyResult: the element {} is not a ipv4Address ", nodeIp, e);
                 }
             }
         }

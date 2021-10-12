@@ -56,6 +56,7 @@ public class TapiContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiContext.class);
     public static final String TAPI_CONTEXT = "T-API context";
+    public static final String NODE_NOT_PRESENT = "Node is not present in datastore";
     private final NetworkTransactionService networkTransactionService;
 
     public TapiContext(NetworkTransactionService networkTransactionService) {
@@ -256,7 +257,7 @@ public class TapiContext {
             Optional<Node> optNode = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID)
                     .get();
             if (!optNode.isPresent()) {
-                LOG.error("Node is not present in datastore");
+                LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
             // TODO -> Need to remove CEPs from NEPs. If not error from get Topology details output
@@ -305,7 +306,7 @@ public class TapiContext {
                     .read(LogicalDatastoreType.OPERATIONAL, nepIID)
                     .get();
             if (!optNode.isPresent()) {
-                LOG.error("Node is not present in datastore");
+                LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
             return optNode.get();
@@ -325,7 +326,7 @@ public class TapiContext {
             Optional<Link> optLink = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, linkIID)
                     .get();
             if (!optLink.isPresent()) {
-                LOG.error("Node is not present in datastore");
+                LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
             return optLink.get();
@@ -483,7 +484,7 @@ public class TapiContext {
             Optional<OwnedNodeEdgePoint> optNode = this.networkTransactionService
                 .read(LogicalDatastoreType.OPERATIONAL, nepIID).get();
             if (!optNode.isPresent()) {
-                LOG.error("Node is not present in datastore");
+                LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
             if (optNode.get().augmentation(OwnedNodeEdgePoint1.class) == null) {
@@ -493,7 +494,7 @@ public class TapiContext {
             return optNode.get().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
                 .get(new ConnectionEndPointKey(cepUuid));
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Couldnt read node in topology");
+            LOG.error("Couldnt read node in topology", e);
             return null;
         }
     }

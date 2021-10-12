@@ -30,7 +30,7 @@ public final class NbiNotificationsUtils {
                 LOG.warn("Kafka property file '{}' is empty", propertyFileName);
             }
         } catch (IOException e) {
-            LOG.warn("Kafka property file '{}' was not found in the classpath", propertyFileName);
+            LOG.error("Kafka property file '{}' was not found in the classpath", propertyFileName, e);
         }
         return props;
     }
