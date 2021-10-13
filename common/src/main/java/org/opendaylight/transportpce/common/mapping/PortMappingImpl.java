@@ -204,4 +204,13 @@ public class PortMappingImpl implements PortMapping {
                 return false;
         }
     }
+
+    @Override
+    public boolean isNodeExist(String nodeId) {
+        if (this.getNode(nodeId) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
