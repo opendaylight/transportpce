@@ -81,6 +81,24 @@
       "revId": "1aaeaedcace8e9bdeb021be807a77870f85e8277",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33706d11_aade3398",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-13T07:26:55Z",
+      "side": 1,
+      "message": "even no space is OK",
+      "parentUuid": "b18eb633_bec1281f",
+      "revId": "1aaeaedcace8e9bdeb021be807a77870f85e8277",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
