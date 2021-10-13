@@ -75,7 +75,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             NetconfNode netconfNodeBefore = rootNode.getDataBefore().augmentation(NetconfNode.class);
             switch (rootNode.getModificationType()) {
                 case DELETE:
-                    this.networkModelService.deleteOpenRoadmnode(nodeId);
+                    if (!this.networkModelService.deleteOpenRoadmnode(nodeId)) {
+                        return;
+                    }
                     onDeviceDisConnected(nodeId);
                     LOG.info("Device {} correctly disconnected from controller", nodeId);
                     break;
