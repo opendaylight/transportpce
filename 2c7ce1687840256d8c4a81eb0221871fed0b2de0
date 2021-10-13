@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e19a7dfd_07abbf51",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-13T18:21:49Z",
+      "side": 1,
+      "message": "shouldn\u0027t we return false here too if an exception is met ?",
+      "revId": "2c7ce1687840256d8c4a81eb0221871fed0b2de0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
