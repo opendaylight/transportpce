@@ -180,4 +180,16 @@ public interface PortMapping {
      */
     boolean updatePortMappingWithOduSwitchingPools(String nodeId, InstanceIdentifier<OduSwitchingPools> ospIID,
         Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap);
+
+    /**
+     * This method check the presence or not of a given node inside the PortMapping
+     * datastore.
+     *
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     *
+     * @return Result true/false based on existance or not of a given node.
+     */
+    boolean isNodeExist(String nodeId);
+
 }

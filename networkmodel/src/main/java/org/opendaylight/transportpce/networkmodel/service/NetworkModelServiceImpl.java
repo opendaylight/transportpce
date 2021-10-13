@@ -191,8 +191,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
      */
 
     @Override
-    public void deleteOpenRoadmnode(String nodeId) {
+    public boolean deleteOpenRoadmnode(String nodeId) {
         try {
+            if (!this.portMapping.isNodeExist(nodeId)) {
+                return false;
+            }
             NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
 
             LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
@@ -263,7 +266,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             LOG.info("all nodes and links deleted ! ");
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error when trying to delete node : {}", nodeId, e);
+            return false;
         }
+        return true;
     }
 
     @Override

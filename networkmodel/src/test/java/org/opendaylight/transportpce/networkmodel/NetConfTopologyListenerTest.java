@@ -78,7 +78,6 @@ public class NetConfTopologyListenerTest {
             OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(node.getDataBefore()).thenReturn(netconfNode);
-        when(registrations.remove(anyString())).thenReturn(nodeRegistration);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping, registrations);
@@ -87,7 +86,7 @@ public class NetConfTopologyListenerTest {
         verify(node, times(1)).getModificationType();
         verify(node, times(3)).getDataBefore();
         verify(networkModelService, times(1)).deleteOpenRoadmnode(anyString());
-        verify(nodeRegistration, times(1)).unregisterListeners();
+        verify(nodeRegistration, times(0)).unregisterListeners();
     }
 
     @Test
