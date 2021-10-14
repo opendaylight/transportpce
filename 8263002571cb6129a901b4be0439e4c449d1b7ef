@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cf9391c_79b75294",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:23:11Z",
+      "side": 1,
+      "message": "Simply\n\n    @Override\n    public boolean isNodeExist(String nodeId) {\n        return this.getNode(nodeId) !\u003d null\n    }\n\nto not raise sonar issue \"Return of boolean expressions should not be wrapped into an \"if-then-else\" statement\"\n\nhttps://rules.sonarsource.com/java/RSPEC-1126",
+      "revId": "8263002571cb6129a901b4be0439e4c449d1b7ef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
