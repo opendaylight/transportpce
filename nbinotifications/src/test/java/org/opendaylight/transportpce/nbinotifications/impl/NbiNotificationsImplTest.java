@@ -44,8 +44,9 @@ public class NbiNotificationsImplTest extends AbstractTest {
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080",
-            networkTransactionService, topicManager);
+
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,
+            "localhost:8080", networkTransactionService, topicManager);
     }
 
     @Test

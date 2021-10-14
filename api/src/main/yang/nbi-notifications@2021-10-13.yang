@@ -31,7 +31,7 @@ module nbi-notifications {
   description
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
-
+  
   revision 2021-10-13 {
     description
       "Implement new models, RPC for TAPI service notification";
