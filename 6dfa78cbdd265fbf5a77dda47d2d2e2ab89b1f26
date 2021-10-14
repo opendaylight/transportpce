@@ -16,6 +16,23 @@
       "revId": "6dfa78cbdd265fbf5a77dda47d2d2e2ab89b1f26",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa73585_1b783eb1",
+        "filename": "tests/nbinotifications/docker-compose.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:37:19Z",
+      "side": 1,
+      "message": "this file will be removed\n\nplease can we rebase this works on top of\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/97384 ?\n\nI have postponed its merge on purpose and it is still based on Si dependencies on purpose.\nthis way, lighty support can be tested",
+      "revId": "6dfa78cbdd265fbf5a77dda47d2d2e2ab89b1f26",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
