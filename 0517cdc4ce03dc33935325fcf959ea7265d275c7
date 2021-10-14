@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e8d0bc8_17371e41",
+        "filename": "api/src/main/yang/nbi-notifications@2021-10-13.yang",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T19:00:58Z",
+      "side": 1,
+      "message": "trailing blank detected by pre-commit",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 2
+      },
+      "revId": "0517cdc4ce03dc33935325fcf959ea7265d275c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
