@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -231,7 +231,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<GetConnectivityServiceDetailsOutput>> getConnectivityServiceDetails(
             GetConnectivityServiceDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid serviceUuid = new Uuid(input.getServiceIdOrName());
+        Uuid serviceUuid = getUuidFromIput(input.getServiceIdOrName());
         ConnectivityService service = this.tapiContext.getConnectivityService(serviceUuid);
         if (service == null) {
             LOG.error("Service {} doesnt exist in tapi context", input.getServiceIdOrName());
@@ -255,8 +255,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<GetConnectionDetailsOutput>> getConnectionDetails(
             GetConnectionDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid connectionUuid = new Uuid(UUID.nameUUIDFromBytes(input.getConnectionIdOrName()
-            .getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid connectionUuid = getUuidFromIput(input.getConnectionIdOrName());
         Connection connection = this.tapiContext.getConnection(connectionUuid);
         if (connection == null) {
             LOG.error("Connection {} doesnt exist in tapi context", input.getConnectionIdOrName());
@@ -274,7 +273,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         // TODO add try
         if (input.getServiceIdOrName() != null) {
             try {
-                Uuid serviceUuid = new Uuid(input.getServiceIdOrName());
+                Uuid serviceUuid = getUuidFromIput(input.getServiceIdOrName());
                 this.tapiContext.deleteConnectivityService(serviceUuid);
                 ListenableFuture<RpcResult<ServiceDeleteOutput>> output =
                     this.serviceHandler.serviceDelete(new ServiceDeleteInputBuilder()
@@ -330,14 +329,10 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<GetConnectionEndPointDetailsOutput>> getConnectionEndPointDetails(
             GetConnectionEndPointDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName()
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNodeIdOrName()
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNepIdOrName()
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid cepUuid = new Uuid(UUID.nameUUIDFromBytes(input.getCepIdOrName()
-            .getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
+        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
+        Uuid nepUuid = getUuidFromIput(input.getNepIdOrName());
+        Uuid cepUuid = getUuidFromIput(input.getCepIdOrName());
         ConnectionEndPoint cep = this.tapiContext.getTapiCEP(topoUuid, nodeUuid, nepUuid, cepUuid);
         if (cep == null) {
             LOG.error("Cep doesnt exist in tapi context");
@@ -346,5 +341,16 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         }
         return RpcResultBuilder.success(new GetConnectionEndPointDetailsOutputBuilder().setConnectionEndPoint(
             new ConnectionEndPointBuilder(cep).build()).build()).buildFuture();
+    }
+
+    private Uuid getUuidFromIput(String serviceIdOrName) {
+        try {
+            UUID.fromString(serviceIdOrName);
+            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
+            return new Uuid(serviceIdOrName);
+        } catch (IllegalArgumentException e) {
+            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
+            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
+        }
     }
 }
