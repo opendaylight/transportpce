@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.tapi.topology;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -127,11 +128,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     public ListenableFuture<RpcResult<GetNodeDetailsOutput>> getNodeDetails(GetNodeDetailsInput input) {
         // TODO Auto-generated method stub
         // TODO -> maybe we get errors when having CEPs?
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
         // Node id: if roadm -> ROADM+PHOTONIC_MEDIA. if xpdr -> XPDR-XPDR+DSR/OTSi
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNodeIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node = this.tapiContext
                 .getTapiNode(topoUuid, nodeUuid);
         if (node == null) {
@@ -309,15 +308,12 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             GetNodeEdgePointDetailsInput input) {
         // TODO Auto-generated method stub
         // TODO -> maybe we get errors when having CEPs?
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
         // Node id: if roadm -> ROADMid+PHOTONIC_MEDIA. if xpdr -> XPDRid-XPDRnbr+DSR/OTSi
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(input.getNodeIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
         // NEP id: if roadm -> ROADMid+PHOTONIC_MEDIA/MC/OTSiMC+TPid.
         // if xpdr -> XPDRid-XPDRnbr+DSR/eODU/iODU/iOTSi/eOTSi/PHOTONIC_MEDIA+TPid
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(input.getEpIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid nepUuid = getUuidFromIput(input.getEpIdOrName());
         OwnedNodeEdgePoint nep = this.tapiContext.getTapiNEP(topoUuid, nodeUuid, nepUuid);
         if (nep == null) {
             LOG.error("Invalid TAPI nep name");
@@ -331,11 +327,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetLinkDetailsOutput>> getLinkDetails(GetLinkDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
         // Link id: same as OR link id
-        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes(input.getLinkIdOrName().getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid linkUuid = getUuidFromIput(input.getLinkIdOrName());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link link = this.tapiContext
                 .getTapiLink(topoUuid, linkUuid);
         if (link == null) {
@@ -492,7 +486,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>>
             getServiceInterfacePointDetails(GetServiceInterfacePointDetailsInput input) {
-        Uuid sipUuid = new Uuid(input.getSipIdOrName());
+        Uuid sipUuid = getUuidFromIput(input.getSipIdOrName());
         Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
             this.tapiContext.getTapiContext().getServiceInterfacePoint();
         if (sips == null || sips.isEmpty()) {
@@ -536,5 +530,16 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
         // TODO --> not yet implemented
         return null;
+    }
+
+    private Uuid getUuidFromIput(String serviceIdOrName) {
+        try {
+            UUID.fromString(serviceIdOrName);
+            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
+            return new Uuid(serviceIdOrName);
+        } catch (IllegalArgumentException e) {
+            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
+            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
+        }
     }
 }
