@@ -89,7 +89,7 @@ public class OpenRoadmInterfacesImpl121 {
     }
 
 
-    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         Optional<Interface> intf2DeleteOpt;
         try {
             intf2DeleteOpt = getInterface(nodeId, interfaceName);
