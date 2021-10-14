@@ -83,7 +83,7 @@ public class OpenRoadmInterfacesImpl710 {
     }
 
 
-    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         LOG.info("deleting interface {} on device71 {}", interfaceName, nodeId);
         Optional<Interface> intf2DeleteOpt;
         try {
@@ -95,9 +95,7 @@ public class OpenRoadmInterfacesImpl710 {
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.get();
             // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder();
-            ifBuilder.setName(intf2Delete.getName());
-            ifBuilder.setType(intf2Delete.getType());
+            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
             ifBuilder.setAdministrativeState(AdminStates.OutOfService);
             // post interface with updated admin state
             try {
