@@ -125,7 +125,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
 
     @Override
     public ListenableFuture<RpcResult<GetSupportedNotificationTypesOutput>>
-        getSupportedNotificationTypes(GetSupportedNotificationTypesInput input) {
+            getSupportedNotificationTypes(GetSupportedNotificationTypesInput input) {
         return null;
     }
 
@@ -207,19 +207,19 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
 
     @Override
     public ListenableFuture<RpcResult<UpdateNotificationSubscriptionServiceOutput>>
-        updateNotificationSubscriptionService(UpdateNotificationSubscriptionServiceInput input) {
+            updateNotificationSubscriptionService(UpdateNotificationSubscriptionServiceInput input) {
         return null;
     }
 
     @Override
     public ListenableFuture<RpcResult<DeleteNotificationSubscriptionServiceOutput>>
-        deleteNotificationSubscriptionService(DeleteNotificationSubscriptionServiceInput input) {
+            deleteNotificationSubscriptionService(DeleteNotificationSubscriptionServiceInput input) {
         return null;
     }
 
     @Override
     public ListenableFuture<RpcResult<GetNotificationSubscriptionServiceDetailsOutput>>
-        getNotificationSubscriptionServiceDetails(GetNotificationSubscriptionServiceDetailsInput input) {
+            getNotificationSubscriptionServiceDetails(GetNotificationSubscriptionServiceDetailsInput input) {
         return null;
     }
 
