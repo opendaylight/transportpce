@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b625c23c_88c466fd",
+        "filename": "api/src/main/yang/nbi-notifications@2021-08-13.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "revision date must be updated if modifications are introduced \u003d\u003e vote -1",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7cf52f9_13b5fb21",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "commented code should preferably removed",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab340be_8118b5ed",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "895ca22a_0ca15c26",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationSerializer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "Nokia rather?",
+      "range": {
+        "startLine": 2,
+        "startChar": 20,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6220f30_78515776",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationSerializer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "shouldn\u0027t we log an error ?",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e0ef7e_d10cc5a6",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationSerializer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce93146a_b465840a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "LF not needed here",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4a8cb6e_6fcf2761",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-14T09:29:32Z",
+      "side": 1,
+      "message": "indent -4 this line to identify clearly its setters below",
+      "revId": "9d2128949f2affc7c3a4e2a7ad407064774e76a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
