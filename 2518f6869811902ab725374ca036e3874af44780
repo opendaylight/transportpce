@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2298856e_b3aa3a6a",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-15T14:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce2aaf1d_56d243f1",
+      "range": {
+        "startLine": 1361,
+        "startChar": 0,
+        "endLine": 1361,
+        "endChar": 11
+      },
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "919e2f58_405104f8",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "4947febc_3f22c2f3",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-15T14:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "919e2f58_405104f8",
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd49e3d_6a156011",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -56,6 +98,24 @@
       "revId": "2518f6869811902ab725374ca036e3874af44780",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48d202a0_fcc54406",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-15T14:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afd49e3d_6a156011",
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
