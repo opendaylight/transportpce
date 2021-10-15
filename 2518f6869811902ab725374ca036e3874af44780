@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce2aaf1d_56d243f1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-15T13:36:57Z",
+      "side": 1,
+      "message": "miss a few ^^^^^^^^^^^",
+      "range": {
+        "startLine": 1361,
+        "startChar": 0,
+        "endLine": 1361,
+        "endChar": 11
+      },
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "919e2f58_405104f8",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-15T13:36:57Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd49e3d_6a156011",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-15T13:36:57Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "2518f6869811902ab725374ca036e3874af44780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
