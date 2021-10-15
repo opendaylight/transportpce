@@ -38,7 +38,7 @@ of WDM transport infrastructure. The WDM layer is built from colorless ROADMs
 and transponders.
 
 The interest of using a controller to provision automatically services strongly
-relies on its ability to handle end to end optical services that spans through
+relies on its ability to handle end to end optical services that span through
 the different network domains, potentially equipped with equipment coming from
 different suppliers. Thus, interoperability in the optical layer is a key
 element to get the benefit of automated control.
@@ -48,17 +48,31 @@ which defines interoperability specifications, consisting of both Optical
 interoperability and Yang data models.
 
 End to end OTN services such as OCH-OTU4, structured ODU4 or 10GE-ODU2e
-services are supported since Magnesium SR2. OTN support will continue to be
+services are supported since Magnesium SR2. OTN support continued to be
 improved in the following releases of Magnesium and Aluminium.
 
-An experimental support of Flexgrid is introduced in Aluminium. Depending on
-OpenROADM device models, optical interfaces can be created according to the
-initial fixed grid (for R1.2.1, 96 channels regularly spaced of 50 GHz), or to
-a flexgrid (for R2.2.1 use of specific number of subsequent frequency slots of
-6.25 GHz depending on one side of ROADMs and transponders capabilities and on
-the other side of the rate of the channel. The full support of Flexgrid,
-including path computation and the creation of B100G (Beyond 100 Gbps) higher
-rate interfaces will be added in the following releases of Aluminium.
+Flexgrid was introduced in Aluminium. Depending on OpenROADM device models,
+optical interfaces can be created according to the initial fixed grid (for
+R1.2.1, 96 channels regularly spaced of 50 GHz), or to a flexgrid (for R2.2.1
+use of specific number of subsequent frequency slots of 6.25 GHz depending on
+one side of ROADMs and transponders capabilities and on the other side of the
+rate of the channel.
+
+Leveraging Flexgrid feature, high rate services are supported since Silicon.
+First implementation allows rendering 400 GE services. This release also brings
+asynchronous service creation and deletion, thanks to northbound notifications
+modules based on a Kafka implementation, allowing interactions with the DMaaP
+Bus of ONAP.
+
+Phosphorus consolidates end to end support for high rate services (ODUC4, OTUC4),
+allowing service creation and deletion from the NBI. The support of path
+computation for high rate services (OTUC4) will be added through the different P
+releases, relying on GNPy for impairment aware path computation. An experimental
+support of T-API is provided allowing service-create/delete from a T-API version
+2.1.1 compliant NBI. A T-API network topology, with different levels of abstraction
+and service context are maintained in the MDSAL. Service state is managed,
+monitoring device port state changes. Associated notifications are handled through
+Kafka and  DMaaP clients.
 
 
 Module description
@@ -67,24 +81,25 @@ Module description
 ServiceHandler
 ^^^^^^^^^^^^^^
 
-Service Handler handles request coming from a higher level controller or an orchestrator
-through the northbound API, as defined in the Open ROADM service model. Current
-implementation addresses the following rpcs: service-create, temp-service-create,
-service–delete, temp-service-delete, service-reroute, and service-restoration. It checks the
-request consistency and trigs path calculation sending rpcs to the PCE. If a valid path is
-returned by the PCE, path configuration is initiated relying on Renderer and OLM. At the
-confirmation of a successful service creation, the Service Handler updates the service-
-list/temp-service-list in the MD-SAL. For service deletion, the Service Handler relies on the
-Renderer and the OLM to delete connections and reset power levels associated with the
-service. The service-list is updated following a successful service deletion. In Neon SR0 is
-added the support for service from ROADM to ROADM, which brings additional flexibility and
-notably allows reserving resources when transponders are not in place at day one.
-Magnesium SR2 fully supports end-to-end OTN services which are part of the OTN infrastructure.
-It concerns the management of OCH-OTU4 (also part of the optical infrastructure) and structured
-HO-ODU4 services. Moreover, once these two kinds of OTN infrastructure service created, it is
-possible to manage some LO-ODU services (for the time being, only 10GE-ODU2e services).
-The full support of OTN services, including 1GE-ODU0 or 100GE, will be introduced along next
-releases (Mg/Al).
+Service Handler handles request coming from a higher level controller or an
+orchestrator through the northbound API, as defined in the Open ROADM service model.
+Current implementation addresses the following rpcs: service-create, temp-service-
+create, service–delete, temp-service-delete, service-reroute, and service-restoration.
+It checks the request consistency and trigs path calculation sending rpcs to the PCE.
+If a valid path is returned by the PCE, path configuration is initiated relying on
+Renderer and OLM. At the confirmation of a successful service creation, the Service
+Handler updates the service-list/temp-service-list in the MD-SAL. For service deletion,
+the Service Handler relies on the Renderer and the OLM to delete connections and reset
+power levels associated with the service. The service-list is updated following a
+successful service deletion. In Neon SR0 is added the support for service from ROADM
+to ROADM, which brings additional flexibility and notably allows reserving resources
+when transponders are not in place at day one. Magnesium SR2 fully supports end-to-end
+OTN services which are part of the OTN infrastructure. It concerns the management of
+OCH-OTU4 (also part of the optical infrastructure) and structured HO-ODU4 services.
+Moreover, once these two kinds of OTN infrastructure service created, it is possible
+to manage some LO-ODU services (1GE-ODU0, 10GE-ODU2e). 100GE services are also
+supported over ODU4 in transponders or switchponders using higher rate network
+interfaces.
 
 PCE
 ^^^
@@ -115,7 +130,9 @@ PCE handles the following constraints as hard constraints:
 
 In Magnesium SR0, the interconnection of the PCE with GNPY (Gaussian Noise Python), an
 open-source library developed in the scope of the Telecom Infra Project for building route
-planning and optimizing performance in optical mesh networks, is fully supported.
+planning and optimizing performance in optical mesh networks, is fully supported. Impairment
+aware path computation for service of higher rates (Beyond 100G) is planned across Phoshorus
+releases. It implies to make B100G OpenROADM specifications available in GNPy libraries.
 
 If the OSNR calculated by the PCE is too close to the limit defined in OpenROADM
 specifications, the PCE forwards through a REST interface to GNPY external tool the topology
@@ -170,7 +187,9 @@ In Neon (SR0), portmapping module has been enriched to support both openroadm 1.
 device models. The full support of openroadm 2.2.1 device models (both in the topology management
 and the rendering function) has been added in Neon SR1. In Magnesium, portmapping is enriched with
 the supported-interface-capability, OTN supporting-interfaces, and switching-pools (reflecting
-cross-connection capabilities of OTN switch-ponders).
+cross-connection capabilities of OTN switch-ponders). The support for 7.1 devices models is
+introduced in Silicon (no devices of intermediate releases have been proposed and made available
+to the market by equipment manufacturers).
 
 After the path is provided, the renderer first checks what are the existing interfaces on the
 ports of the different nodes that the path crosses. It then creates missing interfaces. After all
@@ -183,8 +202,14 @@ rollback function is called to set the equipment on the path back to their initi
 Magnesium brings the support of OTN services. SR0 supports the creation of OTU4, ODU4, ODU2/ODU2e
 and ODU0 interfaces. The creation of these low-order otn interfaces must be triggered through
 otn-service-path RPC. Magnesium SR2 fully supports end-to-end otn service implementation into devices
-(service-implementation-request /service delete rpc, topology alignement after the service has been created).
+(service-implementation-request /service delete rpc, topology alignement after the service
+has been created).
 
+In Silicon releases, higher rate OTN interfaces (OTUC4) must be triggered through otn-service-
+path RPC. Phosphorus SR0 supports end-to-end otn service implementation into devices
+(service-implementation-request /service delete rpc, topology alignement after the service
+has been created). One shall note that impairment aware path calculation for higher rates will
+be made available across the Phosphorus release train.
 
 OLM
 ^^^
@@ -211,15 +236,15 @@ and the configuration was successfully completed.
 Inventory
 ^^^^^^^^^
 
-TransportPCE Inventory module is responsible to keep track of devices connected in an external MariaDB database.
-Other databases may be used as long as they comply with SQL and are compatible with OpenDaylight (for example MySQL).
-At present, the module supports extracting and persisting inventory of devices OpenROADM MSA version 1.2.1.
-Inventory module changes to support newer device models (2.2.1, etc) and other models (network, service, etc)
-will be progressively included.
+TransportPCE Inventory module is responsible to keep track of devices connected in an external
+MariaDB database. Other databases may be used as long as they comply with SQL and are compatible
+with OpenDaylight (for example MySQL). At present, the module supports extracting and persisting
+inventory of devices OpenROADM MSA version 1.2.1. Inventory module changes to support newer device
+models (2.2.1, etc) and other models (network, service, etc) will be progressively included.
 
 The inventory module can be activated by the associated karaf feature (odl-transporpce-inventory)
-The database properties are supplied in the “opendaylight-release” and “opendaylight-snapshots” profiles.
-Below is the settings.xml with properties included in the distribution.
+The database properties are supplied in the “opendaylight-release” and “opendaylight-snapshots”
+profiles. Below is the settings.xml with properties included in the distribution.
 The module can be rebuild from sources with different parameters.
 
 Sample entry in settings.xml to declare an external inventory database:
@@ -252,11 +277,12 @@ Sample entry in settings.xml to declare an external inventory database:
     </profiles>
 
 
-Once the project built and when karaf is started, the cfg file is generated in etc folder with the corresponding
-properties supplied in settings.xml. When devices with OpenROADM 1.2.1 device model are mounted, the device listener in
-the inventory module loads several device attributes to various tables as per the supplied database.
-The database structure details can be retrieved from the file tests/inventory/initdb.sql inside project sources.
-Installation scripts and a docker file are also provided.
+Once the project built and when karaf is started, the cfg file is generated in etc folder with the
+corresponding properties supplied in settings.xml. When devices with OpenROADM 1.2.1 device model
+are mounted, the device listener in the inventory module loads several device attributes to various
+tables as per the supplied database. The database structure details can be retrieved from the file
+tests/inventory/initdb.sql inside project sources. Installation scripts and a docker file are also
+provided.
 
 Key APIs and Interfaces
 -----------------------
@@ -601,15 +627,17 @@ Creating a service
 ~~~~~~~~~~~~~~~~~~
 
 Use the *service handler* module to create any end-to-end connectivity service on an OpenROADM
-network. Two kind of end-to-end "optical" services are managed by TransportPCE:
-- 100GE service from client port to client port of two transponders (TPDR)
+network. Two different kinds of end-to-end "optical" services are managed by TransportPCE:
+- 100GE/400GE services from client port to client port of two transponders (TPDR)
 - Optical Channel (OC) service from client add/drop port (PP port of SRG) to client add/drop port of
 two ROADMs.
 
 For these services, TransportPCE automatically invokes *renderer* module to create all required
 interfaces and cross-connection on each device supporting the service.
-As an example, the creation of a 100GE service implies among other things, the creation of OCH, OTU4
-and ODU4 interfaces on the Network port of TPDR devices.
+As an example, the creation of a 100GE service implies among other things, the creation of OCH or
+Optical Tributary Signal (OTSi), OTU4 and ODU4 interfaces on the Network port of TPDR devices.
+The creation of a 400GE service implies the creation of OTSi, OTUC4, ODUC4 and ODU4 interfaces on
+the Network port of TPDR devices.
 
 Since Magnesium SR2, the *service handler* module directly manages some end-to-end otn
 connectivity services.
@@ -946,6 +974,122 @@ As for the previous RPC, this RPC invokes the *PCE* module to compute a path ove
 *openroadm-topology* and then invokes *renderer* and *OLM* to implement the end-to-end path into
 the devices.
 
+OTSi-OTUC4 service creation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *service handler* module in order to create over the optical
+infrastructure a bidirectional end-to-end OTUC4 over an optical Optical Tributary Signal
+connectivity service between two optical network ports of OTN Xponder (MUXPDR or SWITCH). Such
+service configure the optical network infrastructure composed of rdm nodes.
+
+**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "something",
+            "common-id": "commonId",
+            "connection-type": "infrastructure",
+            "service-a-end": {
+                "service-rate": "400",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTUCn",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "400",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTUCn",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "due-date": "yyyy-mm-ddT00:00:01Z",
+            "operator-contact": "some-contact-info"
+        }
+    }
+
+As for the previous RPC, this RPC invokes the *PCE* module to compute a path over the
+*openroadm-topology* and then invokes *renderer* and *OLM* to implement the end-to-end path into
+the devices.
+
+One shall note that in Phosphorus SR0, as the OpenROADM 400G specification are not available (neither
+in the GNPy libraries, nor in the *PCE* module), path validation will be performed using the same
+asumptions as we use for 100G. This means the path may be validated whereas optical performances do
+not reach expected levels. This allows testing OpenROADM device implementing B100G rates, but shall
+not be used in operational conditions. The support for higher rate impairment aware path computation
+will be introduced across Phosphorus release train.
+
 OTN HO-ODU4 service creation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1184,7 +1328,7 @@ invokes *renderer* and *OLM* to implement the end-to-end path into the devices.
     Magnesium SR0). The trib-slot provided corresponds to the first of the used trib-slots.
     complex-trib-slots will be used when the equipment does not support contiguous trib-slot
     allocation. In this case a list of the different trib-slots to be used shall be provided.
-    The support for non contiguous trib-slot allocation is planned for later Magnesium release.
+    The support for non contiguous trib-slot allocation is planned for later release.
 
 Deleting a service
 ~~~~~~~~~~~~~~~~~~
