@@ -29,7 +29,7 @@ handler, Renderer responsible for the path configuration through optical
 equipment and Optical Line Management (OLM) is associated with a generic block
 relying on open models, each of them communicating through published APIs.
 
-.. figure:: ./images/TransportPCE-Diagramm-Magnesium.jpg
+.. figure:: ./images/TransportPCE-Diagram-Phosphorus.jpg
    :alt: TransportPCE architecture
 
    TransportPCE architecture
