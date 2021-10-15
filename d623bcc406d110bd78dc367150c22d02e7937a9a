@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bab72de_35e76a17",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-10-15T15:19:56Z",
+      "side": 1,
+      "message": "Just a proposal to move this method from public to private in order to only use getServiceType method outside this class.\nAnd to adapt OtnDeviceRendererServiceImpl class by :\nString serviceType \u003d ServiceTypes.getServiceType(input.getServiceFormat(), input.getServiceRate(), null);\ninstead of :\nString serviceType \u003d ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 10
+      },
+      "revId": "d623bcc406d110bd78dc367150c22d02e7937a9a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
