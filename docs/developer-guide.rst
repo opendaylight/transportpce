@@ -86,6 +86,12 @@ possible to manage some LO-ODU services (for the time being, only 10GE-ODU2e ser
 The full support of OTN services, including 1GE-ODU0 or 100GE, will be introduced along next
 releases (Mg/Al).
 
+In Silicon release, the management of TopologyUpdateNotification coming from the *Topology Management*
+module was implemented. This functionality enables the controller to update the information of existing
+services according to the online status of the network infrastructure. If any service is affected by
+the topology update and the *odl-transportpce-nbi* feature is installed, the Service Handler will send a
+notification to a Kafka server with the service update information.
+
 PCE
 ^^^
 
@@ -152,6 +158,11 @@ It includes several network layers:
    The population of OTN links (OTU4 and ODU4), and the adjustment of the tributary ports/slots
    pool occupancy when OTN services are created is supported since Magnesium SR2.**
 
+Since Silicon release, the Topology Management module process NETCONF event received through an
+event stream (as defined in RFC 5277) between devices and the NETCONF adapter of the controller.
+Current implementation detects device configuration changes and updates the topology datastore accordingly.
+Then, it sends a TopologyUpdateNotification to the *Service Handler* to indicate that a change has been
+detected in the network that may affect some of the already existing services.
 
 Renderer
 ^^^^^^^^
@@ -319,6 +330,7 @@ Internal APIs define REST APIs to interconnect TransportPCE modules :
 -   PCE to Topology Management
 -   Service Handler to Renderer
 -   Renderer to OLM
+-   Network Model to Service Handler
 
 Pce Service
 ^^^^^^^^^^^
@@ -397,7 +409,7 @@ odl-transportpce-stubmodels
 
    -  This feature provides function to be able to stub some of TransportPCE modules, pce and
       renderer (Stubpce and Stubrenderer).
-      Stubs are used for development purposes and can be used for some of the functionnal tests.
+      Stubs are used for development purposes and can be used for some of the functional tests.
 
 Interfaces to external software
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1345,15 +1357,32 @@ odl-transportpce-tapi
 
 This feature allows TransportPCE application to expose at its northbound interface other APIs than
 those defined by the OpenROADM MSA. With this feature, TransportPCE provides part of the Transport-API
-specified by the Open Networking Foundation. More specifically, part of the Topology Service component
-is implemented, allowing to expose to higher level applications an abstraction of its OpenROADM
-topologies in the form of topologies respecting the T-API modelling. The current version of TransportPCE
-implements the *tapi-topology.yang* model in the revision 2018-12-10 (T-API v2.1.2).
+specified by the Open Networking Foundation. More specifically, the Topology Service and Connectivity
+Service components are implemented, allowing to expose to higher level applications an abstraction of
+its OpenROADM topologies in the form of topologies respecting the T-API modelling, as well as
+creating/deleting connectivity services between the Service Interface Points (SIPs) exposed by the
+T-API topology. The current version of TransportPCE implements the *tapi-topology.yang* and
+*tapi-connectivity.yang* models in the revision 2018-12-10 (T-API v2.1.2).
 
+Additionally, support for the Notification Service component will be added in future releases, which
+will allow higher level applications to create/delete a Notification Subscription Service to receive
+several T-API notifications as defined in the *tapi-notification.yang* model.
 
--  RPC call
+T-API Topology Service
+~~~~~~~~~~~~~~~~~~~~~~
+
+-  RPC calls implemented:
 
    -  get-topology-details
+
+   -  get-node-details
+
+   -  get-node-edge-point-details
+
+   -  get-link-details
+
+   -  get-topology-list
+
 
 As in IETF or OpenROADM topologies, T-API topologies are composed of lists of nodes and links that
 abstract a set of network resources. T-API specifies the *T0 - Multi-layer topology* which is, as
@@ -1375,13 +1404,35 @@ In the same way, a pair of unidirectional OTN links (OTU4, ODU4) present in *otn
 represented by a bidirectional OTN link in TAPI topology, while retaining their available bandwidth
 characteristics.
 
-Two kinds of topologies are currently implemented. The first one is the *"T0 - Multi-layer topology"*
+Phosphorus SR0 extends the T-API topology service implementation by bringing a fully described topology.
+*T0 - Full Multi-layer topology* is derived from the existing *T0 - Multi-layer topology*. But the ROADM
+infrastructure is not abstracted and the higher level application can get more details on the composition
+of the ROADM infrastructure controlled by TransportPCE. Each ROADM node found in the *openroadm-network*
+is converted into a *Photonic Media* node. The details of these T-API nodes are obtained from the
+*openroadm-topology*. Therefore, the external traffic ports of *Degree* and *SRG* nodes are represented
+with a set of Network Edge Points (NEPs) and SIPs belonging to the *Photonic Media* node and a pair of
+roadm-to-roadm links present in *openroadm-topology* is represented by a bidirectional *OMS* link in TAPI
+topology.
+Additionally, T-API topology related information is stored in TransportPCE datastore in the same way as
+OpenROADM topology layers. When a node is connected to the controller through the corresponding *REST API*,
+the T-API topology context gets updated dynamically and stored.
+
+.. note::
+
+    A naming nomenclature is defined to be able to map T-API and OpenROADM data.
+    i.e., T-API_roadm_Name = OpenROADM_roadmID+T-API_layer
+    i.e., T-API_roadm_nep_Name = OpenROADM_roadmID+T-API_layer+OpenROADM_terminationPointID
+
+Three kinds of topologies are currently implemented. The first one is the *"T0 - Multi-layer topology"*
 defined in the reference implementation of T-API. This topology gives an abstraction from data coming
 from openroadm-topology and otn-topology. Such topology may be rather complex since most of devices are
 represented through several nodes and links.
 Another topology, named *"Transponder 100GE"*, is also implemented. That latter provides a higher level
 of abstraction, much simpler, for the specific case of 100GE transponder, in the form of a single
 DSR node.
+Lastly, the *T0 - Full Multi-layer topology* topology was added. This topology collapses the data coming
+from openroadm-network, openroadm-topology and otn-topology. It gives a complete view of the optical
+network as defined in the reference implementation of T-API
 
 The figure below shows an example of TAPI abstractions as performed by TransportPCE starting from Aluminium SR2.
 
@@ -1439,13 +1490,282 @@ be connected together, through a point-to-point 100GE service running over a wav
     port is connected to Add/Drop nodes of the ROADM infrastructure are retrieved in order to
     abstract only relevant information.
 
+This request builds the TAPI *T0 - Full Multi-layer* topology with respect to the information existing in
+the T-API topology context stored in OpenDaylight datastores.
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology"
+        }
+    }
+
+**REST API** : *POST /restconf/operations/tapi-topology:get-node-details*
+
+This request returns the information, stored in the Topology Context, of the corresponding T-API node.
+The user can provide, either the Uuid associated to the attribute or its name.
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology",
+        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONINC_MEDIA"
+      }
+    }
+
+**REST API** : *POST /restconf/operations/tapi-topology:get-node-edge-point-details*
+
+This request returns the information, stored in the Topology Context, of the corresponding T-API NEP.
+The user can provide, either the Uuid associated to the attribute or its name.
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology",
+        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONINC_MEDIA",
+        "tapi-topology:ep-id-or-name": "ROADM-A1+PHOTONINC_MEDIA+DEG1-TTP-TXRX"
+      }
+    }
+
+**REST API** : *POST /restconf/operations/tapi-topology:get-link-details*
+
+This request returns the information, stored in the Topology Context, of the corresponding T-API link.
+The user can provide, either the Uuid associated to the attribute or its name.
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology",
+        "tapi-topology:link-id-or-name": "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX"
+      }
+    }
+
+T-API Connectivity & Common Services
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Phosphorus SR0 extends the T-API interface support by implementing the T-API connectivity Service.
+This interface enables a higher level controller or an orchestrator to request the creation of
+connectivity services as defined in the *tapi-connectivity* model. As it is necessary to indicate the
+two (or more) SIPs (or endpoints) of the connectivity service, the *tapi-common* model is implemented
+to retrieve from the datastore all the innformation related to the SIPs in the tapi-context.
+Current implementation of the connectivity service maps the *connectivity-request* into the appropriate
+*openroadm-service-create* and relies on the Service Handler to perform path calculation and configuration
+of devices. Results received from the PCE and the Rendererare mapped back into T-API to create the
+corresponding Connection End Points (CEPs) and Connections in the T-API Connectivity Context and store it
+in the datastore.
+
+This first implementation includes the creation of:
+
+-   ROADM-to-ROADM tapi-connectivity service (MC connectivity service)
+-   OTN tapi-connectivity services (OTSi & ODU connectivity services)
+-   Ethernet tapi-connectivity services (DSR connectivity service)
+
+-  RPC calls implemented
+
+   -  create-connectivity-service
+
+   -  get-connectivity-service-details
+
+   -  get-connection-details
+
+   -  delete-connectivity-service
+
+   -  get-connection-end-point-details
+
+   -  get-connectivity-service-list
+
+   -  get-service-interface-point-details
+
+   -  get-service-interface-point-list
+
+Creating a T-API Connectivity service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the *tapi* interface to create any end-to-end connectivity service on a T-API based
+network. Two kind of end-to-end "optical" connectivity services are managed by TransportPCE:
+- 10GE service from client port to client port of two OTN Xponders (MUXPDR or SWITCH)
+- Media Channel (MC) connectivity service from client add/drop port (PP port of SRG) to
+client add/drop port of two ROADMs.
+
+As mentioned earlier, T-API module interfaces with the Service Handler to automatically invoke the
+*renderer* module to create all required tapi connections and cross-connection on each device
+supporting the service.
+
+Before creating a low-order OTN connectivity service (1GE or 10GE services terminating on
+client port of MUXPDR or SWITCH), the user must ensure that a high-order ODU4 container
+exists and has previously been configured (it means structured to support low-order otn services)
+to support low-order OTN containers.
+
+Thus, OTN connectivity service creation implies three steps:
+1. OTSi connectivity service from network port to network port of two OTN Xponders (MUXPDR or SWITCH in Photonic media layer)
+2. ODU connectivity service from network port to network port of two OTN Xponders (MUXPDR or SWITCH in DSR/ODU layer)
+3. 10GE connectivity service creation from client port to client port of two OTN Xponders (MUXPDR or SWITCH in DSR/ODU layer)
+
+The first step corresponds to the OCH-OTU4 service from network port to network port of OpenROADM.
+The corresponding T-API cross and top connections are created between the CEPs of the T-API nodes
+involved in each request.
+
+Additionally, an *MC connectivity service* could be created between two ROADMs to create an optical
+tunnel and reserve resources in advance. This kind of service corresponds to the OC service creation
+use case described earlier.
+
+The management of other OTN services through T-API (1GE-ODU0, 100GE...) is planned for future releases.
+
+Any-Connectivity service creation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+As for the Service Creation described for OpenROADM, the initial steps are the same:
+
+-   Connect netconf devices to the controller
+-   Create XPDR-RDM links and configure RDM-to-RDM links (in openroadm topologies)
+
+Bidirectional T-API links between xpdr and rdm nodes must be created manually. To that end, use the
+following REST RPCs:
+
+From xpdr <--> rdm:
+^^^^^^^^^^^^^^^^^^^
+
+**REST API** : *POST /restconf/operations/transportpce-tapinetworkutils:init-xpdr-rdm-tapi-link*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "input": {
+            "xpdr-node": <XPDR_OpenROADM_id>,
+            "network-tp": <XPDR_TP_OpenROADM_id>,
+            "rdm-node": <ROADM_OpenROADM_id>,
+            "add-drop-tp": <ROADM_TP_OpenROADM_id>
+        }
+    }
+
+Use the following REST RPC to invoke T-API module in order to create a bidirectional connectivity
+service between two devices. The network should be composed of two ROADMs and two Xponders (SWITCH or MUX)
+
+**REST API** : *POST /restconf/operations/tapi-connectivity:create-connectivity-service*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "tapi-connectivity:input": {
+            "tapi-connectivity:end-point": [
+                {
+                    "tapi-connectivity:layer-protocol-name": <Node_TAPI_Layer>,
+                    "tapi-connectivity:service-interface-point": {
+                        "tapi-connectivity:service-interface-point-uuid": <SIP_UUID_of_NEP>
+                    },
+                    "tapi-connectivity:administrative-state": "UNLOCKED",
+                    "tapi-connectivity:operational-state": "ENABLED",
+                    "tapi-connectivity:direction": "BIDIRECTIONAL",
+                    "tapi-connectivity:role": "SYMMETRIC",
+                    "tapi-connectivity:protection-role": "WORK",
+                    "tapi-connectivity:local-id": <OpenROADM node ID>,
+                    "tapi-connectivity:name": [
+                        {
+                            "tapi-connectivity:value-name": "OpenROADM node id",
+                            "tapi-connectivity:value": <OpenROADM node ID>
+                        }
+                    ]
+                },
+                {
+                    "tapi-connectivity:layer-protocol-name": <Node_TAPI_Layer>,
+                    "tapi-connectivity:service-interface-point": {
+                        "tapi-connectivity:service-interface-point-uuid": <SIP_UUID_of_NEP>
+                    },
+                    "tapi-connectivity:administrative-state": "UNLOCKED",
+                    "tapi-connectivity:operational-state": "ENABLED",
+                    "tapi-connectivity:direction": "BIDIRECTIONAL",
+                    "tapi-connectivity:role": "SYMMETRIC",
+                    "tapi-connectivity:protection-role": "WORK",
+                    "tapi-connectivity:local-id": <OpenROADM node ID>,
+                    "tapi-connectivity:name": [
+                        {
+                            "tapi-connectivity:value-name": "OpenROADM node id",
+                            "tapi-connectivity:value": <OpenROADM node ID>
+                        }
+                    ]
+                }
+            ],
+            "tapi-connectivity:connectivity-constraint": {
+                "tapi-connectivity:service-layer": <TAPI_Service_Layer>,
+                "tapi-connectivity:service-type": "POINT_TO_POINT_CONNECTIVITY",
+                "tapi-connectivity:service-level": "Some service-level",
+                "tapi-connectivity:requested-capacity": {
+                    "tapi-connectivity:total-size": {
+                        "value": <CAPACITY>,
+                        "unit": "GB"
+                    }
+                }
+            },
+            "tapi-connectivity:state": "Some state"
+        }
+    }
+
+As for the previous RPC, MC and OTSi correspond to PHOTONIC_MEDIA layer services,
+ODU to ODU layer services and 10GE/DSR to DSR layer services. This RPC invokes the
+*Service Handler* module to trigger the *PCE* to compute a path over the
+*otn-topology* that must contains ODU4 links with valid bandwidth parameters. Once the path is computed
+and validated, the T-API CEPs (associated with a NEP), cross connections and top connections will be created
+according to the service request and the topology objects inside the computed path. Then, the *renderer* and
+*OLM* are invoked to implement the end-to-end path into the devices and to update the status of the connections
+and connectivity service.
+
+.. note::
+    Refer to the "Unconstrained E2E Service Provisioning" use cases from T-API Reference Implementation to get
+    more details about the process of connectivity service creation
+
+Deleting a connectivity service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *TAPI* module in order to delete a given optical
+connectivity service.
+
+**REST API** : *POST /restconf/operations/tapi-connectivity:delete-connectivity-service*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "tapi-connectivity:input": {
+            "tapi-connectivity:service-id-or-name": <Service_UUID_or_Name>
+        }
+    }
+
+.. note::
+    Deleting OTN connectivity services implies proceeding in the reverse way to their creation. Thus, OTN
+    connectivity service deletion must respect the three following steps:
+    1. delete first all 10GE services supported over any ODU4 to be deleted
+    2. delete ODU4
+    3. delete MC-OTSi supporting the just deleted ODU4
+
+T-API Notification Service
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In future releases, the T-API notification service will be implemented. The objective will be to write and read
+T-API notifications stored in topics of a Kafka server as explained later in the odl-transportpce-nbinotifications
+section, but T-API based.
+
+
 odl-transportpce-dmaap-client
 -----------------------------
 
 This feature allows TransportPCE application to send notifications on ONAP Dmaap Message router
 following service request results.
 This feature listens on NBI notifications and sends the PublishNotificationService content to
-Dmaap on the topic "unauthenticated.TPCE" through a POST request on /events/unauthenticated.TPCE
+Dmaap on the topic "unauthenticated. TPCE" through a POST request on /events/unauthenticated.TPCE
 It uses Jackson to serialize the notification to JSON and jersey client to send the POST request.
 
 odl-transportpce-nbinotifications
@@ -1455,7 +1775,7 @@ This feature allows TransportPCE application to write and read notifications sto
 It is basically composed of two kinds of elements. First are the 'publishers' that are in charge of sending a notification to
 a Kafka server. To protect and only allow specific classes to send notifications, each publisher
 is dedicated to an authorized class.
-Then are the 'subscribers' that are in charge of reading notifications from a Kafka server.
+There are the 'subscribers' that are in charge of reading notifications from a Kafka server.
 So when the feature is called to write notification to a Kafka server, it will serialize the notification
 into JSON format and then will publish it in a topic of the server via a publisher.
 And when the feature is called to read notifications from a Kafka server, it will retrieve it from
