@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9984fba9_6c4a9bcd",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-18T14:11:31Z",
+      "side": 1,
+      "message": "The problem is here. It looks like a parsing error\n\n13:39:32 Warning, treated as error:\n13:39:32 /w/workspace/transportpce-tox-verify-sulfur/docs/developer-guide.rst:1618:Could not lex literal_block as \"json\". Highlighting skipped.\n13:39:32 ERROR: InvocationError for command /w/workspace/transportpce-tox-verify-sulfur/.tox/docs/bin/sphinx-build -q -W -b html -n -d /w/workspace/transportpce-tox-verify-sulfur/.tox/docs/tmp/doctrees ../docs/ /w/workspace/transportpce-tox-verify-sulfur/docs/_build/html (exited with code 2)\n13:39:32 ERROR: invocation failed (exit code 1)",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
