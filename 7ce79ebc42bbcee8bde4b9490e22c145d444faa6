@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "692b6dce_b9a278c5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:15:01Z",
+      "side": 1,
+      "message": "should preferably afterString declaration.\n\nSince the size of this list seems fixed, I wonder of using List.of() or Arrays.asList() would not be preferable to new ArrayList\u003c\u003e() here.",
+      "revId": "7ce79ebc42bbcee8bde4b9490e22c145d444faa6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e5ebf55_e4b4ce68",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:15:01Z",
+      "side": 1,
+      "message": "What about null checking one condition per line to ease reading ?\n            if (link.augmentation(Link1.class) \u003d\u003d null\n                    || link.augmentation(Link1.class).getAvailableBandwidth() \u003d\u003d null\n                    || link.augmentation(Link1.class).getUsedBandwidth() \u003d\u003d null) {\n                LOG.error(\"Error with otn parameters of supported link {}\", link.getLinkId().getValue());\n            } else {\n[..]",
+      "revId": "7ce79ebc42bbcee8bde4b9490e22c145d444faa6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bba134c_b209f6ca",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:15:01Z",
+      "side": 1,
+      "message": "idem\n        if (links.isEmpty()) {\n            LOG.error(\"unable to update otn links\");\n            return new TopologyShard(null, null, null);\n        } else {\n            return new TopologyShard(null, links, null);        \n        }",
+      "revId": "7ce79ebc42bbcee8bde4b9490e22c145d444faa6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
