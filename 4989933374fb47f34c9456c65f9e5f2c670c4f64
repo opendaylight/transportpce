@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91cde543_fc4abfb4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:26:34Z",
+      "side": 1,
+      "message": "what about a ternary operator directly in the previous allocation here?",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb8e4620_6c9b24a1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:26:34Z",
+      "side": 1,
+      "message": "intermediate variable not needed",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f589925d_687e1988",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:26:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8169fd_1e4a74bb",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:26:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
