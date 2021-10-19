@@ -327,41 +327,7 @@ public class PortMappingVersion710 {
             }
         }
         if (device.getOduSwitchingPools() != null) {
-            List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
-            for (OduSwitchingPools odp : device.nonnullOduSwitchingPools().values()) {
-                Map<NonBlockingListKey,NonBlockingList> nbMap = new HashMap<>();
-                for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org
-                    .openroadm.device.odu.switching.pools.NonBlockingList nbl : odp.nonnullNonBlockingList().values()) {
-                    if (nbl.getPortList() == null) {
-                        continue;
-                    }
-                    List<String> lcpList = new ArrayList<>();
-                    for (PortList item : nbl.nonnullPortList().values()) {
-                        String key = item.getCircuitPackName() + "+" + item.getPortName();
-                        if (!lcpMap.containsKey(key)) {
-                            LOG.error(PortMappingUtils.NO_ASSOC_FOUND_LOGMSG,
-                                nodeId, item.getPortName(), item.getCircuitPackName(), "to a logical connection point");
-                            continue;
-                        }
-                        lcpList.add(lcpMap.get(key));
-                    }
-                    NonBlockingList nonBlockingList = new NonBlockingListBuilder()
-                        .setNblNumber(nbl.getNblNumber())
-                        .setInterconnectBandwidth(nbl.getInterconnectBandwidth())
-                        .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
-                        .setLcpList(lcpList)
-                        .build();
-                    nbMap.put(nonBlockingList.key(), nonBlockingList);
-                }
-                switchingPoolList.add(
-                    new SwitchingPoolLcpBuilder()
-                        .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
-                        .setSwitchingPoolType(odp.getSwitchingPoolType())
-                        //TODO differs from 2.2.1 SwitchingPoolTypes.forValue(odp.getSwitchingPoolType().getIntValue())
-                        .setNonBlockingList(nbMap)
-                        .build());
-            }
-            postPortMapping(nodeId, null, null, null, switchingPoolList, null);
+            postPortMapping(nodeId, null, null, null, getSwitchingPoolList(device, lcpMap, nodeId), null);
         }
         mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
@@ -455,6 +421,45 @@ public class PortMappingVersion710 {
             return null;
         }
         return portsList.get();
+    }
+
+    private List<SwitchingPoolLcp> getSwitchingPoolList(OrgOpenroadmDevice device,
+            Map<String, String> lcpMap, String nodeId) {
+        List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
+        for (OduSwitchingPools odp : device.nonnullOduSwitchingPools().values()) {
+            Map<NonBlockingListKey,NonBlockingList> nbMap = new HashMap<>();
+            for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org
+                .openroadm.device.odu.switching.pools.NonBlockingList nbl : odp.nonnullNonBlockingList().values()) {
+                if (nbl.getPortList() == null) {
+                    continue;
+                }
+                List<String> lcpList = new ArrayList<>();
+                for (PortList item : nbl.nonnullPortList().values()) {
+                    String key = item.getCircuitPackName() + "+" + item.getPortName();
+                    if (!lcpMap.containsKey(key)) {
+                        LOG.error(PortMappingUtils.NO_ASSOC_FOUND_LOGMSG,
+                            nodeId, item.getPortName(), item.getCircuitPackName(), "to a logical connection point");
+                        continue;
+                    }
+                    lcpList.add(lcpMap.get(key));
+                }
+                NonBlockingList nonBlockingList = new NonBlockingListBuilder()
+                    .setNblNumber(nbl.getNblNumber())
+                    .setInterconnectBandwidth(nbl.getInterconnectBandwidth())
+                    .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
+                    .setLcpList(lcpList)
+                    .build();
+                nbMap.put(nonBlockingList.key(), nonBlockingList);
+            }
+            switchingPoolList.add(
+                new SwitchingPoolLcpBuilder()
+                    .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
+                    .setSwitchingPoolType(odp.getSwitchingPoolType())
+                    //TODO differs from 2.2.1 SwitchingPoolTypes.forValue(odp.getSwitchingPoolType().getIntValue())
+                    .setNonBlockingList(nbMap)
+                    .build());
+        }
+        return switchingPoolList;
     }
 
     private boolean checkPartnerPortNotNull(Ports port) {
@@ -584,9 +589,8 @@ public class PortMappingVersion710 {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG + PortMappingUtils.PARTNERPORT_CONF_ERROR_LOGMSG,
                 nodeId, port2.getPortName(), port.getPartnerPort().getCircuitPackName(),
                 port.getPortName(), circuitPackName);
-            //portIndex++;
-            //TODO check if we really needed to increase portIndex
-            //     if yes this block should not be in getPartnerPort
+            //TODO check if we really needed to increment portIndex in this condition
+            //     if yes this block should not be in getPartnerPort and must move back to createPpPortMapping
             return null;
         }
         return port2;
