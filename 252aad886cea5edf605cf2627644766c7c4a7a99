@@ -16,6 +16,58 @@
       "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0f9e5d1_5902e608",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T16:25:46Z",
+      "side": 1,
+      "message": "https://sonarcloud.io/project/issues?fileUuids\u003dAXPPbQudyx5GDscMkt_2\u0026id\u003dopendaylight_transportpce\u0026resolved\u003dfalse",
+      "parentUuid": "defbd630_0ad77867",
+      "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "428e9bc9_823a7713",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T16:25:46Z",
+      "side": 1,
+      "message": "the cyclomatic complexity of this method is already 30...",
+      "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f7fdbc4_d9b06c97",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T16:25:46Z",
+      "side": 1,
+      "message": "Sonar issue: Replace this if-then-else statement by a single return statement.",
+      "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
