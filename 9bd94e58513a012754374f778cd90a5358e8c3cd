@@ -2,6 +2,109 @@
   "comments": [
     {
       "key": {
+        "uuid": "906f61a9_47755e10",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-19T08:45:35Z",
+      "side": 1,
+      "message": "All these RPCs are really implemented?",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d980e23_d164b25c",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-19T08:45:35Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1403,
+        "startChar": 87,
+        "endLine": 1403,
+        "endChar": 92
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c57095_6b63fd12",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-19T08:45:35Z",
+      "side": 1,
+      "message": "I prefer \"ROADM infrastructure\" instead of \"OLS Domain\", which, moreove, is not defined",
+      "range": {
+        "startLine": 1404,
+        "startChar": 7,
+        "endLine": 1404,
+        "endChar": 17
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2be01906_8e329397",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-19T08:45:35Z",
+      "side": 1,
+      "message": "...the external traffic ports of *Degree* and *SRG* nodes...",
+      "range": {
+        "startLine": 1406,
+        "startChar": 11,
+        "endLine": 1406,
+        "endChar": 39
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b613dbcf_2772085d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-19T08:45:35Z",
+      "side": 1,
+      "message": "It is not exactly what we do on openroadm side. We don\u0027t use the openroadm \"OC\" service. Instead, we create during the first step the OCH(or OTSi) + OTU4 on the network port of the OTN Xponder (+ ROADM configurations).",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9984fba9_6c4a9bcd",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 5
