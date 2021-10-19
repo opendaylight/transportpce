@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "306952a4_03b54587",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T09:57:16Z",
+      "side": 1,
+      "message": "I think this if-block must be mutualized with the previous one since they both check Uint32.valueOf(100).equals(serviceRate) and PortQual.SwitchClient.getName().equals(mapping.getPortQual()",
+      "revId": "f910d046cd7754745b965944b7b369799f4aa086",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
