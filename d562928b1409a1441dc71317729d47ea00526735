@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34e292e3_b85dd91f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T15:12:20Z",
+      "side": 1,
+      "message": "indent +4 to separate method declaratin from its body",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e773028_92a0609b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T15:12:20Z",
+      "side": 1,
+      "message": "intermediate variable not needed",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ba1b1b6_ea6b08ff",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T15:12:20Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80bd9acb_05fb3243",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T15:12:20Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
