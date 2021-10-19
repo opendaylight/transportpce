@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c897179_ccfd6c9e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:52:55Z",
+      "side": 1,
+      "message": "what about a ternary operator directly in sendNotificationsWithPathDescription() here ?\nthis way, this allocation can be removed",
+      "revId": "6071a25cd4f4a0bdaedebe386caedb169f94a227",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05bf59eb_f0e26ee8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:52:55Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "6071a25cd4f4a0bdaedebe386caedb169f94a227",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c9bb314_29238c34",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-19T10:52:55Z",
+      "side": 1,
+      "message": "style coherency with line 250",
+      "revId": "6071a25cd4f4a0bdaedebe386caedb169f94a227",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
