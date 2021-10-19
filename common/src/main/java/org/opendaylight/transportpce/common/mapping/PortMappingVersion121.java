@@ -374,9 +374,8 @@ public class PortMappingVersion121 {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG + PortMappingUtils.PARTNERPORT_CONF_ERROR_LOGMSG,
                 nodeId, port2.getPortName(), port.getPartnerPort().getCircuitPackName(),
                 port.getPortName(), circuitPackName);
-            //portIndex++;
-            //TODO check if we really needed to increase portIndex
-            //     if yes this block should not be in getPartnerPort
+            //TODO check if we really needed to increment portIndex in this condition
+            //     if yes this block should not be in getPartnerPort and must move back to createPpPortMapping
             return null;
         }
         return port2;
