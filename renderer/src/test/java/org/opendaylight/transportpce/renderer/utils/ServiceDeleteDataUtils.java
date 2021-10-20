@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.utils;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
@@ -47,9 +48,9 @@ public final class ServiceDeleteDataUtils {
         TerminationPoint terminationPoint2 = terminationPointBuilder.setTpNodeId("node1" + tpId)
                         .setTpId(tpId).build();
         AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
-                .setResource(terminationPoint).build()).build();
+                .setResource(terminationPoint).setState(State.InService).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("2").withKey(new AToZKey("2")).setResource(new ResourceBuilder()
-                .setResource(terminationPoint2).build()).build();
+                .setResource(terminationPoint2).setState(State.InService).build()).build();
         atoZMap.put(atoZ.key(),atoZ);
         atoZMap.put(atoZ2.key(),atoZ2);
         AToZDirection atozDirection = new AToZDirectionBuilder()
@@ -60,9 +61,9 @@ public final class ServiceDeleteDataUtils {
                 .build();
         Map<ZToAKey,ZToA> ztoAMap = new HashMap<>();
         ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
-                .setResource(terminationPoint).build()).build();
+                .setResource(terminationPoint).setState(State.InService).build()).build();
         ZToA ztoA2 = new ZToABuilder().setId("2").withKey(new ZToAKey("2")).setResource(new ResourceBuilder()
-                .setResource(terminationPoint).build()).build();
+                .setResource(terminationPoint).setState(State.InService).build()).build();
         ztoAMap.put(ztoA.key(),ztoA);
         ztoAMap.put(ztoA2.key(),ztoA2);
         ZToADirection ztoaDirection = new ZToADirectionBuilder()

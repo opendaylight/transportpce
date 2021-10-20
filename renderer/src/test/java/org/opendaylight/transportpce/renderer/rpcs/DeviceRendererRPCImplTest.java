@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.renderer.rpcs;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -22,7 +21,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.RendererRollbackOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.ServicePathInput;
 
-@Ignore
 public class DeviceRendererRPCImplTest extends AbstractTest {
     private final DeviceRendererService deviceRenderer = Mockito.mock(DeviceRendererService.class);
     private final OtnDeviceRendererService otnDeviceRenderer = Mockito.mock(OtnDeviceRendererService.class);

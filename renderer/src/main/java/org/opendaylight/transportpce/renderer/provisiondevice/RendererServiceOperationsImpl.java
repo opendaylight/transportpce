@@ -126,11 +126,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes
+                    mappingNode = portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
+                        ? portMapping.getNode(input.getServiceAEnd().getNodeId())
+                        : null;
                 String serviceType = ServiceTypes.getServiceType(
                     input.getServiceAEnd().getServiceFormat().getName(),
                     serviceRate,
-                    (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId())
-                        .getNodeInfo().getNodeType())
+                    (mappingNode != null
+                        && NodeTypes.Xpdr.equals(mappingNode.getNodeInfo().getNodeType())
                             && input.getServiceAEnd().getTxDirection() != null
                             && input.getServiceAEnd().getTxDirection().getPort() != null
                             && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null)
@@ -515,7 +519,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         RollbackProcessor rollbackProcessor = new RollbackProcessor();
         List<DeviceRenderingResult> renderingResults =
             deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
-        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
             sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
             return false;

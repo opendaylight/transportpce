@@ -13,29 +13,26 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-@Ignore
+@RunWith(MockitoJUnitRunner.StrictStubs.class)
 public class RendererProviderTest extends AbstractTest {
-
 
     @Mock
     RpcProviderService rpcProviderService;
-
     @Mock
     private RendererServiceOperations rendererServiceOperations;
-
     @Mock
     DeviceRendererRPCImpl deviceRendererRPC;
-
     private AutoCloseable closeable;
 
     @Before
@@ -51,13 +48,12 @@ public class RendererProviderTest extends AbstractTest {
 
         verify(rpcProviderService, times(1))
                 .registerRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));
-
         verify(rpcProviderService, times(1))
                 .registerRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
     }
 
-    @After public void releaseMocks() throws Exception {
+    @After
+    public void releaseMocks() throws Exception {
         closeable.close();
     }
-
 }
