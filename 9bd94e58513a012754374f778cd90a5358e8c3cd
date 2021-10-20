@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4685d3d8_ebdfeb3f",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "906f61a9_47755e10",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d980e23_d164b25c",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 5
@@ -39,6 +57,30 @@
       "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3084a39_b70424b2",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d980e23_d164b25c",
+      "range": {
+        "startLine": 1403,
+        "startChar": 87,
+        "endLine": 1403,
+        "endChar": 92
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9eda0baa_7c09a9d1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09c57095_6b63fd12",
+      "range": {
+        "startLine": 1404,
+        "startChar": 7,
+        "endLine": 1404,
+        "endChar": 17
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2be01906_8e329397",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 5
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "281f0607_18fa27c0",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2be01906_8e329397",
+      "range": {
+        "startLine": 1406,
+        "startChar": 11,
+        "endLine": 1406,
+        "endChar": 39
+      },
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b613dbcf_2772085d",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 5
@@ -99,6 +189,24 @@
       "writtenOn": "2021-10-19T08:45:35Z",
       "side": 1,
       "message": "It is not exactly what we do on openroadm side. We don\u0027t use the openroadm \"OC\" service. Instead, we create during the first step the OCH(or OTSi) + OTU4 on the network port of the OTN Xponder (+ ROADM configurations).",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a41e9e_6175a537",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "I agree, im going to discuss this  with Olivier today.",
+      "parentUuid": "b613dbcf_2772085d",
       "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
@@ -134,6 +242,24 @@
       "side": 1,
       "message": "Im looking for a fix here. Thanks 😊",
       "parentUuid": "9984fba9_6c4a9bcd",
+      "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2407bf1b_d240a2ab",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-20T08:11:07Z",
+      "side": 1,
+      "message": "When using this online rst text editor https://livesphinx.herokuapp.com/ I dont get any warning/error",
+      "parentUuid": "9b8e50fd_2c16ea90",
       "revId": "9bd94e58513a012754374f778cd90a5358e8c3cd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
