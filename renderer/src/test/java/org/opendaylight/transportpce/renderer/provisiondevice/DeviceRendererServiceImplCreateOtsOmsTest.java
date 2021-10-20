@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -29,10 +28,6 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
-import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
-import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
-import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
@@ -53,6 +48,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.NodesKey;
@@ -60,7 +56,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-@Ignore
 public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
 
     private DeviceRendererService deviceRendererService;
@@ -72,12 +67,10 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     private OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
-    private PortMappingVersion710 portMappingVersion710;
-    private PortMappingVersion221 portMappingVersion22;
-    private PortMappingVersion121 portMappingVersion121;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
     private CrossConnectImpl710 crossConnectImpl710;
+    private final PortMapping portMapping = Mockito.mock(PortMapping.class);
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
@@ -90,16 +83,6 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
             openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
-        this.portMappingVersion22 = new PortMappingVersion221(getDataBroker(), this.deviceTransactionManager);
-        this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager);
-        this.portMappingVersion710 = new PortMappingVersion710(getDataBroker(), deviceTransactionManager);
-        this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(this.deviceTransactionManager);
-        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(this.deviceTransactionManager);
-        PortMapping portMapping =
-            new PortMappingImpl(getDataBroker(), this.portMappingVersion710, this.portMappingVersion22,
-                this.portMappingVersion121);
-        this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(this.deviceTransactionManager, portMapping,
-            this.portMappingVersion22);
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
@@ -153,17 +136,10 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         wr.commit().get();
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
-        writePortMapping(input);
+        Mapping mapping = MountPointUtils.createMapping(input.getNodeId(), input.getLogicalConnectionPoint());
+        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString())).thenReturn(mapping);
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
         Assert.assertTrue(result.getSuccess());
-    }
-
-    private void writePortMapping(CreateOtsOmsInput input) {
-        MountPointUtils.writeMapping(
-            input.getNodeId(),
-            input.getLogicalConnectionPoint(),
-            this.deviceTransactionManager
-        );
     }
 
 }

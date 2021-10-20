@@ -496,7 +496,7 @@ public final class ModelMappingUtils {
                 return Map.of("nodeId", nodeId, "tpid", lcp);
             }
         }
-        return null;
+        return Map.of();
     }
 
     private static Map<String, String> extractZendFromPathDescriptionForOtn(PathDescription pathDescription) {
@@ -513,7 +513,7 @@ public final class ModelMappingUtils {
                 return Map.of("nodeId", nodeId, "tpid", lcp);
             }
         }
-        return null;
+        return Map.of();
     }
 
     private static Map<String, String> extractAendFromPathDescriptionForOptical(PathDescription pathDescription) {
@@ -530,7 +530,7 @@ public final class ModelMappingUtils {
                 return Map.of("nodeId", tp.getTpNodeId(), "tpid", tp.getTpId());
             }
         }
-        return null;
+        return Map.of();
     }
 
     private static Map<String, String> extractZendFromPathDescriptionForOptical(PathDescription pathDescription) {
@@ -547,6 +547,6 @@ public final class ModelMappingUtils {
                 return Map.of("nodeId", tp.getTpNodeId(), "tpid", tp.getTpId());
             }
         }
-        return null;
+        return Map.of();
     }
 }
