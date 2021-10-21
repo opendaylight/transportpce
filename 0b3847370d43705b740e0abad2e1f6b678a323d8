@@ -34,6 +34,24 @@
       "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0d816e5_53ca47c4",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-21T12:42:06Z",
+      "side": 1,
+      "message": "That\u0027s what I have understood but\n- if srcOtsPmHoler or destOtsPmHoler is not null, why XXX.getOtsInterfaceName() should not be null ? Please elaborate a little more the commit message if so\n- if getPmMeasurements(sourceNodeId, sourceTpId, \"OpticalPowerOutput\") is already not null, why testing srcOtsPmHoler nullness a second time?\n- if it is null and if getPmMeasurements(sourceNodeId, sourceTpId, \"OpticalPowerOutputOSC\") is also null, why retrieving getPmMeasurements(destNodeId, destTpId, \"OpticalPowerInput\") ?",
+      "parentUuid": "2e5ae19a_aa86e9be",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
