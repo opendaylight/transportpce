@@ -142,6 +142,24 @@
       "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bccf66c_9fb970e9",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-21T15:19:56Z",
+      "side": 1,
+      "message": "Yes indeed. Since the ticket was always open in our backlog, and the bug still present, it was hight time to solve it.\nThank you Jonas for having reported it.",
+      "parentUuid": "f9c8b9ea_b8a4366a",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
