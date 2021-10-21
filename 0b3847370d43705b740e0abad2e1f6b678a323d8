@@ -106,6 +106,24 @@
       "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15df4a3b_6c473770",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-21T13:42:53Z",
+      "side": 1,
+      "message": "you can remove the third if block which is a dead code.",
+      "parentUuid": "9abf5be3_bd07004d",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
