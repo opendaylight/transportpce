@@ -84,6 +84,9 @@ final class OlmUtils221 {
 
         InstanceIdentifier<?> resourceKeyIID =
                 findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
+        if (resourceKeyIID == null) {
+            return pmOutputBuilder;
+        }
         CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
                 convertResourceTypeEnum(input.getResourceType()),"");
         InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
@@ -182,6 +185,10 @@ final class OlmUtils221 {
 
     private static InstanceIdentifier<?> findClassKeyIdentifiers(ResourceTypeEnum wantedResourceType,
             ResourceIdentifier wantedResourceIdentifier) {
+        if (wantedResourceIdentifier.getResourceName() == null) {
+            LOG.debug("resource {} is null", wantedResourceType);
+            return null;
+        }
         switch (wantedResourceType) {
             case Device:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class);
