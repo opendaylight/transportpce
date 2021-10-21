@@ -527,34 +527,37 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             String sourceTpId = link.getSrcTpId();
             String destNodeId = link.getDestNodeId();
             String destTpId = link.getDestTpid();
-            OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
-            if (srcOtsPmHoler == null) {
-                srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
+            OtsPmHolder srcOtsPmHolder = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
+            if (srcOtsPmHolder == null) {
+                srcOtsPmHolder = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
+                if (srcOtsPmHolder == null) {
+                    LOG.warn("OTS configuration issue at {} - {}", sourceNodeId, sourceTpId);
+                    continue;
+                }
             }
-            OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
-            if (destOtsPmHoler == null) {
-                destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
+            OtsPmHolder destOtsPmHolder = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
+            if (destOtsPmHolder == null) {
+                destOtsPmHolder = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
+                if (destOtsPmHolder == null) {
+                    LOG.warn("OTS configuration issue at {} - {}", destNodeId, destTpId);
+                    continue;
+                }
             }
-
-            if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
-                LOG.warn("OTS is not present for the link {}", link);
-                continue;
-            }
-            spanLoss = BigDecimal.valueOf(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
+            spanLoss = BigDecimal.valueOf(srcOtsPmHolder.getOtsParameterVal() - destOtsPmHolder.getOtsParameterVal())
                 .setScale(1, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :{}={}-{}",
-                spanLoss, srcOtsPmHoler.getOtsParameterVal(), destOtsPmHoler.getOtsParameterVal());
+                spanLoss, srcOtsPmHolder.getOtsParameterVal(), destOtsPmHolder.getOtsParameterVal());
             if (spanLoss.doubleValue() > 28) {
                 LOG.warn("Span Loss is out of range of OpenROADM specifications");
             }
             if (spanLoss.intValue() <= 0) {
                 spanLoss = BigDecimal.valueOf(0);
             }
-            if (!setSpanLoss(sourceNodeId, srcOtsPmHoler.getOtsInterfaceName(), spanLoss, "TX")) {
+            if (!setSpanLoss(sourceNodeId, srcOtsPmHolder.getOtsInterfaceName(), spanLoss, "TX")) {
                 LOG.info("Setting spanLoss failed for {}", sourceNodeId);
                 return null;
             }
-            if (!setSpanLoss(destNodeId, destOtsPmHoler.getOtsInterfaceName(), spanLoss, "RX")) {
+            if (!setSpanLoss(destNodeId, destOtsPmHolder.getOtsInterfaceName(), spanLoss, "RX")) {
                 LOG.info("Setting spanLoss failed for {}", destNodeId);
                 return null;
             }
