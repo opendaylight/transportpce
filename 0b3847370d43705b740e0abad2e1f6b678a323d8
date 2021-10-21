@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4142b0bd_9f5c2045",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-21T08:49:54Z",
+      "side": 1,
+      "message": "why should we stop checking XXX.getOtsInterfaceName() is not null ? \u003d\u003e vote -1\nI think this check should be split and integrated into the 2 if-blocks at line 531 and 535.",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
