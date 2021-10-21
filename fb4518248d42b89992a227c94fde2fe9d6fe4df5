@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae9279ec_43b70366",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-10-21T13:45:57Z",
+      "side": 1,
+      "message": "@Javier\n\nWe have two different ways of creating SIP UUIDs in the two TAPI implementations.\nIn the multi-layer topology, the SIP is directly derived from the NEP, while in the full multi-layer topo, the SIP is a string concatenation based on the node and the tp.\nIs there a particular reason for having made this choice in the full multi-layer implementation?\nThe idea behind would be to be able to have the same UUIDs whether in one or the other topology.\nWhat\u0027s your opinion ?",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
