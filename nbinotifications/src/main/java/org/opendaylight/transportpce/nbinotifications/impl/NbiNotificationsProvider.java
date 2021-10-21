@@ -17,11 +17,11 @@ import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationTapiService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
@@ -74,7 +74,8 @@ public class NbiNotificationsProvider {
     public void init() {
         LOG.info("NbiNotificationsProvider Session Initiated");
         rpcRegistration = rpcService.registerRpcImplementation(NbiNotificationsService.class,
-                new NbiNotificationsImpl(converterService, converterAlarmService, subscriberServer));
+                new NbiNotificationsImpl(converterService, converterAlarmService, converterTapiService,
+                    subscriberServer, topicManager));
         NbiNotificationsListenerImpl nbiNotificationsListener =
                 new NbiNotificationsListenerImpl(this.topicManager.getProcessTopicMap(),
                         this.topicManager.getAlarmTopicMap(), this.topicManager.getTapiTopicMap());

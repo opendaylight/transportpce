@@ -17,11 +17,11 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApi;
 import org.opendaylight.transportpce.dmaap.client.resource.config.JsonConfigurator;
 import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.TapiTopicNotification;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.TapiTopicNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

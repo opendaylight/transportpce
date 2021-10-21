@@ -19,8 +19,8 @@ import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.TapiTopicNotification;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.TapiTopicNotificationBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.TapiTopicNotification;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.TapiTopicNotificationBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1;
@@ -73,7 +73,10 @@ public class TapiNotificationImpl implements TapiNotificationService {
 
     @Override
     public ListenableFuture<RpcResult<GetSupportedNotificationTypesOutput>>
-        getSupportedNotificationTypes(GetSupportedNotificationTypesInput input) {
+            getSupportedNotificationTypes(GetSupportedNotificationTypesInput input) {
+        /* TODO --> What is supported by tapi-notification? In this case ConnectivityService objects. Add more
+            when it is extended.
+        */
         return null;
     }
 

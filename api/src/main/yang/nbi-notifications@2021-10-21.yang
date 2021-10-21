@@ -32,6 +32,11 @@ module nbi-notifications {
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
 
+  revision 2021-10-21 {
+    description
+      "Implement new RPC for TAPI service notification";
+  }  
+  
   revision 2021-10-13 {
     description
       "Implement new models, RPC for TAPI service notification";
@@ -270,6 +275,21 @@ module nbi-notifications {
       }
     }
   }
+  
+  rpc get-notifications-tapi-service {
+    description "Get the tapi notifications service sent by tapi interface through filtering subscription uuid";
+    input {
+      leaf subscription-id-or-name {
+        type string;
+        description "none";
+      }
+    }
+    output {
+      list notifications-tapi-service {
+        uses notification-tapi-service;
+      }
+    }
+  }  
 
   notification publish-notification-process-service {
     description "Publish the notifications service through a publisher";

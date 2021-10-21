@@ -13,17 +13,25 @@ import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.consumer.Subscriber;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceDeserializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.alarm.service.output.NotificationsAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.transportpce.nbinotifications.serialization.TapiNotificationDeserializer;
+import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsAlarmServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsAlarmServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsProcessServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsProcessServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsTapiServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsTapiServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsTapiServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.get.notifications.tapi.service.output.NotificationsTapiService;
+import org.opendaylight.yangtools.yang.common.RpcError;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -33,13 +41,19 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsImpl.class);
     private final JsonStringConverter<NotificationProcessService> converterService;
     private final JsonStringConverter<NotificationAlarmService> converterAlarmService;
+    private final JsonStringConverter<NotificationTapiService> converterTapiService;
     private final String server;
+    private final TopicManager topicManager;
 
     public NbiNotificationsImpl(JsonStringConverter<NotificationProcessService> converterService,
-                                JsonStringConverter<NotificationAlarmService> converterAlarmService, String server) {
+                                JsonStringConverter<NotificationAlarmService> converterAlarmService,
+                                JsonStringConverter<NotificationTapiService> converterTapiService, String server,
+                                TopicManager topicManager) {
         this.converterService = converterService;
         this.converterAlarmService = converterAlarmService;
         this.server = server;
+        this.topicManager = topicManager;
+        this.converterTapiService = converterTapiService;
     }
 
     @Override
@@ -74,5 +88,29 @@ public class NbiNotificationsImpl implements NbiNotificationsService {
                 .subscribe("alarm" + input.getConnectionType().getName(), NotificationsAlarmService.QNAME);
         return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder()
                 .setNotificationsAlarmService(notificationAlarmServiceList).build()).buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetNotificationsTapiServiceOutput>> getNotificationsTapiService(
+            GetNotificationsTapiServiceInput input) {
+        LOG.info("RPC getNotificationsAlarmService received");
+        if (input == null || input.getSubscriptionIdOrName() == null) {
+            LOG.warn("Missing mandatory params for input {}", input);
+            return RpcResultBuilder.<GetNotificationsTapiServiceOutput>failed().withError(RpcError.ErrorType.RPC,
+                "Null input parameters").buildFuture();
+        }
+        // TODO: SubscriptionIdOrName must be a string of type UUID
+        if (!this.topicManager.getTapiTopicMap().containsKey(input.getSubscriptionIdOrName())) {
+            LOG.warn("Missing mandatory params for input {}", input);
+            return RpcResultBuilder.<GetNotificationsTapiServiceOutput>failed()
+                .withError(RpcError.ErrorType.APPLICATION, "Topic doesnt exist").buildFuture();
+        }
+        Subscriber<NotificationTapiService, NotificationsTapiService> subscriber = new Subscriber<>(
+            input.getSubscriptionIdOrName(), input.getSubscriptionIdOrName(), server, converterTapiService,
+            TapiNotificationDeserializer.class);
+        List<NotificationsTapiService> notificationsTapiServiceList = subscriber
+            .subscribe(input.getSubscriptionIdOrName(), NotificationsTapiService.QNAME);
+        return RpcResultBuilder.success(new GetNotificationsTapiServiceOutputBuilder()
+            .setNotificationsTapiService(notificationsTapiServiceList).build()).buildFuture();
     }
 }

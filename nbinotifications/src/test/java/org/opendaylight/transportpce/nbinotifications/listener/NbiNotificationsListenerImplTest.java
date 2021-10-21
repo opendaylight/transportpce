@@ -22,12 +22,12 @@ import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.PublishNotificationProcessServiceBuilder;
 
 public class NbiNotificationsListenerImplTest extends AbstractTest {
     @Mock

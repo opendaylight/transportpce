@@ -13,19 +13,25 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
+import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsAlarmServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsProcessServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211021.NotificationTapiService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
     private NbiNotificationsImpl nbiNotificationsImpl;
+
+    @Mock
+    private TopicManager topicManager;
 
     @Before
     public void setUp() {
@@ -33,7 +39,10 @@ public class NbiNotificationsImplTest extends AbstractTest {
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080");
+        JsonStringConverter<NotificationTapiService> converterTapi = new JsonStringConverter<>(
+            getDataStoreContextUtil().getBindingDOMCodecServices());
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm, converterTapi,
+            "localhost:8080", topicManager);
     }
 
     @Test
