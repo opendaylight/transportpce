@@ -52,6 +52,24 @@
       "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b817d4e_c32a2ff7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-21T13:25:39Z",
+      "side": 1,
+      "message": "The issue is not for a \"normal\" or \"nominal\" case where nothing is null, but when at list one (srcOtsPmHoler or destOtsPmHoler) is null. From the moment one is null we can no longer continue.\nI think the change fix that!",
+      "parentUuid": "b0d816e5_53ca47c4",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
