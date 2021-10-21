@@ -16,6 +16,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7de7bf6_5e13703d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-21T13:58:43Z",
+      "side": 1,
+      "message": "@Christophe\n\nActually, the difference between the NEP uuid and the SIP uuid in the Full TAPI topo is:\nNEP \u003d Node_ID+TP_ID\nSIP \u003d SIP+Node_ID+TP_ID \u003d SIP+NEP\n\n*Node_ID contains the TAPI layer it belongs to\n\nIn the other TAPI implementation as far as I see it is like this:\nNEP \u003d Node_ID+TP_ID\nSIP \u003d Node_ID+TP_ID \u003d NEP\n\nIn my opinion SIP and NEP uuids should be different no??",
+      "parentUuid": "ae9279ec_43b70366",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
