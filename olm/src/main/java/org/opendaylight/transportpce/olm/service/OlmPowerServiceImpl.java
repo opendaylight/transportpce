@@ -536,7 +536,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
             }
 
-            if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
+            if (srcOtsPmHoler == null || destOtsPmHoler == null) {
                 LOG.warn("OTS is not present for the link {}", link);
                 continue;
             }
