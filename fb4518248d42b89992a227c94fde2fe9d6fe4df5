@@ -52,6 +52,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1010958_2d852bae",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-21T14:57:11Z",
+      "side": 1,
+      "message": "@Christophe\n\nAhh I see. I thought it was the same... my bad. Then I guess there shouldnt be any issue either changing it back or keeping the new naming I proposed. Should we switch to my proposition?? Or you prefer not to??",
+      "parentUuid": "3618b40a_97d4f2ab",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
