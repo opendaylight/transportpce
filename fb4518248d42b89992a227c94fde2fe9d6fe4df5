@@ -34,6 +34,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3618b40a_97d4f2ab",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-10-21T14:51:07Z",
+      "side": 1,
+      "message": "@Javier\n\nYes indeed, SIP and NEP UUID should be different.\nIn the multi-layer implementation, creating the SIP UUID from the NEP UUID creates a new UUID which is not the one of the NEP.\nAs an example : nepUUID : 50b7521a-4a38-358f-9846-45c55813416a - sipUUID : 51d23b83-647e-3534-a3cd-1e9ca28c4241",
+      "parentUuid": "e7de7bf6_5e13703d",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
