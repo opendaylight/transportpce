@@ -106,6 +106,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "413ef187_f6725670",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-10-21T16:22:31Z",
+      "side": 1,
+      "message": "I don\u0027t have any preference, provided that it is unique, stable, and if possible, that we can revert (extrapolate from UUID the origin string it has been built from). I would say select the simplest option : the one that will minimize the effort (adaptation of the code + tests). Thanks!",
+      "parentUuid": "7d0debf9_0a3b7b1c",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
