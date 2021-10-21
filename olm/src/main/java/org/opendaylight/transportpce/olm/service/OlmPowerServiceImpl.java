@@ -530,15 +530,18 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
             if (srcOtsPmHoler == null) {
                 srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
+                if (srcOtsPmHoler == null) {
+                    LOG.warn("OTS is not present for the link {}", link);
+                    continue;
+                }
             }
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
             if (destOtsPmHoler == null) {
                 destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
-            }
-
-            if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
-                LOG.warn("OTS is not present for the link {}", link);
-                continue;
+                if (destOtsPmHoler == null) {
+                    LOG.warn("OTS is not present for the link {}", link);
+                    continue;
+                }
             }
             spanLoss = BigDecimal.valueOf(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
                 .setScale(1, RoundingMode.HALF_UP);
