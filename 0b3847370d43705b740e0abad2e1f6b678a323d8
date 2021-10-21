@@ -88,6 +88,24 @@
       "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9abf5be3_bd07004d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-21T13:37:33Z",
+      "side": 1,
+      "message": "Let\u0027s turn it differently.\nWhat about this rather?\n\n            if (srcOtsPmHoler \u003d\u003d null) {\n                srcOtsPmHoler \u003d getPmMeasurements(sourceNodeId, sourceTpId, \"OpticalPowerOutputOSC\");\n                if (srcOtsPmHoler \u003d\u003d null) {\n                    LOG.warn(\"OTS is not present for the link {}\", link);\n                    continue;\n                }\n            }\n            OtsPmHolder destOtsPmHoler \u003d getPmMeasurements(destNodeId, destTpId, \"OpticalPowerInput\");\n            if (destOtsPmHoler \u003d\u003d null) {\n                destOtsPmHoler \u003d getPmMeasurements(destNodeId, destTpId, \"OpticalPowerInputOSC\");\n                if (destOtsPmHoler \u003d\u003d null) {\n                    LOG.warn(\"OTS is not present for the link {}\", link);\n                    continue;\n                }\n            }\n            if (srcOtsPmHoler.getOtsInterfaceName() \u003d\u003d null || destOtsPmHoler.getOtsInterfaceName() \u003d\u003d null) {\n                LOG.warn(\"OTS is not present for the link {}\", link);\n                continue;\n            }",
+      "parentUuid": "1b817d4e_c32a2ff7",
+      "revId": "0b3847370d43705b740e0abad2e1f6b678a323d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
