@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotifications
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -44,8 +45,11 @@ public class NbiNotificationsImplTest extends AbstractTest {
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm,"localhost:8080",
-            networkTransactionService, topicManager);
+        JsonStringConverter<NotificationTapiService> converterTapi = new JsonStringConverter<>(
+            getDataStoreContextUtil().getBindingDOMCodecServices());
+
+        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm, converterTapi,
+            "localhost:8080", networkTransactionService, topicManager);
     }
 
     @Test
