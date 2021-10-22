@@ -79,7 +79,7 @@ public class NbiNotificationsProvider {
     public void init() {
         LOG.info("NbiNotificationsProvider Session Initiated");
         NbiNotificationsImpl nbiImpl = new NbiNotificationsImpl(converterService, converterAlarmService,
-            subscriberServer, this.networkTransactionService, this.topicManager);
+            converterTapiService, subscriberServer, this.networkTransactionService, this.topicManager);
         rpcRegistration = rpcService.registerRpcImplementation(NbiNotificationsService.class, nbiImpl);
         rpcService.registerRpcImplementation(TapiNotificationService.class, nbiImpl);
         NbiNotificationsListenerImpl nbiNotificationsListener =
