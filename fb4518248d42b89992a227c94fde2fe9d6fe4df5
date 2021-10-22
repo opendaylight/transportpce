@@ -142,6 +142,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11955ea_fe866c40",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-10-22T11:47:33Z",
+      "side": 1,
+      "message": "Thank you Olivier and Javier for your details.\nI agree and think Javier\u0027s proposal is better and easier to manage. I will update our code to align the SID\u0027s creation with Javier\u0027s implementation.",
+      "parentUuid": "d3049df8_db42a834",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
