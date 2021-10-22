@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae78ff5_3e03b690",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-10-22T16:27:41Z",
+      "side": 1,
+      "message": "(OCh/OTU, OTSi/OTU \u0026 ODU if you want to be exhaustive)",
+      "range": {
+        "startLine": 1570,
+        "startChar": 4,
+        "endLine": 1570,
+        "endChar": 69
+      },
+      "revId": "4443edbc68c57a19eee96459ac24fab93e324d2f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "553f56f1_bebf38f2",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-10-22T16:27:41Z",
+      "side": 1,
+      "message": "TransportPCE T-API module? TransportPCE handles (OR API) 1GE, 100GE. The restriction to 10GE applies to tapi.",
+      "range": {
+        "startLine": 1595,
+        "startChar": 79,
+        "endLine": 1595,
+        "endChar": 91
+      },
+      "revId": "4443edbc68c57a19eee96459ac24fab93e324d2f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0efb28bb_31394ee6",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-10-22T16:27:41Z",
+      "side": 1,
+      "message": "OTSi/OTU ? I guess OTSi is associated with the wavelength which supports an OTU",
+      "range": {
+        "startLine": 1610,
+        "startChar": 3,
+        "endLine": 1610,
+        "endChar": 24
+      },
+      "revId": "4443edbc68c57a19eee96459ac24fab93e324d2f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
