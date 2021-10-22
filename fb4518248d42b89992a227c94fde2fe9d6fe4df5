@@ -160,6 +160,24 @@
       "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3acc7b7_b710204e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-10-22T13:46:57Z",
+      "side": 1,
+      "message": "Perfect!! Once done, please add my as reviewer to double check the fix 😊",
+      "parentUuid": "c11955ea_fe866c40",
+      "revId": "fb4518248d42b89992a227c94fde2fe9d6fe4df5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
