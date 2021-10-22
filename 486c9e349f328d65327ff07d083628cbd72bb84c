@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7154a951_f834a8f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-22T07:30:01Z",
+      "side": 1,
+      "message": "What do you exactly expect from the commit message? Having the same level of details than a git show/diff/log output, or having a summarize of modifications with regards to the previous state?",
+      "parentUuid": "27bdf4a6_3d3a84d9",
+      "revId": "486c9e349f328d65327ff07d083628cbd72bb84c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b39501d_ce69173c",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
         "patchSetId": 2
@@ -53,6 +71,30 @@
       "writtenOn": "2021-10-21T15:43:56Z",
       "side": 1,
       "message": "I think we should we be more precise and state that is source pmHolder that is not present.",
+      "range": {
+        "startLine": 534,
+        "startChar": 30,
+        "endLine": 534,
+        "endChar": 33
+      },
+      "revId": "486c9e349f328d65327ff07d083628cbd72bb84c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b2f617_b8a1160f",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-22T07:30:01Z",
+      "side": 1,
+      "message": "For me, the developer at the origin of this class had targetted this log warn for the operator that will use TransportPCE to operate and manage its optical network.\nWhat kind of message do you think will be the most appropriate and usefull for him at this moment:\n- knowing that an absolutely unknown variable name for him, somewhere in the code is null? \u003d\u003e he could do nothing to solve the issue...\n- knowing that at least one of the device terminating the link has a bad configuration at the OTS interface level? \u003d\u003e he could perform some actions to solve the issue, as for example create a missing OTS interface, activate PM monitoring on the specific OTS interface...",
+      "parentUuid": "8a842de6_5ce659bc",
       "range": {
         "startLine": 534,
         "startChar": 30,
