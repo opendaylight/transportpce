@@ -95,6 +95,18 @@ public final class TopicManager {
         }
     }
 
+    public void deleteTapiTopic(String topic) {
+        if (!tapiPublisherMap.containsKey(topic)) {
+            LOG.info("Tapi topic: {} doesnt exist", topic);
+            return;
+        }
+        LOG.info("Deleting tapi topic: {}", topic);
+        tapiPublisherMap.remove(topic);
+        if (this.nbiNotificationsListener != null) {
+            this.nbiNotificationsListener.setTapiPublishersMap(tapiPublisherMap);
+        }
+    }
+
     public Map<String, Publisher<NotificationTapiService>> getTapiTopicMap() {
         return this.tapiPublisherMap;
     }
