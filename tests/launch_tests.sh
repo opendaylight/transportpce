@@ -1,7 +1,8 @@
 #!/bin/sh
 
-if [ "$USE_LIGHTY" != "True" ]; then
-    ./build_karaf_for_tests.sh
+if [ -n "$USE_ODL_ALT_KARAF_ENV" ]; then
+    echo "using environment variables from $USE_ODL_ALT_KARAF_ENV"
+    . $USE_ODL_ALT_KARAF_ENV
 fi
 
 for arg in $@; do

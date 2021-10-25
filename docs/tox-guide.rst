@@ -191,7 +191,7 @@ And::
 
 are equivalent to::
 
-    $ nosetests transportpce_tests/2.2.1/test01_portmapping.py
+    $ nosetests transportpce_tests/7.1/test01_portmapping.py
 
 but will ask tests script to use the controller `lighty.io <https://lighty.io/>`_
 build instead of Karaf.
@@ -214,6 +214,9 @@ Each of these profiles depend on the `buildcontroller` profile, which is simply
 there to build the controller from sources and adapt OLM default timers.
 They can also depend on `sims121` or `sims221` or `sims71` profiles to download
 simulators of OpenROADM devices when needed.
+Other profiles named from the pattern `build_karaf_testsXXX` have also been
+added to configure separate karaf instances with alternate listening ports
+in order to use concurrency.
 
 The `depend` parameter in `tox.ini` allows tox to establish the most efficient
 tests order strategy  when calling tox without the `-e` option.
@@ -226,12 +229,20 @@ For example::
 
     $ tox -e buildcontroller,sims121,tests121
 
+or with karaf alternate builds::
+
+    $ tox -e buildcontroller,build_karaf_tests121,sims121,tests121
+
 will build the controller and download simulators before running every functional
 tests for OpenROADM devices 1.2.1.
 Once that done, you only need to list the others sims versions profiles before
 lauching hybrid tests::
 
     $ tox -e sims221,sims71,tests_hybrid
+
+or with karaf alternate builds::
+
+    $ tox -e build_karaf_tests_hybrid,sims221,sims71,tests_hybrid
 
 Also the same way arguments can be passed to the `launch_tests.sh` script,
 tests names can be passed as argument when calling the corresponding tox profiles.
@@ -340,3 +351,7 @@ For example, the following command will test the portmapping behavior
 for every OpenROADM devices supported versions::
 
     $  tox -p 3 -e buildcontroller,sims121,sims221,sims71,tests121,tests221,tests71 portmapping
+
+or with karaf alternate builds::
+
+    $  tox -p 3 -e buildcontroller,build_karaf_tests121,build_karaf_tests221,build_karaf_tests71,sims121,sims221,sims71,tests121,tests221,tests71 portmapping
