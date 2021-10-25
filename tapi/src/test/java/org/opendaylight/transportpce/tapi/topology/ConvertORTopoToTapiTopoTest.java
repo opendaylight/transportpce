@@ -83,6 +83,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Ru
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
@@ -103,6 +104,9 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         .networks.network.Link> otnLinks;
     private static Uuid topologyUuid;
     private static DataBroker dataBroker = getDataBroker();
+    private static final String E_OTSI = "eOTSi";
+    private static final String I_OTSI = "iOTSi";
+    private static final String DSR = "DSR";
 
     @BeforeClass
     public static void setUp() throws InterruptedException, ExecutionException {
@@ -729,12 +733,14 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid client4NepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C");
+                checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C",
+                    otnSwitch.getNodeId().getValue(), DSR);
                 OwnedNodeEdgePoint nep2 = nepsN.get(1);
                 Uuid networkNepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N",
+                    otnSwitch.getNodeId().getValue(), DSR);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -751,13 +757,15 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid client3NepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C");
+                checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C",
+                    otnMuxA.getNodeId().getValue(), DSR);
 
                 OwnedNodeEdgePoint nep4 = nepsN.get(0);
                 Uuid networkNepUuid2 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "NodeEdgePoint_N",
+                    otnMuxA.getNodeId().getValue(), DSR);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -774,13 +782,15 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid client1NepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr");
+                checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr",
+                    tpdr100G.getNodeId().getValue(), DSR);
 
                 OwnedNodeEdgePoint nep6 = nepsN.get(0);
                 Uuid networkNepUuid3 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "NodeEdgePoint_N",
+                    tpdr100G.getNodeId().getValue(), DSR);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -823,12 +833,14 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid inepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR2-NETWORK2").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint");
+                checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint", otnSwitch.getNodeId().getValue(),
+                    I_OTSI);
                 OwnedNodeEdgePoint nep2 = nepsE.get(0);
                 Uuid enepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR2-NETWORK2").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint");
+                checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint", otnSwitch.getNodeId().getValue(),
+                    E_OTSI);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -841,12 +853,14 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid enepUuid2 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint");
+                checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint", otnMuxA.getNodeId().getValue(),
+                    E_OTSI);
                 OwnedNodeEdgePoint nep4 = nepsI.get(0);
                 Uuid inepUuid2 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint");
+                checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint", otnMuxA.getNodeId().getValue(),
+                    I_OTSI);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -859,12 +873,14 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 Uuid enepUuid3 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep5, enepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint");
+                checkNepOtsiNode(nep5, enepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint", tpdr100G.getNodeId().getValue(),
+                    E_OTSI);
                 OwnedNodeEdgePoint nep6 = nepsI.get(0);
                 Uuid inepUuid3 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep6, inepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint");
+                checkNepOtsiNode(nep6, inepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint", tpdr100G.getNodeId().getValue(),
+                    I_OTSI);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -890,7 +906,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         }
     }
 
-    private void checkNepClient10G(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepClient10G(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            String nodeId, String extension) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         Name name = nameList.get(0);
@@ -905,9 +922,11 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             hasItems(ODUTYPEODU2.class, ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
+        checkSIP(nep, portName, nodeId, extension);
     }
 
-    private void checkNepNetworkODU4(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepNetworkODU4(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            String nodeId, String extension) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         Name name = nameList.get(0);
@@ -922,6 +941,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             hasItem(ODUTYPEODU4.class));
         assertEquals("network nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
+        checkSIP(nep, portName, nodeId, extension);
     }
 
     private void checkNodeRuleGroupForTpdrDSR(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid,
@@ -1105,7 +1125,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             RuleType.FORWARDING, ruleList0.get(0).getRuleType());
     }
 
-    private void checkNepClient100GSwitch(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepClient100GSwitch(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            String nodeId, String extension) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         assertEquals("value of client nep should be '" + portName + "'",
@@ -1119,9 +1140,11 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             hasItems(ODUTYPEODU4.class, DIGITALSIGNALTYPE100GigE.class));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
+        checkSIP(nep, portName, nodeId, extension);
     }
 
-    private void checkNepClient100GTpdr(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepClient100GTpdr(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            String nodeId, String extension) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         assertEquals("value of client nep should be '" + portName + "'",
@@ -1135,9 +1158,11 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             hasItems(DIGITALSIGNALTYPE100GigE.class));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
+        checkSIP(nep, portName, nodeId, extension);
     }
 
-    private void checkNepOtsiNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepOtsiNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            String nodeId, String extension) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         assertEquals("value of OTSi nep should be '" + portName + "'",
@@ -1153,6 +1178,15 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
         assertEquals("OTSi nep should support one SIP", 1, nep.getMappedServiceInterfacePoint().size());
         checkCommonPartOfNep(nep, false);
+        checkSIP(nep, portName, nodeId, extension);
+    }
+
+    private void checkSIP(OwnedNodeEdgePoint nep, String portName, String nodeId, String extension) {
+        Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", nodeId, extension, portName))
+            .getBytes(Charset.forName("UTF-8"))).toString());
+        assertEquals("service-interface-point-uuid of network nep for '" + portName + "' should be '"
+            + String.join("+", "SIP", nodeId, portName) + "'", sipUuid, nep.getMappedServiceInterfacePoint()
+                .get(new MappedServiceInterfacePointKey(sipUuid)).getServiceInterfacePointUuid());
     }
 
     private void checkNepOtsiRdmNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
