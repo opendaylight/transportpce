@@ -116,6 +116,30 @@
       "revId": "4443edbc68c57a19eee96459ac24fab93e324d2f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5df46ac9_46f71b38",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2021-10-26T11:56:26Z",
+      "side": 1,
+      "message": "\u003e OTSi/OTU ? I guess OTSi is associated with the wavelength which supports an OTU",
+      "parentUuid": "0efb28bb_31394ee6",
+      "range": {
+        "startLine": 1610,
+        "startChar": 3,
+        "endLine": 1610,
+        "endChar": 24
+      },
+      "revId": "4443edbc68c57a19eee96459ac24fab93e324d2f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
