@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31b9a6cb_60fe82b3",
+        "filename": "tests/build_karaf_for_tests.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-10-26T09:06:37Z",
+      "side": 1,
+      "message": "this condition should be removed",
+      "revId": "6cdafd6fd010afcf14833cf7401bbda6ef5a610d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
