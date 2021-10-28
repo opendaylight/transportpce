@@ -20,7 +20,6 @@ import sys
 sys.path.append('transportpce_tests/common/')
 import test_utils
 
-
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
@@ -293,8 +292,8 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(
             dict({u'frequency': 196.0812, u'otsi-rate': u'org-openroadm-common-optical-channel-types:R400G-otsi',
-             u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
-                  **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
+                  u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
+                 **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
             res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
 
     def test_15_check_interface_OTSI_GROUP_xpdra2(self):
@@ -359,8 +358,8 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(
             dict({u'frequency': 196.0812, u'otsi-rate': u'org-openroadm-common-optical-channel-types:R400G-otsi',
-             u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
-                  **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
+                  u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
+                 **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
             res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
 
     def test_18_check_interface_OTSI_GROUP_xpdrc2(self):
@@ -637,11 +636,11 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR2-CLIENT1-ETHERNET100G',
-                      'administrative-state': 'inService',
-                      'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
-                      'type': 'org-openroadm-interfaces:ethernetCsmacd',
-                      'supporting-port': 'C1'
-                      }
+                        'administrative-state': 'inService',
+                        'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
+                        'type': 'org-openroadm-interfaces:ethernetCsmacd',
+                        'supporting-port': 'C1'
+                        }
         input_dict_2 = {u'speed': 100000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -729,16 +728,16 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR2-CLIENT1-ETHERNET100G',
-                      'administrative-state': 'inService',
-                      'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
-                      'type': 'org-openroadm-interfaces:ethernetCsmacd',
-                      'supporting-port': 'C1'
-                      }
+                        'administrative-state': 'inService',
+                        'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
+                        'type': 'org-openroadm-interfaces:ethernetCsmacd',
+                        'supporting-port': 'C1'
+                        }
         input_dict_2 = {u'speed': 100000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']),
-            res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
+                             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_36_check_interface_ODU4_CLIENT_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
@@ -1033,7 +1032,7 @@ class TransportPCEtesting(unittest.TestCase):
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
                         self.assertNotIn('org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes',
-                             dict.keys(tp))
+                                         dict.keys(tp))
 
     def test_60_delete_OTUC4_service(self):
         response = test_utils.service_delete_request("service1-OTUC4")
@@ -1159,7 +1158,8 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_74_check_xc1_roadma(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-755:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADM-A1", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-755:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -1228,12 +1228,11 @@ class TransportPCEtesting(unittest.TestCase):
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
-                    freq_map = base64.b64decode(
-                        ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
-                    freq_map_array = [int(x) for x in freq_map]
-                    self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+                freq_map = base64.b64decode(
+                    ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
+                freq_map_array = [int(x) for x in freq_map]
+                self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
         time.sleep(3)
-
 
     def test_78_check_interface_100GE_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
@@ -1241,11 +1240,11 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-CLIENT1-ETHERNET',
-                      'administrative-state': 'inService',
-                      'supporting-circuit-pack-name': '1/1/1-PLUG-CLIENT',
-                      'type': 'org-openroadm-interfaces:ethernetCsmacd',
-                      'supporting-port': 'C1'
-                      }
+                        'administrative-state': 'inService',
+                        'supporting-circuit-pack-name': '1/1/1-PLUG-CLIENT',
+                        'type': 'org-openroadm-interfaces:ethernetCsmacd',
+                        'supporting-port': 'C1'
+                        }
         input_dict_2 = {u'speed': 400000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])

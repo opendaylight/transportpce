@@ -19,7 +19,6 @@ import requests
 sys.path.append('transportpce_tests/common/')
 import test_utils
 
-
 class TransportPCEtesting(unittest.TestCase):
 
     simple_topo_bi_dir_data = None
@@ -49,7 +48,7 @@ class TransportPCEtesting(unittest.TestCase):
             with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                     "..", "..", "sample_configs", "pce_portmapping_121.json")
+                                             "..", "..", "sample_configs", "pce_portmapping_121.json")
             with open(PORT_MAPPING_FILE, 'r') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
@@ -354,7 +353,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbElmPath = len(res['output']['response-parameters']['path-description']
                         ['aToZ-direction']['aToZ'])
         self.assertEqual(31, nbElmPath)
-        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state":"inService"}
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state": "inService"}
         find = False
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
@@ -384,7 +383,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbElmPath = len(res['output']['response-parameters']['path-description']
                         ['aToZ-direction']['aToZ'])
         self.assertEqual(47, nbElmPath)
-        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state":"inService"}
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2", "state": "inService"}
         find = False
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
