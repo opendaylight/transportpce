@@ -25,6 +25,7 @@ import test_utils
 
 CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created successfully'
 
+
 class TransportTapitesting(unittest.TestCase):
 
     processes = None
@@ -191,7 +192,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual("Tpdr100g over WDM node", res["output"]["topology"]["node"][0]["name"][0]["value"],
                          'node name should be: Tpdr100g over WDM node')
         self.assertIn("ETH", res["output"]["topology"]["node"][0]["layer-protocol-name"],
-                         'Node layer protocol should contain ETH')
+                      'Node layer protocol should contain ETH')
         self.assertEqual(1, len(res["output"]["topology"]["node"][0]["node-rule-group"]),
                          'node should contain 1 node rule group')
 
@@ -278,7 +279,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual("ROADM-infra", res["output"]["topology"]["node"][0]["name"][0]["value"],
                          'node name should be: ROADM-infra')
         self.assertIn("PHOTONIC_MEDIA", res["output"]["topology"]["node"][0]["layer-protocol-name"],
-                         'Node layer protocol should contain PHOTONIC_MEDIA')
+                      'Node layer protocol should contain PHOTONIC_MEDIA')
         self.assertEqual(1, len(res["output"]["topology"]["node"][0]["node-rule-group"]),
                          'node should contain 1 node rule group')
 
@@ -543,10 +544,10 @@ class TransportTapitesting(unittest.TestCase):
         for link in links:
             if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
                 self.assertEqual(100000, link["available-capacity"]["total-size"]["value"],
-                         'OTU4 link should have an available capacity of 100 000 Mbps')
+                                 'OTU4 link should have an available capacity of 100 000 Mbps')
             elif link["name"][0]["value-name"] == "transitional link name":
                 self.assertEqual(100, link["available-capacity"]["total-size"]["value"],
-                         'link should have an available capacity of 100 Gbps')
+                                 'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
 
     def test_33_create_ODU4_service(self):
@@ -588,13 +589,13 @@ class TransportTapitesting(unittest.TestCase):
         for link in links:
             if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
                 self.assertEqual(0, link["available-capacity"]["total-size"]["value"],
-                         'OTU4 link should have an available capacity of 0 Mbps')
+                                 'OTU4 link should have an available capacity of 0 Mbps')
             elif link["name"][0]["value"] == "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
                 self.assertEqual(100000, link["available-capacity"]["total-size"]["value"],
-                         'ODU4 link should have an available capacity of 100 000 Mbps')
+                                 'ODU4 link should have an available capacity of 100 000 Mbps')
             elif link["name"][0]["value-name"] == "transitional link name":
                 self.assertEqual(100, link["available-capacity"]["total-size"]["value"],
-                         'link should have an available capacity of 100 Gbps')
+                                 'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
 
     def test_35_connect_sprda_2_n2_to_roadma_pp3(self):
@@ -681,10 +682,10 @@ class TransportTapitesting(unittest.TestCase):
         links = res['network'][0]['ietf-network-topology:link']
         for link in links:
             if (link["org-openroadm-common-network:link-type"] == "XPONDER-OUTPUT" or
-            link["org-openroadm-common-network:link-type"] == "XPONDER-INPUT"):
-                 link_name = link["link-id"]
-                 response = test_utils.delete_request(url+link_name)
-                 self.assertEqual(response.status_code, requests.codes.ok)
+                    link["org-openroadm-common-network:link-type"] == "XPONDER-INPUT"):
+                link_name = link["link-id"]
+                response = test_utils.delete_request(url+link_name)
+                self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_42_check_tapi_topology_T0(self):
         url = "{}/operations/tapi-topology:get-topology-details"
@@ -756,6 +757,7 @@ def find_object_with_key(list_dicts, key, value):
         if dict_[key] == value:
             return dict_
     return None
+
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0

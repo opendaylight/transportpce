@@ -20,7 +20,6 @@ import requests
 sys.path.append('transportpce_tests/common/')
 import test_utils
 
-
 class TransportNbiNotificationstesting(unittest.TestCase):
     processes = None
     cr_serv_sample_data = {"input": {

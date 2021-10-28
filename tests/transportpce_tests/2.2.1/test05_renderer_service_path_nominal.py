@@ -164,7 +164,8 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_10_service_path_create_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-713:720")
+        response = test_utils.check_netconf_node_request(
+            "ROADM-A1", "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
