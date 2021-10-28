@@ -18,7 +18,6 @@ import sys
 sys.path.append('transportpce_tests/common/')
 import test_utils
 
-
 class TransportPCEFulltesting(unittest.TestCase):
 
     processes = None
@@ -240,12 +239,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_13_change_status_line_port_xpdra(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
-                    "port-name": "1",
-                    "logical-connection-point": "XPDR1-NETWORK1",
-                    "port-type": "CFP2",
-                    "circuit-id": "XPDRA-NETWORK",
-                    "administrative-state": "outOfService",
-                    "port-qual": "xpdr-network"}]}
+            "port-name": "1",
+            "logical-connection-point": "XPDR1-NETWORK1",
+            "port-type": "CFP2",
+            "circuit-id": "XPDRA-NETWORK",
+            "administrative-state": "outOfService",
+            "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -317,12 +316,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_17_restore_status_line_port_xpdra(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
-                    "port-name": "1",
-                    "logical-connection-point": "XPDR1-NETWORK1",
-                    "port-type": "CFP2",
-                    "circuit-id": "XPDRA-NETWORK",
-                    "administrative-state": "inService",
-                    "port-qual": "xpdr-network"}]}
+            "port-name": "1",
+            "logical-connection-point": "XPDR1-NETWORK1",
+            "port-type": "CFP2",
+            "circuit-id": "XPDRA-NETWORK",
+            "administrative-state": "inService",
+            "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -367,12 +366,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_21_change_status_port_roadma_srg(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
-                    "port-name": "C1",
-                    "logical-connection-point": "SRG1-PP1",
-                    "port-type": "client",
-                    "circuit-id": "SRG1",
-                    "administrative-state": "outOfService",
-                    "port-qual": "roadm-external"}]}
+            "port-name": "C1",
+            "logical-connection-point": "SRG1-PP1",
+            "port-type": "client",
+            "circuit-id": "SRG1",
+            "administrative-state": "outOfService",
+            "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -436,12 +435,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_24_restore_status_port_roadma_srg(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
         body = {"ports": [{
-                    "port-name": "C1",
-                    "logical-connection-point": "SRG1-PP1",
-                    "port-type": "client",
-                    "circuit-id": "SRG1",
-                    "administrative-state": "inService",
-                    "port-qual": "roadm-external"}]}
+            "port-name": "C1",
+            "logical-connection-point": "SRG1-PP1",
+            "port-type": "client",
+            "circuit-id": "SRG1",
+            "administrative-state": "inService",
+            "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -460,12 +459,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_28_change_status_line_port_roadma_deg(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
         body = {"ports": [{
-                    "port-name": "L1",
-                    "logical-connection-point": "DEG2-TTP-TXRX",
-                    "port-type": "LINE",
-                    "circuit-id": "1",
-                    "administrative-state": "outOfService",
-                    "port-qual": "roadm-external"}]}
+            "port-name": "L1",
+            "logical-connection-point": "DEG2-TTP-TXRX",
+            "port-type": "LINE",
+            "circuit-id": "1",
+            "administrative-state": "outOfService",
+            "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -529,12 +528,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_31_restore_status_line_port_roadma_srg(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
         body = {"ports": [{
-                    "port-name": "L1",
-                    "logical-connection-point": "DEG2-TTP-TXRX",
-                    "port-type": "LINE",
-                    "circuit-id": "1",
-                    "administrative-state": "inService",
-                    "port-qual": "roadm-external"}]}
+            "port-name": "L1",
+            "logical-connection-point": "DEG2-TTP-TXRX",
+            "port-type": "LINE",
+            "circuit-id": "1",
+            "administrative-state": "inService",
+            "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -553,10 +552,10 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_35_change_status_line_port_xpdrc(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
-                    "port-name": "1",
-                    "port-type": "CFP2",
-                    "administrative-state": "outOfService",
-                    "port-qual": "xpdr-network"}]}
+            "port-name": "1",
+            "port-type": "CFP2",
+            "administrative-state": "outOfService",
+            "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -620,10 +619,10 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_38_restore_status_line_port_xpdrc(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
         body = {"ports": [{
-                    "port-name": "1",
-                    "port-type": "CFP2",
-                    "administrative-state": "inService",
-                    "port-qual": "xpdr-network"}]}
+            "port-name": "1",
+            "port-type": "CFP2",
+            "administrative-state": "inService",
+            "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
@@ -642,12 +641,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_42_change_status_port_roadma_srg(self):
         url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
         body = {"ports": [{
-                    "port-name": "C2",
-                    "logical-connection-point": "SRG1-PP2",
-                    "port-type": "client",
-                    "circuit-id": "SRG1",
-                    "administrative-state": "outOfService",
-                    "port-qual": "roadm-external"}]}
+            "port-name": "C2",
+            "logical-connection-point": "SRG1-PP2",
+            "port-type": "client",
+            "circuit-id": "SRG1",
+            "administrative-state": "outOfService",
+            "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
                                     auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))

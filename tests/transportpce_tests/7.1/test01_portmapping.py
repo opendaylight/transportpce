@@ -78,7 +78,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supported-interface-capability':
-              ['org-openroadm-port-types:if-otsi-otsigroup'],
+             ['org-openroadm-port-types:if-otsi-otsigroup'],
              'supporting-port': 'L1',
              'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1',
@@ -113,7 +113,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supported-interface-capability':
-               ['org-openroadm-port-types:if-otsi-otsigroup'],
+             ['org-openroadm-port-types:if-otsi-otsigroup'],
              'supporting-port': 'L1',
              'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
              'logical-connection-point': 'XPDR2-NETWORK1',
@@ -131,9 +131,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('org-openroadm-port-types:if-100GE-ODU4',
-            res['mapping'][0]['supported-interface-capability'])
+                      res['mapping'][0]['supported-interface-capability'])
         self.assertIn('org-openroadm-port-types:if-OCH-OTU4-ODU4',
-            res['mapping'][0]['supported-interface-capability'])
+                      res['mapping'][0]['supported-interface-capability'])
         self.assertEqual('C1', res['mapping'][0]['supporting-port'])
         self.assertEqual('1/2/1/1-PLUG-CLIENT', res['mapping'][0]['supporting-circuit-pack-name'])
         self.assertEqual('XPDR2-CLIENT1', res['mapping'][0]['logical-connection-point'])
@@ -143,9 +143,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
         self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
         self.assertEqual({
-               "min-trib-slot": "1.1",
-               "max-trib-slot": "1.20"
-             }, res['mapping'][0]['mpdr-restrictions'])
+            "min-trib-slot": "1.1",
+            "max-trib-slot": "1.20"
+        }, res['mapping'][0]['mpdr-restrictions'])
 
     # Added test to check mc-capability-profile for a transponder
     def test_08_check_mccapprofile(self):
@@ -182,4 +182,4 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  unittest.main(verbosity=2)
+    unittest.main(verbosity=2)
