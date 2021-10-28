@@ -11,7 +11,6 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 import json
-import base64
 import unittest
 import time
 import requests
