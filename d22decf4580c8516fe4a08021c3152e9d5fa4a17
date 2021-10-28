@@ -16,6 +16,24 @@
       "revId": "d22decf4580c8516fe4a08021c3152e9d5fa4a17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c235f0c5_cf560ed0",
+        "filename": "features/odl-transportpce-swagger/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-28T14:00:26Z",
+      "side": 1,
+      "message": "Yes, exact",
+      "parentUuid": "0b20f242_fe5782ca",
+      "revId": "d22decf4580c8516fe4a08021c3152e9d5fa4a17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
