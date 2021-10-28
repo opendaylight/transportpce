@@ -227,8 +227,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "dest-tp": "SRG1-PP1-TXRX", "src-tp": "DEG2-TTP-TXRX"},
                                                     {"node-id": "XPDRC01",
                                                      "dest-tp": "XPDR1-CLIENT1", "src-tp": "XPDR1-NETWORK1"}],
-                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                   768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -245,8 +245,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "src-tp": "DEG1-TTP-TXRX", "dest-tp": "SRG1-PP1-TXRX"},
                                                     {"node-id": "XPDRA01",
                                                      "src-tp": "XPDR1-NETWORK1", "dest-tp": "XPDR1-CLIENT1"}],
-                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                   768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -304,14 +304,16 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_21_get_roadmconnection_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
         self.assertEqual(-3.3, res['roadm-connections'][0]['target-output-power'])
 
     def test_22_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("power", res['roadm-connections'][0]['opticalControlMode'])
@@ -367,7 +369,8 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_25_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
@@ -416,14 +419,16 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_27_get_roadmconnection_ROADMA(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
         self.assertEqual(-60, res['roadm-connections'][0]['target-output-power'])
 
     def test_28_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
+        response = test_utils.check_netconf_node_request(
+            "ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
@@ -438,8 +443,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "dest-tp": "SRG1-PP1-TXRX", "src-tp": "DEG2-TTP-TXRX"},
                                                     {"node-id": "XPDRC01",
                                                      "dest-tp": "XPDR1-CLIENT1", "src-tp": "XPDR1-NETWORK1"}],
-                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                   768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])
@@ -455,8 +460,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "src-tp": "DEG1-TTP-TXRX", "dest-tp": "SRG1-PP1-TXRX"},
                                                     {"node-id": "XPDRA01",
                                                      "src-tp": "XPDR1-NETWORK1", "dest-tp": "XPDR1-CLIENT1"}],
-                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                   768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])
@@ -484,8 +489,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "dest-tp": "XPDR1-NETWORK2", "src-tp": "XPDR1-CLIENT2"},
                                                     {"node-id": "ROADMA01",
                                                      "dest-tp": "DEG1-TTP-TXRX", "src-tp": "SRG1-PP2-TXRX"}],
-                                                    196.05, 40, 196.025, 196.075, 753,
-                                                    760)
+                                                   196.05, 40, 196.025, 196.075, 753,
+                                                   760)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -507,8 +512,8 @@ class TransportOlmTesting(unittest.TestCase):
                                                      "dest-tp": "XPDR1-NETWORK2", "src-tp": "XPDR1-CLIENT2"},
                                                     {"node-id": "ROADMA01",
                                                      "dest-tp": "DEG1-TTP-TXRX", "src-tp": "SRG1-PP2-TXRX"}],
-                                                    196.1, 40, 196.075, 196.125, 761,
-                                                    768)
+                                                   196.1, 40, 196.075, 196.125, 761,
+                                                   768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])

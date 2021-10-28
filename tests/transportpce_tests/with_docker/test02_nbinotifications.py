@@ -11,6 +11,7 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+import test_utils
 import os
 import json
 import sys
@@ -18,7 +19,6 @@ import unittest
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
-import test_utils
 
 
 class TransportNbiNotificationstesting(unittest.TestCase):

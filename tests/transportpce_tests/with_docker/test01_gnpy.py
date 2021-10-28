@@ -12,13 +12,13 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+import test_utils
 import unittest
 import os
 import sys
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
-import test_utils
 
 
 class TransportGNPYtesting(unittest.TestCase):
@@ -49,7 +49,7 @@ class TransportGNPYtesting(unittest.TestCase):
             with open(TOPO_ORDTOPO_FILE, 'r') as topo_ordtopo:
                 cls.topo_ordtopo_data = topo_ordtopo.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                     "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_121.json")
+                                             "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_121.json")
             with open(PORT_MAPPING_FILE, 'r') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
@@ -227,6 +227,7 @@ class TransportGNPYtesting(unittest.TestCase):
         response = test_utils.delete_request(test_utils.URL_FULL_PORTMAPPING)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
+
 
 if __name__ == "__main__":
     # logging.basicConfig(filename='./transportpce_tests/log/response.log',filemode='w',level=logging.DEBUG)

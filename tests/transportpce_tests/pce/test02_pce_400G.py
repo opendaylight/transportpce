@@ -11,13 +11,13 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+import test_utils
 import unittest
 import os
 import sys
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
-import test_utils
 
 
 class TransportPCE400Gtesting(unittest.TestCase):
@@ -36,22 +36,22 @@ class TransportPCE400Gtesting(unittest.TestCase):
                 cls.topo_bi_dir_data = topo_bi_dir.read()
 
             OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                            "..", "..", "sample_configs", "honeynode-otntopo400G.json")
+                                                "..", "..", "sample_configs", "honeynode-otntopo400G.json")
             with open(OTN_TOPO_BI_DIR_FILE, 'r') as otn_topo_bi_dir:
                 cls.otn_topo_bi_dir_data = otn_topo_bi_dir.read()
 
             OTUC4_OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                            "..", "..", "sample_configs", "honeynode-otntopo400GwithOTUC4.json")
+                                                      "..", "..", "sample_configs", "honeynode-otntopo400GwithOTUC4.json")
             with open(OTUC4_OTN_TOPO_BI_DIR_FILE, 'r') as otuc4_otn_topo_bi_dir:
                 cls.otuc4_otn_topo_bi_dir_data = otuc4_otn_topo_bi_dir.read()
 
             ODUC4_OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                            "..", "..", "sample_configs", "honeynode-otntopo400GwithODUC4.json")
+                                                      "..", "..", "sample_configs", "honeynode-otntopo400GwithODUC4.json")
             with open(ODUC4_OTN_TOPO_BI_DIR_FILE, 'r') as oduc4_otn_topo_bi_dir:
                 cls.oduc4_otn_topo_bi_dir_data = oduc4_otn_topo_bi_dir.read()
 
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                     "..", "..", "sample_configs", "pce_portmapping_71.json")
+                                             "..", "..", "sample_configs", "pce_portmapping_71.json")
             with open(PORT_MAPPING_FILE, 'r') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
@@ -139,11 +139,11 @@ class TransportPCE400Gtesting(unittest.TestCase):
                                                        {"service-rate": "400", "clli": "NodeA",
                                                            "service-format": "OTU", "node-id": "XPDR-A2",
                                                            "rx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
-                                                       },
+                                                        },
                                                        {"service-rate": "400", "clli": "NodeC",
                                                            "service-format": "OTU", "node-id": "XPDR-C2",
                                                            "rx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-                                                       })
+                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -184,11 +184,11 @@ class TransportPCE400Gtesting(unittest.TestCase):
                                                        {"service-rate": "400", "clli": "NodeA", "service-format": "ODU",
                                                            "node-id": "XPDR-A2",
                                                            "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
-                                                       },
+                                                        },
                                                        {"service-rate": "400", "clli": "NodeC", "service-format": "ODU",
                                                            "node-id": "XPDR-C2",
                                                            "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-                                                       })
+                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -217,11 +217,11 @@ class TransportPCE400Gtesting(unittest.TestCase):
                                                        {"service-rate": "100", "clli": "NodeA", "service-format": "Ethernet",
                                                         "node-id": "XPDR-A2",
                                                         "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2",
-                                                           "port-name": "XPDR2-CLIENT1"}}},
+                                                                                  "port-name": "XPDR2-CLIENT1"}}},
                                                        {"service-rate": "100", "clli": "NodeC", "service-format": "Ethernet",
                                                         "node-id": "XPDR-C2",
                                                         "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2",
-                                                           "port-name": "XPDR2-CLIENT1"}}})
+                                                                                  "port-name": "XPDR2-CLIENT1"}}})
 
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -246,6 +246,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual('dp-qpsk', res['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
         time.sleep(5)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

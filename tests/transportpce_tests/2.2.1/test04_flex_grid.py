@@ -71,13 +71,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             {
-              "mc-capabilities": [
-                {
-                  "mc-node-name": "DEG1-TTP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
-                }
-              ]
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "DEG1-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 12.5
+                    }
+                ]
             }, res)
         time.sleep(3)
 
@@ -87,13 +87,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             {
-              "mc-capabilities": [
-                {
-                  "mc-node-name": "DEG2-TTP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
-                }
-              ]
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "DEG2-TTP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 12.5
+                    }
+                ]
             }, res)
         time.sleep(3)
 
@@ -103,13 +103,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             {
-              "mc-capabilities": [
-                {
-                  "mc-node-name": "SRG1-PP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
-                }
-              ]
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "SRG1-PP",
+                        "center-freq-granularity": 6.25,
+                        "slot-width-granularity": 12.5
+                    }
+                ]
             }, res)
         time.sleep(3)
 
@@ -117,27 +117,27 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_07_device_renderer(self):
         data = {
             "transportpce-device-renderer:input": {
-            "transportpce-device-renderer:modulation-format": "dp-qpsk",
-            "transportpce-device-renderer:operation": "create",
-            "transportpce-device-renderer:service-name": "testNMC-MC",
-            "transportpce-device-renderer:wave-number": "0",
-            "transportpce-device-renderer:center-freq": "196.05",
-            "transportpce-device-renderer:width": "80",
-            "transportpce-device-renderer:nodes": [
-              {
-                "transportpce-device-renderer:node-id": "ROADM-D1",
-                "transportpce-device-renderer:src-tp": "SRG1-PP1-TXRX",
-                "transportpce-device-renderer:dest-tp": "DEG1-TTP-TXRX"
-              }
-            ],
-            "transportpce-device-renderer:min-freq": 196.00625,
-            "transportpce-device-renderer:max-freq": 196.09375,
-            "transportpce-device-renderer:lower-spectral-slot-number": 749,
-            "transportpce-device-renderer:higher-spectral-slot-number": 763
-          }
+                "transportpce-device-renderer:modulation-format": "dp-qpsk",
+                "transportpce-device-renderer:operation": "create",
+                "transportpce-device-renderer:service-name": "testNMC-MC",
+                "transportpce-device-renderer:wave-number": "0",
+                "transportpce-device-renderer:center-freq": "196.05",
+                "transportpce-device-renderer:width": "80",
+                "transportpce-device-renderer:nodes": [
+                    {
+                        "transportpce-device-renderer:node-id": "ROADM-D1",
+                        "transportpce-device-renderer:src-tp": "SRG1-PP1-TXRX",
+                        "transportpce-device-renderer:dest-tp": "DEG1-TTP-TXRX"
+                    }
+                ],
+                "transportpce-device-renderer:min-freq": 196.00625,
+                "transportpce-device-renderer:max-freq": 196.09375,
+                "transportpce-device-renderer:lower-spectral-slot-number": 749,
+                "transportpce-device-renderer:higher-spectral-slot-number": 763
+            }
         }
         url = test_utils.RESTCONF_BASE_URL + \
-              "/operations/transportpce-device-renderer:service-path"
+            "/operations/transportpce-device-renderer:service-path"
         response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -159,14 +159,14 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                   "description": "TBD",
                   "supporting-port": "L1",
                   "type": "org-openroadm-interfaces:mediaChannelTrailTerminationPoint"},
-                  **res['interface'][0]),
+                 **res['interface'][0]),
             res['interface'][0])
 
         # Check the mc-ttp max and min-freq
         self.assertEqual({
-                          "min-freq": 196.00625,
-                          "max-freq": 196.09375
-                          },
+            "min-freq": 196.00625,
+            "max-freq": 196.09375
+        },
             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
         time.sleep(3)
 
@@ -189,10 +189,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
         # Check the mc-ttp max and min-freq
         self.assertEqual({
-          "frequency": 196.05,
-          "width": 80
+            "frequency": 196.05,
+            "width": 80
         },
-        res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
+            res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
         time.sleep(3)
 
     # get SRG-NMC interface
@@ -216,7 +216,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # Create ROADM-connection
     def test_11_roadm_connection(self):
         response = test_utils.check_netconf_node_request("ROADM-D1",
-                                          "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
+                                                         "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763",
@@ -232,18 +232,18 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # delete ROADM connection
     def test_12_delete_roadm_connection(self):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
-                   "node/ROADM-D1/yang-ext:mount/" +
-                   "org-openroadm-device:org-openroadm-device/" +
-                   "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
+                                             "node/ROADM-D1/yang-ext:mount/" +
+                                             "org-openroadm-device:org-openroadm-device/" +
+                                             "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     # Delete NMC SRG interface
     def test_13_delete_srg_interface(self):
         response = test_utils.delete_request(test_utils.URL_CONFIG_NETCONF_TOPO +
-                                           "node/ROADM-D1/yang-ext:mount/" +
-                                           "org-openroadm-device:org-openroadm-device/" +
-                                           "interface/SRG1-PP1-TXRX-nmc-749:763")
+                                             "node/ROADM-D1/yang-ext:mount/" +
+                                             "org-openroadm-device:org-openroadm-device/" +
+                                             "interface/SRG1-PP1-TXRX-nmc-749:763")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
