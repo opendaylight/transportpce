@@ -1111,9 +1111,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nb_links, 4)
         for link in res['network'][0]['ietf-network-topology:link']:
             self.assertEqual(
-                    link['org-openroadm-otn-network-topology:available-bandwidth'], 0)
+                link['org-openroadm-otn-network-topology:available-bandwidth'], 0)
             self.assertEqual(
-                    link['org-openroadm-otn-network-topology:used-bandwidth'], 100000)
+                link['org-openroadm-otn-network-topology:used-bandwidth'], 100000)
 
     def test_60_delete_service_100GE_ABC(self):
         response = test_utils.service_delete_request("service-100GE-ABC")
@@ -1283,7 +1283,7 @@ class TransportPCEtesting(unittest.TestCase):
         for link in links:
             if ((link["org-openroadm-common-network:link-type"] == "XPONDER-OUTPUT" or
                     link["org-openroadm-common-network:link-type"] == "XPONDER-INPUT")
-                and ('SPDR-SB1' in link['link-id'] or 'ROADM-B1' in link['link-id'])):
+                    and ('SPDR-SB1' in link['link-id'] or 'ROADM-B1' in link['link-id'])):
                 link_name = link["link-id"]
                 response = test_utils.delete_request(url+link_name)
                 self.assertEqual(response.status_code, requests.codes.ok)
@@ -1306,7 +1306,7 @@ class TransportPCEtesting(unittest.TestCase):
         links = res['network'][0]['ietf-network-topology:link']
         for link in links:
             if (link["org-openroadm-common-network:link-type"] == "ROADM-TO-ROADM"
-                and 'ROADM-B1' in link['link-id']):
+                    and 'ROADM-B1' in link['link-id']):
                 link_name = link["link-id"]
                 response = test_utils.delete_request(url+link_name)
                 self.assertEqual(response.status_code, requests.codes.ok)
@@ -1429,7 +1429,6 @@ class TransportPCEtesting(unittest.TestCase):
         self.test_49_check_interface_ODU4_CLIENT_spdra()
         self.test_50_check_interface_ODU4_NETWORK_spdra()
         self.test_51_check_ODU4_connection_spdra()
-
 
     def test_88_check_configuration_spdrc(self):
         self.test_52_check_interface_100GE_CLIENT_spdrc()

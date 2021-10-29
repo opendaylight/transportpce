@@ -243,6 +243,5 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
 
-
 if __name__ == "__main__":
     unittest.main(verbosity=2)
