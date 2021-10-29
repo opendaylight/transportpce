@@ -18,4 +18,3 @@ linkcheck_ignore = [
     'https://0201.nccdn.net/1_2/000/000/134/c50/Open-ROADM-MSA-release-2-Device-White-paper-v1-1.pdf'
 ]
 linkcheck_timeout = 300
-
