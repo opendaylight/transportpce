@@ -306,7 +306,7 @@ def get_portmapping_node_info(node: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}/node-info"
     response = get_request(url.format('{}', node))
     res = response.json()
-    key = u'transportpce-portmapping:node-info'
+    key = 'transportpce-portmapping:node-info'
     if key in res.keys():
         node_info = res[key]
     else:

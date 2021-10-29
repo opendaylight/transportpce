@@ -55,11 +55,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.get_portmapping_node_info("ROADM-A1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            {u'node-type': u'rdm',
-             u'node-ip-address': u'127.0.0.11',
-             u'node-clli': u'NodeA',
-             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-             u'node-model': u'model2'},
+            {'node-type': 'rdm',
+             'node-ip-address': '127.0.0.11',
+             'node-clli': 'NodeA',
+             'openroadm-version': '2.2.1', 'node-vendor': 'vendorA',
+             'node-model': 'model2'},
             response['node-info'])
         time.sleep(3)
 
@@ -115,11 +115,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.get_portmapping_node_info("XPDR-A1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            {u'node-type': u'xpdr',
-             u'node-ip-address': u'1.2.3.4',
-             u'node-clli': u'NodeA',
-             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-             u'node-model': u'model2'},
+            {'node-type': 'xpdr',
+             'node-ip-address': '1.2.3.4',
+             'node-clli': 'NodeA',
+             'openroadm-version': '2.2.1', 'node-vendor': 'vendorA',
+             'node-model': 'model2'},
             response['node-info'])
         time.sleep(3)
 

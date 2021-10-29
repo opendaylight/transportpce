@@ -292,8 +292,8 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0])
 
         self.assertDictEqual(
-            dict({u'frequency': 196.0812, u'otsi-rate': u'org-openroadm-common-optical-channel-types:R400G-otsi',
-                  u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
+            dict({'frequency': 196.0812, 'otsi-rate': 'org-openroadm-common-optical-channel-types:R400G-otsi',
+                  'transmit-power': -5, 'modulation-format': 'dp-qam16'},
                  **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
             res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
 
@@ -358,8 +358,8 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0])
 
         self.assertDictEqual(
-            dict({u'frequency': 196.0812, u'otsi-rate': u'org-openroadm-common-optical-channel-types:R400G-otsi',
-                  u'transmit-power': -5, u'modulation-format': 'dp-qam16'},
+            dict({'frequency': 196.0812, 'otsi-rate': 'org-openroadm-common-optical-channel-types:R400G-otsi',
+                  'transmit-power': -5, 'modulation-format': 'dp-qam16'},
                  **res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
             res['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
 
@@ -430,8 +430,8 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         ele = res['node'][0]['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR2-NETWORK1', ele['tp-id'])
-        self.assertEqual({u'frequency': 196.08125,
-                          u'width': 75},
+        self.assertEqual({'frequency': 196.08125,
+                          'width': 75},
                          ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
         time.sleep(3)
 
@@ -520,7 +520,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'22', u'exp-payload-type': u'22'},
+            {'payload-type': '22', 'exp-payload-type': '22'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_26_check_interface_ODUC4_xpdrc2(self):
@@ -547,7 +547,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'22', u'exp-payload-type': u'22'},
+            {'payload-type': '22', 'exp-payload-type': '22'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_27_check_otn_topo_links(self):
@@ -642,7 +642,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:ethernetCsmacd',
                         'supporting-port': 'C1'
                         }
-        input_dict_2 = {u'speed': 100000}
+        input_dict_2 = {'speed': 100000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']),
@@ -670,7 +670,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
+            {'payload-type': '07', 'exp-payload-type': '07'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_33_check_interface_ODU4_NETWORK_xpdra2(self):
@@ -688,7 +688,7 @@ class TransportPCEtesting(unittest.TestCase):
             'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU4',
             'monitoring-mode': 'not-terminated'}
-        input_dict_3 = {u'trib-port-number': 1}
+        input_dict_3 = {'trib-port-number': 1}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
@@ -718,9 +718,9 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({u'dst-if': u'XPDR2-NETWORK1-ODU4-service-100GE'},
+        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4-service-100GE'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({u'src-if': u'XPDR2-CLIENT1-ODU4-service-100GE'},
+        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4-service-100GE'},
                              res['odu-connection'][0]['source'])
 
     def test_35_check_interface_100GE_CLIENT_xpdrc2(self):
@@ -734,7 +734,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:ethernetCsmacd',
                         'supporting-port': 'C1'
                         }
-        input_dict_2 = {u'speed': 100000}
+        input_dict_2 = {'speed': 100000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']),
@@ -762,7 +762,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'07', u'exp-payload-type': u'07'},
+            {'payload-type': '07', 'exp-payload-type': '07'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_37_check_interface_ODU4_NETWORK_xpdrc2(self):
@@ -816,9 +816,9 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({u'dst-if': u'XPDR2-NETWORK1-ODU4-service-100GE'},
+        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4-service-100GE'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({u'src-if': u'XPDR2-CLIENT1-ODU4-service-100GE'},
+        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4-service-100GE'},
                              res['odu-connection'][0]['source'])
 
     def test_39_check_otn_topo_links(self):
@@ -1081,7 +1081,7 @@ class TransportPCEtesting(unittest.TestCase):
         tp = res['node'][0]['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR2-NETWORK1', tp['tp-id'])
         self.assertNotIn('wavelength', dict.keys(
-            tp[u'org-openroadm-network-topology:xpdr-network-attributes']))
+            tp['org-openroadm-network-topology:xpdr-network-attributes']))
         time.sleep(3)
 
     def test_67_check_openroadm_topology(self):
@@ -1187,8 +1187,8 @@ class TransportPCEtesting(unittest.TestCase):
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
-                self.assertEqual({u'frequency': 196.08125,
-                                  u'width': 75},
+                self.assertEqual({'frequency': 196.08125,
+                                  'width': 75},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT1':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
@@ -1246,7 +1246,7 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:ethernetCsmacd',
                         'supporting-port': 'C1'
                         }
-        input_dict_2 = {u'speed': 400000}
+        input_dict_2 = {'speed': 400000}
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(dict(input_dict_2, **res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']),
