@@ -59,11 +59,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'rdm',
-                            u'node-ip-address': u'127.0.0.11',
-                            u'node-clli': u'NodeA',
-                            u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-                            u'node-model': u'model2'}},
+            {'node-info': {'node-type': 'rdm',
+                           'node-ip-address': '127.0.0.11',
+                           'node-clli': 'NodeA',
+                           'openroadm-version': '2.2.1',
+                           'node-vendor': 'vendorA',
+                           'node-model': 'model2'}},
             res)
         time.sleep(3)
 
@@ -127,11 +128,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'xpdr',
-                            u'node-ip-address': u'1.2.3.4',
-                            u'node-clli': u'NodeA',
-                            u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-                            u'node-model': u'model2'}},
+            {'node-info': {'node-type': 'xpdr',
+                           'node-ip-address': '1.2.3.4',
+                           'node-clli': 'NodeA',
+                           'openroadm-version': '2.2.1',
+                           'node-vendor': 'vendorA',
+                           'node-model': 'model2'}},
             res)
         time.sleep(3)
 
