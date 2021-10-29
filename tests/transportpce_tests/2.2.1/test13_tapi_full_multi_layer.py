@@ -34,7 +34,7 @@ class TransportPCEtesting(unittest.TestCase):
                     "layer-protocol-name": "PHOTONIC_MEDIA",
                     "service-interface-point": {
                         "service-interface-point-uuid": "b1a0d883-32b8-3b0b-93d6-7ed074f6f107"
-                },
+                    },
                     "administrative-state": "UNLOCKED",
                     "operational-state": "ENABLED",
                     "direction": "BIDIRECTIONAL",
@@ -52,7 +52,7 @@ class TransportPCEtesting(unittest.TestCase):
                     "layer-protocol-name": "PHOTONIC_MEDIA",
                     "service-interface-point": {
                         "service-interface-point-uuid": "d1d6305e-179b-346f-b02d-8260aebe1ce8"
-                },
+                    },
                     "administrative-state": "UNLOCKED",
                     "operational-state": "ENABLED",
                     "direction": "BIDIRECTIONAL",
@@ -257,11 +257,11 @@ class TransportPCEtesting(unittest.TestCase):
         print("photonic media service uuid : {}".format(res['output']['service']['uuid']))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
-            'lifecycle-state': 'PLANNED',
-            'operational-state': 'DISABLED',
-            'service-type': 'POINT_TO_POINT_CONNECTIVITY',
-            'service-layer': 'PHOTONIC_MEDIA',
-            'connectivity-direction': 'BIDIRECTIONAL'
+                        'lifecycle-state': 'PLANNED',
+                        'operational-state': 'DISABLED',
+                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
+                        'service-layer': 'PHOTONIC_MEDIA',
+                        'connectivity-direction': 'BIDIRECTIONAL'
                         }
         input_dict_2 = {'value-name': 'OpenROADM node id',
                         'value': 'SPDR-SC1-XPDR1'}
@@ -278,7 +278,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_16_get_service_PhotonicMedia(self):
         response = test_utils.get_service_list_request(
-            "services/"+ str(service_pm_uuid))
+            "services/" + str(service_pm_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -308,11 +308,11 @@ class TransportPCEtesting(unittest.TestCase):
         print("odu service uuid : {}".format(res['output']['service']['uuid']))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
-            'lifecycle-state': 'PLANNED',
-            'operational-state': 'DISABLED',
-            'service-type': 'POINT_TO_POINT_CONNECTIVITY',
-            'service-layer': 'ODU',
-            'connectivity-direction': 'BIDIRECTIONAL'
+                        'lifecycle-state': 'PLANNED',
+                        'operational-state': 'DISABLED',
+                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
+                        'service-layer': 'ODU',
+                        'connectivity-direction': 'BIDIRECTIONAL'
                         }
         input_dict_2 = {'value-name': 'OpenROADM node id',
                         'value': 'SPDR-SC1-XPDR1'}
@@ -329,7 +329,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_get_service_ODU(self):
         response = test_utils.get_service_list_request(
-            "services/"+ str(service_odu_uuid))
+            "services/" + str(service_odu_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -360,11 +360,11 @@ class TransportPCEtesting(unittest.TestCase):
         print("dsr service uuid : {}".format(res['output']['service']['uuid']))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
-            'lifecycle-state': 'PLANNED',
-            'operational-state': 'DISABLED',
-            'service-type': 'POINT_TO_POINT_CONNECTIVITY',
-            'service-layer': 'DSR',
-            'connectivity-direction': 'BIDIRECTIONAL'
+                        'lifecycle-state': 'PLANNED',
+                        'operational-state': 'DISABLED',
+                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
+                        'service-layer': 'DSR',
+                        'connectivity-direction': 'BIDIRECTIONAL'
                         }
         input_dict_2 = {'value-name': 'OpenROADM node id',
                         'value': 'SPDR-SC1-XPDR1'}
@@ -384,7 +384,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_20_get_service_DSR(self):
         response = test_utils.get_service_list_request(
-            "services/"+ str(service_dsr_uuid))
+            "services/" + str(service_dsr_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -423,9 +423,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_22_delete_connectivity_service_DSR(self):
-       response = test_utils.tapi_delete_connectivity_request(service_dsr_uuid)
-       self.assertEqual(response.status_code, requests.codes.no_content)
-       time.sleep(self.WAITING)
+        response = test_utils.tapi_delete_connectivity_request(service_dsr_uuid)
+        self.assertEqual(response.status_code, requests.codes.no_content)
+        time.sleep(self.WAITING)
 
     def test_23_delete_connectivity_service_ODU(self):
         response = test_utils.tapi_delete_connectivity_request(service_odu_uuid)

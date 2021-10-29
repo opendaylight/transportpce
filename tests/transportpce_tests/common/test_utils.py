@@ -393,6 +393,7 @@ def service_delete_request(servicename: str,
             "tail-retention": "no"}}}
     return post_request(URL_SERV_DELETE, attr)
 
+
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes, centerfreq: str,
                          slotwidth: int, minfreq: float, maxfreq: float, lowerslotnumber: int,
                          higherslotnumber: int):
@@ -446,20 +447,24 @@ def path_computation_request(requestid: str, servicename: str, serviceaend, serv
         attr.update(other_attr)
     return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr})
 
+
 def tapi_create_connectivity_request(topologyidorname):
     return post_request(URL_TAPI_CREATE_CONNECTIVITY, topologyidorname)
+
 
 def tapi_delete_connectivity_request(serviceidorname):
     attr = {
         "input": {
             "service-id-or-name": serviceidorname}}
-    return post_request(URL_TAPI_DELETE_CONNECTIVITY , attr)
+    return post_request(URL_TAPI_DELETE_CONNECTIVITY, attr)
+
 
 def tapi_get_topology_details_request(topologyidorname):
     attr = {
         "input": {
             "topology-id-or-name": topologyidorname}}
-    return post_request(URL_TAPI_TOPOLOGY_DETAILS , attr)
+    return post_request(URL_TAPI_TOPOLOGY_DETAILS, attr)
+
 
 def tapi_get_node_details_request(topologyidorname, nodeidorname):
     attr = {
@@ -468,11 +473,14 @@ def tapi_get_node_details_request(topologyidorname, nodeidorname):
             "node-id-or-name": nodeidorname}}
     return post_request(URL_TAPI_NODE_DETAILS, attr)
 
+
 def tapi_get_sip_details_request():
     return post_request(URL_TAPI_SIP_LIST, "")
 
+
 def tapi_get_service_list_request():
     return post_request(URL_TAPI_SERVICE_LIST, "")
+
 
 def shutdown_process(process):
     if process is not None:
