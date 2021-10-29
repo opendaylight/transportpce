@@ -19,6 +19,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 import test_utils
 
+
 class TransportPCERendererTesting(unittest.TestCase):
 
     processes = None
@@ -289,7 +290,8 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_17_service_path_delete_rdm_check(self):
-        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP7-TXRX-DEG1-TTP-TXRX-713:720")
+        response = test_utils.check_netconf_node_request(
+            "ROADMA01", "roadm-connections/SRG1-PP7-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(

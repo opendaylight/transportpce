@@ -183,15 +183,16 @@ class TransportPCEtesting(unittest.TestCase):
                     if tpType == 'XPONDER-CLIENT':
                         client += 1
                         print("tpId = {}".format(tpId))
-                        print("tp= {}".format(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]))
+                        print("tp= {}".format(res['network'][0]['node'][i]
+                              ['ietf-network-topology:termination-point'][j]))
                         nbIfCapType = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                 ['org-openroadm-otn-network-topology:tp-supported-interfaces']
-                                 ['supported-interface-capability'][0])
+                                          ['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                          ['supported-interface-capability'][0])
                         for k in range(0, nbIfCapType):
                             self.assertIn((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['org-openroadm-otn-network-topology:tp-supported-interfaces']
-                                             ['supported-interface-capability'][0]['if-cap-type']),
-                                           CHECK_LIST[nodeId]['port-types'])
+                                           ['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                           ['supported-interface-capability'][0]['if-cap-type']),
+                                          CHECK_LIST[nodeId]['port-types'])
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
