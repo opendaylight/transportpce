@@ -123,7 +123,6 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['node-info'])
         time.sleep(3)
 
-
     def test_11_xpdr_portmapping_NETWORK1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)

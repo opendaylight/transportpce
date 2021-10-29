@@ -72,11 +72,13 @@ else:
 # Basic HTTP operations
 #
 
+
 def get_request(url):
     return requests.request(
         "GET", url.format(RESTCONF_BASE_URL),
         headers=TYPE_APPLICATION_JSON,
         auth=(ODL_LOGIN, ODL_PWD))
+
 
 def put_request(url, data):
     return requests.request(
@@ -84,6 +86,7 @@ def put_request(url, data):
         data=json.dumps(data),
         headers=TYPE_APPLICATION_JSON,
         auth=(ODL_LOGIN, ODL_PWD))
+
 
 def delete_request(url):
     return requests.request(
@@ -94,6 +97,7 @@ def delete_request(url):
 #
 # Process management
 #
+
 
 def start_sims(sims_list):
     for sim in sims_list:
@@ -110,6 +114,7 @@ def start_sims(sims_list):
             sys.exit(3)
         process_list.append(process)
     return process_list
+
 
 def start_tpce():
     print("starting OpenDaylight...")
@@ -129,6 +134,7 @@ def start_tpce():
         sys.exit(1)
     process_list.append(process)
     return process_list
+
 
 def start_karaf():
     print("starting KARAF TransportPCE build...")
@@ -161,12 +167,14 @@ def install_karaf_feature(feature_name: str):
                           + feature_name + ' \n logout \n',
                           universal_newlines=True, check=False)
 
+
 def shutdown_process(process):
     if process is not None:
         for child in psutil.Process(process.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
         process.send_signal(signal.SIGINT)
+
 
 def start_honeynode(log_file: str, sim):
     executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -179,6 +187,7 @@ def start_honeynode(log_file: str, sim):
                 [executable, SIMS[sim]['port'], os.path.join(sample_directory, SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
     return None
+
 
 def wait_until_log_contains(log_file, regexp, time_to_wait=60):
     # pylint: disable=lost-exception
@@ -213,6 +222,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=60):
             print("log file does not exist or is not accessible... ", flush=True)
         return stringfound
 
+
 class TimeOut:
     def __init__(self, seconds=1, error_message='Timeout'):
         self.seconds = seconds
@@ -232,6 +242,7 @@ class TimeOut:
 #
 # Basic NetCONF device operations
 #
+
 
 def mount_device(node_id, sim):
     url = "{}/data/network-topology:network-topology/topology=topology-netconf/node={}"
@@ -253,6 +264,7 @@ def mount_device(node_id, sim):
         # TODO an else-clause to abort test would probably be nice here
     return response
 
+
 def unmount_device(node_id):
     url = "{}/data/network-topology:network-topology/topology=topology-netconf/node={}"
     response = delete_request(url.format('{}', node_id))
@@ -261,6 +273,7 @@ def unmount_device(node_id):
     else:
         print("Node " + node_id + " still not deleted from tpce topology", end='... ', flush=True)
     return response
+
 
 def check_device_connection(node: str):
     url = "{}/data/network-topology:network-topology/topology=topology-netconf/node={}"
@@ -278,6 +291,7 @@ def check_device_connection(node: str):
 # Portmapping operations
 #
 
+
 def get_portmapping(node: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}"
     response = get_request(url.format('{}', node))
@@ -286,6 +300,7 @@ def get_portmapping(node: str):
     nodes = res['transportpce-portmapping:nodes']
     return {'status_code': response.status_code,
             'nodes': nodes}
+
 
 def get_portmapping_node_info(node: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}/node-info"
@@ -299,6 +314,7 @@ def get_portmapping_node_info(node: str):
     return {'status_code': response.status_code,
             'node-info': node_info}
 
+
 def portmapping_request(node: str, mapping: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}/mapping={}"
     response = get_request(url.format('{}', node, mapping))
@@ -307,6 +323,7 @@ def portmapping_request(node: str, mapping: str):
     return {'status_code': response.status_code,
             'mapping': mapping}
 
+
 def portmapping_mc_capa_request(node: str, mc_capa: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}/mc-capabilities={}"
     response = get_request(url.format('{}', node, mc_capa))
@@ -314,4 +331,3 @@ def portmapping_mc_capa_request(node: str, mc_capa: str):
     capabilities = res['transportpce-portmapping:mc-capabilities']
     return {'status_code': response.status_code,
             'mc-capabilities': capabilities}
-

@@ -225,5 +225,6 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              "error-type": "protocol"},
             response['node-info'])
 
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

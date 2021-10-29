@@ -20,7 +20,7 @@ import time
 import unittest
 import requests
 sys.path.append('transportpce_tests/common/')
-import test_utils
+import test_utils  # nopep8
 
 
 CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created successfully'
