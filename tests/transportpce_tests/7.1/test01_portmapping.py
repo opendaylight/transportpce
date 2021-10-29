@@ -58,12 +58,12 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.get_portmapping_node_info("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            {u'node-type': u'xpdr',
-             u'node-ip-address': u'1.2.3.4',
-             u'node-clli': u'NodeA',
-             u'openroadm-version': u'7.1',
-             u'node-vendor': u'vendorA',
-             u'node-model': u'model'},
+            {'node-type': 'xpdr',
+             'node-ip-address': '1.2.3.4',
+             'node-clli': 'NodeA',
+             'openroadm-version': '7.1',
+             'node-vendor': 'vendorA',
+             'node-model': 'model'},
             response['node-info'])
         time.sleep(3)
 

@@ -189,8 +189,8 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0])
 
         self.assertDictEqual(
-            {u'frequency': 196.1, u'rate': u'org-openroadm-common-types:R100G',
-             u'transmit-power': -5, u'modulation-format': 'dp-qpsk'},
+            {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
+             'transmit-power': -5, 'modulation-format': 'dp-qpsk'},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_05_check_interface_OTU(self):
@@ -232,8 +232,8 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0])
 
         self.assertDictEqual(
-            {u'frequency': 196.1, u'rate': u'org-openroadm-common-types:R100G',
-             u'transmit-power': -5, u'modulation-format': 'dp-qpsk'},
+            {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
+             'transmit-power': -5, 'modulation-format': 'dp-qpsk'},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_07_check_interface_OTU(self):
@@ -393,7 +393,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
                              )
         self.assertDictEqual(
-            {u'payload-type': u'21', u'exp-payload-type': u'21'},
+            {'payload-type': '21', 'exp-payload-type': '21'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_10_check_interface_ODU4(self):
@@ -421,7 +421,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
                              )
         self.assertDictEqual(
-            {u'payload-type': u'21', u'exp-payload-type': u'21'},
+            {'payload-type': '21', 'exp-payload-type': '21'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     # Test creation of 10G service
@@ -546,7 +546,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(
-            {u'speed': 10000},
+            {'speed': 10000},
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_13_check_interface_ODU2E_CLIENT(self):
@@ -570,7 +570,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'03', u'exp-payload-type': u'03'},
+            {'payload-type': '03', 'exp-payload-type': '03'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_14_check_ODU2E_connection(self):
@@ -587,9 +587,9 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({u'dst-if': u'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({u'src-if': u'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
                              res['odu-connection'][0]['source'])
 
     def test_15_check_interface_ODU2E_NETWORK(self):
@@ -670,7 +670,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict, **res['interface'][0]),
                              res['interface'][0])
         self.assertDictEqual(
-            {u'speed': 10000},
+            {'speed': 10000},
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_18_check_interface_ODU2E_CLIENT(self):
@@ -694,7 +694,7 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
-            {u'payload-type': u'03', u'exp-payload-type': u'03'},
+            {'payload-type': '03', 'exp-payload-type': '03'},
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_19_check_ODU2E_connection(self):
@@ -711,9 +711,9 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({u'dst-if': u'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({u'src-if': u'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
                              res['odu-connection'][0]['source'])
 
     def test_20_check_interface_ODU2E_NETWORK(self):

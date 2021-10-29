@@ -174,10 +174,10 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'rate': u'org-openroadm-optical-channel-interfaces:R100G',
-             u'transmit-power': -5,
-             u'wavelength-number': 7,
-             u'modulation-format': u'dp-qpsk'},
+            {'rate': 'org-openroadm-optical-channel-interfaces:R100G',
+             'transmit-power': -5,
+             'wavelength-number': 7,
+             'modulation-format': 'dp-qpsk'},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_10_service_path_create_xpdr_check(self):
@@ -197,8 +197,8 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'rate': u'org-openroadm-otn-otu-interfaces:OTU4',
-             u'fec': u'scfec'},
+            {'rate': 'org-openroadm-otn-otu-interfaces:OTU4',
+             'fec': 'scfec'},
             res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_11_service_path_create_xpdr_check(self):
@@ -220,11 +220,11 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(
             dict({
                 'rate': 'org-openroadm-otn-odu-interfaces:ODU4',
-                u'monitoring-mode': u'terminated'
+                'monitoring-mode': 'terminated'
             }, **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
         )
-        self.assertDictEqual({u'exp-payload-type': u'07', u'payload-type': u'07'},
+        self.assertDictEqual({'exp-payload-type': '07', 'payload-type': '07'},
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_12_service_path_create_xpdr_check(self):
