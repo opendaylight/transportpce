@@ -302,8 +302,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
-                self.assertEqual({u'frequency': 196.1,
-                                  u'width': 40},
+                self.assertEqual({'frequency': 196.1,
+                                  'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT2' or ele['tp-id'] == 'XPDR1-CLIENT1':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
@@ -441,12 +441,12 @@ class TransportPCEFulltesting(unittest.TestCase):
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
-                self.assertEqual({u'frequency': 196.1,
-                                  u'width': 40},
+                self.assertEqual({'frequency': 196.1,
+                                  'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-NETWORK2':
-                self.assertEqual({u'frequency': 196.05,
-                                  u'width': 40},
+                self.assertEqual({'frequency': 196.05,
+                                  'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT2':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
@@ -563,21 +563,21 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ((ele[u'org-openroadm-common-network:tp-type'] ==
+            if ((ele['org-openroadm-common-network:tp-type'] ==
                  'XPONDER-CLIENT')
                     and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele[
                         'tp-id'] == 'XPDR1-CLIENT3')):
                 self.assertNotIn(
                     'org-openroadm-network-topology:xpdr-client-attributes',
                     dict.keys(ele))
-            elif (ele[u'org-openroadm-common-network:tp-type'] ==
+            elif (ele['org-openroadm-common-network:tp-type'] ==
                   'XPONDER-NETWORK'):
-                self.assertIn(u'tail-equipment-id', dict.keys(
-                    ele[u'org-openroadm-network-topology:'
-                        u'xpdr-network-attributes']))
+                self.assertIn('tail-equipment-id', dict.keys(
+                    ele['org-openroadm-network-topology:'
+                        'xpdr-network-attributes']))
                 self.assertNotIn('wavelength', dict.keys(
-                    ele[u'org-openroadm-network-topology:'
-                        u'xpdr-network-attributes']))
+                    ele['org-openroadm-network-topology:'
+                        'xpdr-network-attributes']))
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):

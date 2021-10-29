@@ -13,7 +13,7 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-#from unittest.result import failfast
+# from unittest.result import failfast
 import requests
 import sys
 sys.path.append('transportpce_tests/common/')
@@ -112,7 +112,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'frequency': 195.8, u'width': 40},
+            {'frequency': 195.8, 'width': 40},
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     def test_07_service_path_create_rdm_check(self):
@@ -131,7 +131,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'min-freq': 195.775, u'max-freq': 195.825},
+            {'min-freq': 195.775, 'max-freq': 195.825},
             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
 
     def test_08_service_path_create_rdm_check(self):
@@ -150,7 +150,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'frequency': 195.8, u'width': 40},
+            {'frequency': 195.8, 'width': 40},
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     # -mc supporting interfaces must not be created for SRG, only degrees
@@ -199,10 +199,10 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'rate': u'org-openroadm-common-types:R100G',
-             u'transmit-power': -5,
-             u'modulation-format': 'dp-qpsk',
-             u'frequency': 195.8},
+            {'rate': 'org-openroadm-common-types:R100G',
+             'transmit-power': -5,
+             'modulation-format': 'dp-qpsk',
+             'frequency': 195.8},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_12_service_path_create_xpdr_check(self):
@@ -247,11 +247,11 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(
             dict({
                  'rate': 'org-openroadm-otn-common-types:ODU4',
-                 u'monitoring-mode': u'terminated'
+                 'monitoring-mode': 'terminated'
                  }, **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
         )
-        self.assertDictEqual({u'exp-payload-type': u'07', u'payload-type': u'07'},
+        self.assertDictEqual({'exp-payload-type': '07', 'payload-type': '07'},
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_14_service_path_create_xpdr_check(self):
@@ -270,7 +270,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]
         )
         self.assertDictEqual(
-            {u'fec': u'off', u'speed': 100000},
+            {'fec': 'off', 'speed': 100000},
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_15_service_path_create_xpdr_check(self):

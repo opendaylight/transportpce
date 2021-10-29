@@ -56,12 +56,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'rdm',
-                            u'node-ip-address': u'127.0.0.14',
-                            u'node-clli': u'NodeD',
-                            u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorD',
-                            u'node-model': u'model2',
-                            }},
+            {'node-info': {'node-type': 'rdm',
+                           'node-ip-address': '127.0.0.14',
+                           'node-clli': 'NodeD',
+                           'openroadm-version': '2.2.1',
+                           'node-vendor': 'vendorD',
+                           'node-model': 'model2',
+                           }},
             res)
         time.sleep(3)
 
