@@ -17,7 +17,7 @@ import time
 import requests
 import sys
 sys.path.append('transportpce_tests/common/')
-import test_utils
+import test_utils  # nopep8
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
@@ -241,6 +241,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {"error-type": "application", "error-tag": "data-missing",
              "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
+
 
 
 if __name__ == "__main__":

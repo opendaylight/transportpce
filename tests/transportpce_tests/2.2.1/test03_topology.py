@@ -19,7 +19,7 @@ import logging
 import requests
 import sys
 sys.path.append('transportpce_tests/common/')
-import test_utils
+import test_utils  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):

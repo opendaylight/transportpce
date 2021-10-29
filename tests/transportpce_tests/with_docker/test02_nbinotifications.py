@@ -18,7 +18,8 @@ import unittest
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
-import test_utils
+import test_utils  # nopep8
+
 
 class TransportNbiNotificationstesting(unittest.TestCase):
     processes = None
