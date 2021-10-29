@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1721fe77_a80e783e",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-29T11:16:55Z",
+      "side": 1,
+      "message": "could be on the previous line...",
+      "range": {
+        "startLine": 231,
+        "startChar": 51,
+        "endLine": 231,
+        "endChar": 54
+      },
+      "revId": "7e2c734da1f8132462153fa5e055b9c9b804d959",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "700a6ec2_05d081ba",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-29T11:16:55Z",
+      "side": 1,
+      "message": "idem...",
+      "range": {
+        "startLine": 249,
+        "startChar": 51,
+        "endLine": 249,
+        "endChar": 54
+      },
+      "revId": "7e2c734da1f8132462153fa5e055b9c9b804d959",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00e19ccb_2c89f2a4",
+        "filename": "tests/transportpce_tests/2.2.1/test08_olm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-10-29T11:16:55Z",
+      "side": 1,
+      "message": "could be on the previous line...\nidem below...",
+      "range": {
+        "startLine": 232,
+        "startChar": 51,
+        "endLine": 232,
+        "endChar": 54
+      },
+      "revId": "7e2c734da1f8132462153fa5e055b9c9b804d959",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
