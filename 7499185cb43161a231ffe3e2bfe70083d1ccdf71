@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29269b9d_d71c1cb6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-09T14:15:54Z",
+      "side": 1,
+      "message": "commit title must be \u003c50 char",
+      "revId": "7499185cb43161a231ffe3e2bfe70083d1ccdf71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
