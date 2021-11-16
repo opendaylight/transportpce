@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "defbd630_0ad77867",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "this class is getting more and more complex.\nI think some refactoring and intermediate functions would be welcome.",
       "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f0f9e5d1_5902e608",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
@@ -32,10 +33,28 @@
       "message": "https://sonarcloud.io/project/issues?fileUuids\u003dAXPPbQudyx5GDscMkt_2\u0026id\u003dopendaylight_transportpce\u0026resolved\u003dfalse",
       "parentUuid": "defbd630_0ad77867",
       "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "71dbde09_fb245b53",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:37Z",
+      "side": 1,
+      "message": "Yes indeed, the base code was already suffering from high cyclomatic complexity. I propose to manage this rather complex task later in a specific change, and meanwhile track this issue through a jira ticket.",
+      "parentUuid": "f0f9e5d1_5902e608",
+      "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "428e9bc9_823a7713",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
@@ -49,10 +68,10 @@
       "side": 1,
       "message": "the cyclomatic complexity of this method is already 30...",
       "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6f7fdbc4_d9b06c97",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
@@ -66,8 +85,25 @@
       "side": 1,
       "message": "Sonar issue: Replace this if-then-else statement by a single return statement.",
       "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4302cb43_c6f1d67f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f7fdbc4_d9b06c97",
+      "revId": "252aad886cea5edf605cf2627644766c7c4a7a99",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
