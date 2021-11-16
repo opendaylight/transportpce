@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "e1d97b3c_deb8f68e",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
@@ -20,8 +21,31 @@
         "endChar": 45
       },
       "revId": "066b707ce25889ca4f3f88572fe4a5804dff354e",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c893dc03_65c92ebc",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:38:31Z",
+      "side": 1,
+      "message": "Yes indeed, it could be another way to code this test. However, to keep coherency with the same method in 221 and 71 implementations, I prefer keeping this line as it is.",
+      "parentUuid": "e1d97b3c_deb8f68e",
+      "range": {
+        "startLine": 591,
+        "startChar": 36,
+        "endLine": 591,
+        "endChar": 45
+      },
+      "revId": "066b707ce25889ca4f3f88572fe4a5804dff354e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
