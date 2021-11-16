@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "bf891340_4a960fb0",
         "filename": "tests/transportpce_tests/2.2.1/test13_otn_end2end_with_intermediate_switch.py",
@@ -20,8 +21,31 @@
         "endChar": 20
       },
       "revId": "bc247543f8201c662282ed817833d3a1e3fe62e0",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ce0586b_f5c0801b",
+        "filename": "tests/transportpce_tests/2.2.1/test13_otn_end2end_with_intermediate_switch.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf891340_4a960fb0",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "bc247543f8201c662282ed817833d3a1e3fe62e0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
