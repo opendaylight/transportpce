@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "34e292e3_b85dd91f",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "indent +4 to separate method declaratin from its body",
       "revId": "d562928b1409a1441dc71317729d47ea00526735",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04325171_125b308d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:38:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34e292e3_b85dd91f",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "9e773028_92a0609b",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
@@ -31,10 +50,28 @@
       "side": 1,
       "message": "intermediate variable not needed",
       "revId": "d562928b1409a1441dc71317729d47ea00526735",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a76edd_88bd80cb",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:38:50Z",
+      "side": 1,
+      "message": "yes of course, but not sure it serves the readibility...",
+      "parentUuid": "9e773028_92a0609b",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "3ba1b1b6_ea6b08ff",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
@@ -48,10 +85,28 @@
       "side": 1,
       "message": "idem",
       "revId": "d562928b1409a1441dc71317729d47ea00526735",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c562053_fc553db9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:38:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ba1b1b6_ea6b08ff",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "80bd9acb_05fb3243",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
@@ -65,8 +120,25 @@
       "side": 1,
       "message": "idem",
       "revId": "d562928b1409a1441dc71317729d47ea00526735",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0398d9_11a4e8d0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:38:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80bd9acb_05fb3243",
+      "revId": "d562928b1409a1441dc71317729d47ea00526735",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
