@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "0bab72de_35e76a17",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
@@ -20,8 +21,31 @@
         "endChar": 10
       },
       "revId": "d623bcc406d110bd78dc367150c22d02e7937a9a",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a9dff91_d14c624b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:22Z",
+      "side": 1,
+      "message": "Yes indeed, it could be logical to do that. However, I think it is preferable to keep two different public methods that have different signatures. In this first one, we can have different results depending on mapping parameter is null or not null, whereas in the second method, the user knowns that it doesn\u0027t need mapping parameter to obtain even other results...\nI propose not to change this for the moment, and if in the future we feel that it would be better to do so, we will refacto this piece of code as you propose.",
+      "parentUuid": "0bab72de_35e76a17",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 10
+      },
+      "revId": "d623bcc406d110bd78dc367150c22d02e7937a9a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

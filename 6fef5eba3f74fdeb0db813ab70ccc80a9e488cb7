@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "19c600c2_816e4455",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
@@ -14,8 +15,25 @@
       "side": 1,
       "message": "should be one block with lines 39-42",
       "revId": "6fef5eba3f74fdeb0db813ab70ccc80a9e488cb7",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9494ff03_81d5bbfe",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/service/ServiceTypes.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19c600c2_816e4455",
+      "revId": "6fef5eba3f74fdeb0db813ab70ccc80a9e488cb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
