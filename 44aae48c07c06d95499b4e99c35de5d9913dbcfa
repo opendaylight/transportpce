@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "e5b26c11_c6055bb9",
         "filename": "/COMMIT_MSG",
@@ -14,8 +15,25 @@
       "side": 1,
       "message": "no JIRA ?",
       "revId": "44aae48c07c06d95499b4e99c35de5d9913dbcfa",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cc129f5_29eea0b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:41:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b26c11_c6055bb9",
+      "revId": "44aae48c07c06d95499b4e99c35de5d9913dbcfa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
