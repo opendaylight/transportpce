@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "b89717a9_014b545d",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "intermediates variable not needed",
       "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "904264f2_2a3f889f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b89717a9_014b545d",
+      "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "811f7352_b9a4abfe",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
@@ -31,10 +50,28 @@
       "side": 1,
       "message": "what about simply this ?\n\n    private static String formatNodeName(String nodeName, String tpName) {\n        return nodeName.contains(\"-XPDR\")\n            ? nodeName\n            : StringBuilder(nodeName).append(\"-\").append(tpName.split(\"-\")[0]).toString();\n    }",
       "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead0bf00_e0af859b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "811f7352_b9a4abfe",
+      "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "76e7dcb1_8da67148",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
@@ -48,8 +85,25 @@
       "side": 1,
       "message": "very similar to line 716, what about mutualizing this in a separate function",
       "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "043f985b_44b1fb53",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76e7dcb1_8da67148",
+      "revId": "198363d940cb36da522a58f9481716b4b7d4d149",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
