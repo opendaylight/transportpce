@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "91cde543_fc4abfb4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "what about a ternary operator directly in the previous allocation here?",
       "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8383d6_56e525f9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91cde543_fc4abfb4",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "bb8e4620_6c9b24a1",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
@@ -31,10 +50,28 @@
       "side": 1,
       "message": "intermediate variable not needed",
       "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88445032_b145afc3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb8e4620_6c9b24a1",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "f589925d_687e1988",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
@@ -48,10 +85,28 @@
       "side": 1,
       "message": "idem",
       "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d427b8_f8764bed",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f589925d_687e1988",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "2a8169fd_1e4a74bb",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
@@ -65,8 +120,25 @@
       "side": 1,
       "message": "idem",
       "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bcbdfd1_2da54513",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-16T17:37:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8169fd_1e4a74bb",
+      "revId": "4989933374fb47f34c9456c65f9e5f2c670c4f64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
