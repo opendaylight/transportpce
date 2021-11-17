@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08015dd1_160de9a8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T17:05:30Z",
+      "side": 1,
+      "message": "What \u0027shuishan\u0027 means?",
+      "range": {
+        "startLine": 176,
+        "startChar": 18,
+        "endLine": 176,
+        "endChar": 26
+      },
+      "revId": "9717b783bbd3022779edf139f20bbd3bb040fa91",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86f24d5f_080f8f08",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T17:05:30Z",
+      "side": 1,
+      "message": "idem and so on...",
+      "range": {
+        "startLine": 204,
+        "startChar": 30,
+        "endLine": 204,
+        "endChar": 38
+      },
+      "revId": "9717b783bbd3022779edf139f20bbd3bb040fa91",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
