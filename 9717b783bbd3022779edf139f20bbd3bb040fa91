@@ -45,6 +45,23 @@
       },
       "revId": "9717b783bbd3022779edf139f20bbd3bb040fa91",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d16168_fce46d56",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T18:45:34Z",
+      "side": 1,
+      "message": "I think this intermediate variable is not needed (and its name should be onep1 since it is not a builder)",
+      "revId": "9717b783bbd3022779edf139f20bbd3bb040fa91",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
