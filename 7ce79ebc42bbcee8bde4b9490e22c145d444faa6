@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e2fb7e_94d513b2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T15:06:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf5f8f28_24243aad",
+      "revId": "7ce79ebc42bbcee8bde4b9490e22c145d444faa6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e5ebf55_e4b4ce68",
