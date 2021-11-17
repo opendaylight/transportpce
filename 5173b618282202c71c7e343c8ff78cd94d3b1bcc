@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4572650_c4df6d15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T08:34:40Z",
+      "side": 1,
+      "message": "this change should probably out of the relation chain or at the bottom of the stack",
+      "revId": "5173b618282202c71c7e343c8ff78cd94d3b1bcc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
