@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0651f0a_51259291",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T08:33:03Z",
+      "side": 1,
+      "message": "line length should be \u003c 72char",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c09480a_5546e8b3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T08:33:03Z",
+      "side": 1,
+      "message": "condition (supportedInterface !\u003d null) can be factorized",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34006aa5_a096d4f9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-17T08:33:03Z",
+      "side": 1,
+      "message": "variable factorization are possible here to avoid mulitple check\nif (serviceName !\u003d null) {\n if node (){\n } else {\n }\n} else {\n if node () {\n }\n}\n\nAnyway, I think it is more indicated here to fill progressively an or seveal array(s) and to retur String.join(\"-\", array(s)) at the end",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
