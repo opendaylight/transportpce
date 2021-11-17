@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48ed4025_8f52e815",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T14:51:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0651f0a_51259291",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c09480a_5546e8b3",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec0c938_3995103a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T14:51:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c09480a_5546e8b3",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34006aa5_a096d4f9",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-11-17T08:33:03Z",
       "side": 1,
       "message": "variable factorization are possible here to avoid mulitple check\nif (serviceName !\u003d null) {\n if node (){\n } else {\n }\n} else {\n if node () {\n }\n}\n\nAnyway, I think it is more indicated here to fill progressively an or seveal array(s) and to retur String.join(\"-\", array(s)) at the end",
+      "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f20816fb_49b34815",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T14:51:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34006aa5_a096d4f9",
       "revId": "9cedc8d3fc0ddaeb81d3050c619f614902012400",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
