@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45226881_3439643d",
+        "filename": "nbinotifications/src/test/resources/expected_event.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T17:14:05Z",
+      "side": 1,
+      "message": "Would not be possible to keep the original json format?\nDifficult to read and see changes.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1792
+      },
+      "revId": "9e35d3c4975a1ffe7767999d6ae428fb3dd05cd7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4785420a_97e530c8",
+        "filename": "nbinotifications/src/test/resources/expected_event_alarm_service.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-17T17:14:05Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 159
+      },
+      "revId": "9e35d3c4975a1ffe7767999d6ae428fb3dd05cd7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
