@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c1918a_2aa6776c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T15:26:33Z",
+      "side": 1,
+      "message": "managed from device",
+      "revId": "3d180213babd2eed47091e3c5bc21145aad546a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
