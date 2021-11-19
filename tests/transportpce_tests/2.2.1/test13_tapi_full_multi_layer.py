@@ -25,6 +25,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     processes = None
     WAITING = 20  # nominal value is 300
+    WAITING_SERVICE = 200  # nominal value is 300
     NODE_VERSION = '2.2.1'
 
     cr_serv_sample_data = {
@@ -85,6 +86,7 @@ class TransportPCEtesting(unittest.TestCase):
         cls.init_failed = False
         os.environ['JAVA_MIN_MEM'] = '1024M'
         os.environ['JAVA_MAX_MEM'] = '4096M'
+        print("ENV variables {}".format(os.environ))
         cls.processes = test_utils.start_tpce()
         # TAPI feature is not installed by default in Karaf
         if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
@@ -118,22 +120,27 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_spdrA(self):
-        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        print("Connecting SPDRA")
+        response = test_utils.mount_tapi_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_connect_spdrC(self):
-        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
+        print("Connecting SPDRC")
+        response = test_utils.mount_tapi_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
-        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
+        print("Connecting ROADMA")
+        response = test_utils.mount_tapi_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        time.sleep(2)
 
     def test_04_connect_rdmC(self):
-        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
+        print("Connecting ROADMC")
+        response = test_utils.mount_tapi_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
@@ -155,7 +162,16 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_07_connect_sprdC_1_N1_to_roadmC_PP1(self):
+    def test_07_connect_roadmA_PP1_to_spdrA_1_N1_tapi(self):
+        response = test_utils.connect_xpdr_to_rdm_tapi_request("SPDR-SA1-XPDR1", "XPDR1-NETWORK1",
+                                                               "ROADM-A1", "SRG1-PP1-TXRX")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Link created in tapi topology',
+                      res["output"]["result"])
+        time.sleep(2)
+
+    def test_08_connect_sprdC_1_N1_to_roadmC_PP1(self):
         response = test_utils.connect_xpdr_to_rdm_request("SPDR-SC1", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -164,7 +180,7 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_08_connect_roadmC_PP1_to_spdrC_1_N1(self):
+    def test_09_connect_roadmC_PP1_to_spdrC_1_N1(self):
         response = test_utils.connect_rdm_to_xpdr_request("SPDR-SC1", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -173,7 +189,16 @@ class TransportPCEtesting(unittest.TestCase):
                       res["output"]["result"])
         time.sleep(2)
 
-    def test_09_add_omsAttributes_ROADMA_ROADMC(self):
+    def test_10_connect_roadmC_PP1_to_spdrC_1_N1_tapi(self):
+        response = test_utils.connect_xpdr_to_rdm_tapi_request("SPDR-SC1-XPDR1", "XPDR1-NETWORK1",
+                                                               "ROADM-C1", "SRG1-PP1-TXRX")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Link created in tapi topology',
+                      res["output"]["result"])
+        time.sleep(2)
+
+    def test_11_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -190,7 +215,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(2)
 
-    def test_10_add_omsAttributes_ROADMC_ROADMA(self):
+    def test_12_add_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC-ROADMA oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -207,7 +232,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(2)
 
-    def test_11_check_otn_topology(self):
+    def test_13_check_otn_topology(self):
         response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -216,7 +241,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
         time.sleep(2)
 
-    def test_12_check_openroadm_topology(self):
+    def test_14_check_openroadm_topology(self):
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -226,7 +251,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nbLink, 22, 'There should be 22 openroadm links')
         time.sleep(2)
 
-    def test_13_get_tapi_topology_details(self):
+    def test_15_get_tapi_topology_details(self):
         response = test_utils.tapi_get_topology_details_request(
             "T0 - Full Multi-layer topology")
         time.sleep(2)
@@ -235,10 +260,10 @@ class TransportPCEtesting(unittest.TestCase):
         nbNode = len(res['output']['topology']['node'])
         nbLink = len(res['output']['topology']['link'])
         self.assertEqual(nbNode, 14, 'There should be 14 TAPI nodes')
-        self.assertEqual(nbLink, 13, 'There should be 13 TAPI links')
+        self.assertEqual(nbLink, 15, 'There should be 15 TAPI links')
         time.sleep(2)
 
-    def test_14_check_sip_details(self):
+    def test_16_check_sip_details(self):
         response = test_utils.tapi_get_sip_details_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -247,7 +272,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
 # test create connectivity service from spdrA to spdrC for Photonic_media
-    def test_15_create_connectivity_service_PhotonicMedia(self):
+    def test_17_create_connectivity_service_PhotonicMedia(self):
         response = test_utils.tapi_create_connectivity_request(self.cr_serv_sample_data)
         time.sleep(self.WAITING)
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -274,9 +299,10 @@ class TransportPCEtesting(unittest.TestCase):
                              res['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **res['output']['service']['end-point'][1]['name'][0]),
                              res['output']['service']['end-point'][1]['name'][0])
-        time.sleep(self.WAITING)
+        # This sleep should be bigger to give time to change the state of the service to the service handler
+        time.sleep(self.WAITING_SERVICE)
 
-    def test_16_get_service_PhotonicMedia(self):
+    def test_18_get_service_PhotonicMedia(self):
         response = test_utils.get_service_list_request(
             "services/" + str(service_pm_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -292,7 +318,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
 # test create connectivity service from spdrA to spdrC for odu
-    def test_17_create_connectivity_service_ODU(self):
+    def test_19_create_connectivity_service_ODU(self):
         self.cr_serv_sample_data["input"]["end-point"][0]["layer-protocol-name"] = "ODU"
         self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "eecbfa6e-57ab-3651-9606-c22c8ce73f18"
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "ODU"
@@ -325,9 +351,10 @@ class TransportPCEtesting(unittest.TestCase):
                              res['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **res['output']['service']['end-point'][1]['name'][0]),
                              res['output']['service']['end-point'][1]['name'][0])
-        time.sleep(self.WAITING)
+        # This sleep should be bigger to give time to change the state of the service to the service handler
+        time.sleep(self.WAITING_SERVICE)
 
-    def test_18_get_service_ODU(self):
+    def test_20_get_service_ODU(self):
         response = test_utils.get_service_list_request(
             "services/" + str(service_odu_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -343,7 +370,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
 # test create connectivity service from spdrA to spdrC for dsr
-    def test_19_create_connectivity_service_DSR(self):
+    def test_21_create_connectivity_service_DSR(self):
         self.cr_serv_sample_data["input"]["end-point"][0]["layer-protocol-name"] = "DSR"
         self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "c14797a0-adcc-3875-a1fe-df8949d1a2d7"
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "DSR"
@@ -380,9 +407,10 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(input_dict_3,
                                   **res['output']['service']['end-point'][1]['name'][0]),
                              res['output']['service']['end-point'][1]['name'][0])
+        # The sleep here is okey as the DSR service creation is very fast
         time.sleep(self.WAITING)
 
-    def test_20_get_service_DSR(self):
+    def test_22_get_service_DSR(self):
         response = test_utils.get_service_list_request(
             "services/" + str(service_dsr_uuid))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -397,7 +425,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['services'][0]['lifecycle-state'], 'planned')
         time.sleep(2)
 
-    def test_21_get_connectivity_service_list(self):
+    def test_23_get_connectivity_service_list(self):
         response = test_utils.tapi_get_service_list_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -422,22 +450,22 @@ class TransportPCEtesting(unittest.TestCase):
                 self.fail("get connectivity service failed")
         time.sleep(2)
 
-    def test_22_delete_connectivity_service_DSR(self):
+    def test_24_delete_connectivity_service_DSR(self):
         response = test_utils.tapi_delete_connectivity_request(service_dsr_uuid)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
-    def test_23_delete_connectivity_service_ODU(self):
+    def test_25_delete_connectivity_service_ODU(self):
         response = test_utils.tapi_delete_connectivity_request(service_odu_uuid)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
-    def test_24_delete_connectivity_service_PhotonicMedia(self):
+    def test_26_delete_connectivity_service_PhotonicMedia(self):
         response = test_utils.tapi_delete_connectivity_request(service_pm_uuid)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
-    def test_25_get_no_tapi_services(self):
+    def test_27_get_no_tapi_services(self):
         response = test_utils.tapi_get_service_list_request()
         res = response.json()
         self.assertIn(
@@ -447,7 +475,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['errors']['error'])
         time.sleep(2)
 
-    def test_26_get_no_openroadm_services(self):
+    def test_28_get_no_openroadm_services(self):
         response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
@@ -457,22 +485,22 @@ class TransportPCEtesting(unittest.TestCase):
             res['errors']['error'])
         time.sleep(2)
 
-    def test_27_disconnect_spdrA(self):
+    def test_29_disconnect_spdrA(self):
         response = test_utils.unmount_device("SPDR-SA1")
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
-    def test_28_disconnect_spdrC(self):
+    def test_30_disconnect_spdrC(self):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
-    def test_29_disconnect_roadmA(self):
+    def test_31_disconnect_roadmA(self):
         response = test_utils.unmount_device("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
-    def test_30_disconnect_roadmC(self):
+    def test_32_disconnect_roadmC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
