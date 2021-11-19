@@ -219,7 +219,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             if (!rdm2rdmLinks.isEmpty()) {
                 mergeLinkinTopology(rdm2rdmLinks);
             }
-
+            LOG.info("TAPI node for or node {} successfully merged", orNodeId);
         } else if (NodeTypes.Xpdr.getIntValue() ==  node.getNodeInfo().getNodeType().getIntValue()) {
             List<Mapping> networkMappings = node.nonnullMapping().values()
                     .stream().filter(k -> k.getLogicalConnectionPoint()
@@ -249,6 +249,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     mergeSipsinContext(this.sipMap);
                 }
             }
+            LOG.info("TAPI node for or node {} successfully merged", orNodeId);
         }
         // Device not managed yet
     }
