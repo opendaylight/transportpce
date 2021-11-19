@@ -25,6 +25,7 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.cp.to.degree.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
@@ -84,12 +85,13 @@ public class R2RTapiLinkDiscovery {
 
     private static final Logger LOG = LoggerFactory.getLogger(R2RTapiLinkDiscovery.class);
 
-    private final DataBroker dataBroker;
+    private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
     private static final String PHTNC_MEDIA = "PHOTONIC_MEDIA";
 
-    public R2RTapiLinkDiscovery(final DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager) {
-        this.dataBroker = dataBroker;
+    public R2RTapiLinkDiscovery(NetworkTransactionService networkTransactionService,
+                                DeviceTransactionManager deviceTransactionManager) {
+        this.networkTransactionService = networkTransactionService;
         this.deviceTransactionManager = deviceTransactionManager;
     }
 
@@ -368,8 +370,9 @@ public class R2RTapiLinkDiscovery {
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
+        try {
+            Optional<Nodes> nodesObject = this.networkTransactionService.read(
+                LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isEmpty() || (nodesObject.get().getCpToDegree() == null)) {
                 LOG.warn("Could not find mapping for Interface {} for nodeId {}", interfaceName,
                     nodeId.getValue());
@@ -399,8 +402,9 @@ public class R2RTapiLinkDiscovery {
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
+        try {
+            Optional<Nodes> nodesObject = this.networkTransactionService.read(
+                LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.get().getMapping() != null)) {
                 Collection<Mapping> mappingList = nodesObject.get().nonnullMapping().values();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
@@ -423,12 +427,14 @@ public class R2RTapiLinkDiscovery {
                 .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
                 .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
                 .build();
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<OwnedNodeEdgePoint> optionalOnep = readTx.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            if (optionalOnep.isPresent()) {
-                return optionalOnep.get().getOperationalState();
+        try {
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (!optionalOnep.isPresent()) {
+                LOG.error("No NEP {} object present in datastore", nepUuid);
+                return null;
             }
-            return null;
+            return optionalOnep.get().getOperationalState();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
@@ -441,12 +447,14 @@ public class R2RTapiLinkDiscovery {
                 .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
                 .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
                 .build();
-        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<OwnedNodeEdgePoint> optionalOnep = readTx.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            if (optionalOnep.isPresent()) {
-                return optionalOnep.get().getAdministrativeState();
+        try {
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (!optionalOnep.isPresent()) {
+                LOG.error("No NEP {} object present in datastore", nepUuid);
+                return null;
             }
-            return null;
+            return optionalOnep.get().getAdministrativeState();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;

@@ -258,6 +258,28 @@ def mount_device(node_id, sim):
     return response
 
 
+def mount_tapi_device(node_id, sim):
+    url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
+    body = {"node": [{
+        "node-id": node_id,
+        "netconf-node-topology:username": NODES_LOGIN,
+        "netconf-node-topology:password": NODES_PWD,
+        "netconf-node-topology:host": "127.0.0.1",
+        "netconf-node-topology:port": SIMS[sim]['port'],
+        "netconf-node-topology:tcp-only": "false",
+        "netconf-node-topology:pass-through": {}}]}
+    response = put_request(url, body)
+    if wait_until_log_contains(TPCE_LOG, re.escape("TAPI node for or node {} successfully merged".format(node_id)),
+                               200):
+        print("Node " + node_id + " correctly added to tpce topology", end='... ', flush=True)
+    else:
+        print("Node " + node_id + " still not added to tpce topology", end='... ', flush=True)
+        if response.status_code == requests.codes.ok:
+            print("It was probably loaded at start-up", end='... ', flush=True)
+        # TODO an else-clause to abort test would probably be nice here
+    return response
+
+
 def unmount_device(node_id):
     url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
     response = delete_request(url)
@@ -299,6 +321,19 @@ def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
                 "networkutils:srg-num": srg_num,
                 "networkutils:termination-point-num": termination_num
             }
+        }
+    }
+    return post_request(url, data)
+
+
+def connect_xpdr_to_rdm_tapi_request(xpdr_node: str, xpdr_num: str, rdm_node: str, srg_num: str):
+    url = "{}/operations/transportpce-tapinetworkutils:init-xpdr-rdm-tapi-link"
+    data = {
+        "input": {
+            "xpdr-node": xpdr_node,
+            "network-tp": xpdr_num,
+            "rdm-node": rdm_node,
+            "add-drop-tp": srg_num
         }
     }
     return post_request(url, data)
