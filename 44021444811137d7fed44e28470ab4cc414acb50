@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "821e205e_a8ac55dc",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRB.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T14:40:01Z",
+      "side": 1,
+      "message": "OPENROADM or NETCONF ?\nAll other devices have NETCONF stream declared",
+      "range": {
+        "startLine": 6,
+        "startChar": 14,
+        "endLine": 6,
+        "endChar": 23
+      },
+      "revId": "44021444811137d7fed44e28470ab4cc414acb50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b143694_dd77d356",
+        "filename": "tests/transportpce_tests/2.2.1/test14_otn_switch_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T14:40:01Z",
+      "side": 1,
+      "message": "C -\u003e B",
+      "range": {
+        "startLine": 255,
+        "startChar": 29,
+        "endLine": 255,
+        "endChar": 30
+      },
+      "revId": "44021444811137d7fed44e28470ab4cc414acb50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "440e26e7_56ce5334",
+        "filename": "tests/transportpce_tests/2.2.1/test14_otn_switch_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T14:40:01Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 271,
+        "startChar": 17,
+        "endLine": 271,
+        "endChar": 23
+      },
+      "revId": "44021444811137d7fed44e28470ab4cc414acb50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea212aae_5cf72629",
+        "filename": "tests/transportpce_tests/2.2.1/test14_otn_switch_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T14:40:01Z",
+      "side": 1,
+      "message": "A -\u003e B",
+      "range": {
+        "startLine": 287,
+        "startChar": 17,
+        "endLine": 287,
+        "endChar": 23
+      },
+      "revId": "44021444811137d7fed44e28470ab4cc414acb50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf1a75b_e68e633a",
+        "filename": "tests/transportpce_tests/2.2.1/test14_otn_switch_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T14:40:01Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 303,
+        "startChar": 24,
+        "endLine": 303,
+        "endChar": 30
+      },
+      "revId": "44021444811137d7fed44e28470ab4cc414acb50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
