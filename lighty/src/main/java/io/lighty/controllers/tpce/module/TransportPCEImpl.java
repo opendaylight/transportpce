@@ -208,7 +208,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 networkModelListenerImpl, servicehandler);
 
         LOG.info("Creating tapi beans ...");
-        R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(lightyServices.getBindingDataBroker(),
+        R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
             deviceTransactionManager);
         TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
                 .getBindingDataBroker());
