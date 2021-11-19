@@ -69,6 +69,24 @@
       "parentUuid": "c50da738_ccf62ef4",
       "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d7b6911_ee9036df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-19T09:49:00Z",
+      "side": 1,
+      "message": "@Gilles,\nthanks a lot!! Will update you soon",
+      "parentUuid": "d7febda0_1e60db24",
+      "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
