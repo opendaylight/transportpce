@@ -51,6 +51,24 @@
       "parentUuid": "dad2fc12_d00af7b1",
       "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7febda0_1e60db24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-19T09:45:23Z",
+      "side": 1,
+      "message": "@Javier,\nYou can use tox with this command to only launch tapi_full_multi_layer functional tests : tox -e buildcontroller,tests221 tapi_full_multi_layer",
+      "parentUuid": "c50da738_ccf62ef4",
+      "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
