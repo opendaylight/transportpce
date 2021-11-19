@@ -87,6 +87,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <bean id="tapilinkDiscoveryImpl" class="org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery">
         <argument ref="dataBroker" />
+        <argument ref="networkTransactionImpl" />
         <argument ref="deviceTransactionManager" />
     </bean>
 
