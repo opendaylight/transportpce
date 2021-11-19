@@ -16,6 +16,23 @@
       "message": "@Javier,\nAnother example of instability on TAPI full topo management.\nAlways the same test failing once on x...",
       "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69677bef_deecb253",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-19T09:18:36Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "eba09c1db69954cbdef894ba47d939e85a645dfe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
