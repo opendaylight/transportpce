@@ -16,6 +16,24 @@
       "message": "managed from device",
       "revId": "3d180213babd2eed47091e3c5bc21145aad546a8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cceb2e18_b947711f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-11-20T09:47:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75c1918a_2aa6776c",
+      "revId": "3d180213babd2eed47091e3c5bc21145aad546a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
