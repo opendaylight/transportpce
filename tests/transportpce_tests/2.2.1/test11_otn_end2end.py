@@ -11,13 +11,17 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+# pylint: disable=too-many-lines
 
 import base64
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -1047,6 +1051,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_66_create_OCH_OTU4_service_2(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service2-OCH-OTU4"
         self.cr_serv_sample_data["input"]["connection-type"] = "infrastructure"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "100"
@@ -1086,6 +1091,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_68_create_ODU4_service_2(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service2-ODU4"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "ODU"
         self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-device-name"] = "SPDR-SA1-XPDR3"
@@ -1125,6 +1131,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_70_create_1GE_service(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service1-1GE"
         self.cr_serv_sample_data["input"]["connection-type"] = "service"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "1"
