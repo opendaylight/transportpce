@@ -16,8 +16,11 @@ import os
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -293,6 +296,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test create connectivity service from spdrA to spdrC for odu
     def test_17_create_connectivity_service_ODU(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["end-point"][0]["layer-protocol-name"] = "ODU"
         self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "eecbfa6e-57ab-3651-9606-c22c8ce73f18"
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "ODU"
@@ -344,6 +348,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test create connectivity service from spdrA to spdrC for dsr
     def test_19_create_connectivity_service_DSR(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["end-point"][0]["layer-protocol-name"] = "DSR"
         self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "c14797a0-adcc-3875-a1fe-df8949d1a2d7"
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "DSR"

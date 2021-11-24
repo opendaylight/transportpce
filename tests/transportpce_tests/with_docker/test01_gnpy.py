@@ -14,10 +14,13 @@
 
 import unittest
 import os
+# pylint: disable=wrong-import-order
 import sys
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
