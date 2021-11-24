@@ -13,6 +13,7 @@
 
 import json
 import os
+# pylint: disable=wrong-import-order
 import sys
 import re
 import signal
@@ -22,6 +23,7 @@ import time
 import psutil
 import requests
 
+# pylint: disable=import-error
 import simulators
 
 SIMS = simulators.SIMS
