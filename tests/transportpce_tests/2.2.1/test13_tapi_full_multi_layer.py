@@ -326,9 +326,9 @@ class TransportPCEtesting(unittest.TestCase):
     def test_19_create_connectivity_service_ODU(self):
         # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["end-point"][0]["layer-protocol-name"] = "ODU"
-        self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "eecbfa6e-57ab-3651-9606-c22c8ce73f18"
+        self.cr_serv_sample_data["input"]["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = "5efda776-f8de-3e0b-9bbd-2c702e210946"
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "ODU"
-        self.cr_serv_sample_data["input"]["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = "31f83b1f-29b2-3a8e-af9b-6423dbc5aa22"
+        self.cr_serv_sample_data["input"]["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = "8116d0af-39fa-3df5-bed2-dd2cd5e8217d"
         self.cr_serv_sample_data["input"]["connectivity-constraint"]["service-layer"] = "ODU"
 
         response = test_utils.tapi_create_connectivity_request(self.cr_serv_sample_data)
@@ -449,12 +449,12 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'ODU')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 3, 'There should be 3 connections')
-            elif ele['uuid'] == SERVICE_DSR_UUID:
+                self.assertEqual(nbconnection, 1, 'There should be 1 connection')
+            elif ele['uuid'] == service_dsr_uuid:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'DSR')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 1, 'There should be 1 connection')
+                self.assertEqual(nbconnection, 4, 'There should be 4 connections')
             else:
                 self.fail("get connectivity service failed")
         time.sleep(2)
