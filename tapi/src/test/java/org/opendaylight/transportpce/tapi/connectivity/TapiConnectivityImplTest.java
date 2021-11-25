@@ -43,6 +43,7 @@ import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiConnectivityDataUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
@@ -95,6 +96,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     public static ConnectivityUtils connectivityUtils;
     public static TapiInitialORMapping tapiInitialORMapping;
     public static NetworkTransactionService networkTransactionService;
+    public static TapiLink tapilink;
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
@@ -119,9 +121,11 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
         networkTransactionService = new NetworkTransactionImpl(
             new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        tapilink = new TapiLink(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
-        topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker());
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
+            tapilink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
