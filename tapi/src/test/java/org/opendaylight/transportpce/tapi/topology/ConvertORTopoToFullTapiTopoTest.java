@@ -7,13 +7,16 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.either;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.google.common.util.concurrent.FluentFuture;
@@ -80,6 +83,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
@@ -205,7 +209,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeWhenNoStates() {
-        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", null, null);
+        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", "XPDR1-CLIENT1",  null, null);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : tpdr100G.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -221,7 +225,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
         Uuid enetworkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                 .toString());
         Uuid inetworkNepUuid = new Uuid(
             UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
@@ -263,8 +267,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeWhenBadStates1() {
-        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", AdminStates.OutOfService,
-            State.OutOfService);
+        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", "XPDR1-CLIENT1",
+            AdminStates.OutOfService, State.OutOfService);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : tpdr100G.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -280,7 +284,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
         Uuid enetworkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                 .toString());
         Uuid inetworkNepUuid = new Uuid(
             UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
@@ -332,8 +336,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeWhenBadStates2() {
-        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", AdminStates.Maintenance,
-            State.Degraded);
+        Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", "XPDR1-CLIENT1",
+            AdminStates.Maintenance, State.Degraded);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : tpdr100G.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -349,7 +353,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .getTapiNodes().get(new
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey(dsrNodeUuid));
         Uuid enetworkNepUuid = new Uuid(
-            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+            UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+eODU+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                 .toString());
         Uuid inetworkNepUuid = new Uuid(
             UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
@@ -898,16 +902,16 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 checkNepClient100GSwitch(nep1, client4NepUuid, nodeId + "+DSR+XPDR2-CLIENT4", "NodeEdgePoint_C");
-                OwnedNodeEdgePoint enep2 = enepsN.get(3);
+                OwnedNodeEdgePoint enep2 = enepsN.get(2);
                 OwnedNodeEdgePoint inep2 = inepsN.get(3);
                 Uuid enetworkNepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 Uuid inetworkNepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(enep2, enetworkNepUuid, nodeId + "+eODU+XPDR2-NETWORK1", "eNodeEdgePoint_N", true);
-                checkNepNetworkODU4(inep2, inetworkNepUuid, nodeId + "+iODU+XPDR2-NETWORK1", "iNodeEdgePoint_N", false);
+                checkNepeODU4(enep2, enetworkNepUuid, nodeId + "+eODU+XPDR2-CLIENT4", "eNodeEdgePoint_N", false);
+                checkNepNetworkODU4(inep2, inetworkNepUuid, nodeId + "+iODU+XPDR2-NETWORK1", "iNodeEdgePoint_N", true);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -918,7 +922,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
                     .sorted((nep3, nep4) -> nep3.getUuid().getValue().compareTo(nep4.getUuid().getValue()))
                     .collect(Collectors.toList());
-                assertEquals("Mux-DSR node should have 1 eNEP network", 1, enepsN.size());
+                assertEquals("Mux-DSR node should have 4 eNEP network", 4, enepsN.size());
                 assertEquals("Mux-DSR node should have 1 iNEP network", 1, inepsN.size());
                 assertEquals("Mux-DSR node should have 4 NEPs client", 4, nepsC.size());
                 OwnedNodeEdgePoint nep3 = nepsC.get(2);
@@ -926,18 +930,17 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 checkNepClient10G(nep3, client3NepUuid, nodeId + "+DSR+XPDR1-CLIENT3", "NodeEdgePoint_C");
-
-                OwnedNodeEdgePoint enep4 = enepsN.get(0);
+                OwnedNodeEdgePoint enep4 = enepsN.get(3);
                 OwnedNodeEdgePoint inep4 = inepsN.get(0);
                 Uuid enetworkNepUuid2 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 Uuid inetworkNepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(enep4, enetworkNepUuid2, nodeId + "+eODU+XPDR1-NETWORK1", "eNodeEdgePoint_N", true);
+                checkNepeODU4(enep4, enetworkNepUuid2, nodeId + "+eODU+XPDR1-CLIENT3", "eNodeEdgePoint_N", false);
                 checkNepNetworkODU4(inep4, inetworkNepUuid2, nodeId + "+iODU+XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    false);
+                    true);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -956,18 +959,17 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 checkNepClient100GTpdr(nep5, client1NepUuid, nodeId + "+DSR+XPDR1-CLIENT1", "100G-tpdr");
-
                 OwnedNodeEdgePoint enep6 = enepsN.get(0);
                 OwnedNodeEdgePoint inep6 = inepsN.get(1);
                 Uuid enetworkNepUuid3 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
                         .toString());
                 Uuid inetworkNepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepNetworkODU4(enep6, enetworkNepUuid3, nodeId + "+eODU+XPDR1-NETWORK1", "eNodeEdgePoint_N", true);
+                checkNepeODU4(enep6, enetworkNepUuid3, nodeId + "+eODU+XPDR1-CLIENT1", "eNodeEdgePoint_N", false);
                 checkNepNetworkODU4(inep6, inetworkNepUuid3, nodeId + "+iODU+XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    false);
+                    true);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -1175,6 +1177,26 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         checkCommonPartOfNep(nep, false);
     }
 
+    private void checkNepeODU4(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+                                     boolean withSip) {
+        assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
+        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
+        Name name = nameList.get(0);
+        assertEquals("value of eODU nep should be '" + portName + "'",
+            portName, name.getValue());
+        assertEquals("value-name of eODU nep for '" + portName + "' should be '" + nepName + "'",
+            nepName, name.getValueName());
+        // TODO: depending on the type of node there is one type or another
+        assertThat("eODU nep should support 1, 2 or 3 kind of cep, depending on client port",
+            nep.getSupportedCepLayerProtocolQualifier().size(), anyOf(is(1), is(2), is(3)));
+        assertTrue("eODU nep should support 1 kind of cep",
+            nep.getSupportedCepLayerProtocolQualifier().stream().anyMatch(splc -> splc.equals(ODUTYPEODU0.class)
+                || splc.equals(ODUTYPEODU2.class) || splc.equals(ODUTYPEODU2E.class)
+                || splc.equals(ODUTYPEODU4.class)));
+        assertEquals("eODU nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
+        checkCommonPartOfNep(nep, withSip);
+    }
+
     private void checkNepNetworkODU4(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
                                      boolean withSip) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
@@ -1228,7 +1250,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals("each node-rule-group should contain 2 NEP for muxponder DSR",
                 2, nodeRuleGroup.getNodeEdgePoint().size());
         }
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).nonnullNodeEdgePoint().values());
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(2).nonnullNodeEdgePoint().values());
         assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
@@ -1258,9 +1280,9 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
             .collect(Collectors.toList());
         assertEquals("in the sorted node-rule-group, nep number 7 should be XPDR2-NETWORK1",
-            networkNepUuid, nrg.get(7).getNodeEdgePointUuid());
+            networkNepUuid, nrg.get(6).getNodeEdgePointUuid());
         assertEquals("in the sorted node-rule-group, nep number 4 should be XPDR2-CLIENT4",
-            clientNepUuid, nrg.get(4).getNodeEdgePointUuid());
+            clientNepUuid, nrg.get(3).getNodeEdgePointUuid());
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
             nodeUuid, nrg.get(4).getNodeUuid());
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
@@ -1616,7 +1638,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
     }
 
-    private Node changeTerminationPointState(Node initialNode, String tpid, AdminStates admin, State oper) {
+    private Node changeTerminationPointState(Node initialNode, String tpid, String tpid1, AdminStates admin,
+                                             State oper) {
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder tpdr1Bldr
             = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder(
                 initialNode.augmentation(Node1.class));
@@ -1628,6 +1651,13 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .setOperationalState(oper)
             .build());
         tps.replace(tpBldr.key(), tpBldr.build());
+        TerminationPointBuilder tpBldr1 = new TerminationPointBuilder(
+            tps.get(new TerminationPointKey(new TpId(tpid1))));
+        tpBldr1.addAugmentation(new TerminationPoint1Builder(tpBldr1.augmentation(TerminationPoint1.class))
+            .setAdministrativeState(admin)
+            .setOperationalState(oper)
+            .build());
+        tps.replace(tpBldr1.key(), tpBldr1.build());
         tpdr1Bldr.setTerminationPoint(tps);
         return new NodeBuilder(initialNode).addAugmentation(tpdr1Bldr.build()).build();
     }

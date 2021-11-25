@@ -103,6 +103,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleKey;
@@ -184,8 +187,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             onepMap.putAll(transformSrgToOnep(orNodeId, mapSrg));
 
             // create tapi Node
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node roadmNode =
-                    createRoadmTapiNode(orNodeId, onepMap);
+            Node roadmNode = createRoadmTapiNode(orNodeId, onepMap);
             mergeNodeinTopology(Map.of(roadmNode.key(), roadmNode));
             mergeSipsinContext(this.sipMap);
             // TODO add states corresponding to device config -> based on mapping.
@@ -244,8 +246,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String.join("+", nodeId, TapiStringConstants.DSR)).build();
         List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR,
             LayerProtocolName.ODU);
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols,
+        Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols,
             nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
 
         nodeMap.put(dsrNode.key(), dsrNode);
@@ -257,8 +258,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         Name nameOtsi =  new NameBuilder().setValueName("otsi node name").setValue(
             String.join("+", nodeId, TapiStringConstants.OTSI)).build();
         List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols,
+        Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols,
             nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null);
 
         nodeMap.put(otsiNode.key(), otsiNode);
@@ -594,7 +594,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
-                LayerProtocolName.ODU, LayerProtocolName.DSR, false,
+                LayerProtocolName.ODU, LayerProtocolName.DSR, true,
                 String.join("+", nodeId, TapiStringConstants.I_ODU),
                 xpdrNetMaps.get(i).getSupportedInterfaceCapability(),
                 transformOperState(xpdrNetMaps.get(i).getPortOperState()),
@@ -602,25 +602,25 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             onepl.put(onep.key(), onep);
         }
         // network nep creation on E_ODU node
-        for (int i = 0; i < xpdrNetMaps.size(); i++) {
+        for (int i = 0; i < xpdrClMaps.size(); i++) {
             LOG.info("eODU NEP = {}", String.join("+", nodeId, TapiStringConstants.E_ODU,
-                xpdrNetMaps.get(i).getLogicalConnectionPoint()));
+                xpdrClMaps.get(i).getLogicalConnectionPoint()));
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+", nodeId, TapiStringConstants.E_ODU,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint())).getBytes(Charset.forName("UTF-8"))).toString());
+                    xpdrClMaps.get(i).getLogicalConnectionPoint())).getBytes(Charset.forName("UTF-8"))).toString());
             Name onedName = new NameBuilder()
                 .setValueName("eNodeEdgePoint_N")
                 .setValue(String.join("+", nodeId, TapiStringConstants.E_ODU,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint()))
+                    xpdrClMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
-                LayerProtocolName.ODU, LayerProtocolName.DSR, true,
+                LayerProtocolName.ODU, LayerProtocolName.DSR, false,
                 String.join("+", nodeId, TapiStringConstants.E_ODU),
-                xpdrNetMaps.get(i).getSupportedInterfaceCapability(),
-                transformOperState(xpdrNetMaps.get(i).getPortOperState()),
-                transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
+                xpdrClMaps.get(i).getSupportedInterfaceCapability(),
+                transformOperState(xpdrClMaps.get(i).getPortOperState()),
+                transformAdminState(xpdrClMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
         }
         return onepl;
@@ -633,7 +633,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private AdministrativeState transformAdminState(String adminString) {
         AdminStates adminState = org.opendaylight.transportpce.networkmodel.util.TopologyUtils
-                .setNetworkAdminState(adminString);
+            .setNetworkAdminState(adminString);
         return adminState.equals(AdminStates.InService) ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
@@ -652,7 +652,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         LOG.debug("Node layer {}", nodeProtocol.getName());
         onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedLayerProtocolQualifier(
-                supportedInterfaceCapability, nodeProtocol));
+                supportedInterfaceCapability, nepProtocol));
         onepBldr.setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -739,9 +739,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     tpid)).getBytes(Charset.forName("UTF-8"))).toString());
             MappedServiceInterfacePoint msip = new MappedServiceInterfacePointBuilder()
                     .setServiceInterfacePointUuid(sipUuid).build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint sip
-                    = createSIP(sipUuid, layerProtocol, tpid, nodeid, supportedInterfaceCapability,
-                    operState, adminState);
+            ServiceInterfacePoint sip = createSIP(sipUuid, layerProtocol, tpid, nodeid, supportedInterfaceCapability,
+                operState, adminState);
             this.sipMap.put(sip.key(), sip);
             LOG.info("SIP created {}", sip.getUuid());
             // this.tapiSips.put(sip.key(), sip);
@@ -773,8 +772,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .build();
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
-            createRoadmTapiNode(String orNodeId, Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist) {
+    private Node createRoadmTapiNode(String orNodeId, Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist) {
         // UUID
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", orNodeId,
             TapiStringConstants.PHTNC_MEDIA)).getBytes(Charset.forName("UTF-8"))).toString());
@@ -818,17 +816,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(String orNodeId, Uuid nodeUuid,
                                                                                Collection<OwnedNodeEdgePoint> onepl) {
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
+        Map<NodeEdgePointKey, NodeEdgePoint>
                 nepMap = new HashMap<>();
         for (OwnedNodeEdgePoint onep : onepl) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
-                    nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                    .NodeEdgePointBuilder()
-                    .setTopologyUuid(this.tapiTopoUuid)
-                    .setNodeUuid(nodeUuid)
-                    .setNodeEdgePointUuid(onep.key().getUuid())
-                    .build();
+            NodeEdgePoint nep = new NodeEdgePointBuilder()
+                .setTopologyUuid(this.tapiTopoUuid)
+                .setNodeUuid(nodeUuid)
+                .setNodeEdgePointUuid(onep.key().getUuid())
+                .build();
             nepMap.put(nep.key(), nep);
         }
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
@@ -884,16 +879,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         NonBlockingList nbl = new NonBlockingListBuilder()
-                .setNblNumber(Uint16.valueOf(1))
-                .setTpList(tpl)
-                .build();
+            .setNblNumber(Uint16.valueOf(1))
+            .setTpList(tpl)
+            .build();
         nbMap.put(nbl.key(),nbl);
 
         return new OduSwitchingPoolsBuilder()
-                .setSwitchingPoolNumber(Uint16.valueOf(1))
-                .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
-                .setNonBlockingList(nbMap)
-                .build();
+            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
+            .setNonBlockingList(nbMap)
+            .build();
     }
 
     private OduSwitchingPools createMuxSwitchPool(List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
@@ -905,11 +900,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             tpId = new TpId("XPDR" + xpdrNb + "-NETWORK1");
             tpList.add(tpId);
             NonBlockingList nbl = new NonBlockingListBuilder()
-                    .setNblNumber(Uint16.valueOf(i))
-                    .setTpList(tpList)
-                    .setAvailableInterconnectBandwidth(Uint32.valueOf(xpdrNetMaps.size() * 10L))
-                    .setInterconnectBandwidthUnit(Uint32.valueOf(1000000000))
-                    .build();
+                .setNblNumber(Uint16.valueOf(i))
+                .setTpList(tpList)
+                .setAvailableInterconnectBandwidth(Uint32.valueOf(xpdrNetMaps.size() * 10L))
+                .setInterconnectBandwidthUnit(Uint32.valueOf(1000000000))
+                .build();
             nbMap.put(nbl.key(),nbl);
         }
         return new OduSwitchingPoolsBuilder()
@@ -926,30 +921,23 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // create NodeRuleGroup
         int count = 1;
         for (Mapping tpMapping : xpdrNetMaps) {
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
-                    nepList = new HashMap<>();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                    .NodeEdgePoint inep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-                    .node.rule.group.NodeEdgePointBuilder()
-                    .setTopologyUuid(this.tapiTopoUuid)
-                    .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
-                            TapiStringConstants.OTSI)).getBytes(Charset.forName("UTF-8")))
-                        .toString()))
-                    .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
-                        TapiStringConstants.I_OTSI, tpMapping.getLogicalConnectionPoint()))
-                        .getBytes(Charset.forName("UTF-8"))).toString()))
-                    .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                    .NodeEdgePoint enep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-                    .node.rule.group.NodeEdgePointBuilder()
-                    .setTopologyUuid(this.tapiTopoUuid)
-                    .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
+            Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
+            NodeEdgePoint inep = new NodeEdgePointBuilder()
+                .setTopologyUuid(this.tapiTopoUuid)
+                .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
                         TapiStringConstants.OTSI)).getBytes(Charset.forName("UTF-8"))).toString()))
-                    .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
-                        (String.join("+", nodeId, TapiStringConstants.E_OTSI,
-                            tpMapping.getLogicalConnectionPoint())).getBytes(Charset.forName("UTF-8"))).toString()))
-                    .build();
+                .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
+                    TapiStringConstants.I_OTSI, tpMapping.getLogicalConnectionPoint()))
+                    .getBytes(Charset.forName("UTF-8"))).toString()))
+                .build();
+            NodeEdgePoint enep = new NodeEdgePointBuilder()
+                .setTopologyUuid(this.tapiTopoUuid)
+                .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
+                    TapiStringConstants.OTSI)).getBytes(Charset.forName("UTF-8"))).toString()))
+                .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", nodeId, TapiStringConstants.E_OTSI,
+                        tpMapping.getLogicalConnectionPoint())).getBytes(Charset.forName("UTF-8"))).toString()))
+                .build();
             nepList.put(inep.key(), inep);
             nepList.put(enep.key(), enep);
             // Empty random creation of mandatory fields for avoiding errors....
@@ -1000,9 +988,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         int count = 1;
         for (NonBlockingList nbl : oorOduSwitchingPool.nonnullNonBlockingList().values()) {
             LOG.info("Non blocking list = {}", nbl);
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
-                    nepList = new HashMap<>();
+            Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
             for (TpId tp : nbl.getTpList()) {
                 LOG.info("EDOU TP = {}", String.join("+", nodeId, TapiStringConstants.E_ODU, tp.getValue()));
                 LOG.info("DSR TP = {}", String.join("+", nodeId, TapiStringConstants.DSR, tp.getValue()));
@@ -1011,17 +997,23 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
                     TapiStringConstants.DSR, tp.getValue())).getBytes(Charset.forName("UTF-8"))).toString());
                 if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuid))
-                        || onepl.containsKey(new OwnedNodeEdgePointKey(tp1Uuid))) {
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
-                        nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                            .NodeEdgePointBuilder()
-                            .setTopologyUuid(this.tapiTopoUuid)
-                            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
-                                (String.join("+", nodeId,TapiStringConstants. DSR))
-                                    .getBytes(Charset.forName("UTF-8"))).toString()))
-                            .setNodeEdgePointUuid((tp.getValue().contains("CLIENT")) ? tp1Uuid : tpUuid)
-                            .build();
-                    nepList.put(nep.key(), nep);
+                        && onepl.containsKey(new OwnedNodeEdgePointKey(tp1Uuid))) {
+                    NodeEdgePoint nep1 = new NodeEdgePointBuilder()
+                        .setTopologyUuid(this.tapiTopoUuid)
+                        .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                            (String.join("+", nodeId,TapiStringConstants. DSR))
+                                .getBytes(Charset.forName("UTF-8"))).toString()))
+                        .setNodeEdgePointUuid(tp1Uuid)
+                        .build();
+                    NodeEdgePoint nep2 = new NodeEdgePointBuilder()
+                        .setTopologyUuid(this.tapiTopoUuid)
+                        .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                            (String.join("+", nodeId,TapiStringConstants. DSR))
+                                .getBytes(Charset.forName("UTF-8"))).toString()))
+                        .setNodeEdgePointUuid(tpUuid)
+                        .build();
+                    nepList.put(nep1.key(), nep1);
+                    nepList.put(nep2.key(), nep2);
                 }
             }
             // Empty random creation of mandatory fields for avoiding errors....
@@ -1075,7 +1067,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         for (SupportedInterfaceCapability sic : supIfMap.values()) {
             switch (lpn.getName()) {
                 case "DSR":
-                case "ODU":
                     switch (sic.getIfCapType().getSimpleName()) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
@@ -1110,9 +1101,34 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             break;
                     }
                     break;
+                case "ODU":
+                    switch (sic.getIfCapType().getSimpleName()) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqList.add(ODUTYPEODU0.class);
+                            break;
+                        case "If10GEODU2e":
+                            sclpqList.add(ODUTYPEODU2E.class);
+                            break;
+                        case "If10GEODU2":
+                        case "If10GE":
+                            sclpqList.add(ODUTYPEODU2.class);
+                            break;
+                        case "If100GEODU4":
+                        case "If100GE":
+                        case "IfOCHOTU4ODU4":
+                        case "IfOCH":
+                            sclpqList.add(ODUTYPEODU4.class);
+                            break;
+                        default:
+                            LOG.error("IfCapability type not managed");
+                            break;
+                    }
+                    break;
                 case "PHOTONIC_MEDIA":
                     if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
                         sclpqList.add(PHOTONICLAYERQUALIFIEROTSi.class);
                         sclpqList.add(PHOTONICLAYERQUALIFIEROMS.class);
                     }
@@ -1157,8 +1173,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         LOG.info("Creating tapi node in TAPI topology context");
         InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
             .build();
 
@@ -1180,11 +1195,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         LOG.info("Creating tapi node in TAPI topology context");
         InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-                .child(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-                .build();
+            .augmentation(Context1.class).child(TopologyContext.class)
+            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+            .build();
 
         Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build();
 
@@ -1260,9 +1273,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private void updateConnectivityServicesState(Uuid sipUuid, String nodeId) {
         // TODO: check if this IID is correct
         InstanceIdentifier<ConnectivityContext> connectivitycontextIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
-                .child(ConnectivityContext.class)
-                .build();
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+            .child(ConnectivityContext.class)
+            .build();
         ConnectivityContext connContext = null;
         try {
             Optional<ConnectivityContext> optConnContext =

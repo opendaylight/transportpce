@@ -337,7 +337,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("eNodeEdgePoint_N"))))
             .count();
-        assertEquals("SPDR-SA1-XPDR1+DSR (mux) should have a single external network nep", 1, enb3);
+        assertEquals("SPDR-SA1-XPDR1+DSR (mux) should have 4 external network nep", 4, enb3);
         long nb4 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
             .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2+DSR"))
