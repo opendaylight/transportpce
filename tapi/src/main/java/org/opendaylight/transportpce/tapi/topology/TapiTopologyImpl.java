@@ -28,7 +28,9 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
@@ -117,11 +119,14 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     private final DataBroker dataBroker;
     private final TapiContext tapiContext;
     private final TopologyUtils topologyUtils;
+    private final TapiLink tapiLink;
 
-    public TapiTopologyImpl(DataBroker dataBroker, TapiContext tapiContext, TopologyUtils topologyUtils) {
+    public TapiTopologyImpl(DataBroker dataBroker, TapiContext tapiContext, TopologyUtils topologyUtils,
+                            TapiLink tapiLink) {
         this.dataBroker = dataBroker;
         this.tapiContext = tapiContext;
         this.topologyUtils = topologyUtils;
+        this.tapiLink = tapiLink;
     }
 
     @Override
@@ -147,9 +152,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         // TODO -> Add check for Full T0 Multilayer
-        if (!TopologyUtils.T0_MULTILAYER.equals(input.getTopologyIdOrName())
-            && !TopologyUtils.TPDR_100G.equals(input.getTopologyIdOrName())) {
-            if (TopologyUtils.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
+        if (!TapiStringConstants.T0_MULTILAYER.equals(input.getTopologyIdOrName())
+            && !TapiStringConstants.TPDR_100G.equals(input.getTopologyIdOrName())) {
+            if (TapiStringConstants.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
                 Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName()
                     .getBytes(Charset.forName("UTF-8"))).toString());
                 Context context = this.tapiContext.getTapiContext();
@@ -175,7 +180,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         try {
             LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyIdOrName());
             Topology topology = createAbstractedOtnTopology();
-            if (TopologyUtils.TPDR_100G.equals(input.getTopologyIdOrName())) {
+            if (TapiStringConstants.TPDR_100G.equals(input.getTopologyIdOrName())) {
                 topology = createAbstracted100GTpdrTopology(topology);
             }
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().setTopology(topology).build())
@@ -198,9 +203,10 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))).collect(Collectors.toList());
             nep100GTpdrList.addAll(nepList);
         }
-        Name topoName = new NameBuilder().setValue(TopologyUtils.TPDR_100G).setValueName("TAPI Topology Name").build();
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.TPDR_100G.getBytes(Charset.forName("UTF-8")))
-            .toString());
+        Name topoName = new NameBuilder().setValue(TapiStringConstants.TPDR_100G)
+            .setValueName("TAPI Topology Name").build();
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
+            TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8"))).toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node =
             createTapiNode(nep100GTpdrList, topoUuid);
         return new TopologyBuilder()
@@ -269,9 +275,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             tapiNodeList = new HashMap<>();
         Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
             tapiLinkList = new HashMap<>();
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-            .toString());
-        ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topoUuid);
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
+            .getBytes(Charset.forName("UTF-8"))).toString());
+        ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topoUuid, this.tapiLink);
         Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
         while (it.hasNext()) {
             String nodeId = it.next().getKey();
@@ -281,7 +287,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         }
         if (openroadmTopo.nonnullNode().values().stream().filter(nt ->
                 nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
-                .getNodeType().equals(OpenroadmNodeType.SRG)).count() > 0) {
+                    .getNodeType().equals(OpenroadmNodeType.SRG)).count() > 0) {
             tapiFactory.convertRoadmInfrastructure();
             tapiNodeList.putAll(tapiFactory.getTapiNodes());
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
@@ -295,7 +301,10 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             tapiFactory.convertLinks(otnLinkMap);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
         }
-        Name name = new NameBuilder().setValue(TopologyUtils.T0_MULTILAYER).setValueName("TAPI Topology Name").build();
+        Name name = new NameBuilder()
+            .setValue(TapiStringConstants.T0_MULTILAYER)
+            .setValueName("TAPI Topology Name")
+            .build();
         return new TopologyBuilder()
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
