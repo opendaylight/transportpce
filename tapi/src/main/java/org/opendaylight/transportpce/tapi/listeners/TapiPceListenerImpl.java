@@ -23,7 +23,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
-import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.ServicePathRpcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescription;
@@ -72,18 +72,6 @@ import org.slf4j.LoggerFactory;
 
 public class TapiPceListenerImpl implements TransportpcePceListener {
 
-    private static final String DSR = "DSR";
-    private static final String ODU = "ODU";
-    private static final String E_ODU = "eODU";
-    private static final String I_ODU = "iODU";
-    private static final String OTSI = "OTSi";
-    private static final String E_OTSI = "eOTSi";
-    private static final String I_OTSI = "iOTSi";
-    private static final String PHTNC_MEDIA = "PHOTONIC_MEDIA";
-    private static final String MC = "MEDIA_CHANNEL";
-    private static final String OTSI_MC = "OTSi_MEDIA_CHANNEL";
-    private static final String TP = "TerminationPoint";
-    private static final String NODE = "Node";
     private static final Logger LOG = LoggerFactory.getLogger(TapiPceListenerImpl.class);
 
     private ServicePathRpcResult servicePathRpcResult;
@@ -181,7 +169,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 .sorted(Comparator.comparing(AToZ::getId)).collect(Collectors.toList())) {
             resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
             switch (resourceType) {
-                case TP:
+                case TapiStringConstants.TP:
                     TerminationPoint tp = (TerminationPoint) elem.getResource().getResource();
                     String tpID = tp.getTpId();
                     String tpNode;
@@ -212,7 +200,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                         }
                     }
                     break;
-                case NODE:
+                case TapiStringConstants.NODE:
                     Node node = (Node) elem.getResource().getResource();
                     String nodeId = node.getNodeId();
                     if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
@@ -361,8 +349,9 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
             String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
 
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrClient, DSR, DSR, LayerProtocolName.DSR);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrClient, DSR, DSR, netCep1);
+            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR,
+                LayerProtocolName.DSR);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR, netCep1);
 
             cepMap.put(netCep1.key(), netCep1);
         }
@@ -373,7 +362,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         String spcXpdr2 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
             .get(xpdrNodelist.size() - 1))).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, DSR, LayerProtocolName.DSR);
+            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.DSR,
+            LayerProtocolName.DSR);
         this.connectionFullMap.put(connection.key(), connection);
 
         // ODU top connection that will be added to the service object
@@ -394,18 +384,22 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
             String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
 
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, E_ODU, DSR, LayerProtocolName.ODU);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, E_ODU, DSR, netCep1);
-            ConnectionEndPoint netCep2 = createCepXpdr(spcXpdrNetwork, I_ODU, DSR, LayerProtocolName.ODU);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, I_ODU, DSR, netCep2);
+            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.E_ODU,
+                TapiStringConstants.DSR, LayerProtocolName.ODU);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.E_ODU, TapiStringConstants.DSR,
+                netCep1);
+            ConnectionEndPoint netCep2 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.I_ODU,
+                TapiStringConstants.DSR, LayerProtocolName.ODU);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.I_ODU,
+                TapiStringConstants.DSR, netCep2);
 
             cepMap.put(netCep1.key(), netCep1);
             cepMap.put(netCep2.key(), netCep2);
 
             // Create x connection between I_ODU and E_ODU within xpdr
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                connection = createXCBetweenCeps(netCep1, netCep2, spcXpdrNetwork, spcXpdrNetwork, ODU,
-                LayerProtocolName.ODU);
+                connection = createXCBetweenCeps(netCep1, netCep2, spcXpdrNetwork, spcXpdrNetwork,
+                TapiStringConstants.ODU, LayerProtocolName.ODU);
             this.connectionFullMap.put(connection.key(), connection);
 
             // Create X connection that will be added to the service object
@@ -419,7 +413,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
             .get(xpdrNodelist.size() - 1))).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, E_ODU, LayerProtocolName.ODU);
+            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.E_ODU,
+                LayerProtocolName.ODU);
         this.connectionFullMap.put(connection.key(), connection);
 
         // ODU top connection that will be added to the service object
@@ -443,21 +438,26 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             // TODO photonic media model should be updated to have the corresponding CEPs. I will just create
             //  3 different MC CEPs giving different IDs to show that they are different
             // Create 3 CEPs for each xpdr otsi node and the corresponding cross connection matchin the NEPs
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, PHTNC_MEDIA, OTSI,
-                LayerProtocolName.PHOTONICMEDIA);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, PHTNC_MEDIA, OTSI, netCep1);
-            ConnectionEndPoint netCep2 = createCepXpdr(spcXpdrNetwork, E_OTSI, OTSI, LayerProtocolName.PHOTONICMEDIA);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, E_OTSI, OTSI, netCep2);
-            ConnectionEndPoint netCep3 = createCepXpdr(spcXpdrNetwork, I_OTSI, OTSI, LayerProtocolName.PHOTONICMEDIA);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, I_OTSI, OTSI, netCep3);
+            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA,
+                TapiStringConstants.OTSI, LayerProtocolName.PHOTONICMEDIA);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.OTSI,
+                netCep1);
+            ConnectionEndPoint netCep2 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.E_OTSI,
+                TapiStringConstants.OTSI, LayerProtocolName.PHOTONICMEDIA);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.E_OTSI, TapiStringConstants.OTSI,
+                netCep2);
+            ConnectionEndPoint netCep3 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.I_OTSI,
+                TapiStringConstants.OTSI, LayerProtocolName.PHOTONICMEDIA);
+            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.I_OTSI, TapiStringConstants.OTSI,
+                netCep3);
             cepMap.put(netCep1.key(), netCep1);
             cepMap.put(netCep2.key(), netCep2);
             cepMap.put(netCep3.key(), netCep3);
 
             // Create x connection between I_OTSi and E_OTSi within xpdr
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                connection = createXCBetweenCeps(netCep2, netCep3, spcXpdrNetwork, spcXpdrNetwork, OTSI,
-                LayerProtocolName.PHOTONICMEDIA);
+                connection = createXCBetweenCeps(netCep2, netCep3, spcXpdrNetwork, spcXpdrNetwork,
+                TapiStringConstants.OTSI, LayerProtocolName.PHOTONICMEDIA);
             this.connectionFullMap.put(connection.key(), connection);
 
             // Create X connection that will be added to the service object
@@ -470,7 +470,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
             .get(xpdrNodelist.size() - 1))).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, I_OTSI, LayerProtocolName.PHOTONICMEDIA);
+            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_OTSI,
+            LayerProtocolName.PHOTONICMEDIA);
         this.connectionFullMap.put(connection.key(), connection);
 
         // OTSi top connection that will be added to the service object
@@ -500,12 +501,12 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             // Create 3 CEPs for each AD and DEG and the corresponding cross connections, matching the NEPs
             // created in the topology creation
             // add CEPs to the topology to the corresponding ONEP
-            ConnectionEndPoint adCep1 = createCepRoadm(spcRdmAD, PHTNC_MEDIA);
-            putRdmCepInTopologyContext(roadm, spcRdmAD, PHTNC_MEDIA, adCep1);
-            ConnectionEndPoint adCep2 = createCepRoadm(spcRdmAD, MC);
-            putRdmCepInTopologyContext(roadm, spcRdmAD, MC, adCep2);
-            ConnectionEndPoint adCep3 = createCepRoadm(spcRdmAD, OTSI_MC);
-            putRdmCepInTopologyContext(roadm, spcRdmAD, OTSI_MC, adCep3);
+            ConnectionEndPoint adCep1 = createCepRoadm(spcRdmAD, TapiStringConstants.PHTNC_MEDIA);
+            putRdmCepInTopologyContext(roadm, spcRdmAD, TapiStringConstants.PHTNC_MEDIA, adCep1);
+            ConnectionEndPoint adCep2 = createCepRoadm(spcRdmAD, TapiStringConstants.MC);
+            putRdmCepInTopologyContext(roadm, spcRdmAD, TapiStringConstants.MC, adCep2);
+            ConnectionEndPoint adCep3 = createCepRoadm(spcRdmAD, TapiStringConstants.OTSI_MC);
+            putRdmCepInTopologyContext(roadm, spcRdmAD, TapiStringConstants.OTSI_MC, adCep3);
             cepMap.put(adCep1.key(), adCep1);
             cepMap.put(adCep2.key(), adCep2);
             cepMap.put(adCep3.key(), adCep3);
@@ -513,12 +514,12 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             String spcRdmDEG = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().get();
             LOG.info("Degree port of ROADm {} = {}", roadm, spcRdmDEG);
 
-            ConnectionEndPoint degCep1 = createCepRoadm(spcRdmDEG, PHTNC_MEDIA);
-            putRdmCepInTopologyContext(roadm, spcRdmDEG, PHTNC_MEDIA, degCep1);
-            ConnectionEndPoint degCep2 = createCepRoadm(spcRdmDEG, MC);
-            putRdmCepInTopologyContext(roadm, spcRdmDEG, MC, degCep2);
-            ConnectionEndPoint degCep3 = createCepRoadm(spcRdmDEG, OTSI_MC);
-            putRdmCepInTopologyContext(roadm, spcRdmDEG, OTSI_MC, degCep3);
+            ConnectionEndPoint degCep1 = createCepRoadm(spcRdmDEG, TapiStringConstants.PHTNC_MEDIA);
+            putRdmCepInTopologyContext(roadm, spcRdmDEG, TapiStringConstants.PHTNC_MEDIA, degCep1);
+            ConnectionEndPoint degCep2 = createCepRoadm(spcRdmDEG, TapiStringConstants.MC);
+            putRdmCepInTopologyContext(roadm, spcRdmDEG, TapiStringConstants.MC, degCep2);
+            ConnectionEndPoint degCep3 = createCepRoadm(spcRdmDEG, TapiStringConstants.OTSI_MC);
+            putRdmCepInTopologyContext(roadm, spcRdmDEG, TapiStringConstants.OTSI_MC, degCep3);
             cepMap.put(degCep1.key(), degCep1);
             cepMap.put(degCep2.key(), degCep2);
             cepMap.put(degCep3.key(), degCep3);
@@ -526,11 +527,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             LOG.info("Going to create cross connections for ROADM {}", roadm);
             // Create X connections between MC and OTSi_MC for full map
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                connection1 = createXCBetweenCeps(adCep2, degCep2, spcRdmAD, spcRdmDEG, MC,
+                connection1 = createXCBetweenCeps(adCep2, degCep2, spcRdmAD, spcRdmDEG, TapiStringConstants.MC,
                 LayerProtocolName.PHOTONICMEDIA);
             LOG.info("Cross connection 1 created = {}", connection1.toString());
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                connection2 = createXCBetweenCeps(adCep3, degCep3, spcRdmAD, spcRdmDEG, OTSI_MC,
+                connection2 = createXCBetweenCeps(adCep3, degCep3, spcRdmAD, spcRdmDEG, TapiStringConstants.OTSI_MC,
                 LayerProtocolName.PHOTONICMEDIA);
             LOG.info("Cross connection 2 created = {}", connection2.toString());
             this.connectionFullMap.put(connection1.key(), connection1);
@@ -558,7 +559,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
 
             // Create top connections between MC for full map
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, MC, LayerProtocolName.PHOTONICMEDIA);
+                connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.MC,
+                LayerProtocolName.PHOTONICMEDIA);
             this.connectionFullMap.put(connection.key(), connection);
             LOG.info("Top connection created = {}", connection.toString());
 
@@ -572,7 +574,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         String spcRdmAD1 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm1)).findFirst().get();
         String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().get();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-            connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, OTSI_MC,
+            connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.OTSI_MC,
             LayerProtocolName.PHOTONICMEDIA);
         this.connectionFullMap.put(connection.key(), connection);
         LOG.info("Top connection created = {}", connection.toString());
@@ -717,7 +719,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+",id.split("\\+")[0],
                 qualifier)).getBytes(Charset.forName("UTF-8")))
                 .toString()))
-            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
                 .getBytes(Charset.forName("UTF-8"))).toString()))
             .build();
         // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
@@ -750,7 +752,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+",id.split("\\+")[0],
                 nodeLayer)).getBytes(Charset.forName("UTF-8")))
                 .toString()))
-            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
                 .getBytes(Charset.forName("UTF-8"))).toString()))
             .build();
         // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
@@ -771,11 +773,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
 
     private void putRdmCepInTopologyContext(String node, String spcRdmAD, String qual, ConnectionEndPoint cep) {
         LOG.info("NEP id before Merge = {}", String.join("+", node, qual, spcRdmAD.split("\\+")[1]));
-        LOG.info("Node of NEP id before Merge = {}", String.join("+", node, PHTNC_MEDIA));
+        LOG.info("Node of NEP id before Merge = {}", String.join("+", node, TapiStringConstants.PHTNC_MEDIA));
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", node, PHTNC_MEDIA)
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", node, TapiStringConstants.PHTNC_MEDIA)
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", node, qual, spcRdmAD.split("\\+")[1])
             .getBytes(Charset.forName("UTF-8"))).toString());
@@ -785,7 +787,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
     private void putXpdrCepInTopologyContext(String node, String spcXpdrNet, String qual, String nodeLayer,
                                              ConnectionEndPoint cep) {
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", node, nodeLayer)
             .getBytes(Charset.forName("UTF-8"))).toString());
