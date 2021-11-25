@@ -699,27 +699,27 @@ public class ConvertORTopoToTapiFullTopo {
                 .build();
 
             OwnedNodeEdgePoint onep = createNep(oorNetworkPortList.get(i), Map.of(onedName.key(), onedName),
-                LayerProtocolName.ODU, LayerProtocolName.DSR, false, String.join("+", this.ietfNodeId,
+                LayerProtocolName.ODU, LayerProtocolName.DSR, true, String.join("+", this.ietfNodeId,
                     TapiStringConstants.I_ODU));
             onepl.put(onep.key(), onep);
         }
         // network nep creation on E_ODU node
-        for (int i = 0; i < oorNetworkPortList.size(); i++) {
+        for (int i = 0; i < oorClientPortList.size(); i++) {
             LOG.info("NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU,
-                oorNetworkPortList.get(i).getTpId().getValue()));
+                oorClientPortList.get(i).getTpId().getValue()));
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU,
-                    oorNetworkPortList.get(i).getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString());
+                    oorClientPortList.get(i).getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString());
             this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU,
-                oorNetworkPortList.get(i).getTpId().getValue()), nepUuid);
+                oorClientPortList.get(i).getTpId().getValue()), nepUuid);
             Name onedName = new NameBuilder()
                 .setValueName("eNodeEdgePoint_N")
                 .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU,
-                    oorNetworkPortList.get(i).getTpId().getValue()))
+                    oorClientPortList.get(i).getTpId().getValue()))
                 .build();
 
-            OwnedNodeEdgePoint onep = createNep(oorNetworkPortList.get(i), Map.of(onedName.key(), onedName),
-                LayerProtocolName.ODU, LayerProtocolName.DSR, true, String.join("+", this.ietfNodeId,
+            OwnedNodeEdgePoint onep = createNep(oorClientPortList.get(i), Map.of(onedName.key(), onedName),
+                LayerProtocolName.ODU, LayerProtocolName.DSR, false, String.join("+", this.ietfNodeId,
                     TapiStringConstants.E_ODU));
             onepl.put(onep.key(), onep);
         }
@@ -738,20 +738,28 @@ public class ConvertORTopoToTapiFullTopo {
                     TapiStringConstants.E_ODU, tp.getValue()));
                 if (this.uuidMap.containsKey(String.join("+", this.ietfNodeId,
                             TapiStringConstants.E_ODU, tp.getValue()))
-                        || this.uuidMap.containsKey(String.join("+", this.ietfNodeId,
+                        && this.uuidMap.containsKey(String.join("+", this.ietfNodeId,
                             TapiStringConstants.DSR, tp.getValue()))) {
                     org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
-                        nep = new org.opendaylight.yang.gen.v1.urn
+                        nep1 = new org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
                         .setTopologyUuid(tapiTopoUuid)
                         .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId,
                             TapiStringConstants.DSR)))
-                        .setNodeEdgePointUuid((tp.getValue().contains("CLIENT")) ? this.uuidMap.get(String.join(
-                            "+", this.ietfNodeId, TapiStringConstants.DSR, tp.getValue()))
-                            : this.uuidMap.get(String.join(
+                        .setNodeEdgePointUuid(this.uuidMap.get(String.join(
+                            "+", this.ietfNodeId, TapiStringConstants.DSR, tp.getValue())))
+                        .build();
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
+                        nep2 = new org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
+                        .setTopologyUuid(tapiTopoUuid)
+                        .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId,
+                            TapiStringConstants.DSR)))
+                        .setNodeEdgePointUuid(this.uuidMap.get(String.join(
                             "+", this.ietfNodeId, TapiStringConstants.E_ODU, tp.getValue())))
                         .build();
-                    nepList.put(nep.key(), nep);
+                    nepList.put(nep1.key(), nep1);
+                    nepList.put(nep2.key(), nep2);
                 }
             }
             // Empty random creation of mandatory fields for avoiding errors....
@@ -807,7 +815,7 @@ public class ConvertORTopoToTapiFullTopo {
             operState = this.tapiLink.setTapiOperationalState(oorTp.augmentation(TerminationPoint1.class)
                 .getOperationalState().getName());
         }
-        onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedLayerProtocolQualifier(oorTp, nodeProtocol))
+        onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedLayerProtocolQualifier(oorTp, nepProtocol))
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
             .setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState)
@@ -1009,7 +1017,6 @@ public class ConvertORTopoToTapiFullTopo {
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
-                case "ODU":
                     switch (sic.getIfCapType().getSimpleName()) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
@@ -1044,9 +1051,34 @@ public class ConvertORTopoToTapiFullTopo {
                             break;
                     }
                     break;
+                case "ODU":
+                    switch (sic.getIfCapType().getSimpleName()) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqSet.add(ODUTYPEODU0.class);
+                            break;
+                        case "If10GEODU2e":
+                            sclpqSet.add(ODUTYPEODU2E.class);
+                            break;
+                        case "If10GEODU2":
+                        case "If10GE":
+                            sclpqSet.add(ODUTYPEODU2.class);
+                            break;
+                        case "If100GEODU4":
+                        case "If100GE":
+                        case "IfOCHOTU4ODU4":
+                        case "IfOCH":
+                            sclpqSet.add(ODUTYPEODU4.class);
+                            break;
+                        default:
+                            LOG.error("IfCapability type not managed");
+                            break;
+                    }
+                    break;
                 case "PHOTONIC_MEDIA":
                     if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                        || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
+                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
                         sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
                         sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
                     }
