@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65297528_71273856",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-25T15:39:45Z",
+      "side": 1,
+      "message": "please use the common class to centralize log messages in the 3 versions. \u003d\u003e vote -1",
+      "revId": "feea3d98071649fc533894aeaf90b2252ad9073f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
