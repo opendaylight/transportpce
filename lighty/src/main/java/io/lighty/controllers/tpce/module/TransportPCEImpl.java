@@ -88,6 +88,7 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
@@ -209,16 +210,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
         LOG.info("Creating tapi beans ...");
         R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
-            deviceTransactionManager);
+            deviceTransactionManager, tapiLink);
         TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
                 .getBindingDataBroker());
         TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
         TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(lightyServices
                 .getBindingDataBroker());
         TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
-                networkTransaction);
+                networkTransaction, tapiLink);
         TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
-            tapilinkDiscoveryImpl, networkTransaction);
+            tapilinkDiscoveryImpl, networkTransaction, tapiLink);
         TapiNetconfTopologyListener tapiNetConfTopologyListener =
                 new TapiNetconfTopologyListener(tapiNetworkModelService);
         TapiPortMappingListener tapiPortMappingListener =

@@ -26,7 +26,9 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
@@ -40,6 +42,8 @@ public class TapiTopologyImplExceptionTest {
     TapiContext tapiContext;
     @Mock
     TopologyUtils topologyUtils;
+    @Mock
+    TapiLink tapiLink;
 
     @Test
     public void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
@@ -57,9 +61,11 @@ public class TapiTopologyImplExceptionTest {
         };
         when(networkTransactionService.commit()).then(answer);
         tapiContext = new TapiContext(networkTransactionService);
+        tapiLink = new TapiLink(networkTransactionService);
 
-        GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(dataBroker, tapiContext, topologyUtils);
+        GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
+            TapiStringConstants.T0_MULTILAYER);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(dataBroker, tapiContext, topologyUtils, tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         if (rpcResult.isSuccessful()) {
