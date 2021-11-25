@@ -32,6 +32,11 @@ import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
@@ -108,6 +113,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     private static Map<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
         .networks.network.Link> ortopoLinks;
     private static Uuid topologyUuid;
+    private static NetworkTransactionService networkTransactionService;
+    private static TapiLink tapiLink;
     private static DataBroker dataBroker = getDataBroker();
 
     @BeforeClass
@@ -188,8 +195,11 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .read(LogicalDatastoreType.CONFIGURATION, ortopo1IID);
         openroadmNet = ortopoFuture.get().get();
 
-        topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER.getBytes(
+        topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
+        networkTransactionService = new NetworkTransactionImpl(
+            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        tapiLink = new TapiLink(networkTransactionService);
         LOG.info("TEST SETUP READY");
     }
 
@@ -202,7 +212,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 networkPortList.add(tp.getTpId().getValue());
             }
         }
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(tpdr, networkPortList);
 
         Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
@@ -261,7 +271,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 networkPortList.add(tp.getTpId().getValue());
             }
         }
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(tpdr, networkPortList);
 
         Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
@@ -330,7 +340,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 networkPortList.add(tp.getTpId().getValue());
             }
         }
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(tpdr, networkPortList);
 
         Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
@@ -398,7 +408,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
 
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -419,12 +429,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        assertNull("Administrative State should not be present", tapiLinks.get(0).getAdministrativeState());
+        assertNull("Administrative State should not be present", tapiLinks.get(3).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
-        assertNull("Operational State should not be present", tapiLinks.get(0).getOperationalState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
+        assertNull("Operational State should not be present", tapiLinks.get(3).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
     }
 
     @Test
@@ -436,7 +446,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
 
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -457,12 +467,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        assertNull("Administrative State should not be present", tapiLinks.get(0).getAdministrativeState());
+        assertNull("Administrative State should not be present", tapiLinks.get(3).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
-        assertNull("Operational State should not be present", tapiLinks.get(0).getOperationalState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
+        assertNull("Operational State should not be present", tapiLinks.get(3).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
     }
 
     @Test
@@ -475,7 +485,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
 
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -497,13 +507,13 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
     }
 
     @Test
@@ -516,7 +526,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             AdminStates.Maintenance, State.Degraded);
         otnLinksAlt.replace(link.key(), link);
 
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -538,13 +548,13 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
     }
 
     @Test
@@ -557,7 +567,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
 
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -579,18 +589,18 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(0).getAdministrativeState());
+            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
         assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(2).getAdministrativeState());
+            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
         assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(0).getOperationalState());
+            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
         assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(2).getOperationalState());
+            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
     }
 
     @Test
     public void convertNodeForTransponder100G() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : tpdr100G.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -623,7 +633,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeForOtnMuxponder() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -655,7 +665,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeForOtnSwitch() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortList = new ArrayList<>();
         for (TerminationPoint tp : otnSwitch.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -682,13 +692,13 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkTransitionalLink(tapiLinks.get(1), dsrNodeUuid, otsiNodeUuid,
+        checkTransitionalLink(tapiLinks.get(2), dsrNodeUuid, otsiNodeUuid,
             "SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK4", "SPDR-SA1-XPDR2+iOTSi+XPDR2-NETWORK4", "SPDR-SA1-XPDR2");
     }
 
     @Test
     public void convertOtnLink() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -723,25 +733,25 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
+            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
                 .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid link2Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"
+            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
                 .getBytes(Charset.forName("UTF-8"))).toString());
 
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> links
             = tapiFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkOtnLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
-            "ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
-        checkOtnLink(links.get(3), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
-            "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
+        checkOtnLink(links.get(3), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
+            "SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1");
+        checkOtnLink(links.get(2), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
+            "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1");
     }
 
     @Test
     public void convertNodeForRoadmWhenNoOtnMuxAttached() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFactory.convertRoadmNode(roadmA, openroadmNet);
 
         assertEquals("Node list size should be 1", 1, tapiFactory.getTapiNodes().size());
@@ -755,7 +765,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     public void convertNodeForRoadmWhenRoadmNeighborAttached() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFactory.convertRoadmNode(roadmA, openroadmNet);
         tapiFactory.convertRoadmNode(roadmC, openroadmNet);
 
@@ -786,15 +796,16 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes(("ROADM-C1+PHOTONIC_MEDIA+DEG1-TTP-TXRX")
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid linkUuid =
-            new Uuid(UUID.nameUUIDFromBytes("ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX"
-                .getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(
+                "ROADM-C1+PHOTONIC_MEDIA+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA+DEG2-TTP-TXRX"
+                    .getBytes(Charset.forName("UTF-8"))).toString());
         checkOmsLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
-            "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX");
+            "ROADM-C1+PHOTONIC_MEDIA+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA+DEG2-TTP-TXRX");
     }
 
     @Test
     public void convertNodeForRoadmWhenOtnMuxAttached() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid);
+        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortListA = new ArrayList<>();
         for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
             if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
@@ -842,10 +853,11 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes(("ROADM-A1+PHOTONIC_MEDIA+SRG1-PP2-TXRX")
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid linkUuid =
-            new Uuid(UUID.nameUUIDFromBytes("ROADM-A1-SRG1-SRG1-PP2-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1"
-                .getBytes(Charset.forName("UTF-8"))).toString());
-        checkXpdrRdmLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
-            "ROADM-A1-SRG1-SRG1-PP2-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1");
+            new Uuid(UUID.nameUUIDFromBytes(
+                "ROADM-A1+PHOTONIC_MEDIA+SRG1-PP2-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA+XPDR1-NETWORK1"
+                    .getBytes(Charset.forName("UTF-8"))).toString());
+        checkXpdrRdmLink(links.get(1), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
+            "ROADM-A1+PHOTONIC_MEDIA+SRG1-PP2-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA+XPDR1-NETWORK1");
     }
 
     private void checkDsrNode(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node,
@@ -1452,7 +1464,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     private void checkTransitionalLink(org.opendaylight.yang.gen.v1
                                            .urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link link,
                                        Uuid node1Uuid, Uuid node2Uuid, String tp1, String tp2, String ietfNodeId) {
-        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes((ietfNodeId + "--" + tp1 + "--" + tp2)
+        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes((tp1 + "to" + tp2)
             .getBytes(Charset.forName("UTF-8"))).toString());
         assertEquals("bad uuid for link between DSR node " + tp1 + " and iOTSI port " + tp2, linkUuid, link.getUuid());
         assertEquals("Available capacity unit should be GBPS",
@@ -1495,7 +1507,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             new NameKey("otn link name")).getValue());
         assertEquals("bad uuid for link", linkUuid, link.getUuid());
         assertEquals("Available capacity unit should be MBPS",
-            CapacityUnit.MBPS, link.getAvailableCapacity().getTotalSize().getUnit());
+            CapacityUnit.GBPS, link.getAvailableCapacity().getTotalSize().getUnit());
         String prefix = linkName.split("-")[0];
         if ("OTU4".equals(prefix)) {
             assertEquals("Available capacity -total size value should be 0",
