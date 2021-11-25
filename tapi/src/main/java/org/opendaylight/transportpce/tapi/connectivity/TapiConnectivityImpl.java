@@ -136,6 +136,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                     && sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
                     .findFirst().get().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
                 LOG.info("SIPs found in sipMap");
+                // TODO: differentiate between OTN service and GbE service in TAPI
                 ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
                 if (sci == null) {
                     return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
