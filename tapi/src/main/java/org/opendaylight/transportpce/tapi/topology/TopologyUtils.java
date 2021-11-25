@@ -27,6 +27,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.network.Nodes;
@@ -68,15 +70,15 @@ public final class TopologyUtils {
     private final NetworkTransactionService networkTransactionService;
     private final DataBroker dataBroker;
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
-    public static final String T0_MULTILAYER = "T0 - Multi-layer topology";
-    public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";
-    public static final String TPDR_100G = "Transponder 100GE";
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
+    private final TapiLink tapiLink;
 
-    public TopologyUtils(NetworkTransactionService networkTransactionService, DataBroker dataBroker) {
+    public TopologyUtils(NetworkTransactionService networkTransactionService, DataBroker dataBroker,
+                         TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
         this.dataBroker = dataBroker;
         this.tapiSips = new HashMap<>();
+        this.tapiLink = tapiLink;
     }
 
     public Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
@@ -101,9 +103,10 @@ public final class TopologyUtils {
     public Topology createFullOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.T0_FULL_MULTILAYER
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
-        Name name = new NameBuilder().setValue(TopologyUtils.T0_FULL_MULTILAYER).setValueName("TAPI Topology Name")
+        Name name = new NameBuilder().setValue(TapiStringConstants.T0_FULL_MULTILAYER)
+            .setValueName("TAPI Topology Name")
             .build();
         if (openroadmTopo != null) {
             List<Link> linkList = new ArrayList<>();
@@ -151,7 +154,7 @@ public final class TopologyUtils {
                 tapiNodeList = new HashMap<>();
             Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
                 tapiLinkList = new HashMap<>();
-            ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid);
+            ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid, this.tapiLink);
             Iterator<Map.Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
             while (it.hasNext()) {
                 String nodeId = it.next().getKey();
