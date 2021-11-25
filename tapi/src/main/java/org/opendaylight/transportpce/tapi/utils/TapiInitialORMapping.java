@@ -7,15 +7,19 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.Service;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
@@ -68,8 +72,20 @@ public class TapiInitialORMapping {
             LOG.info("No services in datastore. No mapping needed");
             return;
         }
+        /*
+        Map<ServicesKey, Services> orderedServices = orServices.getServices().entrySet().stream()
+            .sorted(Comparator.comparing(serv -> serv.getValue().getServiceAEnd().getServiceFormat().getName()))
+            .collect(Collectors.toMap(Map.Entry::getKey,
+                Map.Entry::getValue, (left, right) -> left, LinkedHashMap::new));
+
+         */
+        Map<ServicesKey, Services> orderedServices = new TreeMap<>(Comparator.comparing(s ->
+            orServices.getServices().get(s).getServiceAEnd().getServiceFormat().getName()).reversed());
+        orderedServices.putAll(orServices.getServices());
+        LOG.info("orderedServices = {}", orderedServices);
+        // TODO order services correctly. First OTU, then ODU and then DSR
         Map<ConnectivityServiceKey, ConnectivityService> connServMap = new HashMap<>();
-        for (Service service:orServices.getServices().values()) {
+        for (Service service:orderedServices.values()) {
             // map services
             // connections needed to be created --> looking at path description
             ConnectivityService connServ = this.connectivityUtils.mapORServiceToTapiConnectivity(service);
