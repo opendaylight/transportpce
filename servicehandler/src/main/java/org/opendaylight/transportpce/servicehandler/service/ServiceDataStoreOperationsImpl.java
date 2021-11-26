@@ -26,15 +26,15 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
@@ -142,17 +142,18 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services>
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.Services>
             getTempService(String serviceName) {
         try {
             ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> iid = InstanceIdentifier.create(TempServiceList.class).child(org.opendaylight.yang.gen.v1
-                        .http.org.openroadm.service.rev190531.temp.service.list.Services.class,
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+                        .http.org.openroadm.service.rev211210.temp.service.list.Services.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                             .ServicesKey(serviceName));
-            Future<java.util.Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
-                .temp.service.list.Services>> future =  readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
+            FluentFuture<Optional<
+                org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.Services>> future
+                = readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
             return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading service {} failed:", serviceName, e);
@@ -181,10 +182,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         LOG.debug(DELETING_SERVICE_MSG, commonId);
         try {
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> iid = InstanceIdentifier.create(TempServiceList.class).child(org.opendaylight.yang.gen.v1
-                        .http.org.openroadm.service.rev190531.temp.service.list.Services.class,
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+                        .http.org.openroadm.service.rev211210.temp.service.list.Services.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                             .ServicesKey(commonId));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
@@ -208,8 +209,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
                     .child(Services.class, new ServicesKey(serviceName));
             Services services = new ServicesBuilder(readService.get())
-                .setOperationalState(convertOperState(operationalState))
-                .setAdministrativeState(convertAdminState(administrativeState))
+                .setOperationalState(operationalState)
+                .setAdministrativeState(administrativeState)
                 .build();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -224,7 +225,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public OperationResult modifyTempService(String serviceName, State operationalState,
         AdminStates administrativeState) {
         LOG.debug("Modifying '{}' Temp Service", serviceName);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
             .Services> readService = getTempService(serviceName);
         if (!readService.isPresent()) {
             LOG.warn("modifyTempService: {}", LogMessages.SERVICE_NOT_FOUND);
@@ -232,16 +233,16 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         }
         try {
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> iid = InstanceIdentifier.create(TempServiceList.class)
-                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
+                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
                                 .temp.service.list.ServicesKey(serviceName));
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services services =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.ServicesBuilder(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.Services services =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.ServicesBuilder(
                     readService.get())
-                .setOperationalState(convertOperState(operationalState))
-                .setAdministrativeState(convertAdminState(administrativeState))
+                .setOperationalState(operationalState)
+                .setAdministrativeState(administrativeState)
                 .build();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -273,12 +274,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput) {
         LOG.debug("Writing '{}' Temp Service", tempServiceCreateInput.getCommonId());
         try {
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> iid = InstanceIdentifier.create(TempServiceList.class)
-                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
+                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp
                                 .service.list.ServicesKey(tempServiceCreateInput.getCommonId()));
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services service = ModelMappingUtils.mappingServices(tempServiceCreateInput);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
@@ -446,8 +447,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         switch (choice) {
             case 0 : /* Modify. */
                 LOG.debug("Modifying '{}' Service", serviceName);
-                service.setOperationalState(convertOperState(State.InService))
-                    .setAdministrativeState(convertAdminState(AdminStates.InService));
+                service.setOperationalState(State.InService)
+                    .setAdministrativeState(AdminStates.InService);
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, service.build());
                 action = "modifyService";
                 break;
@@ -469,16 +470,16 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
         return null;
     }
-
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
-        convertAdminState(AdminStates adminState61) {
-        return org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
-            .valueOf(adminState61.name());
-    }
-
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
-        convertOperState(State operState61) {
-        return org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
-            .valueOf(operState61.name());
-    }
+//
+//    private org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
+//        convertAdminState(AdminStates adminState61) {
+//        return org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates
+//            .valueOf(adminState61.name());
+//    }
+//
+//    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
+//        convertOperState(State operState61) {
+//        return org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State
+//            .valueOf(operState61.name());
+//    }
 }

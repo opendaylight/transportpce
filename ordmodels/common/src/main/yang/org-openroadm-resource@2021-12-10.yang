@@ -1,0 +1,551 @@
+module org-openroadm-resource {
+  namespace "http://org/openroadm/resource";
+  prefix org-openroadm-resource;
+
+  import org-openroadm-interfaces {
+    prefix org-openroadm-interfaces;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2021-09-24;
+  }
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2021-12-10;
+  }
+  import org-openroadm-resource-types {
+    prefix org-openroadm-resource-types;
+    revision-date 2021-09-24;
+  }
+  import org-openroadm-common-link-types {
+    prefix org-openroadm-common-link-types;
+    revision-date 2019-11-29;
+  }
+
+  organization
+    "Open ROADM MSA";
+  contact
+    "OpenROADM.org";
+  description
+    "YANG definitions of resources.
+
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+    description
+      "Version 10.0";
+  }
+  revision 2021-05-28 {
+    description
+      "Version 9.1";
+  }
+  revision 2021-03-26 {
+    description
+      "Version 9.0";
+  }
+  revision 2020-09-25 {
+    description
+      "Version 8.0";
+  }
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+  revision 2017-07-28 {
+    description
+      "Version 2.0.1 - added revision-date to imports";
+  }
+  revision 2017-06-26 {
+    description
+      "Version 2.0";
+  }
+  revision 2016-10-14 {
+    description
+      "Version 1.2";
+  }
+
+  grouping eth-attributes {
+    leaf speed {
+      type uint32;
+      description
+        "Set speed of the interface, unit mbps.
+         This is for ETH facility. ";
+    }
+  }
+
+  grouping mc-ttp-attributes {
+    description
+      "Media channel termination point. Models bandwidth allocation in physical media. Network media channels may be provisioned in the spectrum characterized by the frequency limits.";
+    leaf min-freq {
+      type org-openroadm-common-optical-channel-types:frequency-THz;
+      config true;
+      description
+        "Minimum Frequency in THz. Granularity is hardware dependent, based on pixel resolution. eg. ITU 12.5GHz frequency slots. Range covers C+L";
+    }
+    leaf max-freq {
+      type org-openroadm-common-optical-channel-types:frequency-THz;
+      config true;
+      description
+        "Maximum Frequency in THz. Granularity is hardware dependent, based on pixel resolution. eg. ITU 12.5GHz frequency slots. Range covers C+L";
+    }
+  }
+
+  grouping nmc-ctp-attributes {
+    description
+      "Network Media Channel attributes";
+    leaf frequency {
+      type org-openroadm-common-optical-channel-types:frequency-THz;
+      config true;
+      description
+        "Center Frequency in THz.  This is not constrained by mc-capabilities.  It must fit (when combined with width) inside any containing media channel.";
+    }
+    leaf width {
+      type org-openroadm-common-optical-channel-types:frequency-GHz;
+      config true;
+      description
+        "Frequency width in GHz.  This is not constrained by mc-capabilities.  It must fit (when combined with frequency) inside any containing media channel.";
+    }
+  }
+
+  grouping common-och-otsi-attributes {
+    description
+      "Optical Channel and otsi common attributes";
+    leaf frequency {
+      type org-openroadm-common-optical-channel-types:frequency-THz;
+      description
+        "Center Frequency in THz.";
+    }
+    leaf width {
+      type org-openroadm-common-optical-channel-types:frequency-GHz;
+      description
+        "Frequency width in GHz.";
+    }
+    leaf optical-operational-mode {
+      type string;
+      description
+        "The path was calculated according to the supported operational modes.
+         Selected mode can be either a specific or an openROADM operational-mode";
+    }
+  }
+  
+  grouping path-computation-outputs {
+	description
+	  "Parameters resulting of path computation";
+    leaf rx-estimated-osnr {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "estimated OSNR for the path";
+    }
+    leaf rx-estimated-gsnr {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "estimated Generalized SNR (including non linear impairments) for the path";
+    }
+    leaf max-output-power {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "maximum output-power";
+    }
+    leaf min-output-power {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "minimum output-power";
+    }
+  }
+
+  grouping och-attributes {
+    description
+      "Optical Channel attributes";
+    leaf rate {
+      type identityref {
+        base org-openroadm-common-optical-channel-types:och-rate-identity;
+      }
+      description
+        "rate";
+    }
+    leaf modulation-format {
+      type org-openroadm-common-optical-channel-types:modulation-format;
+      description
+        "Modulation format";
+    }
+    uses common-och-otsi-attributes;
+  }
+
+  grouping odu-attributes {
+    description
+      "ODU attributes";
+    leaf rate {
+      type identityref {
+        base org-openroadm-otn-common-types:odu-rate-identity;
+      }
+      description
+        "rate identity of the ODU. 'identityref' is used
+         to allow to extend for future higher rates";
+    }
+    leaf oducn-n-rate {
+      when "../rate = 'org-openroadm-otn-common-types:ODUCn'";
+      type uint16;
+      description
+        "ODUCn rate";
+    }
+    leaf oduflex-cbr-service {
+      type identityref {
+        base org-openroadm-otn-common-types:ODUflex-cbr-identity;
+      }
+      description
+        "ODUflex for CBR client signals (G.709)";
+    }
+    leaf oduflex-gfp-num-ts {
+      type uint16;
+      description
+        "For ODUflex GFP-F mapped client signals (G.709), the number of
+         tributary slot as per G.709 Table 7-8";
+    }
+    leaf oduflex-gfp-ts-bandwidth {
+      type uint16;
+      description
+        "The tributary slot minimum bit rates in the approximated value [Mbps]
+         given ODUflex (GFP) 100 ppm (G.709 Table 7-8) :
+           1249 Mbps [1 249 052.312 277 kbps] (n = 1 to 8) (ODU2.ts)
+           1254 Mbps [1 254 344.906 9646 kbps] (n = 9 to 32) ODU3.ts)
+           1301 Mbps [1 301 336.986 2867 kbps] (n = 33 to 80) (ODU4.ts)";
+    }
+    leaf oduflex-imp-s {
+      type uint16;
+      description
+        "For ODUflex IMP (Idle insertion Mapping Procedure) mapped client signals,
+         s = 2, 8, n x 5 with N >= 1 (G.709 12.2.6 & Table 7-3)";
+    }
+    leaf oduflex-flexe-n {
+      type uint16;
+      description
+        "For ODUflex for FlexE-aware client signals, n in the range of 1 to 20*254
+         (G.709 17.12)";
+    }
+    container parent-odu-allocation {
+      description
+        "parent odu allocation";
+      leaf trib-port-number {
+        type uint16 {
+          range "1 .. 80";
+        }
+        description
+          "Assigned tributary port number in parent OPU";
+      }
+      choice trib-slots-choice {
+        description
+          "trib slot selection";
+        case opu {
+          leaf-list trib-slots {
+            type uint16 {
+              range "1 .. 80";
+            }
+            min-elements 1;
+            max-elements 80;
+            description
+              "Assigned trib slots occupied in parent OPU MSI";
+          }
+        }
+        case opucn {
+          leaf-list opucn-trib-slots {
+            type org-openroadm-otn-common-types:opucn-trib-slot-def;
+            description
+              "Specify the list of OPUCn 5G tributary slots in the form of
+               TS #A.B (G.709 Figure 20-9) in the case of provisioning the low
+                order ODUk to the parent server ODUCn";
+          }
+        }
+      }
+    }
+  }
+
+  grouping otu-attributes {
+    description
+      "OTU attributes";
+    leaf rate {
+      type identityref {
+        base org-openroadm-otn-common-types:otu-rate-identity;
+      }
+      description
+        "rate identity of the OTU. 'identityref' is used
+         to allow to extend for future higher rates";
+    }
+    leaf otu4-member-id {
+      when "../rate = 'org-openroadm-otn-common-types:OTU4'";
+      type uint16;
+      description
+        "To uniquely identify each member of an OTSi group and the order of each member in the group.
+         Similar to FlexO PHY-ID in the FlexO Group (PID in G.709.1/3)";
+    }
+    leaf otucn-n-rate {
+      when "../rate = 'org-openroadm-otn-common-types:OTUCn'";
+      type uint16;
+      description
+        "Specify the N associated with OTUCn, e.g. N = 2,3,4 for 200G/300G/400G respectively";
+    }
+    leaf otucn-M-subrate {
+      when "../rate = 'org-openroadm-otn-common-types:OTUCn'";
+      type uint16;
+      description
+        "OTUCn subrate (OTUCn-M), value of M specifies the number of active
+         5 Gbit/s OPUCn tributary slots (G.709 Annex H)";
+    }
+  }
+
+  grouping otsi-attributes {
+    description
+      "Optical Channel attributes";
+    leaf otsi-rate {
+      type identityref {
+        base org-openroadm-common-optical-channel-types:otsi-rate-identity;
+      }
+      description
+        "OTSi rate";
+    }
+    leaf modulation-format {
+      type org-openroadm-common-optical-channel-types:modulation-format;
+      description
+        "Modulation format";
+    }
+    uses common-och-otsi-attributes;
+  }
+
+  grouping otsi-group-attributes {
+    description
+      "Optical Channel attributes";
+    leaf group-rate {
+      type identityref {
+        base org-openroadm-common-optical-channel-types:otsi-rate-identity;
+      }
+      description
+        "Supported group rate";
+    }
+    leaf group-id {
+      type uint32;
+      description
+        "Mandatory for FlexO B100G.  Not required for Non-FlexO B100G.";
+    }
+  }
+
+  grouping resource-reporting {
+    leaf type {
+      type identityref {
+        base org-openroadm-interfaces:interface-type;
+      }
+      mandatory true;
+      description
+        "The type of the interface.";
+    }
+    container ethernet {
+      when "../type = 'ethernetCsmacd'";
+      description
+        "Ethernet Interfaces";
+      uses eth-attributes;
+    }
+    container mc-ttp {
+      when "../type = 'mediaChannelTrailTerminationPoint'";
+      description
+        "Media Channel Trail Termination Point (MC-TTP)";
+      uses mc-ttp-attributes;
+    }
+    container nmc-ctp {
+      when "../type = 'networkMediaChannelConnectionTerminationPoint'";
+      description
+        "Network Media Channel Connection Termination Point (NMC-CTP)";
+      uses nmc-ctp-attributes;
+    }
+    container och {
+      when "../type = 'opticalChannel'";
+      description
+        "Optical Channel (OCh):
+         Models the optical channel interfaces for an Optical White Box.";
+      uses och-attributes;
+    }
+    container odu {
+      when "../type = 'otnOdu'";
+      presence "Attribute Nodes for Optical Data Unit (ODU)";
+      description
+        "Optical Channel Data Unit (ODU)";
+      uses odu-attributes;
+    }
+    container otu {
+      when "../type = 'otnOtu'";
+      description
+        "Optical Channel Transport Unit (OTU)";
+      uses otu-attributes;
+    }
+    container otsi {
+      when "../type = 'otsi'";
+      description
+        "OTSI";
+      uses otsi-attributes;
+    }
+    container otsi-group {
+      when "../type = 'otsi-group'";
+      description
+        "OTSI-Group";
+      uses otsi-group-attributes;
+    }
+  }
+
+  grouping resource {
+    description
+      "This resource identifier is intended to provide a generic identifier
+       for any resource that can be used without specific knowledge of
+       the resource.";
+    container device {
+      description
+        "Device of the resource, used only when the system using this
+         model report on more than one device. ";
+      uses org-openroadm-resource-types:device-id;
+    }
+    container resource {
+      choice resource {
+        case circuit-pack {
+          uses org-openroadm-resource-types:circuit-pack-name;
+        }
+        case port {
+          container port {
+            uses org-openroadm-resource-types:port-name;
+          }
+        }
+        case connection {
+          uses org-openroadm-resource-types:connection-name {
+            refine "connection-name" {
+              mandatory true;
+            }
+          }
+        }
+        case physical-link {
+          uses org-openroadm-resource-types:physical-link-name;
+        }
+        case internal-link {
+          uses org-openroadm-resource-types:internal-link-name;
+        }
+        case shelf {
+          uses org-openroadm-resource-types:shelf-name;
+        }
+        case srg {
+          uses org-openroadm-resource-types:srg-number {
+            refine "srg-number" {
+              mandatory true;
+            }
+          }
+        }
+        case degree {
+          uses org-openroadm-resource-types:degree-number {
+            refine "degree-number" {
+              mandatory true;
+            }
+          }
+        }
+        case service {
+          uses org-openroadm-resource-types:service-name;
+        }
+        case interface {
+          uses org-openroadm-resource-types:interface-name;
+        }
+        case odu-sncp-pg {
+          uses org-openroadm-resource-types:odu-sncp-pg-name;
+        }
+        case client-sncp-pg {
+          uses org-openroadm-resource-types:client-sncp-pg-name;
+        }
+        case other {
+          uses org-openroadm-resource-types:other-resource-id;
+        }
+        case device {
+          uses org-openroadm-resource-types:device-id {
+            refine "node-id" {
+              mandatory true;
+            }
+          }
+        }
+        case line-amplifier {
+          uses org-openroadm-resource-types:amp-number;
+        }
+        case xponder {
+          uses org-openroadm-resource-types:xpdr-number;
+        }
+        case versioned-service {
+          uses org-openroadm-resource-types:versioned-service-name;
+        }
+        case temp-service {
+          uses org-openroadm-resource-types:temp-service-name;
+        }
+      }
+    }
+    container resourceType {
+      uses org-openroadm-resource-types:resource-type;
+    }
+  }
+}

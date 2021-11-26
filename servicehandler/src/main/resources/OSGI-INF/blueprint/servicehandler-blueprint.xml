@@ -85,7 +85,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </bean>
 
     <service ref="serviceHandlerImpl"
-        interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService"/>
+        interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.OrgOpenroadmServiceService"/>
 
     <service ref="serviceDatastoreOperation"
              interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations"/>
