@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1e84de_12c1cfec",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "what about ternary operators here ?",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b62b93ac_dd53cf06",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "I think some LF here are not needed or misplaced from a readability standpoint",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "434cc0d1_b9c160a1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "what about ternary operators here ?",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "747862bc_a7853df8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "LF misplaced here too.",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a635f5eb_5a0d367f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "if it can be set on the same line, I think one setter per line would be more readable",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "988e82f3_4187f5f1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b583cc1_d0790970",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "ternary operator would be more indicated here at least for style coherency with lines 211-212",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "629983e2_9a2537fa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T14:22:51Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
