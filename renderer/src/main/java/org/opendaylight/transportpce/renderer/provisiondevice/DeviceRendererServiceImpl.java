@@ -63,11 +63,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev210618.renderer.rollback.output.FailedToRollbackKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210426.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev210924.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210618.node.interfaces.NodeInterface;

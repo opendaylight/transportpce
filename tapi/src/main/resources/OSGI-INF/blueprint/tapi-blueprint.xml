@@ -26,7 +26,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
           interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
     <reference id="serviceHandlerService"
-          interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService" />
+          interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.OrgOpenroadmServiceService" />
 
     <reference id="networkTransactionImpl"
           interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
