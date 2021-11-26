@@ -7,23 +7,24 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
-import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.GeneralBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.DiversityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.ExcludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraintsBuilder;
+import java.util.HashMap;
+import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.DiversityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.ExcludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Latency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.LatencyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraintsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,103 +52,96 @@ public final class DowngradeConstraints {
     public static SoftConstraints updateSoftConstraints(HardConstraints hardConstraints,
             SoftConstraints softConstraints) {
         SoftConstraintsBuilder softConstraintsBuilder = new SoftConstraintsBuilder(softConstraints);
-        List<String> hardCustomerCode = hardConstraints.getCustomerCode();
-        if (!hardCustomerCode.isEmpty()) {
-            softConstraintsBuilder.getCustomerCode().addAll(hardCustomerCode);
-        } else {
-            LOG.warn("hard constraints customer code list is empty !");
-        }
-        CoRoutingOrGeneral coRoutingOrGeneral = hardConstraints.getCoRoutingOrGeneral();
-        if (coRoutingOrGeneral != null) {
-            if (coRoutingOrGeneral instanceof General) {
-                General hardGeneral = (General) coRoutingOrGeneral;
-                if (softConstraintsBuilder.getCoRoutingOrGeneral() instanceof General) {
-                    General softGeneral = (General) softConstraintsBuilder.getCoRoutingOrGeneral();
-                    updateGeneral(hardGeneral, softGeneral);
-                } else {
-                    softConstraintsBuilder.setCoRoutingOrGeneral(hardGeneral);
-                }
-            } else if (coRoutingOrGeneral instanceof CoRouting) {
-                CoRouting hardCoRouting = (CoRouting) coRoutingOrGeneral;
-                if (softConstraintsBuilder.getCoRoutingOrGeneral() instanceof CoRouting) {
-                    CoRouting softCoRouting = (CoRouting) softConstraintsBuilder.getCoRoutingOrGeneral();
-                    updateCoRouting(hardCoRouting, softCoRouting);
-                } else {
-                    softConstraintsBuilder.setCoRoutingOrGeneral(hardCoRouting);
-                }
+        if (hardConstraints.getCustomerCode() != null) {
+            if (!hardConstraints.getCustomerCode().isEmpty()) {
+                softConstraintsBuilder.getCustomerCode().addAll(hardConstraints.getCustomerCode());
             }
-        } else {
-            LOG.warn("hard constraints CoRoutingOrGeneral is null !");
+        }
+        if (hardConstraints.getOperationalMode() != null) {
+            if (!hardConstraints.getOperationalMode().isEmpty()) {
+                softConstraintsBuilder.getOperationalMode().addAll(hardConstraints.getOperationalMode());
+            }
+        }
+        if (hardConstraints.getDiversity() != null) {
+            if (softConstraints.getDiversity() != null) {
+                softConstraintsBuilder
+                    .setDiversity(updateDiveristy(hardConstraints.getDiversity(), softConstraints.getDiversity()));
+            }
+        }
+        if (hardConstraints.getExclude() != null) {
+            if (softConstraints.getExclude() != null) {
+                softConstraintsBuilder
+                    .setExclude(updateExclude(hardConstraints.getExclude(), softConstraints.getExclude()));
+            }
+        }
+        if (hardConstraints.getInclude() != null) {
+            if (softConstraints.getInclude() != null) {
+                softConstraintsBuilder
+                    .setInclude(updateInclude(hardConstraints.getInclude(), softConstraints.getInclude()));
+            }
+        }
+        if (hardConstraints.getLatency() != null) {
+            if (softConstraints.getLatency() != null) {
+                softConstraintsBuilder
+                    .setLatency(updateLatency(hardConstraints.getLatency(), softConstraints.getLatency()));
+            }
+        }
+        if (hardConstraints.getCoRouting() != null) {
+            if (softConstraints.getCoRouting() != null) {
+                softConstraintsBuilder
+                    .setCoRouting(updateCoRouting(hardConstraints.getCoRouting(), softConstraints.getCoRouting()));
+            }
         }
         return softConstraintsBuilder.build();
     }
 
-    private static General updateGeneral(General hard, General soft) {
-        GeneralBuilder result = new GeneralBuilder(soft);
-        try {
-            result.setDiversity(updateDiveristy(hard.getDiversity(), soft.getDiversity()));
-            result.setExclude(updateExclude(hard.getExclude(), soft.getExclude()));
-            result.setInclude(updateInclude(hard.getInclude(), soft.getInclude()));
-        } catch (NullPointerException e) {
-            LOG.warn("failed to update some 'General' parameters !", e);
-        }
-        return result.build();
-    }
-
     private static Include updateInclude(Include hard, Include soft) {
-        IncludeBuilder result = new IncludeBuilder(soft);
-        if (hard != null) {
-            result.getFiberBundle().addAll(hard.getFiberBundle());
-            result.getNodeId().addAll(hard.getNodeId());
-            result.getSite().addAll(hard.getSite());
-            result.getSupportingServiceName().addAll(hard.getSupportingServiceName());
-        }
-        return result.build();
+        IncludeBuilder includeBldr = new IncludeBuilder(soft);
+        includeBldr.getFiberBundle().addAll(hard.getFiberBundle());
+        includeBldr.getNodeId().addAll(hard.getNodeId());
+        includeBldr.getSite().addAll(hard.getSite());
+        includeBldr.getSupportingServiceName().addAll(hard.getSupportingServiceName());
+        return includeBldr.build();
     }
 
     private static Exclude updateExclude(Exclude hard, Exclude soft) {
-        ExcludeBuilder result = new ExcludeBuilder(soft);
-        if (hard != null) {
-            result.getFiberBundle().addAll(hard.getFiberBundle());
-            result.getNodeId().addAll(hard.getNodeId());
-            result.getSite().addAll(hard.getSite());
-            result.getSupportingServiceName().addAll(hard.getSupportingServiceName());
-        }
-        return result.build();
+        ExcludeBuilder excludeBldr = new ExcludeBuilder(soft);
+        excludeBldr.getFiberBundle().addAll(hard.getFiberBundle());
+        excludeBldr.getNodeId().addAll(hard.getNodeId());
+        excludeBldr.getSite().addAll(hard.getSite());
+        excludeBldr.getSupportingServiceName().addAll(hard.getSupportingServiceName());
+        return excludeBldr.build();
     }
 
     private static Diversity updateDiveristy(Diversity hard, Diversity soft) {
-        DiversityBuilder result = new DiversityBuilder(soft);
-        if (hard != null) {
-            result.getExistingService().addAll(hard.getExistingService());
-            result.setExistingServiceApplicability(hard.getExistingServiceApplicability());
+        DiversityBuilder diversityBldr = new DiversityBuilder(soft);
+        if (!hard.getServiceIdentifierList().isEmpty()) {
+            Map<org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
+                .constraints.ServiceIdentifierListKey,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
+                    .constraints.ServiceIdentifierList> sil = new HashMap<>(diversityBldr.getServiceIdentifierList());
+            sil.putAll(hard.getServiceIdentifierList());
+            diversityBldr.setServiceIdentifierList(sil);
         }
-        return result.build();
+        return diversityBldr.build();
+    }
+
+    private static Latency updateLatency(Latency hard, Latency soft) {
+        LatencyBuilder latencyBldr = new LatencyBuilder(soft);
+        if (hard.getMaxLatency() != null) {
+            latencyBldr.setMaxLatency(hard.getMaxLatency());
+        }
+        return latencyBldr.build();
     }
 
     private static CoRouting updateCoRouting(CoRouting hard, CoRouting soft) {
-        CoRoutingBuilder result = new CoRoutingBuilder(soft);
-        try {
-            result.setCoRouting(
-                    updateCoCoRouting(hard.getCoRouting(), soft.getCoRouting()));
-        } catch (NullPointerException e) {
-            LOG.warn("failed to update some 'CoRouting' parameters !", e);
-        }
-        return result.build();
-    }
-
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing
-        .or.general.co.routing.CoRouting updateCoCoRouting(org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                .constrains.rev190329.constraints.co.routing.or.general.co.routing.CoRouting hard, org.opendaylight
-                    .yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.co
-                        .routing.CoRouting soft) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general
-            .co.routing.CoRoutingBuilder result = new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                .constrains.rev190329.constraints.co.routing.or.general.co.routing.CoRoutingBuilder(soft);
-        if (hard != null) {
-            result.getExistingService().addAll(hard.getExistingService());
-        }
-        return result.build();
+        CoRoutingBuilder coRoutingBldr = new CoRoutingBuilder(soft);
+        Map<ServiceIdentifierListKey, ServiceIdentifierList> serviceIdentifierList
+            = new HashMap<ServiceIdentifierListKey, ServiceIdentifierList>(coRoutingBldr.getServiceIdentifierList());
+        serviceIdentifierList.putAll(hard.getServiceIdentifierList());
+        return coRoutingBldr
+            .setServiceIdentifierList(serviceIdentifierList)
+            .build();
     }
 
     /**
@@ -158,18 +152,10 @@ public final class DowngradeConstraints {
      */
     public static HardConstraints downgradeHardConstraints(HardConstraints hardConstraints) {
         HardConstraintsBuilder hardConstraintsBuilder = new HardConstraintsBuilder();
-        CoRoutingOrGeneral coRoutingOrGeneral = hardConstraints.getCoRoutingOrGeneral();
-        Latency latency = null;
-        if (coRoutingOrGeneral instanceof General) {
-            General general = (General) coRoutingOrGeneral;
-            if (general != null) {
-                latency = general.getLatency();
-                if (latency != null) {
-                    hardConstraintsBuilder.setCoRoutingOrGeneral(new GeneralBuilder().setLatency(latency).build());
-                } else {
-                    LOG.warn("latency value not found in HardContraints !");
-                }
-            }
+        if (hardConstraints != null && hardConstraints.getLatency() != null) {
+            hardConstraintsBuilder.setLatency(hardConstraints.getLatency());
+        } else {
+            LOG.warn("latency value not found in HardContraints !");
         }
         return hardConstraintsBuilder.build();
     }

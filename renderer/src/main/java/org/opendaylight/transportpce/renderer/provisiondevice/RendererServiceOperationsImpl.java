@@ -63,8 +63,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
@@ -200,7 +200,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 }
                 PathDescription pathDescription = pathDescriptionOpt.get();
                 Mapping mapping = portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
-                    service.getServiceAEnd().getTxDirection().getPort().getPortName());
+                    service.getServiceAEnd().getTxDirection().values().stream().findFirst().get().getPort()
+                    .getPortName());
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
                     service.getServiceAEnd().getServiceRate(), mapping);
                 switch (serviceType) {
@@ -263,7 +264,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             return Uint32.ZERO;
         }
         String serviceName =
-            ServiceFormat.OTU.equals(input.getServiceAEnd().getServiceFormat())
+            ServiceFormat.OTU.getName().equals(input.getServiceAEnd().getServiceFormat().getName())
                 ? input.getServiceAEnd().getOtuServiceRate().getSimpleName()
                 : input.getServiceAEnd().getOduServiceRate().getSimpleName();
         if (!formatRateMap.get(input.getServiceAEnd().getServiceFormat()).containsKey(serviceName)) {
