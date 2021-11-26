@@ -32,6 +32,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # pylint: disable=bare-except
         try:
             sample_files_parsed = False
             TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),

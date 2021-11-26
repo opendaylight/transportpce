@@ -161,8 +161,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 (check_list[linkType]).remove(linkId)
             else:
                 self.assertFalse(True)
-        for link_type in check_list:
-            self.assertEqual(len(check_list[link_type]), 0)
+        for val in check_list.values():
+            self.assertEqual(len(val), 0)
 
     def test_05_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
@@ -323,8 +323,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 (check_list[linkType]).remove(linkId)
             else:
                 self.assertFalse(True)
-        for link_type in check_list:
-            self.assertEqual(len(check_list[link_type]), 0)
+        for val in check_list.values():
+            self.assertEqual(len(val), 0)
 
     def test_13_connect_ROADMC(self):
         response = test_utils.mount_device("ROADMC01", ('roadmc', self.NODE_VERSION))
@@ -437,8 +437,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 (check_list[linkType]).remove(linkId)
             else:
                 self.assertFalse(True)
-        for link_type in check_list:
-            self.assertEqual(len(check_list[link_type]), 0)
+        for val in check_list.values():
+            self.assertEqual(len(val), 0)
 
     def test_19_getLinkOmsAttributesOpenRoadmTopology(self):
         response = test_utils.get_ordm_topo_request("")
@@ -846,8 +846,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 (check_list[linkType]).remove(linkId)
             else:
                 roadmtoroadmLink += 1
-        for link_type in check_list:
-            self.assertEqual(len(check_list[link_type]), 0)
+        for val in check_list.values():
+            self.assertEqual(len(val), 0)
         self.assertEqual(roadmtoroadmLink, 6)
         for i in range(0, nbLink):
             self.assertNotEqual(res['network'][0]['ietf-network-topology:link'][i]
