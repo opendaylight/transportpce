@@ -296,11 +296,23 @@ class TransportPCEtesting(unittest.TestCase):
                                                                "port-sub-slot": "Some port-sub-slot"
                                                            }}},
                                                        {"customer-code": ["Some customer-code"],
-                                                           "co-routing": {"existing-service": ["Some existing-service"]}
-                                                        },
+                                                           "co-routing": {
+                                                           "service-identifier-list": [
+                                                               {
+                                                                   "service-identifier": "Some existing-service",
+                                                               }
+                                                           ]
+                                                       }
+                                                       },
                                                        {"customer-code": ["Some customer-code"],
-                                                           "co-routing": {"existing-service": ["Some existing-service"]}
-                                                        }, "hop-count")
+                                                           "co-routing": {
+                                                           "service-identifier-list": [
+                                                               {
+                                                                   "service-identifier": "Some existing-service",
+                                                               }
+                                                           ]
+                                                       }
+                                                       }, "hop-count")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',

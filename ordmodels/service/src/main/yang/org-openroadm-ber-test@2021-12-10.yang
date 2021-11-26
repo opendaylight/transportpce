@@ -4,11 +4,11 @@ module org-openroadm-ber-test {
 
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
+    revision-date 2021-12-10;
   }
   import org-openroadm-common-ber-test {
     prefix org-openroadm-common-ber-test;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import ietf-yang-types {
     prefix yang;
@@ -48,6 +48,46 @@ module org-openroadm-ber-test {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+    description
+      "Version 10.0";
+  }
+  revision 2021-05-28 {
+    description
+      "Version 9.1";
+  }
+  revision 2021-03-26 {
+    description
+      "Version 9.0";
+  }
+  revision 2020-12-11 {
+    description
+      "Version 8.1";
+  }
+  revision 2020-09-25 {
+    description
+      "Version 8.0";
+  }
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
   revision 2019-05-31 {
     description
       "Version 5.1.0";
@@ -115,6 +155,7 @@ module org-openroadm-ber-test {
       }
     }
   }
+
   grouping ber-test-complex-result-details-container {
     container ber-test-result-details {
       list supporting-service-details {
@@ -139,12 +180,14 @@ module org-openroadm-ber-test {
       }
     }
   }
+
   grouping ber-test-complex-result-container {
     container ber-results {
       uses org-openroadm-common-ber-test:ber-test-options-container;
       uses ber-test-complex-result-details-container;
     }
   }
+
   rpc ber-test {
     description
       "This is the ber-test rpc. It is supported for a service in the service-list.";
@@ -160,7 +203,8 @@ module org-openroadm-ber-test {
       uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
-rpc complex-ber-test {
+
+  rpc complex-ber-test {
     description
       "This is the complex-ber-test rpc. It is supported for a service in the service-list.";
     input {
@@ -175,6 +219,7 @@ rpc complex-ber-test {
       uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
+
   rpc service-rpc-ber-test-async-callback {
     description
       "This is the callback notification that the controller invokes on the carrier system.";
@@ -199,6 +244,7 @@ rpc complex-ber-test {
       uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
+
   rpc complex-service-rpc-ber-test-async-callback {
     description
       "This is the callback notification that the controller invokes on the carrier system.";
@@ -223,6 +269,7 @@ rpc complex-ber-test {
       uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
+
   notification service-notification-ber-test {
     description
       "This is the callback notification that the controller invokes on the carrier system.";
@@ -242,6 +289,7 @@ rpc complex-ber-test {
     }
     uses ber-test-result-details-container;
   }
+
   notification complex-service-notification-ber-test {
     description
       "This is the callback notification that the controller invokes on the carrier system.";
@@ -262,4 +310,3 @@ rpc complex-ber-test {
     uses ber-test-complex-result-details-container;
   }
 }
-
