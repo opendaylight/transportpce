@@ -1,0 +1,330 @@
+module org-openroadm-routing-constraints {
+  namespace "http://org/openroadm/routing/constraints";
+  prefix org-openroadm-routing-constraints;
+
+  import org-openroadm-common-node-types {
+    prefix org-openroadm-common-node-types;
+    revision-date 2021-05-28;
+  }
+  import org-openroadm-network-resource {
+    prefix org-openroadm-network-resource;
+    revision-date 2019-11-29;
+  }
+
+  organization
+    "Open ROADM MSA";
+  contact
+    "OpenROADM.org";
+  description
+    "YANG definitions of routing constraints.
+
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+    description
+      "Version 10.0";
+  }
+  revision 2021-05-28 {
+    description
+      "Version 9.1";
+  }
+  revision 2020-12-11 {
+    description
+      "Version 8.1";
+  }
+  revision 2020-09-25 {
+    description
+      "Version 8.0";
+  }
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+  revision 2017-06-26 {
+    description
+      "Version 2.0";
+  }
+  revision 2016-10-14 {
+    description
+      "Version 1.2";
+  }
+
+  grouping routing-constraints {
+    container hard-constraints {
+      uses constraints;
+    }
+    container soft-constraints {
+      uses constraints;
+    }
+  }
+
+  grouping constraints {
+    leaf-list customer-code {
+      type string;
+    }
+    leaf-list operational-mode {
+      type string;
+    }
+    container diversity {
+      uses diversity-existing-service-constraints;
+      uses diversity-constraints;
+      description
+        "Diversity constraints for single or bulk requests.
+        diversity-constraints provides more options for bulk requests";
+    }
+    container exclude {
+      uses common-constraints;
+      leaf-list supporting-service-name {
+        type string;
+        description
+          "Supporting service(s) to exclude from this route.";
+      }
+    }
+    container include {
+      uses common-constraints;
+      leaf-list supporting-service-name {
+        type string;
+        description
+          "Supporting service(s) to include in this route.";
+      }
+    }
+    container latency {
+      description
+        "Maximum allowed one-way latency in milliseconds";
+      leaf max-latency {
+        type decimal64 {
+          fraction-digits 3;
+        }
+        units "milliseconds";
+      }
+    }
+    container hop-count {
+      description
+        "Maximum hops allowed";
+      leaf max-wdm-hop-count {
+        type uint8;
+      }
+      leaf max-otn-hop-count {
+        type uint8;
+      }
+    }
+    container TE-metric {
+      description
+        "Maximum cost allowed";
+      leaf max-wdm-TE-metric {
+        type uint32;
+      }
+      leaf max-otn-TE-metric {
+        type uint32;
+      }
+    }
+    container distance {
+      description
+        "Maximum distance allowed";
+      leaf max-distance {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        units "km";
+      }
+    }
+    container co-routing {
+      list service-identifier-list {
+        description
+          "Indicates that new services that are part of the bulk service request
+          should be co-routed";
+        key "service-identifier";
+        leaf service-identifier {
+          type string;
+          description
+            "This can be a service-name or a common-id";
+        }
+        uses service-applicability-g;
+      }
+    }
+  }
+
+
+  grouping common-constraints {
+    leaf-list fiber-bundle {
+      type string;
+    }
+    leaf-list srlg-id {
+      type uint32;
+      description
+        "unique identifier for SRLG";
+    }
+    leaf-list site {
+      type string;
+      description
+        "site identifies the clli.
+         clli from the device model; clli-network-ref + clli from the network model.";
+    }
+    leaf-list node-id {
+      type org-openroadm-common-node-types:node-id-type;
+      description
+        "node-id from the device model; openroadm-network-ref + node-id from the network model.";
+    }
+    list link-identifier {
+      key "link-network-id link-id";
+      description
+        "Refers to link-id(s) from the network model.
+         The openroadm-topology-ref + link-id identifies the link in the network model.";
+      uses org-openroadm-network-resource:network-link-name;
+    }
+  }
+
+  grouping equipment{
+    container equipment {
+      leaf roadm-srg {
+        type boolean;
+        description "ROADM shared-risk-group diversity";
+      }
+      leaf xponder-srg {
+        type boolean;
+        description "xponder eqpt-srg-id diversity";
+      }
+      description
+        "Equipment Diversity Contraints";
+    }
+  }
+
+  grouping existing-service-applicability-g {
+    container existing-service-applicability {
+      leaf site {
+        type boolean;
+      }
+      leaf node {
+        type boolean;
+      }
+      leaf srlg {
+        type boolean;
+      }
+      leaf link {
+        type boolean;
+      }
+      uses equipment;
+    }
+  }
+
+  grouping service-applicability-g {
+    container service-applicability {
+      leaf site {
+        type boolean;
+      }
+      leaf node {
+        type boolean;
+      }
+      leaf srlg {
+        type boolean;
+      }
+      leaf link {
+        type boolean;
+      }
+      uses equipment;
+    }
+  }
+
+  grouping diversity-existing-service-constraints {
+    list service-identifier-list {
+        description
+          "Indicates that new services that are part of the bulk service request
+          should be co-routed";
+        key "service-indentifier";
+        leaf service-indentifier {
+          type string;
+          description
+            "This can be a service-name or a common-id";
+        }
+        uses service-applicability-g;
+    }
+    /*
+    leaf-list existing-service {
+      type string;
+      description
+        "Diverse from existing services identified by facility CLFI";
+    }
+    uses existing-service-applicability-g;
+    */
+  }
+
+  grouping diversity-constraints {
+    leaf diversity-type {
+      type enumeration {
+        enum serial {
+          value 1;
+          description
+            "Indicates that new services that are part of the bulk service request 
+            should be routed serially for diversity.";
+        }
+        enum synchronous {
+          value 2;
+          description
+            "Indicates that new services that are part of the bulk service request 
+            should be routed synchronously for diversity.";
+        }
+      }
+      description 
+        "This is only used when creating services using service-create-bulk. 
+        It is expected that 'diversity-type' should be same for all services,
+        within the group. Which means it can be either 'serial' or 'synchronous'
+        but not both.";
+    }
+  }
+}

@@ -116,6 +116,21 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev200327.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.openroadm.user.mgmt.rev191129.$YangModuleInfoImpl.getInstance(),
 
+            // common models 10.1
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev210924.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.phy.codes.rev210528.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev211210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.$YangModuleInfoImpl
+            .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev210924.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.$YangModuleInfoImpl.getInstance(),
+
             // device models 1.2.1 and 2.2.1
             org.opendaylight.yang.gen.v1.http.org.openroadm.database.rev161014.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.openroadm.database.rev181019.$YangModuleInfoImpl.getInstance(),
@@ -264,12 +279,18 @@ public final class TPCEUtils {
                     .getInstance(),
 
             // service models
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.$YangModuleInfoImpl
-                    .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.$YangModuleInfoImpl
-                    .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.ber.test.rev211210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.ber.test.rev200529.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev211210.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.$YangModuleInfoImpl
+                .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.$YangModuleInfoImpl.getInstance(),
 
             // tapi models
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.oam.rev181210.$YangModuleInfoImpl.getInstance(),
@@ -292,7 +313,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.$YangModuleInfoImpl
                     .getInstance(),
@@ -315,9 +336,7 @@ public final class TPCEUtils {
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
                     .$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017
-                    .$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.$YangModuleInfoImpl
                     .getInstance(),
