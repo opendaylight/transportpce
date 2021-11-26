@@ -285,7 +285,11 @@ public class PceOtnNode implements PceNode {
                 ||
                 ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
                 .stream().findFirst().get().getOdtuType()
-                .equals(ODTUCnTs.class))
+                .equals(ODTUCnTs.class)
+                ||
+                ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
+                .stream().findFirst().get().getOdtuType()
+                .equals(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTUCnTs.class))
             && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
                 .stream().findFirst().get().getTpnPool().isEmpty()
             && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb));
@@ -399,7 +403,10 @@ public class PceOtnNode implements PceNode {
                 && (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
                     .values().stream().findFirst().get().getOdtuType().equals(ODTU4TsAllocated.class)
                     || tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
-                    .values().stream().findFirst().get().getOdtuType().equals(ODTUCnTs.class))) {
+                    .values().stream().findFirst().get().getOdtuType().equals(ODTUCnTs.class)
+                    || tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
+                    .values().stream().findFirst().get().getOdtuType().equals(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTUCnTs.class))) {
                 @Nullable
                 List<Uint16> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
                     .getOdtuTpnPool().values().stream().findFirst().get().getTpnPool();
