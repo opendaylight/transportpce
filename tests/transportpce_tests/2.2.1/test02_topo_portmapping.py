@@ -57,6 +57,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbMappings = 0
         for i in range(0, len(firstEntry)):
             nodeId = firstEntry[i]['node-id']
+            # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
             print("nodeMapId={}".format(nodeMapId))

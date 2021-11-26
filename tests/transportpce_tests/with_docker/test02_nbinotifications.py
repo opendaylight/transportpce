@@ -152,6 +152,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_connect_xpdrA(self):
