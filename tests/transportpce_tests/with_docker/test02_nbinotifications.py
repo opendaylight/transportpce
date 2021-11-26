@@ -120,6 +120,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # pylint: disable=unsubscriptable-object
         # TODO: for lighty manage the activation of NBI notification feature
         cls.init_failed = False
         cls.processes = test_utils.start_tpce()
