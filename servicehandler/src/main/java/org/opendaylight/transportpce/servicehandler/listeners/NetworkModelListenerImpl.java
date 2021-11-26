@@ -23,7 +23,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
@@ -105,24 +105,43 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             }
             services = serviceOptional.get();
             OperationResult operationResult1 = null;
-            if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State.InService
-                    .equals(services.getOperationalState())
-                && !allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                LOG.debug("Service={} needs to be updated to outOfService", serviceName);
-                operationResult1 = this.serviceDataStoreOperations.modifyService(serviceName, State.OutOfService,
-                        AdminStates.OutOfService);
-            } else if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State.OutOfService
-                    .equals(services.getOperationalState())
-                && allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                LOG.debug("Service={} needs to be updated to inService", serviceName);
-                operationResult1 = this.serviceDataStoreOperations.modifyService(serviceName, State.InService,
-                        AdminStates.InService);
-            } else {
-                LOG.debug("Service {} state doesnt need to be modified", serviceName);
+            switch (services.getOperationalState()) {
+                case InService:
+                    if (!allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                        LOG.debug("Service={} needs to be updated to outOfService", serviceName);
+                        //if (operationResult1 != null && operationResult1.isSuccess()) {
+                        //null check probably no more needed
+                        if (this.serviceDataStoreOperations
+                                .modifyService(serviceName, State.OutOfService, AdminStates.OutOfService)
+                                .isSuccess()) {
+                            LOG.info("Service state of {} correctly updated to outOfService in datastore", serviceName);
+                            continue;
+                        } else {
+                            LOG.error("Service state of {} cannot be updated to outOfService in datastore",
+                                serviceName);
+                        }
+                    }
+                    break;
+                case OutOfService:
+                    if (allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                        LOG.debug("Service={} needs to be updated to inService", serviceName);
+                        //if (operationResult1 != null && operationResult1.isSuccess()) {
+                        //null check probably no more needed
+                        if (this.serviceDataStoreOperations
+                                .modifyService(serviceName, State.InService, AdminStates.InService)
+                                .isSuccess()) {
+                            LOG.info("Service state of {} correctly updated to inService in datastore", serviceName);
+                            continue;
+                        } else {
+                            LOG.error("Service state of {} cannot be updated to inService in datastore", serviceName);
+                        }
+                    }
+                    break;
+                default:
+                    LOG.warn("Service {} state not managed", serviceName);
+                    continue;
             }
-            if (operationResult1 != null && operationResult1.isSuccess()) {
-                LOG.info("Service state of {} correctly updated in datastore", serviceName);
-            }
+            LOG.debug("Service {} state does not need to be modified", serviceName);
         }
     }
 

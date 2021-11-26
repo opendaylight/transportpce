@@ -4,11 +4,11 @@ module org-openroadm-topology {
 
   import org-openroadm-resource {
     prefix org-openroadm-resource;
-    revision-date 2019-05-31;
+    revision-date 2021-12-10;
   }
   import org-openroadm-network-resource {
     prefix org-openroadm-network-resource;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
   }
 
   organization
@@ -44,6 +44,38 @@ module org-openroadm-topology {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+    description
+      "Version 10.0";
+  }
+  revision 2021-05-28 {
+    description
+      "Version 9.1";
+  }
+  revision 2021-03-26 {
+    description
+      "Version 9.0";
+  }
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
   revision 2019-05-31 {
     description
       "Version 5.1.0";
@@ -99,6 +131,12 @@ module org-openroadm-topology {
         description
           "Unique identifier for this topology component within this service";
       }
+  	  container computation-results {
+		  description 
+			"parameters resulting of path computation";
+		  uses org-openroadm-resource:path-computation-outputs;
+	  }
+      uses route_info;
       uses hop;
     }
     list zToA {
@@ -108,19 +146,41 @@ module org-openroadm-topology {
         description
           "Unique identifier for this topology component within this service";
       }
+  	  container computation-results {
+		  description 
+			"parameters resulting of path computation";
+		  uses org-openroadm-resource:path-computation-outputs;
+	  }
+      uses route_info;
       uses hop;
     }
+  }
+
+  grouping route_info {
+      leaf subroute_id {
+        type string;
+        description
+          "Unique identifier for the subroute or segment of the topology";
+      }
+      leaf-list previous_ids {
+        type string;
+        description
+          "Pointer to the previous id or set of ids that allows reconstruction
+           of the end-to-end route from the segments. Can be omitted if the
+           previous-id = current-id – 1 (if id is a number-based string) or if
+           each subroute is already representing an end-to-end route.";
+      }
   }
 
   grouping hop {
     leaf hop-type {
       type enumeration {
-        enum "node-external" {
+        enum node-external {
           value 1;
           description
             "The given resource is on the edge of the node, and used in relationships to resources outside of the node.";
         }
-        enum "node-internal" {
+        enum node-internal {
           value 2;
           description
             "The given resource is internally to the node";
@@ -130,6 +190,18 @@ module org-openroadm-topology {
     uses org-openroadm-resource:resource {
       augment "resource/resource/interface" {
         uses org-openroadm-resource:resource-reporting;
+      }
+      augment "resource/resource/circuit-pack" {
+        leaf circuit-pack-type {
+          type string;
+          description
+            "Type of circuit-pack";
+        }
+        leaf circuit-pack-product-code {
+          type string;
+          description
+            "Product code of the circuit-pack";
+        }
       }
     }
   }
@@ -144,6 +216,7 @@ module org-openroadm-topology {
         description
           "Unique identifier for this network-topology component within this service";
       }
+      uses route_info;
       uses org-openroadm-network-resource:network-resource;
     }
     list z-to-a {
@@ -153,6 +226,7 @@ module org-openroadm-topology {
         description
           "Unigue identifier for this network-topology component within this service";
       }
+      uses route_info;
       uses org-openroadm-network-resource:network-resource;
     }
   }

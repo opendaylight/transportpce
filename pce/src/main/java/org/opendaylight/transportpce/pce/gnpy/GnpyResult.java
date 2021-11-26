@@ -19,13 +19,11 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.Response;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.NoPathCase;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.PathCase;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.GeneralBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,8 +118,7 @@ public class GnpyResult {
         }
 
         Include include = new IncludeBuilder().setNodeId(nodeIdList).build();
-        General general = new GeneralBuilder().setInclude(include).build();
-        hardConstraints = new HardConstraintsBuilder().setCoRoutingOrGeneral(general).build();
+        hardConstraints = new HardConstraintsBuilder().setInclude(include).build();
         return hardConstraints;
     }
 
