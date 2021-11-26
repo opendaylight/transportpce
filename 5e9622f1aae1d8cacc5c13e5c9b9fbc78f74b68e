@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b87aac60_5990dbe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T10:23:51Z",
+      "side": 1,
+      "message": "LGTM\ncaution: autopep8  is now enforced",
+      "revId": "5e9622f1aae1d8cacc5c13e5c9b9fbc78f74b68e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
