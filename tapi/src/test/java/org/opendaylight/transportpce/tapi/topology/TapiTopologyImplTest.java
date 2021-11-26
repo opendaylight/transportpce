@@ -7,9 +7,6 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -43,15 +40,11 @@ import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.CapacityUnit;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.Sip;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.SipKey;
@@ -75,7 +68,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -219,7 +211,7 @@ public class TapiTopologyImplTest extends AbstractTest {
                 .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_N"))))
             .count();
         assertEquals("SPDR-SA1-XPDR2 (switch) should have 2 network neps", 2, nb5);
-        assertEquals("Link list size should be 18", 18, topology.getLink().size());
+        assertEquals("Link list size should be 16", 16, topology.getLink().size());
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes("T0 - Multi-layer topology".getBytes()).toString());
         assertEquals("incorrect topology uuid", topoUuid, topology.getUuid());
         assertEquals("topology name should be T0 - Multi-layer topology",
@@ -236,43 +228,8 @@ public class TapiTopologyImplTest extends AbstractTest {
             .filter(l -> l.getName().containsKey(new NameKey("transitional link name"))).count();
         long nbOmsLinks = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("OMS link name"))).count();
-        long nbOtnLinks = topology.getLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name"))).count();
         assertEquals("Link list should contain 8 transitional links", 8, nbTransititionalLinks);
         assertEquals("Link list should contain 8 transitional links", 8, nbOmsLinks);
-        assertEquals("Link list should contain 2 OTN links", 2, nbOtnLinks);
-
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link2Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-
-        List<Link> links = topology.nonnullLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name")))
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        checkOtnLink(links.get(0), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link1Uuid,
-            "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1");
-        checkOtnLink(links.get(1), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link2Uuid,
-            "SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1");
     }
 
     @Test
@@ -445,7 +402,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
         // Links in openroadm topology which include Roadm-to-Roadm and Xpdr-to-Roadm (ortopo / 2)
         // + transitional links -> 1 per network port of Xpdr + OTN links / 2
-        assertEquals("Link list size should be 27", 27, topology.getLink().size());
+        assertEquals("Link list size should be 25", 25, topology.getLink().size());
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes("T0 - Full Multi-layer topology".getBytes()).toString());
         assertEquals("incorrect topology uuid", topoUuid, topology.getUuid());
         assertEquals("topology name should be T0 - Full Multi-layer topology",
@@ -468,46 +425,10 @@ public class TapiTopologyImplTest extends AbstractTest {
         // Xpdr-to-Roadm
         long nbOmsLinks1 = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("XPDR-RDM link name"))).count();
-        long nbOtnLinks = topology.getLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name"))).count();
         // 1 transitional link per NETWORK port
         assertEquals("Link list should contain 16 transitional links", 16, nbTransititionalLinks);
         // 1 OMS per ROADM-to-ROADM link + Existing XPDR-tp-ROADM link in openroadm topology
         assertEquals("Link list should contain 9 OMS links", 9, nbOmsLinks + nbOmsLinks1);
-        // Should we consider OTN links as links or connections??
-        assertEquals("Link list should contain 2 OTN links", 2, nbOtnLinks);
-
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link2Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-
-        List<Link> links = topology.nonnullLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name")))
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        checkOtnLink(links.get(0), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link1Uuid,
-            "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1");
-        checkOtnLink(links.get(1), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link2Uuid,
-            "SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1");
     }
 
     @Test
@@ -636,56 +557,5 @@ public class TapiTopologyImplTest extends AbstractTest {
                     = rpcResult1.getResult().getSip();
             assertNotNull("Sip should not be null", sip1);
         }
-    }
-
-    private void checkOtnLink(Link link, Uuid topoUuid, Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid,
-            Uuid linkUuid, String linkName) {
-        assertEquals("bad name for the link", linkName, link.getName().get(new NameKey("otn link name")).getValue());
-        assertEquals("bad uuid for link", linkUuid, link.getUuid());
-        assertEquals("Available capacity unit should be MBPS",
-            CapacityUnit.GBPS, link.getAvailableCapacity().getTotalSize().getUnit());
-        String prefix = linkName.split("-")[0];
-        if ("OTU4".equals(prefix)) {
-            assertEquals("Available capacity -total size value should be 0",
-                Uint64.valueOf(0), link.getAvailableCapacity().getTotalSize().getValue());
-        } else if ("ODTU4".equals(prefix)) {
-            assertEquals("Available capacity -total size value should be 100 000",
-                Uint64.valueOf(100000), link.getAvailableCapacity().getTotalSize().getValue());
-        }
-        assertEquals("Total capacity unit should be GBPS",
-            CapacityUnit.GBPS, link.getTotalPotentialCapacity().getTotalSize().getUnit());
-        assertEquals("Total capacity -total size value should be 100",
-            Uint64.valueOf(100), link.getTotalPotentialCapacity().getTotalSize().getValue());
-        if ("OTU4".equals(prefix)) {
-            assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-                LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
-        } else if ("ODTU4".equals(prefix)) {
-            assertEquals("otn link should be between 2 nodes of protocol layers ODU",
-                LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
-        }
-        assertEquals("transitional link should be BIDIRECTIONAL",
-            ForwardingDirection.BIDIRECTIONAL, link.getDirection());
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-            .link.NodeEdgePoint> nodeEdgePointList = new ArrayList<>(link.nonnullNodeEdgePoint().values());
-        assertEquals("topology uuid should be the same for the two termination point of the link",
-            topoUuid, nodeEdgePointList.get(0).getTopologyUuid());
-        assertEquals("topology uuid should be the same for the two termination point of the link",
-            topoUuid, nodeEdgePointList.get(1).getTopologyUuid());
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(0).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(1).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
-        assertEquals("operational state should be ENABLED",
-            OperationalState.ENABLED, link.getOperationalState());
-        assertEquals("administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, link.getAdministrativeState());
     }
 }
