@@ -192,12 +192,6 @@ public final class TopologyUtils {
             tapiFactory.convertXpdrToRdmLinks(xponderInLinkList);
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
 
-            if (otnTopo.augmentation(Network1.class) != null) {
-                Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                    .network.LinkKey, Link> otnLinkMap = otnTopo.augmentation(Network1.class).getLink();
-                tapiFactory.convertLinks(otnLinkMap);
-                tapiLinkList.putAll(tapiFactory.getTapiLinks());
-            }
             // Retrieve created sips map in TapiFactory when mapping all the nodes
             this.tapiSips = tapiFactory.getTapiSips();
             return new TopologyBuilder()
