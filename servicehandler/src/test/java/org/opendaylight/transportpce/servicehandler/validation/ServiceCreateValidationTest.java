@@ -8,17 +8,19 @@
 package org.opendaylight.transportpce.servicehandler.validation;
 
 import java.util.Arrays;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInputBuilder;
 
 
 public class ServiceCreateValidationTest {
@@ -36,19 +38,22 @@ public class ServiceCreateValidationTest {
     public void validateServiceCreateRequestIfConstraintsNotNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCoRoutingOrGeneral(new CoRoutingBuilder()
-                    .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
-                        .CoRoutingBuilder().setExistingService(
-                        Arrays.asList("Some existing-service")).build())
+                .setCoRouting(new CoRoutingBuilder()
+                    .setServiceIdentifierList(Map.of(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                            .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                        new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                            .build()))
                     .build())
                 .setCustomerCode(Arrays.asList("Some customer-code"))
-                .build()).setSoftConstraints(new SoftConstraintsBuilder()
-                .setCoRoutingOrGeneral(new CoRoutingBuilder()
-                    .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
-                        .CoRoutingBuilder().setExistingService(
-                        Arrays.asList("Some existing-service")).build())
+                .build())
+            .setSoftConstraints(new SoftConstraintsBuilder()
+                .setCoRouting(new CoRoutingBuilder()
+                    .setServiceIdentifierList(Map.of(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                            .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                        new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                            .build()))
                     .build())
                 .setCustomerCode(Arrays.asList("Some customer-code"))
                 .build()).build();
@@ -70,11 +75,12 @@ public class ServiceCreateValidationTest {
     public void validateServiceCreateRequestIfHardConstraintsNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCoRoutingOrGeneral(new CoRoutingBuilder()
-                    .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
-                        .CoRoutingBuilder().setExistingService(
-                        Arrays.asList("Some existing-service")).build())
+                .setCoRouting(new CoRoutingBuilder()
+                    .setServiceIdentifierList(Map.of(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                            .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                        new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                            .build()))
                     .build())
                 .setCustomerCode(Arrays.asList("Some customer-code"))
                 .build()).setHardConstraints(null).build();
@@ -87,11 +93,12 @@ public class ServiceCreateValidationTest {
     public void validateServiceCreateRequestIfSoftConstraintsNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setSoftConstraints(null).setHardConstraints(new HardConstraintsBuilder()
-                .setCoRoutingOrGeneral(new CoRoutingBuilder()
-                    .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
-                        .CoRoutingBuilder().setExistingService(
-                        Arrays.asList("Some existing-service")).build())
+                .setCoRouting(new CoRoutingBuilder()
+                    .setServiceIdentifierList(Map.of(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                            .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                        new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                            .build()))
                     .build())
                 .setCustomerCode(Arrays.asList("Some customer-code"))
                 .build()).build();

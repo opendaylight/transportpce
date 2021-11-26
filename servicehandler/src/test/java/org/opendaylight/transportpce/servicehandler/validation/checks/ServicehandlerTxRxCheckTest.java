@@ -14,13 +14,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.lgx.LgxBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.common.Uint8;
 
 public class ServicehandlerTxRxCheckTest {
 
@@ -43,10 +44,11 @@ public class ServicehandlerTxRxCheckTest {
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.TXDIR_NOT_SET, result.getMessage());
+        Assert.assertEquals(LogMessages.TXRXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -55,12 +57,14 @@ public class ServicehandlerTxRxCheckTest {
                 new TxDirectionBuilder()
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build(),
                 new RxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("q")
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build());
 
         Assert.assertFalse(result.hasPassed());
@@ -72,12 +76,15 @@ public class ServicehandlerTxRxCheckTest {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("q")
-                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build(),
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setIndex(Uint8.ZERO)
+                    .build(),
                 new RxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("q")
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build());
 
         Assert.assertFalse(result.hasPassed());
@@ -92,11 +99,12 @@ public class ServicehandlerTxRxCheckTest {
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build(),
                 null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.RXDIR_NOT_SET, result.getMessage());
+        Assert.assertEquals(LogMessages.TXRXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -107,10 +115,12 @@ public class ServicehandlerTxRxCheckTest {
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build(),
                 new RxDirectionBuilder()
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build());
 
         Assert.assertFalse(result.hasPassed());
@@ -125,10 +135,12 @@ public class ServicehandlerTxRxCheckTest {
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
                     .setLgx(new LgxBuilder().setLgxDeviceName("l")
                             .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .setIndex(Uint8.ZERO)
                     .build(),
                 new RxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("q")
                             .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setIndex(Uint8.ZERO)
                     .build());
 
         Assert.assertFalse(result.hasPassed());
@@ -188,6 +200,6 @@ public class ServicehandlerTxRxCheckTest {
             ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.TXDIR_NOT_SET, result.getMessage());
+        Assert.assertEquals(LogMessages.TXRXDIR_NOT_SET, result.getMessage());
     }
 }
