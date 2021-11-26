@@ -39,21 +39,21 @@ class TransportGNPYtesting(unittest.TestCase):
             sample_files_parsed = False
             TOPO_CLLINET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "gnpy", "clliNetwork.json")
-            with open(TOPO_CLLINET_FILE, 'r') as topo_cllinet:
+            with open(TOPO_CLLINET_FILE, 'r', encoding='utf-8') as topo_cllinet:
                 cls.topo_cllinet_data = topo_cllinet.read()
 
             TOPO_ORDNET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                             "..", "..", "sample_configs", "gnpy", "openroadmNetwork.json")
-            with open(TOPO_ORDNET_FILE, 'r') as topo_ordnet:
+            with open(TOPO_ORDNET_FILE, 'r', encoding='utf-8') as topo_ordnet:
                 cls.topo_ordnet_data = topo_ordnet.read()
 
             TOPO_ORDTOPO_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "gnpy", "openroadmTopology.json")
-            with open(TOPO_ORDTOPO_FILE, 'r') as topo_ordtopo:
+            with open(TOPO_ORDTOPO_FILE, 'r', encoding='utf-8') as topo_ordtopo:
                 cls.topo_ordtopo_data = topo_ordtopo.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_121.json")
-            with open(PORT_MAPPING_FILE, 'r') as port_mapping:
+            with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
         except PermissionError as err:
