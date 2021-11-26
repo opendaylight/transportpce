@@ -176,6 +176,7 @@ class TransportTapitesting(unittest.TestCase):
     def setUp(self):  # instruction executed before each test method
         if self.init_failed:
             self.fail('Feature installation failed')
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_get_tapi_topology_T100G(self):

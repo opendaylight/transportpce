@@ -8,6 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=invalid-name
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
@@ -36,31 +37,31 @@ class TransportPCE400Gtesting(unittest.TestCase):
             TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                             "..", "..", "sample_configs",
                                             "honeynode-topo400G.json")
-            with open(TOPO_BI_DIR_FILE, 'r') as topo_bi_dir:
+            with open(TOPO_BI_DIR_FILE, 'r', encoding='utf-8') as topo_bi_dir:
                 cls.topo_bi_dir_data = topo_bi_dir.read()
 
             OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                 "..", "..", "sample_configs",
                                                 "honeynode-otntopo400G.json")
-            with open(OTN_TOPO_BI_DIR_FILE, 'r') as otn_topo_bi_dir:
+            with open(OTN_TOPO_BI_DIR_FILE, 'r', encoding='utf-8') as otn_topo_bi_dir:
                 cls.otn_topo_bi_dir_data = otn_topo_bi_dir.read()
 
             OTUC4_OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                       "..", "..", "sample_configs",
                                                       "honeynode-otntopo400GwithOTUC4.json")
-            with open(OTUC4_OTN_TOPO_BI_DIR_FILE, 'r') as otuc4_otn_topo_bi_dir:
+            with open(OTUC4_OTN_TOPO_BI_DIR_FILE, 'r', encoding='utf-8') as otuc4_otn_topo_bi_dir:
                 cls.otuc4_otn_topo_bi_dir_data = otuc4_otn_topo_bi_dir.read()
 
             ODUC4_OTN_TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                       "..", "..", "sample_configs",
                                                       "honeynode-otntopo400GwithODUC4.json")
-            with open(ODUC4_OTN_TOPO_BI_DIR_FILE, 'r') as oduc4_otn_topo_bi_dir:
+            with open(ODUC4_OTN_TOPO_BI_DIR_FILE, 'r', encoding='utf-8') as oduc4_otn_topo_bi_dir:
                 cls.oduc4_otn_topo_bi_dir_data = oduc4_otn_topo_bi_dir.read()
 
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs",
                                              "pce_portmapping_71.json")
-            with open(PORT_MAPPING_FILE, 'r') as port_mapping:
+            with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
         except PermissionError as err:
@@ -85,6 +86,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(1)
 

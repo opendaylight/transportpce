@@ -44,6 +44,7 @@ class TransportOlmTesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(1)
 
