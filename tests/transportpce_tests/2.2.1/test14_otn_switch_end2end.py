@@ -737,6 +737,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        # pylint: disable=consider-using-f-string
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR2-NETWORK1':
                 self.assertEqual({'frequency': 196.1,
