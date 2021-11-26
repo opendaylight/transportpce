@@ -9,12 +9,12 @@
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceEndpoint;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.Lgx;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.Port;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.lgx.Lgx;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.port.Port;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 
 /**
  * Class for checking missing info on Tx/Rx for A/Z end.
@@ -26,17 +26,15 @@ public final class ServicehandlerTxRxCheck {
     public static final class LogMessages {
 
         private static final String SERVICE = "Service ";
-        public static final String TXDIR_NOT_SET;
+        public static final String TXRXDIR_NOT_SET;
         public static final String TXDIR_PORT_NOT_SET;
         public static final String TXDIR_LGX_NOT_SET;
-        public static final String RXDIR_NOT_SET;
         public static final String RXDIR_PORT_NOT_SET;
         public static final String RXDIR_LGX_NOT_SET;
 
         // Static blocks are generated once and spare memory.
         static {
-            TXDIR_NOT_SET = "Service TxDirection is not correctly set";
-            RXDIR_NOT_SET = "Service RxDirection is not correctly set";
+            TXRXDIR_NOT_SET = "Service TxDirection or RxDirection is not correctly set";
             TXDIR_PORT_NOT_SET = "Service TxDirection Port is not correctly set";
             TXDIR_LGX_NOT_SET = "Service TxDirection Lgx is not correctly set";
             RXDIR_PORT_NOT_SET = "Service RxDirection Port is not correctly set";
@@ -134,11 +132,8 @@ public final class ServicehandlerTxRxCheck {
      * @return <code>true</code> if check is ok <code>false</code> else
      */
     public static ComplianceCheckResult checkTxOrRxInfo(TxDirection txDirection, RxDirection rxDirection) {
-        if (txDirection == null) {
-            return new ComplianceCheckResult(false, LogMessages.TXDIR_NOT_SET);
-        }
-        if (rxDirection == null) {
-            return new ComplianceCheckResult(false, LogMessages.RXDIR_NOT_SET);
+        if (txDirection == null || rxDirection == null) {
+            return new ComplianceCheckResult(false, LogMessages.TXRXDIR_NOT_SET);
         }
         if (!checkPort(txDirection.getPort())) {
             return new ComplianceCheckResult(false, LogMessages.TXDIR_PORT_NOT_SET);
@@ -183,9 +178,13 @@ public final class ServicehandlerTxRxCheck {
         if (!checkString(clli)) {
             return new ComplianceCheckResult(false, LogMessages.clliNotSet(endpointType));
         }
+        if (serviceEnd.getTxDirection() == null || serviceEnd.getRxDirection() == null) {
+            return new ComplianceCheckResult(false, LogMessages.TXRXDIR_NOT_SET);
+        }
 
         ComplianceCheckResult complianceCheckResult
-                = checkTxOrRxInfo(serviceEnd.getTxDirection(), serviceEnd.getRxDirection());
+                = checkTxOrRxInfo(serviceEnd.getTxDirection().values().stream().findFirst().get(),
+                    serviceEnd.getRxDirection().values().stream().findFirst().get());
         if (!complianceCheckResult.hasPassed()) {
             return new ComplianceCheckResult(false, complianceCheckResult.getMessage());
         }

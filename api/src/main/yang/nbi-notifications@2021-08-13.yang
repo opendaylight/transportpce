@@ -11,7 +11,6 @@ module nbi-notifications {
   }
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
-    revision-date 2018-11-30;
   }
 
   organization
