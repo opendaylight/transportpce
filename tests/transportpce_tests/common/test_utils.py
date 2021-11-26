@@ -133,7 +133,7 @@ def start_karaf():
     executable = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         "..", "..", "..", KARAF_INSTALLDIR, "target", "assembly", "bin", "karaf")
-    with open('odl.log', 'w') as outfile:
+    with open('odl.log', 'w', encoding='utf-8') as outfile:
         return subprocess.Popen(
             ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
 
@@ -144,7 +144,7 @@ def start_lighty():
         os.path.dirname(os.path.realpath(__file__)),
         "..", "..", "..", "lighty", "target", "tpce",
         "clean-start-controller.sh")
-    with open(TPCE_LOG, 'w') as outfile:
+    with open(TPCE_LOG, 'w', encoding='utf-8') as outfile:
         return subprocess.Popen(
             ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
 
@@ -498,7 +498,7 @@ def start_honeynode(log_file: str, sim):
     sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     "..", "..", "sample_configs", "openroadm", sim[1])
     if os.path.isfile(executable):
-        with open(log_file, 'w') as outfile:
+        with open(log_file, 'w', encoding='utf-8') as outfile:
             return subprocess.Popen(
                 [executable, SIMS[sim]['port'], os.path.join(sample_directory, SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
@@ -514,7 +514,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=60):
         with TimeOut(seconds=time_to_wait):
             while not os.path.exists(log_file):
                 time.sleep(0.2)
-            filelogs = open(log_file, 'r')
+            filelogs = open(log_file, 'r', encoding='utf-8')
             filelogs.seek(0, 2)
             filefound = True
             print("Searching for pattern '" + regexp + "' in " + os.path.basename(log_file), end='... ', flush=True)

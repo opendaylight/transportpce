@@ -9,6 +9,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=invalid-name
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 # pylint: disable=too-many-lines
