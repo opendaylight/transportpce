@@ -44,7 +44,6 @@ import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -59,7 +58,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -404,205 +402,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     }
 
     @Test
-    public void convertOtnLinkWhenNoState() {
-        HashMap<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))), null, null);
-        otnLinksAlt.replace(link.key(), link);
-
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinksAlt);
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinks
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        assertNull("Administrative State should not be present", tapiLinks.get(3).getAdministrativeState());
-        assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
-        assertNull("Operational State should not be present", tapiLinks.get(3).getOperationalState());
-        assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
-    }
-
-    @Test
-    public void convertOtnLinkWhenNoStateOnOppositeLink() {
-        HashMap<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))), null, null);
-        otnLinksAlt.replace(link.key(), link);
-
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinksAlt);
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinks
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        assertNull("Administrative State should not be present", tapiLinks.get(3).getAdministrativeState());
-        assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
-        assertNull("Operational State should not be present", tapiLinks.get(3).getOperationalState());
-        assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
-    }
-
-    @Test
-    public void convertOtnLinkWhenBadState1() {
-        HashMap<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
-            AdminStates.OutOfService, State.OutOfService);
-        otnLinksAlt.replace(link.key(), link);
-
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinksAlt);
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinks
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
-        assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
-        assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
-        assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
-    }
-
-    @Test
-    public void convertOtnLinkWhenBadState2() {
-        HashMap<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
-            AdminStates.Maintenance, State.Degraded);
-        otnLinksAlt.replace(link.key(), link);
-
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinksAlt);
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinks
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
-        assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
-        assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
-        assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
-    }
-
-    @Test
-    public void convertOtnLinkWhenBadStateOnOppositeLink() {
-        HashMap<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> otnLinksAlt = new HashMap<>(otnLinks);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link
-            link = changeOtnLinkState(otnLinks.get(new LinkKey(
-                new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))),
-            AdminStates.OutOfService, State.OutOfService);
-        otnLinksAlt.replace(link.key(), link);
-
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinksAlt);
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinks
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        assertEquals("Administrative state should be LOCKED",
-            AdministrativeState.LOCKED, tapiLinks.get(3).getAdministrativeState());
-        assertEquals("Administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, tapiLinks.get(0).getAdministrativeState());
-        assertEquals("Operational state should be DISABLED",
-            OperationalState.DISABLED, tapiLinks.get(3).getOperationalState());
-        assertEquals("Operational state should be ENABLED",
-            OperationalState.ENABLED, tapiLinks.get(0).getOperationalState());
-    }
-
-    @Test
     public void convertNodeForTransponder100G() {
         ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         List<String> networkPortList = new ArrayList<>();
@@ -698,59 +497,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .collect(Collectors.toList());
         checkTransitionalLink(tapiLinks.get(2), dsrNodeUuid, otsiNodeUuid,
             "SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK4", "SPDR-SA1-XPDR2+iOTSi+XPDR2-NETWORK4", "SPDR-SA1-XPDR2");
-    }
-
-    @Test
-    public void convertOtnLink() {
-        ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
-        List<String> networkPortListC = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxC.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListC.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxC, networkPortListC);
-        tapiFactory.convertLinks(otnLinks);
-        assertEquals("Link list size should be 4", 4, tapiFactory.getTapiLinks().size());
-
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid node3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid node4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid tp3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-                .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid link2Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-                .getBytes(Charset.forName("UTF-8"))).toString());
-
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> links
-            = tapiFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        checkOtnLink(links.get(3), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
-            "SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1");
-        checkOtnLink(links.get(2), node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
-            "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1");
     }
 
     @Test
@@ -1522,58 +1268,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             either(containsString(nep1Uuid.getValue())).or(containsString(nep2Uuid.getValue())));
     }
 
-    private void checkOtnLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link link,
-                              Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid, Uuid linkUuid,
-                              String linkName) {
-        assertEquals("bad name for the link", linkName, link.getName().get(
-            new NameKey("otn link name")).getValue());
-        assertEquals("bad uuid for link", linkUuid, link.getUuid());
-        assertEquals("Available capacity unit should be MBPS",
-            CapacityUnit.GBPS, link.getAvailableCapacity().getTotalSize().getUnit());
-        String prefix = linkName.split("-")[0];
-        if ("OTU4".equals(prefix)) {
-            assertEquals("Available capacity -total size value should be 0",
-                Uint64.valueOf(0), link.getAvailableCapacity().getTotalSize().getValue());
-        } else if ("ODU4".equals(prefix)) {
-            assertEquals("Available capacity -total size value should be 100 000",
-                Uint64.valueOf(100000), link.getAvailableCapacity().getTotalSize().getValue());
-        }
-        assertEquals("Total capacity unit should be GBPS",
-            CapacityUnit.GBPS, link.getTotalPotentialCapacity().getTotalSize().getUnit());
-        assertEquals("Total capacity -total size value should be 100",
-            Uint64.valueOf(100), link.getTotalPotentialCapacity().getTotalSize().getValue());
-        if ("OTU4".equals(prefix)) {
-            assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-                LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
-        } else if ("ODU4".equals(prefix)) {
-            assertEquals("otn link should be between 2 nodes of protocol layers ODU",
-                LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
-        }
-        assertEquals("otn tapi link should be BIDIRECTIONAL",
-            ForwardingDirection.BIDIRECTIONAL, link.getDirection());
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-            .link.NodeEdgePoint> nodeEdgePointList = new ArrayList<>(link.nonnullNodeEdgePoint().values());
-        assertEquals("topology uuid should be the same for the two termination point of the link",
-            topologyUuid, nodeEdgePointList.get(0).getTopologyUuid());
-        assertEquals("topology uuid should be the same for the two termination point of the link",
-            topologyUuid, nodeEdgePointList.get(1).getTopologyUuid());
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(0).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(1).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
-        assertEquals("operational state should be ENABLED",
-            OperationalState.ENABLED, link.getOperationalState());
-        assertEquals("administrative state should be UNLOCKED",
-            AdministrativeState.UNLOCKED, link.getAdministrativeState());
-    }
 
     private void checkOmsLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link link,
                               Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid, Uuid linkUuid,
@@ -1660,20 +1354,5 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         tps.replace(tpBldr1.key(), tpBldr1.build());
         tpdr1Bldr.setTerminationPoint(tps);
         return new NodeBuilder(initialNode).addAugmentation(tpdr1Bldr.build()).build();
-    }
-
-    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-            .ietf.network.topology.rev180226.networks.network.Link changeOtnLinkState(
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .Link initiallink, AdminStates admin, State oper) {
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .LinkBuilder linkBldr = new
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-                .LinkBuilder(initiallink);
-        linkBldr.addAugmentation(new Link1Builder(linkBldr.augmentation(Link1.class))
-            .setAdministrativeState(admin)
-            .setOperationalState(oper)
-            .build());
-        return linkBldr.build();
     }
 }
