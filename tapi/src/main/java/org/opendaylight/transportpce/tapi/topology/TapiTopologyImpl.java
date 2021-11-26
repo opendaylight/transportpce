@@ -294,13 +294,6 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         } else {
             LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
         }
-        if (otnTopo.augmentation(Network1.class) != null) {
-            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                    .ietf.network.topology.rev180226.networks.network.LinkKey, Link> otnLinkMap =
-                otnTopo.augmentation(Network1.class).getLink();
-            tapiFactory.convertLinks(otnLinkMap);
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
-        }
         Name name = new NameBuilder()
             .setValue(TapiStringConstants.T0_MULTILAYER)
             .setValueName("TAPI Topology Name")
