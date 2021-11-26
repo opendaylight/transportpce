@@ -775,8 +775,8 @@ def find_object_with_key(list_dicts, key, value):
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
-    for dict in list_dicts:
-        if dict[key1][0][key2] == value:
+    for dictio in list_dicts:
+        if dictio[key1][0][key2] == value:
             nb += 1
     return nb
 
