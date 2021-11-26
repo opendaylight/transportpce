@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0930f0e0_480e541b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-26T14:42:29Z",
+      "side": 1,
+      "message": "Javier, just a PS to homogenize the whole class by migrating all from dataBroker by using networkTransactionService",
+      "revId": "b6206cc6020ce2f29add4fa0d1c52de9d685a5d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
