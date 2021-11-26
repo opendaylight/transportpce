@@ -23,10 +23,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
@@ -183,8 +183,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
                     .setMessage("Service implemented !")
-                    .setOperationalState(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.common.state.types.rev181130.State.InService)
+                    .setOperationalState(State.InService)
                     .build());
             if (!tempService) {
                 sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
@@ -194,8 +193,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed(serviceTemp + "Service status not updated in datastore !")
                     .setMessage("ServiceCreate request failed ...")
-                    .setOperationalState(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.common.state.types.rev181130.State.OutOfService)
+                    .setOperationalState(State.OutOfService)
                     .build());
         }
     }

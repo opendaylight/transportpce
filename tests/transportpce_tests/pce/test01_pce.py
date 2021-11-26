@@ -260,11 +260,23 @@ class TransportPCEtesting(unittest.TestCase):
                                                        {"service-format": "Ethernet", "service-rate": "100",
                                                            "clli": "ORANGE1", "node-id": "XPONDER-1-2"},
                                                        {"customer-code": ["Some customer-code"],
-                                                           "co-routing": {"existing-service": ["Some existing-service"]}
-                                                        },
+                                                           "co-routing": {
+                                                           "service-identifier-list": [
+                                                               {
+                                                                   "service-identifier": "Some existing-service",
+                                                               }
+                                                           ]
+                                                       }
+                                                       },
                                                        {"customer-code": ["Some customer-code"],
-                                                           "co-routing": {"existing-service": ["Some existing-service"]}
-                                                        }, "hop-count")
+                                                           "co-routing": {
+                                                           "service-identifier-list": [
+                                                               {
+                                                                   "service-identifier": "Some existing-service",
+                                                               }
+                                                           ]
+                                                       }
+                                                       }, "hop-count")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
