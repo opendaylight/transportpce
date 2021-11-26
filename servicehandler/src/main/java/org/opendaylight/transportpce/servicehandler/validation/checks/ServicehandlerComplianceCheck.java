@@ -7,9 +7,9 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev210924.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev210924.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev210924.sdnc.request.header.SdncRequestHeader;
 
 /**
  * Class for checking service sdnc-request-header compliance.

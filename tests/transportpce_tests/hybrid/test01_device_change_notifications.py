@@ -40,7 +40,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDRA01",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
+                    "tx-direction": [{
                         "port": {
                             "port-device-name": "1/0/C1",
                             "port-type": "fixed",
@@ -53,23 +53,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-name": "Some lgx-port-name",
                             "lgx-port-rack": "000000.00",
                             "lgx-port-shelf": "00"
-                        }
-                    },
-            "rx-direction": {
-                        "port": {
-                            "port-device-name": "1/0/C1",
-                            "port-type": "fixed",
-                            "port-name": "1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
                         },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                        "index": 0
+                    }],
+            "rx-direction": [{
+                "port": {
+                    "port-device-name": "1/0/C1",
+                    "port-type": "fixed",
+                    "port-name": "1",
+                    "port-rack": "000000.00",
+                    "port-shelf": "Chassis#1"
+                },
+                "lgx": {
+                    "lgx-device-name": "Some lgx-device-name",
+                    "lgx-port-name": "Some lgx-port-name",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -77,7 +79,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDR-C1",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
+                    "tx-direction": [{
                         "port": {
                             "port-device-name": "1/0/C1",
                             "port-type": "fixed",
@@ -90,23 +92,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-name": "Some lgx-port-name",
                             "lgx-port-rack": "000000.00",
                             "lgx-port-shelf": "00"
-                        }
-                    },
-            "rx-direction": {
-                        "port": {
-                            "port-device-name": "1/0/C1",
-                            "port-type": "fixed",
-                            "port-name": "1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
                         },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                        "index": 0
+                    }],
+            "rx-direction": [{
+                "port": {
+                    "port-device-name": "1/0/C1",
+                    "port-type": "fixed",
+                    "port-name": "1",
+                    "port-rack": "000000.00",
+                    "port-shelf": "Chassis#1"
+                },
+                "lgx": {
+                    "lgx-device-name": "Some lgx-device-name",
+                    "lgx-port-name": "Some lgx-port-name",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",

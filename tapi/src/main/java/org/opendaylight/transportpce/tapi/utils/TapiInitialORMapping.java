@@ -14,8 +14,8 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.Service;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev210924.Service;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev210924.ServiceList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;

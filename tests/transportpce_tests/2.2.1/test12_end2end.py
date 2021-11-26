@@ -41,7 +41,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDR-A1",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
+            "tx-direction": [{
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
                             "port-type": "router",
@@ -49,28 +49,30 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "port-rack": "000000.00",
                             "port-shelf": "00"
                         },
-                        "lgx": {
+                "lgx": {
                             "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
                             "lgx-port-name": "LGX Back.3",
                             "lgx-port-rack": "000000.00",
                             "lgx-port-shelf": "00"
-                        }
-                    },
-            "rx-direction": {
-                        "port": {
-                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
                         },
-                        "lgx": {
-                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                "index": 0
+            }],
+            "rx-direction": [{
+                "port": {
+                    "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                    "lgx-port-name": "LGX Back.4",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -78,7 +80,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDR-C1",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
+                    "tx-direction": [{
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
                             "port-type": "router",
@@ -91,23 +93,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-name": "LGX Back.29",
                             "lgx-port-rack": "000000.00",
                             "lgx-port-shelf": "00"
-                        }
-                    },
-            "rx-direction": {
-                        "port": {
-                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
                         },
-                        "lgx": {
-                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                        "index": 0
+                    }],
+            "rx-direction": [{
+                "port": {
+                    "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                    "lgx-port-name": "LGX Back.30",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",

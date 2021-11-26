@@ -49,13 +49,7 @@ class TransportTapitesting(unittest.TestCase):
             "service-format": "OTU",
             "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
             "clli": "NodeSA",
-            "subrate-eth-sla": {
-                    "subrate-eth-sla": {
-                        "committed-info-rate": "100000",
-                        "committed-burst-size": "64"
-                    }
-            },
-            "tx-direction": {
+            "tx-direction": [{
                 "port": {
                     "port-device-name": "SPDR-SA1-XPDR1",
                     "port-type": "fixed",
@@ -68,9 +62,10 @@ class TransportTapitesting(unittest.TestCase):
                     "lgx-port-name": "Some lgx-port-name",
                     "lgx-port-rack": "000000.00",
                     "lgx-port-shelf": "00"
-                }
-            },
-            "rx-direction": {
+                },
+                "index": 0
+            }],
+            "rx-direction": [{
                 "port": {
                     "port-device-name": "SPDR-SA1-XPDR1",
                     "port-type": "fixed",
@@ -83,8 +78,9 @@ class TransportTapitesting(unittest.TestCase):
                     "lgx-port-name": "Some lgx-port-name",
                     "lgx-port-rack": "000000.00",
                     "lgx-port-shelf": "00"
-                }
-            },
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -93,13 +89,7 @@ class TransportTapitesting(unittest.TestCase):
             "service-format": "OTU",
             "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
             "clli": "NodeSC",
-            "subrate-eth-sla": {
-                    "subrate-eth-sla": {
-                        "committed-info-rate": "100000",
-                        "committed-burst-size": "64"
-                    }
-            },
-            "tx-direction": {
+            "tx-direction": [{
                 "port": {
                     "port-device-name": "SPDR-SC1-XPDR1",
                     "port-type": "fixed",
@@ -112,9 +102,10 @@ class TransportTapitesting(unittest.TestCase):
                     "lgx-port-name": "Some lgx-port-name",
                     "lgx-port-rack": "000000.00",
                     "lgx-port-shelf": "00"
-                }
-            },
-            "rx-direction": {
+                },
+                "index": 0
+            }],
+            "rx-direction": [{
                 "port": {
                     "port-device-name": "SPDR-SC1-XPDR1",
                     "port-type": "fixed",
@@ -127,8 +118,9 @@ class TransportTapitesting(unittest.TestCase):
                     "lgx-port-name": "Some lgx-port-name",
                     "lgx-port-rack": "000000.00",
                     "lgx-port-shelf": "00"
-                }
-            },
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "due-date": "2018-06-15T00:00:01Z",
