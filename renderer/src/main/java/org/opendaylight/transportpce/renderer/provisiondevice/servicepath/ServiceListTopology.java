@@ -10,22 +10,22 @@ package org.opendaylight.transportpce.renderer.provisiondevice.servicepath;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.DeviceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.ResourceTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.resource.resource.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181130.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.Hop.HopType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToABuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToAKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.DeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.ResourceTypeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev210924.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.Hop.HopType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToAKey;
 
 public class ServiceListTopology {
 
@@ -75,9 +75,9 @@ public class ServiceListTopology {
             PortBuilder portBldr = new PortBuilder();
             portBldr.setCircuitPackName(circuitPackName);
             portBldr.setPortName(portName);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.resource.resource
+            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
                     .PortBuilder portCase =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.resource.resource
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
                             .PortBuilder();
             portCase.setPort(portBldr.build());
             ResourceBuilder rsrcBldr = new ResourceBuilder();
@@ -135,9 +135,9 @@ public class ServiceListTopology {
             PortBuilder portBldr = new PortBuilder();
             portBldr.setCircuitPackName(circuitPackName);
             portBldr.setPortName(portName);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.resource.resource
+            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
                     .PortBuilder portCase =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev190531.resource.resource.resource
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
                             .PortBuilder();
             portCase.setPort(portBldr.build());
             ResourceBuilder rsrcBldr = new ResourceBuilder();

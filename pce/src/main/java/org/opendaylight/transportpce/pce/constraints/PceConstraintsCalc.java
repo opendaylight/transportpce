@@ -8,7 +8,9 @@
 package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -19,17 +21,17 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.diversity.existing.service.constraints.ExistingServiceApplicability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.Constraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.service.applicability.g.ServiceApplicability;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Link;
@@ -73,10 +75,7 @@ public class PceConstraintsCalc {
             LOG.info("In calcHardconstraints: no hard constraints.");
             return;
         }
-
-        CoRoutingOrGeneral coRoutingOrGeneral = servicePathHardConstraints.getCoRoutingOrGeneral();
-        readconstraints(coRoutingOrGeneral, pceHardConstraints);
-
+        readConstraints(servicePathHardConstraints, pceHardConstraints);
     }
 
     private void calcSoftconstraints(PathComputationRequestInput input) {
@@ -85,81 +84,27 @@ public class PceConstraintsCalc {
             LOG.info("In calcSoftconstraints: no soft constraints.");
             return;
         }
-
-        CoRoutingOrGeneral coRoutingOrGeneral = servicePathSoftConstraints.getCoRoutingOrGeneral();
-        readconstraints(coRoutingOrGeneral, pceSoftConstraints);
-
+        readConstraints(servicePathSoftConstraints, pceSoftConstraints);
     }
 
-    private void readconstraints(CoRoutingOrGeneral coRoutingOrGeneral, PceConstraints constraints) {
-        LOG.debug("In readconstraints start");
+    private void readConstraints(Constraints hardConstraints, PceConstraints constraints) {
+        LOG.debug("In readHardconstraints start");
 
-        if (coRoutingOrGeneral == null) {
-            LOG.info("In readHardconstraints: no CoRoutingOrGeneral constraints.");
-            return;
+        if (hardConstraints.getInclude() != null) {
+            readInclude(hardConstraints.getInclude(), constraints);
         }
-
-        General tmpGeneral = null;
-        CoRouting tmpCoRouting = null;
-
-        if (coRoutingOrGeneral instanceof General) {
-            LOG.info("In readconstraints General {}", coRoutingOrGeneral);
-            tmpGeneral = (General) coRoutingOrGeneral;
-            readGeneralContrains(tmpGeneral, constraints);
-            return;
+        if (hardConstraints.getExclude() != null) {
+            readExclude(hardConstraints.getExclude(), constraints);
         }
-
-        if (coRoutingOrGeneral instanceof CoRouting) {
-            LOG.info("In readconstraints CoRouting {}", coRoutingOrGeneral);
-            tmpCoRouting = (CoRouting) coRoutingOrGeneral;
-            readCoRoutingContrains(tmpCoRouting, constraints);
+        if (hardConstraints.getCoRouting() != null) {
+            readCoRouting(hardConstraints.getCoRouting(), constraints);
         }
-    }
-
-    private void readGeneralContrains(General tmpGeneral, PceConstraints constraints) {
-        LOG.debug("In readGeneralContrains start");
-
-        if (tmpGeneral == null) {
-            LOG.info("In readGeneralContrains: no General constraints.");
-            return;
+        if (hardConstraints.getDiversity() != null) {
+            readDiversity(hardConstraints.getDiversity(), constraints);
         }
-
-        Latency latency = tmpGeneral.getLatency();
-        if (latency != null) {
-            constraints.setMaxLatency(latency.getMaxLatency().toJava());
-            LOG.info("In readGeneralContrains: read latency {}", latency);
+        if (hardConstraints.getLatency() != null) {
+            constraints.setMaxLatency(hardConstraints.getLatency().getMaxLatency().longValue());
         }
-
-        Exclude exclude = tmpGeneral.getExclude();
-        if (exclude != null) {
-            readExclude(exclude, constraints);
-        }
-
-        Include include = tmpGeneral.getInclude();
-        if (include != null) {
-            readInclude(include, constraints);
-        }
-
-        Diversity diversity = tmpGeneral.getDiversity();
-        PceConstraints.ResourceType rt = PceConstraints.ResourceType.NONE;
-        if (diversity != null) {
-            ExistingServiceApplicability temp = diversity.getExistingServiceApplicability();
-            if (temp == null) {
-                return;
-            }
-            if (Boolean.TRUE.equals(temp.getNode())) {
-                rt = PceConstraints.ResourceType.NODE;
-            }
-            if (Boolean.TRUE.equals(temp.getSrlg())) {
-                rt = PceConstraints.ResourceType.SRLG;
-            }
-            if (Boolean.TRUE.equals(temp.getSite())) {
-                rt = PceConstraints.ResourceType.CLLI;
-            }
-            LOG.info("in readGeneralContrains {} list is :{}", rt, diversity);
-            readDiversity(diversity.getExistingService(), constraints, rt);
-        }
-
     }
 
     private void readExclude(Exclude exclude, PceConstraints constraints) {
@@ -206,48 +151,36 @@ public class PceConstraintsCalc {
         }
     }
 
-    private void readDiversity(List<String> srvList, PceConstraints constraints, PceConstraints.ResourceType rt) {
+    private void readCoRouting(CoRouting tmpcoRouting, PceConstraints constraints) {
+        if (tmpcoRouting == null) {
+            LOG.info("In readCoRoutingContrains: no CoRouting constraints.");
+        } else {
+            LOG.warn("CoRouting constraints handling not implemented yet");
+        }
+    }
 
-        List<String> elementsToExclude = new ArrayList<>();
-        LOG.info("in readDiversity {}", srvList);
-
-        for (String srv : srvList) {
-            Optional<PathDescription> service = getPathDescriptionFromDatastore(srv);
-            if (service.isPresent()) {
-                LOG.info("in readDiversity service list {}", service);
-                switch (rt) {
-                    case NODE:
-                        elementsToExclude.addAll(getAToZNodeList(service.get()));
-                        LOG.info("readDiversity NODE : {}", elementsToExclude);
-                        if (elementsToExclude != null) {
-                            constraints.setExcludeNodes(elementsToExclude);
-                        }
-                        break;
-                    case SRLG:
-                        elementsToExclude.addAll(getSRLGList(service.get()));
-                        LOG.info("readDiversity SRLG : {}", elementsToExclude);
-                        if (elementsToExclude != null) {
-                            constraints.setExcludeSrlgLinks(elementsToExclude);
-                        }
-                        break;
-                    case CLLI:
-                        /// Retrieve nodes into dedicated CLLI list
-                        /// during node validation check their CLLI and build CLLI exclude list
-                        elementsToExclude.addAll(getAToZNodeList(service.get()));
-                        LOG.info("readDiversity CLLI : {}", elementsToExclude);
-                        if (elementsToExclude != null) {
-                            constraints.setExcludeClliNodes(elementsToExclude);
-                        }
-                        break;
-                    default:
-                        LOG.info("in readDiversity unsupported divercity type {}", rt);
+    private void readDiversity(Diversity diversity, PceConstraints constraints) {
+        //TODO: How to implement the DiversityType: serial or synchronous?
+        Map<ServiceIdentifierListKey, ServiceIdentifierList> serviceIdList = diversity.getServiceIdentifierList();
+        Collection<ServiceIdentifierList> services = serviceIdList.values();
+        for (ServiceIdentifierList serviceIdentifier : services) {
+            String serviceId = serviceIdentifier.getServiceIndentifier();
+            ServiceApplicability serviceApplicability = serviceIdentifier.getServiceApplicability();
+            Optional<PathDescription> serviceOpt = getPathDescriptionFromDatastore(serviceId);
+            if (serviceOpt.isPresent()) {
+                List<String> serviceNodes = getAToZNodeList(serviceOpt.get());
+                if (serviceApplicability.getNode() && !serviceNodes.isEmpty()) {
+                    constraints.setExcludeNodes(serviceNodes);
                 }
-
-            } else {
-                LOG.info("in readDiversity srv={} is not present", srv);
+                List<String> serviceLinks = getSRLGList(serviceOpt.get());
+                if (serviceApplicability.getLink() && !serviceLinks.isEmpty()) {
+                    constraints.setExcludeSrlgLinks(serviceLinks);
+                }
+                if (serviceApplicability.getSite() && !serviceNodes.isEmpty()) {
+                    constraints.setExcludeClliNodes(serviceNodes);
+                }
             }
         }
-
     }
 
     private List<String> getAToZNodeList(PathDescription pathDescription) {
@@ -314,15 +247,6 @@ public class PceConstraintsCalc {
             return result;
         }
         return result;
-    }
-
-    private void readCoRoutingContrains(CoRouting tmpcoRouting, PceConstraints constraints) {
-        LOG.info("In readCoRoutingContrains start");
-
-        if (tmpcoRouting == null) {
-            LOG.info("In readCoRoutingContrains: no General constraints.");
-        }
-
     }
 
     public PceConstraints getPceHardConstraints() {

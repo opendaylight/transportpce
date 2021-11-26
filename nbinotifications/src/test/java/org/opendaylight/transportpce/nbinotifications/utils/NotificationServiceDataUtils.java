@@ -7,16 +7,19 @@
  */
 package org.opendaylight.transportpce.nbinotifications.utils;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirectionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.lgx.LgxBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notifications.alarm.service.output.NotificationsAlarmService;
@@ -26,6 +29,7 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.get.notification
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.common.Uint8;
 
 public final class NotificationServiceDataUtils {
 
@@ -87,8 +91,8 @@ public final class NotificationServiceDataUtils {
                 .setRxDirection(getRxDirection());
     }
 
-    private static TxDirection getTxDirection() {
-        return new TxDirectionBuilder()
+    private static Map<TxDirectionKey, TxDirection> getTxDirection() {
+        return Map.of(new TxDirectionKey(Uint8.ZERO), new TxDirectionBuilder()
                 .setPort(new PortBuilder()
                         .setPortDeviceName("device name")
                         .setPortName("port name")
@@ -104,11 +108,12 @@ public final class NotificationServiceDataUtils {
                         .setLgxPortRack("lgx port rack")
                         .setLgxPortShelf("lgx port shelf")
                         .build())
-                .build();
+                .setIndex(Uint8.ZERO)
+                .build());
     }
 
-    private static RxDirection getRxDirection() {
-        return new RxDirectionBuilder()
+    private static Map<RxDirectionKey, RxDirection> getRxDirection() {
+        return Map.of(new RxDirectionKey(Uint8.ZERO), new RxDirectionBuilder()
                 .setPort(new PortBuilder()
                         .setPortDeviceName("device name")
                         .setPortName("port name")
@@ -124,6 +129,7 @@ public final class NotificationServiceDataUtils {
                         .setLgxPortRack("lgx port rack")
                         .setLgxPortShelf("lgx port shelf")
                         .build())
-                .build();
+                .setIndex(Uint8.ZERO)
+                .build());
     }
 }
