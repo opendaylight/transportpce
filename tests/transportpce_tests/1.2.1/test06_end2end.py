@@ -40,8 +40,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDRA01",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJP8",
-            "tx-direction": {},
-            "rx-direction": {},
+            "tx-direction": [{"index": 0}],
+            "rx-direction": [{"index": 0}],
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -49,8 +49,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDRC01",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJT4",
-            "tx-direction": {},
-            "rx-direction": {},
+            "tx-direction": [{"index": 0}],
+            "rx-direction": [{"index": 0}],
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",

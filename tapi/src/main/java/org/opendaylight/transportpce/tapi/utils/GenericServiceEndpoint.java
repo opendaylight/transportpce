@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceEndpoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
 
 public class GenericServiceEndpoint {
     private ServiceEndpoint value;

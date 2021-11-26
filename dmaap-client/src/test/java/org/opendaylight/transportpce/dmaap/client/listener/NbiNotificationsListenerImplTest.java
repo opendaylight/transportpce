@@ -13,24 +13,28 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import java.util.List;
+import java.util.Map;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Test;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApiStub;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.TxDirectionKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev210813.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.LoggerFactory;
 
 public class NbiNotificationsListenerImplTest extends JerseyTest {
@@ -59,16 +63,20 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
                         .setNodeId(new NodeIdType("nodeidtype"))
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(100))
-                        .setRxDirection(new RxDirectionBuilder().build())
-                        .setTxDirection(new TxDirectionBuilder().build())
+                        .setRxDirection(Map.of(new RxDirectionKey(Uint8.ZERO),
+                            new RxDirectionBuilder().setIndex(Uint8.ZERO).build()))
+                        .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
+                            new TxDirectionBuilder().setIndex(Uint8.ZERO).build()))
                         .build())
                 .setServiceZEnd(new ServiceZEndBuilder()
                         .setClli("clli")
                         .setNodeId(new NodeIdType("nodeidtype"))
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(100))
-                        .setRxDirection(new RxDirectionBuilder().build())
-                        .setTxDirection(new TxDirectionBuilder().build())
+                        .setRxDirection(Map.of(new RxDirectionKey(Uint8.ZERO),
+                            new RxDirectionBuilder().setIndex(Uint8.ZERO).build()))
+                        .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
+                            new TxDirectionBuilder().setIndex(Uint8.ZERO).build()))
                         .build())
                 .build();
         listener.onPublishNotificationProcessService(notification);

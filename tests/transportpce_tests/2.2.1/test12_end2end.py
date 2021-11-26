@@ -41,22 +41,23 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDR-A1",
             "service-format": "Ethernet",
             "clli": "NodeA",
-            "tx-direction": {
-                        "port": {
-                            "port-device-name": "XPDR-A1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "1/0/2-PLUG-CLIENT",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
+            "tx-direction": [{
+                "port": {
+                    "port-device-name": "XPDR-A1-XPDR1",
+                    "port-type": "fixed",
+                    "port-name": "1/0/2-PLUG-CLIENT",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
                 "lgx": {
-                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-            },
-            "rx-direction": {
+                    "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                    "lgx-port-name": "LGX Back.3",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
+            "rx-direction": [{
                 "port": {
                     "port-device-name": "XPDR-A1-XPDR1",
                     "port-type": "fixed",
@@ -69,8 +70,9 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "lgx-port-name": "LGX Back.4",
                     "lgx-port-rack": "000000.00",
                     "lgx-port-shelf": "00"
-                }
-            },
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -78,7 +80,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDR-C1",
             "service-format": "Ethernet",
             "clli": "NodeC",
-                    "tx-direction": {
+                    "tx-direction": [{
                         "port": {
                             "port-device-name": "XPDR-C1-XPDR2",
                             "port-type": "router",
@@ -91,23 +93,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-name": "LGX Back.29",
                             "lgx-port-rack": "000000.00",
                             "lgx-port-shelf": "00"
-                        }
-                    },
-            "rx-direction": {
-                        "port": {
-                            "port-device-name": "XPDR-C1-XPDR2",
-                            "port-type": "router",
-                            "port-name": "1/0/2-PLUG-CLIENT",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
                         },
-                        "lgx": {
-                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                        "index": 0
+                    }],
+            "rx-direction": [{
+                "port": {
+                    "port-device-name": "XPDR-C1-XPDR2",
+                    "port-type": "router",
+                    "port-name": "1/0/2-PLUG-CLIENT",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                    "lgx-port-name": "LGX Back.29",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                },
+                "index": 0
+            }],
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",
@@ -374,14 +378,14 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_22_create_eth_service1(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service1"
-        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-device-name"]
-        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-name"]
-        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-device-name"]
-        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-name"]
-        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-device-name"]
-        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-name"]
-        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-device-name"]
-        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"][0]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"][0]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"][0]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"][0]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"][0]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"][0]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"][0]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"][0]["port"]["port-name"]
 
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)

@@ -183,7 +183,7 @@ public class PceOtnNode implements PceNode {
                     String notCreatedServiceType = xpdrNetTpCreation(ontTp1);
                     if (notCreatedServiceType == null) {
                         LOG.info("TP {} of XPONDER {} is validated",
-                            tp.getTpId(),
+                            tp.getTpId().getValue(),
                             node.getNodeId().getValue());
                         this.availableXpdrNWTps.add(tp.getTpId());
                     } else {
@@ -344,8 +344,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkFirstOdtuTpn(OdtuTpnPool otPool) {
-        return (otPool.getOdtuType().equals(ODTU4TsAllocated.class)
-                || otPool.getOdtuType().equals(ODTUCnTs.class))
+        return (otPool.getOdtuType().getSimpleName().equals(ODTU4TsAllocated.class.getSimpleName())
+                || otPool.getOdtuType().getSimpleName().equals(ODTUCnTs.class.getSimpleName()))
             && !otPool.getTpnPool().isEmpty();
     }
 
