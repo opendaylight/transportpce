@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e5f1d7_f7c902e2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-26T13:45:37Z",
+      "side": 1,
+      "message": "maybe using a map would be more indicated than switch case here.",
+      "revId": "1c1885fc5857e6b61c801e3fbb72004440586149",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
