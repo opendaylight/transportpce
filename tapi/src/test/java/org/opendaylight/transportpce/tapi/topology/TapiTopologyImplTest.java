@@ -451,7 +451,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
         // Links in openroadm topology which include Roadm-to-Roadm and Xpdr-to-Roadm (ortopo / 2)
         // + transitional links -> 1 per network port of Xpdr + OTN links / 2
-        assertEquals("Link list size should be 27", 27, topology.getLink().size());
+        assertEquals("Link list size should be 25", 25, topology.getLink().size());
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes("T0 - Full Multi-layer topology".getBytes()).toString());
         assertEquals("incorrect topology uuid", topoUuid, topology.getUuid());
         assertEquals("topology name should be T0 - Full Multi-layer topology",
@@ -474,46 +474,10 @@ public class TapiTopologyImplTest extends AbstractTest {
         // Xpdr-to-Roadm
         long nbOmsLinks1 = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("XPDR-RDM link name"))).count();
-        long nbOtnLinks = topology.getLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name"))).count();
         // 1 transitional link per NETWORK port
         assertEquals("Link list should contain 16 transitional links", 16, nbTransititionalLinks);
         // 1 OMS per ROADM-to-ROADM link + Existing XPDR-tp-ROADM link in openroadm topology
         assertEquals("Link list should contain 9 OMS links", 9, nbOmsLinks + nbOmsLinks1);
-        // Should we consider OTN links as links or connections??
-        assertEquals("Link list should contain 2 OTN links", 2, nbOtnLinks);
-
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+DSR".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid node4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+OTSi".getBytes(StandardCharsets.UTF_8))
-            .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp3Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid tp4Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link1Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-        Uuid link2Uuid =
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-                .getBytes(StandardCharsets.UTF_8)).toString());
-
-        List<Link> links = topology.nonnullLink().values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey("otn link name")))
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        checkOtnLink(links.get(0), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link1Uuid,
-            "SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1");
-        checkOtnLink(links.get(1), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link2Uuid,
-            "SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1");
     }
 
     @Test
