@@ -548,18 +548,13 @@ class TransportTapitesting(unittest.TestCase):
         nodes = res["output"]["topology"]["node"]
         links = res["output"]["topology"]["link"]
         self.assertEqual(9, len(nodes), 'Topology should contain 9 nodes')
-        self.assertEqual(9, len(links), 'Topology should contain 9 links')
+        self.assertEqual(8, len(links), 'Topology should contain 8 links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
                          'Topology should contain 4 transitional links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
                          'Topology should contain 4 oms links')
-        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "otn link name"),
-                         'Topology should contain 1 otn link')
         for link in links:
-            if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
-                self.assertEqual(100000, link["available-capacity"]["total-size"]["value"],
-                                 'OTU4 link should have an available capacity of 100 000 Mbps')
-            elif link["name"][0]["value-name"] == "transitional link name":
+            if link["name"][0]["value-name"] == "transitional link name":
                 self.assertEqual(100, link["available-capacity"]["total-size"]["value"],
                                  'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
@@ -593,21 +588,13 @@ class TransportTapitesting(unittest.TestCase):
         nodes = res["output"]["topology"]["node"]
         links = res["output"]["topology"]["link"]
         self.assertEqual(9, len(nodes), 'Topology should contain 9 nodes')
-        self.assertEqual(10, len(links), 'Topology should contain 10 links')
+        self.assertEqual(8, len(links), 'Topology should contain 8 links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
                          'Topology should contain 4 transitional links')
         self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
                          'Topology should contain 4 oms links')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
-                         'Topology should contain 2 otn links')
         for link in links:
-            if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
-                self.assertEqual(0, link["available-capacity"]["total-size"]["value"],
-                                 'OTU4 link should have an available capacity of 0 Mbps')
-            elif link["name"][0]["value"] == "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
-                self.assertEqual(100000, link["available-capacity"]["total-size"]["value"],
-                                 'ODU4 link should have an available capacity of 100 000 Mbps')
-            elif link["name"][0]["value-name"] == "transitional link name":
+            if link["name"][0]["value-name"] == "transitional link name":
                 self.assertEqual(100, link["available-capacity"]["total-size"]["value"],
                                  'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
@@ -643,7 +630,7 @@ class TransportTapitesting(unittest.TestCase):
         nodes = res["output"]["topology"]["node"]
         links = res["output"]["topology"]["link"]
         self.assertEqual(11, len(nodes), 'Topology should contain 11 nodes')
-        self.assertEqual(12, len(links), 'Topology should contain 12 links')
+        self.assertEqual(10, len(links), 'Topology should contain 10 links')
         self.assertEqual(6, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
                          'Topology should contain 6 otsi nodes')
         self.assertEqual(5, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
@@ -652,8 +639,6 @@ class TransportTapitesting(unittest.TestCase):
                          'Topology should contain 5 transitional links')
         self.assertEqual(5, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
                          'Topology should contain 5 oms links')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
-                         'Topology should contain 2 otn links')
 
     def test_38_delete_ODU4_service(self):
         response = test_utils.service_delete_request("service1-ODU4")
@@ -685,8 +670,6 @@ class TransportTapitesting(unittest.TestCase):
         links = res["output"]["topology"]["link"]
         self.assertEqual(11, len(nodes), 'Topology should contain 11 nodes')
         self.assertEqual(10, len(links), 'Topology should contain 10 links')
-        self.assertEqual(0, count_object_with_double_key(links, "name", "value-name", "otn link name"),
-                         'Topology should contain 0 otn link')
 
     def test_41_disconnect_xponders_from_roadm(self):
         url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
