@@ -98,15 +98,15 @@ public class TapiTopologyImplTest extends AbstractTest {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-                TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
+            TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-                TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
+            TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-                TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
+            TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
-                TapiTopologyDataUtils.PORTMAPPING_FILE);
+            TapiTopologyDataUtils.PORTMAPPING_FILE);
         networkTransactionService = new NetworkTransactionImpl(
-                new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
         tapiLink = new TapiLink(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
@@ -114,14 +114,14 @@ public class TapiTopologyImplTest extends AbstractTest {
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
-                tapiContext, serviceDataStoreOperations);
+            tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
         LOG.info("setup done");
     }
 
     @Test
     public void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.TPDR_100G);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
@@ -167,7 +167,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.T0_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
@@ -186,37 +186,37 @@ public class TapiTopologyImplTest extends AbstractTest {
         assertEquals("Node list size should be 13", 13, topology.getNode().size());
         long nb1 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("XPDR-A1-XPDR1"))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("XPDR-A1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))))
             .count();
         assertEquals("XPDR-A1-XPDR1 should only have one client nep", 1, nb1);
         long nb2 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1"))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
             .count();
         assertEquals("SPDR-SA1-XPDR1 (mux) should have 4 client neps", 4, nb2);
         long nb3 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1"))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
-                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_N"))))
+                .filter(nep -> nep.getName().containsKey(new NameKey("iNodeEdgePoint_N"))))
             .count();
         assertEquals("SPDR-SA1-XPDR1 (mux) should have a single network nep", 1, nb3);
         long nb4 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2"))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
             .count();
         assertEquals("SPDR-SA1-XPDR2 (switch) should have 4 client neps", 4, nb4);
         long nb5 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2"))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
-                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_N"))))
+                .filter(nep -> nep.getName().containsKey(new NameKey("iNodeEdgePoint_N"))))
             .count();
         assertEquals("SPDR-SA1-XPDR2 (switch) should have 2 network neps", 2, nb5);
         assertEquals("Link list size should be 18", 18, topology.getLink().size());
@@ -277,7 +277,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     public void getTopologyDetailsForFullTapiTopologyWithLinksWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.T0_FULL_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
@@ -512,7 +512,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     public void getNodeAndNepsDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.T0_FULL_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
@@ -559,7 +559,7 @@ public class TapiTopologyImplTest extends AbstractTest {
                 RpcResult<GetNodeEdgePointDetailsOutput> rpcResult2 = result2.get();
                 org.opendaylight.yang.gen.v1
                     .urn.onf.otcc.yang.tapi.topology.rev181210.get.node.edge.point.details.output.NodeEdgePoint
-                        onep1 = rpcResult2.getResult().getNodeEdgePoint();
+                    onep1 = rpcResult2.getResult().getNodeEdgePoint();
                 assertNotNull("Node Edge Point should not be null", onep1);
             }
         }
@@ -567,7 +567,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     public void getLinkDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.T0_FULL_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
@@ -603,7 +603,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     public void getSipDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+        throws ExecutionException, InterruptedException {
         GetServiceInterfacePointListInput input = TapiTopologyDataUtils.buildServiceInterfacePointListInput();
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
         ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>> result = tapiTopoImpl
@@ -633,7 +633,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             RpcResult<GetServiceInterfacePointDetailsOutput> rpcResult1 = result1.get();
             org.opendaylight.yang.gen.v1
                 .urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.details.output.Sip sip1
-                    = rpcResult1.getResult().getSip();
+                = rpcResult1.getResult().getSip();
             assertNotNull("Sip should not be null", sip1);
         }
     }
