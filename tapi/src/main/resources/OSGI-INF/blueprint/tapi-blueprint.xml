@@ -65,6 +65,11 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="tapiNetworkModelService" />
     </bean>
 
+    <bean id="tapiOrLinkListener" class="org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener">
+        <argument ref="tapiLink" />
+        <argument ref="networkTransactionImpl" />
+    </bean>
+
     <bean id="tapiNetworkUtilsImpl" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl">
         <argument ref="networkTransactionImpl" />
         <argument ref="tapiLink" />
@@ -86,6 +91,7 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
         <argument ref="tapiRendererListener" />
         <argument ref="tapiServiceHandlerListener" />
         <argument ref="notificationService" />
+        <argument ref="tapiOrLinkListener" />
     </bean>
 
     <bean id="tapiPortMappingListener" class="org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener">
