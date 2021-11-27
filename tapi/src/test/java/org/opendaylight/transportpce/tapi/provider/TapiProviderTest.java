@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
+import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -61,6 +62,9 @@ public class TapiProviderTest extends AbstractTest {
     TapiNetconfTopologyListener topologyListener;
 
     @Mock
+    TapiOrLinkListener orLinkListener;
+
+    @Mock
     TapiPceListenerImpl pceListenerImpl;
 
     @Mock
@@ -87,7 +91,7 @@ public class TapiProviderTest extends AbstractTest {
         TapiProvider provider =  new TapiProvider(getDataBroker(), rpcProviderRegistry, serviceHandler,
             serviceDataStoreOperations, tapiListener, networkTransactionService, topologyListener,
             tapiPortMappingListener, tapiNetworkUtils, pceListenerImpl, rendererListenerImpl,
-            serviceHandlerListenerImpl, getNotificationService());
+            serviceHandlerListenerImpl, getNotificationService(), orLinkListener);
 
         provider.init();
 
