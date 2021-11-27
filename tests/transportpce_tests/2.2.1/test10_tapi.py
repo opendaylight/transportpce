@@ -323,9 +323,9 @@ class TransportTapitesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(1, len(res["output"]["topology"]["node"][0]["owned-node-edge-point"]),
                          'Node should contain 1 owned-node-edge-points')
-        self.assertEqual("XPDR1-CLIENT1",
+        self.assertEqual("XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1",
                          res["output"]["topology"]["node"][0]["owned-node-edge-point"][0]["name"][0]["value"],
-                         'name of owned-node-edge-points should be XPDR1-CLIENT1')
+                         'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_14_check_tapi_topology_T0(self):
         url = "{}/operations/tapi-topology:get-topology-details"
@@ -385,12 +385,12 @@ class TransportTapitesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(2, len(res["output"]["topology"]["node"][0]["owned-node-edge-point"]),
                          'Node should contain 2 owned-node-edge-points')
-        self.assertEqual("XPDR1-CLIENT1",
+        self.assertEqual("XPDR-C1-XPDR1+DSR+XPDR1-CLIENT1",
                          res["output"]["topology"]["node"][0]["owned-node-edge-point"][0]["name"][0]["value"],
-                         'name of owned-node-edge-points should be XPDR1-CLIENT1')
-        self.assertEqual("XPDR1-CLIENT1",
+                         'name of owned-node-edge-points should be XPDR-C1-XPDR1+DSR+XPDR1-CLIENT1')
+        self.assertEqual("XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1",
                          res["output"]["topology"]["node"][0]["owned-node-edge-point"][1]["name"][0]["value"],
-                         'name of owned-node-edge-points should be XPDR1-CLIENT1')
+                         'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_19_check_tapi_topology_T0(self):
         url = "{}/operations/tapi-topology:get-topology-details"
