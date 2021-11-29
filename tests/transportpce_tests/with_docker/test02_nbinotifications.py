@@ -25,7 +25,7 @@ import test_utils  # nopep8
 
 
 class TransportNbiNotificationstesting(unittest.TestCase):
-    processes = None
+    processes = []
     cr_serv_sample_data = {"input": {
         "sdnc-request-header": {
             "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
