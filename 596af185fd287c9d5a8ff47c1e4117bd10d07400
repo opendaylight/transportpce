@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cf406c1_174b486c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf1e84de_12c1cfec",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b62b93ac_dd53cf06",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-26T14:22:51Z",
       "side": 1,
       "message": "I think some LF here are not needed or misplaced from a readability standpoint",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3c1b98_e8ab7a03",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b62b93ac_dd53cf06",
       "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad4cc01a_f662c872",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "434cc0d1_b9c160a1",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "747862bc_a7853df8",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-11-26T14:22:51Z",
       "side": 1,
       "message": "LF misplaced here too.",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cacaf77_6e238ab3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "747862bc_a7853df8",
       "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +158,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc39c8a3_2bb579da",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a635f5eb_5a0d367f",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "988e82f3_4187f5f1",
@@ -99,6 +189,24 @@
       "writtenOn": "2021-11-26T14:22:51Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69e0ac96_0403b0b5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "988e82f3_4187f5f1",
       "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -120,6 +228,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c9bc24_c5aad645",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b583cc1_d0790970",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "629983e2_9a2537fa",
@@ -133,6 +259,24 @@
       "writtenOn": "2021-11-26T14:22:51Z",
       "side": 1,
       "message": "idem",
+      "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05cacd15_5107f1db",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "629983e2_9a2537fa",
       "revId": "596af185fd287c9d5a8ff47c1e4117bd10d07400",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
