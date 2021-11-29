@@ -52,11 +52,10 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
         responseTopo = test_utils_rfc8040.get_request(test_utils_rfc8040.URL_CONFIG_ORDM_TOPO)
         resTopo = responseTopo.json()
-        firstEntry = resTopo['ietf-network:network'][0]['node']
         nbMapCumul = 0
         nbMappings = 0
-        for i in range(0, len(firstEntry)):
-            nodeId = firstEntry[i]['node-id']
+        for val in resTopo['ietf-network:network'][0]['node']:
+            nodeId = val['node-id']
             # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
@@ -65,10 +64,9 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertEqual(response['status_code'], requests.codes.ok)
             responseMapList = test_utils_rfc8040.get_portmapping(nodeMapId)
             nbMappings = len(responseMapList['nodes'][0]['mapping']) - nbMapCumul
-            nbTp = len(firstEntry[i]['ietf-network-topology:termination-point'])
             nbMapCurrent = 0
-            for j in range(0, nbTp):
-                tpId = firstEntry[i]['ietf-network-topology:termination-point'][j]['tp-id']
+            for val2 in val['ietf-network-topology:termination-point']:
+                tpId = val2['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
                     responseMap = test_utils_rfc8040.portmapping_request(nodeMapId, tpId)
                     self.assertEqual(responseMap['status_code'], requests.codes.ok)

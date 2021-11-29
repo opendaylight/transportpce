@@ -24,11 +24,21 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
+# pylint: disable=too-few-public-methods
+class UuidServices:
+    def __init__(self):
+        # pylint: disable=invalid-name
+        self.pm = None
+        self.odu = None
+        self.dsr = None
+
+
 class TransportPCEtesting(unittest.TestCase):
 
-    processes = None
+    processes = []
     WAITING = 20  # nominal value is 300
     NODE_VERSION = '2.2.1'
+    uuid_services = UuidServices()
 
     cr_serv_sample_data = {
         "input": {
@@ -256,10 +266,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        global SERVICE_PM_UUID
-        SERVICE_PM_UUID = res['output']['service']['uuid']
+        self.uuid_services.pm = res['output']['service']['uuid']
         # pylint: disable=consider-using-f-string
-        print("photonic media service uuid : {}".format(res['output']['service']['uuid']))
+        print("photonic media service uuid : {}".format(self.uuid_services.pm))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
                         'lifecycle-state': 'PLANNED',
@@ -283,13 +292,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_16_get_service_PhotonicMedia(self):
         response = test_utils.get_service_list_request(
-            "services/" + str(SERVICE_PM_UUID))
+            "services/" + str(self.uuid_services.pm))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
             res['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], SERVICE_PM_UUID)
+            res['services'][0]['service-name'], self.uuid_services.pm)
         self.assertEqual(
             res['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
@@ -309,10 +318,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        global SERVICE_ODU_UUID
-        SERVICE_ODU_UUID = res['output']['service']['uuid']
+        self.uuid_services.odu = res['output']['service']['uuid']
         # pylint: disable=consider-using-f-string
-        print("odu service uuid : {}".format(res['output']['service']['uuid']))
+        print("odu service uuid : {}".format(self.uuid_services.odu))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
                         'lifecycle-state': 'PLANNED',
@@ -336,13 +344,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_get_service_ODU(self):
         response = test_utils.get_service_list_request(
-            "services/" + str(SERVICE_ODU_UUID))
+            "services/" + str(self.uuid_services.odu))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
             res['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], SERVICE_ODU_UUID)
+            res['services'][0]['service-name'], self.uuid_services.odu)
         self.assertEqual(
             res['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
@@ -363,10 +371,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        global SERVICE_DSR_UUID
-        SERVICE_DSR_UUID = res['output']['service']['uuid']
+        self.uuid_services.dsr = res['output']['service']['uuid']
         # pylint: disable=consider-using-f-string
-        print("dsr service uuid : {}".format(res['output']['service']['uuid']))
+        print("dsr service uuid : {}".format(self.uuid_services.dsr))
 
         input_dict_1 = {'administrative-state': 'LOCKED',
                         'lifecycle-state': 'PLANNED',
@@ -393,13 +400,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_20_get_service_DSR(self):
         response = test_utils.get_service_list_request(
-            "services/" + str(SERVICE_DSR_UUID))
+            "services/" + str(self.uuid_services.dsr))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
             res['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], SERVICE_DSR_UUID)
+            res['services'][0]['service-name'], self.uuid_services.dsr)
         self.assertEqual(
             res['services'][0]['connection-type'], 'service')
         self.assertEqual(
@@ -412,17 +419,17 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         liste_service = res['output']['service']
         for ele in liste_service:
-            if ele['uuid'] == SERVICE_PM_UUID:
+            if ele['uuid'] == self.uuid_services.pm:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'PHOTONIC_MEDIA')
                 nbconnection = len(ele['connection'])
                 self.assertEqual(nbconnection, 9, 'There should be 9 connections')
-            elif ele['uuid'] == SERVICE_ODU_UUID:
+            elif ele['uuid'] == self.uuid_services.odu:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'ODU')
                 nbconnection = len(ele['connection'])
                 self.assertEqual(nbconnection, 3, 'There should be 3 connections')
-            elif ele['uuid'] == SERVICE_DSR_UUID:
+            elif ele['uuid'] == self.uuid_services.dsr:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'DSR')
                 nbconnection = len(ele['connection'])
@@ -432,17 +439,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_22_delete_connectivity_service_DSR(self):
-        response = test_utils.tapi_delete_connectivity_request(SERVICE_DSR_UUID)
+        response = test_utils.tapi_delete_connectivity_request(self.uuid_services.dsr)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
     def test_23_delete_connectivity_service_ODU(self):
-        response = test_utils.tapi_delete_connectivity_request(SERVICE_ODU_UUID)
+        response = test_utils.tapi_delete_connectivity_request(self.uuid_services.odu)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
     def test_24_delete_connectivity_service_PhotonicMedia(self):
-        response = test_utils.tapi_delete_connectivity_request(SERVICE_PM_UUID)
+        response = test_utils.tapi_delete_connectivity_request(self.uuid_services.pm)
         self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(self.WAITING)
 
