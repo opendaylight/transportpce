@@ -17,7 +17,6 @@ module transportpce-common-service-path-types {
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
   }
   import org-openroadm-service-format {
     prefix org-openroadm-service-format;

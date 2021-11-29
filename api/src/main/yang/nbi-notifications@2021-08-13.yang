@@ -5,11 +5,9 @@ module nbi-notifications {
 
   import org-openroadm-service {
     prefix oor-service;
-    revision-date 2019-05-31;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
   }
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
