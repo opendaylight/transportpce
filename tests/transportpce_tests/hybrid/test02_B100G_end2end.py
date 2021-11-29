@@ -589,7 +589,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if node['node-id'] == 'XPDR-A2-XPDR2' or node['node-id'] == 'XPDR-C2-XPDR2':
+            if node['node-id'] in ('XPDR-A2-XPDR2', 'XPDR-C2-XPDR2'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
@@ -845,7 +845,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if node['node-id'] == 'XPDR-A2-XPDR2' or node['node-id'] == 'XPDR-C2-XPDR2':
+            if node['node-id'] in ('XPDR-A2-XPDR2', 'XPDR-C2-XPDR2'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
@@ -919,7 +919,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if node['node-id'] == 'XPDR-A2-XPDR2' or node['node-id'] == 'XPDR-C2-XPDR2':
+            if node['node-id'] in ('XPDR-A2-XPDR2', 'XPDR-C2-XPDR2'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
@@ -997,7 +997,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if node['node-id'] == 'XPDR-A2-XPDR2' or node['node-id'] == 'XPDR-C2-XPDR2':
+            if node['node-id'] in ('XPDR-A2-XPDR2', 'XPDR-C2-XPDR2'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
@@ -1033,7 +1033,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if node['node-id'] == 'XPDR-A2-XPDR2' or node['node-id'] == 'XPDR-C2-XPDR2':
+            if node['node-id'] in ('XPDR-A2-XPDR2', 'XPDR-C2-XPDR2'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
                     if tp['tp-id'] == 'XPDR2-NETWORK1':
@@ -1406,8 +1406,7 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         links = res['network'][0]['ietf-network-topology:link']
         for link in links:
-            if (link["org-openroadm-common-network:link-type"] == "XPONDER-OUTPUT" or
-                    link["org-openroadm-common-network:link-type"] == "XPONDER-INPUT"):
+            if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT'):
                 link_name = link["link-id"]
                 response = test_utils.delete_request(url+link_name)
                 self.assertEqual(response.status_code, requests.codes.ok)

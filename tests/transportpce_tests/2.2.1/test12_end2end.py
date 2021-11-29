@@ -293,9 +293,9 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual({'frequency': 196.1,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            if ele['tp-id'] == 'XPDR1-CLIENT2' or ele['tp-id'] == 'XPDR1-CLIENT1':
+            elif ele['tp-id'] in ('XPDR1-CLIENT2', 'XPDR1-CLIENT1'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
-            if ele['tp-id'] == 'XPDR1-NETWORK2':
+            elif ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-network-attributes', dict.keys(ele))
         time.sleep(3)
 
@@ -314,7 +314,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
-            if ele['tp-id'] == 'SRG1-PP2-TXRX':
+            elif ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
         time.sleep(3)
 
@@ -333,7 +333,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
-            if ele['tp-id'] == 'DEG2-TTP-TXRX':
+            elif ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
@@ -426,11 +426,11 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual({'frequency': 196.1,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            if ele['tp-id'] == 'XPDR1-NETWORK2':
+            elif ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertEqual({'frequency': 196.05,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            if ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT2':
+            elif ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT2'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
         time.sleep(10)
 
@@ -451,13 +451,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
                 self.assertEqual(freq_map_array[94], 255, "Lambda 2 should be available")
-            if ele['tp-id'] == 'SRG1-PP2-TXRX':
+            elif ele['tp-id'] == 'SRG1-PP2-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
                 self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
-            if ele['tp-id'] == 'SRG1-PP3-TXRX':
+            elif ele['tp-id'] == 'SRG1-PP3-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(10)
 
@@ -478,7 +478,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
                 self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
-            if ele['tp-id'] == 'DEG2-TTP-TXRX':
+            elif ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
@@ -556,7 +556,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(freq_map_array[94], 255, "Index 2 should  be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ele['tp-id'] == 'SRG1-PP1-TXRX' or ele['tp-id'] == 'SRG1-PP2-TXRX':
+            if ele['tp-id'] in ('SRG1-PP1-TXRX', 'SRG1-PP2-TXRX'):
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
@@ -589,7 +589,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 freq_map_array = [int(x) for x in freq_map]
                 self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
                 self.assertEqual(freq_map_array[94], 255, "Lambda 2 should be available")
-            if ele['tp-id'] == 'DEG2-TTP-TXRX':
+            elif ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
