@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4cca8a_a1279e70",
+        "filename": "nbinotifications/src/test/resources/expected_event.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45226881_3439643d",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1792
+      },
+      "revId": "9e35d3c4975a1ffe7767999d6ae428fb3dd05cd7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4785420a_97e530c8",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-17T17:14:05Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 159
+      },
+      "revId": "9e35d3c4975a1ffe7767999d6ae428fb3dd05cd7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b347fc97_62492272",
+        "filename": "nbinotifications/src/test/resources/expected_event_alarm_service.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4785420a_97e530c8",
       "range": {
         "startLine": 1,
         "startChar": 0,
