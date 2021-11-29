@@ -695,8 +695,7 @@ class TransportTapitesting(unittest.TestCase):
         res = response.json()
         links = res['network'][0]['ietf-network-topology:link']
         for link in links:
-            if (link["org-openroadm-common-network:link-type"] == "XPONDER-OUTPUT" or
-                    link["org-openroadm-common-network:link-type"] == "XPONDER-INPUT"):
+            if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT'):
                 link_name = link["link-id"]
                 response = test_utils.delete_request(url+link_name)
                 self.assertEqual(response.status_code, requests.codes.ok)

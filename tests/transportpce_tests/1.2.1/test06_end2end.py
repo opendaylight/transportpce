@@ -309,7 +309,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual({'frequency': 196.1,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            if ele['tp-id'] == 'XPDR1-CLIENT2' or ele['tp-id'] == 'XPDR1-CLIENT1':
+            if ele['tp-id'] in ('XPDR1-CLIENT2', 'XPDR1-CLIENT1'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
             if ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-network-attributes', dict.keys(ele))
@@ -452,7 +452,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual({'frequency': 196.05,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            if ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT2':
+            if ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT2'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
         time.sleep(10)
 
@@ -567,15 +567,12 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ((ele['org-openroadm-common-network:tp-type'] ==
-                 'XPONDER-CLIENT')
-                    and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele[
-                        'tp-id'] == 'XPDR1-CLIENT3')):
+            if (ele['org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT'
+                    and ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT3')):
                 self.assertNotIn(
                     'org-openroadm-network-topology:xpdr-client-attributes',
                     dict.keys(ele))
-            elif (ele['org-openroadm-common-network:tp-type'] ==
-                  'XPONDER-NETWORK'):
+            elif ele['org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK':
                 self.assertIn('tail-equipment-id', dict.keys(
                     ele['org-openroadm-network-topology:'
                         'xpdr-network-attributes']))
