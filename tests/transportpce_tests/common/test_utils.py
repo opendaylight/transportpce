@@ -10,6 +10,7 @@
 ##############################################################################
 
 # pylint: disable=no-member
+# pylint: disable=too-many-arguments
 
 import json
 import os
@@ -507,6 +508,7 @@ def start_honeynode(log_file: str, sim):
 
 def wait_until_log_contains(log_file, regexp, time_to_wait=60):
     # pylint: disable=lost-exception
+    # pylint: disable=consider-using-with
     stringfound = False
     filefound = False
     line = None
