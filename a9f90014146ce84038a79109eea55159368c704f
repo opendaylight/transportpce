@@ -16,6 +16,24 @@
       "message": "prepare iODU",
       "revId": "a9f90014146ce84038a79109eea55159368c704f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada785d7_3b1995d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-29T15:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "346d362d_1b37e31e",
+      "revId": "a9f90014146ce84038a79109eea55159368c704f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
