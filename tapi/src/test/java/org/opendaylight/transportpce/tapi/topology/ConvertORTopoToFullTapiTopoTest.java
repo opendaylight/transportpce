@@ -619,8 +619,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             AdministrativeState.UNLOCKED, node.getAdministrativeState());
         assertEquals("life-cycle state should be INSTALLED", LifecycleState.INSTALLED, node.getLifecycleState());
         assertEquals("operational state should be ENABLED", OperationalState.ENABLED, node.getOperationalState());
-        assertEquals("value-name should be 'dsr/odu node name'",
-            "dsr/odu node name", node.nonnullName().values().stream().findFirst().get().getValueName());
+        assertThat("one value-name should be 'dsr/odu node name'",
+            new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("dsr/odu node name")));
         assertEquals("dsr node should manage 2 protocol layers : dsr and odu",
             2, node.getLayerProtocolName().size());
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
@@ -740,8 +740,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         if (!otsiNodeType.equals("roadm")) {
             assertEquals("incorrect node name", nodeId + "+OTSi", node.getName().get(
                 new NameKey("otsi node name")).getValue());
-            assertEquals("value-name should be 'dsr/odu node name'",
-                "otsi node name", node.nonnullName().values().stream().findFirst().get().getValueName());
+            assertThat("one value-name should be 'dsr/odu node name'",
+                new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("otsi node name")));
             nepsI = node.nonnullOwnedNodeEdgePoint().values().stream()
                 .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint")))
                 .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
@@ -757,8 +757,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         } else {
             assertEquals("incorrect node name", nodeId + "+PHOTONIC_MEDIA", node.getName().get(
                 new NameKey("roadm node name")).getValue());
-            assertEquals("value-name should be 'dsr/odu node name'",
-                "roadm node name", node.nonnullName().values().stream().findFirst().get().getValueName());
+            assertThat("one value-name should be 'dsr/odu node name'",
+                new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("roadm node name")));
             nepsMc = node.nonnullOwnedNodeEdgePoint().values().stream()
                 .filter(n -> n.getName().containsKey(new NameKey("MEDIA_CHANNELNodeEdgePoint")))
                 .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
