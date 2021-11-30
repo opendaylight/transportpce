@@ -112,7 +112,8 @@ public class TapiTopologyImplTest extends AbstractTest {
         tapiContext = new TapiContext(networkTransactionService);
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapiLink);
-        connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext);
+        connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
+            networkTransactionService);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
@@ -186,35 +187,40 @@ public class TapiTopologyImplTest extends AbstractTest {
         assertEquals("Node list size should be 13", 13, topology.getNode().size());
         long nb1 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("XPDR-A1-XPDR1+DSR"))
+            .filter(node -> node.getName().get(new NameKey("dsr/odu node name")).getValue()
+                .equals("XPDR-A1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))))
             .count();
         assertEquals("XPDR-A1-XPDR1 should only have one client nep", 1, nb1);
         long nb2 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1+DSR"))
+            .filter(node -> node.getName().get(new NameKey("dsr/odu node name")).getValue()
+                .equals("SPDR-SA1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
             .count();
         assertEquals("SPDR-SA1-XPDR1 (mux) should have 4 client neps", 4, nb2);
         long nb3 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1+DSR"))
+            .filter(node -> node.getName().get(new NameKey("dsr/odu node name")).getValue()
+                .equals("SPDR-SA1-XPDR1+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("iNodeEdgePoint_N"))))
             .count();
         assertEquals("SPDR-SA1-XPDR1 (mux) should have a single network nep", 1, nb3);
         long nb4 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2+DSR"))
+            .filter(node -> node.getName().get(new NameKey("dsr/odu node name")).getValue()
+                .equals("SPDR-SA1-XPDR2+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
             .count();
         assertEquals("SPDR-SA1-XPDR2 (switch) should have 4 client neps", 4, nb4);
         long nb5 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2+DSR"))
+            .filter(node -> node.getName().get(new NameKey("dsr/odu node name")).getValue()
+                .equals("SPDR-SA1-XPDR2+DSR"))
             .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("iNodeEdgePoint_N"))))
             .count();

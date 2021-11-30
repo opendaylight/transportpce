@@ -167,9 +167,12 @@ public class ConvertORTopoToTapiTopo {
         this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.DSR), nodeUuid);
         Name nameDsr = new NameBuilder().setValueName("dsr/odu node name")
             .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.DSR)).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(this.ietfNodeType.getName()).build();
         List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR, LayerProtocolName.ODU);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node dsrNode = createTapiNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols);
+            .Node dsrNode = createTapiNode(Map.of(nameDsr.key(), nameDsr, nameNodeType.key(), nameNodeType),
+            dsrLayerProtocols);
         tapiNodes.put(dsrNode.key(), dsrNode);
 
         // node creation [otsi]
@@ -181,7 +184,8 @@ public class ConvertORTopoToTapiTopo {
             .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)).build();
         List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node otsiNode = createTapiNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols);
+            .Node otsiNode = createTapiNode(Map.of(nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
+            otsiLayerProtocols);
         tapiNodes.put(otsiNode.key(), otsiNode);
 
         // transitional link cration between network nep of DSR/ODU node and iNep of otsi node
@@ -251,6 +255,8 @@ public class ConvertORTopoToTapiTopo {
             .getBytes(Charset.forName("UTF-8"))).toString());
         Name nodeName =  new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA)
             .build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(OpenroadmNodeType.ROADM.getName()).build();
         List<LayerProtocolName> nodeLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
 
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiPhotonicNodes
@@ -264,7 +270,7 @@ public class ConvertORTopoToTapiTopo {
         // build RDM infra node abstraction
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node rdmNode = new NodeBuilder()
             .setUuid(nodeUuid)
-            .setName(Map.of(nodeName.key(), nodeName))
+            .setName(Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType))
             .setLayerProtocolName(nodeLayerProtocols)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
