@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2242d9b2_d8bf4eb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2021-11-30T09:31:29Z",
+      "side": 1,
+      "message": "JIRA ticket for this change and the previous ones in the relation chain ?",
+      "revId": "4c2e7bc8bb5e6ea7b12335e5bb671953c730110b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
