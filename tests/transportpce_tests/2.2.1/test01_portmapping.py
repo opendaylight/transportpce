@@ -133,7 +133,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AMkDwQ7xTmRI',
+             'lcp-hash-val': 'AMkDwQ7xTmRI', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -145,7 +145,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'AMkDwQ7xTmRL',
+             'lcp-hash-val': 'AMkDwQ7xTmRL', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -158,7 +158,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALj',
+             'lcp-hash-val': 'AJUUr6I5fALj', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -171,7 +171,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALg',
+             'lcp-hash-val': 'AJUUr6I5fALg', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
