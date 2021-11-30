@@ -34,6 +34,24 @@
       "parentUuid": "6157e9a2_a141b265",
       "revId": "66d96567dbdfca9cc2fa63e90d6b9e32cfb704f1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "448ff6d5_22872989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T14:54:12Z",
+      "side": 1,
+      "message": "Got it. I am just waiting for the official announcement in case of.",
+      "parentUuid": "fd114170_647d4b3f",
+      "revId": "66d96567dbdfca9cc2fa63e90d6b9e32cfb704f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
