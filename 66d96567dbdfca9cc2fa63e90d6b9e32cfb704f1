@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6157e9a2_a141b265",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T13:37:33Z",
+      "side": 1,
+      "message": "verified -1 to ensure it is not merged before P SR-1 is released",
+      "revId": "66d96567dbdfca9cc2fa63e90d6b9e32cfb704f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
