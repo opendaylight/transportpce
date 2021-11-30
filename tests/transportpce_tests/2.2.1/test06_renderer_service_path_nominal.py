@@ -69,7 +69,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AMkDwQ7xTmRI',
+             'lcp-hash-val': 'AMkDwQ7xTmRI', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
         self.assertIn(
@@ -78,7 +78,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALj',
+             'lcp-hash-val': 'AJUUr6I5fALj', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             res['nodes'][0]['mapping'])
 
