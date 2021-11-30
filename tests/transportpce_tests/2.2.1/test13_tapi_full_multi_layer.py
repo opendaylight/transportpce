@@ -431,17 +431,17 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'PHOTONIC_MEDIA')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 9, 'There should be 9 connections')
+                self.assertEqual(nbconnection, 3, 'There should be 3 connections')
             elif ele['uuid'] == self.uuid_services.odu:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'ODU')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 1, 'There should be 3 connections')
+                self.assertEqual(nbconnection, 1, 'There should be 1 connections')
             elif ele['uuid'] == self.uuid_services.dsr:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
                 self.assertEqual(ele['service-layer'], 'DSR')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 4, 'There should be 4 connections')
+                self.assertEqual(nbconnection, 2, 'There should be 2 connections')
             else:
                 self.fail("get connectivity service failed")
         time.sleep(2)
