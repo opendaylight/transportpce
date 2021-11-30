@@ -105,6 +105,24 @@
       "parentUuid": "bb6c6c61_2c57f619",
       "revId": "b38ce88d532c5a7fa87e105bcc77e65ca83067fd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f214461d_c9fdca91",
+        "filename": "tests/transportpce_tests/2.2.1/test13_tapi_full_multi_layer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T19:52:01Z",
+      "side": 1,
+      "message": "OK in that case, maybe 20S is tangent.\ncan you try locally 30s or a little more ?\nThere\u0027s no reason to use different values on the gate and locally.",
+      "parentUuid": "6f624719_54ade704",
+      "revId": "b38ce88d532c5a7fa87e105bcc77e65ca83067fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
