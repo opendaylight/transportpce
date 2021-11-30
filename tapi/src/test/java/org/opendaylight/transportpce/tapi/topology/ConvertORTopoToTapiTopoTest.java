@@ -469,8 +469,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             AdministrativeState.UNLOCKED, node.getAdministrativeState());
         assertEquals("life-cycle state should be INSTALLED", LifecycleState.INSTALLED, node.getLifecycleState());
         assertEquals("operational state should be ENABLED", OperationalState.ENABLED, node.getOperationalState());
-        assertEquals("value-name should be 'dsr/odu node name'",
-            "dsr/odu node name", node.nonnullName().values().stream().findFirst().get().getValueName());
+        assertThat("one value-name should be 'dsr/odu node name'",
+            new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("dsr/odu node name")));
         assertEquals("dsr node should manage 2 protocol layers : dsr and odu",
             2, node.getLayerProtocolName().size());
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
@@ -570,8 +570,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             AdministrativeState.UNLOCKED, node.getAdministrativeState());
         assertEquals("life-cycle state should be INSTALLED", LifecycleState.INSTALLED, node.getLifecycleState());
         assertEquals("operational state should be ENABLED", OperationalState.ENABLED, node.getOperationalState());
-        assertEquals("value-name should be 'dsr/odu node name'",
-            "otsi node name", node.nonnullName().values().stream().findFirst().get().getValueName());
+        assertThat("one value-name should be 'dsr/odu node name'",
+            new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("otsi node name")));
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
             1, node.getLayerProtocolName().size());
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",

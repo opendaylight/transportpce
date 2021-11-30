@@ -173,11 +173,14 @@ public class ConvertORTopoToTapiFullTopo {
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
             TapiStringConstants.DSR)).getBytes(Charset.forName("UTF-8"))).toString());
         this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.DSR), nodeUuid);
-        Name nameDsr = new NameBuilder().setValueName("dsr/odu node name").setValue(
+        Name nameDsrNode = new NameBuilder().setValueName("dsr/odu node name").setValue(
             String.join("+", this.ietfNodeId, TapiStringConstants.DSR)).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(this.ietfNodeType.getName()).build();
         List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR, LayerProtocolName.ODU);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node dsrNode = createTapiNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols);
+            .Node dsrNode = createTapiNode(Map.of(nameDsrNode.key(), nameDsrNode, nameNodeType.key(), nameNodeType),
+            dsrLayerProtocols);
         LOG.info("DSR Node {} should have {} NEPs and {} SIPs", this.ietfNodeId,
             this.oorClientPortList.size() + 2 * this.oorNetworkPortList.size(),
             this.oorClientPortList.size() + this.oorNetworkPortList.size());
@@ -191,11 +194,12 @@ public class ConvertORTopoToTapiFullTopo {
         nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiStringConstants.OTSI))
             .getBytes(Charset.forName("UTF-8"))).toString());
         this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI), nodeUuid);
-        Name nameOtsi =  new NameBuilder().setValueName("otsi node name").setValue(
+        Name nameOtsiNode =  new NameBuilder().setValueName("otsi node name").setValue(
             String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)).build();
         List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node otsiNode = createTapiNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols);
+            .Node otsiNode = createTapiNode(Map.of(nameOtsiNode.key(), nameOtsiNode, nameNodeType.key(), nameNodeType),
+            otsiLayerProtocols);
         LOG.info("OTSi Node {} should have {} NEPs and {} SIPs", this.ietfNodeId, 3 * this.oorNetworkPortList.size(),
             this.oorNetworkPortList.size());
         LOG.info("OTSi Node {} has {} NEPs and {} SIPs", this.ietfNodeId,
@@ -261,6 +265,8 @@ public class ConvertORTopoToTapiFullTopo {
 
     public void convertRoadmNode(Node roadm, Network openroadmTopo) {
         this.ietfNodeId = roadm.getNodeId().getValue();
+        this.ietfNodeType = roadm.augmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class).getNodeType();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
         if (openroadmTopo.getNode() == null) {
@@ -339,11 +345,14 @@ public class ConvertORTopoToTapiFullTopo {
         // Names
         Name nodeNames =  new NameBuilder().setValueName("roadm node name")
             .setValue(String.join("+", roadm.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA)).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(this.ietfNodeType.getName()).build();
         // Protocol Layer
         List<LayerProtocolName> layerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node roadmNode = createRoadmTapiNode(nodeUuid, nodeNames, layerProtocols, oneplist);
+            .Node roadmNode = createRoadmTapiNode(nodeUuid,
+            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist);
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs", roadm.getNodeId().getValue(), numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs", roadm.getNodeId().getValue(),
@@ -432,7 +441,7 @@ public class ConvertORTopoToTapiFullTopo {
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
-            createRoadmTapiNode(Uuid nodeUuid, Name nodeNames, List<LayerProtocolName> layerProtocols,
+            createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, List<LayerProtocolName> layerProtocols,
                         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist) {
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
@@ -449,7 +458,7 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
         return new NodeBuilder()
             .setUuid(nodeUuid)
-            .setName(Map.of(nodeNames.key(), nodeNames))
+            .setName(nameMap)
             .setLayerProtocolName(layerProtocols)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
