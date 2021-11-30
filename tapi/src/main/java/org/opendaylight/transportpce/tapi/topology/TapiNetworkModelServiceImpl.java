@@ -244,10 +244,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .getBytes(Charset.forName("UTF-8"))).toString());
         Name nameDsr = new NameBuilder().setValueName("dsr/odu node name").setValue(
             String.join("+", nodeId, TapiStringConstants.DSR)).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(getNodeType(xponderType)).build();
         List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR,
             LayerProtocolName.ODU);
-        Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr), dsrLayerProtocols,
-            nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
+        Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr, nameNodeType.key(), nameNodeType),
+            dsrLayerProtocols, nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
 
         nodeMap.put(dsrNode.key(), dsrNode);
 
@@ -258,8 +260,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         Name nameOtsi =  new NameBuilder().setValueName("otsi node name").setValue(
             String.join("+", nodeId, TapiStringConstants.OTSI)).build();
         List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
-        Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi), otsiLayerProtocols,
-            nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null);
+        Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
+            otsiLayerProtocols, nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null);
 
         nodeMap.put(otsiNode.key(), otsiNode);
 
@@ -278,7 +280,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         switch (xpdrType) {
             case 1:
                 // Tpdr
-                return createTpdrSwitchPool();
+                return createTpdrSwitchPool(xpdrNetMaps);
             case 2:
                 // Mux
                 return createMuxSwitchPool(xpdrClMaps, xpdrNetMaps, xpdrNb);
@@ -779,6 +781,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // Names
         Name nodeNames =  new NameBuilder().setValueName("roadm node name")
             .setValue(String.join("+", orNodeId, TapiStringConstants.PHTNC_MEDIA)).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type")
+            .setValue(OpenroadmNodeType.ROADM.getName()).build();
         // Protocol Layer
         List<LayerProtocolName> layerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
         // Empty random creation of mandatory fields for avoiding errors....
@@ -796,7 +800,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .build();
         return new NodeBuilder()
             .setUuid(nodeUuid)
-            .setName(Map.of(nodeNames.key(), nodeNames))
+            .setName(Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType))
             .setLayerProtocolName(layerProtocols)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
@@ -861,8 +865,28 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return linkMap;
     }
 
-    private OduSwitchingPools createTpdrSwitchPool() {
-        return new OduSwitchingPoolsBuilder().build();
+    private OduSwitchingPools createTpdrSwitchPool(List<Mapping> xpdrNetMaps) {
+        Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
+        int count = 1;
+        for (int i = 1; i <= xpdrNetMaps.size(); i++) {
+            LOG.info("XPDr net LCP = {}", xpdrNetMaps.get(i - 1).getLogicalConnectionPoint());
+            LOG.info("XPDr net associated LCP = {}", xpdrNetMaps.get(i - 1).getConnectionMapLcp());
+            TpId tpid1 = new TpId(xpdrNetMaps.get(i - 1).getLogicalConnectionPoint());
+            TpId tpid2 = new TpId(xpdrNetMaps.get(i - 1).getConnectionMapLcp());
+            List<TpId> tpList = new ArrayList<>();
+            tpList.add(tpid1);
+            tpList.add(tpid2);
+            NonBlockingList nbl = new NonBlockingListBuilder()
+                .setNblNumber(Uint16.valueOf(count))
+                .setTpList(tpList)
+                .build();
+            nblMap.put(nbl.key(), nbl);
+            count++;
+        }
+        return new OduSwitchingPoolsBuilder()
+            .setNonBlockingList(nblMap)
+            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .build();
     }
 
     private OduSwitchingPools createSwtchSwitchPool(List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps,
@@ -980,7 +1004,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                                                                        OwnedNodeEdgePoint> onepl) {
         // create NodeRuleGroup
         if (oorOduSwitchingPool == null) {
-            LOG.info("TPDR node --> no switching pool");
+            LOG.info("No switching pool created for node = {}", nodeId);
             return new HashMap<>();
         }
         LOG.info("ONEPL = {}", onepl.values());
@@ -1166,6 +1190,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             default:
                 return null;
         }
+    }
+
+    private String getNodeType(XpdrNodeTypes xponderType) {
+        switch (xponderType.getIntValue()) {
+            case 1:
+                return OpenroadmNodeType.TPDR.getName();
+            case 2:
+                return OpenroadmNodeType.MUXPDR.getName();
+            case 3:
+                return OpenroadmNodeType.SWITCH.getName();
+            default:
+                LOG.info("XpdrType {} not supported", xponderType);
+                break;
+        }
+        return null;
     }
 
     private void mergeNodeinTopology(Map<NodeKey, Node> nodeMap) {
