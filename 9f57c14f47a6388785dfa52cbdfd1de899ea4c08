@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ffda59_b257ca60",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T09:32:28Z",
+      "side": 1,
+      "message": "I think this else-clause should be avoided because it leads to superfluous indentation and  nested if-blocks",
+      "revId": "9f57c14f47a6388785dfa52cbdfd1de899ea4c08",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
