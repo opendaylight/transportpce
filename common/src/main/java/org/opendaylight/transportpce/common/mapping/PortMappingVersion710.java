@@ -371,7 +371,7 @@ public class PortMappingVersion710 {
                 portList.sort(Comparator.comparing(Ports::getPortName));
                 for (Ports port : portList) {
                     int[] counters = fillXpdrLcpsMaps(line, client, nodeId,
-                        1, null, circuitPackName, port,
+                        1, XpdrNodeTypes.Tpdr, circuitPackName, port,
                         circuitPackList, lcpMap, mappingMap);
                     line = counters[0];
                     client = counters[1];
