@@ -87,6 +87,24 @@
       "parentUuid": "38358efc_6e014c30",
       "revId": "b38ce88d532c5a7fa87e105bcc77e65ca83067fd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f624719_54ade704",
+        "filename": "tests/transportpce_tests/2.2.1/test13_tapi_full_multi_layer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-11-30T11:03:32Z",
+      "side": 1,
+      "message": "Ive changed it to 20 seconds as it was before. I will remove the waiting_service variable. Locally it fails because the service is not inService after 20 seconds. But it passes the gate with no problem. Dont know why",
+      "parentUuid": "bb6c6c61_2c57f619",
+      "revId": "b38ce88d532c5a7fa87e105bcc77e65ca83067fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
