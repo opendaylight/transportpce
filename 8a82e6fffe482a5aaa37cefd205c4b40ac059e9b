@@ -16,6 +16,57 @@
       "message": "I think I covered all the comments. Please let me know if I didnt",
       "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9311bd7_85fd8bfa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T20:03:39Z",
+      "side": 1,
+      "message": "I find this difficult to read.\nWhat about this rather?\n\n                String adminState \u003d\n                    otnlink.augmentation(Link1.class).getAdministrativeState() \u003d\u003d null\n                            || oppositeLinkAdminState \u003d\u003d null\n                        ? null\n                        : this.tapiLink.setTapiAdminState(\n                                otnlink.augmentation(Link1.class).getAdministrativeState(),  oppositeLinkAdminState)\n                            .getName();\n                String operState \u003d\n                    otnlink.augmentation(Link1.class).getOperationalState() \u003d\u003d null || oppositeLinkOperState \u003d\u003d null\n                        ? null\n                        : this.tapiLink.setTapiOperationalState(\n                                otnlink.augmentation(Link1.class).getOperationalState(), oppositeLinkOperState)\n                            .getName();\n\nAlso I guess variables name should be shortened to avoid too many LF (e.g.  oppositeLinkAdminState \u003d\u003e oppLnkAdmState)",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "809054f1_b22de895",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T20:03:39Z",
+      "side": 1,
+      "message": "parenthesis at the extermity of the condition are superfluous here",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e836266_792e6fa7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-11-30T20:03:39Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
