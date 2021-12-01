@@ -873,6 +873,16 @@ module org-openroadm-common-service-types {
         "Label for service endpoint, defined by the user";
     }
     uses ethernet-subrate-attributes-grp;
+    leaf project-id {
+        type string;
+        description
+          "Project identifier for the service end point";
+      }
+      leaf project-note {
+        type string;
+        description
+          "Additional details associated with the service end point project";
+      }
   }
 
   typedef existing-resource-reuse-type {
@@ -1468,11 +1478,9 @@ module org-openroadm-common-service-types {
     }
     container service-a-end {
       uses service-endpoint;
-      uses service-endpoint-project;
     }
     container service-z-end {
       uses service-endpoint;
-      uses service-endpoint-project;
     }
     uses org-openroadm-routing-constraints:routing-constraints;
     uses service-information;

@@ -437,11 +437,9 @@ module org-openroadm-service {
       uses org-openroadm-common-service-types:resource-status;
       container service-a-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
       }
       container service-z-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
       }
       uses org-openroadm-routing-constraints:routing-constraints;
       uses org-openroadm-common-service-types:service-information;
@@ -484,11 +482,9 @@ module org-openroadm-service {
         uses org-openroadm-common-service-types:resource-status;
         container service-a-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         container service-z-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         uses org-openroadm-routing-constraints:routing-constraints;
         uses org-openroadm-common-service-types:service-information;
@@ -529,11 +525,9 @@ module org-openroadm-service {
         uses org-openroadm-common-service-types:resource-status;
         container service-a-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         container service-z-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         uses org-openroadm-routing-constraints:routing-constraints;
         uses org-openroadm-common-service-types:service-information;
@@ -784,7 +778,6 @@ module org-openroadm-service {
       uses org-openroadm-common-service-types:resource-status;
       container service-a-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
         container requesting-interface-properties {
           when "../../connection-type = 'optical-tunnel'" {
             description
@@ -797,7 +790,6 @@ module org-openroadm-service {
       }
       container service-z-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
         container requesting-interface-properties {
           when "../../connection-type = 'optical-tunnel'" {
             description
@@ -921,7 +913,6 @@ module org-openroadm-service {
       uses org-openroadm-common-service-types:resource-status;
       container service-a-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
         container requesting-interface-properties {
           when "../../connection-type = 'optical-tunnel'" {
             description
@@ -934,7 +925,6 @@ module org-openroadm-service {
       }
       container service-z-end {
         uses org-openroadm-common-service-types:service-endpoint;
-        uses org-openroadm-common-service-types:service-endpoint-project;
         container requesting-interface-properties {
           when "../../connection-type = 'optical-tunnel'" {
             description
@@ -1009,11 +999,9 @@ module org-openroadm-service {
         uses org-openroadm-common-service-types:resource-status;
         container service-a-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         container service-z-end {
           uses org-openroadm-common-service-types:service-endpoint;
-          uses org-openroadm-common-service-types:service-endpoint-project;
         }
         uses org-openroadm-routing-constraints:routing-constraints;
         uses org-openroadm-common-service-types:service-information;
