@@ -22,6 +22,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCETopologyTesting(unittest.TestCase):
@@ -98,40 +99,38 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
-                                               ('roadmb', cls.NODE_VERSION), ('roadmc', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
+                                                       ('roadmb', cls.NODE_VERSION), ('roadmc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
 
     def test_01_connect_ROADMA(self):
-        response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_03_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'ROADMA01')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'ROADM')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], '2')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'ROADMA01')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'ROADM')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:model'], '2')
 
     def test_04_getLinks_OpenroadmTopology(self):
         # pylint: disable=redundant-unittest-assert
@@ -195,15 +194,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_06_connect_XPDRA(self):
-        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_07_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_08_getOpenRoadmNetwork(self):
         # pylint: disable=redundant-unittest-assert
@@ -327,8 +325,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
             self.assertEqual(len(val), 0)
 
     def test_13_connect_ROADMC(self):
-        response = test_utils.mount_device("ROADMC01", ('roadmc', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMC01", ('roadmc', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA01-ROADMC01 oms-attributes
@@ -358,15 +356,13 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_16_getClliNetwork(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         listNode = ['NodeA', 'NodeC']
-        for i in range(0, nbNode):
-            nodeId = res['network'][0]['node'][i]['node-id']
+        for val in response['network'][0]['node']:
+            nodeId = val['node-id']
             if nodeId in listNode:
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], nodeId)
+                self.assertEqual(val['org-openroadm-clli-network:clli'], nodeId)
                 listNode.remove(nodeId)
             else:
                 self.assertFalse(True)
@@ -530,8 +526,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):
-        response = test_utils.mount_device("ROADMB01", ('roadmb', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMB01", ('roadmb', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
         # Config ROADMA01-ROADMB01 oms-attributes
@@ -678,15 +674,15 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_30_disconnect_ROADMB(self):
         # Delete in the topology-netconf
-        response = test_utils.unmount_device("ROADMB01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMB01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeB")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_31_disconnect_ROADMC(self):
-        response = test_utils.unmount_device("ROADMC01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMC01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeC")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -762,8 +758,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], 'NodeC')
 
     def test_35_disconnect_XPDRA(self):
-        response = test_utils.unmount_device("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_36_getClliNetwork(self):
         response = test_utils.get_clli_net_request()
@@ -856,8 +852,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
                                 ['org-openroadm-common-network:link-type'], 'XPONDER-INPUT')
 
     def test_41_disconnect_ROADMA(self):
-        response = test_utils.unmount_device("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeA")
         self.assertEqual(response.status_code, requests.codes.ok)
