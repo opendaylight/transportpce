@@ -37,8 +37,6 @@ ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
-URL_CONFIG_ORDM_TOPO = "{}/data/ietf-network:networks/network=openroadm-topology"
-URL_PORTMAPPING = "{}/data/transportpce-portmapping:network/nodes="
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -299,7 +297,6 @@ def get_portmapping(node: str):
     url = "{}/data/transportpce-portmapping:network/nodes={}"
     response = get_request(url.format('{}', node))
     res = response.json()
-    print(res)
     nodes = res['transportpce-portmapping:nodes']
     return {'status_code': response.status_code,
             'nodes': nodes}
@@ -334,3 +331,15 @@ def portmapping_mc_capa_request(node: str, mc_capa: str):
     capabilities = res['transportpce-portmapping:mc-capabilities']
     return {'status_code': response.status_code,
             'mc-capabilities': capabilities}
+
+#
+# Topology operations
+#
+
+def get_ietf_network_request(network: str, config: str):
+    url = "{}/data/ietf-network:networks/network={}?content={}"
+    response = get_request(url.format('{}', network, config))
+    res = response.json()
+    networks = res['ietf-network:network']
+    return {'status_code': response.status_code,
+            'network': networks}
