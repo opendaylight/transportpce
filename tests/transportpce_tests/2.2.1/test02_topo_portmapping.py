@@ -50,11 +50,11 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Verify the termination points of the ROADMA
     def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
-        responseTopo = test_utils_rfc8040.get_request(test_utils_rfc8040.URL_CONFIG_ORDM_TOPO)
-        resTopo = responseTopo.json()
+        resTopo = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(resTopo['status_code'], requests.codes.ok)
         nbMapCumul = 0
         nbMappings = 0
-        for val in resTopo['ietf-network:network'][0]['node']:
+        for val in resTopo['network'][0]['node']:
             nodeId = val['node-id']
             # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
