@@ -22,6 +22,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCETopologyTesting(unittest.TestCase):
@@ -98,49 +99,45 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
-                                               ('roadmb', cls.NODE_VERSION), ('roadmc', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
+                                                       ('roadmb', cls.NODE_VERSION), ('roadmc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
 
     def test_01_connect_ROADMA(self):
-        response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_03_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'ROADMA01')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'ROADM')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], '2')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'ROADMA01')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'ROADM')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:model'], '2')
 
     def test_04_getLinks_OpenroadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 10)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 10)
         check_list = {'EXPRESS-LINK': ['ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX',
                                        'ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX'],
                       'ADD-LINK': ['ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX',
@@ -152,115 +149,94 @@ class TransportPCETopologyTesting(unittest.TestCase):
                                     'ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-SRG3-SRG3-CP-TXRX',
                                     'ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG3-SRG3-CP-TXRX']
                       }
-        for i in range(0, nbLink):
-            linkId = res['network'][0]['ietf-network-topology:link'][i]['link-id']
-            linkType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
-            if linkType in check_list:
-                find = linkId in check_list[linkType]
-                self.assertEqual(find, True)
-                (check_list[linkType]).remove(linkId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['ietf-network-topology:link']:
+            linkId = val['link-id']
+            linkType = val['org-openroadm-common-network:link-type']
+            self.assertIn(linkType, check_list)
+            find = linkId in check_list[linkType]
+            self.assertEqual(find, True)
+            (check_list[linkType]).remove(linkId)
         for val in check_list.values():
             self.assertEqual(len(val), 0)
 
     def test_05_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        res = response.json()
-        # Tests related to nodes
-        self.assertEqual(response.status_code, requests.codes.ok)
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 4)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 4)
         listNode = ['ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
-        for i in range(0, nbNode):
-            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                          res['network'][0]['node'][i]['supporting-node'])
-            nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-            nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId in self.CHECK_DICT1:
-                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
-                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
-                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['node']:
+            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
+            nodeType = val['org-openroadm-common-network:node-type']
+            nodeId = val['node-id']
+            self.assertIn(nodeId, self.CHECK_DICT1)
+            self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+            if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
+            for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                self.assertIn(item, val['ietf-network-topology:termination-point'])
+            self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
+            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
+            listNode.remove(nodeId)
 
         self.assertEqual(len(listNode), 0)
 
     def test_06_connect_XPDRA(self):
-        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_07_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_08_getOpenRoadmNetwork(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 2)
-        for i in range(0, nbNode):
-            self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['network-ref'], 'clli-network')
-            self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['node-ref'], 'NodeA')
-            nodeId = res['network'][0]['node'][i]['node-id']
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 2)
+        for val in response['network'][0]['node']:
+            self.assertEqual(val['supporting-node'][0]['network-ref'], 'clli-network')
+            self.assertEqual(val['supporting-node'][0]['node-ref'], 'NodeA')
+            nodeId = val['node-id']
             if nodeId == 'XPDRA01':
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'XPONDER')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'], '1')
+                self.assertEqual(val['org-openroadm-common-network:node-type'], 'XPONDER')
+                self.assertEqual(val['org-openroadm-network:model'], '1')
             elif nodeId == 'ROADMA01':
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'ROADM')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'], '2')
+                self.assertEqual(val['org-openroadm-common-network:node-type'], 'ROADM')
+                self.assertEqual(val['org-openroadm-network:model'], '2')
             else:
+                # pylint: disable=redundant-unittest-assert
                 self.assertFalse(True)
 
     def test_09_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        res = response.json()
-        # Tests related to nodes
-        self.assertEqual(response.status_code, requests.codes.ok)
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 5)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 5)
         listNode = ['XPDRA01-XPDR1', 'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
-        for i in range(0, nbNode):
-            nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-            nodeId = res['network'][0]['node'][i]['node-id']
+        for val in response['network'][0]['node']:
+            nodeType = val['org-openroadm-common-network:node-type']
+            nodeId = val['node-id']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, val['supporting-node'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
                 self.assertEqual(nodeType, 'XPONDER')
-                nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
-                for j in range(0, nbTps):
-                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j][
-                        'org-openroadm-common-network:tp-type']
-                    tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
+                for val2 in val['ietf-network-topology:termination-point']:
+                    tpType = val2['org-openroadm-common-network:tp-type']
+                    tpId = val2['tp-id']
                     if tpType == 'XPONDER-CLIENT':
                         client += 1
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                     if tpId == 'XPDR1-NETWORK2':
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
-                                         [j]['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT3')
-                    if tpId == 'XPDR1-CLIENT3':
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
-                                         [j]['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK2')
+                        self.assertEqual(val2['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT3')
+                    elif tpId == 'XPDR1-CLIENT3':
+                        self.assertEqual(val2['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK2')
                 self.assertTrue(client == 4)
                 self.assertTrue(network == 2)
                 listNode.remove(nodeId)
@@ -268,15 +244,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
             elif nodeId in self.CHECK_DICT1:
                 self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
                 if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
+                    self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
                 for item in self.CHECK_DICT1[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
+                    self.assertIn(item, val['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
                 listNode.remove(nodeId)
             else:
+                # pylint: disable=redundant-unittest-assert
                 self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
 
@@ -295,12 +270,9 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_12_getLinks_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 12)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 12)
         check_list = {'EXPRESS-LINK': ['ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX',
                                        'ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX'],
                       'ADD-LINK': ['ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX',
@@ -314,21 +286,19 @@ class TransportPCETopologyTesting(unittest.TestCase):
                       'XPONDER-INPUT': ['ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1'],
                       'XPONDER-OUTPUT': ['XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX']
                       }
-        for i in range(0, nbLink):
-            linkId = res['network'][0]['ietf-network-topology:link'][i]['link-id']
-            linkType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
-            if linkType in check_list:
-                find = linkId in check_list[linkType]
-                self.assertEqual(find, True)
-                (check_list[linkType]).remove(linkId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['ietf-network-topology:link']:
+            linkId = val['link-id']
+            linkType = val['org-openroadm-common-network:link-type']
+            self.assertIn(linkType, check_list)
+            find = linkId in check_list[linkType]
+            self.assertEqual(find, True)
+            (check_list[linkType]).remove(linkId)
         for val in check_list.values():
             self.assertEqual(len(val), 0)
 
     def test_13_connect_ROADMC(self):
-        response = test_utils.mount_device("ROADMC01", ('roadmc', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMC01", ('roadmc', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA01-ROADMC01 oms-attributes
@@ -358,55 +328,44 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_16_getClliNetwork(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         listNode = ['NodeA', 'NodeC']
-        for i in range(0, nbNode):
-            nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId in listNode:
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], nodeId)
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['node']:
+            nodeId = val['node-id']
+            self.assertIn(nodeId, listNode)
+            self.assertEqual(val['org-openroadm-clli-network:clli'], nodeId)
+            listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
     def test_17_getOpenRoadmNetwork(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 3)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 3)
         listNode = ['XPDRA01', 'ROADMA01', 'ROADMC01']
         CHECK_LIST = {'XPDRA01': {'node-ref': 'NodeA', 'node-type': 'XPONDER', 'model': '1'},
                       'ROADMA01': {'node-ref': 'NodeA', 'node-type': 'ROADM', 'model': '2'},
                       'ROADMC01': {'node-ref': 'NodeC', 'node-type': 'ROADM', 'model': '2'}
                       }
-        for i in range(0, nbNode):
-            self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['network-ref'], 'clli-network')
-            nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId in CHECK_LIST:
-                self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['node-ref'],
-                                 CHECK_LIST[nodeId]['node-ref'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'],
-                                 CHECK_LIST[nodeId]['node-type'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],
-                                 CHECK_LIST[nodeId]['model'])
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['node']:
+            self.assertEqual(val['supporting-node'][0]['network-ref'], 'clli-network')
+            nodeId = val['node-id']
+            self.assertIn(nodeId, CHECK_LIST)
+            self.assertEqual(val['supporting-node'][0]['node-ref'],
+                             CHECK_LIST[nodeId]['node-ref'])
+            self.assertEqual(val['org-openroadm-common-network:node-type'],
+                             CHECK_LIST[nodeId]['node-type'])
+            self.assertEqual(val['org-openroadm-network:model'],
+                             CHECK_LIST[nodeId]['model'])
+            listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
     def test_18_getROADMLinkOpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 20)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 20)
         check_list = {'EXPRESS-LINK': ['ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX',
                                        'ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX',
                                        'ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX',
@@ -428,36 +387,29 @@ class TransportPCETopologyTesting(unittest.TestCase):
                       'XPONDER-INPUT': ['ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1'],
                       'XPONDER-OUTPUT': ['XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX']
                       }
-        for i in range(0, nbLink):
-            linkId = res['network'][0]['ietf-network-topology:link'][i]['link-id']
-            linkType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
-            if linkType in check_list:
-                find = linkId in check_list[linkType]
-                self.assertEqual(find, True)
-                (check_list[linkType]).remove(linkId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['ietf-network-topology:link']:
+            linkId = val['link-id']
+            linkType = val['org-openroadm-common-network:link-type']
+            self.assertIn(linkType, check_list)
+            find = linkId in check_list[linkType]
+            self.assertEqual(find, True)
+            (check_list[linkType]).remove(linkId)
         for val in check_list.values():
             self.assertEqual(len(val), 0)
 
     def test_19_getLinkOmsAttributesOpenRoadmTopology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 20)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 20)
         R2RLink = ['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX',
                    'ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX']
-        for i in range(0, nbLink):
-            link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
+        for val in response['network'][0]['ietf-network-topology:link']:
+            link_id = val['link-id']
             if link_id in R2RLink:
                 find = False
-                spanLoss = (res['network'][0]['ietf-network-topology:link'][i]
-                               ['org-openroadm-network-topology:OMS-attributes']['span']["engineered-spanloss"])
-                length = (res['network'][0]['ietf-network-topology:link'][i]
-                             ['org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]
-                             ['SRLG-length'])
+                spanLoss = val['org-openroadm-network-topology:OMS-attributes']['span']['engineered-spanloss']
+                # pylint: disable=line-too-long
+                length = val['org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]['SRLG-length']
                 if (spanLoss is not None) & (length is not None):
                     find = True
                 self.assertTrue(find)
@@ -466,30 +418,24 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_20_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        res = response.json()
-        # Tests related to nodes
-        self.assertEqual(response.status_code, requests.codes.ok)
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 8)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 8)
         listNode = ['XPDRA01-XPDR1',
                     'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2',
                     'ROADMC01-SRG1', 'ROADMC01-DEG1', 'ROADMC01-DEG2']
-        for i in range(0, nbNode):
-            nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-            nodeId = res['network'][0]['node'][i]['node-id']
+        for val in response['network'][0]['node']:
+            nodeType = val['org-openroadm-common-network:node-type']
+            nodeId = val['node-id']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, val['supporting-node'])
                 self.assertEqual(nodeType, 'XPONDER')
-                nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertTrue(nbTps == 6)
+                self.assertEqual(len(val['ietf-network-topology:termination-point']), 6)
                 client = 0
                 network = 0
-                for j in range(0, nbTps):
-                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j][
-                        'org-openroadm-common-network:tp-type']
+                for val2 in val['ietf-network-topology:termination-point']:
+                    tpType = val2['org-openroadm-common-network:tp-type']
                     if tpType == 'XPONDER-CLIENT':
                         client += 1
                     elif tpType == 'XPONDER-NETWORK':
@@ -501,37 +447,32 @@ class TransportPCETopologyTesting(unittest.TestCase):
             elif nodeId in self.CHECK_DICT1:
                 self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
                 if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
+                    self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
                 for item in self.CHECK_DICT1[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'],
-                                 self.CHECK_DICT1[nodeId]['node_type'])
+                    self.assertIn(item, val['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
+                self.assertEqual(val['org-openroadm-common-network:node-type'], self.CHECK_DICT1[nodeId]['node_type'])
                 listNode.remove(nodeId)
             # Tests related to ROADMC nodes
             elif nodeId in self.CHECK_DICT2:
                 self.assertEqual(nodeType, self.CHECK_DICT2[nodeId]['node_type'])
                 if self.CHECK_DICT2[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
+                    self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
                 for item in self.CHECK_DICT2[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeC'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMC01'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'],
-                                 self.CHECK_DICT2[nodeId]['node_type'])
+                    self.assertIn(item, val['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeC'}, val['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMC01'}, val['supporting-node'])
+                self.assertEqual(val['org-openroadm-common-network:node-type'], self.CHECK_DICT2[nodeId]['node_type'])
                 listNode.remove(nodeId)
             else:
+                # pylint: disable=redundant-unittest-assert
                 self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):
-        response = test_utils.mount_device("ROADMB01", ('roadmb', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMB01", ('roadmb', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
         # Config ROADMA01-ROADMB01 oms-attributes
@@ -587,55 +528,43 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_26_getClliNetwork(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         listNode = ['NodeA', 'NodeB', 'NodeC']
-        for i in range(0, nbNode):
-            nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId in listNode:
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], nodeId)
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['node']:
+            nodeId = val['node-id']
+            self.assertIn(nodeId, listNode)
+            self.assertEqual(val['org-openroadm-clli-network:clli'], nodeId)
+            listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
     def test_27_verifyDegree(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         listR2RLink = ['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX',
                        'ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX',
                        'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX',
                        'ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX',
                        'ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX',
                        'ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
-        for i in range(0, nbLink):
-            if (res['network'][0]['ietf-network-topology:link'][i]
-                   ['org-openroadm-common-network:link-type'] == 'ROADM-TO-ROADM'):
-                link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
+        for val in response['network'][0]['ietf-network-topology:link']:
+            if val['org-openroadm-common-network:link-type'] == 'ROADM-TO-ROADM':
+                link_id = val['link-id']
                 find = link_id in listR2RLink
                 self.assertEqual(find, True)
                 listR2RLink.remove(link_id)
         self.assertEqual(len(listR2RLink), 0)
 
     def test_28_verifyOppositeLinkTopology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 34)
-        for i in range(0, nbLink):
-            link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
-            link_type = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
-            link_src = res['network'][0]['ietf-network-topology:link'][i]['source']['source-node']
-            link_dest = res['network'][0]['ietf-network-topology:link'][i]['destination']['dest-node']
-            oppLink_id = (res['network'][0]['ietf-network-topology:link'][i]
-                             ['org-openroadm-common-network:opposite-link'])
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 34)
+        for val in response['network'][0]['ietf-network-topology:link']:
+            link_id = val['link-id']
+            link_type = val['org-openroadm-common-network:link-type']
+            link_src = val['source']['source-node']
+            link_dest = val['destination']['dest-node']
+            oppLink_id = val['org-openroadm-common-network:opposite-link']
             # Find the opposite link
             response_oppLink = test_utils.get_ordm_topo_request("ietf-network-topology:link/"+oppLink_id)
             self.assertEqual(response_oppLink.status_code, requests.codes.ok)
@@ -652,24 +581,21 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 self.assertEqual(oppLink_type, CHECK_DICT[link_type])
 
     def test_29_getLinkOmsAttributesOpenRoadmTopology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         R2RLink = ['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX',
                    'ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX',
                    'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX',
                    'ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX',
                    'ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX',
                    'ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
-        for i in range(0, nbLink):
-            link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
+        for val in response['network'][0]['ietf-network-topology:link']:
+            link_id = val['link-id']
             if link_id in R2RLink:
                 find = False
-                spanLoss = res['network'][0]['ietf-network-topology:link'][i][
-                    'org-openroadm-network-topology:OMS-attributes']['span']["engineered-spanloss"]
-                length = res['network'][0]['ietf-network-topology:link'][i][
-                    'org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]['SRLG-length']
+                spanLoss = val['org-openroadm-network-topology:OMS-attributes']['span']['engineered-spanloss']
+                # pylint: disable=line-too-long
+                length = val['org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]['SRLG-length']
                 if (spanLoss is not None) & (length is not None):
                     find = True
                 self.assertTrue(find)
@@ -678,137 +604,109 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_30_disconnect_ROADMB(self):
         # Delete in the topology-netconf
-        response = test_utils.unmount_device("ROADMB01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMB01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeB")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_31_disconnect_ROADMC(self):
-        response = test_utils.unmount_device("ROADMC01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMC01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeC")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_32_getNodes_OpenRoadmTopology(self):
-        # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        res = response.json()
-        # Tests related to nodes
-        self.assertEqual(response.status_code, requests.codes.ok)
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 5)
+        # pylint: disable=W1503
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 5)
         listNode = ['XPDRA01-XPDR1', 'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
-        for i in range(0, nbNode):
-            nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-            nodeId = res['network'][0]['node'][i]['node-id']
+        for val in response['network'][0]['node']:
+            nodeType = val['org-openroadm-common-network:node-type']
+            nodeId = val['node-id']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
-                nbTp = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                for j in range(0, nbTp):
-                    tpid = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
+                for val2 in val['ietf-network-topology:termination-point']:
+                    tpid = val2['tp-id']
                     if tpid == 'XPDR1-CLIENT1':
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                         ['org-openroadm-common-network:tp-type'], 'XPONDER-CLIENT')
+                        self.assertEqual(val2['org-openroadm-common-network:tp-type'], 'XPONDER-CLIENT')
                     if tpid == 'XPDR1-NETWORK1':
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                         ['org-openroadm-common-network:tp-type'], 'XPONDER-NETWORK')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                         ['org-openroadm-network-topology:xpdr-network-attributes']
-                                         ['tail-equipment-id'],
+                        self.assertEqual(val2['org-openroadm-common-network:tp-type'], 'XPONDER-NETWORK')
+                        # pylint: disable=line-too-long
+                        self.assertEqual(val2['org-openroadm-network-topology:xpdr-network-attributes']['tail-equipment-id'],
                                          'ROADMA01-SRG1--SRG1-PP1-TXRX')
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, val['supporting-node'])
                 listNode.remove(nodeId)
             # Tests related to ROADMA nodes
             elif nodeId in self.CHECK_DICT1:
                 self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
                 if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
+                    self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
                 for item in self.CHECK_DICT1[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
+                    self.assertIn(item, val['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
                 listNode.remove(nodeId)
             else:
                 self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
         # Test related to SRG1 of ROADMC
-        for i in range(0, nbNode):
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMC01-SRG1')
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMC01-DEG1')
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMC01-DEG2')
+        for val in response['network'][0]['node']:
+            self.assertNotEqual(val['node-id'], 'ROADMC01-SRG1')
+            self.assertNotEqual(val['node-id'], 'ROADMC01-DEG1')
+            self.assertNotEqual(val['node-id'], 'ROADMC01-DEG2')
 
     def test_33_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 2)
-        for i in range(0, nbNode-1):
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMC01')
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMB01')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 2)
+        for val in response['network'][0]['node']:
+            self.assertNotEqual(val['node-id'], 'ROADMC01')
+            self.assertNotEqual(val['node-id'], 'ROADMB01')
 
     def test_34_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 1)
-        for i in range(0, nbNode-1):
-            self.assertNotEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], 'NodeC')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertNotEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeC')
 
     def test_35_disconnect_XPDRA(self):
-        response = test_utils.unmount_device("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_36_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 1)
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_37_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 1)
-        for i in range(0, nbNode):
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'XPDRA01')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertNotEqual(response['network'][0]['node'][0]['node-id'], 'XPDRA01')
 
     def test_38_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils.get_ordm_topo_request("")
-        res = response.json()
-        # Tests related to nodes
-        self.assertEqual(response.status_code, requests.codes.ok)
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 4)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 4)
         listNode = ['ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
-        for i in range(0, nbNode):
-            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                          res['network'][0]['node'][i]['supporting-node'])
-            nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-            nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId in self.CHECK_DICT1:
-                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
-                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
-                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 17)
-                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
-                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
+        for val in response['network'][0]['node']:
+            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
+            nodeType = val['org-openroadm-common-network:node-type']
+            nodeId = val['node-id']
+            self.assertIn(nodeId, self.CHECK_DICT1)
+            self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+            if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                self.assertEqual(len(val['ietf-network-topology:termination-point']), 17)
+            for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                self.assertIn(item, val['ietf-network-topology:termination-point'])
+            self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, val['supporting-node'])
+            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, val['supporting-node'])
+            listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
     def test_39_disconnect_ROADM_XPDRA_link(self):
@@ -820,11 +718,9 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_40_getLinks_OpenRoadmTopology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 16)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 16)
         check_list = {'EXPRESS-LINK': ['ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX',
                                        'ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX'],
                       'ADD-LINK': ['ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX',
@@ -837,9 +733,9 @@ class TransportPCETopologyTesting(unittest.TestCase):
                                     'ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG3-SRG3-CP-TXRX']
                       }
         roadmtoroadmLink = 0
-        for i in range(0, nbLink):
-            linkId = res['network'][0]['ietf-network-topology:link'][i]['link-id']
-            linkType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
+        for val in response['network'][0]['ietf-network-topology:link']:
+            linkId = val['link-id']
+            linkType = val['org-openroadm-common-network:link-type']
             if linkType in check_list:
                 find = linkId in check_list[linkType]
                 self.assertEqual(find, True)
@@ -849,38 +745,32 @@ class TransportPCETopologyTesting(unittest.TestCase):
         for val in check_list.values():
             self.assertEqual(len(val), 0)
         self.assertEqual(roadmtoroadmLink, 6)
-        for i in range(0, nbLink):
-            self.assertNotEqual(res['network'][0]['ietf-network-topology:link'][i]
-                                ['org-openroadm-common-network:link-type'], 'XPONDER-OUTPUT')
-            self.assertNotEqual(res['network'][0]['ietf-network-topology:link'][i]
-                                ['org-openroadm-common-network:link-type'], 'XPONDER-INPUT')
+        for val in response['network'][0]['ietf-network-topology:link']:
+            self.assertNotEqual(val['org-openroadm-common-network:link-type'], 'XPONDER-OUTPUT')
+            self.assertNotEqual(val['org-openroadm-common-network:link-type'], 'XPONDER-INPUT')
 
     def test_41_disconnect_ROADMA(self):
-        response = test_utils.unmount_device("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
         response = test_utils.del_node_request("NodeA")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_42_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertNotIn('node', res['network'][0])
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
 
     def test_43_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertNotIn('node', res['network'][0])
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
 
     def test_44_check_roadm2roadm_link_persistence(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbLink = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertNotIn('node', res['network'][0])
-        self.assertEqual(nbLink, 6)
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 6)
 
 
 if __name__ == "__main__":
