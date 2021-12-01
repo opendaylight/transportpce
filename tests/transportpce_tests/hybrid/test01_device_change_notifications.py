@@ -14,8 +14,11 @@ import json
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -133,6 +136,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_connect_xpdrA(self):

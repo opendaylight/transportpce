@@ -15,8 +15,11 @@ import base64
 import time
 import unittest
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -138,6 +141,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     #  connect netconf devices
@@ -813,6 +817,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_35_check_topo_ROADMA_DEG1()
 
     def test_49_loop_create_eth_service(self):
+        # pylint: disable=consider-using-f-string
         for i in range(1, 6):
             print("iteration number {}".format(i))
             print("eth service creation")
@@ -830,6 +835,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             response = test_utils.service_delete_request("service1")
             time.sleep(5)
 
+        # pylint: disable=consider-using-f-string
         for i in range(1, 6):
             print("iteration number {}".format(i))
             print("oc service creation")

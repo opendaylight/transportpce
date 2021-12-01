@@ -13,11 +13,14 @@
 
 import os
 import json
+# pylint: disable=wrong-import-order
 import sys
 import unittest
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -117,6 +120,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # pylint: disable=unsubscriptable-object
         # TODO: for lighty manage the activation of NBI notification feature
         cls.init_failed = False
         cls.processes = test_utils.start_tpce()
@@ -149,6 +153,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_connect_xpdrA(self):

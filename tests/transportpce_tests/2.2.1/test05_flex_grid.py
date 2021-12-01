@@ -9,11 +9,16 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=no-member
+
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -29,11 +34,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
 

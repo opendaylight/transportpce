@@ -11,13 +11,17 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+# pylint: disable=too-many-lines
 
 import base64
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -593,6 +597,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for OCH-OTU4 service from spdrB to spdrC
     def test_35_create_OCH_OTU4_service_BC(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service-OCH-OTU4-BC"
         self.cr_serv_sample_data["input"]["service-a-end"]["node-id"] = "SPDR-SB1"
         self.cr_serv_sample_data["input"]["service-a-end"]["clli"] = "NodeSB"
@@ -732,6 +737,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        # pylint: disable=consider-using-f-string
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR2-NETWORK1':
                 self.assertEqual({'frequency': 196.1,
@@ -823,6 +829,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for 100GE service from spdrA to spdrC via spdrB
     def test_46_create_100GE_service_ABC(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service-100GE-ABC"
         self.cr_serv_sample_data["input"]["connection-type"] = "service"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "Ethernet"
@@ -1344,6 +1351,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_83_create_OCH_OTU4_service_AC(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service-OCH-OTU4-AC"
         self.cr_serv_sample_data["input"]["connection-type"] = "infrastructure"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "100"
@@ -1384,6 +1392,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for 100GE service from spdrA to spdrC via spdrB
     def test_85_create_100GE_service_AC(self):
+        # pylint: disable=line-too-long
         self.cr_serv_sample_data["input"]["service-name"] = "service-100GE-AC"
         self.cr_serv_sample_data["input"]["connection-type"] = "service"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "Ethernet"

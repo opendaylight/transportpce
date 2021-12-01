@@ -13,10 +13,13 @@
 
 import unittest
 import os
+# pylint: disable=wrong-import-order
 import sys
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -35,22 +38,22 @@ class TransportPCEtesting(unittest.TestCase):
             sample_files_parsed = False
             TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                             "..", "..", "sample_configs", "honeynode-topo.xml")
-            with open(TOPO_BI_DIR_FILE, 'r') as topo_bi_dir:
+            with open(TOPO_BI_DIR_FILE, 'r', encoding='utf-8') as topo_bi_dir:
                 cls.simple_topo_bi_dir_data = topo_bi_dir.read()
 
             TOPO_UNI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "NW-simple-topology.xml")
 
-            with open(TOPO_UNI_DIR_FILE, 'r') as topo_uni_dir:
+            with open(TOPO_UNI_DIR_FILE, 'r', encoding='utf-8') as topo_uni_dir:
                 cls.simple_topo_uni_dir_data = topo_uni_dir.read()
 
             TOPO_UNI_DIR_COMPLEX_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                      "..", "..", "sample_configs", "NW-for-test-5-4.xml")
-            with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r') as topo_uni_dir_complex:
+            with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r', encoding='utf-8') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
             PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "pce_portmapping_121.json")
-            with open(PORT_MAPPING_FILE, 'r') as port_mapping:
+            with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
         except PermissionError as err:

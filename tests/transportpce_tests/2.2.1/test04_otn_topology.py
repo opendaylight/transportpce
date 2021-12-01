@@ -16,8 +16,11 @@ import unittest
 import time
 import logging
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -182,6 +185,7 @@ class TransportPCEtesting(unittest.TestCase):
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if tpType == 'XPONDER-CLIENT':
                         client += 1
+                        # pylint: disable=consider-using-f-string
                         print("tpId = {}".format(tpId))
                         print("tp= {}".format(res['network'][0]['node'][i]
                               ['ietf-network-topology:termination-point'][j]))

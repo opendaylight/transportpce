@@ -15,8 +15,11 @@
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils_rfc8040  # nopep8
 
 
@@ -54,6 +57,7 @@ class TransportPCEtesting(unittest.TestCase):
         nbMappings = 0
         for i in range(0, len(firstEntry)):
             nodeId = firstEntry[i]['node-id']
+            # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
             print("nodeMapId={}".format(nodeMapId))

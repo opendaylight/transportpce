@@ -15,11 +15,14 @@
 # pylint: disable=unsupported-assignment-operation
 
 import os
+# pylint: disable=wrong-import-order
 import sys
 import time
 import unittest
 import requests
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -173,6 +176,7 @@ class TransportTapitesting(unittest.TestCase):
     def setUp(self):  # instruction executed before each test method
         if self.init_failed:
             self.fail('Feature installation failed')
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_get_tapi_topology_T100G(self):
@@ -771,8 +775,8 @@ def find_object_with_key(list_dicts, key, value):
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
-    for dict in list_dicts:
-        if dict[key1][0][key2] == value:
+    for dictio in list_dicts:
+        if dictio[key1][0][key2] == value:
             nb += 1
     return nb
 

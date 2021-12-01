@@ -15,8 +15,11 @@
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils_rfc8040  # nopep8
 
 
@@ -38,6 +41,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
 

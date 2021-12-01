@@ -15,8 +15,11 @@ import base64
 import unittest
 import time
 import requests
+# pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
 import test_utils  # nopep8
 
 
@@ -131,6 +134,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
+        # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_connect_xpdrA(self):
@@ -763,6 +767,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_49_loop_create_eth_service(self):
         for i in range(1, 6):
+            # pylint: disable=consider-using-f-string
             print("iteration number {}".format(i))
             print("eth service creation")
             self.test_11_create_eth_service1()
@@ -780,6 +785,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             time.sleep(5)
 
         for i in range(1, 6):
+            # pylint: disable=consider-using-f-string
             print("iteration number {}".format(i))
             print("oc service creation")
             self.test_36_create_oc_service1()
