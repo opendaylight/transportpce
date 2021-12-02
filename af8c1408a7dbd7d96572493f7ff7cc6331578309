@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "707d5151_164e1f22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-02T10:30:00Z",
+      "side": 1,
+      "message": "verified -1 very likely due to pylint warning fixes\n\ntry to rebase on top of 98743 that should be merged soon\n\nthere are huge changes in func tests after complete pylint pass\n",
+      "revId": "af8c1408a7dbd7d96572493f7ff7cc6331578309",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
