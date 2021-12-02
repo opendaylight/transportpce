@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a1d693_d860e70f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-02T12:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9311bd7_85fd8bfa",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "809054f1_b22de895",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f61504_1d3b9c7e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-02T12:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "809054f1_b22de895",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e836266_792e6fa7",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-11-30T20:03:39Z",
       "side": 1,
       "message": "idem",
+      "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "169390f9_cba0428b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLink.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-02T12:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e836266_792e6fa7",
       "revId": "8a82e6fffe482a5aaa37cefd205c4b40ac059e9b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
