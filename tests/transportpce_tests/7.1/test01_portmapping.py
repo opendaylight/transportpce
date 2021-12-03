@@ -165,20 +165,18 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_10_xpdr_device_disconnected(self):
         response = test_utils_rfc8040.check_device_connection("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
-        self.assertIn(
-            {"error-tag": "data-missing",
-             "error-message": "Request could not be completed because the relevant data model content does not exist",
-             "error-type": "protocol"},
-            response['connection-status'])
+        self.assertIn(response['connection-status']['error-type'], ('protocol', 'application'))
+        self.assertEqual(response['connection-status']['error-tag'], 'data-missing')
+        self.assertEqual(response['connection-status']['error-message'],
+                         'Request could not be completed because the relevant data model content does not exist')
 
     def test_11_xpdr_device_not_connected(self):
         response = test_utils_rfc8040.get_portmapping_node_info("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
-        self.assertIn(
-            {"error-tag": "data-missing",
-             "error-message": "Request could not be completed because the relevant data model content does not exist",
-             "error-type": "protocol"},
-            response['node-info'])
+        self.assertIn(response['node-info']['error-type'], ('protocol', 'application'))
+        self.assertEqual(response['node-info']['error-tag'], 'data-missing')
+        self.assertEqual(response['node-info']['error-message'],
+                         'Request could not be completed because the relevant data model content does not exist')
 
 
 if __name__ == '__main__':
