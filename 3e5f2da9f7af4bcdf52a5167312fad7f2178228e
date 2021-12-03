@@ -16,6 +16,23 @@
       "message": "12:27:30 FAIL: test_46_check_tapi_topos (test10_tapi.TransportTapitesting)\n12:27:30 ----------------------------------------------------------------------\n12:27:30 \nTraceback (most recent call last):\n12:27:30   File \"/w/workspace/transportpce-tox-verify-sulfur/tests/transportpce_tests/2.2.1/test10_tapi.py\", line 746, in test_46_check_tapi_topos\n12:27:30     self.test_02_get_tapi_topology_T0()\n12:27:30   File \"/w/workspace/transportpce-tox-verify-sulfur/tests/transportpce_tests/2.2.1/test10_tapi.py\", line 213, in test_02_get_tapi_topology_T0\n12:27:30     self.assertNotIn(\"node\", res[\"output\"][\"topology\"], \u0027Topology should contain no node\u0027)\n12:27:30 AssertionError: \u0027node\u0027 unexpectedly found in {\u0027uuid\u0027: \u0027747c670e-7a07-3dab-b379-5b1cd17402a3\u0027, \u0027name\u0027: [{\u0027value-name\u0027: \u0027TAPI Topology Name\u0027, \u0027value\u0027: \u0027T0 - Multi-layer topology\u0027}], \u0027node\u0027: [{\u0027uuid\u0027: \u0027d69d9d82-5ac7-3f21-a9ae-ba161f8b4a4c\u0027, \u0027administrative-state\u0027: \u0027UNLOCKED\u0027, \u0027node-rule-group\u0027: [{\u0027uuid\u0027: \u0027d985f642-1927-31f4-ad09-04719f427d9e\u0027, \u0027rule\u0027: [{\u0027local-id\u0027: \u0027forward\u0027, \u0027rule-type\u0027: \u0027FORWARDING\u0027, \u0027forwarding-rule\u0027: \u0027MAY_FORWARD_ACROSS_GROUP\u0027}]}], \u0027lifecycle-state\u0027: \u0027INSTALLED\u0027, \u0027layer-protocol-name\u0027: [\u0027PHOTONIC_MEDIA\u0027], \u0027name\u0027: [{\u0027value-name\u0027: \u0027otsi node name\u0027, \u0027value\u0027: \u0027ROADM-infra\u0027}], \u0027operational-state\u0027: \u0027ENABLED\u0027}]} : Topology should contain no node\n12:27:30 -------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\n12:27:30 execution of test_46_check_tapi_topos\n12:27:30 {\"tapi-topology:input\": {\"tapi-topology:topology-id-or-name\": \"Transponder 100GE\"}}\n12:27:30 {\"tapi-topology:input\": {\"tapi-topology:topology-id-or-name\": \"T0 - Multi-layer topology\"}}",
       "revId": "3e5f2da9f7af4bcdf52a5167312fad7f2178228e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d317b5f_c3779182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-03T13:29:13Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "3e5f2da9f7af4bcdf52a5167312fad7f2178228e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
