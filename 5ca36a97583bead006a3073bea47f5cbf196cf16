@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b9a6ccb_7b7c6dd0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-03T17:05:17Z",
+      "side": 1,
+      "message": "previous indentation was correct and was better separating body blocks from if condition",
+      "revId": "5ca36a97583bead006a3073bea47f5cbf196cf16",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df7d479_3ae937a2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-03T17:05:17Z",
+      "side": 1,
+      "message": "previous indentation was better",
+      "revId": "5ca36a97583bead006a3073bea47f5cbf196cf16",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5248e1a2_c2e88ef8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-03T17:05:17Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "5ca36a97583bead006a3073bea47f5cbf196cf16",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ac4645_949c8925",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-03T17:05:17Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "5ca36a97583bead006a3073bea47f5cbf196cf16",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
