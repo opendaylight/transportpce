@@ -569,14 +569,12 @@ class TransportPCEtesting(unittest.TestCase):
             link_dest = val['destination']['dest-node']
             oppLink_id = val['org-openroadm-common-network:opposite-link']
             # Find the opposite link
-            response_oppLink = test_utils.get_ordm_topo_request("ietf-network-topology:link/"+oppLink_id)
-            self.assertEqual(response_oppLink.status_code, requests.codes.ok)
-            res_oppLink = response_oppLink.json()
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]
-                             ['org-openroadm-common-network:opposite-link'], link_id)
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]['source']['source-node'], link_dest)
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]['destination']['dest-node'], link_src)
-            oppLink_type = res_oppLink['ietf-network-topology:link'][0]['org-openroadm-common-network:link-type']
+            res_oppLink = test_utils_rfc8040.get_ietf_network_link_request('openroadm-topology', oppLink_id, 'config')
+            self.assertEqual(res_oppLink['status_code'], requests.codes.ok)
+            self.assertEqual(res_oppLink['link']['org-openroadm-common-network:opposite-link'], link_id)
+            self.assertEqual(res_oppLink['link']['source']['source-node'], link_dest)
+            self.assertEqual(res_oppLink['link']['destination']['dest-node'], link_src)
+            oppLink_type = res_oppLink['link']['org-openroadm-common-network:link-type']
             CHECK_DICT = {'ADD-LINK': 'DROP-LINK', 'DROP-LINK': 'ADD-LINK',
                           'EXPRESS-LINK': 'EXPRESS-LINK', 'ROADM-TO-ROADM': 'ROADM-TO-ROADM',
                           'XPONDER-INPUT': 'XPONDER-OUTPUT', 'XPONDER-OUTUT': 'XPONDER-INPUT'}
