@@ -57,7 +57,7 @@ RESTCONF_PATH_PREFIX = {'rfc8040': '/rests',
                         'draft-bierman02': '/restconf'}
 if 'USE_ODL_RESTCONF_VERSION' in os.environ:
     RESTCONF_VERSION = os.environ['USE_ODL_RESTCONF_VERSION']
-    if RESTCONF_VERSION not in RESTCONF_PATH_PREFIX.keys():
+    if RESTCONF_VERSION not in RESTCONF_PATH_PREFIX:
         print('unsupported RESTCONF version ' + RESTCONF_VERSION)
         sys.exit(3)
 else:
@@ -379,3 +379,34 @@ def get_ietf_network_request(network: str, content: str):
     networks = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'network': networks}
+
+
+def get_ietf_network_link_request(network: str, link: str, content: str):
+    url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link={}?content={}',
+           'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', network, link, content)
+    elif content == 'config':
+        format_args = ('{}', content, network, link)
+    else:
+        format_args = ('{}', 'operational', network, link)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    return_key = {'rfc8040': 'ietf-network-topology:link',
+                  'draft-bierman02': 'ietf-network-topology:link'}
+    link = res[return_key[RESTCONF_VERSION]][0]
+    return {'status_code': response.status_code,
+            'link': link}
+
+
+def del_ietf_network_link_request(network: str, link: str, content: str):
+    url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link={}?content={}',
+           'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', network, link, content)
+    elif content == 'config':
+        format_args = ('{}', content, network, link)
+    else:
+        format_args = ('{}', 'operational', network, link)
+    response = delete_request(url[RESTCONF_VERSION].format(*format_args))
+    return response
