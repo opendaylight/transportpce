@@ -307,7 +307,8 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request("ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_15_omsAttributes_ROADMC_ROADMA(self):
@@ -321,7 +322,8 @@ class TransportPCEtesting(unittest.TestCase):
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
 
-        response = test_utils.add_oms_attr_request("ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_16_getClliNetwork(self):
@@ -483,7 +485,8 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request("ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-B1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-B1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_23_omsAttributes_ROADMB_ROADMA(self):
@@ -498,7 +501,8 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request("ROADM-B1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-B1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_24_omsAttributes_ROADMB_ROADMC(self):
@@ -513,7 +517,8 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request("ROADM-B1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-B1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_25_omsAttributes_ROADMC_ROADMB(self):
@@ -526,7 +531,8 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request("ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-B1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils_rfc8040.add_oms_attr_request(
+            "ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-B1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_26_getClliNetwork(self):
@@ -569,14 +575,12 @@ class TransportPCEtesting(unittest.TestCase):
             link_dest = val['destination']['dest-node']
             oppLink_id = val['org-openroadm-common-network:opposite-link']
             # Find the opposite link
-            response_oppLink = test_utils.get_ordm_topo_request("ietf-network-topology:link/"+oppLink_id)
-            self.assertEqual(response_oppLink.status_code, requests.codes.ok)
-            res_oppLink = response_oppLink.json()
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]
-                             ['org-openroadm-common-network:opposite-link'], link_id)
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]['source']['source-node'], link_dest)
-            self.assertEqual(res_oppLink['ietf-network-topology:link'][0]['destination']['dest-node'], link_src)
-            oppLink_type = res_oppLink['ietf-network-topology:link'][0]['org-openroadm-common-network:link-type']
+            res_oppLink = test_utils_rfc8040.get_ietf_network_link_request('openroadm-topology', oppLink_id, 'config')
+            self.assertEqual(res_oppLink['status_code'], requests.codes.ok)
+            self.assertEqual(res_oppLink['link']['org-openroadm-common-network:opposite-link'], link_id)
+            self.assertEqual(res_oppLink['link']['source']['source-node'], link_dest)
+            self.assertEqual(res_oppLink['link']['destination']['dest-node'], link_src)
+            oppLink_type = res_oppLink['link']['org-openroadm-common-network:link-type']
             CHECK_DICT = {'ADD-LINK': 'DROP-LINK', 'DROP-LINK': 'ADD-LINK',
                           'EXPRESS-LINK': 'EXPRESS-LINK', 'ROADM-TO-ROADM': 'ROADM-TO-ROADM',
                           'XPONDER-INPUT': 'XPONDER-OUTPUT', 'XPONDER-OUTUT': 'XPONDER-INPUT'}
@@ -610,16 +614,16 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils_rfc8040.unmount_device("ROADM-B1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
-        response = test_utils.del_node_request("NodeB")
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.del_ietf_network_node_request('clli-network', 'NodeB', 'config')
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_31_disconnect_ROADMC(self):
         # Delete in the topology-netconf
         response = test_utils_rfc8040.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
-        response = test_utils.del_node_request("NodeC")
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.del_ietf_network_node_request('clli-network', 'NodeC', 'config')
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_32_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
@@ -715,11 +719,17 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_39_disconnect_ROADM_XPDRA_link(self):
         # Link-1
-        response = test_utils.del_link_request("XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX")
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.del_ietf_network_link_request(
+            'openroadm-topology',
+            'XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX',
+            'config')
         # Link-2
-        response = test_utils.del_link_request("ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1")
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response2 = test_utils_rfc8040.del_ietf_network_link_request(
+            'openroadm-topology',
+            'ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1',
+            'config')
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
+        self.assertIn(response2.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_40_getLinks_OpenRoadmTopology(self):
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
@@ -757,8 +767,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils_rfc8040.unmount_device("ROADM-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         # Delete in the clli-network
-        response = test_utils.del_node_request("NodeA")
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.del_ietf_network_node_request('clli-network', 'NodeA', 'config')
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_42_getClliNetwork(self):
         response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
