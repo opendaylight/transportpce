@@ -379,3 +379,24 @@ def get_ietf_network_request(network: str, content: str):
     networks = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'network': networks}
+
+
+def get_ietf_network_link_request(network: str, link: str, content: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link/ietf-network-topology:link={}?content={}',
+           'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', network, link, content)
+    elif content == 'config':
+        format_args = ('{}', content, network, link)
+    else:
+        format_args = ('{}', 'operational', network, link)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    print(res)
+    return_key = {'rfc8040': 'link',
+                  'draft-bierman02': 'ietf-network-topology:link'}
+    link = res[return_key[RESTCONF_VERSION]][0]
+    #links = res['link']
+    return {'status_code': response.status_code,
+            'link': link}
