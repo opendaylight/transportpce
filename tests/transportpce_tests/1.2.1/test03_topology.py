@@ -21,7 +21,6 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils  # nopep8
 import test_utils_rfc8040  # nopep8
 
 
@@ -254,14 +253,16 @@ class TransportPCETopologyTesting(unittest.TestCase):
     # Connect the tail XPDRA to ROADMA and vice versa
     def test_10_connect_tail_xpdr_rdm(self):
         # Connect the tail: XPDRA to ROADMA
-        response = test_utils.connect_xpdr_to_rdm_request("XPDRA01", "1", "1",
-                                                          "ROADMA01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_xpdr_to_rdm_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_11_connect_tail_rdm_xpdr(self):
         # Connect the tail: ROADMA to XPDRA
-        response = test_utils.connect_rdm_to_xpdr_request("XPDRA01", "1", "1",
-                                                          "ROADMA01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_rdm_to_xpdr_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
