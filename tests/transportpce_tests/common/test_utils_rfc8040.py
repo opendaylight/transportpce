@@ -105,6 +105,20 @@ def delete_request(url):
         headers=TYPE_APPLICATION_JSON,
         auth=(ODL_LOGIN, ODL_PWD))
 
+
+def post_request(url, data):
+    if data:
+        print(json.dumps(data))
+        return requests.request(
+            "POST", url.format(RESTCONF_BASE_URL),
+            data=json.dumps(data),
+            headers=TYPE_APPLICATION_JSON,
+            auth=(ODL_LOGIN, ODL_PWD))
+    return requests.request(
+        "POST", url.format(RESTCONF_BASE_URL),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
+
 #
 # Process management
 #
@@ -441,3 +455,43 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
         format_args = ('{}', 'operational', network, node)
     response = delete_request(url[RESTCONF_VERSION].format(*format_args))
     return response
+
+#
+# TransportPCE network utils operations
+#
+
+
+def connect_xpdr_to_rdm_request(payload: dict):
+    url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
+    payload_prefix = {'rfc8040': '', 'draft-bierman02': 'networkutils:'}
+    data = {
+        payload_prefix[RESTCONF_VERSION] + "input": {
+            payload_prefix[RESTCONF_VERSION] + "links-input": {
+                payload_prefix[RESTCONF_VERSION] + "xpdr-node": payload['xpdr-node'],
+                payload_prefix[RESTCONF_VERSION] + "xpdr-num": payload['xpdr-num'],
+                payload_prefix[RESTCONF_VERSION] + "network-num": payload['network-num'],
+                payload_prefix[RESTCONF_VERSION] + "rdm-node": payload['rdm-node'],
+                payload_prefix[RESTCONF_VERSION] + "srg-num": payload['srg-num'],
+                payload_prefix[RESTCONF_VERSION] + "termination-point-num": payload['termination-point-num']
+            }
+        }
+    }
+    return post_request(url, data)
+
+
+def connect_rdm_to_xpdr_request(payload: dict):
+    url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
+    payload_prefix = {'rfc8040': '', 'draft-bierman02': 'networkutils:'}
+    data = {
+        payload_prefix[RESTCONF_VERSION] + "input": {
+            payload_prefix[RESTCONF_VERSION] + "links-input": {
+                payload_prefix[RESTCONF_VERSION] + "xpdr-node": payload['xpdr-node'],
+                payload_prefix[RESTCONF_VERSION] + "xpdr-num": payload['xpdr-num'],
+                payload_prefix[RESTCONF_VERSION] + "network-num": payload['network-num'],
+                payload_prefix[RESTCONF_VERSION] + "rdm-node": payload['rdm-node'],
+                payload_prefix[RESTCONF_VERSION] + "srg-num": payload['srg-num'],
+                payload_prefix[RESTCONF_VERSION] + "termination-point-num": payload['termination-point-num']
+            }
+        }
+    }
+    return post_request(url, data)
