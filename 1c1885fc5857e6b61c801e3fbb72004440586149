@@ -16,6 +16,24 @@
       "message": "maybe using a map would be more indicated than switch case here.",
       "revId": "1c1885fc5857e6b61c801e3fbb72004440586149",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec331da5_abcdebc0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-08T12:29:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86e5f1d7_f7c902e2",
+      "revId": "1c1885fc5857e6b61c801e3fbb72004440586149",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
