@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44601413_6e77259a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-08T12:30:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39118350_73d51ce0",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "de081f0d0f03cdaca27b0f365290b7be50d4d0e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6cc3230_8c7a211a",
@@ -41,6 +65,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6307a84e_c050f249",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-08T12:30:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6cc3230_8c7a211a",
+      "revId": "de081f0d0f03cdaca27b0f365290b7be50d4d0e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5563704d_b0aacee0",
@@ -54,6 +96,24 @@
       "writtenOn": "2021-11-25T15:57:10Z",
       "side": 1,
       "message": "idem",
+      "revId": "de081f0d0f03cdaca27b0f365290b7be50d4d0e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460efbe8_710515be",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-08T12:30:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5563704d_b0aacee0",
       "revId": "de081f0d0f03cdaca27b0f365290b7be50d4d0e3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
