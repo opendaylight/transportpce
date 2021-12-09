@@ -16,6 +16,40 @@
       "message": "recheck",
       "revId": "25dd6b4bb396fd92666e4aade5d77eb2b90d7484",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0612e1f3_a92eb9f6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:43:50Z",
+      "side": 1,
+      "message": "intermediate variable updatedLink1Bldr not needed",
+      "revId": "25dd6b4bb396fd92666e4aade5d77eb2b90d7484",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db041774_65a8821e",
+        "filename": "tests/transportpce_tests/hybrid/test02_B100G_end2end.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:43:50Z",
+      "side": 1,
+      "message": "please rather use a @skipTest decorator as in this URL and add a justification\nhttps://www.tutorialspoint.com/unittest_framework/unittest_framework_skip_test.htm\n\noptionnaly with a condition such as in\nhttps://www.tutorialspoint.com/unittest_framework/unittest_framework_skip_test.htm",
+      "revId": "25dd6b4bb396fd92666e4aade5d77eb2b90d7484",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
