@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85899cd4_aeb5e271",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:35:00Z",
+      "side": 1,
+      "message": "When a new interface is created on a device,, we need to take into account this new interface just after the mapping update.",
+      "revId": "d089e80f398998ee1e8cbc01de08cb8704553893",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c078439f_ec5e8695",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:35:00Z",
+      "side": 1,
+      "message": "the mapping update",
+      "range": {
+        "startLine": 12,
+        "startChar": 46,
+        "endLine": 12,
+        "endChar": 64
+      },
+      "revId": "d089e80f398998ee1e8cbc01de08cb8704553893",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e897d9b3_b0c0827f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:35:00Z",
+      "side": 1,
+      "message": "modifies",
+      "range": {
+        "startLine": 13,
+        "startChar": 54,
+        "endLine": 13,
+        "endChar": 60
+      },
+      "revId": "d089e80f398998ee1e8cbc01de08cb8704553893",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7294c15_b46006e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:35:00Z",
+      "side": 1,
+      "message": "invokes",
+      "range": {
+        "startLine": 15,
+        "startChar": 61,
+        "endLine": 15,
+        "endChar": 69
+      },
+      "revId": "d089e80f398998ee1e8cbc01de08cb8704553893",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d64d3f9_8617826f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:35:00Z",
+      "side": 1,
+      "message": "mapping update",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "d089e80f398998ee1e8cbc01de08cb8704553893",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
