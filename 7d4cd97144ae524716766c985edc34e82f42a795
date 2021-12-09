@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a01cc98c_142c8a74",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:29:54Z",
+      "side": 1,
+      "message": "not related to this change but I assume the answer is yes and that this must be moved to createPpPortmapping...",
+      "revId": "7d4cd97144ae524716766c985edc34e82f42a795",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

@@ -46,6 +46,30 @@
       },
       "revId": "066b707ce25889ca4f3f88572fe4a5804dff354e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98160674_110617f0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:29:54Z",
+      "side": 1,
+      "message": "I missed you answer. Please do not close the comment except if the issue is really trivial and has been fixed.\nMy opinion is that the condition should be updated in the 3 classes indeed.\nThat\u0027s what I meant by \"etc\"\nI am reopening this comment.",
+      "parentUuid": "c893dc03_65c92ebc",
+      "range": {
+        "startLine": 591,
+        "startChar": 36,
+        "endLine": 591,
+        "endChar": 45
+      },
+      "revId": "066b707ce25889ca4f3f88572fe4a5804dff354e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
