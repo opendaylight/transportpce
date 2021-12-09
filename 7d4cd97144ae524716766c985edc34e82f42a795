@@ -16,6 +16,24 @@
       "message": "not related to this change but I assume the answer is yes and that this must be moved to createPpPortmapping...",
       "revId": "7d4cd97144ae524716766c985edc34e82f42a795",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef9b1033_d827feaa",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-09T08:16:29Z",
+      "side": 1,
+      "message": "Not sure to follow you, all the more than this is absolutely not related to this change. Please fill in a JIRA ticket to explain what you want.",
+      "parentUuid": "a01cc98c_142c8a74",
+      "revId": "7d4cd97144ae524716766c985edc34e82f42a795",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
