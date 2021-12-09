@@ -52,6 +52,24 @@
       "parentUuid": "ef9b1033_d827feaa",
       "revId": "7d4cd97144ae524716766c985edc34e82f42a795",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f35383c3_d8b15dcd",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T15:18:38Z",
+      "side": 1,
+      "message": "My mistake I meant the answer is no that this TODO comment should be removed\ncf git diff view between PS6 and 13  at this URL\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/97828/6..13/common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java\n\nthe incrementation commented out has been removed meanwhile.",
+      "parentUuid": "072c7a05_c50e82a5",
+      "revId": "7d4cd97144ae524716766c985edc34e82f42a795",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
