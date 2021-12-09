@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5d9862_8bf08711",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-09T06:53:34Z",
+      "side": 1,
+      "message": "miss a pylint disable comment\n\n\n$ git-review -x 98669\n[..]\n$ tox -e pylint\n[...]\n************* Module common.test_utils\ntransportpce_tests/common/test_utils.py:275:51: C0209: Formatting a regular string which could be a f-string (consider-using-f-string)",
+      "revId": "cb559abf1417d41a71e7695b2703e1bc7213f4ef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
