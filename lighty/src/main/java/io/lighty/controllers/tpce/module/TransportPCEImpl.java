@@ -89,6 +89,8 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+// This TapiLink import above is warned as unused because tapiLink was not initialized 
+// cf https://git.opendaylight.org/gerrit/c/transportpce/+/98688
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
