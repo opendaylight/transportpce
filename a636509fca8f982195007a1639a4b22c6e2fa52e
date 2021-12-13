@@ -16,6 +16,23 @@
       "message": "16:17:51 ..............F.................\n16:19:18 \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n16:25:42 FAIL: test_15_get_tapi_topology_details (test13_tapi_full_multi_layer.TransportPCEtesting)\n16:25:42 ----------------------------------------------------------------------\n16:25:42 \nTraceback (most recent call last):\n16:25:42   File \"/w/workspace/transportpce-tox-verify-sulfur/tests/transportpce_tests/2.2.1/test13_tapi_full_multi_layer.py\", line 275, in test_15_get_tapi_topology_details\n16:25:42     self.assertEqual(nbLink, 15, \u0027There should be 15 TAPI links\u0027)\n16:25:42 AssertionError: 14 !\u003d 15 : There should be 15 TAPI links\n16:25:42 -------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\n16:25:42 {\"input\": {\"topology-id-or-name\": \"T0 - Full Multi-layer topology\"}}\n16:25:42 \n16:25:42 --------------------- \u003e\u003e end captured stdout \u003c\u003c ----------------------\n16:25:42 -------------------- \u003e\u003e begin captured logging \u003c\u003c --------------------\n16:25:42 urllib3.connectionpool: DEBUG: Starting new HTTP connection (1): localhost:8183\n16:25:42 urllib3.connectionpool: DEBUG: http://localhost:8183 \"POST /restconf/operations/tapi-topology:get-topology-details HTTP/1.1\" 200 None\n16:25:42 --------------------- \u003e\u003e end captured logging \u003c\u003c ---------------------\n16:25:42 \n16:25:42 ----------------------------------------------------------------------\n16:25:42 Ran 32 tests in 497.650s\n16:25:42 \n16:25:42 FAILED (failures\u003d1)\n16:25:42 ERROR: InvocationError for command /w/workspace/transportpce-tox-verify-sulfur/tests/launch_tests.sh 2.2.1 (exited with code 1)\n16:25:42 ERROR: invocation failed (exit code 1)\n16:25:42 ✖ FAIL tests221 in 1 hour, 16 minutes, 23.674 seconds",
       "revId": "a636509fca8f982195007a1639a4b22c6e2fa52e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ea4d081_46bceae4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-13T16:11:32Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "a636509fca8f982195007a1639a4b22c6e2fa52e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
