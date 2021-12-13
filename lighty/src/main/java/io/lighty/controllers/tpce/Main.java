@@ -104,9 +104,8 @@ public class Main {
         }
     }
 
-    /**
+    /*
      * Build options for command line arguments.
-     * @return
      */
     private static Options buildOptions() {
         Option restconfFileOption = Option.builder(RESTCONF_OPTION_NAME)
