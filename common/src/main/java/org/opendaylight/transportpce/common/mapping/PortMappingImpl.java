@@ -57,6 +57,11 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
+    public PortMappingVersion221 getPortMappingVersion221() {
+        return portMappingVersion22;
+    }
+
+    @Override
     public boolean createMappingData(String nodeId, String nodeVersion) {
         switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_1_2_1:

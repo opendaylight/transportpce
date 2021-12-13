@@ -141,8 +141,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         TransportpceNetworkutilsService networkutilsServiceImpl = new NetworkUtilsImpl(
                 lightyServices.getBindingDataBroker());
         MappingUtils mappingUtils = new MappingUtilsImpl(lightyServices.getBindingDataBroker());
-        OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils);
-        PortMapping portMapping = initPortMapping(lightyServices, openRoadmInterfaces);
+        PortMapping portMapping = initPortMapping(lightyServices);
+        OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
         NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
                 portMapping, lightyServices.getBindingNotificationPublishService());
         FrequenciesService networkModelWavelengthService =
@@ -209,6 +209,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 networkModelListenerImpl, servicehandler);
 
         LOG.info("Creating tapi beans ...");
+        TapiLink tapiLink = new TapiLink(networkTransaction);
         R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
             deviceTransactionManager, tapiLink);
         TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
@@ -321,22 +322,22 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             openRoadmInterface710, openRoadmOtnInterface221, openRoadmOtnInterface710);
     }
 
-    private PortMapping initPortMapping(LightyServices lightyServices, OpenRoadmInterfaces openRoadmInterfaces) {
+    private PortMapping initPortMapping(LightyServices lightyServices) {
         PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(lightyServices.getBindingDataBroker(),
-            deviceTransactionManager, openRoadmInterfaces);
+                deviceTransactionManager);
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager, openRoadmInterfaces);
+                deviceTransactionManager);
         PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager, openRoadmInterfaces);
+                deviceTransactionManager);
         return new PortMappingImpl(lightyServices.getBindingDataBroker(), portMappingVersion710,
             portMappingVersion221, portMappingVersion121);
     }
 
-    private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils) {
+    private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {
         OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(
                 deviceTransactionManager);
         OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(
-                deviceTransactionManager);
+                deviceTransactionManager, portMapping, portMapping.getPortMappingVersion221());
         OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(
             deviceTransactionManager);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
