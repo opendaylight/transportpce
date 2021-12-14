@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb77d361_75624ed0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-14T19:19:43Z",
+      "side": 1,
+      "message": "I like the idea of using env variables.",
+      "revId": "ff4dea3c709111c68e46712e9bf4ad3e6f28feb3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c3392e4_9b92dd6e",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/OlmProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-14T19:19:43Z",
+      "side": 1,
+      "message": "I think this can be fixed quickly in a dedicated change.",
+      "revId": "ff4dea3c709111c68e46712e9bf4ad3e6f28feb3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
