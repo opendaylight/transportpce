@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "b803c718b7915bd1409b4840ff2379467f28d58e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2003780_b1c6a03b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-14T20:21:28Z",
+      "side": 1,
+      "message": "Thanks Anil\n\nit works now.\nThe CI verified -1 is due to a URL timeout in docs-linkcheck\n\n04:39:29 ___________________________________ summary ____________________________________\n04:39:29   buildcontroller: commands succeeded\n04:39:29   testsPCE: commands succeeded\n04:39:29   sims121: commands succeeded\n04:39:29   build_karaf_tests121: commands succeeded\n04:39:29   tests121: commands succeeded\n04:39:29   sims221: commands succeeded\n04:39:29   build_karaf_tests221: commands succeeded\n04:39:29   sims71: commands succeeded\n04:39:29   build_karaf_tests71: commands succeeded\n04:39:29   tests71: commands succeeded\n04:39:29   tests221: commands succeeded\n04:39:29   build_karaf_tests_hybrid: commands succeeded\n04:39:29   tests_hybrid: commands succeeded\n04:39:29   docs: commands succeeded\n04:39:29 ERROR:   docs-linkcheck: parallel child exit code 1\n04:39:29   checkbashisms: commands succeeded\n04:39:29   pre-commit: commands succeeded\n04:39:29   gitlint: commands succeeded\n04:39:29   pylint: commands succeeded",
+      "revId": "b803c718b7915bd1409b4840ff2379467f28d58e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
