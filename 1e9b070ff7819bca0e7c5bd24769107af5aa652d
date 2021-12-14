@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "551a5ba2_40254752",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -20,10 +21,34 @@
         "endChar": 52
       },
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": false
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "745b8e50_33386544",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-14T13:04:53Z",
+      "side": 1,
+      "message": "\u003e note this condition might be factorized.\n\nDone in PS 13.",
+      "parentUuid": "551a5ba2_40254752",
+      "range": {
+        "startLine": 327,
+        "startChar": 28,
+        "endLine": 327,
+        "endChar": 52
+      },
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "88db75c5_b3e88b8e",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -37,10 +62,10 @@
       "side": 1,
       "message": "Doesn\u0027t the input width here refer to NMC width and not slot width? I thought it was changed from slot width to NMC width in an earlier commit so I don\u0027t understand how width can be compared to 87.5 GHz slot width here.",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "83e4f9c1_5131f74f",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -55,10 +80,10 @@
       "message": "Input width here refers to MC/slot width and not NMC width",
       "parentUuid": "88db75c5_b3e88b8e",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": false
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "44f740af_ba23124a",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -73,10 +98,10 @@
       "message": "@Jonas @Olivier: LGTM \u003d\u003e if there is no other objection, I propose we merge this change",
       "parentUuid": "83e4f9c1_5131f74f",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": false
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "3f51cd65_7092a3ea",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -91,10 +116,10 @@
       "message": "\u003e Input width here refers to MC/slot width and not NMC width\n\nWidth is defined in transportpce-common-types@2021-06-18.yang:\n\n leaf width {\n   description\n    \" Width of nmc\";\n   type org-openroadm-common-types:frequency-GHz;\n }\n\nSo I think it is confusing when input.getWidth() is compared to 87.5 GHz slot width. Also, this patch partly reverts an earlier change in https://git.opendaylight.org/gerrit/c/transportpce/+/94560, which said \"Update setPower in PowerMgmtImpl as now we use width instead of slot-width\" in the commit message. I do think using slot width for the power calculation is more consistent with the OpenROADM MSA but then it is not consistent with the description in the yang module and I don\u0027t understand why it is being changed back and forth.",
       "parentUuid": "44f740af_ba23124a",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": false
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "714d1c59_505c50a2",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -109,10 +134,10 @@
       "message": "OK I reopen the comment and wait for Olivier\u0027s feedback",
       "parentUuid": "3f51cd65_7092a3ea",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "838e8d89_11b6e0fe",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -127,10 +152,10 @@
       "message": "Agree with Jonas. This is somewhat confusing. Power setting shall be made according to OpenROADM MSA recommendation, so the power difference shall be calculated on the base of slot width. But input.getwidth is supposed to be a nmc width (according to what is in olm-renderer-input grouping (transport-pce-common-type). Probably need to check that service Handler really provides a value corresponding to a NMC (as defined in yang model), and then if we use width to make decision on the power calculation, it shall be compared to NMC width we are supposed to experience (To be checked : 40 GHz for initialy defined 100G channels with Gaussian profile? 37.5 GHz for new 100G channels based on Nyquist profile?,....)",
       "parentUuid": "714d1c59_505c50a2",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "61065bab_21aa67a4",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -145,10 +170,10 @@
       "message": "Thx for the feedbacks.\n\nFair enough for me.\nI am putting a -1 to state clearly the disagreements pointed here on Gerrit dashboards.",
       "parentUuid": "838e8d89_11b6e0fe",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f789e29a_ddcc51e5",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -163,10 +188,10 @@
       "message": "Following today\u0027s call, it seems that some clarifications in comments is needed even for the current code since it uses input.getWidth() already.",
       "parentUuid": "61065bab_21aa67a4",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e5a94b9a_13059ff0",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -181,10 +206,10 @@
       "message": "Current code is not compliant with OpenROADM MSA since the commit I mentioned earlier:\n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/94560\n\nIt increases the power with 3 dB for 87.5 GHz slot-width compared to 50 GHz while the MSA says it should be increased by 10*log(87.5/50). Also note that before the mentioned commit, olm-renderer-input in transportpce-common-types included slot-width instead of width (\"Width of nmc\" according to the description) and the power calculation was done according to the MSA recommendation.",
       "parentUuid": "f789e29a_ddcc51e5",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "09dce282_19f9cc96",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -199,10 +224,10 @@
       "message": "Thanks a lot for the details and your investigations Jonas. It helps.\nThat\u0027s also what I have understood from our talk of last week but I am not a specialist.\nPlease feel free to join us at our weekly call tomorrow and/or to propose a change to fix that.\n\nAccording to Olivier and if I have well understood, it might be possible that an approximation was made for this particular case. But we definitely need to check that.\nFrom an optical standpoint, I cannot find a clear trace of the reason behind neither in Git Log nor the code comments,  whatever this reason was valid or not.\nOnly that in itself is already problematic in my opinion and we probably need to open a JIRA ticket to clarify things here.",
       "parentUuid": "e5a94b9a_13059ff0",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "87c8d8f0_c49d8ca2",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -217,10 +242,10 @@
       "message": "Hello,\nThe approximation is about using the spacing rather than the signal width @-20 dBm to make the calculation in OpenROADM. We make this because basically we don\u0027t have all the elements to qualify the signal width for all modulation format (different filter shapes, unkown exact Roll off factor...). Agree with Jonas rule for calculation.",
       "parentUuid": "09dce282_19f9cc96",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "357582aa_0c2f9aaf",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
@@ -235,8 +260,7 @@
       "message": "FYI I\u0027ve created a JIRA ticket at https://jira.opendaylight.org/browse/TRNSPRTPCE-494\nFeel free to amend it according to your needs.\nI will mention it in a FIXME comment in the current OLM refactoring change at \nhttps://git.opendaylight.org/gerrit/c/transportpce/+/97100\ntill it is fixed.",
       "parentUuid": "87c8d8f0_c49d8ca2",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
-      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
-      "unresolved": true
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
