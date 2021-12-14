@@ -83,6 +83,23 @@ Preparing for Installation
 Installation Feature
 ~~~~~~~~~~~~~~~~~~~~
 
+Creation of services with TransportPCE controller on real optical devices takes a rather long while,
+due to the fact that the output optical power level modification on interfaces requires time for stabilisation
+level. Per default values of TransportPCE timers are those recommended by OpenROADM MSA, respectively 120 000
+and 20 000 seconds.
+When running TransportPCE controller with honeynode simulators, which is the case of all TransportPCE functional tests,
+we don't need so important timer values. You can considerably speed tests using respectively 3000 and 2000 seconds.
+To that end, before running OpenDaylight, set OLM_TIMER1 and OLM_TIMER2 as environment variables.
+For example::
+
+    export OLM_TIMER1=3000 OLM_TIMER2=2000
+
+To come back with per default values for these timers, just logout from OpenDaylight controller, and unset your
+environment variables, and start again the controller::
+
+    unset OLM_TIMER1 OLM_TIMER2
+
+
 Run OpenDaylight and install TransportPCE Service *odl-transportpce* as below::
 
    feature:install odl-transportpce
