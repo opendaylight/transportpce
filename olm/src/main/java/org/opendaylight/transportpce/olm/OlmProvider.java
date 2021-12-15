@@ -50,7 +50,7 @@ public class OlmProvider {
      * Method called when the blueprint container is destroyed.
      */
     public void close() {
-        LOG.info("RendererProvider Closed");
+        LOG.info("OlmProvider Closed");
         // Clean up the RPC service registration
         if (olmRPCRegistration != null) {
             olmRPCRegistration.close();
