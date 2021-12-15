@@ -279,6 +279,24 @@
       "parentUuid": "357582aa_0c2f9aaf",
       "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8860dea3_fe640595",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-15T10:23:59Z",
+      "side": 1,
+      "message": "If everybody agrees, no objection on my side.\nI can see the explanation and the FIXME in current code comments.\nRemaining issues can be addressed in newer commits.",
+      "parentUuid": "bb17f386_27ae8e29",
+      "revId": "1e9b070ff7819bca0e7c5bd24769107af5aa652d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
