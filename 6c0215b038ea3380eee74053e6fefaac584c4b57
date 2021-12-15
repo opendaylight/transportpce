@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f18f42d0_1450422a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-15T16:07:10Z",
+      "side": 1,
+      "message": "still quite slow in CI but at least some results.\n\nIt seems lighty.io notification support is missing...\n\n13:20:39 nosetests --with-xunit transportpce_tests/hybrid/test01_device_change_notifications.py\n13:24:47 .............FFF.....FF.....FF.....FF.....FF.......",
+      "revId": "6c0215b038ea3380eee74053e6fefaac584c4b57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
