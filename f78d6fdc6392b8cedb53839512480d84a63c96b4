@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133439a4_1d7e8028",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-16T14:57:54Z",
+      "side": 1,
+      "message": "NEP",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "f78d6fdc6392b8cedb53839512480d84a63c96b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f2ceb1_7e4359f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-16T14:57:54Z",
+      "side": 1,
+      "message": "LGTM, just the commit message ;)",
+      "revId": "f78d6fdc6392b8cedb53839512480d84a63c96b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
