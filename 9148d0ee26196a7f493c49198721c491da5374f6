@@ -16,6 +16,23 @@
       "message": "@Guillaume \u0026 @Gilles\nIs it possible to change the owner to me?? As I had to redo the whole chain myself and Peter is no longer part of Nokia",
       "revId": "9148d0ee26196a7f493c49198721c491da5374f6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7709665a_09ecc90d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-16T14:13:57Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "9148d0ee26196a7f493c49198721c491da5374f6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
