@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6710478a_241677a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2021-12-16T12:54:37Z",
+      "side": 1,
+      "message": "@Guillaume \u0026 @Gilles\nIdem as previous change from relation chain",
+      "revId": "da77f74b4fd897d6ae1770f13ec37ac832f85589",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
