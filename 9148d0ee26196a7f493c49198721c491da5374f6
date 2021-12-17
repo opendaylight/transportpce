@@ -33,6 +33,24 @@
       "message": "recheck",
       "revId": "9148d0ee26196a7f493c49198721c491da5374f6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d75139e8_b22390ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-17T07:38:47Z",
+      "side": 1,
+      "message": "No not possible without creating another change.\nYou can add you as co-author in the footer but Gerrit does not manage that field.",
+      "parentUuid": "a1d54ca0_28fb84fb",
+      "revId": "9148d0ee26196a7f493c49198721c491da5374f6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
