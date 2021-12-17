@@ -34,6 +34,24 @@
       "parentUuid": "fbd85d9c_5fa11a23",
       "revId": "64388f2b9892365c57fa5ad0cf95070840d25760",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05109423_235f76f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-17T11:47:09Z",
+      "side": 1,
+      "message": "yep this deserves a JIRA ticket probably although it does not affect the build.",
+      "parentUuid": "6ba1cc4a_9cae2bcd",
+      "revId": "64388f2b9892365c57fa5ad0cf95070840d25760",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

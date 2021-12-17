@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02109d2c_e7c12be5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-17T11:47:09Z",
+      "side": 1,
+      "message": "@Gilles: I understand the reason of the -2 was to block the +2 because of build issues that occured after your rebase. The revision of common YANG model changed.\n\nThis new PS should fix the problem.",
+      "revId": "f0c7d45051b7cf4aa225cbefcf7f34b4f1f4a514",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
