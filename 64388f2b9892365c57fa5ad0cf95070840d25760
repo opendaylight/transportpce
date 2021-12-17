@@ -16,6 +16,24 @@
       "message": "I\u0027ve still some issues when running TPCE with Lighty...",
       "revId": "64388f2b9892365c57fa5ad0cf95070840d25760",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba1cc4a_9cae2bcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2021-12-17T09:48:43Z",
+      "side": 1,
+      "message": "As an example, it is very annoying that the current version of lighty uses the netconf 2.0.9 dependency which makes our logs unreadable due to the problem of LOG in trace mode (hexadecimal). It would be necessary to use version 2.0.11 to be aligned with LOG with have with the karaf version.",
+      "parentUuid": "fbd85d9c_5fa11a23",
+      "revId": "64388f2b9892365c57fa5ad0cf95070840d25760",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
