@@ -71,7 +71,9 @@ public class TapiRendererListenerImpl implements TransportpceRendererListener {
     private void onServiceImplementationResult(RendererRpcResultSp notification) {
         switch (serviceRpcResultSp.getStatus()) {
             case Successful:
-                onSuccededServiceImplementation();
+                if (this.serviceUuid != null) {
+                    onSuccededServiceImplementation();
+                }
                 break;
             case Failed:
                 onFailedServiceImplementation(notification.getServiceName());
@@ -103,7 +105,7 @@ public class TapiRendererListenerImpl implements TransportpceRendererListener {
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOperationalState(OperationalState.ENABLED)
             .build();
-        for (Connection connection:updtConnServ.getConnection().values()) {
+        for (Connection connection:updtConnServ.nonnullConnection().values()) {
             updateConnectionState(connection.getConnectionUuid());
         }
         updateConnectivityService(updtConnServ);
