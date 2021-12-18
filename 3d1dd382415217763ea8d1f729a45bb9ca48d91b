@@ -16,6 +16,23 @@
       "message": "gate connectivity issue on docs-linkcheck\n\n15:49:53 /w/workspace/transportpce-tox-verify-sulfur/docs/tox-guide.rst:109: WARNING: broken link: https://pre-commit.com/ (HTTPSConnectionPool(host\u003d\u0027pre-commit.com\u0027, port\u003d443): Max retries exceeded with url: / (Caused by NewConnectionError(\u0027\u003curllib3.connection.HTTPSConnection object at 0x7f3d13301470\u003e: Failed to establish a new connection: [Errno -2] Name or service not known\u0027,))",
       "revId": "3d1dd382415217763ea8d1f729a45bb9ca48d91b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de1710b7_9629c581",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2021-12-18T10:57:19Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "3d1dd382415217763ea8d1f729a45bb9ca48d91b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
