@@ -131,7 +131,11 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface221.createOpenRoadmOdu4HOInterface(nodeId, logicalConnPoint, isCTP,
                     apiInfoA, apiInfoZ, payloadType);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                return openRoadmInterface710.createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
+                // Here ODUCn and ODUflex are combined
+                String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(nodeId,
+                    logicalConnPoint);
+                return openRoadmInterface710.createOpenRoadmOduflexInterface(nodeId, logicalConnPoint,
+                    interfaceNameOduc4);
             default:
                 return null;
         }
