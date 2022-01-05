@@ -1240,7 +1240,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
         time.sleep(3)
 
-    def test_78_check_interface_100GE_CLIENT_xpdra2(self):
+    def test_78_check_interface_400GE_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A2", "interface/XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response.status_code, requests.codes.ok)
