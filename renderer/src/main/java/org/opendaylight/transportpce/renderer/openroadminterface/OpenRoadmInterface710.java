@@ -274,11 +274,6 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
-        // Maint test signal
-        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
-            .setEnabled(false);
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -290,8 +285,7 @@ public class OpenRoadmInterface710 {
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
-            .setOpu(opuBuilder.build())
-            .setMaintTestsignal(maintTestsignal.build());
+            .setOpu(opuBuilder.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOdu.class,
             logicalConnPoint + "-ODUC4");
@@ -343,11 +337,6 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
-        // Maint test signal
-        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
-            .setEnabled(false);
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -363,8 +352,7 @@ public class OpenRoadmInterface710 {
             .setTxSapi(portMapA.getLcpHashVal())
             .setTxDapi(portMapZ.getLcpHashVal())
             .setExpectedSapi(portMapZ.getLcpHashVal())
-            .setExpectedDapi(portMapZ.getLcpHashVal())
-            .setMaintTestsignal(maintTestsignal.build());
+            .setExpectedDapi(portMapZ.getLcpHashVal());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
             alogicalConnPoint + ODUC4);
@@ -405,11 +393,6 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
-        // Maint test signal
-        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
-            .setEnabled(false);
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -421,8 +404,7 @@ public class OpenRoadmInterface710 {
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
-            .setOpu(opuBuilder.build())
-            .setMaintTestsignal(maintTestsignal.build());
+            .setOpu(opuBuilder.build());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
             logicalConnPoint + ODUC4);
@@ -474,11 +456,6 @@ public class OpenRoadmInterface710 {
         OpuBuilder opuBuilder = new OpuBuilder()
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("22"));
-        // Maint test signal
-        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
-            .setEnabled(false);
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
@@ -494,8 +471,7 @@ public class OpenRoadmInterface710 {
             .setTxSapi(portMapA.getLcpHashVal())
             .setTxDapi(portMapZ.getLcpHashVal())
             .setExpectedSapi(portMapZ.getLcpHashVal())
-            .setExpectedDapi(portMapZ.getLcpHashVal())
-            .setMaintTestsignal(maintTestsignal.build());
+            .setExpectedDapi(portMapZ.getLcpHashVal());
 
         InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
             alogicalConnPoint + ODUC4);
@@ -537,12 +513,6 @@ public class OpenRoadmInterface710 {
             .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
             .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
 
-        // Maint test signal
-        MaintTestsignalBuilder maintTestsignal = new MaintTestsignalBuilder()
-            // PRBS value should be PRBS31 if enabled is true
-            .setTestPattern(TestPattern.PRBS31)
-            .setEnabled(false);
-
         // Parent Odu-allocation
         // Set the trib-slot array
         List<OpucnTribSlotDef> tribslots = new ArrayList<>();
@@ -564,7 +534,6 @@ public class OpenRoadmInterface710 {
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
             .setOpu(opuBuilder.build())
-            .setMaintTestsignal(maintTestsignal.build())
             .setParentOduAllocation(parentOduAllocationBuilder.build());
 
         InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
