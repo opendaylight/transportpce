@@ -1137,6 +1137,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for 400GE service from xpdra2 to xpdrc2
 
+
     def test_72_create_400GE_service(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service-400GE"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "400"
@@ -1240,7 +1241,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
         time.sleep(3)
 
-    def test_78_check_interface_100GE_CLIENT_xpdra2(self):
+    def test_78_check_interface_400GE_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A2", "interface/XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1361,6 +1362,60 @@ class TransportPCEtesting(unittest.TestCase):
                                   **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu']),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
         self.assertEqual('XPDR1-NETWORK1-OTUC4', res['interface'][0]['supporting-interface-list'][0])
+
+    def test_82a_check_interface_ODUFLEX_xpdra2(self):
+        response = test_utils.check_netconf_node_request(
+            "XPDR-A2", "interface/XPDR1-NETWORK1-ODUFLEX")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODUFLEX',
+                        'administrative-state': 'inService',
+                        'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
+                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-ODUC4',
+                        'type': 'org-openroadm-interfaces:otnOdu',
+                        'supporting-port': 'L1',
+                        'circuit-id': 'TBD',
+                        'description': 'TBD'}
+        input_dict_2 = {"odu-function": "org-openroadm-otn-common-types:ODU-TTP-CTP",
+                        "tim-detect-mode": "Disabled",
+                        "degm-intervals": 2,
+                        "degthr-percentage": 100,
+                        "monitoring-mode": "terminated",
+                        "rate": "org-openroadm-otn-common-types:ODUflex-cbr",
+                        "oduflex-cbr-service": "org-openroadm-otn-common-types:ODUflex-cbr-400G"
+                        }
+        input_dict_3 = {"exp-payload-type": "32", "payload-type": "32"}
+        input_dict_4 = {'trib-port-number': 1}
+
+        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
+                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_2,
+                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+        self.assertDictEqual(dict(input_dict_3,
+                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu']),
+                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+        self.assertDictEqual(dict(input_dict_4,
+                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                                      'parent-odu-allocation']),
+                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation'])
+        self.assertIn('1.1', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('1.20', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('2.1', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('2.20', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('3.1', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('3.20', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('4.1', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertIn('4.20', res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['parent-odu-allocation']
+                      ['opucn-trib-slots'])
+        self.assertEqual('XPDR1-NETWORK1-ODUC4', res['interface'][0]['supporting-interface-list'][0])
 
     def test_83_delete_400GE_service(self):
         response = test_utils.service_delete_request("service-400GE")
