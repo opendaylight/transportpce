@@ -99,7 +99,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes: ', res["output"]["result"])
+        self.assertIn('Interfaces created successfully for nodes: ', res["output"]["result"])
         self.assertTrue(res["output"]["success"])
         self.assertIn(
             {'node-id': 'SPDR-SA1',

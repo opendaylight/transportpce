@@ -93,8 +93,12 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 case StringConstants.SERVICE_TYPE_ODU4:
                     createHighOrderInterfaces(input, nodeInterfaces, otnLinkTps);
                     break;
+                // For all the intermediate rates, device renderer is generalized as
+                // ODUCnTTPinterface method
+                case StringConstants.SERVICE_TYPE_ODUC2:
+                case StringConstants.SERVICE_TYPE_ODUC3:
                 case StringConstants.SERVICE_TYPE_ODUC4:
-                    createOduc4TtpInterface(input, nodeInterfaces, otnLinkTps);
+                    createOducnTtpInterface(input, nodeInterfaces, otnLinkTps);
                     break;
                 case StringConstants.SERVICE_TYPE_100GE_S:
                     LOG.info("Calling Node interface for service-type {}", serviceType);
@@ -206,18 +210,21 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         connectionNumber = getConnectionNumber(null, node, networkTp, "ODU4");
                     }
                     break;
+                case StringConstants.SERVICE_TYPE_ODUC2:
+                case StringConstants.SERVICE_TYPE_ODUC3:
                 case StringConstants.SERVICE_TYPE_ODUC4:
                     if (node.getClientTp() == null && node.getNetwork2Tp() == null) {
-                        interfacesToDelete.add(networkTp + "-ODUC4");
+                        // Service-type can be ODUC2, ODUC3, ODUC4
+                        interfacesToDelete.add(networkTp + "-" + serviceType);
                         otnLinkTps.add(new LinkTpBuilder()
                             .setNodeId(nodeId)
                             .setTpId(networkTp)
                             .build());
                     }
                     if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
-                        interfacesToDelete.add(networkTp + "-ODUC4");
-                        interfacesToDelete.add(node.getNetwork2Tp() + "-ODUC4");
-                        connectionNumber = getConnectionNumber(null, node, networkTp, "ODUC4");
+                        interfacesToDelete.add(networkTp + "-" + serviceType);
+                        interfacesToDelete.add(node.getNetwork2Tp() + "-" + serviceType);
+                        connectionNumber = getConnectionNumber(null, node, networkTp, serviceType);
                     }
                     break;
                 case StringConstants.SERVICE_TYPE_10GE:
@@ -250,7 +257,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     if (supportedInterface == null) {
                         continue;
                     }
-                    if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC4"))
+                    // Here ODUC can be ODUC2, ODUC3, ODUC4
+                    if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC"))
                         || (input.getServiceRate().intValue() != 100 && !supportedInterface.contains("ODU4"))) {
                         interfacesToDelete.add(supportedInterface);
                     }
@@ -505,15 +513,39 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         }
     }
 
-    private void createOduc4TtpInterface(OtnServicePathInput input, List<NodeInterface> nodeInterfaces,
+    private void createOducnTtpInterface(OtnServicePathInput input, List<NodeInterface> nodeInterfaces,
         CopyOnWriteArrayList<LinkTp> linkTpList) throws OpenRoadmInterfaceException {
         if (input.getNodes() == null) {
             return;
         }
-        LOG.info("Creation of ODUC4 TTP interface in OTN service path {}", input);
+        if (input.getServiceRate() == null) {
+            LOG.error("Missing service rate for ODUCn interface");
+            return;
+        }
+        LOG.info("Creation of ODUCn TTP interface in OTN service path {}", input);
         for (int i = 0; i < input.getNodes().size(); i++) {
             Nodes node = input.getNodes().get(i);
-            String supportingOtuInterface = node.getNetworkTp() + "-OTUC4";
+            // Based on the service rate, we will know if it is a OTUC4, OTUC3 or OTUC2
+            String supportingOtuInterface = node.getNetworkTp();
+            boolean serviceRateNotSupp = false;
+
+            switch (input.getServiceRate().intValue()) {
+                case 200:
+                    supportingOtuInterface += "-OTUC2";
+                    break;
+                case 300:
+                    supportingOtuInterface += "-OTUC3";
+                    break;
+                case 400:
+                    supportingOtuInterface += "-OTUC4";
+                    break;
+                default:
+                    serviceRateNotSupp = true;
+                    break;
+            }
+            if (serviceRateNotSupp) {
+                LOG.error("Service rate {} is not supported", input.getServiceRate());
+            }
 
             Nodes tgtNode =
                 i + 1 == input.getNodes().size()
@@ -525,8 +557,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     .withKey(new NodeInterfaceKey(node.getNodeId()))
                     .setNodeId(node.getNodeId())
                     .setOduInterfaceId(List.of(
-                        // though this is odu, actually it has ODUC4 interfaces
-                        openRoadmInterfaceFactory.createOpenRoadmOtnOduc4Interface(node.getNodeId(),
+                        // though this is odu, actually it has ODUCn interfaces
+                        openRoadmInterfaceFactory.createOpenRoadmOtnOducnInterface(node.getNodeId(),
                             node.getNetworkTp(), supportingOtuInterface, tgtNode.getNodeId(), tgtNode.getNetworkTp())))
                     .build());
             linkTpList.add(new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());

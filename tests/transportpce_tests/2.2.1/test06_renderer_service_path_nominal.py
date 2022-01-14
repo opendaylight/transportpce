@@ -97,7 +97,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                                                    720)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
+        self.assertIn('Interfaces created successfully for nodes: ROADM-A1', res["output"]["result"])
 
     def test_06_service_path_create_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-713:720")

@@ -98,6 +98,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 // In the case of 710 device, we logically combine the OTSi and OTSiGroup interface and represent
                 // as OCh
+                //TODO: 7.1 device can also have 100G transponder
                 String interfaceOtsiName = openRoadmInterface710.createOpenRoadmOtsiInterface(nodeId, logicalConnPoint,
                     spectrumInformation);
                 return openRoadmInterface710.createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint,
@@ -365,7 +366,7 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
-    public String createOpenRoadmOtnOduc4Interface(String anodeId, String alogicalConnPoint,
+    public String createOpenRoadmOtnOducnInterface(String anodeId, String alogicalConnPoint,
             String asupportingOtuInterface, String znodeId, String zlogicalConnPoint)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
