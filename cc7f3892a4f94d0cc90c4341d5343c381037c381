@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "606ff0b7_31f77b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-14T15:10:21Z",
+      "side": 1,
+      "message": "I don\u0027t really understand your proposal because this yang model you propose seems to be the official one. I see no if-OTUCn-ODUCn-regen identity inside it. I would have expected to copy in karaf cache the non official yang model, so, the model Guillaume put in our ordmodel repository with change 97599.\nWith the non-official model already present in the cache, both compliant and not compliant 7.1 device could be mounted on the controller.",
+      "revId": "cc7f3892a4f94d0cc90c4341d5343c381037c381",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
