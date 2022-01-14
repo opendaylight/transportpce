@@ -256,7 +256,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         forkJoinPool.shutdown();
 
         if (success.get()) {
-            results.add("Roadm-connection successfully created for nodes: " + String.join(", ", nodesProvisioned));
+            results.add("Interfaces created successfully for nodes: " + String.join(", ", nodesProvisioned));
         }
         // setting topology in the service list data store
         try {
