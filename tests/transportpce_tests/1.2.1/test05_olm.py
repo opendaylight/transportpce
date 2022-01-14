@@ -235,7 +235,7 @@ class TransportOlmTesting(unittest.TestCase):
                                                    768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
+        self.assertIn('Interfaces created successfully for nodes', res["output"]["result"])
         # time.sleep(40)
         time.sleep(10)
 
@@ -253,7 +253,7 @@ class TransportOlmTesting(unittest.TestCase):
                                                    768)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
+        self.assertIn('Interfaces created successfully for nodes', res["output"]["result"])
         # time.sleep(40)
         time.sleep(10)
 
@@ -497,7 +497,7 @@ class TransportOlmTesting(unittest.TestCase):
                                                    760)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
+        self.assertIn('Interfaces created successfully for nodes', res["output"]["result"])
         # time.sleep(40)
         time.sleep(10)
 
