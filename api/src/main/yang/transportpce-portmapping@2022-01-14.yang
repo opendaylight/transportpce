@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2022-01-14 {
+        description
+        "Modify the container names for ODUCn and OTUCn supporting interfaces";
+  }
   revision 2021-09-27 {
       description
       "Add supporting-otu interface in mapping";
@@ -212,20 +216,22 @@ module transportpce-portmapping {
           description
             "OTU4 interface provisioned on the port";
         }
-      leaf supporting-otuc4 {
+      leaf supporting-otucn {
           type string;
           description
-            "OTUC4 interface provisioned on the port";
+            "OTUCn interface provisioned on the port for B100G support. This includes
+            OTUC2, OTUC3, OTUC4";
         }
       leaf supporting-odu4 {
           type string;
           description
             "ODU4 interface provisioned on the port";
         }
-      leaf supporting-oduc4 {
+      leaf supporting-oducn {
         type string;
         description
-          "ODUC4 interface provisioned on the port for B100G support";
+          "ODUCn interface provisioned on the port for B100G support. This includes
+           ODUC2, ODUC3, ODUC4";
       }
       leaf rate {
         type string;
