@@ -99,6 +99,8 @@ public class OpenRoadmOtnInterface710 {
         String supportingInterface = null;
         if (isNetworkPort) {
             supportingInterface = portMap.getSupportingOducn();
+            // TODO: remove this log
+            LOG.info("ODUCn supporting interface on port mapping {}", supportingInterface);
         } else {
             supportingInterface = logicalConnPoint + "-ETHERNET-100G";
         }
