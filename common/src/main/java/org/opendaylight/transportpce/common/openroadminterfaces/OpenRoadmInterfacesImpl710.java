@@ -119,9 +119,20 @@ public class OpenRoadmInterfacesImpl710 {
         }
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.get();
-            // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
-            ifBuilder.setAdministrativeState(AdminStates.OutOfService);
+            // set the name and set the type. Having these two lines will post the interface with just
+            // name, type and admin-state, without all the default values such as maint-testsignal
+            //  delete the interfaces successfully
+            // just build a new Interface builder without the arguments for inter2Delete
+            InterfaceBuilder ifBuilder = new InterfaceBuilder()
+                .setAdministrativeState(AdminStates.OutOfService)
+                // Though these could be redundant, but 'when' statements are causing problem,
+                // when deleting the interfaces trying to be deleted
+                .setName(intf2Delete.getName())
+                .setType(intf2Delete.getType())
+                // CP name and the ports are needed, since the post interface is validated
+                .setSupportingCircuitPackName(intf2Delete.getSupportingCircuitPackName())
+                .setSupportingPort(intf2Delete.getSupportingPort());
+
             // post interface with updated admin state
             try {
                 postInterface(nodeId, ifBuilder);
