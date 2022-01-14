@@ -970,7 +970,7 @@ public class PortMappingVersion710 {
             }
             if ((interfaceType.equals(OtnOtu.class))
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("OTUC4"))) {
+                .contains("OTUC"))) {
                 mpBldr.setSupportingOtucn(interfaces.getInterfaceName());
             }
             if (interfaceType.equals(OtnOdu.class)
@@ -980,7 +980,7 @@ public class PortMappingVersion710 {
             }
             if ((interfaceType.equals(OtnOdu.class))
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("ODUC4"))) {
+                .contains("ODUC"))) {
                 mpBldr.setSupportingOducn(interfaces.getInterfaceName());
             }
         }
