@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev210927.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.TrailTraceOther.TimDetectMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
@@ -292,8 +292,8 @@ public class OpenRoadmInterface710 {
 
         // Create a list
         List<String> listSupportingOtucnInterface = new ArrayList<>();
-        if (mapping.getSupportingOtuc4() != null) {
-            listSupportingOtucnInterface.add(mapping.getSupportingOtuc4());
+        if (mapping.getSupportingOtucn() != null) {
+            listSupportingOtucnInterface.add(mapping.getSupportingOtucn());
         }
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
