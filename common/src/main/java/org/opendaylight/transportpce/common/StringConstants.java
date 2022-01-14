@@ -39,7 +39,10 @@ public final class StringConstants {
     public static final String SERVICE_TYPE_1GE = "1GE";
 
     public static final String SERVICE_TYPE_ODU4 = "ODU4";
+    public static final String SERVICE_TYPE_ODUC2 = "ODUC2";
+    public static final String SERVICE_TYPE_ODUC3 = "ODUC3";
     public static final String SERVICE_TYPE_ODUC4 = "ODUC4";
+
 
     private StringConstants() {
         // hiding the default constructor
