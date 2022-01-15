@@ -64,7 +64,7 @@ public class OpenRoadmOtnInterface710 {
             .setSpeed(Uint32.valueOf(100000));
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(
             portMap, EthernetCsmacd.class,
-            logicalConnPoint + "-ETHERNET100G");
+            logicalConnPoint + "-ETHERNET-100G");
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new Interface1Builder();
         ethInterfaceBldr.addAugmentation(ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
@@ -100,7 +100,7 @@ public class OpenRoadmOtnInterface710 {
         if (isNetworkPort) {
             supportingInterface = portMap.getSupportingOducn();
         } else {
-            supportingInterface = logicalConnPoint + "-ETHERNET100G";
+            supportingInterface = logicalConnPoint + "-ETHERNET-100G";
         }
 
         if (supportingInterface == null) {
