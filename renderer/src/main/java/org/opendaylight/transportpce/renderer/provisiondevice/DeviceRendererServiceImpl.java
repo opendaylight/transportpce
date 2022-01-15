@@ -364,6 +364,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 String.valueOf(lowerSpectralSlotNumber),
                 String.valueOf(higherSpectralSlotNumber));
+
         if (destTp.contains(StringConstants.NETWORK_TOKEN)
                 || srcTp.contains(StringConstants.CLIENT_TOKEN)
                 || srcTp.contains(StringConstants.NETWORK_TOKEN)
@@ -392,7 +393,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
                     "ODU",  List.of("ODUC4","ODUFLEX"),
-                    "other", List.of("OTUC4", "OTSI-GROUP", spectralSlotName))
+                    // -400G added due to the change in naming convention
+                    "other", List.of("OTUC4", "OTSIGROUP-400G", spectralSlotName))
                 : Map.of(
                     "ODU", List.of("ODU", "ODU4"),
                     "other", List.of("OTU", spectralSlotName));
@@ -427,10 +429,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, suffix));
             }
         }
+
         if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, "ETHERNET"));
         }
         if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
+
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, "ETHERNET"));
         }
         return interfacesToDelete;
