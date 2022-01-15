@@ -95,7 +95,7 @@ public class OpenRoadmInterface710 {
             .setSpeed(Uint32.valueOf(400000));
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
-            logicalConnPoint + "-ETHERNET");
+            logicalConnPoint + "-ETHERNET-400G");
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new Interface1Builder();
         ethInterfaceBldr.addAugmentation(ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
@@ -142,7 +142,7 @@ public class OpenRoadmInterface710 {
         }
         // Create generic interface
         InterfaceBuilder otsiInterfaceBldr = createGenericInterfaceBuilder(portMap, Otsi.class,
-            spectrumInformation.getIdentifierFromParams(logicalConnPoint));
+            spectrumInformation.getIdentifierFromParams(logicalConnPoint) + "-400G");
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http
@@ -181,7 +181,7 @@ public class OpenRoadmInterface710 {
 
         // Create generic interface
         InterfaceBuilder otsiGroupInterfaceBldr = createGenericInterfaceBuilder(portMap, OtsiGroup.class,
-            logicalConnPoint + "-OTSI-GROUP");
+            logicalConnPoint + "-OTSIG-400G");
 
         // Create a list
         List<String> listSupportingOtsiInterface = new ArrayList<>();

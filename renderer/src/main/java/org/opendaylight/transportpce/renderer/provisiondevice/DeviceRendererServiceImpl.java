@@ -364,11 +364,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 String.valueOf(lowerSpectralSlotNumber),
                 String.valueOf(higherSpectralSlotNumber));
+
+        // For 400G it is 14 and for 100G it is 8
+        int slotsUsed = higherSpectralSlotNumber - lowerSpectralSlotNumber + 1;
+
         if (destTp.contains(StringConstants.NETWORK_TOKEN)
                 || srcTp.contains(StringConstants.CLIENT_TOKEN)
                 || srcTp.contains(StringConstants.NETWORK_TOKEN)
                 || destTp.contains(StringConstants.CLIENT_TOKEN)) {
-            return getInterfacesTodelete(nodeId, srcTp, destTp, spectralSlotName);
+            return getInterfacesTodelete(nodeId, srcTp, destTp, spectralSlotName, slotsUsed);
         }
 
         List<String> interfacesToDelete = new LinkedList<>();
@@ -383,7 +387,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         return interfacesToDelete;
     }
 
-    private List<String> getInterfacesTodelete(String nodeId, String srcTp, String destTp, String spectralSlotName) {
+    private List<String> getInterfacesTodelete(String nodeId, String srcTp, String destTp, String spectralSlotName,
+        int slotsUsed) {
 
         OpenroadmNodeVersion nodeOpenRoadmVersion =
                 this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
@@ -392,7 +397,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
                     "ODU",  List.of("ODUC4","ODUFLEX"),
-                    "other", List.of("OTUC4", "OTSI-GROUP", spectralSlotName))
+                    // -400G added due to the change in naming convention
+                    "other", List.of("OTUC4", "OTSIG-400G", spectralSlotName + "-400G"))
                 : Map.of(
                     "ODU", List.of("ODU", "ODU4"),
                     "other", List.of("OTU", spectralSlotName));
@@ -427,11 +433,18 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, suffix));
             }
         }
+        // We are not changing the naming notation for 1.2.1 and 2.2.1 device, so it remains "ETHERNET" for those
+        String ethernetSuffix = "ETHERNET";
+        if (slotsUsed == 14) {
+            ethernetSuffix += "-400G";
+        }
+
         if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
-            interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, "ETHERNET"));
+            interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, ethernetSuffix));
         }
         if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
-            interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, "ETHERNET"));
+
+            interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, ethernetSuffix));
         }
         return interfacesToDelete;
     }
