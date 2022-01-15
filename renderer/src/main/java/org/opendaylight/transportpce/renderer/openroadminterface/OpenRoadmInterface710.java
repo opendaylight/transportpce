@@ -181,7 +181,7 @@ public class OpenRoadmInterface710 {
 
         // Create generic interface
         InterfaceBuilder otsiGroupInterfaceBldr = createGenericInterfaceBuilder(portMap, OtsiGroup.class,
-            logicalConnPoint + "-OTSI-GROUP");
+            logicalConnPoint + "-OTSIGROUP-400G");
 
         // Create a list
         List<String> listSupportingOtsiInterface = new ArrayList<>();
