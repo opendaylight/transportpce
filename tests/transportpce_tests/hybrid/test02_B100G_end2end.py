@@ -283,12 +283,12 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     # Check correct configuration of devices
-    def test_14_check_interface_och_xpdra2(self):
+    def test_14_check_interface_otsi_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-755:768")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-755:768-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768-400G',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                                    'type': 'org-openroadm-interfaces:otsi',
@@ -304,13 +304,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_15_check_interface_OTSI_GROUP_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-OTSI-GROUP")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-OTSIG-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTUC4',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSIG-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768-400G',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'
                         }
@@ -329,10 +329,10 @@ class TransportPCEtesting(unittest.TestCase):
             "XPDR-A2", "interface/XPDR2-NETWORK1-OTUC4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSI-GROUP',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTUC4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-OTSI-GROUP',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-OTSIG-400G',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
@@ -351,12 +351,12 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]
                              ['org-openroadm-otn-otu-interfaces:otu'])
 
-    def test_17_check_interface_och_xpdrc2(self):
+    def test_17_check_interface_otsi_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-C2", "interface/XPDR2-NETWORK1-755:768")
+            "XPDR-C2", "interface/XPDR2-NETWORK1-755:768-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768-400G',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                                    'type': 'org-openroadm-interfaces:otsi',
@@ -372,13 +372,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_check_interface_OTSI_GROUP_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-C2", "interface/XPDR2-NETWORK1-OTSI-GROUP")
+            "XPDR-C2", "interface/XPDR2-NETWORK1-OTSIG-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSI-GROUP',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSIG-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768-400G',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'
                         }
@@ -400,7 +400,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTUC4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-OTSI-GROUP',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-OTSIG-400G',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'
                         }
@@ -1065,14 +1065,14 @@ class TransportPCEtesting(unittest.TestCase):
             "XPDR-A2", "interface/XPDR2-NETWORK1-OTUC4")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
-    def test_63_check_no_interface_OCH_xpdra2(self):
+    def test_63_check_no_interface_OTSI_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-755:768")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-755:768-400G")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
-    def test_64_check_no_interface_OTSI_xpdra2(self):
+    def test_64_check_no_interface_OTSIG_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-OTSI-GROUP")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-OTSIG-400G")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_65_getLinks_OtnTopology(self):
@@ -1260,10 +1260,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_79_check_interface_OTSI_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR1-NETWORK1-755:768")
+            "XPDR-A2", "interface/XPDR1-NETWORK1-755:768-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-755:768',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-755:768-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
                         'type': 'org-openroadm-interfaces:otsi',
@@ -1286,13 +1286,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_80_check_interface_OTSI_GROUP_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR1-NETWORK1-OTSI-GROUP")
+            "XPDR-A2", "interface/XPDR1-NETWORK1-OTSIG-400G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e-service1-10GE',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-OTSIG-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-755:768',
+                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-755:768-400G',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'}
         input_dict_2 = {"group-id": 1,
@@ -1312,7 +1312,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTUC4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSI-GROUP',
+                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-OTSIG-400G',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'L1'}
         input_dict_2 = {"tx-sapi": "ANeUjNzWtDLV",
@@ -1447,12 +1447,12 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_87_check_no_interface_OTSI_GROUP_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR1-NETWORK1-OTSI-GROUP")
+            "XPDR-A2", "interface/XPDR1-NETWORK1-OTSIG-400G")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_88_check_no_interface_OTSI_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR1-NETWORK1-755:768")
+            "XPDR-A2", "interface/XPDR1-NETWORK1-755:768-400G")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_89_check_no_interface_400GE_CLIENT_xpdra2(self):
