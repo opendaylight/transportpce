@@ -149,7 +149,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes',
+        self.assertIn('Interfaces created successfully for nodes',
                       res['output']['result'])
         time.sleep(10)
 
