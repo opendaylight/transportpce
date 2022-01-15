@@ -392,7 +392,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
                     "ODU",  List.of("ODUC4","ODUFLEX"),
-                    "other", List.of("OTUC4", "OTSI-GROUP", spectralSlotName))
+                    // -400G added due to the change in naming convention
+                    "other", List.of("OTUC4", "OTSIG" + "-400G", spectralSlotName + "-400G"))
                 : Map.of(
                     "ODU", List.of("ODU", "ODU4"),
                     "other", List.of("OTU", spectralSlotName));
