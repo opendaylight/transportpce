@@ -256,7 +256,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         forkJoinPool.shutdown();
 
         if (success.get()) {
-            results.add("Roadm-connection successfully created for nodes: " + String.join(", ", nodesProvisioned));
+            results.add("Interfaces created successfully for nodes: " + String.join(", ", nodesProvisioned));
         }
         // setting topology in the service list data store
         try {
@@ -290,7 +290,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     @Override
     public ServicePathOutput deleteServicePath(ServicePathInput input) {
         if (!alarmSuppressionNodeRegistration(input)) {
-            LOG.warn("Alarm suppresion node registraion failed!!!!");
+            LOG.warn("Alarm suppression node registration failed!!!!");
         }
         List<Nodes> nodes = input.getNodes();
         AtomicBoolean success = new AtomicBoolean(true);
@@ -364,6 +364,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 String.valueOf(lowerSpectralSlotNumber),
                 String.valueOf(higherSpectralSlotNumber));
+
         if (destTp.contains(StringConstants.NETWORK_TOKEN)
                 || srcTp.contains(StringConstants.CLIENT_TOKEN)
                 || srcTp.contains(StringConstants.NETWORK_TOKEN)
@@ -387,12 +388,17 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
         OpenroadmNodeVersion nodeOpenRoadmVersion =
                 this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+
         List<String> interfacesToDelete = new LinkedList<>();
         Map<String, List<String>> suffixListMap =
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
-                    "ODU",  List.of("ODUC4","ODUFLEX"),
-                    "other", List.of("OTUC4", "OTSI-GROUP", spectralSlotName))
+                    // We don't need ODUC2, ODUC3 here, since they are handled in OTN service-path
+                    "ODU",  List.of("ODUC4", "ODUFLEX"),
+                    // Add intermediate OTUCn rates (OTUC2, OTUC3)
+                    "other", List.of("OTUC2", "OTUC3", "OTUC4",
+                    "OTSIGROUP-400G", "OTSIGROUP-300G",  "OTSIGROUP-200G",
+                    spectralSlotName))
                 : Map.of(
                     "ODU", List.of("ODU", "ODU4"),
                     "other", List.of("OTU", spectralSlotName));
@@ -416,8 +422,22 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         suffixListMap.get("ODU")),
                     e);
             }
-            for (String suffix : suffixListMap.get("other")) {
-                interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
+            try {
+                for (String suffix : suffixListMap.get("other")) {
+                    if (this.openRoadmInterfaces.getInterface(
+                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix)).isPresent()) {
+                        LOG.info("Deleting the interface {}",
+                            String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
+                        interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
+                    }
+                }
+            }
+            catch (OpenRoadmInterfaceException e) {
+                LOG.error("impossible to get one of the interfaces {}",
+                    destTp + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
+                        " or " + destTp + GridConstant.NAME_PARAMETERS_SEPARATOR,
+                        suffixListMap.get("ODU")),
+                    e);
             }
         }
         if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
@@ -427,10 +447,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, suffix));
             }
         }
+
         if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, "ETHERNET"));
         }
         if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
+
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, "ETHERNET"));
         }
         return interfacesToDelete;
