@@ -105,41 +105,41 @@ public class MappingConstraintsTest {
     public void serviceToServicePathConstraintsParameterizedConstructor() {
         MappingConstraints mappingConstraints = new MappingConstraints(
             new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder()
+            .routing.constraints.rev220118.routing.constraints.sp.HardConstraintsBuilder()
             .setCustomerCode(Arrays.asList("Some customer-code"))
             .setCoRoutingOrGeneral(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                .constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder()
+                .constraints.rev220118.constraints.sp.co.routing.or.general.CoRoutingBuilder()
                 .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                    .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                    .constraints.rev220118.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                     .setExistingService(Arrays.asList("Some existing-service"))
                     .build())
                 .build()).build(),
             new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder()
+                .routing.constraints.rev220118.routing.constraints.sp.SoftConstraintsBuilder()
                 .setCustomerCode(Arrays.asList("Some customer-code"))
                 .setCoRoutingOrGeneral(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                    .constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder()
+                    .constraints.rev220118.constraints.sp.co.routing.or.general.CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                        .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                        .constraints.rev220118.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                         .setExistingService(Arrays.asList("Some existing-service"))
                         .build())
                     .build()).build());
 
         mappingConstraints.serviceToServicePathConstarints();
         Assert.assertEquals(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-            .constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder()
+            .constraints.rev220118.constraints.sp.co.routing.or.general.CoRoutingBuilder()
             .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                .constraints.rev220118.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                 .setExistingService(Arrays.asList("Some existing-service"))
                 .build())
             .build(), mappingConstraints.getServicePathHardConstraints().getCoRoutingOrGeneral());
         Assert.assertEquals(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder()
+            .routing.constraints.rev220118.routing.constraints.sp.SoftConstraintsBuilder()
             .setCustomerCode(Arrays.asList("Some customer-code"))
             .setCoRoutingOrGeneral(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                .constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder()
+                .constraints.rev220118.constraints.sp.co.routing.or.general.CoRoutingBuilder()
                 .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                    .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                    .constraints.rev220118.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                     .setExistingService(Arrays.asList("Some existing-service"))
                     .build())
                 .build()).build(), mappingConstraints.getServicePathSoftConstraints());
