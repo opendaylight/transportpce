@@ -66,8 +66,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
@@ -189,7 +189,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         RpcStatusEx.Pending, "Service compliant, submitting service delete Request ...");
                 // Obtain path description
                 Optional<
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service
+                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service
                     .path.PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
                 if (pathDescriptionOpt.isEmpty()) {
                     LOG.error("Unable to get path description for service {}!", serviceName);
@@ -288,12 +288,12 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
             value = "UPM_UNCALLED_PRIVATE_METHOD",
             justification = "call in call() method")
-    private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
+    private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
         .service.path.PathDescription> getPathDescriptionFromDatastore(String serviceName) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
             .service.path.PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName))
-                .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
+                .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                     .service.path.PathDescription.class);
         ReadTransaction pathDescReadTx = this.dataBroker.newReadOnlyTransaction();
         try {

@@ -19,24 +19,24 @@ import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Node;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicability;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.hop.type.HopType;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.CoRoutingOrGeneral;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.General;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Include;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Latency;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.diversity.existing.service.contraints.sp.ExistingServiceApplicability;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.ordered.constraints.sp.hop.type.HopType;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
@@ -58,7 +58,7 @@ public class PceConstraintsCalc {
     public PceConstraintsCalc(PathComputationRequestInput input, NetworkTransactionService networkTransactionService) {
         LOG.debug("In PceconstraintsCalc start");
 
-        pceMetrics = input.getPceMetric();
+        pceMetrics = input.getPceRoutingMetric();
 
         this.networkTransactionService = networkTransactionService;
 
@@ -197,25 +197,25 @@ public class PceConstraintsCalc {
             switch (hopt) {
                 case "Node":
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                            .rev171017.ordered.constraints.sp.hop.type.hop.type.Node
+                            .rev220118.ordered.constraints.sp.hop.type.hop.type.Node
                             node = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                            .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Node) hoptype;
+                            .constraints.rev220118.ordered.constraints.sp.hop.type.hop.type.Node) hoptype;
                     constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.NODE,
                             node.getNodeId()));
                     break;
                 case "SRLG":
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                            .rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG
+                            .rev220118.ordered.constraints.sp.hop.type.hop.type.SRLG
                             srlg = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                            .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG) hoptype;
+                            .constraints.rev220118.ordered.constraints.sp.hop.type.hop.type.SRLG) hoptype;
                     constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.SRLG,
                             srlg.getSRLG()));
                     break;
                 case "Clli":
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                            .rev171017.ordered.constraints.sp.hop.type.hop.type.Clli
+                            .rev220118.ordered.constraints.sp.hop.type.hop.type.Clli
                             clli = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
-                            .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Clli) hoptype;
+                            .constraints.rev220118.ordered.constraints.sp.hop.type.hop.type.Clli) hoptype;
                     constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.CLLI,
                             clli.getClli()));
                     break;
