@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e69e9127_566e23a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-18T09:29:50Z",
+      "side": 1,
+      "message": "I think it is a bit too short\n\nwhat about more explanations coming from JIRA?\n\"Complement func tests done for renderer, so that a full test suite (E2E) is provided for intermediate testing\"",
+      "revId": "d9e561002809a9608a85faa8f0d0b87a58c49be5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
