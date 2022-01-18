@@ -36,6 +36,10 @@ module transportpce-routing-constraints {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2022-01-18 {
+    description
+      "Remove pce-metric from routing-constraint-sp";
+  }
   revision 2017-10-17 {
     description
       "Version 1.6";
@@ -109,14 +113,6 @@ module transportpce-routing-constraints {
     }
     container soft-constraints {
       uses constraints-sp;
-    }
-    leaf pce-metric {
-      type enumeration {
-        enum hop-count;
-        enum propagation-delay;
-        enum TE-metric;
-        enum IGP-metric;
-      }
     }
     leaf locally-protected-links {
       type boolean;
