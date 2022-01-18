@@ -76,6 +76,23 @@ module transportpce-common-service-path-types {
       "Version 1.5";
   }
 
+  typedef pce-metric {
+    type enumeration {
+      enum hop-count {
+        value 1;
+      }
+      enum propagation-delay {
+        value 2;
+      }
+      enum TE-metric {
+        value 3;
+      }
+      enum IGP-metric {
+        value 4;
+      }
+    }
+  }
+
   typedef service-path-notification-types {
     type enumeration {
       enum path-computation-request {
@@ -236,6 +253,9 @@ module transportpce-common-service-path-types {
     }
     container service-z-end {
       uses service-endpoint-sp;
+    }
+    leaf pce-routing-metric {
+      type pce-metric;
     }
     uses transportpce-routing-constraints:routing-constraints-sp;
     leaf latency {

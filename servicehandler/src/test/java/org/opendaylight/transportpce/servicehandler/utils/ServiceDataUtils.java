@@ -67,7 +67,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.handler.header.ServiceHandlerHeaderBuilder;
@@ -174,7 +174,7 @@ public final class ServiceDataUtils {
             .setServiceHandlerHeader(serviceHandlerHeader.build())
             .setHardConstraints(mappingConstraints.getServicePathHardConstraints())
             .setSoftConstraints(mappingConstraints.getServicePathSoftConstraints())
-            .setPceMetric(PceMetric.TEMetric)
+            .setPceRoutingMetric(PceMetric.TEMetric)
             .setServiceAEnd(ModelMappingUtils.createServiceAEnd(input.getServiceAEnd()))
             .setServiceZEnd(ModelMappingUtils.createServiceZEnd(input.getServiceZEnd()))
             .build();

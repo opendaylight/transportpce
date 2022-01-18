@@ -364,7 +364,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .setLatency(readServicePath.get().getLatency())
                     .setLocallyProtectedLinks(readServicePath.get().getLocallyProtectedLinks())
                     .setPathDescription(pathDescription)
-                    .setPceMetric(readServicePath.get().getPceMetric())
+                    .setPceRoutingMetric(readServicePath.get().getPceRoutingMetric())
                     .setSoftConstraints(readServicePath.get().getSoftConstraints())
                     .build();
 

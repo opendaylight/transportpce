@@ -159,6 +159,9 @@ module transportpce-pce {
           "indicates if resources (from local PCE topology) must be reserved
            until further notice (cancel-resource-reserve or topology update)";
       }
+      leaf pce-routing-metric {
+        type transportpce-common-service-path-types:pce-metric;
+      }
       uses transportpce-common-service-path-types:service-handler-header;
       container service-a-end {
         uses transportpce-common-service-path-types:service-endpoint-sp;
