@@ -433,11 +433,11 @@ def service_delete_request(servicename: str,
 
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes, centerfreq: str,
                          slotwidth: int, minfreq: float, maxfreq: float, lowerslotnumber: int,
-                         higherslotnumber: int):
+                         higherslotnumber: int, modulation_format="dp-qpsk"):
     attr = {"renderer:input": {
         "renderer:service-name": servicename,
         "renderer:wave-number": wavenumber,
-        "renderer:modulation-format": "dp-qpsk",
+        "renderer:modulation-format": modulation_format,
         "renderer:operation": operation,
         "renderer:nodes": nodes,
         "renderer:center-freq": centerfreq,
