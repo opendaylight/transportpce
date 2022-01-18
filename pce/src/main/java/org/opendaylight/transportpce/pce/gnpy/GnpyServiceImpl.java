@@ -54,7 +54,7 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.Syn
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.SynchronizationBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.synchronization.Svec;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.synchronization.SvecBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
