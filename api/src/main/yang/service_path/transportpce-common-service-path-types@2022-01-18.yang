@@ -59,6 +59,11 @@ module transportpce-common-service-path-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2022-01-18 {
+    description
+      "Add typedef pce-metric";
+  }
+
   revision 2020-01-28 {
     description
       "Version 1.7";
@@ -75,6 +80,23 @@ module transportpce-common-service-path-types {
   revision 2017-04-26 {
     description
       "Version 1.5";
+  }
+
+  typedef pce-metric {
+    type enumeration {
+      enum hop-count {
+        value 1;
+      }
+      enum propagation-delay {
+        value 2;
+      }
+      enum TE-metric {
+        value 3;
+      }
+      enum IGP-metric {
+        value 4;
+      }
+    }
   }
 
   typedef service-path-notification-types {
@@ -237,6 +259,9 @@ module transportpce-common-service-path-types {
     }
     container service-z-end {
       uses service-endpoint-sp;
+    }
+    leaf pce-routing-metric {
+      type pce-metric;
     }
     uses transportpce-routing-constraints:routing-constraints-sp;
     leaf latency {

@@ -475,7 +475,7 @@ def path_computation_request(requestid: str, servicename: str, serviceaend, serv
             "service-handler-header": {"request-id": requestid},
             "service-a-end": serviceaend,
             "service-z-end": servicezend,
-            "pce-metric": metric}
+            "pce-routing-metric": metric}
     if hardconstraints:
         attr.update({"hard-constraints": hardconstraints})
     if softconstraints:
