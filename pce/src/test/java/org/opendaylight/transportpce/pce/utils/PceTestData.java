@@ -31,7 +31,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.DiversityBuilder;
@@ -47,6 +46,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.response.parameters.PathDescription;
@@ -158,7 +158,7 @@ public final class PceTestData {
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
                 .setServiceName("service1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setLocallyProtectedLinks(true)
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)
@@ -251,7 +251,7 @@ public final class PceTestData {
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
                 .setServiceName("service1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setLocallyProtectedLinks(true)
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)
@@ -344,7 +344,7 @@ public final class PceTestData {
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
                 .setServiceName("service1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setLocallyProtectedLinks(true)
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)
@@ -434,7 +434,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceName("service 1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
                 .build();
@@ -506,7 +506,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceName("service 1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
                 .setHardConstraints(new HardConstraintsBuilder()
@@ -586,7 +586,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceName("service 1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
                 .setHardConstraints(new HardConstraintsBuilder()
@@ -633,7 +633,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceName("service 1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
                 .setHardConstraints(hardConstrains)
@@ -658,7 +658,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceName("service 1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
                 .build();
@@ -876,7 +876,7 @@ public final class PceTestData {
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
                 .setServiceName("service1")
                 .setResourceReserve(true)
-                .setPceMetric(PceMetric.HopCount)
+                .setPceRoutingMetric(PceMetric.HopCount)
                 .setLocallyProtectedLinks(true)
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)

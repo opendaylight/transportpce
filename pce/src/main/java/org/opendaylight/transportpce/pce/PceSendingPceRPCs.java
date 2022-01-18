@@ -25,8 +25,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.PceMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -208,7 +208,7 @@ public class PceSendingPceRPCs {
         // Compute the path
         PathComputationRequestInput inputFromGnpy = new PathComputationRequestInputBuilder()
             .setServiceName(input.getServiceName()).setHardConstraints(gnpyPathAsHC)
-            .setSoftConstraints(input.getSoftConstraints()).setPceMetric(PceMetric.HopCount)
+            .setSoftConstraints(input.getSoftConstraints()).setPceRoutingMetric(PceMetric.HopCount)
             .setServiceAEnd(input.getServiceAEnd()).setServiceZEnd(input.getServiceZEnd()).build();
         PceConstraintsCalc constraintsGnpy = new PceConstraintsCalc(inputFromGnpy, networkTransaction);
         PceConstraints gnpyHardConstraints = constraintsGnpy.getPceHardConstraints();
