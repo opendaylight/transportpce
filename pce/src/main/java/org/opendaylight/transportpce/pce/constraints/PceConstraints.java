@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.constraints;
 import java.util.ArrayList;
 import java.util.List;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class PceConstraints {
     private static final Logger LOG = LoggerFactory.getLogger(PceConstraints.class);
 
     // TODO. for now metrics are set into hard structure
-    private RoutingConstraintsSp.PceMetric pceMetrics = RoutingConstraintsSp.PceMetric.HopCount;
+    private PceMetric pceMetrics = PceMetric.HopCount;
     private Long maxLatency = -1L;
 
     // Structure related to  EXCLUDE constraints
@@ -48,11 +48,11 @@ public class PceConstraints {
         NONE, NODE, SRLG, CLLI;
     }
 
-    public RoutingConstraintsSp.PceMetric getPceMetrics() {
+    public PceMetric getPceMetrics() {
         return pceMetrics;
     }
 
-    public void setPceMetrics(RoutingConstraintsSp.PceMetric pceMetrics) {
+    public void setPceMetrics(PceMetric pceMetrics) {
         this.pceMetrics = pceMetrics;
     }
 
