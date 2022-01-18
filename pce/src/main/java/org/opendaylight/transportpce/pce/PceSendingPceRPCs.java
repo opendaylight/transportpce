@@ -20,13 +20,13 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.graph.PceGraph;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -207,9 +207,13 @@ public class PceSendingPceRPCs {
         LOG.info("In pceSendingPceRPC: GNPy succeed to find another path");
         // Compute the path
         PathComputationRequestInput inputFromGnpy = new PathComputationRequestInputBuilder()
-            .setServiceName(input.getServiceName()).setHardConstraints(gnpyPathAsHC)
-            .setSoftConstraints(input.getSoftConstraints()).setPceMetric(PceMetric.HopCount)
-            .setServiceAEnd(input.getServiceAEnd()).setServiceZEnd(input.getServiceZEnd()).build();
+            .setServiceName(input.getServiceName())
+            .setHardConstraints(gnpyPathAsHC)
+            .setSoftConstraints(input.getSoftConstraints())
+            .setPceRoutingMetric(PceMetric.HopCount)
+            .setServiceAEnd(input.getServiceAEnd())
+            .setServiceZEnd(input.getServiceZEnd())
+            .build();
         PceConstraintsCalc constraintsGnpy = new PceConstraintsCalc(inputFromGnpy, networkTransaction);
         PceConstraints gnpyHardConstraints = constraintsGnpy.getPceHardConstraints();
         PceConstraints gnpySoftConstraints = constraintsGnpy.getPceSoftConstraints();
