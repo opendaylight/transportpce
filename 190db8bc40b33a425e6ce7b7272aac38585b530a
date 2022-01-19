@@ -16,6 +16,24 @@
       "message": "I am not sure this is needed",
       "revId": "190db8bc40b33a425e6ce7b7272aac38585b530a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80030454_c7436c32",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-19T13:50:09Z",
+      "side": 1,
+      "message": "If I had to test the suite locally, without the USE_ODL_ALT_RESTCONF_PORT variable, it throws an error since line#66 we concatenate the strings. \nRESTCONF_BASE_URL \u003d \u0027http://localhost:\u0027 + RESTCONF_PORT + RESTCONF_PATH_PREFIX[RESTCONF_VERSION]",
+      "parentUuid": "2c0d47b2_199edeaf",
+      "revId": "190db8bc40b33a425e6ce7b7272aac38585b530a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
