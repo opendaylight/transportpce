@@ -398,12 +398,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
                     // We don't need ODUC2, ODUC3 here, since they are handled in OTN service-path
-                    "ODU",  List.of("ODUC4", "ODUFLEX"),
+                    // OTU4 is used in 100G service on 7.1 model
+                    "ODU",  List.of("ODU4", "ODUC4", "ODUFLEX"),
                     // Add intermediate OTUCn rates (OTUC2, OTUC3)
-                    "other", List.of("OTUC2", "OTUC3", "OTUC4",
+                    "other", List.of("OTU4", "OTUC2", "OTUC3", "OTUC4",
                     // -400G added due to the change in naming convention
                         "OTSIG" + "-400G",  "OTSIG" + "-300G",  "OTSIG" + "-200G",
-                    spectralSlotName + "-400G", spectralSlotName + "-300G", spectralSlotName + "-200G"))
+                    // Change only applies to 7.1 models
+                    spectralSlotName + "-400G", spectralSlotName + "-300G", spectralSlotName + "-200G",
+                    spectralSlotName + "-100G"))
                 : Map.of(
                     "ODU", List.of("ODU", "ODU4"),
                     "other", List.of("OTU", spectralSlotName));
@@ -457,7 +460,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (slotsUsed == 14) {
             ethernetSuffix += "-400G";
         }
-
+        else if (slotsUsed == 8) {
+            // 50 GHz
+            ethernetSuffix += "-100G";
+        }
         if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, ethernetSuffix));
         }
