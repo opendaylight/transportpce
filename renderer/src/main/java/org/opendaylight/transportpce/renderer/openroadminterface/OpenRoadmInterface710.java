@@ -28,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev2003
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic24;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic28;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic36;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic48;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
@@ -150,12 +151,22 @@ public class OpenRoadmInterface710 {
         FlexoBuilder flexoBuilder = new FlexoBuilder();
         boolean rateNotFound = false;
         // Use the rate to switch rather than modulation format
-        int serviceRate = getServiceRate(modulationFormat);
+        int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         switch (serviceRate) {
             case 200:
                 LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
-                flexoBuilder.setFoicType(Foic24.class)
-                    .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
+                if (modulationFormat == ModulationFormat.DpQam16) {
+                    LOG.info("FOIC is 2.8 for 31.6 Gbaud and rate is 200");
+                    // FOIC rate is different
+                    flexoBuilder.setFoicType(Foic28.class)
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
+                            Uint8.valueOf(3), Uint8.valueOf(4))));
+                }
+                else {
+                    // default is dp-qpsk for 200G under 63.1 GBaud
+                    flexoBuilder.setFoicType(Foic24.class)
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
+                }
                 otsiBuilder.setOtsiRate(R200GOtsi.class)
                     .setFlexo(flexoBuilder.build());
                 break;
@@ -236,7 +247,7 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
         }
-        int serviceRate = getServiceRate(modulationFormat);
+        int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         // Create an OTSI group object
         OtsiGroupBuilder otsiGroupBuilder = new OtsiGroupBuilder()
             .setGroupId(Uint32.valueOf(1));
@@ -810,7 +821,7 @@ public class OpenRoadmInterface710 {
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
-    private int getServiceRate(ModulationFormat modulationFormat) {
+    private int getServiceRate(ModulationFormat modulationFormat, SpectrumInformation spectrumInformation) {
 
         switch (modulationFormat) {
             case DpQpsk:
@@ -820,9 +831,22 @@ public class OpenRoadmInterface710 {
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
                 return 300;
             case DpQam16:
-                // Based on roll-of-factor of 0.5, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
-                LOG.info("Given modulation format is {} and thus rate is 400G", modulationFormat);
-                return 400;
+                // DpQam16 is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
+                // Here take the difference of highest and lowest spectral numbers and determine the width
+                LOG.info("The width with guard band {}", (spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
+                if ((spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
+                    // Based on roll-of-factor of 0.5, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
+                    LOG.info("The baud-rate is 31.6 GBaud");
+                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
+                    return 200;
+                }
+                else {
+                    // Based on roll-of-factor of 0.5, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
+                    LOG.info("The baud-rate is 63.1 GBaud");
+                    return 400;
+                }
             default:
                 LOG.error("Modulation format is required to select the rate");
                 break;
