@@ -16,6 +16,24 @@
       "message": "I think this intermediate variable is not needed",
       "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da44337a_456a7963",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-19T13:31:46Z",
+      "side": 1,
+      "message": "yes, this variable is used to create the following odu-flex.",
+      "parentUuid": "557c53de_3e183d35",
+      "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
