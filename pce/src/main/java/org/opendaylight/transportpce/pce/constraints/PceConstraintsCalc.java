@@ -8,8 +8,6 @@
 package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -19,36 +17,35 @@ import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.CoRoutingOrGeneral;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Latency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.diversity.existing.service.constraints.ExistingServiceApplicability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Node;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.diversity.existing.service.contraints.sp.ExistingServiceApplicability;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.ordered.constraints.sp.hop.type.HopType;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceConstraintsCalc {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceConstraintsCalc.class);
-    private static final Comparator<OrderedHops> ORDERED_HOP_COMPARATOR =
-            Comparator.comparing(OrderedHops::getHopNumber);
 
     private PceConstraints pceHardConstraints = new PceConstraints();
     private PceConstraints pceSoftConstraints = new PceConstraints();
@@ -134,35 +131,13 @@ public class PceConstraintsCalc {
         }
 
         Exclude exclude = tmpGeneral.getExclude();
-        List<String> elementsToExclude = null;
         if (exclude != null) {
-            elementsToExclude = exclude.getNodeId();
-            if (elementsToExclude != null) {
-                constraints.setExcludeSupNodes(elementsToExclude);
-            }
-
-            elementsToExclude = exclude.getSRLG();
-            if (elementsToExclude != null) {
-                List<Long> srlgToExclude = new ArrayList<>();
-                for (String str : elementsToExclude) {
-                    srlgToExclude.add(Long.parseLong(str));
-                }
-                constraints.setExcludeSRLG(srlgToExclude);
-            }
-
-            elementsToExclude = exclude.getClli();
-            if (elementsToExclude != null) {
-                constraints.setExcludeCLLI(elementsToExclude);
-            }
+            readExclude(exclude, constraints);
         }
 
         Include include = tmpGeneral.getInclude();
         if (include != null) {
-            List<OrderedHops> listHops = new ArrayList<>(include.nonnullOrderedHops().values());
-            if (listHops != null) {
-                readIncludeNodes(listHops, constraints);
-            }
-            LOG.debug("in readGeneralContrains INCLUDE {} ", include);
+            readInclude(include, constraints);
         }
 
         Diversity diversity = tmpGeneral.getDiversity();
@@ -178,49 +153,54 @@ public class PceConstraintsCalc {
             if (Boolean.TRUE.equals(temp.getSrlg())) {
                 rt = PceConstraints.ResourceType.SRLG;
             }
-            if (Boolean.TRUE.equals(temp.getClli())) {
+            if (Boolean.TRUE.equals(temp.getSite())) {
                 rt = PceConstraints.ResourceType.CLLI;
             }
             LOG.info("in readGeneralContrains {} list is :{}", rt, diversity);
             readDiversity(diversity.getExistingService(), constraints, rt);
         }
-
     }
 
-    private void readIncludeNodes(List<OrderedHops> listHops, PceConstraints constraints) {
-        Collections.sort(listHops, ORDERED_HOP_COMPARATOR);
-        for (int i = 0; i < listHops.size(); i++) {
-            HopType hoptype = listHops.get(i).getHopType().getHopType();
+    private void readExclude(Exclude exclude, PceConstraints constraints) {
+        List<NodeIdType> nodes = exclude.getNodeId();
+        if (nodes != null) {
+            List<String> elementsToExclude = new ArrayList<>();
+            for (NodeIdType node : nodes) {
+                elementsToExclude.add(node.getValue());
+            }
+            constraints.setExcludeSupNodes(elementsToExclude);
+        }
+        List<Uint32> srlgs = exclude.getSrlgId();
+        if (srlgs != null) {
+            List<Long> elementsToExclude = new ArrayList<>();
+            for (Uint32 srlg : srlgs) {
+                elementsToExclude.add(srlg.longValue());
+            }
+            constraints.setExcludeSRLG(elementsToExclude);
+        }
+        List<String> sites = exclude.getSite();
+        if (sites != null) {
+            constraints.setExcludeCLLI(exclude.getSite());
+        }
+    }
 
-            String hopt = hoptype.implementedInterface().getSimpleName();
-            LOG.info("in readIncludeNodes next hop to include {}", hopt);
-            switch (hopt) {
-                case "Node":
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                        .ordered.constraints.sp.hop.type.hop.type.Node node =
-                        (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                            .ordered.constraints.sp.hop.type.hop.type.Node) hoptype;
-                    constraints.setListToInclude(
-                        new PceConstraints.ResourcePair(PceConstraints.ResourceType.NODE, node.getNodeId()));
-                    break;
-                case "SRLG":
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                        .ordered.constraints.sp.hop.type.hop.type.SRLG srlg =
-                        (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                            .ordered.constraints.sp.hop.type.hop.type.SRLG) hoptype;
-                    constraints.setListToInclude(
-                        new PceConstraints.ResourcePair(PceConstraints.ResourceType.SRLG, srlg.getSRLG()));
-                    break;
-                case "Clli":
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                        .ordered.constraints.sp.hop.type.hop.type.Clli clli =
-                        (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                            .ordered.constraints.sp.hop.type.hop.type.Clli) hoptype;
-                    constraints.setListToInclude(
-                        new PceConstraints.ResourcePair(PceConstraints.ResourceType.CLLI, clli.getClli()));
-                    break;
-                default:
-                    LOG.error("in readIncludeNodes unsupported include type {}", hopt);
+    private void readInclude(Include include, PceConstraints constraints) {
+        List<NodeIdType> nodes = include.getNodeId();
+        if (nodes != null) {
+            for (NodeIdType node : nodes) {
+                constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.NODE, node.getValue()));
+            }
+        }
+        List<Uint32> srlgs = include.getSrlgId();
+        if (srlgs != null) {
+            for (Uint32 srlg : srlgs) {
+                constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.SRLG, srlg.toString()));
+            }
+        }
+        List<String> sites = include.getSite();
+        if (sites != null) {
+            for (String site : sites) {
+                constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.CLLI, site));
             }
         }
     }
