@@ -56,6 +56,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                // Below method differenciates 100G vs 400G based on supported-if-cap type
                 return openRoadmInterface710.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             default:
                 return null;
@@ -96,13 +97,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
                         spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                // In the case of 710 device, we logically combine the OTSi and OTSiGroup interface and represent
-                // as OCh
-                //TODO: 7.1 device can also have 100G transponder
-                String interfaceOtsiName = openRoadmInterface710.createOpenRoadmOtsiInterface(nodeId, logicalConnPoint,
+                return openRoadmInterface710.createOpenRoadmOchOtsiOtsigroupInterface(nodeId, logicalConnPoint,
                     spectrumInformation);
-                return openRoadmInterface710.createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint,
-                    interfaceOtsiName);
             default:
                 return null;
         }
@@ -132,11 +128,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface221.createOpenRoadmOdu4HOInterface(nodeId, logicalConnPoint, isCTP,
                     apiInfoA, apiInfoZ, payloadType);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                // Here ODUCn and ODUflex are combined
-                String interfaceNameOduc4 = openRoadmInterface710.createOpenRoadmOducnInterface(nodeId,
-                    logicalConnPoint);
-                return openRoadmInterface710.createOpenRoadmOduflexInterface(nodeId, logicalConnPoint,
-                    interfaceNameOduc4);
+                return openRoadmInterface710.createOpenRoadmOdu4OducnOduflex(nodeId, logicalConnPoint,
+                    apiInfoA, apiInfoZ);
             default:
                 return null;
         }
@@ -166,7 +159,7 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface221.createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportOchInterface,
                     apiInfoA, apiInfoZ);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                return openRoadmInterface710.createOpenRoadmOtucnInterface(nodeId, logicalConnPoint,
+                return openRoadmInterface710.createOpenRoadmOtu4OtucnInterface(nodeId, logicalConnPoint,
                     supportOchInterface, apiInfoA, apiInfoZ);
             default:
                 return null;
