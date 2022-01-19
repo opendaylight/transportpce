@@ -16,6 +16,24 @@
       "message": "according to current SONAR rules, comments should be on a separate line",
       "revId": "af09593ec4d0e95886334c7f2e03314da73d543a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9b66e7d_8a6fc45c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-19T13:51:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2be92c22_1d35692d",
+      "revId": "af09593ec4d0e95886334c7f2e03314da73d543a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
