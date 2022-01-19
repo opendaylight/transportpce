@@ -264,8 +264,7 @@ class TransportPCEtesting(unittest.TestCase):
                                                         },
                                                        {"customer-code": ["Some customer-code"],
                                                            "co-routing": {"existing-service": ["Some existing-service"]}
-                                                        },
-                                                       "hop-count", {"locally-protected-links": "true"})
+                                                        }, "hop-count")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -296,7 +295,7 @@ class TransportPCEtesting(unittest.TestCase):
                                                            "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
                                                        {"service-rate": "100", "service-format": "Ethernet",
                                                            "node-id": "XPONDER-3-2", "clli": "ORANGE3"},
-                                                       {"exclude_": {"node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]}})
+                                                       {"exclude": {"node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
