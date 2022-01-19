@@ -22,6 +22,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -45,43 +46,36 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_SPDR_SA1(self):
-        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        response = test_utils.get_netconf_oper_request("SPDR-SA1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(
-            res['node'][0]['netconf-node-topology:connection-status'],
-            'connected')
+        response = test_utils_rfc8040.check_device_connection("SPDR-SA1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['connection-status'], 'connected')
 
     def test_02_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        logging.info(res)
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeSA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        logging.info(response)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeSA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_03_getOpenRoadmNetwork(self):
-        response = test_utils.get_ordm_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
-        self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeSA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'XPONDER')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], 'universal-switchponder')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:vendor'], 'vendorA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:ip'], '1.2.3.4')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
+        self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeSA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'XPONDER')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:model'], 'universal-switchponder')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:vendor'], 'vendorA')
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:ip'], '1.2.3.4')
 
     def test_04_getLinks_OpenroadmTopology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        # Tests related to links
-        self.assertNotIn('ietf-network-topology:link', res['network'][0])
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_05_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
@@ -220,16 +214,15 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_08_disconnect_SPDR_SA1(self):
-        response = test_utils.unmount_device("SPDR-SA1")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("SPDR-SA1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_09_getClliNetwork(self):
-        response = test_utils.get_clli_net_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 1)
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
+        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        logging.info(response)
+        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_10_getOpenRoadmNetwork(self):
         response = test_utils.get_ordm_net_request()
