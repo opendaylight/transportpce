@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.NumUnnumHop;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetric;
@@ -20,18 +19,13 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.Response;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.NoPathCase;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.PathCase;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.GeneralBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.constraints.sp.co.routing.or.general.general.include_.OrderedHopsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.ordered.constraints.sp.HopType;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.ordered.constraints.sp.HopTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.ordered.constraints.sp.hop.type.hop.type.NodeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraintsBuilder;
-import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.GeneralBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,29 +108,18 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        List<OrderedHops> orderedHopsList = new ArrayList<>();
-        int counter = 0;
+        List<NodeIdType> nodeIdList = new ArrayList<>();
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
                 NumUnnumHop numUnnumHop = (NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
                 String nodeId = numUnnumHop.getNumUnnumHop().getNodeId();
                 if (nodeId != null && this.ordNodeList.contains(nodeId)) {
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118
-                        .ordered.constraints.sp.hop.type.hop.type.Node node = new NodeBuilder().setNodeId(nodeId)
-                        .build();
-                    HopType hopType = new HopTypeBuilder().setHopType(node).build();
-                    OrderedHops orderedHops = new OrderedHopsBuilder()
-                            .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
-                        .build();
-                    orderedHopsList.add(orderedHops);
-                    counter++;
+                    nodeIdList.add(new NodeIdType(nodeId));
                 }
             }
         }
-        Include include = new IncludeBuilder()
-                .setOrderedHops(orderedHopsList.stream()
-                        .collect(Collectors.toMap(OrderedHops::key, orderedHops -> orderedHops)))
-                .build();
+
+        Include include = new IncludeBuilder().setNodeId(nodeIdList).build();
         General general = new GeneralBuilder().setInclude(include).build();
         hardConstraints = new HardConstraintsBuilder().setCoRoutingOrGeneral(general).build();
         return hardConstraints;
