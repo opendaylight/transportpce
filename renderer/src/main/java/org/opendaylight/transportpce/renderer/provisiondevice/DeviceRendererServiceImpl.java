@@ -394,9 +394,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             nodeOpenRoadmVersion.equals(OpenroadmNodeVersion._71)
                 ? Map.of(
                     // We don't need ODUC2, ODUC3 here, since they are handled in OTN service-path
-                    "ODU",  List.of("ODUC4", "ODUFLEX"),
+                    "ODU",  List.of("ODU4", "ODUC4", "ODUFLEX"),
                     // Add intermediate OTUCn rates (OTUC2, OTUC3)
-                    "other", List.of("OTUC2", "OTUC3", "OTUC4",
+                    // OTU4 is used in 100G service on 7.1 model
+                    "other", List.of("OTU4", "OTUC2", "OTUC3", "OTUC4",
                     "OTSIGROUP-400G", "OTSIGROUP-300G",  "OTSIGROUP-200G",
                     spectralSlotName))
                 : Map.of(
