@@ -36,7 +36,7 @@ public class PceConstraintsCalcTest extends AbstractTest {
 
     @Test
     public void testNoHardOrSoftConstrainsExists() {
-        PceTestData.getPCE_test2_request_54().getSoftConstraints();
+        PceTestData.getPCE_test2_request_54();
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData
                 .getEmptyPCERequest(), networkTransactionService);
     }
@@ -71,7 +71,7 @@ public class PceConstraintsCalcTest extends AbstractTest {
                 .getEmptyPCERequestServiceNameWithRequestId(), networkTransactionService);
     }
 
-    @Test(expected = Exception.class)
+    @Test()
     public void testHardConstrainsExists4() {
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData
                 .getPCE_test2_request_54(), networkTransactionService);

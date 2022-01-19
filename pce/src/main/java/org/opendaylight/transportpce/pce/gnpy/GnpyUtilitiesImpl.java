@@ -25,10 +25,10 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.service.PathRequest;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.synchronization.info.Synchronization;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
@@ -75,7 +75,6 @@ public class GnpyUtilitiesImpl {
         return isPcePathFeasible;
     }
 
-    @SuppressWarnings("checkstyle:illegalcatch")
     public GnpyResult gnpyResponseOneDirection(GnpyServiceImpl gnpySvc) throws GnpyException {
         requestId = Uint32.valueOf((requestId.toJava()) + 1);
         List<PathRequest> pathRequestList = new ArrayList<>(gnpySvc.getPathRequest().values());
