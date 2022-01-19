@@ -15,7 +15,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
-import org.opendaylight.transportpce.servicehandler.MappingConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInputBuilder;
@@ -160,9 +159,6 @@ public final class ServiceDataUtils {
     }
 
     public static PathComputationRequestInput createPceRequestInput(ServiceCreateInput input) {
-        MappingConstraints mappingConstraints =
-                new MappingConstraints(input.getHardConstraints(), input.getSoftConstraints());
-        mappingConstraints.serviceToServicePathConstarints();
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
         SdncRequestHeader serviceHandler = input.getSdncRequestHeader();
         if (serviceHandler != null) {
@@ -172,8 +168,8 @@ public final class ServiceDataUtils {
             .setServiceName(input.getServiceName())
             .setResourceReserve(true)
             .setServiceHandlerHeader(serviceHandlerHeader.build())
-            .setHardConstraints(mappingConstraints.getServicePathHardConstraints())
-            .setSoftConstraints(mappingConstraints.getServicePathSoftConstraints())
+            .setHardConstraints(input.getHardConstraints())
+            .setSoftConstraints(input.getSoftConstraints())
             .setPceRoutingMetric(PceMetric.TEMetric)
             .setServiceAEnd(ModelMappingUtils.createServiceAEnd(input.getServiceAEnd()))
             .setServiceZEnd(ModelMappingUtils.createServiceZEnd(input.getServiceZEnd()))
