@@ -2,8 +2,8 @@ module transportpce-pce {
   namespace "http://org/opendaylight/transportpce/pce";
   prefix org-opendaylight-transportpce-pce;
 
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
+  import org-openroadm-routing-constraints {
+    prefix org-openroadm-routing-constraints;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
@@ -173,7 +173,7 @@ module transportpce-pce {
       container service-z-end {
         uses transportpce-common-service-path-types:service-endpoint-sp;
       }
-      uses transportpce-routing-constraints:routing-constraints-sp;
+      uses org-openroadm-routing-constraints:routing-constraints;
       uses org-openroadm-common-service-types:routing-metric;
     }
     output {
