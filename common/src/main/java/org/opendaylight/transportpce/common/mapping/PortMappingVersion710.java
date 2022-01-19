@@ -965,7 +965,7 @@ public class PortMappingVersion710 {
             String interfaceName = interfaces.getInterfaceName();
             if (interfaceType.equals(OtnOtu.class)
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("OTU"))) {
+                .equals("OTU4"))) {
                 mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
             }
             if ((interfaceType.equals(OtnOtu.class))
@@ -975,7 +975,7 @@ public class PortMappingVersion710 {
             }
             if (interfaceType.equals(OtnOdu.class)
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("ODU"))) {
+                .equals("ODU4"))) {
                 mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
             }
             if ((interfaceType.equals(OtnOdu.class))
