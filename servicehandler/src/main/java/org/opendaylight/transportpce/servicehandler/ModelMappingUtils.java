@@ -73,8 +73,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev220118.routing.constraints.sp.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirection;
@@ -497,20 +495,11 @@ public final class ModelMappingUtils {
                     .setPort(serviceInput.getServiceZEnd().getRxDirection().getPort()).build());
             servicePathBuilder.setServiceAEnd(serviceAEnd.build());
             servicePathBuilder.setServiceZEnd(serviceZEnd.build());
-            MappingConstraints mapConstraints = new MappingConstraints(serviceInput.getHardConstraints(),
-                serviceInput.getSoftConstraints());
-            mapConstraints.serviceToServicePathConstarints();
-            if (mapConstraints.getServicePathHardConstraints() != null) {
-                HardConstraintsBuilder hardConstraintBuilder = new HardConstraintsBuilder()
-                    .setCustomerCode(serviceInput.getHardConstraints().getCustomerCode())
-                    .setCoRoutingOrGeneral(mapConstraints.getServicePathHardConstraints().getCoRoutingOrGeneral());
-                servicePathBuilder.setHardConstraints(hardConstraintBuilder.build());
+            if (serviceInput.getHardConstraints() != null) {
+                servicePathBuilder.setHardConstraints(serviceInput.getHardConstraints());
             }
-            if (mapConstraints.getServicePathSoftConstraints() != null) {
-                SoftConstraintsBuilder softConstraintBuilder = new SoftConstraintsBuilder()
-                    .setCustomerCode(mapConstraints.getServicePathSoftConstraints().getCustomerCode())
-                    .setCoRoutingOrGeneral(mapConstraints.getServicePathSoftConstraints().getCoRoutingOrGeneral());
-                servicePathBuilder.setSoftConstraints(softConstraintBuilder.build());
+            if (serviceInput.getSoftConstraints() != null) {
+                servicePathBuilder.setSoftConstraints(serviceInput.getSoftConstraints());
             }
             servicePathBuilder.setServicePathName(serviceInput.getServiceName());
             servicePathBuilder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder()
