@@ -362,7 +362,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     .setFiberSpanSrlgs(readServicePath.get().getFiberSpanSrlgs())
                     .setHardConstraints(readServicePath.get().getHardConstraints())
                     .setLatency(readServicePath.get().getLatency())
-                    .setLocallyProtectedLinks(readServicePath.get().getLocallyProtectedLinks())
                     .setPathDescription(pathDescription)
                     .setPceRoutingMetric(readServicePath.get().getPceRoutingMetric())
                     .setSoftConstraints(readServicePath.get().getSoftConstraints())
