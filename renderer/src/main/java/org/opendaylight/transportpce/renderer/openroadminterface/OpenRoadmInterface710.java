@@ -28,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev2003
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic24;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic28;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic36;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic48;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
@@ -174,14 +175,32 @@ public class OpenRoadmInterface710 {
                 ifName = ifName + "-300G";
                 break;
             case DpQam16:
-                LOG.info("Given modulation format is {} and thus rate is 400G", modulationFormat);
-                flexoBuilder.setFoicType(Foic48.class)
-                    .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
-                        Uint8.valueOf(3), Uint8.valueOf(4))));
-                otsiBuilder.setModulationFormat(modulationFormat)
-                    .setOtsiRate(R400GOtsi.class)
-                    .setFlexo(flexoBuilder.build());
-                ifName = ifName + "-400G";
+                // Here take the difference of highest and lowest spectral numbers and determine the width
+                LOG.info("The width with guard band {}", (spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
+                if ((spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
+                    LOG.info("The baud-rate is 31.6 Gb");
+                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
+                    flexoBuilder.setFoicType(Foic28.class)
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
+                            Uint8.valueOf(3), Uint8.valueOf(4))));
+                    otsiBuilder.setModulationFormat(modulationFormat)
+                        .setOtsiRate(R200GOtsi.class)
+                        .setFlexo(flexoBuilder.build());
+                    ifName = ifName + "-200G";
+                }
+                else {
+                    // Default baud-rate is 63.1 Gbaud
+                    LOG.info("Given modulation format is {} and thus rate is 400G", modulationFormat);
+                    flexoBuilder.setFoicType(Foic48.class)
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
+                            Uint8.valueOf(3), Uint8.valueOf(4))));
+                    otsiBuilder.setModulationFormat(modulationFormat)
+                        .setOtsiRate(R400GOtsi.class)
+                        .setFlexo(flexoBuilder.build());
+                    ifName = ifName + "-400G";
+                }
                 break;
             default:
                 LOG.error("Modulation format is required to select the rate");
