@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.servicehandler.MappingConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.CancelResourceReserveInputBuilder;
@@ -33,11 +32,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
@@ -106,13 +105,9 @@ public class PCEServiceWrapper {
         }
     }
 
-    private PathComputationRequestOutput performPCE(org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains
-            .rev190329.routing.constraints.HardConstraints hardConstraints, org.opendaylight.yang.gen.v1.http.org
-            .openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints softConstraints,
+    private PathComputationRequestOutput performPCE(HardConstraints hardConstraints, SoftConstraints softConstraints,
             String serviceName, SdncRequestHeader sdncRequestHeader, ServiceEndpoint serviceAEnd,
             ServiceEndpoint serviceZEnd, ServiceNotificationTypes notifType, boolean reserveResource) {
-        MappingConstraints mappingConstraints = new MappingConstraints(hardConstraints, softConstraints);
-        mappingConstraints.serviceToServicePathConstarints();
         LOG.info("Calling path computation.");
         notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
                 .setStatus(RpcStatusEx.Pending)
@@ -125,8 +120,7 @@ public class PCEServiceWrapper {
         FutureCallback<PathComputationRequestOutput> pceCallback =
                 new PathComputationRequestOutputCallback(notifType, serviceName);
         PathComputationRequestInput pathComputationRequestInput = createPceRequestInput(serviceName, sdncRequestHeader,
-                mappingConstraints.getServicePathHardConstraints(), mappingConstraints.getServicePathSoftConstraints(),
-                reserveResource, serviceAEnd, serviceZEnd);
+                hardConstraints, softConstraints, reserveResource, serviceAEnd, serviceZEnd);
         ListenableFuture<PathComputationRequestOutput> pce = this.pathComputationService
                 .pathComputationRequest(pathComputationRequestInput);
         Futures.addCallback(pce, pceCallback, executor);
