@@ -2,8 +2,8 @@ module transportpce-common-service-path-types {
   namespace "http://org/transportpce/B-C-interface/service/types";
   prefix transportpce-common-service-path-types;
 
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
+  import org-openroadm-routing-constraints {
+    prefix org-openroadm-routing-constraints;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
@@ -61,7 +61,8 @@ module transportpce-common-service-path-types {
 
   revision 2022-01-18 {
     description
-      "Add typedef pce-metric";
+      "Add typedef pce-metric.
+       Replace transportpce-routing-constraints by org-openroadm-routing-constraints.";
   }
 
   revision 2020-01-28 {
@@ -148,7 +149,7 @@ module transportpce-common-service-path-types {
 
   grouping response-parameters-sp {
     container response-parameters {
-      uses transportpce-routing-constraints:routing-constraints-sp;
+      uses org-openroadm-routing-constraints:routing-constraints;
       container path-description {
         uses transportpce-pathDescription:path-description;
       }
@@ -263,7 +264,7 @@ module transportpce-common-service-path-types {
     leaf pce-routing-metric {
       type pce-metric;
     }
-    uses transportpce-routing-constraints:routing-constraints-sp;
+    uses org-openroadm-routing-constraints:routing-constraints;
     leaf latency {
       type uint32;
       description
