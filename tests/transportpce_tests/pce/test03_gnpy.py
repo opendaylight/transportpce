@@ -141,11 +141,8 @@ class TransportGNPYtesting(unittest.TestCase):
                                                            "service-format": "Ethernet", "clli": "Node1"},
                                                        {"node-id": "XPONDER-5", "service-rate": "100",
                                                            "service-format": "Ethernet", "clli": "Node5"},
-                                                       {"include_": {"ordered-hops": [
-                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
-                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}}]}
-                                                        })
+                                                       {"include": {"node-id": [
+                                                           "OpenROADM-2", "OpenROADM-3", "OpenROADM-4"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -172,10 +169,8 @@ class TransportGNPYtesting(unittest.TestCase):
                                                            "service-format": "Ethernet", "clli": "Node1"},
                                                        {"node-id": "XPONDER-4", "service-rate": "100",
                                                            "service-format": "Ethernet", "clli": "Node5"},
-                                                       {"include_": {"ordered-hops": [
-                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}}]}
-                                                        })
+                                                       {"include": {"node-id": [
+                                                           "OpenROADM-2", "OpenROADM-3"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -200,11 +195,9 @@ class TransportGNPYtesting(unittest.TestCase):
                                                            "service-format": "Ethernet", "clli": "Node1"},
                                                        {"node-id": "XPONDER-4", "service-rate": "400",
                                                            "service-format": "Ethernet", "clli": "Node4"},
-                                                       {"include_": {"ordered-hops": [
-                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-3"}},
-                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-2"}},
-                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-5"}}]}
-                                                        })
+                                                       {"include": {"node-id": [
+                                                           "OpenROADM-3", "OpenROADM-2",
+                                                           "OpenROADM-5"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
