@@ -20,6 +20,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
@@ -29,14 +30,14 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('roadmd', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('roadmd', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -45,32 +46,26 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_01_rdm_device_connection(self):
-        response = test_utils.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created,
-                         test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
-        response = test_utils.get_netconf_oper_request("ROADM-D1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(
-            res['node'][0]['netconf-node-topology:connection-status'],
-            'connected')
+        response = test_utils_rfc8040.check_device_connection("ROADM-D1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['connection-status'], 'connected')
         time.sleep(10)
 
     def test_03_rdm_portmapping_info(self):
-        response = test_utils.portmapping_request("ROADM-D1/node-info")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_portmapping_node_info("ROADM-D1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            {'node-info': {'node-type': 'rdm',
-                           'node-ip-address': '127.0.0.14',
-                           'node-clli': 'NodeD',
-                           'openroadm-version': '2.2.1',
-                           'node-vendor': 'vendorD',
-                           'node-model': 'model2',
-                           }},
-            res)
+            {'node-type': 'rdm',
+             'node-ip-address': '127.0.0.14',
+             'node-clli': 'NodeD',
+             'openroadm-version': '2.2.1',
+             'node-vendor': 'vendorD',
+             'node-model': 'model2'},
+            response['node-info'])
         time.sleep(3)
 
     def test_04_rdm_deg1_lcp(self):
@@ -273,6 +268,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
+    def test_16_disconnect_ROADM_D1(self):
+        response = test_utils_rfc8040.unmount_device("ROADM-D1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
