@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1b7f5b_9994b620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-01-20T11:42:18Z",
+      "side": 1,
+      "message": "Reply to one comment",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f39527e_3e7f3696",
@@ -71,6 +88,24 @@
       "writtenOn": "2022-01-20T10:26:54Z",
       "side": 1,
       "message": "As we are testing a 100GE service in an over-provisioned optical path, would it be relevant to have the 400GE service in an under-provisioned optical path?",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9f201c5_8367ad64",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-01-20T11:42:18Z",
+      "side": 1,
+      "message": "I don\u0027t think so, since as specified now, openROADM Mux/Switch-Ponders do not include L2 features, which means we can not provision client rate that exceed line-rates without having any control mechanism at the input",
+      "parentUuid": "8c25c383_2214da7c",
       "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
