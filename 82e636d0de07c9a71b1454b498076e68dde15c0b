@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ebd688_2294fe97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Thanks for your feedback Gilles!",
+      "parentUuid": "417f2fff_a8432220",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f39527e_3e7f3696",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55680e74_b8070f29",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f39527e_3e7f3696",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4e8ffb5_491c953e",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-01-20T10:26:54Z",
       "side": 1,
       "message": "Shouldn\u0027t have also otsi XPDR2-NETWORK1-755:768-200G interface created?",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10563efe_367cb82e",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "The response is coming from Renderer-result. Since we are combining the OTSI, OTSI-group as the part of OCH interface, only the last interface name which is OTSI-GROUP will be resulted.\n\nAlso, note that OTSI-GROUP wouldn\u0027t be created without the existence of OTSI.\n\nBut you are right, the result should indicate all the interfaces. I have created a ticket to make this change and display all the interfaces created. https://jira.opendaylight.org/browse/TRNSPRTPCE-589",
+      "parentUuid": "b4e8ffb5_491c953e",
       "range": {
         "startLine": 84,
         "startChar": 8,
@@ -153,6 +213,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5eb8345_14e25df4",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Answered in the previous comment",
+      "parentUuid": "e95544a9_0458b20b",
+      "range": {
+        "startLine": 414,
+        "startChar": 8,
+        "endLine": 414,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e941d8e_659deea1",
         "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
         "patchSetId": 6
@@ -164,6 +248,30 @@
       "writtenOn": "2022-01-20T10:26:54Z",
       "side": 1,
       "message": "4",
+      "range": {
+        "startLine": 594,
+        "startChar": 40,
+        "endLine": 594,
+        "endChar": 41
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0eec1b3_6439c35e",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e941d8e_659deea1",
       "range": {
         "startLine": 594,
         "startChar": 40,
@@ -197,6 +305,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08fcdf17_f55c2a54",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62faee64_850f1119",
+      "range": {
+        "startLine": 604,
+        "startChar": 8,
+        "endLine": 604,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "060ba1fc_132c9047",
@@ -210,6 +342,30 @@
       "writtenOn": "2022-01-20T10:26:54Z",
       "side": 1,
       "message": "4",
+      "range": {
+        "startLine": 688,
+        "startChar": 44,
+        "endLine": 688,
+        "endChar": 45
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2664f3_0d65d4ce",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "060ba1fc_132c9047",
       "range": {
         "startLine": 688,
         "startChar": 44,
