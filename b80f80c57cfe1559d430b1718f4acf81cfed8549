@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171fa465_c4146be8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-20T18:59:25Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "b80f80c57cfe1559d430b1718f4acf81cfed8549",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
