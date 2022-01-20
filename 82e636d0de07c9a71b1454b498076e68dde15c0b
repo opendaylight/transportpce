@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "417f2fff_a8432220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "Thanks Bala for this new functional test suite that tests this new renderer functionality.\nSee few comments.",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f39527e_3e7f3696",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "I don\u0027t think this test is necessary. This new functional test suite being run after the portmapping one, since this test will has already been tested in portmapping, it is no longer relevant here.\nIf it has passed sucessfully in portmapping, we can suppose it will pass also here.",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e8ffb5_491c953e",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t have also otsi XPDR2-NETWORK1-755:768-200G interface created?",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c25c383_2214da7c",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "As we are testing a 100GE service in an over-provisioned optical path, would it be relevant to have the 400GE service in an under-provisioned optical path?",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95544a9_0458b20b",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "idem, shouldn\u0027t have also otsi XPDR2-NETWORK1-755:768-300G interface created here?",
+      "range": {
+        "startLine": 414,
+        "startChar": 8,
+        "endLine": 414,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e941d8e_659deea1",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "4",
+      "range": {
+        "startLine": 594,
+        "startChar": 40,
+        "endLine": 594,
+        "endChar": 41
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62faee64_850f1119",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "idem, where is the otsi interface?",
+      "range": {
+        "startLine": 604,
+        "startChar": 8,
+        "endLine": 604,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "060ba1fc_132c9047",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T10:26:54Z",
+      "side": 1,
+      "message": "4",
+      "range": {
+        "startLine": 688,
+        "startChar": 44,
+        "endLine": 688,
+        "endChar": 45
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
