@@ -317,6 +317,56 @@ def check_device_connection(node: str):
     return {'status_code': response.status_code,
             'connection-status': connection_status}
 
+
+def check_interface_request(node: str, interface: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface={}',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/{}'}  # nopep8
+    response = get_request(url[RESTCONF_VERSION].format('{}', node, interface))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-device:interface',
+                  'draft-bierman02': 'interface'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        interface = res[return_key[RESTCONF_VERSION]]
+    else:
+        interface = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'interface': interface}
+
+
+def del_interface_request(node: str, interface: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface={}',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/{}'}  # nopep8
+    # draft-bierman02: note this is config here and not operational as previously in check_interface_request
+    response = delete_request(url[RESTCONF_VERSION].format('{}', node, interface))
+    return response
+
+
+def check_roadm_connections_request(node: str, connections: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/roadm-connections={}',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/roadm-connections/{}'}  # nopep8
+    response = get_request(url[RESTCONF_VERSION].format('{}', node, connections))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-device:roadm-connections',
+                  'draft-bierman02': 'roadm-connections'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        roadm_connections = res[return_key[RESTCONF_VERSION]]
+    else:
+        roadm_connections = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'roadm-connections': roadm_connections}
+
+
+def del_roadm_connections_request(node: str, connections: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/roadm-connections={}',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/roadm-connections/{}'}  # nopep8
+    # draft-bierman02: note this is config here and not operational as previously in check_interface_request
+    response = delete_request(url[RESTCONF_VERSION].format('{}', node, connections))
+    return response
+
 #
 # Portmapping operations
 #
