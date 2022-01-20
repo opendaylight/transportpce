@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e8df1b5_8c5d7ef4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:02:51Z",
+      "side": 1,
+      "message": "Thanks Gilles for the feedback. I ack all the remarks.",
+      "parentUuid": "022d55a6_18c108bc",
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91047e92_0fbf7401",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-20T09:34:23Z",
       "side": 1,
       "message": "Why not creating the ifBuilder from the existing intf2Delete in order not to have to set again name, type, supporting CP/port?.\nYou would just have to change the administrative-state...",
+      "range": {
+        "startLine": 126,
+        "startChar": 41,
+        "endLine": 126,
+        "endChar": 63
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5786b0fe_7f60439d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:02:51Z",
+      "side": 1,
+      "message": "As discussed, it was necessary so we only try to delete config data. Also, I noticed issues with maint-testsignal container when all the data was passed for delete.",
+      "parentUuid": "91047e92_0fbf7401",
       "range": {
         "startLine": 126,
         "startChar": 41,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c734f87_bd75ef14",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:02:51Z",
+      "side": 1,
+      "message": "Yes, definitely. If it is ok, we can refactor the code as a separate change?  I have created a JIRA: https://jira.opendaylight.org/browse/TRNSPRTPCE-588, so we don\u0027t forget.",
+      "parentUuid": "09e5a895_11cde755",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0802519_823f6fc6",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 7
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6991d47_fea62390",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:02:51Z",
+      "side": 1,
+      "message": "With the advent of 10.1 operational modes, we can adopt the changes to the device-renderer along with it (as discussed in the meeting).",
+      "parentUuid": "a0802519_823f6fc6",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 102
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acd67455_cbeb3bf9",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 7
@@ -100,6 +190,30 @@
       "writtenOn": "2022-01-20T09:34:23Z",
       "side": 1,
       "message": "See the previous comment which becomes all the more relevant as it would be needed several times.",
+      "range": {
+        "startLine": 317,
+        "startChar": 15,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aad9143_6fad6686",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T17:02:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "acd67455_cbeb3bf9",
       "range": {
         "startLine": 317,
         "startChar": 15,
