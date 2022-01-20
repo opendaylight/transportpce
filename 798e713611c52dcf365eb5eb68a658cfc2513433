@@ -52,6 +52,24 @@
       "parentUuid": "da44337a_456a7963",
       "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6338bb7d_8f33f3c5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-20T16:26:49Z",
+      "side": 1,
+      "message": "As mentioned in the meeting, this has been addressed in: https://git.opendaylight.org/gerrit/c/transportpce/+/99399/",
+      "parentUuid": "73d4df81_d5d81f6d",
+      "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
