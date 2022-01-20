@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "022d55a6_18c108bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T09:34:23Z",
+      "side": 1,
+      "message": "Hi Bala,\nThanks for this new functionality in the renderer. \nSee my comments.\nPart of modifications in this change could has been put apart in a dedicated bug fix change.",
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91047e92_0fbf7401",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T09:34:23Z",
+      "side": 1,
+      "message": "Why not creating the ifBuilder from the existing intf2Delete in order not to have to set again name, type, supporting CP/port?.\nYou would just have to change the administrative-state...",
+      "range": {
+        "startLine": 126,
+        "startChar": 41,
+        "endLine": 126,
+        "endChar": 63
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e5a895_11cde755",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T09:34:23Z",
+      "side": 1,
+      "message": "Would not be worth taking advantage of this evolution to refactor a little bit this class, avoiding duplicating methods as createOpenRoadmOducnInterface, createOpenRoadmOtnOducnInterface, createOpenRoadmOduflexInterface?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0802519_823f6fc6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T09:34:23Z",
+      "side": 1,
+      "message": "What a pity to have to retrieve the rate by this means.\nWouldn\u0027t it be more relevant to add it in the \"service-path\" rpc, as we already do it in the \"otn-service-path\", and to pass it directly to the OpenRoadmInterfaceFactory method in the same way as for spectral informations?",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 102
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd67455_cbeb3bf9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T09:34:23Z",
+      "side": 1,
+      "message": "See the previous comment which becomes all the more relevant as it would be needed several times.",
+      "range": {
+        "startLine": 317,
+        "startChar": 15,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
