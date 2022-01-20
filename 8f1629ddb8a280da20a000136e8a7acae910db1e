@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48ad62e_48abbde9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-20T18:57:51Z",
+      "side": 1,
+      "message": "what about simply \"-OTSIG-400G\" ?",
+      "revId": "8f1629ddb8a280da20a000136e8a7acae910db1e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acab56e7_6c516f56",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-20T18:57:51Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8f1629ddb8a280da20a000136e8a7acae910db1e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
