@@ -110,6 +110,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7818acda_12c20276",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-20T15:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c9f201c5_8367ad64",
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e95544a9_0458b20b",
