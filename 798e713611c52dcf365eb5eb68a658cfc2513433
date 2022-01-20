@@ -34,6 +34,24 @@
       "parentUuid": "557c53de_3e183d35",
       "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73d4df81_d5d81f6d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-20T13:35:25Z",
+      "side": 1,
+      "message": "-1 because of other +1",
+      "parentUuid": "da44337a_456a7963",
+      "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
