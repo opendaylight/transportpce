@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f515a4cc_86034a4f",
+        "filename": "tests/transportpce_tests/2.2.1/test04_otn_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-21T08:53:59Z",
+      "side": 1,
+      "message": "adressed more generally in https://git.opendaylight.org/gerrit/c/transportpce/+/99415",
+      "parentUuid": "3d3445a0_7ce44eec",
+      "range": {
+        "startLine": 86,
+        "startChar": 12,
+        "endLine": 86,
+        "endChar": 16
+      },
+      "revId": "70cd68f1bd3270c87f81b01c0fbec39e6805794f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3e4f67a_8e72f1b9",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-20T16:42:14Z",
       "side": 1,
       "message": "tp?",
+      "range": {
+        "startLine": 97,
+        "startChar": 16,
+        "endLine": 97,
+        "endChar": 21
+      },
+      "revId": "70cd68f1bd3270c87f81b01c0fbec39e6805794f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "982fe16e_80de8ae6",
+        "filename": "tests/transportpce_tests/2.2.1/test04_otn_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-21T08:53:59Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "e3e4f67a_8e72f1b9",
       "range": {
         "startLine": 97,
         "startChar": 16,
