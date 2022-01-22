@@ -181,6 +181,12 @@ public final class OpenRoadmOtnTopology {
             } else if (OtnLinkType.ODUC4.equals(linkType) && link.augmentation(Link1.class) != null
                 && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(400000))) {
                 links.add(updateOtnLinkBwParameters(link, 0L, 400000L));
+            } else if (OtnLinkType.ODUC3.equals(linkType) && link.augmentation(Link1.class) != null
+                    && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(300000))) {
+                    links.add(updateOtnLinkBwParameters(link, 0L, 300000L));
+            } else if (OtnLinkType.ODUC2.equals(linkType) && link.augmentation(Link1.class) != null
+                && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(200000))) {
+                links.add(updateOtnLinkBwParameters(link, 0L, 200000L));
             } else {
                 LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
             }
