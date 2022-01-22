@@ -139,6 +139,8 @@ public class PceOtnNode implements PceNode {
                     case StringConstants.SERVICE_TYPE_100GE_S:
                         // TODO verify the capability of network port to support ODU4 CTP interface creation
                     case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC2:
+                    case StringConstants.SERVICE_TYPE_ODUC3:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!checkTpForOdtuTermination(ontTp1)) {
                             LOG.error("TP {} of {} does not allow ODU4 termination creation",
@@ -198,7 +200,9 @@ public class PceOtnNode implements PceNode {
         }
 
         if ((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
-                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType))
+                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)
+                || StringConstants.SERVICE_TYPE_ODUC3.equals(this.otnServiceType)
+                || StringConstants.SERVICE_TYPE_ODUC2.equals(this.otnServiceType))
             || ((StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                     || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))
