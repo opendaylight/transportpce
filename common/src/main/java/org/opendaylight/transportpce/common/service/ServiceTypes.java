@@ -62,6 +62,8 @@ public final class ServiceTypes {
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_100GE_M),
             "OTU", Map.of(
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_OTU4,
+                    Uint32.valueOf(200), StringConstants.SERVICE_TYPE_OTUC2,
+                    Uint32.valueOf(300), StringConstants.SERVICE_TYPE_OTUC3,
                     Uint32.valueOf(400), StringConstants.SERVICE_TYPE_OTUC4),
             "ODU", Map.of(
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_ODU4,
