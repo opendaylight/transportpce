@@ -311,13 +311,23 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         String serviceType = notification.getServiceType();
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
                 Map<String, OtnLinkType> otnLinkTypeMap = Map.of(
                     StringConstants.SERVICE_TYPE_OTU4, OtnLinkType.OTU4,
+                    // TODO: need to change it when OtnLinkType is updated with enum
+                    StringConstants.SERVICE_TYPE_OTUC2, OtnLinkType.OTUC4,
+                    StringConstants.SERVICE_TYPE_OTUC3, OtnLinkType.OTUC4,
                     StringConstants.SERVICE_TYPE_OTUC4, OtnLinkType.OTUC4,
                     StringConstants.SERVICE_TYPE_ODU4, OtnLinkType.ODTU4,
+                    // TODO: need to change it when OtnLinkType is updated with enum
+                    StringConstants.SERVICE_TYPE_ODUC2, OtnLinkType.ODUC4,
+                    StringConstants.SERVICE_TYPE_ODUC3, OtnLinkType.ODUC4,
                     StringConstants.SERVICE_TYPE_ODUC4, OtnLinkType.ODUC4);
                 if (isDeletion) {
                     LOG.info("updating otn-topology removing links");

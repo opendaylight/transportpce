@@ -129,6 +129,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
                         RpcStatusEx.Pending, "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
+                LOG.info("Using {}G rate", serviceRate);
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes
                     mappingNode = portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                         ? portMapping.getNode(input.getServiceAEnd().getNodeId())
@@ -149,6 +150,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
                     case StringConstants.SERVICE_TYPE_OTU4:
+                    case StringConstants.SERVICE_TYPE_OTUC2:
+                    case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
                         if (!manageServicePathCreation(input, serviceType)) {
                             return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
@@ -160,6 +163,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_100GE_M:
                     case StringConstants.SERVICE_TYPE_100GE_S:
                     case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC2:
+                    case StringConstants.SERVICE_TYPE_ODUC3:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!manageOtnServicePathCreation(input, serviceType, serviceRate)) {
                             return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
@@ -207,6 +212,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
                     case StringConstants.SERVICE_TYPE_OTU4:
+                    case StringConstants.SERVICE_TYPE_OTUC2:
+                    case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
                         if (!manageServicePathDeletion(serviceName, pathDescription, serviceType)) {
                             return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
@@ -218,6 +225,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_100GE_M:
                     case StringConstants.SERVICE_TYPE_100GE_S:
                     case StringConstants.SERVICE_TYPE_ODU4:
+                    case StringConstants.SERVICE_TYPE_ODUC2:
+                    case StringConstants.SERVICE_TYPE_ODUC3:
                     case StringConstants.SERVICE_TYPE_ODUC4:
                         if (!manageOtnServicePathDeletion(serviceName, pathDescription, service, serviceType)) {
                             return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
@@ -245,6 +254,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         if (input.getServiceAEnd().getServiceRate() != null) {
             return input.getServiceAEnd().getServiceRate();
         }
+        LOG.warn("Input should have rate if you are using 200 or 300G");
+        // TODO: missing 200, and 300G rates here, OTUCn cannot always be 400G
         Map<ServiceFormat, Map<String, Uint32>> formatRateMap  = Map.of(
                 ServiceFormat.OTU, Map.of(
                     "OTUCn", Uint32.valueOf(400),

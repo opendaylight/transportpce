@@ -158,6 +158,8 @@ public class PceCalculation {
     private void getAZnodeId() {
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -179,6 +181,8 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_400GE:
             case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
                 LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
                 nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
@@ -187,6 +191,8 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
@@ -259,6 +265,8 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case  StringConstants.SERVICE_TYPE_OTU4:
             case  StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case  StringConstants.SERVICE_TYPE_OTUC4:
                 // 100GE service and OTU4 service are handled at the openroadm-topology layer
                 for (Node node : allNodes) {
@@ -386,6 +394,8 @@ public class PceCalculation {
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_400GE:
                 return processPceLink(link, sourceId, destId, source, dest);
@@ -393,6 +403,8 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_1GE:
                 return processPceOtnLink(link, source, dest);
