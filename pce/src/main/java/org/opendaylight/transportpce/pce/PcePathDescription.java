@@ -93,6 +93,8 @@ public class PcePathDescription {
             .setAToZ(atozMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
@@ -105,6 +107,8 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
                 if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
                     && rc.getResultTribPortTribSlot().get(1) != null) {
@@ -136,6 +140,8 @@ public class PcePathDescription {
                 .setZToA(ztoaMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
@@ -148,6 +154,9 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
             case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
+            case StringConstants.SERVICE_TYPE_ODUC4:
                 if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
                     && rc.getResultTribPortTribSlot().get(1) != null) {
                     ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
