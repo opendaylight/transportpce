@@ -398,10 +398,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         TopologyShard otnTopologyShard;
         switch (linkType) {
             case OTU4:
+            case OTUC2:
+            case OTUC3:
             case OTUC4:
                 otnTopologyShard = OpenRoadmOtnTopology.createOtnLinks(notifLink, null, null, linkType);
                 break;
             case ODTU4:
+            case ODUC2:
+            case ODUC3:
             case ODUC4:
                 List<LinkId> linkIdList = new ArrayList<>();
                 if (suppLinks != null) {
@@ -470,6 +474,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         List<LinkId> linkIdList = new ArrayList<>();
         switch (linkType) {
             case OTU4:
+            case OTUC2:
+            case OTUC3:
             case OTUC4:
                 linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, linkType.getName()));
                 linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, linkType.getName()));
@@ -482,6 +488,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 otnTopologyShard = new TopologyShard(null, null);
                 break;
             case ODTU4:
+            case ODUC2:
+            case ODUC3:
             case ODUC4:
                 linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoA, tpA, nodeTopoZ, tpZ, linkType.getName()));
                 linkIdList.add(LinkIdUtil.buildOtnLinkId(nodeTopoZ, tpZ, nodeTopoA, tpA, linkType.getName()));
