@@ -175,15 +175,27 @@ public final class OpenRoadmOtnTopology {
             OtnLinkType linkType) {
         List<Link> links = new ArrayList<>();
         for (Link link : suppOtuLinks) {
-            if (OtnLinkType.ODTU4.equals(linkType) && link.augmentation(Link1.class) != null
+            if (link.augmentation(Link1.class) == null) {
+                LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
+                continue;
+            }
+            if (OtnLinkType.ODTU4.equals(linkType)
                 && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(100000))) {
                 links.add(updateOtnLinkBwParameters(link, 0L, 100000L));
-            } else if (OtnLinkType.ODUC4.equals(linkType) && link.augmentation(Link1.class) != null
+            } else if (OtnLinkType.ODUC4.equals(linkType)
                 && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(400000))) {
                 links.add(updateOtnLinkBwParameters(link, 0L, 400000L));
+            } else if (OtnLinkType.ODUC3.equals(linkType)
+                && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(300000))) {
+                links.add(updateOtnLinkBwParameters(link, 0L, 300000L));
+            } else if (OtnLinkType.ODUC2.equals(linkType)
+                && link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(200000))) {
+                links.add(updateOtnLinkBwParameters(link, 0L, 200000L));
             } else {
-                LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
+                LOG.error("Unsupported OTN Link Type link or unsufficient available bandwith: {}",
+                    link.getLinkId().getValue());
             }
+            //TODO use a Map here instead of multiple else-if-blocks
         }
         if (links.size() == 2) {
             links.addAll(initialiseOtnLinks(suppOtuLinks.get(0).getSource().getSourceNode().getValue(),

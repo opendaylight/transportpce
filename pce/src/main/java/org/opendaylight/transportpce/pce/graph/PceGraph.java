@@ -111,6 +111,8 @@ public class PceGraph {
             switch (serviceType) {
 
                 case StringConstants.SERVICE_TYPE_100GE_T:
+                case StringConstants.SERVICE_TYPE_OTUC2:
+                case StringConstants.SERVICE_TYPE_OTUC3:
                 case StringConstants.SERVICE_TYPE_OTUC4:
                 case StringConstants.SERVICE_TYPE_400GE:
                 case StringConstants.SERVICE_TYPE_OTU4:
