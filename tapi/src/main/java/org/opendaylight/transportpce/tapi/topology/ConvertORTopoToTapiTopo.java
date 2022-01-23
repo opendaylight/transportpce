@@ -295,7 +295,7 @@ public class ConvertORTopoToTapiTopo {
         for (TerminationPoint tp : this.oorNetworkPortList) {
             TpId tpid1 = tp.getTpId();
             TpId tpid2 = new TpId(tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.TerminationPoint1.class)
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1.class)
                 .getAssociatedConnectionMapPort());
             List<TpId> tpList = new ArrayList<>();
             tpList.add(tpid1);
