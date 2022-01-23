@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cde73c93_bb475cc1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-23T20:45:04Z",
+      "side": 1,
+      "message": "If so, may I suggest to rather use directly String.join(\"-\", ... ) ?",
+      "parentUuid": "0cb91a2f_9d35cb6c",
+      "revId": "8f1629ddb8a280da20a000136e8a7acae910db1e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acab56e7_6c516f56",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 4
