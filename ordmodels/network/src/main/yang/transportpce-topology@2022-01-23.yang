@@ -21,6 +21,9 @@ module transportpce-topology {
     contact
         "TransportPCE team";
 
+    revision 2022-01-23 {
+        description "Update otn-link-type enum for intermediate rates (B100G)";
+    }
     revision 2021-05-11 {
         description "Update otn-link-type enum for higher rates";
     }
@@ -59,6 +62,18 @@ module transportpce-topology {
         }
         enum "ODUC4" {
           value 6;
+        }
+        enum "OTUC3" {
+          value 7;
+        }
+        enum "ODUC3" {
+          value 8;
+        }
+        enum "OTUC2" {
+          value 9;
+        }
+        enum "ODUC2" {
+          value 10;
         }
       }
     }

@@ -321,7 +321,7 @@ public final class TPCEUtils {
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev210511.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.$YangModuleInfoImpl.getInstance(),
 
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev170119.$YangModuleInfoImpl
                     .getInstance(),
