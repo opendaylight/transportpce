@@ -54,13 +54,13 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_compare_Openroadm_topology_portmapping_rdm(self):
         resTopo = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(resTopo['status_code'], requests.codes.ok)
-        for val in resTopo['network'][0]['node']:
-            nodeId = val['node-id']
+        for node in resTopo['network'][0]['node']:
+            nodeId = node['node-id']
             nodeMapId = nodeId.split("-")[0]
             response = test_utils_rfc8040.get_portmapping_node_info(nodeMapId)
             self.assertEqual(response['status_code'], requests.codes.ok)
-            for val2 in val['ietf-network-topology:termination-point']:
-                tpId = val2['tp-id']
+            for tp in node['ietf-network-topology:termination-point']:
+                tpId = tp['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
                     response2 = test_utils_rfc8040.portmapping_request(nodeMapId, tpId)
                     self.assertEqual(response2['status_code'], requests.codes.ok)

@@ -54,8 +54,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(resTopo['status_code'], requests.codes.ok)
         nbMapCumul = 0
         nbMappings = 0
-        for val in resTopo['network'][0]['node']:
-            nodeId = val['node-id']
+        for node in resTopo['network'][0]['node']:
+            nodeId = node['node-id']
             # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
@@ -65,8 +65,8 @@ class TransportPCEtesting(unittest.TestCase):
             responseMapList = test_utils_rfc8040.get_portmapping(nodeMapId)
             nbMappings = len(responseMapList['nodes'][0]['mapping']) - nbMapCumul
             nbMapCurrent = 0
-            for val2 in val['ietf-network-topology:termination-point']:
-                tpId = val2['tp-id']
+            for tp in node['ietf-network-topology:termination-point']:
+                tpId = tp['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
                     responseMap = test_utils_rfc8040.portmapping_request(nodeMapId, tpId)
                     self.assertEqual(responseMap['status_code'], requests.codes.ok)
