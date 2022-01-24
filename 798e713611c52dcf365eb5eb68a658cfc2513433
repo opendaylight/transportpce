@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb8a9848_183b92e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T17:25:32Z",
+      "side": 1,
+      "message": "no objection as long as the comment I put here will be taken in account in the next changes",
+      "parentUuid": "b330e023_6c8cfd76",
+      "revId": "798e713611c52dcf365eb5eb68a658cfc2513433",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "557c53de_3e183d35",
