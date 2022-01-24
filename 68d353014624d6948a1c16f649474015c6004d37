@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "757785de_83660972",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:49:23Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "68d353014624d6948a1c16f649474015c6004d37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1637853a_0bf9c451",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:49:23Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "68d353014624d6948a1c16f649474015c6004d37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "585dee86_e420fc03",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:49:23Z",
+      "side": 1,
+      "message": "I am not sure this boolean is really needed, the exception could be thrown directly in the witch/default section just above",
+      "revId": "68d353014624d6948a1c16f649474015c6004d37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a99e2f84_fccf4d45",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:49:23Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "68d353014624d6948a1c16f649474015c6004d37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa75944c_b5dc0c79",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:49:23Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "68d353014624d6948a1c16f649474015c6004d37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
