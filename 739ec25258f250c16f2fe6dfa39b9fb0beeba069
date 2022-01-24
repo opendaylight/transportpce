@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "312443f9_68c9c18f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:50:55Z",
+      "side": 1,
+      "message": "there is only one item in this list...",
+      "revId": "739ec25258f250c16f2fe6dfa39b9fb0beeba069",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aff0268e_5cdd0669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-24T09:50:55Z",
+      "side": 1,
+      "message": "LGTM apart commit message",
+      "revId": "739ec25258f250c16f2fe6dfa39b9fb0beeba069",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
