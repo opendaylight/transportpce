@@ -507,49 +507,9 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
     return response
 
 #
-# TransportPCE network utils operations
+# TransportPCE network-utils and service-path operations
 #
 
-
-def connect_xpdr_to_rdm_request(payload: dict):
-    url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
-    payload_prefix = {'rfc8040': '', 'draft-bierman02': 'networkutils:'}
-    data = {
-        payload_prefix[RESTCONF_VERSION] + "input": {
-            payload_prefix[RESTCONF_VERSION] + "links-input": {
-                payload_prefix[RESTCONF_VERSION] + "xpdr-node": payload['xpdr-node'],
-                payload_prefix[RESTCONF_VERSION] + "xpdr-num": payload['xpdr-num'],
-                payload_prefix[RESTCONF_VERSION] + "network-num": payload['network-num'],
-                payload_prefix[RESTCONF_VERSION] + "rdm-node": payload['rdm-node'],
-                payload_prefix[RESTCONF_VERSION] + "srg-num": payload['srg-num'],
-                payload_prefix[RESTCONF_VERSION] + "termination-point-num": payload['termination-point-num']
-            }
-        }
-    }
-    return post_request(url, data)
-
-
-def connect_rdm_to_xpdr_request(payload: dict):
-    url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
-    payload_prefix = {'rfc8040': '', 'draft-bierman02': 'networkutils:'}
-    data = {
-        payload_prefix[RESTCONF_VERSION] + "input": {
-            payload_prefix[RESTCONF_VERSION] + "links-input": {
-                payload_prefix[RESTCONF_VERSION] + "xpdr-node": payload['xpdr-node'],
-                payload_prefix[RESTCONF_VERSION] + "xpdr-num": payload['xpdr-num'],
-                payload_prefix[RESTCONF_VERSION] + "network-num": payload['network-num'],
-                payload_prefix[RESTCONF_VERSION] + "rdm-node": payload['rdm-node'],
-                payload_prefix[RESTCONF_VERSION] + "srg-num": payload['srg-num'],
-                payload_prefix[RESTCONF_VERSION] + "termination-point-num": payload['termination-point-num']
-            }
-        }
-    }
-    return post_request(url, data)
-
-
-#
-# TransportPCE device renderer service path operations
-#
 
 def prepend_dict_keys(input_dict: dict, prefix: str):
     return_dict = {}
@@ -565,11 +525,28 @@ def prepend_dict_keys(input_dict: dict, prefix: str):
     return return_dict
 
 
+def connect_xpdr_to_rdm_request(payload: dict):
+    url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': {'links-input': payload}}, 'networkutils:')
+    else:
+        data = {'input': {'links-input': payload}}
+    return post_request(url, data)
+
+
+def connect_rdm_to_xpdr_request(payload: dict):
+    url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': {'links-input': payload}}, 'networkutils:')
+    else:
+        data = {'input': {'links-input': payload}}
+    return post_request(url, data)
+
+
 def device_renderer_service_path_request(payload: dict):
     url = "{}/operations/transportpce-device-renderer:service-path"
-    payload_prefix = {'rfc8040': '', 'draft-bierman02': 'transportpce-device-renderer:'}
     if RESTCONF_VERSION == 'draft-bierman02':
-        data = prepend_dict_keys(payload, payload_prefix[RESTCONF_VERSION])
+        data = prepend_dict_keys(payload, 'transportpce-device-renderer:')
     else:
         data = payload
     return post_request(url, data)
