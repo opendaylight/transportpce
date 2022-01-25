@@ -237,6 +237,7 @@ public class OpenRoadmInterface710 {
                 .setExpectedDapi(apiInfoZ.getExpectedDapi());
         }
 
+        // TODO: test
         InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOtu.class,
             logicalConnPoint + "-OTUC4");
 
