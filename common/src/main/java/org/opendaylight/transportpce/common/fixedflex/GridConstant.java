@@ -98,8 +98,8 @@ public final class GridConstant {
     private static Table<Uint32, ModulationFormat, String> initFrequencyWidthTable() {
         Table<Uint32, ModulationFormat, String> frequencyWidthTable = HashBasedTable.create();
         frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, String.valueOf(WIDTH_40));
-        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, String.valueOf(WIDTH_80));
-        frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, String.valueOf(WIDTH_80));
+        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, String.valueOf(WIDTH_75));
+        frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, String.valueOf(WIDTH_75));
         frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, String.valueOf(WIDTH_75));
         return frequencyWidthTable;
     }
