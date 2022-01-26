@@ -125,7 +125,6 @@ public final class ConnectivityUtils {
         .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey,
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection>
         connectionFullMap; // this variable is for complete connection objects
-    private Map<String, Map<String, Boolean>> networkMap = new HashMap<>();
     private final NetworkTransactionService networkTransactionService;
 
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
@@ -1428,19 +1427,6 @@ public final class ConnectivityUtils {
         String rxPortName = txPortName;
         LOG.debug("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
         LOG.debug("Node z id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
-        if (serviceFormat.equals(ServiceFormat.ODU)) {
-            // TODO --> populate network map
-            populateNetworkMap(nodeid, txPortName);
-        }
-        if (serviceFormat.equals(ServiceFormat.Ethernet)) {
-            // TODO --> choose from network Map un network port which hasnt been used yet by another service.
-            //  Set boolean to true and update txportName and so on
-            String updTxName = findFreeConfiguredNetworkPort(nodeid);
-            if (updTxName != null) {
-                txPortName = updTxName;
-                rxPortName = txPortName;
-            }
-        }
         // TODO --> get clli from datastore?
         String clli = "NodeSC";
         LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
@@ -1540,19 +1526,6 @@ public final class ConnectivityUtils {
         String rxPortName = txPortName;
         LOG.debug("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
         LOG.debug("Node a id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
-        if (serviceFormat.equals(ServiceFormat.ODU)) {
-            // TODO --> populate network map
-            populateNetworkMap(nodeid, txPortName);
-        }
-        if (serviceFormat.equals(ServiceFormat.Ethernet)) {
-            // TODO --> choose from network Map un network port which hasnt been used yet by another service.
-            //  Set boolean to true and update txportName and so on
-            String updTxName = findFreeConfiguredNetworkPort(nodeid);
-            if (updTxName != null) {
-                txPortName = updTxName;
-                rxPortName = txPortName;
-            }
-        }
         // TODO --> get clli from datastore?
         String clli = "NodeSA";
         LOG.info("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
@@ -1609,30 +1582,6 @@ public final class ConnectivityUtils {
                     .build());
         }
         return serviceAEndBuilder.build();
-    }
-
-    private String findFreeConfiguredNetworkPort(String nodeid) {
-        if (!this.networkMap.containsKey(nodeid)) {
-            return null;
-        }
-        Map<String, Boolean> netMap = this.networkMap.get(nodeid);
-        for (Map.Entry<String, Boolean> entry : netMap.entrySet()) {
-            if (!entry.getValue()) {
-                this.networkMap.get(nodeid).put(entry.getKey(), true);
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    private void populateNetworkMap(String nodeid, String txPortName) {
-        Map<String, Boolean> netMap = new HashMap<>();
-        netMap.put(txPortName, false);
-        if (!this.networkMap.containsKey(nodeid)) {
-            this.networkMap.put(nodeid, netMap);
-        } else if (!this.networkMap.get(nodeid).containsKey(txPortName)) {
-            this.networkMap.get(nodeid).putAll(netMap);
-        }
     }
 
     private ConnectionType getConnectionTypePhtnc(Collection<org.opendaylight.yang.gen.v1.urn

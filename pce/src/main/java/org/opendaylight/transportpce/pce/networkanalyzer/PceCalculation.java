@@ -451,11 +451,23 @@ public class PceCalculation {
         }
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.aendPceNode == null
             && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
-            this.aendPceNode = pceNode;
+            // Added to ensure A-node has a addlink in the topology
+            List<Link> links = this.allLinks.stream()
+                    .filter(x -> x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
+                    .collect(Collectors.toList());
+            if (links.size() > 0) {
+                this.aendPceNode = pceNode;
+            }
         }
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.zendPceNode == null
             && isAZendPceNode(this.serviceFormatZ, pceNode, znodeId, "Z")) {
-            this.zendPceNode = pceNode;
+            // Added to ensure Z-node has a droplink in the topology
+            List<Link> links = this.allLinks.stream()
+                    .filter(x -> x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
+                    .collect(Collectors.toList());
+            if (links.size() > 0) {
+                this.zendPceNode = pceNode;
+            }
         }
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
@@ -496,8 +508,23 @@ public class PceCalculation {
         }
 
         OpenroadmNodeType nodeType = node.augmentation(Node1.class).getNodeType();
+        String clientPort = null;
+        if (node.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null
+            && input.getServiceAEnd() != null
+            && input.getServiceAEnd().getRxDirection() != null
+            && input.getServiceAEnd().getRxDirection().getPort() != null
+            && input.getServiceAEnd().getRxDirection().getPort().getPortName() != null) {
+            clientPort = input.getServiceAEnd().getRxDirection().getPort().getPortName();
+        }
+        if (node.getNodeId().getValue().equals(znodeId) && this.zendPceNode == null
+            && input.getServiceZEnd() != null
+            && input.getServiceZEnd().getRxDirection() != null
+            && input.getServiceZEnd().getRxDirection().getPort() != null
+            && input.getServiceZEnd().getRxDirection().getPort().getPortName() != null) {
+            clientPort = input.getServiceZEnd().getRxDirection().getPort().getPortName();
+        }
 
-        PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType);
+        PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType, clientPort);
         pceOtnNode.validateXponder(anodeId, znodeId);
 
         if (!pceOtnNode.isValid()) {
