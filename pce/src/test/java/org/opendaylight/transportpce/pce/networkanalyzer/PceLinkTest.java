@@ -174,7 +174,8 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(node.augmentation(Node1.class));
         // OpenroadmNodeType nodeType = node.augmentation(Node1.class).;
 
-        PceOtnNode pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType");
+        PceOtnNode pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType",
+            null);
 
     }
 
