@@ -79,15 +79,16 @@ public final class ModelMappingUtils {
             olmSetupBldr.setWaveNumber(atoZDirection.getAToZWavelengthNumber());
             if (atoZDirection.getAToZMinFrequency() != null) {
                 olmSetupBldr.setLowerSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
+                    .valueOf(GridUtils
+                        .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
             }
             if (atoZDirection.getAToZMaxFrequency() != null) {
                 olmSetupBldr.setHigherSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
+                    .valueOf(GridUtils
+                        .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
             }
         }
+        olmSetupBldr.setMcWidth(input)
         return olmSetupBldr.build();
     }
 
