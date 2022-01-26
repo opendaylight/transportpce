@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "118d8ad6_53a95d81",
+        "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-26T10:14:03Z",
+      "side": 1,
+      "message": "Fair enough since it makes the transition smoother and sense from a redundancy refactoring standpoint.\nPlease note there are not only pros.\nThere is at least a con because it splits the post payload data between tests and test_utils.\nThis is similar to an issue feedback that I got on the tests previous refactoring and that I am trying to address now.\nURLs split were more difficult to read.",
+      "parentUuid": "fbf9c7f2_24f25634",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "aa04b4f192a1f8d18b7dd6cf5bd844f5fb742d3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "948433cb_a342342d",
         "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-26T08:35:20Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 266,
+        "startChar": 12,
+        "endLine": 266,
+        "endChar": 37
+      },
+      "revId": "aa04b4f192a1f8d18b7dd6cf5bd844f5fb742d3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa19b70_78bf04bc",
+        "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-26T10:14:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "948433cb_a342342d",
       "range": {
         "startLine": 266,
         "startChar": 12,
