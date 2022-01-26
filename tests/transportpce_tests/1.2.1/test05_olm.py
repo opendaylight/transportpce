@@ -378,7 +378,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(2, res['roadm-connections'][0]['target-output-power'])
+        self.assertEqual(-0.63, res['roadm-connections'][0]['target-output-power'])
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
         url = "{}/operations/transportpce-olm:service-power-turndown"
