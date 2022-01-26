@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.renderer;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -79,14 +80,17 @@ public final class ModelMappingUtils {
             olmSetupBldr.setWaveNumber(atoZDirection.getAToZWavelengthNumber());
             if (atoZDirection.getAToZMinFrequency() != null) {
                 olmSetupBldr.setLowerSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
+                    .valueOf(GridUtils
+                        .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
             }
             if (atoZDirection.getAToZMaxFrequency() != null) {
                 olmSetupBldr.setHigherSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
+                    .valueOf(GridUtils
+                        .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
             }
+            // Set the MC-width for the OLM
+            olmSetupBldr.setMcWidth(new FrequencyGHz(atoZDirection.getAToZMaxFrequency().getValue()
+                .subtract(atoZDirection.getAToZMinFrequency().getValue()).multiply(new BigDecimal(1000))));
         }
         return olmSetupBldr.build();
     }

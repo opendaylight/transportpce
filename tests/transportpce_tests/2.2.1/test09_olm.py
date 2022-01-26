@@ -310,7 +310,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(2.0, res['roadm-connections'][0]['target-output-power'])
+        self.assertEqual(0, res['roadm-connections'][0]['target-output-power'])
 
     def test_22_get_roadmconnection_ROADMC(self):
         response = test_utils.check_netconf_node_request(

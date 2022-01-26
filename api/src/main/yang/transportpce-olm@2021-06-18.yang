@@ -1,10 +1,11 @@
 module transportpce-olm {
-  yang-version 1;
+  yang-version 1.1;
   namespace "http://org/opendaylight/transportpce/olm";
   prefix org-opendaylight-transportpce-olm;
 
   import transportpce-common-types {
     prefix org-transportpce-common-types;
+    revision-date 2021-09-30;
   }
   import ietf-network-topology {
     prefix ietf-network-topology;
@@ -146,7 +147,7 @@ module transportpce-olm {
     description
       "This RPC can be used by PM monitoring to calculate spanloss
          periodically";
-    input;
+    // input;
     output {
       leaf result {
         type string;
