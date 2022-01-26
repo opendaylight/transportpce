@@ -1432,15 +1432,6 @@ public final class ConnectivityUtils {
             // TODO --> populate network map
             populateNetworkMap(nodeid, txPortName);
         }
-        if (serviceFormat.equals(ServiceFormat.Ethernet)) {
-            // TODO --> choose from network Map un network port which hasnt been used yet by another service.
-            //  Set boolean to true and update txportName and so on
-            String updTxName = findFreeConfiguredNetworkPort(nodeid);
-            if (updTxName != null) {
-                txPortName = updTxName;
-                rxPortName = txPortName;
-            }
-        }
         // TODO --> get clli from datastore?
         String clli = "NodeSC";
         LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
@@ -1544,15 +1535,6 @@ public final class ConnectivityUtils {
             // TODO --> populate network map
             populateNetworkMap(nodeid, txPortName);
         }
-        if (serviceFormat.equals(ServiceFormat.Ethernet)) {
-            // TODO --> choose from network Map un network port which hasnt been used yet by another service.
-            //  Set boolean to true and update txportName and so on
-            String updTxName = findFreeConfiguredNetworkPort(nodeid);
-            if (updTxName != null) {
-                txPortName = updTxName;
-                rxPortName = txPortName;
-            }
-        }
         // TODO --> get clli from datastore?
         String clli = "NodeSA";
         LOG.info("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
@@ -1609,20 +1591,6 @@ public final class ConnectivityUtils {
                     .build());
         }
         return serviceAEndBuilder.build();
-    }
-
-    private String findFreeConfiguredNetworkPort(String nodeid) {
-        if (!this.networkMap.containsKey(nodeid)) {
-            return null;
-        }
-        Map<String, Boolean> netMap = this.networkMap.get(nodeid);
-        for (Map.Entry<String, Boolean> entry : netMap.entrySet()) {
-            if (!entry.getValue()) {
-                this.networkMap.get(nodeid).put(entry.getKey(), true);
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 
     private void populateNetworkMap(String nodeid, String txPortName) {
