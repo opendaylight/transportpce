@@ -484,8 +484,23 @@ public class PceCalculation {
         }
 
         OpenroadmNodeType nodeType = node.augmentation(Node1.class).getNodeType();
+        String clientPort = null;
+        if (node.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null
+            && input.getServiceAEnd() != null
+            && input.getServiceAEnd().getRxDirection() != null
+            && input.getServiceAEnd().getRxDirection().getPort() != null
+            && input.getServiceAEnd().getRxDirection().getPort().getPortName() != null) {
+            clientPort = input.getServiceAEnd().getRxDirection().getPort().getPortName();
+        }
+        if (node.getNodeId().getValue().equals(znodeId) && this.zendPceNode == null
+            && input.getServiceZEnd() != null
+            && input.getServiceZEnd().getRxDirection() != null
+            && input.getServiceZEnd().getRxDirection().getPort() != null
+            && input.getServiceZEnd().getRxDirection().getPort().getPortName() != null) {
+            clientPort = input.getServiceZEnd().getRxDirection().getPort().getPortName();
+        }
 
-        PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType);
+        PceOtnNode pceOtnNode = new PceOtnNode(node, nodeType, node.getNodeId(), "otn", serviceType, clientPort);
         pceOtnNode.validateXponder(anodeId, znodeId);
 
         if (!pceOtnNode.isValid()) {
