@@ -42,6 +42,7 @@ public class PowerMgmtImpl implements PowerMgmt {
     private static final BigDecimal DEFAULT_TPDR_PWR_100G = new BigDecimal(-5);
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
+    private static final double MC_WIDTH_GRAN = 2 * GridConstant.GRANULARITY;
 
     private long timer1 = 120000;
     // openroadm spec value is 120000, functest value is 3000
@@ -174,9 +175,10 @@ public class PowerMgmtImpl implements PowerMgmt {
                         destTpId, nodeId, openroadmVersion.getIntValue());
 
                     LOG.info("Spanloss TX is {}", spanLossTx);
-                    if (spanLossTx == null || spanLossTx.intValue() <= 0 || spanLossTx.intValue() > 28) {
-                        LOG.error("Power Value is null: spanLossTx null or out of openROADM range ]0,28] {}",
-                                spanLossTx);
+                    // TODO: The span-loss limits should be obtained from optical specifications
+                    if (spanLossTx == null || spanLossTx.intValue() <= 0 || spanLossTx.intValue() > 27) {
+                        LOG.error("Power Value is null: spanLossTx null or out of openROADM range ]0,27] {}",
+                            spanLossTx);
                         return false;
                     }
                     BigDecimal powerValue = getRdmPowerValue(spanLossTx, input);
@@ -369,22 +371,45 @@ public class PowerMgmtImpl implements PowerMgmt {
 
 
     private BigDecimal getRdmPowerValue(BigDecimal spanLossTx, ServicePowerSetupInput input) {
-        BigDecimal powerValue = spanLossTx.subtract(BigDecimal.valueOf(9)).min(BigDecimal.valueOf(2));
+        // TODO: These values will be obtained from the specifications
+        // power-value here refers to the Pin[50GHz]
+        BigDecimal powerValue;
+        if (spanLossTx.doubleValue()  >= 23.0) {
+            powerValue = BigDecimal.valueOf(2.0);
+        } else if (spanLossTx.doubleValue()  >= 8.0) {
+            powerValue = BigDecimal.valueOf(- (8.0 - spanLossTx.doubleValue()) / 3.0 - 3.0);
+        } else if (spanLossTx.doubleValue() >= 6.0) {
+            powerValue = BigDecimal.valueOf(-3.0);
+        } else {
+            powerValue = spanLossTx.subtract(BigDecimal.valueOf(9));
+        }
+        // target-output-power yang precision is 2, so we limit here to 2
+        powerValue = powerValue.setScale(2, RoundingMode.CEILING);
+        LOG.info("P1[50GHz]={} dBm for spanloss {} based on OpenROADM-5.0 specs power target mask", powerValue,
+            spanLossTx);
         // we work at constant power spectral density (50 GHz channel width @-20dBm=37.5GHz)
         // 87.5 GHz channel width @-20dBm=75GHz
         if (input.getMcWidth() != null) {
-            LOG.debug("Input Gridsize is {}",input.getMcWidth().getValue());
-            if (input.getMcWidth().getValue().equals(GridConstant.WIDTH_80)) {
-                powerValue = powerValue.add(BigDecimal.valueOf(3));
-            } else if (input.getMcWidth().getValue().equals(GridConstant.SLOT_WIDTH_87_5)) {
-                BigDecimal logVal = GridConstant.SLOT_WIDTH_87_5.divide(new BigDecimal(50));
-                double pdsVal = 10 * Math.log10(logVal.doubleValue());
-                powerValue = powerValue.add(new BigDecimal(pdsVal, new MathContext(3, RoundingMode.HALF_EVEN)));
-            }
+            // Units of MC-wdith are in GHz, meaning it should be 40/50/87.5GHz
+            // TODO: Should we validate this units before proceeding?
+            LOG.debug("Input Grid size is {}",input.getMcWidth().getValue());
+
+            // We round-off the mc-width to the nearest grid-value based on the granularity of 12.5 GHz
+            double nbrMcSlots = Math.ceil(input.getMcWidth().getValue().doubleValue() / MC_WIDTH_GRAN);
+            LOG.debug("Nearest (ceil) number of slots {}", nbrMcSlots);
+            BigDecimal mcWidth = new BigDecimal(MC_WIDTH_GRAN * nbrMcSlots);
+            LOG.info("Given mc-width={}, Rounded mc-width={}", input.getMcWidth().getValue(), mcWidth);
+
+            BigDecimal logVal = mcWidth.divide(new BigDecimal(50));
+            double pdsVal = 10 * Math.log10(logVal.doubleValue());
+            // Addition of PSD value will give Pin[87.5 GHz]
+            powerValue = powerValue.add(new BigDecimal(pdsVal, new MathContext(3,
+                RoundingMode.HALF_EVEN)));
+            LOG.info("P1[{}GHz]={} dB will be used for OSNR calculation", mcWidth, powerValue);
         }
         // FIXME compliancy with OpenROADM MSA and approximations used -- should be addressed with powermask update
         // cf JIRA ticket https://jira.opendaylight.org/browse/TRNSPRTPCE-494
-        LOG.info("Power Value is {}", powerValue);
+        LOG.info("The power value is {} for spanloss {}", powerValue, spanLossTx);
         return powerValue;
     }
 
