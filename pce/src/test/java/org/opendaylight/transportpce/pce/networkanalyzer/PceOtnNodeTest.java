@@ -74,7 +74,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTpsODU4() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_ODU4);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_ODU4, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -85,7 +85,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTps10GE() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -96,7 +96,7 @@ public class PceOtnNodeTest extends AbstractTest {
     public void testInitXndrTps10GXponderClient1() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.ROADM,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -110,7 +110,7 @@ public class PceOtnNodeTest extends AbstractTest {
     public void testInitXndrTps1GXponderClient() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -120,7 +120,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTps10GXponderClient() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.validateXponder("optical", "sl");
         pceOtnNode.validateXponder("not optical", "sl");
         pceOtnNode.initXndrTps("AZ");
@@ -134,7 +134,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValid() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -144,7 +144,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNode() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -157,7 +157,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNodeTypeNull() {
         pceOtnNode = new PceOtnNode(node, null,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -167,7 +167,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidNodeTypeDeg() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M, null);
         pceOtnNode.initXndrTps("AZ");
         Assert.assertFalse("not valid node , its type isn't one of MUXPDR or SWITCH or TPDR" ,
                 pceOtnNode.isPceOtnNodeValid(pceOtnNode));
@@ -176,7 +176,7 @@ public class PceOtnNodeTest extends AbstractTest {
     @Test
     public void testIsPceOtnNodeValidTrue() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_ODU4);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_ODU4, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
@@ -187,7 +187,7 @@ public class PceOtnNodeTest extends AbstractTest {
     public void testIsPceOtnNodeValidChecksw() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE);
+                new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE, null);
         pceOtnNode.initXndrTps("mode");
         Assert.assertFalse("not valid otn service Type" , pceOtnNode.isPceOtnNodeValid(pceOtnNode));
     }
