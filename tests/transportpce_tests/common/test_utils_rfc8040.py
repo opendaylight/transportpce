@@ -367,6 +367,32 @@ def del_roadm_connections_request(node: str, connections: str):
     response = delete_request(url[RESTCONF_VERSION].format('{}', node, connections))
     return response
 
+
+def check_circuit_packs_request(node: str, circuit_packs: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/circuit-packs={}',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/circuit-packs/{}'}  # nopep8
+    # draft-bierman02: note this is config here and not operational as previously in check_interface_request
+    # FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-591
+    response = get_request(url[RESTCONF_VERSION].format('{}', node, circuit_packs))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-device:circuit-packs',
+                  'draft-bierman02': 'circuit-packs'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        cp = res[return_key[RESTCONF_VERSION]]
+    else:
+        cp = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'circuit-packs': cp}
+
+
+def del_circuit_packs_request(node: str, circuit_packs: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/circuit-packs={}',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/circuit-packs/{}'}  # nopep8
+    response = delete_request(url[RESTCONF_VERSION].format('{}', node, circuit_packs))
+    return response
+
 #
 # Portmapping operations
 #
