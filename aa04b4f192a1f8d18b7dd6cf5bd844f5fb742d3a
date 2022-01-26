@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbf9c7f2_24f25634",
+        "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-26T08:35:20Z",
+      "side": 1,
+      "message": "Even if it means using test_utils, you might as well put that in test_utils...",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "aa04b4f192a1f8d18b7dd6cf5bd844f5fb742d3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948433cb_a342342d",
+        "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-26T08:35:20Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 266,
+        "startChar": 12,
+        "endLine": 266,
+        "endChar": 37
+      },
+      "revId": "aa04b4f192a1f8d18b7dd6cf5bd844f5fb742d3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
