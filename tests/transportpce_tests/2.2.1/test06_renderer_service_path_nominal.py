@@ -21,6 +21,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCERendererTesting(unittest.TestCase):
@@ -30,43 +31,41 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def test_01_rdm_device_connected(self):
-        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_xpdr_device_connected(self):
-        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_03_rdm_portmapping(self):
-        response = test_utils.portmapping_request("ROADM-A1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_portmapping("ROADM-A1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '1/0',
              'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
-            res['nodes'][0]['mapping'])
+            response['nodes'][0]['mapping'])
         self.assertIn(
             {'supporting-port': 'C3', 'supporting-circuit-pack-name': '3/0',
              'logical-connection-point': 'SRG1-PP3-TXRX', 'port-direction': 'bidirectional',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
-            res['nodes'][0]['mapping'])
+            response['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
-        response = test_utils.portmapping_request("XPDR-A1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_portmapping("XPDR-A1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
@@ -74,7 +73,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
              'lcp-hash-val': 'AMkDwQ7xTmRI', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
-            res['nodes'][0]['mapping'])
+            response['nodes'][0]['mapping'])
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
              'supporting-port': 'C1',
@@ -83,21 +82,27 @@ class TransportPCERendererTesting(unittest.TestCase):
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
              'lcp-hash-val': 'AJUUr6I5fALj', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
-            res['nodes'][0]['mapping'])
+            response['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        response = test_utils.service_path_request("create", "service_test", "7",
-                                                   [{"renderer:node-id": "ROADM-A1",
-                                                     "renderer:src-tp": "SRG1-PP3-TXRX",
-                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                                                    {"renderer:node-id": "XPDR-A1",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1",
-                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}],
-                                                   195.8, 40, 195.775, 195.825, 713,
-                                                   720)
+        data = {
+            'input': {
+                'service-name': 'service_test',
+                'wave-number': '7',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'create',
+                'nodes': [{'node-id': 'ROADM-A1', 'src-tp': 'SRG1-PP3-TXRX', 'dest-tp': 'DEG1-TTP-TXRX'},
+                          {'node-id': 'XPDR-A1', 'src-tp': 'XPDR1-CLIENT1', 'dest-tp': 'XPDR1-NETWORK1'}],
+                'center-freq': 195.8,
+                'nmc-width': 40,
+                'min-freq': 195.775,
+                'max-freq': 195.825,
+                'lower-spectral-slot-number': 713,
+                'higher-spectral-slot-number': 720
+            }
+        }
+        response = test_utils_rfc8040.device_renderer_service_path_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
 
     def test_06_service_path_create_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-713:720")
@@ -287,18 +292,27 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
 
     def test_17_service_path_delete(self):
-        response = test_utils.service_path_request("delete", "service_test", "7",
-                                                   [{"renderer:node-id": "ROADM-A1",
-                                                     "renderer:src-tp": "SRG1-PP3-TXRX",
-                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                                                    {"renderer:node-id": "XPDR-A1",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1",
-                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}],
-                                                   195.8, 40, 195.775, 195.825, 713,
-                                                   720)
+        data = {
+            'input': {
+                'service-name': 'service_test',
+                'wave-number': '7',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'delete',
+                'nodes': [{'node-id': 'ROADM-A1', 'src-tp': 'SRG1-PP3-TXRX', 'dest-tp': 'DEG1-TTP-TXRX'},
+                          {'node-id': 'XPDR-A1', 'src-tp': 'XPDR1-CLIENT1', 'dest-tp': 'XPDR1-NETWORK1'}],
+                'center-freq': 195.8,
+                'nmc-width': 40,
+                'min-freq': 195.775,
+                'max-freq': 195.825,
+                'lower-spectral-slot-number': 713,
+                'higher-spectral-slot-number': 720
+            }
+        }
+        response = test_utils_rfc8040.device_renderer_service_path_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json(), {
-            'output': {'result': 'Request processed', 'success': True}})
+        self.assertIn(response.json(),
+                      ({'output': {'result': 'Request processed', 'success': True}},
+                       {'transportpce-device-renderer:output': {'result': 'Request processed', 'success': True}}))
 
     def test_18_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-713:720")
@@ -401,12 +415,12 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual('not-reserved-available', res["circuit-packs"][0]['equipment-state'])
 
     def test_29_rdm_device_disconnected(self):
-        response = test_utils.unmount_device("ROADM-A1")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADM-A1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_30_xpdr_device_disconnected(self):
-        response = test_utils.unmount_device("XPDR-A1")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("XPDR-A1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
 if __name__ == "__main__":
