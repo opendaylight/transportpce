@@ -76,8 +76,10 @@ public class PceOtnNode implements PceNode {
 
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
+    private String clientPort;
 
-    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType) {
+    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType,
+            String clientPort) {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
@@ -98,6 +100,7 @@ public class PceOtnNode implements PceNode {
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
         checkAvailableTribSlot();
+        this.clientPort = clientPort;
         if ((node == null) || (nodeId == null) || (nodeType != OpenroadmNodeType.MUXPDR)
             && (nodeType != OpenroadmNodeType.SWITCH) && (nodeType != OpenroadmNodeType.TPDR)) {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
@@ -231,13 +234,19 @@ public class PceOtnNode implements PceNode {
                             usableXpdrNWTps.add(nwTp);
                         }
                         if (usableXpdrClientTps.size() >= nbClient && usableXpdrNWTps.size() >= nbNetw) {
-                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
-                            return true;
+                            if (this.clientPort == null) {
+                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                                return true;
+                            } else {
+                                if (this.clientPort.equals(clTp.getValue())) {
+                                    clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }
             }
-
         }
         if (netwTps != null && nbClient == 0 && nbNetw == 2) {
             netwTps.sort(Comparator.comparing(TpId::getValue));
