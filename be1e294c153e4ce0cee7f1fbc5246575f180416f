@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b593a50_ec37c53f",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "after rebasing you can now use test_utils_rfc8040.device_renderer_service_path_request(payload: dict) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "469c780d_5f5a48b2",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "after rebasing you can now use test_utils_rfc8040.portmapping_request(node: str, mapping: str) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2aefc59_c7260a8d",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "you can use test_utils_rfc8040.check_interface_request(node: str, interface: str) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "250d4823_f4dea9c3",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd22bb46_b73f84c5",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61bd46b3_eb9fadda",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "you can use test_utils_rfc8040.portmapping_request(node: str, mapping: str) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52363cfe_1d66edfe",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "you can use test_utils_rfc8040.check_interface_request(node: str, interface: str) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b71655e4_09fc6a76",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8ca982_3119c7a2",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T16:14:24Z",
+      "side": 1,
+      "message": "this adaptation won\u0027t be needed after rebasing on top of rfc8040 new testutils since the payload will be passed in argument",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
