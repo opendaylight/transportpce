@@ -16,6 +16,7 @@ import unittest
 import os
 # pylint: disable=wrong-import-order
 import sys
+import subprocess
 import time
 import requests
 sys.path.append('transportpce_tests/common/')
@@ -30,7 +31,7 @@ class TransportGNPYtesting(unittest.TestCase):
     topo_ordnet_data = None
     topo_ordtopo_data = None
     port_mapping_data = None
-    processes = None
+    processes = []
 
     @classmethod
     def setUpClass(cls):
@@ -69,6 +70,11 @@ class TransportGNPYtesting(unittest.TestCase):
             if sample_files_parsed:
                 print("sample files content loaded")
 
+        with open('gnpy.log', 'w', encoding='utf-8') as outfile:
+            print('starting GNPy REST server...')
+            # pylint: disable=consider-using-with
+            test_utils.process_list.append(subprocess.Popen(
+                ['path_requests_run.py', '--rest'], stdout=outfile, stderr=outfile, stdin=None))
         cls.processes = test_utils.start_tpce()
 
     @classmethod
