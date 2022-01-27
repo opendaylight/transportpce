@@ -48,6 +48,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb211519_3faeb373",
+        "filename": "tests/transportpce_tests/2.2.1/test03_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-27T09:11:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "118d8ad6_53a95d81",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "aa04b4f192a1f8d18b7dd6cf5bd844f5fb742d3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "948433cb_a342342d",
