@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17b961d3_11e91a79",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T20:28:10Z",
+      "side": 1,
+      "message": "quick update\n\nI just refactored this function into test_utils_rfc8040.check_node_attribute_request(node: str, attribute: str, attribute_value: str)\n\ncf https://git.opendaylight.org/gerrit/c/transportpce/+/99509 not merged yet",
+      "parentUuid": "f2aefc59_c7260a8d",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "250d4823_f4dea9c3",
         "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
         "patchSetId": 11
