@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f07594c_302827a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-27T15:54:58Z",
+      "side": 1,
+      "message": "$ tox -e gnpy\ngnpy recreate: /home/guillaume/git_ws/transportpce/.tox/gnpy\ngnpy installdeps: -r/home/guillaume/git_ws/transportpce/tests/requirements.txt, -r/home/guillaume/git_ws/transportpce/tests/test-requirements.txt, setuptools\u003e\u003d7.0\ngnpy develop-inst: /home/guillaume/git_ws/transportpce/tests\ngnpy installed: certifi\u003d\u003d2021.10.8,charset-normalizer\u003d\u003d2.0.10,idna\u003d\u003d3.3,nose\u003d\u003d1.3.7,psutil\u003d\u003d5.9.0,requests\u003d\u003d2.27.1,-e git+ssh://guillaume.lambert@git.opendaylight.org:29418/transportpce@3778a0e87f0d508fa8c6e057b7ccaf1a1fbc57a6#egg\u003dtransportpce_tests\u0026subdirectory\u003dtests,urllib3\u003d\u003d1.26.8\ngnpy run-test-pre: PYTHONHASHSEED\u003d\u0027481977871\u0027\ngnpy run-test: commands[0] | ./dockercmd.sh run -d -p 8008:5000 --name gnpy_tpce_rest1 atriki/gnpyrest:v1.2\na7c953e3f9c00b0273031951a3e21dd05ee19e656b8431b6083c1f14bc8175cf\ngnpy run-test: commands[1] | ./launch_tests.sh with_docker gnpy\nnosetests --with-xunit transportpce_tests/with_docker/test01_gnpy.py\n............\n----------------------------------------------------------------------\nRan 12 tests in 85.994s\n\nOK\ngnpy run-test: commands[2] | ./dockercmd.sh container rm -f gnpy_tpce_rest1\na7c953e3f9c00b0273031951a3e21dd05ee19e656b8431b6083c1f14bc8175cf\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  gnpy: commands succeeded\n  congratulations :)\n",
+      "revId": "3778a0e87f0d508fa8c6e057b7ccaf1a1fbc57a6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
