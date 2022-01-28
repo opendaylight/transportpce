@@ -65,6 +65,8 @@ public final class ServiceTypes {
                     Uint32.valueOf(400), StringConstants.SERVICE_TYPE_OTUC4),
             "ODU", Map.of(
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_ODU4,
+                    Uint32.valueOf(200), StringConstants.SERVICE_TYPE_ODUC2,
+                    Uint32.valueOf(300), StringConstants.SERVICE_TYPE_ODUC3,
                     Uint32.valueOf(400), StringConstants.SERVICE_TYPE_ODUC4));
 
         if (!otnMap.containsKey(serviceFormat)) {
