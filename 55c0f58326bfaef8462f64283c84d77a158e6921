@@ -83,6 +83,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8026f4ae_c01cd3c5",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:01:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5786b0fe_7f60439d",
+      "range": {
+        "startLine": 126,
+        "startChar": 41,
+        "endLine": 126,
+        "endChar": 63
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09e5a895_11cde755",
@@ -130,6 +154,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a6197d_817cb963",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:01:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3c734f87_bd75ef14",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0802519_823f6fc6",
@@ -167,6 +215,30 @@
       "side": 1,
       "message": "With the advent of 10.1 operational modes, we can adopt the changes to the device-renderer along with it (as discussed in the meeting).",
       "parentUuid": "a0802519_823f6fc6",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 102
+      },
+      "revId": "55c0f58326bfaef8462f64283c84d77a158e6921",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca31954_92a15815",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:01:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6991d47_fea62390",
       "range": {
         "startLine": 236,
         "startChar": 8,
