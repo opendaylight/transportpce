@@ -16,6 +16,24 @@
       "message": "LF not needed",
       "revId": "b80f80c57cfe1559d430b1718f4acf81cfed8549",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c064ff97_53a16338",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:53:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "171fa465_c4146be8",
+      "revId": "b80f80c57cfe1559d430b1718f4acf81cfed8549",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
