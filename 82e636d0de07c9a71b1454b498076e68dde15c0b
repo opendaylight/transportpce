@@ -135,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ecd68e_58e96933",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:06:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "10563efe_367cb82e",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c25c383_2214da7c",
@@ -225,6 +249,30 @@
       "side": 1,
       "message": "Answered in the previous comment",
       "parentUuid": "e95544a9_0458b20b",
+      "range": {
+        "startLine": 414,
+        "startChar": 8,
+        "endLine": 414,
+        "endChar": 22
+      },
+      "revId": "82e636d0de07c9a71b1454b498076e68dde15c0b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61cf36e5_053011ec",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-28T19:06:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f5eb8345_14e25df4",
       "range": {
         "startLine": 414,
         "startChar": 8,
