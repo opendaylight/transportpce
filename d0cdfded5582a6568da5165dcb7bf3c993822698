@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4aa96e7_e4dc4f85",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T06:08:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1214a80b_dedb40db",
+      "revId": "d0cdfded5582a6568da5165dcb7bf3c993822698",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13a717f4_7a0cfbc1",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2eca7b_c53df964",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T06:08:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a717f4_7a0cfbc1",
+      "revId": "d0cdfded5582a6568da5165dcb7bf3c993822698",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a9f3b8e_0df068df",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-01-24T09:58:13Z",
       "side": 1,
       "message": "LF not needed",
+      "revId": "d0cdfded5582a6568da5165dcb7bf3c993822698",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecf0005d_fb72a0c1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T06:08:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a9f3b8e_0df068df",
       "revId": "d0cdfded5582a6568da5165dcb7bf3c993822698",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
