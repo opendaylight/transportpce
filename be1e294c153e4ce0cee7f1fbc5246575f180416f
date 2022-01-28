@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c789785_61ce6b41",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-28T23:00:34Z",
+      "side": 1,
+      "message": "I can understand you are in a hurry and I\u0027d be happy to give a hand.\nBut please don\u0027t close comments if they are still open even if anyone think the change has to be merged.\nThis makes issues tracking much more difficult.\n\nI am fine with addressing this in a separate change in a second step.\nBut this file looks very alike 2.2.1 otn_renderer func test, which I am currenlty working on.\nI think I can handle them together but I\u0027d prefer this file to be renamed into test02_otn_renderer.py before.",
+      "parentUuid": "6edcd20b_a0959010",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "250d4823_f4dea9c3",
         "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
         "patchSetId": 11
