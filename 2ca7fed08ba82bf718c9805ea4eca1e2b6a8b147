@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95870671_2453f9b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-28T22:44:26Z",
+      "side": 1,
+      "message": "@Gilles: some comments have been acked without any answer here. So I am reopening them.\nFor non trivial changes, the agreement up to now was to let at least one open day after a +2 before merging changes so that other committers can give their feedbacks.\nFor these 2 reasons, I will revert this change and any other depending on it since it should have not been merged.",
+      "revId": "2ca7fed08ba82bf718c9805ea4eca1e2b6a8b147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
