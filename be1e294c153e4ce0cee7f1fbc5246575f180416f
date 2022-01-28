@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac6bc05_a976eea1",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T05:34:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9b593a50_ec37c53f",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "469c780d_5f5a48b2",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-27T16:14:24Z",
       "side": 1,
       "message": "after rebasing you can now use test_utils_rfc8040.portmapping_request(node: str, mapping: str) instead",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e0831f8_d6baf6ce",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T05:34:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "469c780d_5f5a48b2",
       "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -66,6 +102,24 @@
       "side": 1,
       "message": "quick update\n\nI just refactored this function into test_utils_rfc8040.check_node_attribute_request(node: str, attribute: str, attribute_value: str)\n\ncf https://git.opendaylight.org/gerrit/c/transportpce/+/99509 not merged yet",
       "parentUuid": "f2aefc59_c7260a8d",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fdf4ce1_11af02e1",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T05:34:46Z",
+      "side": 1,
+      "message": "Hi Guillaume, there are so many places this needs to changed. Unfortunately I don\u0027t have that time. If this can wait for later, I would like to differ it.",
+      "parentUuid": "17b961d3_11e91a79",
       "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -168,6 +222,24 @@
       "writtenOn": "2022-01-27T16:14:24Z",
       "side": 1,
       "message": "this adaptation won\u0027t be needed after rebasing on top of rfc8040 new testutils since the payload will be passed in argument",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01e69cb7_706569dc",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-28T05:34:46Z",
+      "side": 1,
+      "message": "Understood, I will keep this 7.1 testsuite as is for now. Also there more coming and it might easier to do then.",
+      "parentUuid": "4a8ca982_3119c7a2",
       "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
