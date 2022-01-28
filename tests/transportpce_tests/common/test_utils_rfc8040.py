@@ -51,7 +51,7 @@ process_list = []
 if 'USE_ODL_ALT_RESTCONF_PORT' in os.environ:
     RESTCONF_PORT = os.environ['USE_ODL_ALT_RESTCONF_PORT']
 else:
-    RESTCONF_PORT = str(8181)
+    RESTCONF_PORT = 8181
 
 RESTCONF_PATH_PREFIX = {'rfc8040': '/rests',
                         'draft-bierman02': '/restconf'}
