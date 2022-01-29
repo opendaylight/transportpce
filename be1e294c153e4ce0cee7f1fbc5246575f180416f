@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e0c1d57_8a0a6e55",
+        "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-29T22:35:14Z",
+      "side": 1,
+      "message": "I achieved the complete migration to use new test_utils_rfc8040 package\nand proposed it on top of my work on the RFC8040 migration at https://git.opendaylight.org/gerrit/c/transportpce/+/99525\n\nUnfortunately, these new tests only work completely with old draft RESTCONF API used here. It seems a few queries used here triggers some internal issues with RFC8040 URLs.\nThey return a HTTP code 503 (service unavailable) instead of a 409 code (conflict)\nso I forced the use of the old API.",
+      "parentUuid": "2c789785_61ce6b41",
+      "revId": "be1e294c153e4ce0cee7f1fbc5246575f180416f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "250d4823_f4dea9c3",
         "filename": "tests/transportpce_tests/7.1/test02_device_renderer.py",
         "patchSetId": 11
