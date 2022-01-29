@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e25cc32_f5e335b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-29T19:24:38Z",
+      "side": 1,
+      "message": "It still does not work! I will email the details, somehow it is still picking the wrong network port even though, we give the port in the service-create. For instance for OTUC works, then if we create ODUC, then it picks the wrong network ports.",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
