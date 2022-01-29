@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba629a9a_135e27e9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-29T22:47:58Z",
+      "side": 1,
+      "message": "I am fine with differing the rest of the refactoring later as suggested below.\nBut there will be a lot of work to do and it won\u0027t probably be achieved in one commit.\nThe factorization I am asking here is not really complex.\nSo I\u0027d prefer we address at least this particular issue directly in this change in order to decrease the remaining amount of refactoring work.\n\nBelow is the resulting piece of code after factorizing this condition.\n\n\n        for (Link link : suppOtuLinks) {\n            if(link.augmentation(Link1.class) \u003d\u003d null) {\n                LOG.error(\"Error with otn parameters of supported link {}\", link.getLinkId().getValue());\n                continue;\n            }\n            if (OtnLinkType.ODTU4.equals(linkType)\n                \u0026\u0026 link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(100000))) {\n                links.add(updateOtnLinkBwParameters(link, 0L, 100000L));\n            } else if (OtnLinkType.ODUC4.equals(linkType)\n                \u0026\u0026 link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(400000))) {\n                links.add(updateOtnLinkBwParameters(link, 0L, 400000L));\n            } else if (OtnLinkType.ODUC3.equals(linkType)\n                \u0026\u0026 link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(300000))) {\n                links.add(updateOtnLinkBwParameters(link, 0L, 300000L));\n            } else if (OtnLinkType.ODUC2.equals(linkType)\n                \u0026\u0026 link.augmentation(Link1.class).getAvailableBandwidth().equals(Uint32.valueOf(200000))) {\n                links.add(updateOtnLinkBwParameters(link, 0L, 200000L));\n            } else {\n                LOG.error(\"Error with otn parameters of supported link {}\", link.getLinkId().getValue());\n            }\n        }",
+      "parentUuid": "89b0c498_7efa7d99",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd4c8e64_4724a0e1",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
         "patchSetId": 2
