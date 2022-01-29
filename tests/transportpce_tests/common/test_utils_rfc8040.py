@@ -523,7 +523,13 @@ def device_renderer_service_path_request(payload: dict):
         data = prepend_dict_keys(payload, 'transportpce-device-renderer:')
     else:
         data = payload
-    return post_request(url, data)
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-device-renderer:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
 
 
 def device_renderer_otn_service_path_request(payload: dict):
