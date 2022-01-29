@@ -87,8 +87,8 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        data = {
-            'input': {
+        response = test_utils_rfc8040.device_renderer_service_path_request(
+            {'input': {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -101,10 +101,9 @@ class TransportPCERendererTesting(unittest.TestCase):
                 'max-freq': 195.825,
                 'lower-spectral-slot-number': 713,
                 'higher-spectral-slot-number': 720
-            }
-        }
-        response = test_utils_rfc8040.device_renderer_service_path_request(data)
+            }})
         self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertIn('Interfaces created successfully for nodes: ROADMA01', response['output']['result'])
 
     def test_06_service_path_create_rdm_check(self):
         response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")
@@ -242,8 +241,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('not-reserved-inuse', response['circuit-packs'][0]["equipment-state"])
 
     def test_14_service_path_delete(self):
-        data = {
-            'input': {
+        response = test_utils_rfc8040.device_renderer_service_path_request(
+            {'input': {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -256,13 +255,9 @@ class TransportPCERendererTesting(unittest.TestCase):
                 'max-freq': 195.825,
                 'lower-spectral-slot-number': 713,
                 'higher-spectral-slot-number': 720
-            }
-        }
-        response = test_utils_rfc8040.device_renderer_service_path_request(data)
+            }})
         self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertIn(response.json(),
-                      ({'output': {'result': 'Request processed', 'success': True}},
-                       {'transportpce-device-renderer:output': {'result': 'Request processed', 'success': True}}))
+        self.assertDictEqual(response['output'], {'result': 'Request processed', 'success': True})
 
     def test_15_service_path_delete_rdm_check(self):
         response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")

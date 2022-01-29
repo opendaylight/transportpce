@@ -96,29 +96,28 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # Renderer interface creations
     def test_07_device_renderer(self):
-        data = {
-            "input": {
-                "modulation-format": "dp-qpsk",
-                "operation": "create",
-                "service-name": "testNMC-MC",
-                "wave-number": "0",
-                "center-freq": "196.05",
-                "nmc-width": "80",
-                "nodes": [
+        response = test_utils_rfc8040.device_renderer_service_path_request(
+            {'input': {
+                'modulation-format': 'dp-qpsk',
+                'operation': 'create',
+                'service-name': 'testNMC-MC',
+                'wave-number': '0',
+                'center-freq': '196.05',
+                'nmc-width': '80',
+                'nodes': [
                     {
-                        "node-id": "ROADM-D1",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "dest-tp": "DEG1-TTP-TXRX"
+                        'node-id': 'ROADM-D1',
+                        'src-tp': 'SRG1-PP1-TXRX',
+                        'dest-tp': 'DEG1-TTP-TXRX'
                     }
                 ],
-                "min-freq": 196.00625,
-                "max-freq": 196.09375,
-                "lower-spectral-slot-number": 749,
-                "higher-spectral-slot-number": 763
-            }
-        }
-        response = test_utils_rfc8040.device_renderer_service_path_request(data)
+                'min-freq': 196.00625,
+                'max-freq': 196.09375,
+                'lower-spectral-slot-number': 749,
+                'higher-spectral-slot-number': 763
+            }})
         self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         time.sleep(10)
 
     # Get Degree MC interface and check
