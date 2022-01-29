@@ -106,6 +106,24 @@
       "parentUuid": "74e85244_a5ff61b0",
       "revId": "190db8bc40b33a425e6ce7b7272aac38585b530a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a3e4979_076b659f",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-29T11:47:19Z",
+      "side": 1,
+      "message": "Rethinking about this, the best option is probably to use the str() cast in the concatenation rather than in the RESTCONF_PORT variable first allocation.\nThis way, customized port derived from env variable are also covered by the cast protection.\nSince this is unrelated to any other work and unlikely to generate any merge conflict, I\u0027ve pushed a separate change on top of the master branch at\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99523\n\nhope this helps",
+      "parentUuid": "7dd48e8e_d29d3fd3",
+      "revId": "190db8bc40b33a425e6ce7b7272aac38585b530a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
