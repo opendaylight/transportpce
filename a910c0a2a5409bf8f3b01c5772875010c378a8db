@@ -72,6 +72,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51c46de3_e1139d43",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-01-30T00:28:06Z",
+      "side": 1,
+      "message": "I will work on it! Thanks Guillaume",
+      "parentUuid": "76e27f8a_a985d0ba",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd4c8e64_4724a0e1",
