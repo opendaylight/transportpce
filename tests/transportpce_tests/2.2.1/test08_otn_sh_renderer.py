@@ -20,7 +20,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -30,176 +30,163 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
-                                               ('spdrc', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('spdra', cls.NODE_VERSION),
+                                                       ('spdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
 
     def test_01_connect_SPDR_SA1(self):
-        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
-                         test_utils.CODE_SHOULD_BE_201)
+                         test_utils_rfc8040.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        response = test_utils.get_netconf_oper_request("SPDR-SA1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(
-            res['node'][0]['netconf-node-topology:connection-status'],
-            'connected')
+        response = test_utils_rfc8040.check_device_connection("SPDR-SA1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['connection-status'], 'connected')
 
     def test_02_connect_SPDR_SC1(self):
-        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
-                         test_utils.CODE_SHOULD_BE_201)
+                         test_utils_rfc8040.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        response = test_utils.get_netconf_oper_request("SPDR-SC1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(
-            res['node'][0]['netconf-node-topology:connection-status'],
-            'connected')
+        response = test_utils_rfc8040.check_device_connection("SPDR-SC1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['connection-status'], 'connected')
 
     def test_03_service_create_OTU4(self):
-        url = "{}/operations/transportpce-renderer:service-implementation-request"
-        data = {
-            "transportpce-renderer:input": {
-                "transportpce-renderer:service-name": "SPDRA-SPDRC-OTU4-ODU4",
-                "transportpce-renderer:connection-type": "infrastructure",
-                "transportpce-renderer:service-handler-header": {
-                    "transportpce-renderer:request-id": "abcd12-efgh34"
+        response = test_utils_rfc8040.device_renderer_service_implementation_request(
+            {
+                'service-name': 'SPDRA-SPDRC-OTU4-ODU4',
+                'connection-type': 'infrastructure',
+                'service-handler-header': {
+                    'request-id': 'abcd12-efgh34'
                 },
-                "transportpce-renderer:service-a-end": {
-                    "transportpce-renderer:service-format": "OTU",
-                    "transportpce-renderer:otu-service-rate": "org-openroadm-otn-common-types:OTU4",
-                    "transportpce-renderer:clli": "nodeSA",
-                    "transportpce-renderer:node-id": "SPDR-SA1"
+                'service-a-end': {
+                    'service-format': 'OTU',
+                    'otu-service-rate': 'org-openroadm-otn-common-types:OTU4',
+                    'clli': 'nodeSA',
+                    'node-id': 'SPDR-SA1'
 
                 },
-                "transportpce-renderer:service-z-end": {
-                    "transportpce-renderer:service-format": "OTU",
-                    "transportpce-renderer:otu-service-rate": "org-openroadm-otn-common-types:OTU4",
-                    "transportpce-renderer:clli": "nodeSC",
-                    "transportpce-renderer:node-id": "SPDR-SC1"
+                'service-z-end': {
+                    'service-format': 'OTU',
+                    'otu-service-rate': 'org-openroadm-otn-common-types:OTU4',
+                    'clli': 'nodeSC',
+                    'node-id': 'SPDR-SC1'
                 },
-                "transportpce-renderer:path-description": {
-                    "aToZ-direction": {
-                        "rate": 100,
-                        "transportpce-renderer:modulation-format": "dp-qpsk",
-                        "aToZ-wavelength-number": 1,
-                        "aToZ": [
+                'path-description': {
+                    'aToZ-direction': {
+                        'rate': 100,
+                        'modulation-format': 'dp-qpsk',
+                        'aToZ-wavelength-number': 1,
+                        'aToZ': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": ""
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': ''
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": ""
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': ''
                                 }
                             }
                         ],
-                        "transportpce-renderer:aToZ-min-frequency": 196.075,
-                        "transportpce-renderer:aToZ-max-frequency": 196.125
+                        'aToZ-min-frequency': 196.075,
+                        'aToZ-max-frequency': 196.125
                     },
-                    "transportpce-renderer:zToA-direction": {
-                        "transportpce-renderer:zToA-wavelength-number": "1",
-                        "transportpce-renderer:rate": "100",
-                        "transportpce-renderer:modulation-format": "dp-qpsk",
-                        "zToA": [
+                    'zToA-direction': {
+                        'zToA-wavelength-number': '1',
+                        'rate': '100',
+                        'modulation-format': 'dp-qpsk',
+                        'zToA': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": ""
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': ''
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": ""
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': ''
                                 }
                             }
                         ],
-                        "transportpce-renderer:zToA-min-frequency": 196.075,
-                        "transportpce-renderer:zToA-max-frequency": 196.125
+                        'zToA-min-frequency': 196.075,
+                        'zToA-max-frequency': 196.125
                     }
                 }
-            }
-        }
-        response = test_utils.post_request(url, data)
-        time.sleep(3)
-        print(response.json())
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+            })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
-                      res["output"]["configuration-response-common"]["response-message"])
+                      response['output']['configuration-response-common']['response-message'])
 
     # Test OCH-OTU interfaces on SPDR-A1
     def test_04_check_interface_och(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-NETWORK1-761:768")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-761:768',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP1-CFP0',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
                                    'supporting-port': 'CP1-CFP0-P1'
-                                   }, **res['interface'][0]),
-                             res['interface'][0])
-
-        self.assertDictEqual(
-            {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
-             'transmit-power': -5, 'modulation-format': 'dp-qpsk'},
-            res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
+                                   }, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertIn(
+            response['interface'][0]['org-openroadm-optical-channel-interfaces:och'],
+            [{'frequency': '196.1000', 'rate': 'org-openroadm-common-types:R100G',
+              'transmit-power': '-5', 'modulation-format': 'dp-qpsk'},
+             {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
+              'transmit-power': -5, 'modulation-format': 'dp-qpsk'}])
 
     def test_05_check_interface_OTU(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-OTU")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-NETWORK1-OTU")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -214,35 +201,32 @@ class TransportPCEtesting(unittest.TestCase):
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
-
-        self.assertDictEqual(input_dict_2,
-                             res['interface'][0]
-                             ['org-openroadm-otn-otu-interfaces:otu'])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertDictEqual(dict(input_dict_2, **response['interface'][0]['org-openroadm-otn-otu-interfaces:otu']),
+                             response['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     # Test OCH-OTU interfaces on SPDR-C1
     def test_06_check_interface_och(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SC1", "interface", "XPDR1-NETWORK1-761:768")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(dict({'name': 'XPDR1-NETWORK1-1',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP1-CFP0',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
                                    'supporting-port': 'CP1-CFP0-P1'
-                                   }, **res['interface'][0]),
-                             res['interface'][0])
-
-        self.assertDictEqual(
-            {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
-             'transmit-power': -5, 'modulation-format': 'dp-qpsk'},
-            res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
+                                   }, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertIn(
+            response['interface'][0]['org-openroadm-optical-channel-interfaces:och'],
+            [{'frequency': '196.1000', 'rate': 'org-openroadm-common-types:R100G',
+              'transmit-power': '-5', 'modulation-format': 'dp-qpsk'},
+             {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
+              'transmit-power': -5, 'modulation-format': 'dp-qpsk'}])
 
     def test_07_check_interface_OTU(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-OTU")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SC1", "interface", "XPDR1-NETWORK1-OTU")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -257,124 +241,113 @@ class TransportPCEtesting(unittest.TestCase):
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'
                         }
-
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
-
-        self.assertDictEqual(input_dict_2,
-                             res['interface'][0]
-                             ['org-openroadm-otn-otu-interfaces:otu'])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertDictEqual(dict(input_dict_2, **response['interface'][0]['org-openroadm-otn-otu-interfaces:otu']),
+                             response['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     # Test creation of ODU4 service
     def test_08_service_create_ODU4(self):
-        url = "{}/operations/transportpce-renderer:service-implementation-request"
-
-        data = {
-            "transportpce-renderer:input": {
-                "transportpce-renderer:service-name":
-                "SPDRA-SPDRC-OTU4-ODU4",
-                "transportpce-renderer:connection-type": "infrastructure",
-                "transportpce-renderer:service-handler-header": {
-                    "transportpce-renderer:request-id": "abcd12-efgh34"
+        response = test_utils_rfc8040.device_renderer_service_implementation_request(
+            {
+                'service-name':
+                'SPDRA-SPDRC-OTU4-ODU4',
+                'connection-type': 'infrastructure',
+                'service-handler-header': {
+                    'request-id': 'abcd12-efgh34'
                 },
-                "transportpce-renderer:service-a-end": {
-                    "transportpce-renderer:service-format": "ODU",
-                    "transportpce-renderer:odu-service-rate":
-                    "org-openroadm-otn-common-types:ODU4",
-                    "transportpce-renderer:clli": "nodeSA",
-                    "transportpce-renderer:node-id": "SPDR-SA1"
+                'service-a-end': {
+                    'service-format': 'ODU',
+                    'odu-service-rate':
+                    'org-openroadm-otn-common-types:ODU4',
+                    'clli': 'nodeSA',
+                    'node-id': 'SPDR-SA1'
 
                 },
-                "transportpce-renderer:service-z-end": {
-                    "transportpce-renderer:service-format": "ODU",
-                    "transportpce-renderer:odu-service-rate":
-                    "org-openroadm-otn-common-types:ODU4",
-                    "transportpce-renderer:clli": "nodeSC",
-                    "transportpce-renderer:node-id": "SPDR-SC1"
+                'service-z-end': {
+                    'service-format': 'ODU',
+                    'odu-service-rate':
+                    'org-openroadm-otn-common-types:ODU4',
+                    'clli': 'nodeSC',
+                    'node-id': 'SPDR-SC1'
                 },
-                "transportpce-renderer:path-description": {
-                    "aToZ-direction": {
-                        "rate": 100,
-                        "aToZ": [
+                'path-description': {
+                    'aToZ-direction': {
+                        'rate': 100,
+                        'aToZ': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": ""
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': ''
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": ""
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': ''
                                 }
                             }
                         ]
                     },
-                    "transportpce-renderer:zToA-direction": {
-                        "transportpce-renderer:rate": "100",
-                        "zToA": [
+                    'zToA-direction': {
+                        'rate': '100',
+                        'zToA': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": ""
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': ''
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": ""
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': ''
                                 }
                             }
                         ]
                     }
                 }
-            }
-        }
-        response = test_utils.post_request(url, data)
-        time.sleep(3)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+            })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
-                      res["output"]["configuration-response-common"]
-                      ["response-message"])
+                      response['output']['configuration-response-common']['response-message'])
 
     # Test ODU4 interfaces on SPDR-A1 and SPDR-C1
     def test_09_check_interface_ODU4(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -389,20 +362,19 @@ class TransportPCEtesting(unittest.TestCase):
                         'tx-dapi': 'AMf1n5hK6Xkk',
                         'tx-sapi': 'H/OelLynehI='}
 
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
-        self.assertDictEqual(dict(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'],
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertDictEqual(dict(response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'],
                                   **input_dict_2),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
                              )
         self.assertDictEqual(
             {'payload-type': '21', 'exp-payload-type': '21'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+            response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_10_check_interface_ODU4(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-ODU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -417,145 +389,134 @@ class TransportPCEtesting(unittest.TestCase):
                         'expected-sapi': 'H/OelLynehI=',
                         'expected-dapi': 'AMf1n5hK6Xkk'
                         }
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
-        self.assertDictEqual(dict(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'],
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertDictEqual(dict(response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'],
                                   **input_dict_2),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
                              )
         self.assertDictEqual(
             {'payload-type': '21', 'exp-payload-type': '21'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+            response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     # Test creation of 10G service
     def test_11_service_create_10GE(self):
-        url = "{}/operations/transportpce-renderer:service-implementation-request"
-
-        data = {
-            "transportpce-renderer:input": {
-                "transportpce-renderer:service-name": "SPDRA-SPDRC-10G",
-                "transportpce-renderer:connection-type": "service",
-                "transportpce-renderer:service-handler-header": {
-                    "transportpce-renderer:request-id": "abcd12-efgh34"
+        response = test_utils_rfc8040.device_renderer_service_implementation_request(
+            {
+                'service-name': 'SPDRA-SPDRC-10G',
+                'connection-type': 'service',
+                'service-handler-header': {
+                    'request-id': 'abcd12-efgh34'
                 },
-                "transportpce-renderer:service-a-end": {
-                    "transportpce-renderer:service-format": "Ethernet",
-                    "transportpce-renderer:service-rate": "10",
-                    "transportpce-renderer:clli": "nodeSA",
-                    "transportpce-renderer:node-id": "SPDR-SA1"
+                'service-a-end': {
+                    'service-format': 'Ethernet',
+                    'service-rate': '10',
+                    'clli': 'nodeSA',
+                    'node-id': 'SPDR-SA1'
                 },
-                "transportpce-renderer:service-z-end": {
-                    "transportpce-renderer:service-format": "Ethernet",
-                    "transportpce-renderer:service-rate": "10",
-                    "transportpce-renderer:clli": "nodeSC",
-                    "transportpce-renderer:node-id": "SPDR-SC1"
+                'service-z-end': {
+                    'service-format': 'Ethernet',
+                    'service-rate': '10',
+                    'clli': 'nodeSC',
+                    'node-id': 'SPDR-SC1'
                 },
-                "transportpce-renderer:path-description": {
-                    "aToZ-direction": {
-                        "rate": 10,
-                        "min-trib-slot": "1.1",
-                        "max-trib-slot": "1.8",
-                        "aToZ": [
+                'path-description': {
+                    'aToZ-direction': {
+                        'rate': 10,
+                        'min-trib-slot': '1.1',
+                        'max-trib-slot': '1.8',
+                        'aToZ': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-CLIENT1"
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-CLIENT1'
 
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-CLIENT1"
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-CLIENT1'
                                 }
                             }
                         ]
                     },
-                    "transportpce-renderer:zToA-direction": {
-                        "rate": "10",
-                        "min-trib-slot": "1.1",
-                        "max-trib-slot": "1.8",
-                        "zToA": [
+                    'zToA-direction': {
+                        'rate': '10',
+                        'min-trib-slot': '1.1',
+                        'max-trib-slot': '1.8',
+                        'zToA': [
                             {
-                                "id": "0",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-CLIENT1"
+                                'id': '0',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-CLIENT1'
                                 }
                             },
                             {
-                                "id": "1",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '1',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SC1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "2",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                'id': '2',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-NETWORK1'
                                 }
                             },
                             {
-                                "id": "3",
-                                "resource": {
-                                    "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-CLIENT1"
+                                'id': '3',
+                                'resource': {
+                                    'tp-node-id': 'SPDR-SA1-XPDR1',
+                                    'tp-id': 'XPDR1-CLIENT1'
 
                                 }
                             }
                         ]
                     }
                 }
-            }
-        }
-
-        response = test_utils.post_request(url, data)
-        time.sleep(3)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+            })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
-                      res["output"]["configuration-response-common"]
-                      ["response-message"])
+                      response['output']['configuration-response-common']['response-message'])
 
     # Test the interfaces on SPDR-A1
     def test_12_check_interface_10GE_CLIENT(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ETHERNET10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-CLIENT1-ETHERNET10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict = {'name': 'XPDR1-CLIENT1-ETHERNET10G',
                       'administrative-state': 'inService',
                       'supporting-circuit-pack-name': 'CP1-SFP4',
                       'type': 'org-openroadm-interfaces:ethernetCsmacd',
                       'supporting-port': 'CP1-SFP4-P1'
                       }
-        self.assertDictEqual(dict(input_dict, **res['interface'][0]),
-                             res['interface'][0])
-        self.assertDictEqual(
-            {'speed': 10000},
-            res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
+        self.assertDictEqual(dict(input_dict, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertEqual(response['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']['speed'], 10000)
 
     def test_13_check_interface_ODU2E_CLIENT(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request(
+            "SPDR-SA1", "interface", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-SFP4',
@@ -567,38 +528,36 @@ class TransportPCEtesting(unittest.TestCase):
             'rate': 'org-openroadm-otn-common-types:ODU2e',
             'monitoring-mode': 'terminated'}
 
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
         self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
             {'payload-type': '03', 'exp-payload-type': '03'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+            response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_14_check_ODU2E_connection(self):
-        response = test_utils.check_netconf_node_request(
+        response = test_utils_rfc8040.check_node_attribute_request(
             "SPDR-SA1",
-            "odu-connection/XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+            "odu-connection", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {
             'connection-name':
             'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
             'direction': 'bidirectional'
         }
-
-        self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
-                             res['odu-connection'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['odu-connection'][0]),
+                             response['odu-connection'][0])
         self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
-                             res['odu-connection'][0]['destination'])
+                             response['odu-connection'][0]['destination'])
         self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
-                             res['odu-connection'][0]['source'])
+                             response['odu-connection'][0]['source'])
 
     def test_15_check_interface_ODU2E_NETWORK(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request(
+            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -609,29 +568,27 @@ class TransportPCEtesting(unittest.TestCase):
             'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU2e',
             'monitoring-mode': 'monitored'}
-
         input_dict_3 = {'trib-port-number': 1}
-
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
         self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(dict(input_dict_3,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
                                       'parent-odu-allocation']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
             'parent-odu-allocation'])
         self.assertIn(1,
-                      res['interface'][0][
+                      response['interface'][0][
                           'org-openroadm-otn-odu-interfaces:odu'][
                           'parent-odu-allocation']['trib-slots'])
 
     # Test the interfaces on SPDR-C1
     def test_16_check_interface_ODU2E_NETWORK(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request(
+            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -642,44 +599,39 @@ class TransportPCEtesting(unittest.TestCase):
             'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU2e',
             'monitoring-mode': 'monitored'}
-
         input_dict_3 = {'trib-port-number': 1}
-
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
         self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(dict(input_dict_3,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
                                       'parent-odu-allocation']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
             'parent-odu-allocation'])
         self.assertIn(1,
-                      res['interface'][0][
+                      response['interface'][0][
                           'org-openroadm-otn-odu-interfaces:odu'][
                           'parent-odu-allocation']['trib-slots'])
 
     def test_17_check_interface_10GE_CLIENT(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-CLIENT1-ETHERNET10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request("SPDR-SC1", "interface", "XPDR1-CLIENT1-ETHERNET10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict = {'name': 'XPDR1-CLIENT1-ETHERNET10G',
                       'administrative-state': 'inService',
                       'supporting-circuit-pack-name': 'CP1-SFP4',
                       'type': 'org-openroadm-interfaces:ethernetCsmacd',
                       'supporting-port': 'CP1-SFP4-P1'
                       }
-        self.assertDictEqual(dict(input_dict, **res['interface'][0]),
-                             res['interface'][0])
-        self.assertDictEqual(
-            {'speed': 10000},
-            res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
+        self.assertDictEqual(dict(input_dict, **response['interface'][0]),
+                             response['interface'][0])
+        self.assertEqual(response['interface'][0]['org-openroadm-ethernet-interfaces:ethernet']['speed'], 10000)
 
     def test_18_check_interface_ODU2E_CLIENT(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request(
+            "SPDR-SC1", "interface", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-SFP4',
@@ -690,39 +642,36 @@ class TransportPCEtesting(unittest.TestCase):
             'odu-function': 'org-openroadm-otn-common-types:ODU-TTP-CTP',
             'rate': 'org-openroadm-otn-common-types:ODU2e',
             'monitoring-mode': 'terminated'}
-
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
         self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(
             {'payload-type': '03', 'exp-payload-type': '03'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
+            response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_19_check_ODU2E_connection(self):
-        response = test_utils.check_netconf_node_request(
+        response = test_utils_rfc8040.check_node_attribute_request(
             "SPDR-SC1",
-            "odu-connection/XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+            "odu-connection", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {
             'connection-name':
             'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
             'direction': 'bidirectional'
         }
-
-        self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
-                             res['odu-connection'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['odu-connection'][0]),
+                             response['odu-connection'][0])
         self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
-                             res['odu-connection'][0]['destination'])
+                             response['odu-connection'][0]['destination'])
         self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
-                             res['odu-connection'][0]['source'])
+                             response['odu-connection'][0]['source'])
 
     def test_20_check_interface_ODU2E_NETWORK(self):
-        response = test_utils.check_netconf_node_request("SPDR-SC1", "interface/XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.check_node_attribute_request(
+            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
@@ -736,18 +685,18 @@ class TransportPCEtesting(unittest.TestCase):
 
         input_dict_3 = {'trib-port-number': 1}
 
-        self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
-                             res['interface'][0])
+        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
+                             response['interface'][0])
         self.assertDictEqual(dict(input_dict_2,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(dict(input_dict_3,
-                                  **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                                  **response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
                                       'parent-odu-allocation']),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+                             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
             'parent-odu-allocation'])
         self.assertIn(1,
-                      res['interface'][0][
+                      response['interface'][0][
                           'org-openroadm-otn-odu-interfaces:odu'][
                           'parent-odu-allocation']['trib-slots'])
 
@@ -755,14 +704,12 @@ class TransportPCEtesting(unittest.TestCase):
     # TODO: Delete interfaces (SPDR-A1, SPDR-C1)
 
     def test_21_disconnect_SPDR_SA1(self):
-        response = test_utils.unmount_device("SPDR-SA1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("SPDR-SA1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_22_disconnect_SPDR_SC1(self):
-        response = test_utils.unmount_device("SPDR-SC1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("SPDR-SC1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
 if __name__ == "__main__":

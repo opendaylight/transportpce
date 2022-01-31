@@ -481,7 +481,7 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
     return response
 
 #
-# TransportPCE network-utils and service-path operations
+# TransportPCE network-utils and service-path and service-implementation operations
 #
 
 
@@ -541,6 +541,21 @@ def device_renderer_otn_service_path_request(payload: dict):
     response = post_request(url, data)
     res = response.json()
     return_key = {'rfc8040': 'transportpce-device-renderer:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def device_renderer_service_implementation_request(payload: dict):
+    url = "{}/operations/transportpce-renderer:service-implementation-request"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-renderer:')
+    else:
+        data = {'input': payload}
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-renderer:output',
                   'draft-bierman02': 'output'}
     return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
