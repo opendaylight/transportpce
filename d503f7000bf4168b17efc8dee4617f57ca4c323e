@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6deda59b_6c5eb378",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-31T09:02:59Z",
+      "side": 1,
+      "message": "We should avoid, as much as possible, fixing the revision of yang models to use, in order to use, per default, the latest revision and to help future migrations of models.\nFor the moment, in TransportPCE we manage a single revision of transportpce-common-types. So, this line is not necesary.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35ae816_3b84f695",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer@2021-09-15.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-31T09:02:59Z",
+      "side": 1,
+      "message": "idem previous comment",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 31
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd4dd1b_fd058927",
+        "filename": "api/src/main/yang/transportpce-olm@2021-06-18.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-01-31T09:02:59Z",
+      "side": 1,
+      "message": "idem previous comment",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
