@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3572cd20_9e7da84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-31T09:27:35Z",
+      "side": 1,
+      "message": "I agree with Gilles\u0027comments.\n\nAlso OLM 1.2.1 and 2.21 func tests are in failure\nFAIL: test_19_service_power_setup_XPDRA_XPDRC (test05_olm.TransportOlmTesting)\nFAIL: test_19_service_power_setup_XPDRA_XPDRC (test09_olm.TransportOlmTesting)",
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6deda59b_6c5eb378",
