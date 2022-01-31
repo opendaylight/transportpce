@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce2db724_61cd31f4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-31T17:32:07Z",
+      "side": 1,
+      "message": "I got a few free cycles so I pushed the update on top of tests refactoring to give a shot. If it passed, I am OK to rebase it on top of master and merge it.",
+      "parentUuid": "f11aa5a1_5881eed5",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd4c8e64_4724a0e1",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
         "patchSetId": 2
