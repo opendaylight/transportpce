@@ -16,6 +16,23 @@
       "message": "same test passed locally. let\u0027s recheck\n\n\nnosetests --with-xunit transportpce_tests/2.2.1/test15_otn_end2end_with_intermediate_switch.py\n...........................................................................................................\n----------------------------------------------------------------------\nRan 107 tests in 705.973s\n\nOK\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  tests221: commands succeeded\n  congratulations :)\n",
       "revId": "96854fdb5b73033e7cd6fe3e77017249886a7f30",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "248a81be_36a99eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-01-31T19:48:40Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "96854fdb5b73033e7cd6fe3e77017249886a7f30",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
