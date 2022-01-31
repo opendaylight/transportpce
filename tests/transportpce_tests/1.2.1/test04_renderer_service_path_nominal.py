@@ -88,7 +88,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_05_service_path_create(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -101,7 +101,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                 'max-freq': 195.825,
                 'lower-spectral-slot-number': 713,
                 'higher-spectral-slot-number': 720
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ROADMA01', response['output']['result'])
 
@@ -242,7 +242,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_14_service_path_delete(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -255,7 +255,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                 'max-freq': 195.825,
                 'lower-spectral-slot-number': 713,
                 'higher-spectral-slot-number': 720
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(response['output'], {'result': 'Request processed', 'success': True})
 

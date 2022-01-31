@@ -67,7 +67,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1a) create a OTUC2 device renderer
     def test_02_service_path_create_otuc2(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC2',
                 'wave-number': '0',
                 'modulation-format': 'dp-qpsk',
@@ -79,7 +79,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         self.assertIn(
@@ -164,13 +164,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1b) create a ODUC2 device renderer
     def test_07_otn_service_path_create_oduc2(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC2',
                 'operation': 'create',
                 'service-rate': '200',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :XPDR-A2', response['output']['result'])
         self.assertIn(
@@ -218,7 +218,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1c) create Ethernet device renderer
     def test_10_otn_service_path_create_100ge(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_Ethernet',
                 'operation': 'create',
                 'service-rate': '100',
@@ -226,7 +226,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'nodes': [{'node-id': 'XPDR-A2', 'client-tp': 'XPDR2-CLIENT1', 'network-tp': 'XPDR2-NETWORK1'}],
                 'ethernet-encoding': 'eth encode',
                 'opucn-trib-slots': ['1.1', '1.20']
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :XPDR-A2', response['output']['result'])
         self.assertEqual('XPDR-A2', response['output']['node-interface'][0]['node-id'])
@@ -330,7 +330,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1d) Delete Ethernet device interfaces
     def test_15_otn_service_path_delete_100ge(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_Ethernet',
                 'operation': 'delete',
                 'service-rate': '100',
@@ -339,7 +339,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'ethernet-encoding': 'eth encode',
                 'trib-slot': ['1'],
                 'trib-port-number': '1'
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -367,13 +367,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1e) Delete ODUC2 device interfaces
     def test_20_otn_service_path_delete_oduc2(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC2',
                 'operation': 'delete',
                 'service-rate': '200',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -384,7 +384,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1f) Delete OTUC2 device interfaces
     def test_22_service_path_delete_otuc2(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC2',
                 'wave-number': '0',
                 'modulation-format': 'dp-qpsk',
@@ -396,7 +396,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -416,7 +416,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 2a) create a OTUC3 device renderer
     def test_26_service_path_create_otuc3(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC3',
                 'wave-number': '0',
                 'modulation-format': 'dp-qam8',
@@ -428,7 +428,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         self.assertIn(
@@ -514,13 +514,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 2b) create a ODUC3 device renderer
     def test_31_otn_service_path_create_oduc3(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC3',
                 'operation': 'create',
                 'service-rate': '300',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :XPDR-A2', response['output']['result'])
         self.assertIn(
@@ -573,13 +573,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 2e) Delete ODUC3 device interfaces
     def test_34_otn_service_path_delete_oduc3(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC3',
                 'operation': 'delete',
                 'service-rate': '300',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -590,7 +590,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 2f) Delete OTUC3 device interfaces
     def test_36_service_path_delete_otuc3(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC3',
                 'wave-number': '0',
                 'modulation-format': 'dp-qam8',
@@ -602,7 +602,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -622,7 +622,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 3a) create a OTUC4 device renderer
     def test_40_service_path_create_otuc3(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC4',
                 'wave-number': '0',
                 'modulation-format': 'dp-qam16',
@@ -634,7 +634,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         self.assertIn(
@@ -720,13 +720,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 3b) create a ODUC4 device renderer
     def test_45_otn_service_path_create_oduc3(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC4',
                 'operation': 'create',
                 'service-rate': '400',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :XPDR-A2', response['output']['result'])
         self.assertIn(
@@ -779,13 +779,13 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 3e) Delete ODUC4 device interfaces
     def test_48_otn_service_path_delete_oduc4(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODUC4',
                 'operation': 'delete',
                 'service-rate': '400',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'XPDR-A2', 'network-tp': 'XPDR2-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 
@@ -796,7 +796,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 3f) Delete OTUC4 device interfaces
     def test_50_service_path_delete_otuc4(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_OTUC4',
                 'wave-number': '0',
                 'modulation-format': 'dp-qam16',
@@ -808,7 +808,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 755,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
 

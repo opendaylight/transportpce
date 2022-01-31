@@ -89,7 +89,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_04_service_path_create_OCH_OTU4(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -101,7 +101,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 761,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         self.assertTrue(response['output']['success'])
@@ -160,13 +160,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_08_otn_service_path_create_ODU4(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODU4',
                 'operation': 'create',
                 'service-rate': '100',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'SPDR-SA1', 'network-tp': 'XPDR1-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :SPDR-SA1', response['output']['result'])
         self.assertTrue(response['output']['success'])
@@ -206,7 +206,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_11_otn_service_path_create_10GE(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service1',
                 'operation': 'create',
                 'service-rate': '10',
@@ -215,7 +215,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'ethernet-encoding': 'eth encode',
                 'trib-slot': ['1'],
                 'trib-port-number': '1'
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :SPDR-SA1', response['output']['result'])
         self.assertTrue(response['output']['success'])
@@ -314,7 +314,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_16_otn_service_path_delete_10GE(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service1',
                 'operation': 'delete',
                 'service-rate': '10',
@@ -323,7 +323,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'ethernet-encoding': 'eth encode',
                 'trib-slot': ['1'],
                 'trib-port-number': '1'
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         self.assertTrue(response['output']['success'])
@@ -349,13 +349,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_21_otn_service_path_delete_ODU4(self):
         response = test_utils_rfc8040.device_renderer_otn_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_ODU4',
                 'operation': 'delete',
                 'service-rate': '100',
                 'service-format': 'ODU',
                 'nodes': [{'node-id': 'SPDR-SA1', 'network-tp': 'XPDR1-NETWORK1'}]
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         self.assertTrue(response['output']['success'])
@@ -366,7 +366,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_23_service_path_delete_OCH_OTU4(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'service-name': 'service_test',
                 'wave-number': '7',
                 'modulation-format': 'dp-qpsk',
@@ -378,7 +378,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'max-freq': 196.125,
                 'lower-spectral-slot-number': 761,
                 'higher-spectral-slot-number': 768
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         self.assertTrue(response['output']['success'])

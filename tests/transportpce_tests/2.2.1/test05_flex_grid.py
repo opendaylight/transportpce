@@ -97,7 +97,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     # Renderer interface creations
     def test_07_device_renderer(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
-            {'input': {
+            {
                 'modulation-format': 'dp-qpsk',
                 'operation': 'create',
                 'service-name': 'testNMC-MC',
@@ -115,7 +115,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                 'max-freq': 196.09375,
                 'lower-spectral-slot-number': 749,
                 'higher-spectral-slot-number': 763
-            }})
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         time.sleep(10)
