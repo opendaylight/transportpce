@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dc12741_c1284fcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-01-31T14:54:03Z",
+      "side": 1,
+      "message": "Hi, \nPropose to make a little adjustment of the final power calculation for channels that have a spacing greater than 50 GHz to be compliant with OR specs. I am fine with your implementation of the power mask. Thanks",
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6deda59b_6c5eb378",
@@ -82,6 +99,29 @@
         "startChar": 4,
         "endLine": 8,
         "endChar": 29
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7037d23f_87e427c8",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-01-31T14:54:03Z",
+      "side": 1,
+      "message": "As I understand the specification (constant power spectral density defined according to the grid : spacing of the channels), if you add to the power of a channel defined with 50GHz spacing,  3dB, it means you are considering a channel with a 100GHz MC width, not 80. 80 GHz channel spacing is not defined in openROADM for which the grid is a multiple of 12.5 GHz. At that time we don\u0027t have OR transponder modes with a 100GHz MC. It could however correspond to baud rate higher than 63 Gbaud in the case we use specific Operational modes. Maybe we could do something generic, always considering the MC width, rounding it up to make it compliant with the grid that shall be a multiple of 12.5 GHz slots, and apply always the same calculation as you did it for 87.5 GHz in the lines below",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
