@@ -92,6 +92,24 @@
       "parentUuid": "55061ca2_0db18f7a",
       "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "613f04a6_8b796ba9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T21:17:59Z",
+      "side": 1,
+      "message": "My mistake, I suspected a copy/paste error and misread \u0027else if\u0027 that I confused with \u0027else\u0027 indeed.\nSo my first statement is obviously wrong.\nBut anyway there is still no point to separate these 2 conditions and duplicate the code block.\n\nWith\n\n                            if ((this.clientPort \u003d\u003d null) || (this.clientPort.equals(clTp.getValue()))) {\n                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());\n                                return true;\n                            }\n\n\nthe second condition (this.clientPort.equals(clTp.getValue())) will be evaluated only if (this.clientPort \u003d\u003d null) is not true, what also avoids NPE.\nso I maintain vote -1 because of the code duplication here",
+      "parentUuid": "3136c486_a504f59a",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
