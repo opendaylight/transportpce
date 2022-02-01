@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689635ed_f8323182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "change OK but I think some clean-up by the way is wishable to smooth other forthcoming revision update.",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12b539a8_887742e6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "I propose we use one setter per line to ease reading here.",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "763b5fe5_6ca2bfb2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/constraints/PceConstraintsCalc.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "I think revision date should not be split from the NS body",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce98543c_39614a1a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "split revision date here too",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eba3aa0_c0ab3439",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "split NS body and rev date here  too",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1a14f2_1bfe3450",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "288e00bf_8c94ebdf",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c482ea4_3b758a9f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b232e1ed_cbcc6ad7",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/MappingConstraintsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:11:40Z",
+      "side": 1,
+      "message": "and here etc",
+      "revId": "a07409a4bb84917812a1f0988de911f784a35150",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
