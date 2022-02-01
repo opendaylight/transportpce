@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81800856_80142c11",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-01T22:16:53Z",
+      "side": 1,
+      "message": "You could also move the assignment on line 378 to an else clause:\n        BigDecimal powerValue;\n        if (spanLossTx.doubleValue()  \u003e\u003d 23.0) {\n            powerValue \u003d BigDecimal.valueOf(2.0);\n        } else if (spanLossTx.doubleValue()  \u003e\u003d 8.0) {\n            powerValue \u003d BigDecimal.valueOf(- (8.0 - spanLossTx.doubleValue()) / 3.0 - 3.0);\n        } else if (spanLossTx.doubleValue() \u003e\u003d 6.0) {\n            powerValue \u003d BigDecimal.valueOf(-3.0);\n        } else {\n            powerValue \u003d spanLossTx.subtract(BigDecimal.valueOf(9));\n        }",
+      "parentUuid": "5dce32b8_19397b74",
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af6dcd2b_13cf9aef",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
         "patchSetId": 4
