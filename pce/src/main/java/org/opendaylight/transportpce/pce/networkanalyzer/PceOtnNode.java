@@ -106,7 +106,7 @@ public class PceOtnNode implements PceNode {
     }
 
     public void initXndrTps(String mode) {
-        LOG.info("PceOtnNode: initXndrTps for node {}", this.nodeId.getValue());
+        LOG.debug("PceOtnNode: initXndrTps for node {}", this.nodeId.getValue());
         this.availableXponderTp.clear();
 
         this.modeType = mode;
@@ -174,7 +174,7 @@ public class PceOtnNode implements PceNode {
                             tp.getTpId().getValue(), node.getNodeId().getValue());
                         continue;
                 }
-                LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                LOG.debug("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                 this.availableXpdrNWTps.add(tp.getTpId());
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
                 && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
@@ -188,7 +188,7 @@ public class PceOtnNode implements PceNode {
                     continue;
                 }
                 if (checkClientTp(ontTp1)) {
-                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                    LOG.debug("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrClientTps.add(tp.getTpId());
                 } else {
                     LOG.error("TP {} of {} does not allow lo-ODU (ODU2e or ODU0) termination creation",
@@ -261,7 +261,7 @@ public class PceOtnNode implements PceNode {
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
         for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
                 .values()) {
-            LOG.info("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.class) || sic.getIfCapType().equals(IfOtsiOtsigroup.class))
                 && (ontTp1.getXpdrTpPortConnectionAttributes() == null
                     || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
@@ -330,7 +330,7 @@ public class PceOtnNode implements PceNode {
         } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
             initXndrTps("intermediate");
         } else {
-            LOG.info("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
+            LOG.warn("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
             valid = false;
         }
     }
@@ -379,7 +379,7 @@ public class PceOtnNode implements PceNode {
         if (!this.valid) {
             LOG.debug("validateIntermediateSwitch: Switch unusable for transit == {}", nodeId.getValue());
         } else {
-            LOG.info("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
+            LOG.debug("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
         }
     }
 

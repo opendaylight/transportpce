@@ -50,6 +50,7 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     public ListenableFuture<RpcResult<PathComputationRequestOutput>>
             pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC path computation request received");
+        LOG.debug("input parameters are : input = {}", input.toString());
         PathComputationRequestOutput output = null;
         try {
             output = this.pathComputationService.pathComputationRequest(input).get();

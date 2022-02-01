@@ -74,7 +74,7 @@ public class PceLink implements Serializable {
     private static final double LOWER_BOUND_OSNR = 0.1;
 
     public PceLink(Link link, PceNode source, PceNode dest) {
-        LOG.info("PceLink: : PceLink start ");
+        LOG.debug("PceLink: : PceLink start ");
 
         this.linkId = link.getLinkId();
 
@@ -371,7 +371,7 @@ public class PceLink implements Serializable {
 
         if ((this.availableBandwidth >= neededBW)
             && ((neededType == null) || (neededType.equals(otnLinkType)))) {
-            LOG.info("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
+            LOG.debug("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
                 linkId, serviceType);
         }
 

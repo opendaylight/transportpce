@@ -99,7 +99,7 @@ public class PceOpticalNode implements PceNode {
         if (!isValid()) {
             return;
         }
-        LOG.info("initSrgTpList: getting SRG tps from ROADM node {}", this.nodeId);
+        LOG.debug("initSrgTpList: getting SRG tps from ROADM node {}", this.nodeId);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp =
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
@@ -117,26 +117,26 @@ public class PceOpticalNode implements PceNode {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
                         .TerminationPoint1.class);
             OpenroadmTpType type = cntp1.getTpType();
-            LOG.info("type = {} for tp {}", type.getName(), tp);
+            LOG.debug("type = {} for tp {}", type.getName(), tp);
 
             switch (type) {
                 case SRGTXRXCP:
                 case SRGRXCP:
                 case SRGTXCP:
                     if (State.InService.equals(cntp1.getOperationalState())) {
-                        LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
+                        LOG.debug("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
                         this.availableSrgCp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     }
                     break;
                 case SRGRXPP:
                 case SRGTXPP:
                 case SRGTXRXPP:
-                    LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
+                    LOG.debug("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
                     if (isTerminationPointAvailable(nttp1)) {
-                        LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
+                        LOG.debug("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                         this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                         if (State.InService.equals(cntp1.getOperationalState())) {
-                            LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
+                            LOG.debug("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                             this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                         }
                     } else {
@@ -152,7 +152,7 @@ public class PceOpticalNode implements PceNode {
             this.valid = false;
             return;
         }
-        LOG.info("initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}",
+        LOG.debug("initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}",
             this.availableSrgPp.size(), this.availableSrgCp.size(), this);
     }
 
@@ -250,7 +250,7 @@ public class PceOpticalNode implements PceNode {
     }
 
     public void initXndrTps(ServiceFormat serviceFormat) {
-        LOG.info("PceNod: initXndrTps for node : {}", this.nodeId);
+        LOG.debug("PceNod: initXndrTps for node : {}", this.nodeId);
         if (!isValid()) {
             return;
         }
@@ -269,7 +269,7 @@ public class PceOpticalNode implements PceNode {
             .node.TerminationPoint tp : allTps) {
             TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
             if (cntp1.getTpType() != OpenroadmTpType.XPONDERNETWORK) {
-                LOG.warn("initXndrTps: {} is not an Xponder network port", cntp1.getTpType().getName());
+                LOG.debug("initXndrTps: {} is not an Xponder network port", cntp1.getTpType().getName());
                 continue;
             }
             if (!isTpWithGoodCapabilities(tp)) {
@@ -286,7 +286,7 @@ public class PceOpticalNode implements PceNode {
                 .TerminationPoint1.class);
             if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                 this.usedXpndrNWTps.add(tp.getTpId().getValue());
-                LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
+                LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
             } else {
                 this.valid = true;
             }
@@ -312,7 +312,7 @@ public class PceOpticalNode implements PceNode {
 
     @Override
     public String getRdmSrgClient(String tp) {
-        LOG.info("getRdmSrgClient: Getting PP client for tp '{}' on node : {}", tp, this.nodeId);
+        LOG.debug("getRdmSrgClient: Getting PP client for tp '{}' on node : {}", tp, this.nodeId);
         OpenroadmTpType srgType = null;
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
@@ -321,21 +321,21 @@ public class PceOpticalNode implements PceNode {
         }
         switch (cpType) {
             case SRGTXRXCP:
-                LOG.info("getRdmSrgClient: Getting BI Directional PP port ...");
+                LOG.debug("getRdmSrgClient: Getting BI Directional PP port ...");
                 srgType = OpenroadmTpType.SRGTXRXPP;
                 break;
             case SRGTXCP:
-                LOG.info("getRdmSrgClient: Getting UNI Rx PP port ...");
+                LOG.debug("getRdmSrgClient: Getting UNI Rx PP port ...");
                 srgType = OpenroadmTpType.SRGRXPP;
                 break;
             case SRGRXCP:
-                LOG.info("getRdmSrgClient: Getting UNI Tx PP port ...");
+                LOG.debug("getRdmSrgClient: Getting UNI Tx PP port ...");
                 srgType = OpenroadmTpType.SRGTXPP;
                 break;
             default:
                 break;
         }
-        LOG.info("getRdmSrgClient:  Getting client PP for CP '{}'", tp);
+        LOG.debug("getRdmSrgClient:  Getting client PP for CP '{}'", tp);
         if (!this.availableSrgPp.isEmpty()) {
             Optional<String> client = null;
             final OpenroadmTpType openType = srgType;
@@ -348,7 +348,7 @@ public class PceOpticalNode implements PceNode {
                 LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this, tp);
                 return null;
             }
-            LOG.info("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
+            LOG.debug("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
             return client.get();
         } else {
             LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this);

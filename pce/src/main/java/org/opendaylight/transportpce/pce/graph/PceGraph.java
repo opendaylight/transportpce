@@ -13,6 +13,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.alg.shortestpath.PathValidator;
@@ -54,7 +59,7 @@ public class PceGraph {
     private List<PceLink> shortestPathAtoZ = null;
 
     // for path calculation
-    List<GraphPath<String, PceGraphEdge>> allWPaths = null;
+    Map<Integer, GraphPath<String, PceGraphEdge>> allWPaths = null;
 
     private List<PceLink> pathAtoZ = new ArrayList<>();
 
@@ -84,17 +89,21 @@ public class PceGraph {
         populateWithLinks(weightedGraph);
 
         if (!runKgraphs(weightedGraph)) {
-            LOG.info("In calcPath : pceResult {}", pceResult);
+            LOG.error("In calcPath : pceResult {}", pceResult);
             return false;
         }
-
         // validate found paths
         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
-        for (GraphPath<String, PceGraphEdge> path : allWPaths) {
+        for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
+            GraphPath<String, PceGraphEdge> path = entry.getValue();
+            LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
             PostAlgoPathValidator papv = new PostAlgoPathValidator();
             pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints, serviceType);
-            LOG.info("In calcPath after PostAlgoPathValidator {} {}",
-                    pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
+            if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
+                LOG.info("Path is validated");
+            } else {
+                LOG.warn("Path not validated - cause: {}", pceResult.getLocalCause());
+            }
 
             if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
                 LOG.warn("In calcPath: post algo validations DROPPED the path {}", path);
@@ -114,7 +123,7 @@ public class PceGraph {
                 case StringConstants.SERVICE_TYPE_OTUC4:
                 case StringConstants.SERVICE_TYPE_400GE:
                 case StringConstants.SERVICE_TYPE_OTU4:
-                    LOG.info(
+                    LOG.debug(
                         "In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
                         + " hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pceResult.getMinFreq(), pceResult.getMaxFreq(),
@@ -122,7 +131,7 @@ public class PceGraph {
                     break;
 
                 default:
-                    LOG.info(
+                    LOG.debug(
                         "In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
                         pathAtoZ.size(), path.getWeight(), pathAtoZ);
                     break;
@@ -150,7 +159,12 @@ public class PceGraph {
         // KShortestPaths on weightedGraph
         KShortestSimplePaths<String, PceGraphEdge> swp =
             new KShortestSimplePaths<>(weightedGraph, mhopsPerPath, wpv);
-        allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
+        List<GraphPath<String, PceGraphEdge>> weightedPathList = swp
+            .getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
+        allWPaths = IntStream
+            .range(0, weightedPathList.size())
+            .boxed()
+            .collect(Collectors.toMap(Function.identity(), weightedPathList::get));
 
         if (allWPaths.isEmpty()) {
             LOG.info(" In runKgraphs : algorithm didn't find any path");
@@ -160,10 +174,8 @@ public class PceGraph {
         }
 
         // debug print
-        for (GraphPath<String, PceGraphEdge> path : allWPaths) {
-            LOG.debug("path Weight: {} : {}", path.getWeight(), path.getVertexList());
-        }
-
+        allWPaths
+            .forEach((k, v) -> LOG.info("path n° {} - weight: {} - path: {}", k, v.getWeight(), v.getVertexList()));
         return true;
     }
 

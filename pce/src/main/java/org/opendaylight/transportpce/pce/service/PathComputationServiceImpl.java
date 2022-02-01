@@ -136,7 +136,7 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     @Override
     public ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input) {
-        LOG.info("pathComputationRequest");
+        LOG.debug("input parameters are : input = {}", input.toString());
         return executor.submit(new Callable<PathComputationRequestOutput>() {
 
             @Override
