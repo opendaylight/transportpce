@@ -56,6 +56,24 @@
       "message": "I can\u0027t see any difference with line 238 here \u003d\u003e vote -1\n\nclientPerNwTp.put(nwTp.getValue(), clTp.getValue()) will be executed and it will return true whether this.clientPort is null or not",
       "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55061ca2_0db18f7a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-01T16:22:10Z",
+      "side": 1,
+      "message": "If you invoke equals method on clientPort when it is null, it will generate a NullPointerException, what is never a good thing...",
+      "parentUuid": "4fba8f8b_820e47af",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
