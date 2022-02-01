@@ -74,6 +74,24 @@
       "parentUuid": "4fba8f8b_820e47af",
       "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3136c486_a504f59a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-01T17:36:20Z",
+      "side": 1,
+      "message": "No, it will not be executed if clientPort is set (i.e. not null) but it is not equal to clTp.",
+      "parentUuid": "55061ca2_0db18f7a",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
