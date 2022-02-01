@@ -126,6 +126,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b5b035b_122bddcf",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T06:58:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce2db724_61cd31f4",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd4c8e64_4724a0e1",
@@ -157,6 +175,24 @@
       "side": 1,
       "message": "Yes, understood. Can we differ the refactoring to later?",
       "parentUuid": "dd4c8e64_4724a0e1",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d23160cc_6149ae20",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T06:58:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1e7fc47c_ee4649af",
       "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
