@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.slf4j.Logger;
@@ -173,6 +174,13 @@ public class PceConstraints {
             return name;
         }
 
+        @Override
+        public String toString() {
+            return new StringJoiner(", ", ResourcePair.class.getSimpleName() + "[", "]")
+                    .add("type=" + type)
+                    .add("name='" + name + "'")
+                    .toString();
+        }
     }
 
     public List<ResourcePair> getListToInclude() {
