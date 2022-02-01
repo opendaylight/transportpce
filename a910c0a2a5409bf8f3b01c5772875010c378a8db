@@ -195,6 +195,24 @@
       "parentUuid": "1e7fc47c_ee4649af",
       "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c9f2e2_7454074e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-01T09:28:56Z",
+      "side": 1,
+      "message": "Thanks Guillaume, I was about to work on it and noticed it was merged :) Sorry, couldn\u0027t get to it sooner !",
+      "parentUuid": "d23160cc_6149ae20",
+      "revId": "a910c0a2a5409bf8f3b01c5772875010c378a8db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
