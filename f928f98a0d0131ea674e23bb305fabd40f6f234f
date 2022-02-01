@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5089c85b_a67dad52",
+        "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2022-01-18.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:15:59Z",
+      "side": 1,
+      "message": "since the constraint NS changed, I think the rev date should be updated",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "585b0f34_f8a9fe91",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2022-01-18.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:15:59Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef636da7_96574db0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:15:59Z",
+      "side": 1,
+      "message": "when there is only one setter, I think oneliner allocation is OK from a readability standpoint",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae0fed5_1826b11a",
+        "filename": "tests/transportpce_tests/pce/test03_gnpy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T08:15:59Z",
+      "side": 1,
+      "message": "I think we should rather use a @skip decorator here",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
