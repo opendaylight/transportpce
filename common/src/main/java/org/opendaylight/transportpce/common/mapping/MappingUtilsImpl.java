@@ -118,7 +118,7 @@ public class MappingUtilsImpl implements MappingUtils {
             Optional<Nodes> nodePortMapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
                     .get();
             if (nodePortMapObject.isPresent()) {
-                LOG.info("Found node {}", nodeId);
+                LOG.debug("Found node {}", nodeId);
                 Nodes node = nodePortMapObject.get();
                 mcCapabilities.addAll(node.nonnullMcCapabilities().values());
             }
@@ -128,7 +128,7 @@ public class MappingUtilsImpl implements MappingUtils {
             LOG.error("Request interrupted for node {} interrupted", nodeId, e);
             Thread.currentThread().interrupt();
         }
-        LOG.info("Capabilitities for node {}: {}", nodeId, mcCapabilities);
+        LOG.debug("Capabilitities for node {}: {}", nodeId, mcCapabilities);
         return mcCapabilities;
     }
 
