@@ -304,7 +304,7 @@ def unmount_device(node: str):
 
 
 def check_device_connection(node: str):
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}',
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}?content=nonconfig',
            'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node))
     res = response.json()
@@ -320,8 +320,8 @@ def check_device_connection(node: str):
 
 def check_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}',  # nopep8
-           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}?content=nonconfig',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
     response = get_request(url[RESTCONF_VERSION].format('{}', node, attribute, attribute_value))
     res = response.json()
     return_key = {'rfc8040': 'org-openroadm-device:' + attribute,
@@ -523,4 +523,25 @@ def device_renderer_service_path_request(payload: dict):
         data = prepend_dict_keys(payload, 'transportpce-device-renderer:')
     else:
         data = payload
-    return post_request(url, data)
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-device-renderer:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def device_renderer_otn_service_path_request(payload: dict):
+    url = "{}/operations/transportpce-device-renderer:otn-service-path"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys(payload, 'transportpce-device-renderer:')
+    else:
+        data = payload
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-device-renderer:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
