@@ -16,6 +16,29 @@
       "message": "I think the following statement is equivalent and evaluate less conditions. It would decrease the complexity and make the code more efficient.\n\n        if (spanLossTx.doubleValue()  \u003e\u003d 23.0) {\n            powerValue \u003d BigDecimal.valueOf(2.0);\n        } else if (spanLossTx.doubleValue()  \u003e\u003d 8.0) {\n            powerValue \u003d BigDecimal.valueOf(- (8.0 - spanLossTx.doubleValue()) / 3.0 - 3.0);\n        } else if (spanLossTx.doubleValue() \u003e\u003d 6.0) {\n            powerValue \u003d BigDecimal.valueOf(-3.0);\n        }",
       "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af6dcd2b_13cf9aef",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-01T22:06:27Z",
+      "side": 1,
+      "message": "With this change, I think you want to return pinMcWidth instead of powerValue (but I don\u0027t know why you introduced a new variable).",
+      "range": {
+        "startLine": 406,
+        "startChar": 12,
+        "endLine": 413,
+        "endChar": 26
+      },
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

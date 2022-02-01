@@ -311,6 +311,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db6ecb09_d029ff6f",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-01T22:06:27Z",
+      "side": 1,
+      "message": "If I read the PCE and renderer code correctly, McWidth will always be either 50 GHz or 87.5 GHz. The WIDTH_80 here remains from an old patch, https://git.opendaylight.org/gerrit/c/transportpce/+/94560, which made the power depend on NMC width instead of MC width. See also discussion on patch https://git.opendaylight.org/gerrit/c/transportpce/+/96193, which changed it back to MC width to be compliant with the MSA spec. I think it could be a good idea to generalize support to \"non-standard\" modes with other baud rates but maybe the mapping to MC width should be done somewhere else.",
+      "parentUuid": "1fa5f45c_8364ef51",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
