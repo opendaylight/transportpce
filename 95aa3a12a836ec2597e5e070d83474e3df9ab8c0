@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac854fe0_06693b96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T16:12:16Z",
+      "side": 1,
+      "message": "pick\n(present tense imperative style is recommended to list actions in commit messages)",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2e25cc32_f5e335b3",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-01-29T19:24:38Z",
       "side": 1,
       "message": "It still does not work! I will email the details, somehow it is still picking the wrong network port even though, we give the port in the service-create. For instance for OTUC works, then if we create ODUC, then it picks the wrong network ports.",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fba8f8b_820e47af",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-01T16:12:16Z",
+      "side": 1,
+      "message": "I can\u0027t see any difference with line 238 here \u003d\u003e vote -1\n\nclientPerNwTp.put(nwTp.getValue(), clTp.getValue()) will be executed and it will return true whether this.clientPort is null or not",
       "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
