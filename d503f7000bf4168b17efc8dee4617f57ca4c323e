@@ -126,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8878f824_363ea133",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-01T09:54:18Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t mean to close the comments. I as ack the fact that this is not needed and wanted to fix the code and push according to the comments.",
+      "parentUuid": "43cc4159_b0a84b57",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e35ae816_3b84f695",
         "filename": "api/src/main/yang/service_path/transportpce-renderer@2021-09-15.yang",
         "patchSetId": 2
