@@ -239,6 +239,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12e18712_e9621bac",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-01T09:52:10Z",
+      "side": 1,
+      "message": "Sure Olivier we can discuss this. From your comment, what I understand is if, we pick a mc-width outside the grid granularity, we round it to nearest value of the grid. For instance 80 GHz of mc-width would be rounded to ceil(80/12.5) \u003d ceil(6.4). And we still take the constant psd meaning, we take Pin + 10*log(MC/50). Let me know if there is I interpreted our comment correctly or not.",
+      "parentUuid": "7037d23f_87e427c8",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
