@@ -81,17 +81,17 @@ public class PostAlgoPathValidator {
                     return pceResult;
                 }
                 if (spectrumAssignment.getFlexGrid()) {
-                    LOG.info("Spectrum assignment flexgrid mode");
+                    LOG.debug("Spectrum assignment flexgrid mode");
                     pceResult.setResultWavelength(GridConstant.IRRELEVANT_WAVELENGTH_NUMBER);
                 } else {
-                    LOG.info("Spectrum assignment fixedgrid mode");
+                    LOG.debug("Spectrum assignment fixedgrid mode");
                     pceResult.setResultWavelength(
                             GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()
                                 .toJava()));
                 }
                 pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex().toJava()));
                 pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex().toJava()));
-                LOG.info("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
+                LOG.debug("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
 
                 // Check the OSNR
                 if (!checkOSNR(path)) {
@@ -178,7 +178,9 @@ public class PostAlgoPathValidator {
 
     // Check the inclusion if it is defined in the hard constraints
     private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput) {
-        List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
+        List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude()
+            .stream().sorted((rp1, rp2) -> rp1.getName().compareTo(rp2.getName()))
+            .collect(Collectors.toList());
         if (listToInclude.isEmpty()) {
             return true;
         }
@@ -262,7 +264,7 @@ public class PostAlgoPathValidator {
 
     private Map<String, Uint16> chooseTribPort(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
-        LOG.info("In choosetribPort: edgeList = {} ", path.getEdgeList());
+        LOG.debug("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -297,7 +299,7 @@ public class PostAlgoPathValidator {
 
     private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
-        LOG.info("In choosetribSlot: edgeList = {} ", path.getEdgeList());
+        LOG.debug("In choosetribSlot: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -414,15 +416,15 @@ public class PostAlgoPathValidator {
         Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         BitSet result = BitSet.valueOf(freqMap);
         boolean isFlexGrid = true;
-        LOG.info("Processing path {} with length {}", path, path.getLength());
+        LOG.debug("Processing path {} with length {}", path, path.getLength());
         BitSet pceNodeFreqMap;
         for (PceGraphEdge edge : path.getEdgeList()) {
-            LOG.info("Processing source {} ", edge.link().getSourceId());
+            LOG.debug("Processing source {} ", edge.link().getSourceId());
             if (allPceNodes.containsKey(edge.link().getSourceId())) {
                 PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
-                LOG.info("Processing PCE node {}", pceNode);
+                LOG.debug("Processing PCE node {}", pceNode);
                 if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNode.getVersion())) {
-                    LOG.info("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
+                    LOG.debug("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
                         pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity());
                     isFlexGrid = false;
                 }
