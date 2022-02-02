@@ -431,6 +431,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d1012f_f32f7b20",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-02-02T15:30:11Z",
+      "side": 1,
+      "message": "Hi. This is a very good point. Jonas is right. However, having the roadmap in mind, I would propose to let it as it is now, until we rework in the PCE, the PostAlgoPathValidator. This is planned in a short term (but after the OFC demo which is our main priority) and will come in several steps. First we need Service Model 10.1 (pushed by Gilles) and Network Model 10.1 (ongoing). Having this, we will have the specification catalog in the datastore, and the supported Operational mode (for any kind of node) in the topology (if we complement the code). The plan is then to develop generic function to retreive physical parameters from the catalog, pointing to an operational mode (which can be OR or Specific --\u003e adresses Jonas comment about non-standard mode). Having this we will be able to derive width and spacing associated with any mode. Thus we will be able to change the way MC width is calculated (from OM rather than service type). It will be more generic, and will avoid hardcoding some functions. We will update not only the  PostAlgoPathvalidator but also the renderer, and I guess it will be then much easier to refactor the code from that point.",
+      "parentUuid": "e78203af_2b7139c3",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
