@@ -148,6 +148,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85eeb435_98d31878",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-02T08:11:07Z",
+      "side": 1,
+      "message": "OK thank you for this feedback.\nI think it can be closed now",
+      "parentUuid": "8878f824_363ea133",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e35ae816_3b84f695",

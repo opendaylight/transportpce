@@ -72,6 +72,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3cd9073_47ae3496",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-02T08:11:07Z",
+      "side": 1,
+      "message": "+1 to Jonas\u0027s proposal",
+      "parentUuid": "f554b41c_d8a00d98",
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af6dcd2b_13cf9aef",
