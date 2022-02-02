@@ -16,6 +16,23 @@
       "message": "Doc-links is failing the jenkins",
       "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16ea23e_5cf0e127",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-02T08:11:30Z",
+      "side": 1,
+      "message": "06:08:46 ___________________________________ summary ____________________________________\n06:08:46   buildcontroller: commands succeeded\n06:08:46   testsPCE: commands succeeded\n06:08:46   sims121: commands succeeded\n06:08:46   build_karaf_tests121: commands succeeded\n06:08:46   tests121: commands succeeded\n06:08:46   sims221: commands succeeded\n06:08:46   build_karaf_tests221: commands succeeded\n06:08:46   sims71: commands succeeded\n06:08:46   build_karaf_tests71: commands succeeded\n06:08:46   tests71: commands succeeded\n06:08:46   tests221: commands succeeded\n06:08:46   build_karaf_tests_hybrid: commands succeeded\n06:08:46   tests_hybrid: commands succeeded\n06:08:46   docs: commands succeeded\n06:08:46 ERROR:   docs-linkcheck: parallel child exit code 1\n06:08:46   checkbashisms: commands succeeded\n06:08:46   pre-commit: commands succeeded\n06:08:46   gitlint: commands succeeded\n06:08:46   pylint: commands succeeded",
+      "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
