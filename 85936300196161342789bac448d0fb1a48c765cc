@@ -16,6 +16,24 @@
       "message": "Hi Jonas, \nThis may look somewhat confusing, but as I understand it (my reference is the OpenROADM Network white paper 7.1 , page 17-18), a SRG shall have no more than a pair of CPs (One TX, one RX). A SRG may however be built from several circuit packs. A C/D/C Add/drop block may be built from several SRGs (if 1 fails the other survive) whereas a C/D Add/drop block is built from only one SRG. Add/Drop blocks are not modeled in the network model so that Add/Drop group need to be converted to SRG. So the logical connection point (CP pair) is modeling in fact several ports connecting the SRG  to the different degrees.As you tried to correct this, I guess it might be an issue for you. Please tell us if we can do something playing with other functions/parameter to solve the issue you may face. From what I remember, at that time we do not handle the wavelength-duplication parameter which allows to handle contentionless architecture. The Wavelength assignment process is made in a way to avoid having 2 times the same wavelength on the same SRG. ",
       "revId": "85936300196161342789bac448d0fb1a48c765cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb72a5bb_8d18f501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-02T15:36:25Z",
+      "side": 1,
+      "message": "Sorry, my commit message may have been confusing. With \"multiple CPs\" I was referring to circuit packs. As you say, an SRG may be built from multiple circuit packs but this is not supported by the current implementation in TransportPCE as I tried to explain.",
+      "parentUuid": "64b47248_875673d7",
+      "revId": "85936300196161342789bac448d0fb1a48c765cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
