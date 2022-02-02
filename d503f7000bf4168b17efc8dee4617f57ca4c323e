@@ -383,6 +383,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f98c5160_39f85617",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-02-02T09:08:34Z",
+      "side": 1,
+      "message": "My point is that assignment of MC width is done by the PCE code based on mapping from service type/rate defined in GridConstant.java. Currently, only 50 GHz and 87.5 GHz are defined. Support of \"non-standard\" modes (service type/rate/width) would require changes to the PCE and service handler code. I\u0027m not sure that there is much point in just adding this functionality here in the power management.",
+      "parentUuid": "a47b41f3_d4add1ee",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
