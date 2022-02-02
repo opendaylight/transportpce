@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7425b273_9a84e15a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-02T19:15:58Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be 0L rather?",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cdf69843_f5356f95",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 4
