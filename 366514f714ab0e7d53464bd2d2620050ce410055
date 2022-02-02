@@ -36,6 +36,42 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fe97af_fdad1922",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-02T03:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81800856_80142c11",
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f554b41c_d8a00d98",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-02T03:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81800856_80142c11",
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af6dcd2b_13cf9aef",
@@ -49,6 +85,30 @@
       "writtenOn": "2022-02-01T22:06:27Z",
       "side": 1,
       "message": "With this change, I think you want to return pinMcWidth instead of powerValue (but I don\u0027t know why you introduced a new variable).",
+      "range": {
+        "startLine": 406,
+        "startChar": 12,
+        "endLine": 413,
+        "endChar": 26
+      },
+      "revId": "366514f714ab0e7d53464bd2d2620050ce410055",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ce6c1cd_5063ae2c",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-02T03:11:54Z",
+      "side": 1,
+      "message": "Done! It was my overlook, didn\u0027t realize. Thanks for catching that",
+      "parentUuid": "af6dcd2b_13cf9aef",
       "range": {
         "startLine": 406,
         "startChar": 12,
