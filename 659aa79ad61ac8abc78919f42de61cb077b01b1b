@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95a4f6b9_32256c10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-02T21:07:36Z",
+      "side": 1,
+      "message": "18:06:28 ___________________________________ summary ____________________________________\n18:06:28   buildcontroller: commands succeeded\n18:06:28   testsPCE: commands succeeded\n18:06:28   sims121: commands succeeded\n18:06:28   build_karaf_tests121: commands succeeded\n18:06:28   tests121: commands succeeded\n18:06:28   sims221: commands succeeded\n18:06:28   build_karaf_tests221: commands succeeded\n18:06:28   sims71: commands succeeded\n18:06:28   build_karaf_tests71: commands succeeded\n18:06:28   tests71: commands succeeded\n18:06:28   tests221: commands succeeded\n18:06:28   build_karaf_tests_hybrid: commands succeeded\n18:06:28   tests_hybrid: commands succeeded\n18:06:28   docs: commands succeeded\n18:06:28 ERROR:   docs-linkcheck: parallel child exit code 1\n18:06:28   checkbashisms: commands succeeded\n18:06:28   pre-commit: commands succeeded\n18:06:28   gitlint: commands succeeded\n18:06:28   pylint: commands succeeded",
+      "revId": "659aa79ad61ac8abc78919f42de61cb077b01b1b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
