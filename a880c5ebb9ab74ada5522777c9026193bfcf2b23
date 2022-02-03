@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c17aa15_8446ca30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-02-03T08:34:13Z",
+      "side": 1,
+      "message": "Thanks for the Update of the commit message which makes it clear and for all your effort to improve code quality of transport PCE!",
+      "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
