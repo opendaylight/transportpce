@@ -60,6 +60,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fae06dd5_ab07a1fb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/constraints/PceConstraintsCalc.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 6118
+      },
+      "writtenOn": "2022-02-03T17:47:13Z",
+      "side": 1,
+      "message": "10.1 service model has other options for exclude constraints. Should we add a TODO or a comment to note options which are not supported by existing code",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef636da7_96574db0",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
         "patchSetId": 5
