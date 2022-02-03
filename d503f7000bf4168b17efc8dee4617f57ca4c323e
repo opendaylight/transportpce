@@ -479,6 +479,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4295f01a_dcbc9287",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-03T14:34:28Z",
+      "side": 1,
+      "message": "If everybody agrees to differ this and if this is not done yet, I propose we track this remark in a JIRA improvement or task ticket so it is not lost after this change is merged.",
+      "parentUuid": "b8298dac_5db25bb4",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
