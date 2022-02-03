@@ -1,6 +1,57 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb203e73_6b6ab6b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-03T10:06:31Z",
+      "side": 1,
+      "message": "commit title should be \u003c\u003d 50 char\n\n(I have to fix the gitling onfig to enforce this correctly)",
+      "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0324a56_f03c02b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-03T10:06:31Z",
+      "side": 1,
+      "message": "only one element in this actions list. dash not needed",
+      "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf5954d_a3d54607",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-03T10:06:31Z",
+      "side": 1,
+      "message": "since this has to be advertized in release notes that are generated from JIRA, a JIRA ticket has to be created/specified here to track this bug correctly",
+      "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7c17aa15_8446ca30",
@@ -14,6 +65,23 @@
       "writtenOn": "2022-02-03T08:34:13Z",
       "side": 1,
       "message": "Thanks for the Update of the commit message which makes it clear and for all your effort to improve code quality of transport PCE!",
+      "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb4abcc_6ad5f5b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-03T10:06:31Z",
+      "side": 1,
+      "message": "Thanks for this contribution Jonas\n\nLGTM as far as I am concerned apart commit message minor cosmetic issues\n\n+ other committers in CC\n",
       "revId": "a880c5ebb9ab74ada5522777c9026193bfcf2b23",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
