@@ -690,7 +690,6 @@ public class PortMappingVersion221 {
         nodesList.put(nodes.key(),nodes);
 
         Network network = new NetworkBuilder().setNodes(nodesList).build();
-
         final WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
@@ -869,7 +868,9 @@ public class PortMappingVersion221 {
             List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
                 .SupportedIfCapability>> supportedIntf = new ArrayList<>();
             for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
-                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()));
+                if (MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()) != null) {
+                    supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()));
+                }
             }
             mpBldr.setSupportedInterfaceCapability(supportedIntf);
         }

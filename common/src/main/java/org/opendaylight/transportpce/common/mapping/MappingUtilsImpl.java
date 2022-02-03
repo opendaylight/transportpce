@@ -31,6 +31,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1G
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU2EODU2E;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU2ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
@@ -57,6 +59,8 @@ public class MappingUtilsImpl implements MappingUtils {
             put("If100GE", If100GE.class);
             put("If10GE", If10GE.class);
             put("If1GE", If1GE.class);
+            put("IfOCHOTU2EODU2E", IfOCHOTU2EODU2E.class);
+            put("IfOCHOTU2ODU2", IfOCHOTU2ODU2.class);
         }
     };
 
