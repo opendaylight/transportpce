@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c052903b_ee98ff89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-03T08:09:42Z",
+      "side": 1,
+      "message": "Thank you for your feedback.\nThis patch is supposed to fix the problem of the client port selection when it is specified in the request. Is your CR -1 justified by the fact that this bug is always present on your side, or by the fact that there are other bugs related to the network port selection?\nIn that latter case, we could already merge this one, and solve other bugs (the rest of TRNSPRTPCE-460) in other changes, all the more than we have also the TRNSPRTPCE-176 to take into acount.",
+      "parentUuid": "2e25cc32_f5e335b3",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fba8f8b_820e47af",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
         "patchSetId": 7
@@ -108,6 +126,24 @@
       "side": 1,
       "message": "My mistake, I suspected a copy/paste error and misread \u0027else if\u0027 that I confused with \u0027else\u0027 indeed.\nSo my first statement is obviously wrong.\nBut anyway there is still no point to separate these 2 conditions and duplicate the code block.\n\nWith\n\n                            if ((this.clientPort \u003d\u003d null) || (this.clientPort.equals(clTp.getValue()))) {\n                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());\n                                return true;\n                            }\n\n\nthe second condition (this.clientPort.equals(clTp.getValue())) will be evaluated only if (this.clientPort \u003d\u003d null) is not true, what also avoids NPE.\nso I maintain vote -1 because of the code duplication here",
       "parentUuid": "3136c486_a504f59a",
+      "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebe00f7e_45e50c37",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-03T08:09:42Z",
+      "side": 1,
+      "message": "yes of course, much better. I\u0027ll do it.",
+      "parentUuid": "613f04a6_8b796ba9",
       "revId": "95aa3a12a836ec2597e5e070d83474e3df9ab8c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
