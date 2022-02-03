@@ -34,14 +34,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.States;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOdu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOtu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.loopback.rev171215.maint.loopback.MaintLoopbackBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.testsignal.rev171215.maint.testsignal.MaintTestsignalBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
@@ -101,13 +93,17 @@ public class OpenRoadmInterfacesImpl221 {
         };
         try {
             txSubmitFuture.get();
-            LOG.info("Successfully posted interface {} on node {}", ifBuilder.getName(), nodeId);
-            boolean devicePortIsUptodated = false;
-            while (!devicePortIsUptodated) {
-                devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+            LOG.info("Successfully posted/deleted interface {} on node {}", ifBuilder.getName(), nodeId);
+            // this check is not needed during the delete operation
+            // during the delete operation, ifBuilder does not contain supporting-cp and supporting-port
+            if (ifBuilder.getSupportingCircuitPackName() != null && ifBuilder.getSupportingPort() != null) {
+                boolean devicePortIsUptodated = false;
+                while (!devicePortIsUptodated) {
+                    devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+                }
+                LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
+                    ifBuilder.getName(), ifBuilder.getSupportingPort());
             }
-            LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
-                ifBuilder.getName(), ifBuilder.getSupportingPort());
             timer.interrupt();
         } catch (InterruptedException | ExecutionException e) {
             throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
@@ -136,34 +132,10 @@ public class OpenRoadmInterfacesImpl221 {
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.get();
             // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
-            if (ifBuilder.getType() == OtnOdu.class) {
-                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.augmentation(Interface1.class));
-                OduBuilder odu = new OduBuilder(oduBuilder.getOdu());
-                if (odu.getMaintTestsignal() != null) {
-                    MaintTestsignalBuilder maintSignalBuilder = new MaintTestsignalBuilder();
-                    maintSignalBuilder.setEnabled(false);
-                    odu.setMaintTestsignal(maintSignalBuilder.build());
-                }
-                oduBuilder.setOdu(odu.build());
-                ifBuilder.addAugmentation(oduBuilder.build());
-            } else if (ifBuilder.getType() == OtnOtu.class) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder
-                    otuBuilder =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder(
-                        intf2Delete.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1
-                            .class));
-                OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
-                if (otu.getMaintLoopback() != null) {
-                    MaintLoopbackBuilder maintLoopBackBuilder = new MaintLoopbackBuilder();
-                    maintLoopBackBuilder.setEnabled(false);
-                    otu.setMaintLoopback(maintLoopBackBuilder.build());
-                }
-                otuBuilder.setOtu(otu.build());
-                ifBuilder.addAugmentation(otuBuilder.build());
-            }
-            ifBuilder.setAdministrativeState(AdminStates.OutOfService);
+            InterfaceBuilder ifBuilder = new InterfaceBuilder()
+                .setAdministrativeState(AdminStates.OutOfService)
+                .setName(intf2Delete.getName())
+                .setType(intf2Delete.getType());
             // post interface with updated admin state
             try {
                 postInterface(nodeId, ifBuilder);
