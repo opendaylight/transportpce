@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3666faea_5fed9a93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2022-02-03T10:26:09Z",
+      "side": 1,
+      "message": "Good practise as there will be soon a new version of GNPy api. The next release of GNPy api will be incompatible with the actual implementation of GNPy client in TPCE.",
+      "revId": "735af44fcb12af164c4b349017f91e6127282236",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
