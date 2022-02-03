@@ -93,13 +93,17 @@ public class OpenRoadmInterfacesImpl710 {
         };
         try {
             txSubmitFuture.get();
-            LOG.info("Successfully posted interface {} on node {}", ifBuilder.getName(), nodeId);
-            boolean devicePortIsUptodated = false;
-            while (!devicePortIsUptodated) {
-                devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+            LOG.info("Successfully posted/deleted interface {} on node {}", ifBuilder.getName(), nodeId);
+            // this check is not needed during the delete operation
+            // during the delete operation, ifBuilder does not contain supporting-cp and supporting-port
+            if (ifBuilder.getSupportingCircuitPackName() != null && ifBuilder.getSupportingPort() != null) {
+                boolean devicePortIsUptodated = false;
+                while (!devicePortIsUptodated) {
+                    devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+                }
+                LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
+                    ifBuilder.getName(), ifBuilder.getSupportingPort());
             }
-            LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
-                ifBuilder.getName(), ifBuilder.getSupportingPort());
             timer.interrupt();
         } catch (InterruptedException | ExecutionException e) {
             throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
@@ -136,10 +140,7 @@ public class OpenRoadmInterfacesImpl710 {
                 // Though these could be redundant, but 'when' statements are causing problem,
                 // when deleting the interfaces trying to be deleted
                 .setName(intf2Delete.getName())
-                .setType(intf2Delete.getType())
-                // CP name and the ports are needed, since the post interface is validated
-                .setSupportingCircuitPackName(intf2Delete.getSupportingCircuitPackName())
-                .setSupportingPort(intf2Delete.getSupportingPort());
+                .setType(intf2Delete.getType());
 
             // post interface with updated admin state
             try {
