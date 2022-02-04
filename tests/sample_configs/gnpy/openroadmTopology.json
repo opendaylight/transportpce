@@ -590,8 +590,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },
@@ -652,8 +652,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },
@@ -678,12 +678,12 @@
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 140000,
+                                    "SRLG-length": 133000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
+                            "spanloss-current": 27.93,
                             "engineered-spanloss": 30.2,
                             "auto-spanloss": true
                         }
@@ -771,12 +771,12 @@
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 140000,
+                                    "SRLG-length": 133000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
+                            "spanloss-current": 27.93,
                             "engineered-spanloss": 30.2,
                             "auto-spanloss": true
                         }
@@ -838,8 +838,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },
@@ -869,8 +869,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },
@@ -900,8 +900,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },
@@ -931,8 +931,8 @@
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 29,
-                            "engineered-spanloss": 30.2,
+                            "spanloss-current": 20,
+                            "engineered-spanloss": 20.2,
                             "auto-spanloss": true
                         }
                     },

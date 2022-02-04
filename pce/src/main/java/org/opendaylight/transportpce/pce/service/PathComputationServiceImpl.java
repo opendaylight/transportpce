@@ -24,7 +24,7 @@ import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.Response;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.CancelResourceReserveOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.CancelResourceReserveOutputBuilder;
@@ -239,26 +239,26 @@ public class PathComputationServiceImpl implements PathComputationService {
         ResponseType respType = null;
         boolean feasible = true;
         if (responseGnpy != null) {
-            if (responseGnpy.getResponseType() instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result
+            if (responseGnpy.getResponseType() instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result
                     .response.response.type.NoPathCase) {
                 LOG.info("GNPy : path is not feasible");
-                org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCase
-                    noPathGnpy = (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type
+                org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type.NoPathCase
+                    noPathGnpy = (org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type
                     .NoPathCase) responseGnpy.getResponseType();
                 NoPathCase noPathCase = new NoPathCaseBuilder().setNoPath(noPathGnpy.getNoPath()).build();
                 respType = noPathCase;
                 feasible = false;
-            } else if (responseGnpy.getResponseType() instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result
+            } else if (responseGnpy.getResponseType() instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result
                     .response.response.type.PathCase) {
                 LOG.info("GNPy : path is feasible");
-                org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCase pathCase =
-                        (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCase)
+                org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type.PathCase pathCase =
+                        (org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type.PathCase)
                         responseGnpy.getResponseType();
-                List<org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties
+                List<org.opendaylight.yang.gen.v1.gnpy.path.rev201022.generic.path.properties.path.properties
                     .PathMetric> pathMetricList =
                     new ArrayList<>(pathCase.getPathProperties().getPathMetric().values());
                 List<PathMetric> gnpyPathMetricList = new ArrayList<>();
-                for (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric
+                for (org.opendaylight.yang.gen.v1.gnpy.path.rev201022.generic.path.properties.path.properties.PathMetric
                         pathMetricGnpy : pathMetricList) {
                     PathMetric pathMetric = new PathMetricBuilder().setMetricType(pathMetricGnpy.getMetricType())
                             .setAccumulativeValue(pathMetricGnpy.getAccumulativeValue()).build();
