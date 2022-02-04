@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c4499e_429d1af3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T06:01:09Z",
+      "side": 1,
+      "message": "dash not needed with only one item",
+      "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84251dd_f7f2129e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T06:01:09Z",
+      "side": 1,
+      "message": "LGTM\nMaybe some explanations why the same modification would not make sense with 1.2.1 are missing.",
+      "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
