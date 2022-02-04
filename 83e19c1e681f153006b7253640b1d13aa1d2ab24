@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4f0e1a41_e8d4ebb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-04T14:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74c4499e_429d1af3",
+      "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d84251dd_f7f2129e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-04T08:09:40Z",
       "side": 1,
       "message": "We are changing a litle bit the behavior, but since actually this is only the intermediate step, not really visible for the end-user -or the functional test-, I\u0027m ok with this simplification.",
+      "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdfa7bc5_6cb81706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-04T14:20:02Z",
+      "side": 1,
+      "message": "Well, we don\u0027t have any 1.2.1 devices. The problem occurs when the delete operation tries to remove something that device does not support. So, it is always better to keep it simple, rather than passing the entire config data.",
+      "parentUuid": "d84251dd_f7f2129e",
       "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
