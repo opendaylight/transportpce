@@ -18,11 +18,11 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMaps;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class GridUtilsTest {

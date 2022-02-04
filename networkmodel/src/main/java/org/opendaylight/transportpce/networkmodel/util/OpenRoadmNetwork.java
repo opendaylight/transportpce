@@ -11,8 +11,8 @@ package org.opendaylight.transportpce.networkmodel.util;
 import com.google.common.collect.ImmutableMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev200529.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev211210.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -44,8 +44,8 @@ public final class OpenRoadmNetwork {
     public static Node createNode(String nodeId, NodeInfo nodeInfo) {
 
         Node1Builder node1Bldr = new Node1Builder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder node2Bldr =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder node2Bldr =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder();
 
         /*
          * Recognize the node type: 1:ROADM, 2:XPONDER
