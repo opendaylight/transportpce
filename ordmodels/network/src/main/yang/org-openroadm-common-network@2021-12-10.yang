@@ -13,7 +13,7 @@ module org-openroadm-common-network {
   }
   import org-openroadm-network-types {
     prefix org-openroadm-network-types;
-    revision-date 2020-05-29;
+    revision-date 2021-12-10;
   }
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
@@ -22,6 +22,10 @@ module org-openroadm-common-network {
   import org-openroadm-equipment-states-types {
     prefix org-openroadm-equipment-states-types;
     revision-date 2019-11-29;
+  }
+  import org-openroadm-common-node-types {
+    prefix org-openroadm-common-node-types;
+    revision-date 2021-05-28;
   }
 
   organization
@@ -55,6 +59,22 @@ module org-openroadm-common-network {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+    description
+      "Version 10.0";
+  }
+  revision 2021-03-26 {
+    description
+      "Version 9.0";
+  }
+  revision 2020-12-11 {
+    description
+      "Version 8.1";
+  }
   revision 2020-05-29 {
     description
       "Version 7.1.0";
@@ -106,6 +126,12 @@ module org-openroadm-common-network {
     }
   }
 
+  augment "/nd:networks/nd:network" {
+    description
+      "Introduce new network type for the Open ROADM common network";
+    uses org-openroadm-network-types:SRLG-list;
+  }  
+
   augment "/nd:networks/nd:network/nd:node" {
     when '../nd:network-types/cnet:openroadm-common-network';
     description
@@ -114,6 +140,12 @@ module org-openroadm-common-network {
       type org-openroadm-network-types:openroadm-node-type;
       description
         "A component of the network topology. Once the node-type is configured, it should not be modified.";
+    }
+    leaf node-subtype {
+      type org-openroadm-common-node-types:node-subtypes;
+      description
+        "An optional refinement of the node-type. Once the node-subtype is configured, it
+         should not be modified.";
     }
     leaf lifecycle-state {
       type org-openroadm-common-state-types:lifecycle-state;
@@ -197,9 +229,9 @@ module org-openroadm-common-network {
     }
     leaf link-latency {
       type uint32;
-      units "ms";
+      units "microseconds";
       description
-        "Latency of a link";
+        "Latency of a link (microseconds)";
     }
     leaf TE-metric {
       type uint32;
@@ -207,17 +239,14 @@ module org-openroadm-common-network {
         "defines a Traffic Engineering metric which could be used for any type of link.
          Supersedes TE-metric originally defined in OMS-attributes grouping";
     }
-    list link-concatenation {
-      key "SRLG-Id";
-      leaf SRLG-Id {
-        type uint32;
-        description
-          "unique identifier for SRLG";
-      }
-      leaf SRLG-length {
-        type uint32;
-        description
-          "fiber length in meters";
+    uses org-openroadm-network-types:link-concatenation;
+    uses org-openroadm-network-types:future-SRLGs {
+      augment "future-SRLGs" {
+        leaf-list SRLG-Id {
+          type leafref {
+            path "/nd:networks/nd:network/SRLG-list/SRLG-Id";
+          }
+        }  
       }
     }
     leaf administrative-group {
