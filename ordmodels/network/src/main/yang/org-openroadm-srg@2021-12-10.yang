@@ -1,24 +1,19 @@
-module org-openroadm-degree {
+module org-openroadm-srg {
   yang-version 1.1;
-  namespace "http://org/openroadm/degree";
-  prefix dgr;
+  namespace "http://org/openroadm/srg";
+  prefix srg;
 
-  import org-openroadm-common-link-types {
-    prefix org-openroadm-common-link-types;
-    revision-date 2019-11-29;
-  }
-  import org-openroadm-network-types {
-    prefix org-openroadm-network-types;
-    revision-date 2020-05-29;
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2021-12-10;
   }
 
   organization
-    "Open ROADM MSA";
+    "OPEN ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for a Degree in Network Model
-
+    "YANG definitions for an Add/Drop group in Network Model
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
      All other rights reserved.
@@ -46,6 +41,18 @@ module org-openroadm-degree {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2021-12-10 {
+    description
+      "Version 10.1";
+  }
+  revision 2021-09-24 {
+	description
+	  "Version 10.0";
+  }
+  revision 2021-03-26 {
+    description
+      "Version 9.0";
+  }
   revision 2020-05-29 {
     description
       "Version 7.1.0";
@@ -61,10 +68,6 @@ module org-openroadm-degree {
   revision 2019-09-27 {
     description
       "Version 6.0.0";
-  }
-  revision 2019-05-31 {
-    description
-      "Version 5.1.0";
   }
   revision 2019-03-29 {
     description
@@ -107,45 +110,28 @@ module org-openroadm-degree {
       "Version 1.2";
   }
 
-  grouping degree-used-wavelengths {
-    description
-      "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
-       index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
-       will hold list of used spectra";
-    list used-wavelengths {
-      key "index";
-      uses org-openroadm-network-types:wavelengths;
-    }
-  }
-
-  grouping degree-node-attributes {
-    description
-      "Defines the group of degree attributes";
-    leaf degree-number {
+  grouping srg-node-attributes {
+    leaf srg-number {
       type uint16;
     }
-    leaf max-wavelengths {
+    leaf max-pp {
       type uint32;
       description
-        "maximum # of wavelengths";
+        "Maximum number of add/drop port pairs in an SRG";
     }
-    leaf ingress-span-loss-aging-margin {
-      type org-openroadm-common-link-types:ratio-dB;
+    leaf current-provisioned-pp {
+      type uint32;
+      description
+        "current provisioned number of port pair in a given SRG";
+    }
+    leaf wavelength-duplication {
+      type org-openroadm-common-optical-channel-types:wavelength-duplication-type;
+    }
+    leaf-list supported-operational-modes {
+      type string;
       config true;
       description
-        "Span-loss margin extracted from corresponding device OTS interface container, optional";
-    }
-    leaf eol-max-load-pIn {
-      type org-openroadm-common-link-types:power-dBm;
-      config true;
-      description
-        "End Of Life Total input power at maximum load extracted from corresponding device OTS interface container";
-    }
-    leaf egress-average-channel-power {
-      type org-openroadm-common-link-types:power-dBm;
-      config true;
-      description
-        "Based upon the total max power across the 4.8 THz passband.";
+        "defines the supported openroadm specifications";
     }
   }
 }

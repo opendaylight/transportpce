@@ -22,13 +22,13 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.links.input.grouping.LinksInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -158,9 +158,9 @@ final class Rdm2XpdrLink {
                 .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
         // If both TPs of the Xpdr2Rdm link are inService --> link inService. Otherwise outOfService
         if (State.InService.equals(xpdrTp.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState())
+                    .org.openroadm.common.network.rev211210.TerminationPoint1.class).getOperationalState())
                 && State.InService.equals(rdmTp.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState())) {
+                    .org.openroadm.common.network.rev211210.TerminationPoint1.class).getOperationalState())) {
             lnk2bldr.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
         } else {
             lnk2bldr.setOperationalState(State.OutOfService).setAdministrativeState(AdminStates.OutOfService);

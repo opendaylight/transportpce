@@ -13,7 +13,6 @@ module transportpce-topology {
       }
     import org-openroadm-common-network {
         prefix cnet;
-        revision-date 2020-05-29;
       }
 
     organization
