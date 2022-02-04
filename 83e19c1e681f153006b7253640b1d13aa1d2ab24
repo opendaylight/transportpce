@@ -33,6 +33,23 @@
       "message": "LGTM\nMaybe some explanations why the same modification would not make sense with 1.2.1 are missing.",
       "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7cc1ee_e57aa2b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-04T08:09:40Z",
+      "side": 1,
+      "message": "We are changing a litle bit the behavior, but since actually this is only the intermediate step, not really visible for the end-user -or the functional test-, I\u0027m ok with this simplification.",
+      "revId": "83e19c1e681f153006b7253640b1d13aa1d2ab24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
