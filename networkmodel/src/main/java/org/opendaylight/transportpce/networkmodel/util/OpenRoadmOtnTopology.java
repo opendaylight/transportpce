@@ -108,6 +108,10 @@ public final class OpenRoadmOtnTopology {
         Uint32.valueOf(1), 1000L,
         Uint32.valueOf(10), 10000L,
         Uint32.valueOf(100), 100000L);
+    private static Map<Uint32, Class<? extends OdtuTypeIdentity>> serviceRateOdtuTypeClassMap = Map.of(
+        Uint32.valueOf(1), ODTU4TsAllocated.class,
+        Uint32.valueOf(10), ODTU4TsAllocated.class,
+        Uint32.valueOf(100), ODTUCnTs.class);
 
     private OpenRoadmOtnTopology() {
     }
@@ -198,9 +202,7 @@ public final class OpenRoadmOtnTopology {
                 LOG.error("Error with link {} : unsupported OTN link type", link.getLinkId().getValue());
                 continue;
             }
-            if (!link.augmentation(Link1.class).getAvailableBandwidth()
-                    .equals(Uint32.valueOf(otnLinkTypeBwMap.get(linkType)))) {
-                    //TODO shouldn't it be < rather than !equals() here ?
+            if (link.augmentation(Link1.class).getAvailableBandwidth().longValue() < otnLinkTypeBwMap.get(linkType)) {
                 LOG.error("Error with link {} : unsufficient available bandwith", link.getLinkId().getValue());
                 continue;
             }
@@ -251,8 +253,7 @@ public final class OpenRoadmOtnTopology {
         }
         List<TerminationPoint> tps = new ArrayList<>();
         for (TerminationPoint tp : oldTps) {
-            if (bwIncr != 0) {
-            //TODO shouldn't it be 0L rather?
+            if (bwIncr > 0L) {
                 tps.add(updateNodeTpTsPool(tp, serviceRate, tribPortNb, minTribSlotNb, maxTribSlotNb, isDeletion));
             }
         }
@@ -338,7 +339,7 @@ public final class OpenRoadmOtnTopology {
         }
         // create link A-Z
         LinkBuilder ietfLinkAZBldr = TopologyUtils.createLink(nodeATopo, nodeZTopo, tpA, tpZ, linkType.getName());
-        ietfLinkAZBldr
+        links.add(ietfLinkAZBldr
             .addAugmentation(tpceLink1)
             .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
@@ -348,11 +349,11 @@ public final class OpenRoadmOtnTopology {
                     .setLinkType(OpenroadmLinkType.OTNLINK)
                     .setOperationalState(State.InService)
                     .setAdministrativeState(AdminStates.InService)
-                    .build());
-        links.add(ietfLinkAZBldr.build());
+                    .build())
+            .build());
         // create link Z-A
         LinkBuilder ietfLinkZABldr = TopologyUtils.createLink(nodeZTopo, nodeATopo, tpZ, tpA, linkType.getName());
-        ietfLinkZABldr
+        links.add(ietfLinkZABldr
             .addAugmentation(tpceLink1)
             .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
@@ -362,8 +363,8 @@ public final class OpenRoadmOtnTopology {
                     .setLinkType(OpenroadmLinkType.OTNLINK)
                     .setOperationalState(State.InService)
                     .setAdministrativeState(AdminStates.InService)
-                    .build());
-        links.add(ietfLinkZABldr.build());
+                    .build())
+            .build());
         return links;
     }
 
@@ -384,15 +385,16 @@ public final class OpenRoadmOtnTopology {
         LOG.debug("in updateOtnLinkBwParameters with supportedLinks = {}, linkType = {}", supportedLinks, linkType);
         List<Link> updatedlinks = new ArrayList<>();
         for (Link link : supportedLinks) {
-            LinkBuilder updatedLinkBldr = new LinkBuilder(link);
-            updatedLinkBldr.addAugmentation(new Link1Builder(link.augmentation(Link1.class))
-                .setAvailableBandwidth(Uint32.valueOf(0))
-                .setUsedBandwidth(
-                    otnLinkTypeBwMap.containsKey(linkType)
-                        ? Uint32.valueOf(otnLinkTypeBwMap.get(linkType))
-                        : Uint32.valueOf(0))
-                .build());
-            updatedlinks.add(updatedLinkBldr.build());
+            updatedlinks.add(
+                new LinkBuilder(link)
+                    .addAugmentation(new Link1Builder(link.augmentation(Link1.class))
+                        .setAvailableBandwidth(Uint32.valueOf(0))
+                        .setUsedBandwidth(
+                            otnLinkTypeBwMap.containsKey(linkType)
+                                ? Uint32.valueOf(otnLinkTypeBwMap.get(linkType))
+                                : Uint32.valueOf(0))
+                        .build())
+                    .build());
         }
         return updatedlinks;
     }
@@ -464,30 +466,26 @@ public final class OpenRoadmOtnTopology {
                 tpnPool.remove(Uint16.valueOf(tribPortNb));
             }
         }
-        Class<? extends OdtuTypeIdentity> odtuType = null;
-        switch (serviceRate.intValue()) {
-            case 1:
-            case 10:
-                odtuType = ODTU4TsAllocated.class;
-                break;
-            case 100:
-                odtuType = ODTUCnTs.class;
-                break;
-            default:
-                LOG.warn("Unable to set the odtu-type");
-                break;
+        Class<? extends OdtuTypeIdentity> odtuType;
+        if (serviceRateOdtuTypeClassMap.containsKey(serviceRate)) {
+            odtuType = serviceRateOdtuTypeClassMap.get(serviceRate);
+        } else {
+            odtuType = null;
+            LOG.warn("Unable to set the odtu-type");
         }
         OdtuTpnPool odtuTpnPool = new OdtuTpnPoolBuilder()
             .setOdtuType(odtuType)
             .setTpnPool(tpnPool)
             .build();
-        xtpcaBldr.setOdtuTpnPool(ImmutableMap.of(odtuTpnPool.key(),odtuTpnPool));
-        tpBldr.addAugmentation(
-            new TerminationPoint1Builder(
-                tp.augmentation(TerminationPoint1.class))
-                    .setXpdrTpPortConnectionAttributes(xtpcaBldr.build())
-                    .build());
-        return tpBldr.build();
+        return tpBldr
+            .addAugmentation(
+                new TerminationPoint1Builder(tp.augmentation(TerminationPoint1.class))
+                    .setXpdrTpPortConnectionAttributes(
+                        xtpcaBldr
+                            .setOdtuTpnPool(ImmutableMap.of(odtuTpnPool.key(),odtuTpnPool))
+                            .build())
+                    .build())
+            .build();
     }
 
     private static Map<Integer, OtnTopoNode> convertPortMappingToOtnNodeList(Nodes mappingNode) {
