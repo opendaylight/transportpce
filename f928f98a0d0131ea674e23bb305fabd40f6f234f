@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1d72e0d_5fa6e0ce",
+        "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2022-01-18.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-04T20:26:51Z",
+      "side": 1,
+      "message": "As agreed, I updated the description of the yang model by all modifications done in this revision\n+ add a note in each commit message of the two changes concerned by this NS change.",
+      "parentUuid": "5089c85b_a67dad52",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "585b0f34_f8a9fe91",
         "filename": "api/src/main/yang/service_path/transportpce-pce@2022-01-18.yang",
         "patchSetId": 5
@@ -71,6 +89,24 @@
       "writtenOn": "2022-02-01T08:15:59Z",
       "side": 1,
       "message": "idem",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1639b5d_2e8b78d7",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2022-01-18.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-04T20:26:51Z",
+      "side": 1,
+      "message": "See previous answer",
+      "parentUuid": "585b0f34_f8a9fe91",
       "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -112,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e0d40f9f_851faa16",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/constraints/PceConstraintsCalc.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-04T20:26:51Z",
+      "side": 1,
+      "message": "In this change, I prepare the service model upgrade but don\u0027t use yet the models 10.1. I will add a TODO as you suggest in the next change which is more appropriate.",
+      "parentUuid": "0809d632_f2452c56",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef636da7_96574db0",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
         "patchSetId": 5
@@ -123,6 +177,24 @@
       "writtenOn": "2022-02-01T08:15:59Z",
       "side": 1,
       "message": "when there is only one setter, I think oneliner allocation is OK from a readability standpoint",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f75e8ad3_6ca3509a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-04T20:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef636da7_96574db0",
       "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
