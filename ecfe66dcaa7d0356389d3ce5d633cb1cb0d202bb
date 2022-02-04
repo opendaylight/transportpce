@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8559e820_2210d7a7",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-node-types@2021-05-28.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-04T14:43:28Z",
+      "side": 1,
+      "message": "This is a good point Guillaume. We can perhaps setup sometime to discuss this and bring to MSA. We can setup a pipeline to clean or provide warnings whenever a PR is submitted.",
+      "parentUuid": "6c0edc2f_b61b9df5",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e466a7c_cb7d3369",
         "filename": "ordmodels/common/src/main/yang/org-openroadm-common-optical-channel-types@2021-12-10.yang",
         "patchSetId": 6
