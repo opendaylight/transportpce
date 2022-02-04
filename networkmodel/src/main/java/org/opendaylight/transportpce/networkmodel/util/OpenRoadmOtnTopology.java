@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,45 +24,56 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTU4TsAllocated;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTUCnTs;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OdtuTypeIdentity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OduRateIdentity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.SwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.SwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.TpBandwidthSharing;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.TpBandwidthSharingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.XpdrAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.XpdrAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.TpSupportedInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTUCnTs;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OdtuTypeIdentity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OduRateIdentity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.SwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.SwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.TpBandwidthSharing;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.TpBandwidthSharingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.XpdrAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.XpdrAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.TpSupportedInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.otn.tp.attributes.OdtuTpnPool;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -94,6 +106,19 @@ public final class OpenRoadmOtnTopology {
     private static final int NB_TRIB_PORTS = 80;
     private static final int NB_TRIB_SLOTS = 80;
     private static final int NB_TRIB_SLOT_PER_10GE = 8;
+
+    private static Map<String, Class<? extends SupportedIfCapability>> supIfCapaMap = Map.ofEntries(
+        new AbstractMap.SimpleEntry<>("IfOTUCnODUCn", IfOTUCnODUCn.class),
+        new AbstractMap.SimpleEntry<>("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class),
+        new AbstractMap.SimpleEntry<>("IfOCH", IfOCH.class),
+        new AbstractMap.SimpleEntry<>("If100GEODU4", If100GEODU4.class),
+        new AbstractMap.SimpleEntry<>("If10GEODU2e", If10GEODU2e.class),
+        new AbstractMap.SimpleEntry<>("If10GEODU2", If10GEODU2.class),
+        new AbstractMap.SimpleEntry<>("If1GEODU0", If1GEODU0.class),
+        new AbstractMap.SimpleEntry<>("If400GE", If400GE.class),
+        new AbstractMap.SimpleEntry<>("If100GE", If100GE.class),
+        new AbstractMap.SimpleEntry<>("If10GE", If10GE.class),
+        new AbstractMap.SimpleEntry<>("If1GE", If1GE.class));
 
     private OpenRoadmOtnTopology() {
     }
@@ -338,9 +363,9 @@ public final class OpenRoadmOtnTopology {
             .addAugmentation(tpceLink1)
             .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder(
                         ietfLinkAZBldr.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class))
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1.class))
                         .setLinkType(OpenroadmLinkType.OTNLINK)
                         .setOperationalState(State.InService)
                         .setAdministrativeState(AdminStates.InService)
@@ -352,9 +377,9 @@ public final class OpenRoadmOtnTopology {
             .addAugmentation(tpceLink1)
             .addAugmentation(otnLink1Bldr.build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder(
                         ietfLinkZABldr.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class))
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1.class))
                         .setLinkType(OpenroadmLinkType.OTNLINK)
                         .setOperationalState(State.InService)
                         .setAdministrativeState(AdminStates.InService)
@@ -536,8 +561,8 @@ public final class OpenRoadmOtnTopology {
         Node1 otnNodeAug = new Node1Builder()
             .setXpdrAttributes(xpdrAttr)
             .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 ocnNodeAug =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                     .setNodeType(OpenroadmNodeType.TPDR)
                     .setOperationalState(State.InService)
                     .setAdministrativeState(AdminStates.InService)
@@ -600,8 +625,8 @@ public final class OpenRoadmOtnTopology {
             .setXpdrAttributes(xpdrAttr)
             .setSwitchingPools(switchingPools)
             .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 ocnNodeAug =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                     .setNodeType(OpenroadmNodeType.MUXPDR)
                     .setAdministrativeState(AdminStates.InService)
                     .setOperationalState(State.InService)
@@ -670,8 +695,8 @@ public final class OpenRoadmOtnTopology {
             .setXpdrAttributes(xpdrAttr)
             .setSwitchingPools(switchingPools)
             .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 ocnNodeAug =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                     .setNodeType(OpenroadmNodeType.SWITCH)
                     .setOperationalState(State.InService)
                     .setAdministrativeState(AdminStates.InService)
@@ -723,10 +748,11 @@ public final class OpenRoadmOtnTopology {
             TerminationPoint1Builder otnTp1Bldr = new TerminationPoint1Builder();
             if (mapping.getSupportedInterfaceCapability() != null) {
                 XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
-                for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
+                for (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                        .SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
                     SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                        .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
-                        .setIfCapType(supInterCapa)
+                        .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa.getSimpleName())))
+                        .setIfCapType(convertSupIfCapa(supInterCapa.getSimpleName()))
                         .build();
                     supIfMap.put(supIfCapa.key(), supIfCapa);
                 }
@@ -783,14 +809,16 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends SupportedIfCapability>> list) {
+    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends org.opendaylight.yang.gen.v1.http
+            .org.openroadm.port.types.rev200327.SupportedIfCapability>> list) {
         Map<String, Class<? extends OduRateIdentity>> rateMap = Map.of(
             "If100GEODU4", ODU4.class,
             "IfOCHOTU4ODU4", ODU4.class,
             "If1GEODU0", ODU0.class,
             "If10GEODU2", ODU2.class,
             "If10GEODU2e", ODU2e.class);
-        for (Class<? extends SupportedIfCapability> class1 : list) {
+        for (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                .SupportedIfCapability> class1 : list) {
             if (rateMap.containsKey(class1.getSimpleName())) {
                 return rateMap.get(class1.getSimpleName());
             }
@@ -836,8 +864,8 @@ public final class OpenRoadmOtnTopology {
         if (supportTpMap != null) {
             ietfTpBldr.setSupportingTerminationPoint(supportTpMap);
         }
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 ocnTp =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1 ocnTp =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder()
                     .setTpType(tpType)
                     .setAdministrativeState(TopologyUtils.setNetworkAdminState(mapping.getPortAdminState()))
                     .setOperationalState(TopologyUtils.setNetworkOperState(mapping.getPortOperState()))
@@ -854,5 +882,12 @@ public final class OpenRoadmOtnTopology {
         return nodeName.contains(XPDR)
                 ? nodeName
                 : new StringBuilder(nodeName).append("-").append(tpName.split("-")[0]).toString();
+    }
+
+    private static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
+        if (!supIfCapaMap.containsKey(ifCapType)) {
+            return null;
+        }
+        return supIfCapaMap.get(ifCapType);
     }
 }

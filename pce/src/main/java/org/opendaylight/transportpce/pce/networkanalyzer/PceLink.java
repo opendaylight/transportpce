@@ -13,14 +13,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation.FiberType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.Span;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.span.attributes.LinkConcatenation1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.span.attributes.LinkConcatenation1.FiberType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.link.oms.attributes.Span;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -151,7 +152,7 @@ public class PceLink implements Serializable {
                 LOG.debug("In PceLink: cannot compute the latency for the link {}", link.getLinkId().getValue());
                 return 1L;
             }
-            tmp += entry.getValue().getSRLGLength().toJava() / CELERITY;
+            tmp += entry.getValue().getSRLGLength().doubleValue() / CELERITY;
             LOG.info("In PceLink: The latency of link {} == {}", link.getLinkId(), tmp);
         }
         return (long) Math.ceil(tmp);
@@ -173,7 +174,8 @@ public class PceLink implements Serializable {
             return 0L;
         }
         // power on the output of the previous ROADM (dBm)
-        double pout = retrievePower(linkConcatenationiterator.next().getFiberType());
+        double pout = retrievePower(linkConcatenationiterator.next().augmentation(LinkConcatenation1.class)
+            .getFiberType());
         // span loss (dB)
         double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
         // power on the input of the current ROADM (dBm)
