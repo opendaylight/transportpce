@@ -33,6 +33,23 @@
       "message": "LGTM as far as I am concerned but I need another opinion",
       "revId": "a0a7816ef583fb9df0dd2ea1f668e9aff78b6f2e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb7ccb5_506347bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-04T14:23:06Z",
+      "side": 1,
+      "message": "Merging this change",
+      "revId": "a0a7816ef583fb9df0dd2ea1f668e9aff78b6f2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
