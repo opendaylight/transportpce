@@ -108,6 +108,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             LOG.info("createOpenROADMNode: {} ", nodeId);
 
+            boolean firstMount;
+            if (portMapping.getNode(nodeId) == null) {
+                firstMount = true;
+            } else {
+                LOG.info("{} already exists in portmapping but was reconnected", nodeId);
+                firstMount = false;
+            }
+
             if (!portMapping.createMappingData(nodeId, openRoadmVersion)) {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
                 return;
@@ -133,7 +141,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 openroadmNetworkNode);
 
             // nodes/links creation in openroadm-topology
-            TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId));
+            TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId),
+                                                                                firstMount);
             if (topologyShard != null) {
                 this.topologyShardMountedDevice.put(nodeId, topologyShard);
                 for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
