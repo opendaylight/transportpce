@@ -8,7 +8,7 @@
                     "path-properties": {
                         "path-metric": [
                             {
-                                "metric-type": "SNR-bandwidth",
+                                "gnpy-path:metric-type": "SNR-bandwidth",
                                 "accumulative-value": 13.06
                             },
                             {
