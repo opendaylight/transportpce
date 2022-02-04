@@ -42,8 +42,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
@@ -340,7 +340,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .setNodeId(abstractNodeid)
                         .setTpId(tp.getTpId().getValue())
                         .setState(tp.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1
                                 .class).getOperationalState())
                         .build();
                     if (!this.topologyChanges.containsKey(tc.key())) {
@@ -381,7 +381,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .setNodeId(abstractNodeid)
                         .setTpId(tp.getTpId().getValue())
                         .setState(tp.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1
                                 .class).getOperationalState())
                         .build();
                     if (!this.topologyChanges.containsKey(tc.key())) {

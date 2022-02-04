@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.graph;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

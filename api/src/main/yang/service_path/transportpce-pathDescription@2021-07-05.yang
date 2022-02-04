@@ -4,7 +4,6 @@ module transportpce-pathDescription {
 
   import org-openroadm-common-optical-channel-types {
     prefix org-openroadm-common-optical-channel-types;
-    revision-date 2020-05-29;
   }
 
   import org-openroadm-common-state-types {
