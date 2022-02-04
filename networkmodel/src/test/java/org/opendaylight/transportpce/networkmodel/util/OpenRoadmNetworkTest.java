@@ -19,7 +19,7 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;

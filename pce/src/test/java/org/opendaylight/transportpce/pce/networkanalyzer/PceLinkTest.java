@@ -22,18 +22,20 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.OMSAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.SpanBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.span.attributes.LinkConcatenation1.FiberType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.span.attributes.LinkConcatenation1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.link.OMSAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.link.oms.attributes.SpanBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -205,8 +207,10 @@ public class PceLinkTest extends AbstractTest {
         //For setting up attributes for openRoadm augment
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
                 .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
-                .setSRLGLength(Uint32.valueOf(20))
-                .setFiberType(LinkConcatenation.FiberType.Dsf)
+                .setSRLGLength(BigDecimal.valueOf(20))
+                .addAugmentation(new LinkConcatenation1Builder()
+                    .setFiberType(FiberType.Dsf)
+                    .build())
                 .build();
         OMSAttributesBuilder omsAttributesBuilder =
                 new OMSAttributesBuilder()
@@ -225,8 +229,8 @@ public class PceLinkTest extends AbstractTest {
 
         linkBuilder.addAugmentation(link1Builder.build());
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder linkBuilderNetworkLink
-                = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1Builder linkBuilderNetworkLink
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1Builder()
                 .setOMSAttributes(omsAttributesBuilder
                         .build());
 
@@ -280,8 +284,8 @@ public class PceLinkTest extends AbstractTest {
         TerminationPoint xpdr = xpdrTpBldr.build();
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
             new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node11 =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 node11 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
         return new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))

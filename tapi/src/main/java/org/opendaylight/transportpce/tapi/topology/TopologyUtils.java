@@ -33,11 +33,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
@@ -167,13 +167,13 @@ public final class TopologyUtils {
             // read openroadm-network
             Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II);
             if (openroadmNet != null && openroadmNet.nonnullNode().values().stream().filter(nt ->
-                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1.class)
+                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1.class)
                     .getNodeType().equals(OpenroadmNodeType.ROADM)).count() > 0) {
                 // map roadm nodes
                 for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.rev180226.networks.network.Node roadm:openroadmNet.nonnullNode().values().stream()
                     .filter(nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.network.rev200529.Node1.class)
+                        .org.openroadm.common.network.rev211210.Node1.class)
                         .getNodeType().equals(OpenroadmNodeType.ROADM))
                     .collect(Collectors.toList())) {
                     tapiFactory.convertRoadmNode(roadm, openroadmTopo);

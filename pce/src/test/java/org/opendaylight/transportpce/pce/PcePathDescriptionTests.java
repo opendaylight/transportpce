@@ -29,7 +29,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
