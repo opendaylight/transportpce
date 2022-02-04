@@ -85,7 +85,6 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         pceSendingPceRPCs.pathComputation();
         Assert.assertTrue(gnpyConsumer.isAvailable());
         jerseyServer.tearDown();
-
     }
 
     @Test

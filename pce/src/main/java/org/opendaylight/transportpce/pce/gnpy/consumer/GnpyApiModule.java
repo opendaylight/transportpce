@@ -10,8 +10,10 @@ package org.opendaylight.transportpce.pce.gnpy.consumer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.PackageVersion;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
+
+
 
 //This class is a temporary workaround while waiting jackson
 //support in yang tools https://git.opendaylight.org/gerrit/c/yangtools/+/94852
@@ -19,10 +21,9 @@ public class GnpyApiModule extends SimpleModule {
 
     private static final long serialVersionUID = 1L;
 
-    public GnpyApiModule(JsonStringConverter<GnpyApi> gnpyApiConverter, JsonStringConverter<Result> resultConverter) {
+    public GnpyApiModule(JsonStringConverter<Request> requestConverter, JsonStringConverter<Result> resultConverter) {
         super(PackageVersion.VERSION);
-        addSerializer(GnpyApi.class, new GnpyApiSerializer(gnpyApiConverter));
+        addSerializer(Request.class, new RequestSerializer(requestConverter));
         addDeserializer(Result.class, new ResultDeserializer(resultConverter));
     }
-
 }
