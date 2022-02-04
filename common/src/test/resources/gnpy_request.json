@@ -1,6 +1,6 @@
 {
-  "gnpy-api": {
-    "topology-file": {
+  "request": {
+    "topology": {
       "elements": [
         {
           "uid": "127.0.0.40",
@@ -577,7 +577,7 @@
         }
       ]
     },
-    "service-file": {
+    "service": {
       "path-request": [
         {
           "request-id": 2,

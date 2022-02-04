@@ -1,10 +1,7 @@
 module gnpy-network-topology {
-  yang-version 1;
+  yang-version 1.1;
   namespace "gnpy:gnpy-network-topology";
   prefix gnpynt;
-  import ietf-inet-types {
-    prefix inet;
-  }
 
   organization
     "Telecom Infra Project OOPT PSE Working Group";
@@ -14,18 +11,28 @@ module gnpy-network-topology {
      contact:  <mailto:esther.lerouzic@orange.com>
     ";
   description
-    "YANG model for gnpy network input for path computation - transportPCE preversion";
+    "YANG model for gnpy network input -
+    The license used for all the yang files of GNPy is BSD 3-Clause License";
 
-  revision 2021-08-31 {
+  revision 2022-02-21 {
     description
-      "Change absolute path in leafref";
+      "draft for GNPy4TPCE preversion - non official version relevant for v2.4 GNPy file format";
+    reference
+      "YANG model for api input for path computation with gnpy";
   }
 
-  revision 2018-12-14 {
+  revision 2020-10-22 {
     description
-      "first draft";
+      "draft for experimental/2020-candi";
     reference
       "YANG model for network input for path computation with gnpy";
+  }
+
+  revision 2019-01-03 {
+    description
+      "first draft for GNPy4TPCE preversion - non official version relevant for v1.2 GNPy file format";
+    reference
+      "YANG model for api input for path computation with gnpy";
   }
 
   identity type-element {
@@ -42,7 +49,7 @@ module gnpy-network-topology {
   identity Fiber {
     base type-element;
     description
-      "Fiber element";
+      "Fiber element (unidirectional)";
   }
 
   identity Roadm {
@@ -60,7 +67,9 @@ module gnpy-network-topology {
   identity Fused {
     base type-element;
     description
-      "Fused element";
+      "Fused element ; non amplified connection between two fiber spans ;
+       can be used to model optical distribution frame, or losses due to
+       connectors or fused in a span";
   }
 
   identity length-unit {
@@ -84,16 +93,6 @@ module gnpy-network-topology {
     type decimal64 {
       fraction-digits 6;
     }
-  }
-
-  typedef te-node-id {
-    type inet:ip-address;
-    description
-      "An identifier for a node in a topology.
-       The identifier is represented as 32-bit unsigned integer in
-       the dotted-quad notation.
-       This attribute is mapped to Router ID in
-       RFC3630, RFC5329, RFC5305, and RFC6119.";
   }
 
   typedef Coef {
@@ -137,6 +136,8 @@ module gnpy-network-topology {
         fraction-digits 2;
       }
       mandatory true;
+      units db/km;
+      description "Loss coefficient of the fiber span (dB/km)";
     }
     leaf length_units {
       type identityref {
@@ -148,18 +149,21 @@ module gnpy-network-topology {
       type decimal64 {
         fraction-digits 2;
       }
+      units "dB";
       mandatory true;
     }
     leaf con_in {
       type decimal64 {
         fraction-digits 2;
       }
+      units "dB";
       mandatory true;
     }
     leaf con_out {
       type decimal64 {
         fraction-digits 2;
       }
+      units "dB";
       mandatory true;
     }
   }
@@ -168,7 +172,24 @@ module gnpy-network-topology {
     container operational {
       description
         "Operational values for the Edfa ";
-      leaf gain-target {
+      leaf gain_target {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        units "dB";
+        mandatory true;
+        description
+          "gain target of the amplifier (before VOA and after att_in)";
+      }
+      leaf tilt_target {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        mandatory true;
+        description
+          "..";
+      }
+      leaf out_voa {
         type decimal64 {
           fraction-digits 2;
         }
@@ -177,22 +198,14 @@ module gnpy-network-topology {
         description
           "..";
       }
-      leaf tilt-target {
-        type decimal64 {
-          fraction-digits 2;
-        }
-        mandatory true;
-        description
-          "..";
-      }
-      leaf out-voa {
+      leaf delta_p {
         type decimal64 {
           fraction-digits 2;
         }
         units "dB";
         mandatory true;
         description
-          "..";
+          "per channel target output power delta with respect to power setting in SI";
       }
     }
   }
@@ -206,11 +219,32 @@ module gnpy-network-topology {
       description
         "..";
     }
+    container restrictions {
+      leaf-list preamp_variety_list {
+        type string;
+        description
+          "List of authorized preamp type-variety";
+      }
+      leaf-list booster_variety_list {
+        type string;
+        description
+          "List of authorized booster type-variety";
+      }
+    }
   }
 
   grouping transceiver-params;
 
-  grouping fused-params;
+  grouping fused-params{
+    leaf loss {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      units "dB";
+      description
+        "Concentrated loss of the fused element";
+    }
+  }
 
   grouping element-type-choice {
     choice element-type {
@@ -220,7 +254,7 @@ module gnpy-network-topology {
       }
       case FiberRoadm {
         container params {
-          choice fiberroadm {
+          choice fiberroadmfused {
             case Fiber {
               when "type = 'Fiber'";
               uses fiber-params;
@@ -229,17 +263,19 @@ module gnpy-network-topology {
               when "type = 'Roadm'";
               uses roadm-params;
             }
+            case Fused {
+              when "type = 'Fused'";
+              uses fused-params;
+            }
           }
         }
       }
       case Transceiver {
         when "type = 'Transceiver'";
       }
-      case Fused {
-        when "type = 'Fused'";
-      }
     }
   }
+
 
   grouping topo {
     list elements {
@@ -266,12 +302,12 @@ module gnpy-network-topology {
       config false;
       leaf from_node {
         type leafref {
-          path ../../elements/uid;
+          path "../../elements/uid";
         }
       }
       leaf to_node {
         type leafref {
-          path ../../elements/uid;
+          path "../../elements/uid";
         }
       }
     }

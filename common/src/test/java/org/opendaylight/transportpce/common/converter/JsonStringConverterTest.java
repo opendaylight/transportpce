@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
@@ -36,12 +36,12 @@ public class JsonStringConverterTest extends AbstractTest {
         try (Reader reader = new FileReader("src/test/resources/gnpy_request.json", StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
                     .transformIntoNormalizedNode(reader).get();
-            GnpyApi gnpyRequest = (GnpyApi) getDataStoreContextUtil().getBindingDOMCodecServices()
-                    .fromNormalizedNode(YangInstanceIdentifier.of(GnpyApi.QNAME), normalizedNode).getValue();
-            JsonStringConverter<GnpyApi> gnpyJsonCOnverter = new JsonStringConverter<GnpyApi>(
+            Request gnpyRequest = (Request) getDataStoreContextUtil().getBindingDOMCodecServices()
+                    .fromNormalizedNode(YangInstanceIdentifier.of(Request.QNAME), normalizedNode).getValue();
+            JsonStringConverter<Request> gnpyJsonCOnverter = new JsonStringConverter<Request>(
                     getDataStoreContextUtil().getBindingDOMCodecServices());
             String jsonString = gnpyJsonCOnverter
-                    .createJsonStringFromDataObject(InstanceIdentifier.builder(GnpyApi.class).build(),
+                    .createJsonStringFromDataObject(InstanceIdentifier.builder(Request.class).build(),
                             gnpyRequest, JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
             assertEquals("Should be a valid request",
                     Files.readString(Paths.get("src/test/resources/expected_string.json")), jsonString);
@@ -53,10 +53,10 @@ public class JsonStringConverterTest extends AbstractTest {
     @Test
     public void createDataObjectFromJsonStringTest() throws IOException {
         String json = Files.readString(Paths.get("src/test/resources/expected_string.json"));
-        JsonStringConverter<GnpyApi> gnpyJsonCOnverter = new JsonStringConverter<GnpyApi>(
+        JsonStringConverter<Request> gnpyJsonCOnverter = new JsonStringConverter<Request>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
-        GnpyApi request = gnpyJsonCOnverter
-                .createDataObjectFromJsonString(YangInstanceIdentifier.of(GnpyApi.QNAME), json,
+        Request request = gnpyJsonCOnverter
+                .createDataObjectFromJsonString(YangInstanceIdentifier.of(Request.QNAME), json,
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
         assertNotNull("Should not be null", request);
     }

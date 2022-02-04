@@ -14,22 +14,24 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.service.PathRequest;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/gnpy/api/v1.0/files")
+@Path("/api/v1")
 public class GnpyStub {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyStub.class);
 
@@ -38,30 +40,43 @@ public class GnpyStub {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatus() {
+        try {
+            String response = Files.readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_status.json"));
+            return Response.ok(response).build();
+        } catch (IOException e) {
+            LOG.error("Cannot manage request", e);
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Produces({ "application/json" })
     @Consumes({ "application/json" })
+    @Path("/path-computation")
     public Response computePath(String request) {
         LOG.info("Received path request {}", request);
-        URI location = URI.create("http://127.0.0.1:9998/gnpy/api/v1.0/files");
+        URI location = URI.create("http://127.0.0.1:9998/api/v1/path-computation");
         // TODO: return different response based on body data
-        QName pathQname = QName.create("gnpy:gnpy-api", "2019-01-03", "gnpy-api");
+        QName pathQname = Request.QNAME;
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-        JsonStringConverter<GnpyApi> converter = new JsonStringConverter<>(
+        JsonStringConverter<Request> converter = new JsonStringConverter<>(
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
         try {
             String response = null;
             request = request.replace("Transceiver", "gnpy-network-topology:Transceiver")
                     .replace("Roadm", "gnpy-network-topology:Roadm")
                     .replace("Fiber", "gnpy-network-topology:Fiber")
-                    .replace("km", "gnpy-network-topology:km")
-                    .replace("route-include-ero", "gnpy-path-computation-simplified:route-include-ero");
-            GnpyApi data = converter.createDataObjectFromJsonString(yangId,
+                    .replace("km", "gnpy-network-topology:km");
+            Request data = converter.createDataObjectFromJsonString(yangId,
                     request, JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
             LOG.info("Converted request {}", data);
-            List<PathRequest> pathRequest = new ArrayList<>(data.getServiceFile().nonnullPathRequest().values());
+            List<PathRequest> pathRequest = new ArrayList<>(data.getService().nonnullPathRequest().values());
             // this condition is totally arbitrary and could be modified
-            if (!pathRequest.isEmpty() && "127.0.0.31".contentEquals(pathRequest.get(0).getSource().stringValue())) {
+            if (!pathRequest.isEmpty() && "127.0.0.31".contentEquals(pathRequest.get(0).getSource())) {
                 response = Files
                         .readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json"));
             } else {
