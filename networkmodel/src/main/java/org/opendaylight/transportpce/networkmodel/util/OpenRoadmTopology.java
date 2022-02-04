@@ -76,6 +76,10 @@ public final class OpenRoadmTopology {
     }
 
     public static TopologyShard createTopologyShard(Nodes mappingNode) {
+        return createTopologyShard(mappingNode, true);
+    }
+
+    public static TopologyShard createTopologyShard(Nodes mappingNode, boolean firstMount) {
         int numOfDegrees;
         int numOfSrgs;
         List<Node> nodes = new ArrayList<>();
@@ -111,13 +115,13 @@ public final class OpenRoadmTopology {
             // create degree nodes
             for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
                 NodeBuilder ietfNode = createDegree(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
-                    mappingNode.getNodeInfo().getNodeClli());
+                    mappingNode.getNodeInfo().getNodeClli(), firstMount);
                 nodes.add(ietfNode.build());
             }
             // create srg nodes
             for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
                 NodeBuilder ietfNode = createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
-                    mappingNode.getNodeInfo().getNodeClli());
+                    mappingNode.getNodeInfo().getNodeClli(), firstMount);
                 nodes.add(ietfNode.build());
             }
 
@@ -243,7 +247,8 @@ public final class OpenRoadmTopology {
         return ietfNodeBldr;
     }
 
-    private static NodeBuilder createDegree(String degNb, List<Mapping> degListMap, String nodeId, String clli) {
+    private static NodeBuilder createDegree(String degNb, List<Mapping> degListMap, String nodeId, String clli,
+                                            boolean firstMount) {
         // Create tp-list
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         TerminationPointBuilder ietfTpBldr;
@@ -286,10 +291,12 @@ public final class OpenRoadmTopology {
         TerminationPoint ietfTp = ietfTpBldr.build();
         tpMap.put(ietfTp.key(),ietfTp);
         // set degree-attributes
-        DegreeAttributes degAtt = new DegreeAttributesBuilder()
-            .setDegreeNumber(Uint16.valueOf(degNb.split("DEG")[1]))
-            .setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available())
-            .build();
+        DegreeAttributesBuilder degAttBldr = new DegreeAttributesBuilder()
+            .setDegreeNumber(Uint16.valueOf(degNb.split("DEG")[1]));
+        if (firstMount) {
+            degAttBldr.setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available());
+        }
+        DegreeAttributes degAtt = degAttBldr.build();
         // Create ietf node augmentation to support ietf tp-list
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder
             ietfNode1 = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -313,7 +320,8 @@ public final class OpenRoadmTopology {
             .addAugmentation(ietfNode1.build());
     }
 
-    private static NodeBuilder createSrg(String srgNb, List<Mapping> srgListMap, String nodeId, String clli) {
+    private static NodeBuilder createSrg(String srgNb, List<Mapping> srgListMap, String nodeId, String clli,
+                                         boolean firstMount) {
         // Create tp-list
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         TerminationPointBuilder ietfTpBldr;
@@ -363,8 +371,11 @@ public final class OpenRoadmTopology {
                     .setOperationalState(State.InService)
                     .build();
         // set srg-attributes
-        SrgAttributes srgAttr = new SrgAttributesBuilder()
-                .setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available()).build();
+        SrgAttributesBuilder srgAttrBldr = new SrgAttributesBuilder();
+        if (firstMount) {
+            srgAttrBldr.setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available());
+        }
+        SrgAttributes srgAttr = srgAttrBldr.build();
         Node1 ontNode1 = new Node1Builder().setSrgAttributes(srgAttr).build();
         // Create ietf node augmentation to support ietf tp-list
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder
