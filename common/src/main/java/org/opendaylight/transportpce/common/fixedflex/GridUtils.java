@@ -221,4 +221,13 @@ public final class GridUtils {
         return frequencyIndex - 284;
     }
 
+    /**
+     * Convert the power from dBm to Watt.
+     * @param power in dBm.
+     * @return outputpower in Watt.
+     */
+    public static BigDecimal convertDbmW(double dbm) {
+        return BigDecimal.valueOf(Math.pow(10, (dbm - 30) / 10));
+    }
+
 }

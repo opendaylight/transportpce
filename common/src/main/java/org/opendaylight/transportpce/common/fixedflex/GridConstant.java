@@ -33,6 +33,9 @@ public final class GridConstant {
     public static final double CENTRAL_FREQUENCY = 193.1;
     public static final int NB_SLOTS_100G = 8;
     public static final int NB_SLOTS_400G = 14;
+    public static final double OUTPUT_POWER_100GB_DBM = 2;
+    public static final BigDecimal OUTPUT_POWER_100GB_W = BigDecimal.valueOf(0.0015849);
+    public static final BigDecimal OUTPUT_POWER_400GB_W =  BigDecimal.valueOf(0.0027735);
     public static final BigDecimal WIDTH_80 = BigDecimal.valueOf(80);
     public static final BigDecimal WIDTH_75 = BigDecimal.valueOf(75);
     public static final BigDecimal WIDTH_40 = BigDecimal.valueOf(40);
@@ -89,7 +92,7 @@ public final class GridConstant {
     public static final Map<Uint32, Integer> RATE_SPECTRAL_WIDTH_SLOT_NUMBER_MAP = Map.of(
             ServiceRateConstant.RATE_100, NB_SLOTS_100G,
             ServiceRateConstant.RATE_200, NB_SLOTS_100G,
-            ServiceRateConstant.RATE_300, NB_SLOTS_100G,
+            ServiceRateConstant.RATE_300, NB_SLOTS_400G,
             ServiceRateConstant.RATE_400, NB_SLOTS_400G);
 
     private GridConstant() {
@@ -107,6 +110,7 @@ public final class GridConstant {
     private static Table<Uint32, ModulationFormat, BigDecimal> initFrequencySlotWidthTable() {
         Table<Uint32, ModulationFormat, BigDecimal> frequencyWidthTable = HashBasedTable.create();
         frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, SLOT_WIDTH_50);
+        frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQam16, SLOT_WIDTH_50);
         frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, SLOT_WIDTH_87_5);
         frequencyWidthTable.put(ServiceRateConstant.RATE_300, ModulationFormat.DpQam8, SLOT_WIDTH_87_5);
         frequencyWidthTable.put(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16, SLOT_WIDTH_87_5);
