@@ -74,7 +74,7 @@ class TransportGNPYtesting(unittest.TestCase):
             print('starting GNPy REST server...')
             # pylint: disable=consider-using-with
             test_utils.process_list.append(subprocess.Popen(
-                ['path_requests_run.py', '--rest'], stdout=outfile, stderr=outfile, stdin=None))
+                ['gnpy-rest'], stdout=outfile, stderr=outfile, stdin=None))
         cls.processes = test_utils.start_tpce()
 
     @classmethod
@@ -196,15 +196,14 @@ class TransportGNPYtesting(unittest.TestCase):
     # Not found path by PCE and GNPy cannot find another one
     def test_07_path_computation_FoundByPCE_NotFeasibleByGnpy(self):
         response = test_utils.path_computation_request("request-4", "service-4",
-                                                       {"node-id": "XPONDER-1", "service-rate": "100",
+                                                       {"node-id": "XPONDER-1", "service-rate": "400",
                                                            "service-format": "Ethernet", "clli": "Node1"},
-                                                       {"node-id": "XPONDER-4", "service-rate": "100",
-                                                           "service-format": "Ethernet", "clli": "Node5"},
+                                                       {"node-id": "XPONDER-4", "service-rate": "400",
+                                                           "service-format": "Ethernet", "clli": "Node4"},
                                                        {"include_": {"ordered-hops": [
-                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
-                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}},
-                                                           {"hop-number": "3", "hop-type": {"node-id": "OpenROADM-3"}}]}
+                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-3"}},
+                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-2"}},
+                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-5"}}]}
                                                         })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
