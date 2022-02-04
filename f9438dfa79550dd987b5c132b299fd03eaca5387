@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2d0682e_94a7498e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "commit title depends on the body message",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "589ff900_79b2684e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "wtih only one item, I think \"1)\" is not needed",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25fab82_2d714570",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "I think the solution below is more readable\n\npcelink.setClient(\n    source.getRdmSrgClient(pcelink.getSourceTP().getValue(), StringConstants.SERVICE_DIRECTION_AZ));",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9166e1b7_622b491f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e734cd2_98d2540e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "with a break here, I think this for-loop is pointless",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b97ade18_5d4480c0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-04T19:41:19Z",
+      "side": 1,
+      "message": "LF not needed\n\n                } else if (direction.equalsIgnoreCase(\"aToz\")) {",
+      "revId": "f9438dfa79550dd987b5c132b299fd03eaca5387",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
