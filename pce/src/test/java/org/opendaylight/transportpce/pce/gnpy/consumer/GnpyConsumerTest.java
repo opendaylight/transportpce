@@ -19,8 +19,8 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 public class GnpyConsumerTest extends JerseyTest {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerTest.class);
-    private JsonStringConverter<GnpyApi> gnpyApiConverter;
+    private JsonStringConverter<Request> gnpyApiConverter;
 
     @Override
     protected Application configure() {
@@ -55,7 +55,7 @@ public class GnpyConsumerTest extends JerseyTest {
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
         QName pathQname = QName.create("gnpy:gnpy-api", "2019-01-03", "gnpy-api");
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-        GnpyApi request = gnpyApiConverter
+        Request request = gnpyApiConverter
                 .createDataObjectFromJsonString(yangId,
                         Files.readString(Paths.get("src/test/resources/gnpy/gnpy_request.json")),
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);

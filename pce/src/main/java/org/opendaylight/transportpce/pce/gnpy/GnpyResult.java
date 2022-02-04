@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCase;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.explicit.route.hop.type.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.generic.path.properties.path.properties.PathRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type.NoPathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.result.response.response.type.PathCase;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Include;
@@ -124,7 +124,7 @@ public class GnpyResult {
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
-                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type
+                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev201022.explicit.route.hop.type
                     .NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
                 String nodeIp = numUnnumHop.getNumUnnumHop().getNodeId();
                 try {

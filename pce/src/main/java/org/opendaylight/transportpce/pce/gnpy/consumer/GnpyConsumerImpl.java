@@ -17,8 +17,8 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,14 +26,15 @@ public class GnpyConsumerImpl implements GnpyConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerImpl.class);
 
     private GnpyResource api;
-    private JsonStringConverter<GnpyApi> gnpyApiConverter;
-    private JsonStringConverter<Result> resultConverter;
+    JsonStringConverter<Request> gnpyRequestConverter;
+    JsonStringConverter<Result> resultConverter;
 
     public GnpyConsumerImpl(String baseUrl, String username, String password,
             BindingDOMCodecServices bindingDOMCodecServices) {
-        gnpyApiConverter = new JsonStringConverter<>(bindingDOMCodecServices);
+        gnpyRequestConverter = new JsonStringConverter<>(bindingDOMCodecServices);
         resultConverter = new JsonStringConverter<>(bindingDOMCodecServices);
-        JsonConfigurator jsonConfigurator = new JsonConfigurator(gnpyApiConverter, resultConverter);
+
+        JsonConfigurator jsonConfigurator = new JsonConfigurator(gnpyRequestConverter, resultConverter);
         Client client = ClientBuilder.newClient();
         HttpAuthenticationFeature authFeature = HttpAuthenticationFeature.basic(username, password);
         client.register(authFeature);
@@ -55,7 +56,7 @@ public class GnpyConsumerImpl implements GnpyConsumer {
     }
 
     @Override
-    public Result computePaths(GnpyApi request) {
+    public Result computePaths(Request request) {
         try {
             return api.computePathRequest(request);
         } catch (WebApplicationException | ProcessingException e) {

@@ -1,5 +1,5 @@
 module gnpy-api {
-  yang-version 1;
+  yang-version 1.1;
   namespace "gnpy:gnpy-api";
   prefix gnpyapi;
 
@@ -8,6 +8,9 @@ module gnpy-api {
   }
   import gnpy-path-computation-simplified {
     prefix gnpypc;
+  }
+  import gnpy-eqpt-config {
+    prefix gnpyeqpt;
   }
 
   organization
@@ -20,25 +23,35 @@ module gnpy-api {
   description
     "YANG model for gnpy api input for path computation - TransportPCE preversion";
 
-  revision 2019-01-03 {
+  revision 2020-10-22 {
     description
-      "first draft";
+      "draft for experimental/2020-candi";
     reference
       "YANG model for api input for path computation with gnpy";
   }
 
-  container gnpy-api {
-    description
-      "This is the structure of the body of the request to gnpy";
-    container topology-file {
-      description
-        "Describe the topology file to connect to gnpy";
-      uses gnpynt:topo;
-    }
-    container service-file {
+  container request {
+    container service {
       description
         "Describe the service file to connect to gnpy";
       uses gnpypc:service;
     }
+    container topology {
+      description
+        "Describe the topology file to connect to gnpy";
+      uses gnpynt:topo;
+    }
+    container equipment {
+      description
+        "Describe the equipment library to connect to gnpy";
+      uses gnpyeqpt:eqpt;
+    }    
   }
+    
+  container result {
+    uses gnpypc:result;
+    description
+      "Describe the response object to gnpy";
+  }
+    
 }

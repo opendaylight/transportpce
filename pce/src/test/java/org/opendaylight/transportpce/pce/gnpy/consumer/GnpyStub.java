@@ -21,8 +21,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.service.PathRequest;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
@@ -47,7 +47,7 @@ public class GnpyStub {
         // TODO: return different response based on body data
         QName pathQname = QName.create("gnpy:gnpy-api", "2019-01-03", "gnpy-api");
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-        JsonStringConverter<GnpyApi> converter = new JsonStringConverter<>(
+        JsonStringConverter<Request> converter = new JsonStringConverter<>(
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
         try {
             String response = null;
@@ -56,12 +56,12 @@ public class GnpyStub {
                     .replace("Fiber", "gnpy-network-topology:Fiber")
                     .replace("km", "gnpy-network-topology:km")
                     .replace("route-include-ero", "gnpy-path-computation-simplified:route-include-ero");
-            GnpyApi data = converter.createDataObjectFromJsonString(yangId,
+            Request data = converter.createDataObjectFromJsonString(yangId,
                     request, JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
             LOG.info("Converted request {}", data);
-            List<PathRequest> pathRequest = new ArrayList<>(data.getServiceFile().nonnullPathRequest().values());
+            List<PathRequest> pathRequest = new ArrayList<>(data.getService().nonnullPathRequest().values());
             // this condition is totally arbitrary and could be modified
-            if (!pathRequest.isEmpty() && "127.0.0.31".contentEquals(pathRequest.get(0).getSource().stringValue())) {
+            if (!pathRequest.isEmpty() && "127.0.0.31".contentEquals(pathRequest.get(0).getSource())) {
                 response = Files
                         .readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json"));
             } else {
