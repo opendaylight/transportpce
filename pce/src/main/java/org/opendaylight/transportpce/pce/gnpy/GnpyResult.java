@@ -11,19 +11,15 @@ package org.opendaylight.transportpce.pce.gnpy;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCase;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.NoPathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.PathCase;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Include;
@@ -35,8 +31,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.NodeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +46,10 @@ public class GnpyResult {
 
     private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
     private Response response = null;
-    private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
+    private List<String> ordNodeList = new ArrayList<>();
 
     public GnpyResult(Result result, GnpyTopoImpl gnpyTopo) throws GnpyException {
-        this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
+        this.ordNodeList = gnpyTopo.getElementsList();
         List<Response> responses = new ArrayList<>(result.nonnullResponse().values());
         if (responses.isEmpty()) {
             throw new GnpyException("In GnpyResult: the response from GNpy is null!");
@@ -124,26 +118,18 @@ public class GnpyResult {
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
-                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type
-                    .NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
-                String nodeIp = numUnnumHop.getNumUnnumHop().getNodeId();
-                try {
-                    IpAddress nodeIpAddress = new IpAddress(new Ipv4Address(nodeIp));
-                    // find the corresponding node-id (in ord-ntw) corresponding to nodeId (in gnpy response)
-                    String nodeId = findOrdNetworkNodeId(nodeIpAddress);
-                    if (nodeId != null) {
-                        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017
-                            .ordered.constraints.sp.hop.type.hop.type.Node node = new NodeBuilder().setNodeId(nodeId)
-                            .build();
-                        HopType hopType = new HopTypeBuilder().setHopType(node).build();
-                        OrderedHops orderedHops = new OrderedHopsBuilder()
-                                .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
-                            .build();
-                        orderedHopsList.add(orderedHops);
-                        counter++;
-                    }
-                } catch (IllegalArgumentException e) {
-                    LOG.error(" in GnpyResult: the element {} is not a ipv4Address ", nodeIp, e);
+                NumUnnumHop numUnnumHop = (NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
+                String nodeId = numUnnumHop.getNumUnnumHop().getNodeId();
+                if (nodeId != null && this.ordNodeList.contains(nodeId)) {
+                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017
+                        .ordered.constraints.sp.hop.type.hop.type.Node node = new NodeBuilder().setNodeId(nodeId)
+                        .build();
+                    HopType hopType = new HopTypeBuilder().setHopType(node).build();
+                    OrderedHops orderedHops = new OrderedHopsBuilder()
+                            .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
+                        .build();
+                    orderedHopsList.add(orderedHops);
+                    counter++;
                 }
             }
         }
@@ -154,17 +140,6 @@ public class GnpyResult {
         General general = new GeneralBuilder().setInclude(include).build();
         hardConstraints = new HardConstraintsBuilder().setCoRoutingOrGeneral(general).build();
         return hardConstraints;
-    }
-
-    private String findOrdNetworkNodeId(IpAddress nodeIpAddress) {
-        Iterator<Map.Entry<String,IpAddress>> it = this.mapNodeRefIp.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry<String, IpAddress> entry = it.next();
-            if (entry.getValue().equals(nodeIpAddress)) {
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 
     public Response getResponse() {

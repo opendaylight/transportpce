@@ -1,0 +1,97 @@
+module gnpy-api {
+  yang-version 1.1;
+  namespace "gnpy:gnpy-api";
+  prefix gnpyapi;
+
+  import gnpy-network-topology {
+    prefix gnpynt;
+  }
+  import gnpy-path-computation-simplified {
+    prefix gnpypc;
+  }
+  import gnpy-eqpt-config {
+    prefix gnpyeqpt;
+  }
+
+  organization
+    "Telecom Infra Project OOPT PSE Working Group";
+  contact
+    "WG Web:   <https://github.com/Telecominfraproject/oopt-gnpy>
+     contact:  <mailto:ahmed.triki@orange.com>
+     contact:  <mailto:esther.lerouzic@orange.com>
+    ";
+  description
+    "YANG model for gnpy api input for path computation -
+    The license used for all the yang files of GNPy is BSD 3-Clause License
+
+    BSD 3-Clause License
+
+    Copyright (c) 2018, Telecom Infra Project
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this
+      list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+
+    * Neither the name of the copyright holder nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+
+  revision 2022-02-21 {
+    description
+      "draft for GNPy4TPCE preversion - non official version relevant for v2.4 GNPy file format";
+    reference
+      "YANG model for api input for path computation with gnpy";
+  }
+
+  revision 2020-10-22 {
+    description
+      "draft for experimental/2020-candi";
+    reference
+      "YANG model for api input for path computation with gnpy";
+  }
+
+  revision 2019-01-03 {
+    description
+      "first draft for GNPy4TPCE preversion - non official version relevant for v1.2 GNPy file format";
+    reference
+      "YANG model for api input for path computation with gnpy";
+  }
+
+  container request {
+    container service {
+      description
+        "Describe the service file to connect to gnpy";
+      uses gnpypc:service;
+    }
+    container topology {
+      description
+        "Describe the topology file to connect to gnpy";
+      uses gnpynt:topo;
+    }
+    container equipment {
+      description
+        "Describe the equipment library to connect to gnpy";
+      uses gnpyeqpt:eqpt;
+    }
+  }
+
+
+}
