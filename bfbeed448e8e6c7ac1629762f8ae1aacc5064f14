@@ -16,6 +16,23 @@
       "message": "Strange...\nCan\u0027t understand what here could make otn_end2end functional test fail.\nGate is overloaded?",
       "revId": "bfbeed448e8e6c7ac1629762f8ae1aacc5064f14",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeb38d66_c3a10542",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-05T07:18:23Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "bfbeed448e8e6c7ac1629762f8ae1aacc5064f14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
