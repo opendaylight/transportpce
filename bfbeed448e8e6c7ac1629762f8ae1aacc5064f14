@@ -33,6 +33,24 @@
       "message": "recheck",
       "revId": "bfbeed448e8e6c7ac1629762f8ae1aacc5064f14",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb50439c_f5633dad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-05T08:02:16Z",
+      "side": 1,
+      "message": "very likely I observe the same behavior with other contributions...",
+      "parentUuid": "d1647f8b_5c7dd216",
+      "revId": "bfbeed448e8e6c7ac1629762f8ae1aacc5064f14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
