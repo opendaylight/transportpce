@@ -51,6 +51,28 @@ public class PceOtnNode implements PceNode {
      * For This Class the node passed shall be at the otn-openroadm Layer
      */
 
+    private static List<String> serviceTypeOduList = List.of(
+        StringConstants.SERVICE_TYPE_ODU4,
+        StringConstants.SERVICE_TYPE_ODUC4,
+        StringConstants.SERVICE_TYPE_ODUC3,
+        StringConstants.SERVICE_TYPE_ODUC2);
+    private static Map<String,
+            Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability>>
+                serviceTypeEthClassMap = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
+        StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
+        StringConstants.SERVICE_TYPE_100GE_T, If100GEODU4.class,
+        StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
+        StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
+    private static Map<String, Integer> serviceTypeEthTsNbMap = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, 1,
+        StringConstants.SERVICE_TYPE_10GE, 10,
+        StringConstants.SERVICE_TYPE_100GE_M, 20);
+    private static Map<String, String> serviceTypeEthOduStringMap = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, "ODU0",
+        StringConstants.SERVICE_TYPE_10GE, "ODU2e",
+        StringConstants.SERVICE_TYPE_100GE_M, "ODU4");
+
     private boolean valid = true;
 
     private final Node node;
@@ -138,56 +160,36 @@ public class PceOtnNode implements PceNode {
                         continue;
                     }
                     TerminationPoint1 ontTp1 = tp.augmentation(TerminationPoint1.class);
-                    switch (this.otnServiceType) {
-                        case StringConstants.SERVICE_TYPE_100GE_S:
+                    if (serviceTypeOduList.contains(this.otnServiceType)
+                            || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)) {
                             // TODO verify the capability of network port to support ODU4 CTP interface creation
-                        case StringConstants.SERVICE_TYPE_ODU4:
-                        case StringConstants.SERVICE_TYPE_ODUC2:
-                        case StringConstants.SERVICE_TYPE_ODUC3:
-                        case StringConstants.SERVICE_TYPE_ODUC4:
-                            if (!checkTpForOdtuTermination(ontTp1)) {
-                                LOG.error("TP {} of {} does not allow ODU4 termination creation",
-                                    tp.getTpId().getValue(), node.getNodeId().getValue());
-                                continue;
-                            }
-                            break;
-
-                        case StringConstants.SERVICE_TYPE_10GE:
-                            if (!checkOdtuTTPforLoOduCreation(ontTp1, 10)) {
-                                LOG.error("TP {} of {} does not allow ODU2e termination creation",
-                                    tp.getTpId().getValue(), node.getNodeId().getValue());
-                                continue;
-                            }
-                            break;
-                        case StringConstants.SERVICE_TYPE_100GE_M:
-                            if (!checkOdtuTTPforLoOduCreation(ontTp1, 20)) {
-                                LOG.error("TP {} of {} does not allow ODU4 termination creation",
-                                    tp.getTpId().getValue(), node.getNodeId().getValue());
-                                continue;
-                            }
-                            break;
-                        case StringConstants.SERVICE_TYPE_1GE:
-                            if (!checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
-                                LOG.error("TP {} of {} does not allow ODU0 termination creation",
-                                    tp.getTpId().getValue(), node.getNodeId().getValue());
-                                continue;
-                            }
-                            break;
-
-                        default:
-                            LOG.error("TP {} of {} does not allow any termination creation",
+                        if (!checkTpForOdtuTermination(ontTp1)) {
+                            LOG.error("TP {} of {} does not allow ODU4 termination creation",
                                 tp.getTpId().getValue(), node.getNodeId().getValue());
                             continue;
+                        }
+                    } else if (serviceTypeEthTsNbMap.containsKey(this.otnServiceType)) {
+                        if (!checkOdtuTTPforLoOduCreation(ontTp1, serviceTypeEthTsNbMap.get(this.otnServiceType))) {
+                            LOG.error("TP {} of {} does not allow {} termination creation",
+                                tp.getTpId().getValue(),
+                                serviceTypeEthOduStringMap.get(this.otnServiceType),
+                                node.getNodeId().getValue());
+                            continue;
+                        }
+                    // TODO what about SERVICE_TYPE_100GE_T ?
+                    } else {
+                        LOG.error("TP {} of {} does not allow any termination creation",
+                            tp.getTpId().getValue(), node.getNodeId().getValue());
+                        continue;
                     }
                     LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                     break;
 
                 case XPONDERCLIENT:
-                    if (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
-                            || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
-                            || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                            || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType)) {
+                    if (serviceTypeEthClassMap.containsKey(otnServiceType)
+                            && !StringConstants.SERVICE_TYPE_100GE_T.equals(this.otnServiceType)) {
+                            // TODO should we really exclude SERVICE_TYPE_100GE_T ?
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -205,25 +207,17 @@ public class PceOtnNode implements PceNode {
                     LOG.debug("unsupported ocn TP type {}", ocnTp1.getTpType());
             }
         }
-        if (StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
-                || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)
-                || StringConstants.SERVICE_TYPE_ODUC3.equals(this.otnServiceType)
-                || StringConstants.SERVICE_TYPE_ODUC2.equals(this.otnServiceType)
-                || ((StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
-                        || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))
+        this.valid = serviceTypeOduList.contains(this.otnServiceType)
+                || (serviceTypeEthTsNbMap.containsKey(this.otnServiceType)
                     && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
                      || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
                     )
                 || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                    && (mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1)))
-                || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                    && (mode.equals("intermediate") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 0, 2)))
-        ) {
-            this.valid = true;
-        } else {
-            this.valid = false;
-        }
+                    && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1)))
+                     || (mode.equals("intermediate") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 0, 2))
+                    );
+                //TODO checks very similar to isIntermediate and isAz methods - they should be mutualized
+                //     perhaps even with isOtnServiceTypeValid method
     }
 
     private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
@@ -299,27 +293,10 @@ public class PceOtnNode implements PceNode {
         for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
                 .values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
-            switch (otnServiceType) {
-                case StringConstants.SERVICE_TYPE_1GE:
-                // we could also check the administrative status of the tp
-                    if (sic.getIfCapType().equals(If1GEODU0.class)) {
-                        return true;
-                    }
-                    break;
-                case StringConstants.SERVICE_TYPE_10GE:
-                    if (sic.getIfCapType().equals(If10GEODU2e.class)) {
-                        return true;
-                    }
-                    break;
-                case StringConstants.SERVICE_TYPE_100GE_T:
-                case StringConstants.SERVICE_TYPE_100GE_M:
-                case StringConstants.SERVICE_TYPE_100GE_S:
-                    if (sic.getIfCapType().equals(If100GEODU4.class)) {
-                        return true;
-                    }
-                    break;
-                default:
-                    break;
+            // we could also check the administrative status of the tp
+            if (serviceTypeEthClassMap.containsKey(otnServiceType)
+                    && sic.getIfCapType().equals(serviceTypeEthClassMap.get(otnServiceType))) {
+                return true;
             }
         }
         return false;
@@ -443,19 +420,19 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
-        if (pceOtnNode == null || pceOtnNode.node == null
-            || pceOtnNode.getNodeId() == null || pceOtnNode.nodeType == null || pceOtnNode.getSupNetworkNodeId() == null
-            || pceOtnNode.getSupClliNodeId() == null || pceOtnNode.otnServiceType == null) {
+        if (pceOtnNode == null || pceOtnNode.node == null || pceOtnNode.getNodeId() == null
+                || pceOtnNode.nodeType == null || pceOtnNode.getSupNetworkNodeId() == null
+                || pceOtnNode.getSupClliNodeId() == null || pceOtnNode.otnServiceType == null) {
             LOG.error(
                 "PceOtnNode: one of parameters is not populated : nodeId, node type, supporting nodeId, otnServiceType"
             );
             return false;
         }
-        if (!isNodeTypeValid(pceOtnNode)) {
-            LOG.error("PceOtnNode node type: node type isn't one of MUXPDR or SWITCH or TPDR");
-            return false;
+        if (isNodeTypeValid(pceOtnNode)) {
+            return isOtnServiceTypeValid(pceOtnNode);
         }
-        return isOtnServiceTypeValid(pceOtnNode);
+        LOG.error("PceOtnNode node type: node type is not one of MUXPDR or SWITCH or TPDR");
+        return false;
     }
 
     private boolean isOtnServiceTypeValid(PceOtnNode pceOtnNode) {
@@ -471,6 +448,8 @@ public class PceOtnNode implements PceNode {
                 || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
                 || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
                 && (isAz(pceOtnNode) || isIntermediate(pceOtnNode));
+        //TODO serviceTypeEthTsNbMap.containsKey(this.otnServiceType) might be more appropriate here
+        //     but only SERVICE_TYPE_100GE_S is managed and not SERVICE_TYPE_100GE_M and _T
     }
 
     private boolean isIntermediate(PceOtnNode pceOtnNode) {
