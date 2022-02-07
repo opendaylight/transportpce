@@ -86,7 +86,8 @@ public class PowerMgmtTest extends AbstractTest {
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager, this.portMapping,
             this.portMappingVersion22);
-        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager);
+        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager, this.portMapping,
+            this.portMappingVersion710);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
                 this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22,
             this.openRoadmInterfacesImpl710);
