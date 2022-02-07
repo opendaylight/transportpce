@@ -121,6 +121,24 @@
       "parentUuid": "d4cbcf41_857d0750",
       "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3842635c_e7900031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-07T18:19:33Z",
+      "side": 1,
+      "message": "Here is the JIRA ticket for Jonas comment: https://jira.opendaylight.org/browse/TRNSPRTPCE-609",
+      "parentUuid": "d4a41d7c_4391f035",
+      "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
