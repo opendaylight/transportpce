@@ -35,6 +35,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.otn.tp.attributes.OdtuTpnPool;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -44,13 +46,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceOtnNode implements PceNode {
-    /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
     ////////////////////////// OTN NODES ///////////////////////////
     /*
      * For This Class the node passed shall be at the otn-openroadm Layer
      */
 
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
+=======
+    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
+    private static final List<String> SERVICE_TYPE_ODU_LIST = List.of(
+        StringConstants.SERVICE_TYPE_ODU4,
+        StringConstants.SERVICE_TYPE_ODUC4,
+        StringConstants.SERVICE_TYPE_ODUC3,
+        StringConstants.SERVICE_TYPE_ODUC2);
+    private static final List<OpenroadmNodeType> VALID_NODETYPES_LIST = List.of(
+        OpenroadmNodeType.MUXPDR,
+        OpenroadmNodeType.SWITCH,
+        OpenroadmNodeType.TPDR);
+    private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
+        StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
+        StringConstants.SERVICE_TYPE_100GE_T, If100GEODU4.class,
+        StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
+        StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
+    private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, 1,
+        StringConstants.SERVICE_TYPE_10GE, 10,
+        StringConstants.SERVICE_TYPE_100GE_M, 20);
+    private static final Map<String, String> SERVICE_TYPE_ETH_ODU_STRING_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, "ODU0",
+        StringConstants.SERVICE_TYPE_10GE, "ODU2e",
+        StringConstants.SERVICE_TYPE_100GE_M, "ODU4");
+
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
     private boolean valid = true;
 
     private final Node node;
@@ -102,8 +130,7 @@ public class PceOtnNode implements PceNode {
         this.tpAvailableTribSlot.clear();
         checkAvailableTribSlot();
         this.clientPort = clientPort;
-        if (node == null || nodeId == null || nodeType != OpenroadmNodeType.MUXPDR
-                && nodeType != OpenroadmNodeType.SWITCH && nodeType != OpenroadmNodeType.TPDR) {
+        if (node == null || nodeId == null || nodeType == null || !VALID_NODETYPES_LIST.contains(nodeType)) {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
@@ -141,8 +168,13 @@ public class PceOtnNode implements PceNode {
                         continue;
                     }
                     TerminationPoint1 ontTp1 = tp.augmentation(TerminationPoint1.class);
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
                     switch (this.otnServiceType) {
                         case StringConstants.SERVICE_TYPE_100GE_S:
+=======
+                    if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
+                            || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)) {
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
                             // TODO verify the capability of network port to support ODU4 CTP interface creation
                         case StringConstants.SERVICE_TYPE_ODU4:
                         case StringConstants.SERVICE_TYPE_ODUC2:
@@ -181,16 +213,40 @@ public class PceOtnNode implements PceNode {
                             LOG.error("TP {} of {} does not allow any termination creation",
                                 tp.getTpId().getValue(), node.getNodeId().getValue());
                             continue;
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
+=======
+                        }
+                    } else if (SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)) {
+                        if (!checkOdtuTTPforLoOduCreation(
+                                ontTp1, SERVICE_TYPE_ETH_TS_NB_MAP.get(this.otnServiceType))) {
+                            LOG.error("TP {} of {} does not allow {} termination creation",
+                                tp.getTpId().getValue(),
+                                SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType),
+                                node.getNodeId().getValue());
+                            continue;
+                        }
+                    // TODO what about SERVICE_TYPE_100GE_T ?
+                    } else {
+                        LOG.error("TP {} of {} does not allow any termination creation",
+                            tp.getTpId().getValue(), node.getNodeId().getValue());
+                        continue;
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
                     }
                     LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                     break;
 
                 case XPONDERCLIENT:
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
                     if (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType)) {
+=======
+                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
+                            && !StringConstants.SERVICE_TYPE_100GE_T.equals(this.otnServiceType)) {
+                            // TODO should we really exclude SERVICE_TYPE_100GE_T ?
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -208,6 +264,7 @@ public class PceOtnNode implements PceNode {
                     LOG.debug("unsupported ocn TP type {}", ocnTp1.getTpType());
             }
         }
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         if (StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
                 || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)
                 || StringConstants.SERVICE_TYPE_ODUC3.equals(this.otnServiceType)
@@ -227,10 +284,22 @@ public class PceOtnNode implements PceNode {
         } else {
             this.valid = false;
         }
+=======
+        this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
+                || SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)
+                    && isAzOrIntermediateAvl(mode, null, availableXpdrClientTps, availableXpdrNWTps)
+                || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                    && isAzOrIntermediateAvl(mode, availableXpdrClientTps, availableXpdrClientTps, availableXpdrNWTps);
+                //TODO very similar to isOtnServiceTypeValid method
+                //     check whether the different treatment for SERVICE_TYPE_100GE_S here is appropriate or not
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
     }
 
     private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
-        if (clientTps != null && netwTps != null && nbClient == 1 && nbNetw == 1) {
+        if (netwTps == null) {
+            return false;
+        }
+        if (clientTps != null && nbClient == 1 && nbNetw == 1) {
             clientTps.sort(Comparator.comparing(TpId::getValue));
             netwTps.sort(Comparator.comparing(TpId::getValue));
             for (TpId nwTp : netwTps) {
@@ -242,18 +311,20 @@ public class PceOtnNode implements PceNode {
                             usableXpdrClientTps.add(clTp);
                             usableXpdrNWTps.add(nwTp);
                         }
-                        if (usableXpdrClientTps.size() >= nbClient && usableXpdrNWTps.size() >= nbNetw) {
-                            if (this.clientPort == null || this.clientPort.equals(clTp.getValue())) {
-                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
-                                return true;
-                            }
+                        if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
+                            //since nbClient == 1 && nbNetw == 1...
+                                && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
+                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                            return true;
                         }
                     }
                 }
             }
         }
-        if (netwTps != null && nbClient == 0 && nbNetw == 2) {
+        if (nbClient == 0 && nbNetw == 2) {
             netwTps.sort(Comparator.comparing(TpId::getValue));
+            //TODO compared to above, nested loops are inverted below - does it make really sense ?
+            //     there is room to rationalize things here
             for (NonBlockingList nbl : new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
                     .nonnullOduSwitchingPools().values().stream().findFirst().get()
                         .getNonBlockingList().values())) {
@@ -261,7 +332,8 @@ public class PceOtnNode implements PceNode {
                     if (nbl.getTpList().contains(nwTp)) {
                         usableXpdrNWTps.add(nwTp);
                     }
-                    if (usableXpdrNWTps.size() >= nbNetw) {
+                    if (usableXpdrNWTps.size() >= 2) {
+                    //since nbClient == 0 && nbNetw == 2...
                         return true;
                     }
                 }
@@ -284,6 +356,7 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkOdtuTTPforLoOduCreation(TerminationPoint1 ontTp1, int tsNb) {
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         return ontTp1.getXpdrTpPortConnectionAttributes() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
@@ -298,12 +371,29 @@ public class PceOtnNode implements PceNode {
                         .stream().findFirst().get().getTpnPool()
                     .isEmpty()
             && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb;
+=======
+        XpdrTpPortConnectionAttributes portConAttr = ontTp1.getXpdrTpPortConnectionAttributes();
+        if (portConAttr == null
+                || portConAttr.getTsPool() == null
+                || portConAttr.getTsPool().size() < tsNb
+                || portConAttr.getOdtuTpnPool() == null) {
+            return false;
+        }
+        return checkFirstOdtuTpn(portConAttr.getOdtuTpnPool().values().stream().findFirst().get());
+    }
+
+    private boolean checkFirstOdtuTpn(OdtuTpnPool otPool) {
+        return (otPool.getOdtuType().equals(ODTU4TsAllocated.class)
+                || otPool.getOdtuType().equals(ODTUCnTs.class))
+            && !otPool.getTpnPool().isEmpty();
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
     }
 
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
         for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
                 .values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
             switch (otnServiceType) {
                 case StringConstants.SERVICE_TYPE_1GE:
                 // we could also check the administrative status of the tp
@@ -325,6 +415,12 @@ public class PceOtnNode implements PceNode {
                     break;
                 default:
                     break;
+=======
+            // we could also check the administrative status of the tp
+            if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
+                    && sic.getIfCapType().equals(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType))) {
+                return true;
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
             }
         }
         return false;
@@ -391,6 +487,7 @@ public class PceOtnNode implements PceNode {
     }
 
     public void checkAvailableTribPort() {
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         List<TerminationPoint> networkTpList = node
             .augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
@@ -413,6 +510,26 @@ public class PceOtnNode implements PceNode {
                         .values().stream().findFirst().get().getTpnPool();
                 if (tpnPool != null) {
                     tpAvailableTribPort.put(tp.getTpId().getValue(), tpnPool);
+=======
+        for (TerminationPoint tp :
+            node.augmentation(
+                    org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .Node1.class)
+                .getTerminationPoint().values().stream()
+                .filter(type -> type
+                    .augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+                            .TerminationPoint1.class)
+                    .getTpType()
+                    .equals(OpenroadmTpType.XPONDERNETWORK))
+                .collect(Collectors.toList())) {
+            XpdrTpPortConnectionAttributes portConAttr =
+                tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes();
+            if (portConAttr != null && portConAttr.getOdtuTpnPool() != null) {
+                OdtuTpnPool otPool = portConAttr.getOdtuTpnPool().values().stream().findFirst().get();
+                if (checkFirstOdtuTpn(otPool)) {
+                    tpAvailableTribPort.put(tp.getTpId().getValue(), otPool.getTpnPool());
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
                 }
             }
         }
@@ -439,59 +556,71 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean isValid() {
-        if (node == null || nodeId == null || nodeType == null || this.getSupNetworkNodeId() == null
-                || this.getSupClliNodeId() == null) {
+        if (isNotValid(this)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
         return valid;
     }
 
+    private boolean isNotValid(final PceOtnNode poNode) {
+        return poNode == null || poNode.nodeId == null || poNode.nodeType == null
+                || poNode.getSupNetworkNodeId() == null || poNode.getSupClliNodeId() == null;
+    }
+
     public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         if (pceOtnNode == null || pceOtnNode.node == null
             || pceOtnNode.getNodeId() == null || pceOtnNode.nodeType == null || pceOtnNode.getSupNetworkNodeId() == null
             || pceOtnNode.getSupClliNodeId() == null || pceOtnNode.otnServiceType == null) {
+=======
+        if (isNotValid(pceOtnNode) || pceOtnNode.otnServiceType == null) {
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
             LOG.error(
                 "PceOtnNode: one of parameters is not populated : nodeId, node type, supporting nodeId, otnServiceType"
             );
             return false;
         }
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         if (!isNodeTypeValid(pceOtnNode)) {
             LOG.error("PceOtnNode node type: node type isn't one of MUXPDR or SWITCH or TPDR");
             return false;
+=======
+        if (VALID_NODETYPES_LIST.contains(pceOtnNode.nodeType)) {
+            return isOtnServiceTypeValid(pceOtnNode);
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
         }
         return isOtnServiceTypeValid(pceOtnNode);
     }
 
-    private boolean isOtnServiceTypeValid(PceOtnNode pceOtnNode) {
-        if (pceOtnNode.modeType == null) {
+    private boolean isOtnServiceTypeValid(final PceOtnNode poNode) {
+        if (poNode.modeType == null) {
             return false;
         }
         //Todo refactor Strings (mode and otnServiceType ) to enums
-        if (pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
-                && pceOtnNode.modeType.equals("AZ")) {
+        if (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
+                && poNode.modeType.equals("AZ")) {
             return true;
         }
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         return (pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
                 || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
                 || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
                 && (isAz(pceOtnNode) || isIntermediate(pceOtnNode));
+=======
+        return (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
+            && isAzOrIntermediateAvl(poNode.modeType, null, poNode.availableXpdrClientTps, poNode.availableXpdrNWTps);
+        //TODO SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType) might be more appropriate here
+        //     but only SERVICE_TYPE_100GE_S is managed and not SERVICE_TYPE_100GE_M and _T
+>>>>>>> CHANGE (2eba74 Refactor PCE network analyzer PceOtnNode step 3)
     }
 
-    private boolean isIntermediate(PceOtnNode pceOtnNode) {
-        return pceOtnNode.modeType.equals("intermediate")
-                && checkSwPool(null, pceOtnNode.availableXpdrNWTps, 0, 2);
-    }
-
-    private boolean isAz(PceOtnNode pceOtnNode) {
-        return pceOtnNode.modeType.equals("AZ")
-                && checkSwPool(pceOtnNode.availableXpdrClientTps, pceOtnNode.availableXpdrNWTps, 1, 1);
-    }
-
-    private boolean isNodeTypeValid(final PceOtnNode pceOtnNode) {
-        return pceOtnNode.nodeType == OpenroadmNodeType.MUXPDR
-                || pceOtnNode.nodeType  == OpenroadmNodeType.SWITCH
-                || pceOtnNode.nodeType  == OpenroadmNodeType.TPDR;
+    private boolean isAzOrIntermediateAvl(
+            String mdType, List<TpId> clientTps0, List<TpId> clientTps, List<TpId> netwTps) {
+        return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
+               || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);
     }
 
     @Override
