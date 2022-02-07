@@ -36,6 +36,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bean id="openRoadmInterfaces710" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710" >
         <argument ref="deviceTransactionManager" />
+        <argument ref="portMapping" />
+        <argument ref="portMapping710" />
     </bean>
 
     <bean id="openRoadmInterfaces" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl" >

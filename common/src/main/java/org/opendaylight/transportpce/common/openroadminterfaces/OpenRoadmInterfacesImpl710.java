@@ -19,6 +19,9 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.packs.CircuitPacks;
@@ -41,9 +44,14 @@ public class OpenRoadmInterfacesImpl710 {
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl710.class);
 
     private final DeviceTransactionManager deviceTransactionManager;
+    private final PortMapping portMapping;
+    private final PortMappingVersion710 portMapping710;
 
-    public OpenRoadmInterfacesImpl710(DeviceTransactionManager deviceTransactionManager) {
+    public OpenRoadmInterfacesImpl710(DeviceTransactionManager deviceTransactionManager,
+        PortMapping portMapping, PortMappingVersion710 portMapping710) {
         this.deviceTransactionManager = deviceTransactionManager;
+        this.portMapping = portMapping;
+        this.portMapping710 = portMapping710;
     }
 
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
@@ -174,6 +182,11 @@ public class OpenRoadmInterfacesImpl710 {
             if (intf2Delete.getName().contains(StringConstants.CLIENT_TOKEN) || intf2Delete.getName().contains(
                 StringConstants.NETWORK_TOKEN)) {
                 postEquipmentState(nodeId, intf2Delete.getSupportingCircuitPackName(), false);
+                // Here we update the port-mapping data after the interface delete
+                Mapping oldMapping = this.portMapping.getMapping(nodeId, intf2Delete.getSupportingCircuitPackName(),
+                    intf2Delete.getSupportingPort());
+                this.portMapping.deleteMapping(nodeId, oldMapping.getLogicalConnectionPoint());
+                this.portMapping710.updateMapping(nodeId, oldMapping);
             }
 
         } else {
