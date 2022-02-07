@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed09570_1da0f4c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T11:06:35Z",
+      "side": 1,
+      "message": "This is ready for review.\nIn order to prepare next changes, I\u0027ve added a few comments with questions at places where I suspected some service types checks could have been forgotten.\nBut it might be on purpose as well.\nI would appreciate if anyone could give me any guidance about them.",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d2a127e_b3e98d30",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T11:06:35Z",
+      "side": 1,
+      "message": "Is it normal? or should we add SERVICE_TYPE_100GE_T here too ?",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "888bd18d_c0cc8dc7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T11:06:35Z",
+      "side": 1,
+      "message": "Is it normal? or should we add SERVICE_TYPE_100GE_T here too ?",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6766dc3_72d1e208",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T11:06:35Z",
+      "side": 1,
+      "message": "Is it normal? or should we add SERVICE_TYPE_100GE_M \u0026 SERVICE_TYPE_100GE_T here too ?",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
