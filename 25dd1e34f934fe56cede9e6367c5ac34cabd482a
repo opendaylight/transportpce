@@ -67,6 +67,24 @@
       "message": "If no further comments, can we merge this? ",
       "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a6ddd00_c84dfbe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T16:47:36Z",
+      "side": 1,
+      "message": "no objection for me if we create the jira ticket for https://git.opendaylight.org/gerrit/c/transportpce/+/99497/comment/7037d23f_87e427c8/ before",
+      "parentUuid": "326d1f4c_d4a603f0",
+      "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
