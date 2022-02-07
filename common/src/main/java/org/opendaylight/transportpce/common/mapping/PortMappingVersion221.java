@@ -422,12 +422,12 @@ public class PortMappingVersion221 {
         for (Entry<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks>>
                 srgCpEntry : getSrgCps(nodeId, deviceInfo).entrySet()) {
             List<String> keys = new ArrayList<>();
+            int portIndex = 1;
             for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks
                     cp : srgCpEntry.getValue()) {
                 String circuitPackName = cp.getCircuitPackName();
                 List<Ports> portList = getPortList(circuitPackName, nodeId);
                 Collections.sort(portList, new SortPort221ByName());
-                int portIndex = 1;
                 for (Ports port : portList) {
                     if (!checkPortQual(port, circuitPackName, nodeId)) {
                         continue;
