@@ -214,6 +214,24 @@
       "message": "I think we should rather use a @skip decorator here",
       "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2ba5141_5e29a466",
+        "filename": "tests/transportpce_tests/pce/test03_gnpy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-07T10:41:13Z",
+      "side": 1,
+      "message": "No longer relevant.",
+      "parentUuid": "8ae0fed5_1826b11a",
+      "revId": "f928f98a0d0131ea674e23bb305fabd40f6f234f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
