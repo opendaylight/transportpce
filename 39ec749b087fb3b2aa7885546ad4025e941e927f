@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cbbcd91_2e360afc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e10e0afd_b0c52e9e",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2845a30f_adcfed80",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-02T19:15:19Z",
       "side": 1,
       "message": "I suspect \u003c would be more appropriate than !\u003d here",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2d79bcb_2ea3ec62",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2845a30f_adcfed80",
       "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -69,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b2c60a_2a116d3c",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7425b273_9a84e15a",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdf69843_f5356f95",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-02-02T19:15:19Z",
       "side": 1,
       "message": "shouldn\u0027t ODUC3 and ODUC2 be managed too ?",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a5283f_fa4ba450",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdf69843_f5356f95",
       "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -103,6 +175,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2c64fd_f4cc3b6a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "67e29547_eb68d975",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe27d349_0337ae73",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-02-02T19:15:19Z",
       "side": 1,
       "message": "shouldn\u0027t ODUC3 and ODUC2 be managed too ?",
+      "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ea4ece_ef5e4a45",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T08:29:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fe27d349_0337ae73",
       "revId": "39ec749b087fb3b2aa7885546ad4025e941e927f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
