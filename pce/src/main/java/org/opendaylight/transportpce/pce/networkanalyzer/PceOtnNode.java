@@ -208,16 +208,12 @@ public class PceOtnNode implements PceNode {
             }
         }
         this.valid = serviceTypeOduList.contains(this.otnServiceType)
-                || (serviceTypeEthTsNbMap.containsKey(this.otnServiceType)
-                    && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
-                     || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
-                    )
-                || (StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                    && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1)))
-                     || (mode.equals("intermediate") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 0, 2))
-                    );
-                //TODO checks very similar to isIntermediate and isAz methods - they should be mutualized
-                //     perhaps even with isOtnServiceTypeValid method
+                || serviceTypeEthTsNbMap.containsKey(this.otnServiceType)
+                    && isAzOrIntermediateAvl(mode, null, availableXpdrClientTps, availableXpdrNWTps)
+                || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                    && isAzOrIntermediateAvl(mode, availableXpdrClientTps, availableXpdrClientTps, availableXpdrNWTps);
+                //TODO very similar to isOtnServiceTypeValid method
+                //     check whether the different treatment for SERVICE_TYPE_100GE_S here is appropriate or not
     }
 
     private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
@@ -432,31 +428,27 @@ public class PceOtnNode implements PceNode {
         return false;
     }
 
-    private boolean isOtnServiceTypeValid(PceOtnNode pceOtnNode) {
-        if (pceOtnNode.modeType == null) {
+    private boolean isOtnServiceTypeValid(PceOtnNode poNode) {
+        if (poNode.modeType == null) {
             return false;
         }
         //Todo refactor Strings (mode and otnServiceType ) to enums
-        if (pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
-                && pceOtnNode.modeType.equals("AZ")) {
+        if (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
+                && poNode.modeType.equals("AZ")) {
             return true;
         }
-        return (pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
-                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
-                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
-                && (isAz(pceOtnNode) || isIntermediate(pceOtnNode));
+        return (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
+            && isAzOrIntermediateAvl(poNode.modeType, null, poNode.availableXpdrClientTps, poNode.availableXpdrNWTps);
         //TODO serviceTypeEthTsNbMap.containsKey(this.otnServiceType) might be more appropriate here
         //     but only SERVICE_TYPE_100GE_S is managed and not SERVICE_TYPE_100GE_M and _T
     }
 
-    private boolean isIntermediate(PceOtnNode pceOtnNode) {
-        return pceOtnNode.modeType.equals("intermediate")
-                && checkSwPool(null, pceOtnNode.availableXpdrNWTps, 0, 2);
-    }
-
-    private boolean isAz(PceOtnNode pceOtnNode) {
-        return pceOtnNode.modeType.equals("AZ")
-                && checkSwPool(pceOtnNode.availableXpdrClientTps, pceOtnNode.availableXpdrNWTps, 1, 1);
+    private boolean isAzOrIntermediateAvl(
+            String mdType, List<TpId> clientTps0, List<TpId> clientTps, List<TpId> netwTps) {
+        return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
+               || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);
     }
 
     private boolean isNodeTypeValid(final PceOtnNode pceOtnNode) {
