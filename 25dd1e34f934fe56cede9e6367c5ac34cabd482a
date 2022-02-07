@@ -103,6 +103,24 @@
       "parentUuid": "1a6ddd00_c84dfbe4",
       "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a41d7c_4391f035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-07T18:13:59Z",
+      "side": 1,
+      "message": "yes Jonas. I think as we move to this new power-mask, \"only 100G\" case becomes obsolete. That is why I had the commit message explicitly as the mixed line rates.",
+      "parentUuid": "d4cbcf41_857d0750",
+      "revId": "25dd1e34f934fe56cede9e6367c5ac34cabd482a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
