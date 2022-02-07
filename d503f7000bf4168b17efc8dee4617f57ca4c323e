@@ -503,6 +503,30 @@
       },
       "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae98b854_e9ffc425",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-07T21:38:37Z",
+      "side": 1,
+      "message": "ticket created  by Bala at https://jira.opendaylight.org/browse/TRNSPRTPCE-609\n@Jonas and @Olivier I\u0027ll let you check the content is OK and comment it if needed",
+      "parentUuid": "4295f01a_dcbc9287",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 78
+      },
+      "revId": "d503f7000bf4168b17efc8dee4617f57ca4c323e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
