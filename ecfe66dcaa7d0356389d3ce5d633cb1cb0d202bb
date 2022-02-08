@@ -327,6 +327,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "087fe054_5e070cf6",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T09:53:04Z",
+      "side": 1,
+      "message": "I was thinking of something like this\n\n//OperationResult operationResult1 \u003d null;\nswitch(services.getOperationalState()){\n\n    case InService:\n        if(!allElementsinPathinService(updatedAtoZ, updatedZtoA)) {\n            LOG.debug(\"Service\u003d{} needs to be updated to outOfService\", serviceName);\n            //if (operationResult1 !\u003d null \u0026\u0026 operationResult1.isSuccess()) {\n            //null check probably no more needed\n            if (this.serviceDataStoreOperations\n                    .modifyService(serviceName, State.OutOfService, AdminStates.OutOfService)\n                    .isSuccess()) {\n                LOG.info(\"Service state of {} correctly updated to outOfService in datastore\", serviceName);\n            } else {\n                LOG.error(\"Service state of {} cannot be updated to outOfService in datastore\", serviceName);\n            }\n        }\n        break;\n\n    case OutOfService:\n        if(allElementsinPathinService(updatedAtoZ, updatedZtoA)) {\n            LOG.debug(\"Service\u003d{} needs to be updated to inService\", serviceName);\n            //if (operationResult1 !\u003d null \u0026\u0026 operationResult1.isSuccess()) {\n            //null check probably no more needed\n            if (this.serviceDataStoreOperations\n                    .modifyService(serviceName, State.InService, AdminStates.InService)\n                    .isSuccess()) {\n                LOG.info(\"Service state of {} correctly updated to inService in datastore\", serviceName);\n            } else {\n                LOG.error(\"Service state of {} cannot be updated to inService in datastore\", serviceName);\n            }\n        }\n        break;\n\n    default:\n        LOG.warn(\"Service {} state not managed\", serviceName);\n        continue;\n}\nLOG.debug(\"Service {} state does not need to be modified\", serviceName);",
+      "parentUuid": "f4a40d8b_1a02e1d7",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "657e4452_5d3883af",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 6
