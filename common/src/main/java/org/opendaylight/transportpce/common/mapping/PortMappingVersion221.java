@@ -88,6 +88,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev181019.Ports1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -846,13 +847,21 @@ public class PortMappingVersion221 {
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
+        List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+            .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+        for (String sup: getSupIfCapList(port)) {
+            if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
+                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
+            }
+        }
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
+                .setSupportedInterfaceCapability(supportedIntf);
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
@@ -864,16 +873,6 @@ public class PortMappingVersion221 {
         if (partnerLcp != null) {
             mpBldr.setPartnerLcp(partnerLcp);
         }
-        if (port.getSupportedInterfaceCapability() != null) {
-            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
-            for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
-                if (MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()) != null) {
-                    supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()));
-                }
-            }
-            mpBldr.setSupportedInterfaceCapability(supportedIntf);
-        }
         if (port.getAdministrativeState() != null) {
             mpBldr.setPortAdminState(port.getAdministrativeState().name());
         }
@@ -881,6 +880,22 @@ public class PortMappingVersion221 {
             mpBldr.setPortOperState(port.getOperationalState().name());
         }
         return mpBldr.build();
+    }
+
+    private List<String> getSupIfCapList(Ports port) {
+        List<Class<? extends SupportedIfCapability>> supIfCapClassList = port.getSupportedInterfaceCapability();
+        if (supIfCapClassList != null) {
+            return supIfCapClassList
+                    .stream().map(e -> e.getSimpleName())
+                    .collect(Collectors.toList());
+        }
+        Ports1 ports1 = port.augmentation(Ports1.class);
+        if (ports1 != null && ports1.getPortCapabilities() != null) {
+            return ports1.getPortCapabilities().getSupportedInterfaceCapability()
+                    .values().stream().map(e -> e.getIfCapType().getSimpleName())
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     private Ports getPort2(Ports port, String nodeId, String circuitPackName, StringBuilder circuitPackName2,
