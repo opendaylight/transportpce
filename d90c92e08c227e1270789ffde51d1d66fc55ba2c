@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e53b63_0f12ee97",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T20:16:19Z",
+      "side": 1,
+      "message": "I think this check is useless: if supInfcap is null the for-loop below won\u0027t be executed\n\nalso a direct allocation would be more straight forward than the intermediate function getSupInfCap that seems used only once here.\nIt would give\n} else {\n    Collection\u003cSupportedInterfaceCapability\u003e supInfcap \u003d\n            port.augmentation(Ports1.class) \u003d\u003d null || port.augmentation(Ports1.class).getPortCapabilities() \u003d\u003d null\n                ? null\n                : port.augmentation(Ports1.class)\n                    .getPortCapabilities().getSupportedInterfaceCapability().values();\n\n\nthat could be simplified in\n\n} else if (port.augmentation(Ports1.class) !\u003d null \u0026\u0026 port.augmentation(Ports1.class).getPortCapabilities() !\u003d null) {\n    Collection\u003cSupportedInterfaceCapability\u003e supInfcap \u003d \n        port.augmentation(Ports1.class).getPortCapabilities().getSupportedInterfaceCapability().values();\n\nMoreover the for-loop content below is pretty the same than the old one above at the difference that .getIfCapType() is applied to every sup item encountered.\n\nTherefore, I think the parent if/else block proposed here should be only applied to the collection/list and not the for-loop itself.\nA new compatible list (i.e similar to port.getSupportedInterfaceCapability() ) could be created from supInfcap with a stream that applies .getIfCapType() to every element.",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
