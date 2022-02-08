@@ -16,6 +16,24 @@
       "message": "and they should be cherry-picked together to guarantee YANG revision dates coherency.",
       "revId": "c66e657df97b660f380cb42e3de899f87a78b4d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b2cb9a5_aed2848d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T09:32:14Z",
+      "side": 1,
+      "message": "Gerrit change numbers do not appear in git log.\nA URL, a change-ID or a commit hash would be welcome.",
+      "parentUuid": "a172c9b6_ddcc3cf8",
+      "revId": "c66e657df97b660f380cb42e3de899f87a78b4d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
