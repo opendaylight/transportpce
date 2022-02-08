@@ -37,9 +37,8 @@ import org.slf4j.LoggerFactory;
 
 public class JsonStringConverter<T extends DataObject> {
     private static final Logger LOG = LoggerFactory.getLogger(JsonStringConverter.class);
-    private static final JsonParser PARSER = new JsonParser();
-    private BindingDOMCodecServices bindingDOMCodecServices;
 
+    private BindingDOMCodecServices bindingDOMCodecServices;
 
     public JsonStringConverter(BindingDOMCodecServices bindingDOMCodecServices) {
         this.bindingDOMCodecServices = bindingDOMCodecServices;
@@ -73,7 +72,7 @@ public class JsonStringConverter<T extends DataObject> {
                 nodeWriter.write(bindingDOMCodecServices.toNormalizedNode(id, dataObject).getValue());
                 nodeWriter.flush();
             }
-            JsonObject asJsonObject = PARSER.parse(writer.toString()).getAsJsonObject();
+            JsonObject asJsonObject = JsonParser.parseString(writer.toString()).getAsJsonObject();
             return new Gson().toJson(asJsonObject);
         } catch (IOException e) {
             LOG.error("Cannot convert object {} to string ", dataObject);
