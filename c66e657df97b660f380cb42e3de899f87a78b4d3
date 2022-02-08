@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a172c9b6_ddcc3cf8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T09:30:19Z",
+      "side": 1,
+      "message": "and they should be cherry-picked together to guarantee YANG revision dates coherency.",
+      "revId": "c66e657df97b660f380cb42e3de899f87a78b4d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
