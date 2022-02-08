@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "165accc3_bcdb13a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T20:19:29Z",
+      "side": 1,
+      "message": "Unfortunately we often have to duplicate code between portmapping implementation versions.\n\nPlease can you confirm or not that there is also 2 ways with 1.2.1 or 7.1 portmapping\nand that they are not yet or already implemented ?",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02e53b63_0f12ee97",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
