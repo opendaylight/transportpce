@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -88,6 +89,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev181019.Ports1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev181019.port.capability.grp.port.capabilities.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -864,16 +867,27 @@ public class PortMappingVersion221 {
         if (partnerLcp != null) {
             mpBldr.setPartnerLcp(partnerLcp);
         }
+        List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+            .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+
         if (port.getSupportedInterfaceCapability() != null) {
-            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
             for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
                 if (MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()) != null) {
                     supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getSimpleName()));
                 }
             }
-            mpBldr.setSupportedInterfaceCapability(supportedIntf);
+        } else {
+            Collection<SupportedInterfaceCapability> supInfcap = getSupInfCap(port);
+            // Add only if it not null
+            if (supInfcap != null) {
+                for (SupportedInterfaceCapability sup: supInfcap) {
+                    if (MappingUtilsImpl.convertSupIfCapa(sup.getIfCapType().getSimpleName()) != null) {
+                        supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup.getIfCapType().getSimpleName()));
+                    }
+                }
+            }
         }
+        mpBldr.setSupportedInterfaceCapability(supportedIntf);
         if (port.getAdministrativeState() != null) {
             mpBldr.setPortAdminState(port.getAdministrativeState().name());
         }
@@ -881,6 +895,14 @@ public class PortMappingVersion221 {
             mpBldr.setPortOperState(port.getOperationalState().name());
         }
         return mpBldr.build();
+    }
+
+    private Collection<SupportedInterfaceCapability> getSupInfCap(Ports port) {
+        return
+            port.augmentation(Ports1.class) == null || port.augmentation(Ports1.class).getPortCapabilities() == null
+                ? null
+                : port.augmentation(Ports1.class)
+                    .getPortCapabilities().getSupportedInterfaceCapability().values();
     }
 
     private Ports getPort2(Ports port, String nodeId, String circuitPackName, StringBuilder circuitPackName2,
