@@ -16,6 +16,23 @@
       "message": "  File \"/w/workspace/transportpce-tox-verify-sulfur/tests/transportpce_tests/2.2.1/test13_tapi_full_multi_layer.py\", line 257, in test_13_get_tapi_topology_details\n23:57:44     self.assertEqual(nbLink, 15, \u0027There should be 15 TAPI links\u0027)\n23:57:44 AssertionError: 14 !\u003d 15 : There should be 15 TAPI links\n23:57:44 -------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\n23:57:44 {\"input\": {\"topology-id-or-name\": \"T0 - Full Multi-layer topology\"}}\n23:57:44 \n23:57:44 --------------------- \u003e\u003e end captured stdout \u003c\u003c ----------------------\n23:57:44 -------------------- \u003e\u003e begin captured logging \u003c\u003c --------------------\n23:57:44 urllib3.connectionpool: DEBUG: Starting new HTTP connection (1): localhost:8183\n23:57:44 urllib3.connectionpool: DEBUG: http://localhost:8183 \"POST /restconf/operations/tapi-topology:get-topology-details HTTP/1.1\" 200 None\n23:57:44 --------------------- \u003e\u003e end captured logging \u003c\u003c ---------------------",
       "revId": "d3e6296ed3caa8024091e66cd68e3c08080070a6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a9e6ed_dfd65704",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-08T07:35:20Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "d3e6296ed3caa8024091e66cd68e3c08080070a6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
