@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e831c9be_6a52af5a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-08T14:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76922a61_9e3f2f07",
+      "revId": "ba893e9b177e8090b683a9118098539dc83b3c74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97f215f0_15bb499f",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "696155ff_ba4c46c3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-08T14:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97f215f0_15bb499f",
+      "revId": "ba893e9b177e8090b683a9118098539dc83b3c74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "872960e2_ad9f2472",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-02-08T09:18:45Z",
       "side": 1,
       "message": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java should be updated consequently",
+      "revId": "ba893e9b177e8090b683a9118098539dc83b3c74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e4b2ff_5031b509",
+        "filename": "common/src/main/resources/OSGI-INF/blueprint/common-blueprint.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-08T14:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872960e2_ad9f2472",
       "revId": "ba893e9b177e8090b683a9118098539dc83b3c74",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
