@@ -556,6 +556,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de254a1_8cc7f9fd",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:40:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0abc8f25_72bbcd1a",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0466c87_42c85860",
