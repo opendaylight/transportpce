@@ -363,6 +363,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c77c92a_6f2a1cd9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-09T11:05:29Z",
+      "side": 1,
+      "message": "The initial implementation prevents from duplicating 8 lines only to manage a log!\nI don\u0027t find your proposal better or more readable...",
+      "parentUuid": "d7234a90_041fb8b6",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "657e4452_5d3883af",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 6
