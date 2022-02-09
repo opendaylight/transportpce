@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a928c9fe_24b9ba7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "fair enough \nI pointed some style issues mostly already present in the existing code base.\nThey would better be fixed afterwards in a separate change.",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1396fd74_79d4e294",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/constraints/PceConstraintsCalc.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "I noticed afterwards that the NS for CLLI and SRLG objects had no collision contrary to Node.\nThey could have been stated directly in the import and removed here to simplify this piece of code.\nBut it will be removed in next changes any way.\nSo fair enough to keep that as it is.",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da829464_356b9146",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "setters and build should be a different indentation level than PathDescriptionBuilder() IMO",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38fc3b66_551e0ac5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6afc1d5a_45526ef2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f503d40_b78cb374",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "etc\nit probably a good idea to fix it in a separate change.",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a401b255_43a0c92e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "indent +4 or LF would be welcome here",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef0d1b0_5c610e00",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "87f30dde91b6eec5182e3c3478887d38ec2347af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

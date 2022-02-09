@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "305230aa_7ec4630c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68f68a24_daa64fd2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 13
+      },
+      "revId": "b1dfb8d310fc9e4e25412f989f8b665468efe4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00d0f784_3f8d3472",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-02-08T09:33:00Z",
       "side": 1,
       "message": "and they should be cherry-picked together to guarantee YANG revision dates coherency.\n\nGerrit change numbers do not appear in git log.\nA URL, a change-ID or a commit hash would be welcome.",
+      "revId": "b1dfb8d310fc9e4e25412f989f8b665468efe4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ced8af2_8292deb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:39:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00d0f784_3f8d3472",
       "revId": "b1dfb8d310fc9e4e25412f989f8b665468efe4ea",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
