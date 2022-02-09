@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be102ff6_1181a6ee",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:50:29Z",
+      "side": 1,
+      "message": "what about simply this ?\n\n            case SRGTXRXCP:\n                LOG.info(\"getRdmSrgClient: Getting BI Directional PP port ...\");\n                // Take the first-element in the available PP key set\n                if (availableSrgPp.entrySet().iterator().next().getKey()\n                        // and check if the port is bidirectional\n                        .contains(\"TXRX\")) {\n                    srgType \u003d OpenroadmTpType.SRGTXRXPP;\n                } else if (direction.equalsIgnoreCase(\"aToz\")) {\n                    srgType \u003d OpenroadmTpType.SRGRXPP;\n                } else {\n                    srgType \u003d OpenroadmTpType.SRGTXPP;\n                }\n                break;",
+      "revId": "93d7b5e05d3c4d9407a10875d3c4b4e46f62f128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
