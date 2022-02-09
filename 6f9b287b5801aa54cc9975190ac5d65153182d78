@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2bcb9e3_850a9b90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-09T15:48:42Z",
+      "side": 1,
+      "message": "hmm, I find it hard to believe that it is related to the rebase...",
+      "revId": "6f9b287b5801aa54cc9975190ac5d65153182d78",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
