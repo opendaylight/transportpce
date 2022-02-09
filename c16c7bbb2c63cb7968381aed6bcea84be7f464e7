@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d17a6de_8610e500",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-09T09:21:56Z",
+      "side": 1,
+      "message": "Personally, I find it very readable as it is.\nIs it a new rule?\nIt is not what you apply, even when you refactor existing code...",
+      "parentUuid": "26c9a59a_e729b6ae",
+      "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa03fcce_9656db93",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
         "patchSetId": 12
@@ -65,6 +83,30 @@
       "writtenOn": "2022-02-07T09:33:10Z",
       "side": 1,
       "message": "Does this variable make sense now?? Does it make sense to have in a map the already in use network ports per device?? If not we can remove also this variable and the populateNetworkMap function as it is no longer used...",
+      "range": {
+        "startLine": 128,
+        "startChar": 46,
+        "endLine": 128,
+        "endChar": 56
+      },
+      "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11781f05_3114e846",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-09T09:21:56Z",
+      "side": 1,
+      "message": "I think you are right, this networkMap is now useless and can be removed.",
+      "parentUuid": "114c9ea7_a4a8b8f9",
       "range": {
         "startLine": 128,
         "startChar": 46,
