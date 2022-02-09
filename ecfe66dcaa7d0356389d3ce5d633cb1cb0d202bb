@@ -381,6 +381,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef37bb8a_d8f32e43",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:25:40Z",
+      "side": 1,
+      "message": "Right, the readability of nested blocks can be argued here.\nIf you don\u0027t intend to use a switch/case here, I think we should at least indent +4 lines 109 and 114 to ease readability.\n\nThe solution I am proposing here is more about the few other improvements\nthat IMO flows naturally after the switch/case introduction, such as:\n- better logs as you noticed (e.g. with an error when modifyService calls fails)\n- better protections with switch/default clause with a more precise log message.\n- some null checks removal\n- removal of the operationResult1 variable\nThey might sound a bit out of scope now and I can propose it in a separate change if you prefer.\nIt would be certainly a best place to talk about the relevancy of these new log messages.",
+      "parentUuid": "6c77c92a_6f2a1cd9",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "657e4452_5d3883af",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 6
@@ -498,6 +516,24 @@
       "side": 1,
       "message": "The model change imposes changes in the implementation.\nPropose to remove all this obsolete part here, and rewrite all this class in another dedicated change.",
       "parentUuid": "4ab1566d_10dfa1e8",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0abc8f25_72bbcd1a",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T12:25:40Z",
+      "side": 1,
+      "message": "OK fair enough.\nI didn\u0027t notice the import issues forbidding @Ignore decorator use.",
+      "parentUuid": "67f120b0_016c992b",
       "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
