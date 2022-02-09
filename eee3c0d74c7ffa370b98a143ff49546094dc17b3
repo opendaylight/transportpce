@@ -34,6 +34,24 @@
       "parentUuid": "892a0913_26073321",
       "revId": "eee3c0d74c7ffa370b98a143ff49546094dc17b3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71629188_fd8a3826",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T10:34:58Z",
+      "side": 1,
+      "message": "@Gilles @Shweta I think this should have been proposed in a separate change on top of this one.\nIf you are in a hurry, I can take care of that.\n\nAlso should we really call endPceNode(nodeType, pceNode.getNodeId(), pceNode) twice? or can it be factorized ?",
+      "parentUuid": "c3ae8f1c_d3cfbcb6",
+      "revId": "eee3c0d74c7ffa370b98a143ff49546094dc17b3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ddf1d24_bb36a08b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T10:34:58Z",
+      "side": 1,
+      "message": "I am sorry but I strongly disagree with you last assertion.\nIf I might have missed some of them, I have done my best to apply it, especially in the recent refactoring works.\n\nIf you are not convinced about that, please have a more careful look at\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99607/1/networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java\n\nespecially at lines 203,237-238,299\nand\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99608/1/pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java\n\nat lines 103,188-190,208-221,400-405,437-438,466-467\n\netc\n\nAbout your question, this is not really a new rule but a commonly accepted best practice to format long conditions (similar to prototype declaration formatting).\ncf https://softwareengineering.stackexchange.com/questions/3450/most-readable-way-to-format-long-if-conditions\nIndent +4 is my personal preference but other solutions are commonly accepted too,. For example LF + \") {\" at the same indentation level than the if-clause first line is pretty common too.\n\nIf I might have no reported it very often in the past, I should have.\nI agree continuous improvement processes can be pretty annoying but it is, or at least shoud be, the norm in in open source and any software development products.\nI am convinced that many difficulties we are facing now are due to the lack of readability in some pieces of code,  especially in the conditions blocks, i.e. more generally to the technical debt and an urge need to refactor some pieces of the current code.\n\nIMO adopting this good habit (to separate clearly condition blocks from the code block body) would really help to avoid such situations in the future.",
+      "parentUuid": "7d17a6de_8610e500",
+      "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa03fcce_9656db93",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
         "patchSetId": 12
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "I think you are right, this networkMap is now useless and can be removed.",
       "parentUuid": "114c9ea7_a4a8b8f9",
+      "range": {
+        "startLine": 128,
+        "startChar": 46,
+        "endLine": 128,
+        "endChar": 56
+      },
+      "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09442ebc_e3425349",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T10:34:58Z",
+      "side": 1,
+      "message": "@Javier I think it is time we try to close this change and it is not completely related or required now,\n        please can you take care of proposing a separate change for that ?",
+      "parentUuid": "11781f05_3114e846",
       "range": {
         "startLine": 128,
         "startChar": 46,

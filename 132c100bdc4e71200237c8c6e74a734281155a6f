@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4388326_cbc24f2c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-09T10:34:58Z",
+      "side": 1,
+      "message": "same remark about long conditions style\n\nexcept if anodeId can be equal to znodeId\nI think } else if { might be more indeicated here",
+      "revId": "132c100bdc4e71200237c8c6e74a734281155a6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
