@@ -157,6 +157,30 @@
       },
       "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e3ae033_fc19bb39",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-10T17:54:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09442ebc_e3425349",
+      "range": {
+        "startLine": 128,
+        "startChar": 46,
+        "endLine": 128,
+        "endChar": 56
+      },
+      "revId": "c16c7bbb2c63cb7968381aed6bcea84be7f464e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
