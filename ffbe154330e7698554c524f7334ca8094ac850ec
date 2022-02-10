@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f23f12d_050e8a27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-10T17:40:14Z",
+      "side": 1,
+      "message": "Thanks for this change.\nWaiting for test result with real device in ATT lab",
+      "revId": "ffbe154330e7698554c524f7334ca8094ac850ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
