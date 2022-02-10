@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b8c062a_492d10fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-10T17:24:45Z",
+      "side": 1,
+      "message": "Add the JIRA ticket to have it after automatically in the release notes.",
+      "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4acf1942_42563dbd",
