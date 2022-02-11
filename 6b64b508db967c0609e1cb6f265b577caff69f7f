@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "24b9d980_65ff7079",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T14:10:24Z",
+      "side": 1,
+      "message": "I can\u0027t see it in the commit message: vote -1",
+      "parentUuid": "3591583c_99104b13",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "163499f9_a4c7d5b0",
