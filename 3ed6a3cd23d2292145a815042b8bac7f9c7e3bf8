@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b166b604_d6799a34",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T08:56:29Z",
+      "side": 1,
+      "message": "I understand SERVICE_TYPE_100GE_T should not be managed here indeed\nand should be handled at the class instanciation.\nso this comment could be removed in a next change.",
+      "parentUuid": "3d2a127e_b3e98d30",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "888bd18d_c0cc8dc7",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
         "patchSetId": 2
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f6ffd7d_97d638e3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T08:56:29Z",
+      "side": 1,
+      "message": "idem, this condition can be removed too",
+      "parentUuid": "888bd18d_c0cc8dc7",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6766dc3_72d1e208",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2022-02-07T11:06:35Z",
       "side": 1,
       "message": "Is it normal? or should we add SERVICE_TYPE_100GE_M \u0026 SERVICE_TYPE_100GE_T here too ?",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f558ff9_98140362",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T08:56:29Z",
+      "side": 1,
+      "message": "idem for SERVICE_TYPE_100GE_T\n\nPlease can you provide some guidance about SERVICE_TYPE_100GE_M and SERVICE_TYPE_100GE_S here",
+      "parentUuid": "b6766dc3_72d1e208",
       "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

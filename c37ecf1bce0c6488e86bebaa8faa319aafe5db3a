@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91c57055_b6459c5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T08:56:29Z",
+      "side": 1,
+      "message": "Ready to be merged\n\nplease provide some guidance in the remaining open comments so that it can be handled properly in shortcoming changes",
+      "revId": "c37ecf1bce0c6488e86bebaa8faa319aafe5db3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
