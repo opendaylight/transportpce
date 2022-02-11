@@ -1061,7 +1061,7 @@
     </xponder>
     <odu-switching-pools>
       <switching-pool-number>1</switching-pool-number>
-      <switching-pool-type xmlns:org-openroadm-switching-pool-types="http://org/openroadm/switching-pool-types">non-blocking</switching-pool-type>
+      <switching-pool-type xmlns:org-openroadm-switching-pool-types="http://org/openroadm/switching-pool-types">blocking</switching-pool-type>
       <non-blocking-list>
         <nbl-number>1</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
