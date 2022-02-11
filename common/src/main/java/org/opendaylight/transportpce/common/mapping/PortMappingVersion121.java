@@ -74,6 +74,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev170929.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -632,6 +633,13 @@ public class PortMappingVersion121 {
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp) {
+        List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+            .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+        for (String sup: getSupIfCapList(port)) {
+            if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
+                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
+            }
+        }
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
@@ -639,7 +647,8 @@ public class PortMappingVersion121 {
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
                 .setXponderType(XpdrNodeTypes.Tpdr)
-                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
+                .setSupportedInterfaceCapability(supportedIntf);
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
@@ -653,6 +662,16 @@ public class PortMappingVersion121 {
             mpBldr.setPortOperState(port.getOperationalState().name());
         }
         return mpBldr.build();
+    }
+
+    private List<String> getSupIfCapList(Ports port) {
+        List<Class<? extends SupportedIfCapability>> supIfCapClassList = port.getSupportedInterfaceCapability();
+        return
+            supIfCapClassList == null
+                ? Collections.emptyList()
+                : supIfCapClassList
+                    .stream().map(e -> e.getSimpleName())
+                    .collect(Collectors.toList());
     }
 
     private Ports getPort2(Ports port, String nodeId, String circuitPackName, StringBuilder circuitPackName2,
