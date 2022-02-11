@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1629fe72_3ddd64b6",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-11T16:10:14Z",
+      "side": 1,
+      "message": "If this code is no longer usefull (nor present) in the business code (PceOtnNode), there is no reason to have UT on it. Doing that is purely and simply a no sence!\nYou should better remove UT from lines 160 to 220 instead.\nAnd after, complement this UT class by the test of other public method of PceOtnNode to increase the coverage and check/help your refactor.",
+      "revId": "1ef9a8fb00ed4c327973838ebff87d191832a28d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
