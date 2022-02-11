@@ -58,14 +58,9 @@ public class PceOtnNode implements PceNode {
         StringConstants.SERVICE_TYPE_ODUC4,
         StringConstants.SERVICE_TYPE_ODUC3,
         StringConstants.SERVICE_TYPE_ODUC2);
-    private static final List<OpenroadmNodeType> VALID_NODETYPES_LIST = List.of(
-        OpenroadmNodeType.MUXPDR,
-        OpenroadmNodeType.SWITCH,
-        OpenroadmNodeType.TPDR);
     private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
         StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
-        StringConstants.SERVICE_TYPE_100GE_T, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
     private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
@@ -76,15 +71,16 @@ public class PceOtnNode implements PceNode {
         StringConstants.SERVICE_TYPE_1GE, "ODU0",
         StringConstants.SERVICE_TYPE_10GE, "ODU2e",
         StringConstants.SERVICE_TYPE_100GE_M, "ODU4");
+    protected static final List<OpenroadmNodeType> VALID_NODETYPES_LIST = List.of(
+        OpenroadmNodeType.MUXPDR,
+        OpenroadmNodeType.SWITCH,
+        OpenroadmNodeType.TPDR);
 
     private boolean valid = true;
 
     private final Node node;
     private final NodeId nodeId;
-    private final OpenroadmNodeType nodeType;
     private final String pceNodeType;
-    private final String otnServiceType;
-    private String modeType;
     // TODO: not adding state check in this class as otn topology has not been modified
     private final AdminStates adminStates;
     private final State state;
@@ -93,15 +89,19 @@ public class PceOtnNode implements PceNode {
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<>();
     private List<String> usedXpdrNWTps = new ArrayList<>();
-    private List<TpId> availableXpdrNWTps;
     private List<TpId> usableXpdrNWTps;
     private List<String> usedXpdrClientTps = new ArrayList<>();
-    private List<TpId> availableXpdrClientTps;
     private List<TpId> usableXpdrClientTps;
 
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private String clientPort;
+
+    protected final OpenroadmNodeType nodeType;
+    protected final String otnServiceType;
+    protected String modeType;
+    protected List<TpId> availableXpdrNWTps;
+    protected List<TpId> availableXpdrClientTps;
 
     public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType,
             String clientPort) {
@@ -182,7 +182,6 @@ public class PceOtnNode implements PceNode {
                                 node.getNodeId().getValue());
                             continue;
                         }
-                    // TODO what about SERVICE_TYPE_100GE_T ?
                     } else {
                         LOG.error("TP {} of {} does not allow any termination creation",
                             tp.getTpId().getValue(), node.getNodeId().getValue());
@@ -193,9 +192,7 @@ public class PceOtnNode implements PceNode {
                     break;
 
                 case XPONDERCLIENT:
-                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
-                            && !StringConstants.SERVICE_TYPE_100GE_T.equals(this.otnServiceType)) {
-                            // TODO should we really exclude SERVICE_TYPE_100GE_T ?
+                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -416,43 +413,12 @@ public class PceOtnNode implements PceNode {
         return valid;
     }
 
-    private boolean isNotValid(final PceOtnNode poNode) {
+    protected boolean isNotValid(final PceOtnNode poNode) {
         return poNode == null || poNode.nodeId == null || poNode.nodeType == null
                 || poNode.getSupNetworkNodeId() == null || poNode.getSupClliNodeId() == null;
     }
 
-    public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
-        if (isNotValid(pceOtnNode) || pceOtnNode.otnServiceType == null) {
-            LOG.error(
-                "PceOtnNode: one of parameters is not populated : nodeId, node type, supporting nodeId, otnServiceType"
-            );
-            return false;
-        }
-        if (VALID_NODETYPES_LIST.contains(pceOtnNode.nodeType)) {
-            return isOtnServiceTypeValid(pceOtnNode);
-        }
-        LOG.error("PceOtnNode node type: node type is not one of MUXPDR or SWITCH or TPDR");
-        return false;
-    }
-
-    private boolean isOtnServiceTypeValid(final PceOtnNode poNode) {
-        if (poNode.modeType == null) {
-            return false;
-        }
-        //Todo refactor Strings (mode and otnServiceType ) to enums
-        if (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
-                && poNode.modeType.equals("AZ")) {
-            return true;
-        }
-        return (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
-                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
-                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
-            && isAzOrIntermediateAvl(poNode.modeType, null, poNode.availableXpdrClientTps, poNode.availableXpdrNWTps);
-        //TODO SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType) might be more appropriate here
-        //     but only SERVICE_TYPE_100GE_S is managed and not SERVICE_TYPE_100GE_M and _T
-    }
-
-    private boolean isAzOrIntermediateAvl(
+    protected boolean isAzOrIntermediateAvl(
             String mdType, List<TpId> clientTps0, List<TpId> clientTps, List<TpId> netwTps) {
         return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
                || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);

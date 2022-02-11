@@ -66,6 +66,32 @@ public class PceOtnNodeTest extends AbstractTest {
     private PceOtnNode pceOtnNode;
     private Node node;
 
+    private boolean isPceOtnNodeValid(final PceOtnNode poNode) {
+        if (poNode.isNotValid(pceOtnNode) || poNode.otnServiceType == null) {
+            return false;
+        }
+        if (PceOtnNode.VALID_NODETYPES_LIST.contains(poNode.nodeType)) {
+            return isOtnServiceTypeValid(poNode);
+        }
+        return false;
+    }
+
+    private boolean isOtnServiceTypeValid(final PceOtnNode poNode) {
+        if (poNode.modeType == null) {
+            return false;
+        }
+        if (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
+                && poNode.modeType.equals("AZ")) {
+            return true;
+        }
+        return (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
+                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
+                //TODO What about SERVICE_TYPE_100GE_M ?
+            && poNode.isAzOrIntermediateAvl(
+                poNode.modeType, null, poNode.availableXpdrClientTps, poNode.availableXpdrNWTps);
+    }
+
     @Before
     public void setUp() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).build();
@@ -138,7 +164,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid otn service Type" , pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+        Assert.assertFalse("not valid otn service Type" , isPceOtnNodeValid(pceOtnNode));
     }
 
     @Test
@@ -150,7 +176,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.checkAvailableTribSlot();
         pceOtnNode = Mockito.spy(pceOtnNode);
         Mockito.when(pceOtnNode.getNodeId()).thenReturn(null);
-        Assert.assertFalse("not valid node , nodeId is null" , pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+        Assert.assertFalse("not valid node , nodeId is null" , isPceOtnNodeValid(pceOtnNode));
 
     }
 
@@ -161,7 +187,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid type, nodeType is null " , pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+        Assert.assertFalse("not valid type, nodeType is null " , isPceOtnNodeValid(pceOtnNode));
     }
 
     @Test
@@ -170,7 +196,7 @@ public class PceOtnNodeTest extends AbstractTest {
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_100GE_M, null);
         pceOtnNode.initXndrTps("AZ");
         Assert.assertFalse("not valid node , its type isn't one of MUXPDR or SWITCH or TPDR" ,
-                pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+                isPceOtnNodeValid(pceOtnNode));
     }
 
     @Test
@@ -180,7 +206,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertTrue("valid otn service type ", pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+        Assert.assertTrue("valid otn service type ", isPceOtnNodeValid(pceOtnNode));
     }
 
     @Test
@@ -189,7 +215,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE, null);
         pceOtnNode.initXndrTps("mode");
-        Assert.assertFalse("not valid otn service Type" , pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+        Assert.assertFalse("not valid otn service Type" , isPceOtnNodeValid(pceOtnNode));
     }
 
     private Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
