@@ -16,6 +16,24 @@
       "message": "To be removed, because this augmentation does not exist for device in R 1.2.1.",
       "revId": "e659ea8468a2f979634c9275619e7a29510bfd03",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0abfdb2_87affb68",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T19:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3e62e99_eb731b61",
+      "revId": "e659ea8468a2f979634c9275619e7a29510bfd03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
