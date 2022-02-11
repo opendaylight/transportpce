@@ -16,6 +16,40 @@
       "message": "Add a JIRA ticket to automatically have it after in the release notes.",
       "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "163499f9_a4c7d5b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T09:52:48Z",
+      "side": 1,
+      "message": "LGTM apart cosmetic issues",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5922b38_cd6217fd",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T09:52:48Z",
+      "side": 1,
+      "message": "comments should be on a different line according to SONAR rules",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
