@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3591583c_99104b13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "869c9465_adafdabf",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "163499f9_a4c7d5b0",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-11T09:52:48Z",
       "side": 1,
       "message": "LGTM apart cosmetic issues",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c32bec9f_7e474dc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:13:08Z",
+      "side": 1,
+      "message": "\u003e LGTM apart cosmetic issues\n\nFixed the comment",
+      "parentUuid": "163499f9_a4c7d5b0",
       "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2022-02-11T09:52:48Z",
       "side": 1,
       "message": "comments should be on a different line according to SONAR rules",
+      "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "988f94c7_2c2e487c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5922b38_cd6217fd",
       "revId": "6b64b508db967c0609e1cb6f265b577caff69f7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
