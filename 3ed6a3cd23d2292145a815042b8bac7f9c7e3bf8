@@ -139,6 +139,24 @@
       "parentUuid": "7f558ff9_98140362",
       "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee2fe40_8e18cd02",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T14:17:01Z",
+      "side": 1,
+      "message": "Thx for this feedback. I haven\u0027t noticed it.\n\nIf isPceOtnNodeValid method is only called in the UT, I propose to move it to UT in a step 4.\nIs it fair enough to you?",
+      "parentUuid": "960c2cf3_e928094b",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

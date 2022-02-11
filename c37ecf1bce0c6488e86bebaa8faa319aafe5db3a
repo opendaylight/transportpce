@@ -33,6 +33,24 @@
       "message": "-1: if presence of dead code.",
       "revId": "c37ecf1bce0c6488e86bebaa8faa319aafe5db3a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dfb74da_be77bd60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T14:17:01Z",
+      "side": 1,
+      "message": "half-dead since it is apparently used in UT, I propose we moved it to UT in a next change if you don\u0027t mind.",
+      "parentUuid": "ed360944_30346567",
+      "revId": "c37ecf1bce0c6488e86bebaa8faa319aafe5db3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
