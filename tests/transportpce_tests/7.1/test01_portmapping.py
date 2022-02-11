@@ -42,7 +42,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def setUp(self):
         # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
-        time.sleep(10)
+        time.sleep(1)
 
     def test_01_xpdr_device_connection(self):
         response = test_utils_rfc8040.mount_device("XPDR-A2",
@@ -55,7 +55,6 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.check_device_connection("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
-        time.sleep(10)
 
     # Check node info in the port-mappings
     def test_03_xpdr_portmapping_info(self):
@@ -69,7 +68,6 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'node-vendor': 'vendorA',
              'node-model': 'model'},
             response['node-info'])
-        time.sleep(3)
 
     # Check the if-capabilities and the other details for network
     def test_04_tpdr_portmapping_NETWORK1(self):
@@ -158,11 +156,24 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(str(res['mc-capabilities'][0]['center-freq-granularity']), '3.125')
         self.assertEqual(str(res['mc-capabilities'][0]['slot-width-granularity']), '6.25')
 
-    def test_09_xpdr_device_disconnection(self):
+    def test_09_mpdr_switching_pool(self):
+        response = test_utils_rfc8040.portmapping_switching_pool_request("XPDR-A2", "1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("blocking",
+                         response['switching_pool'][0]['switching-pool-type'])
+        self.assertEqual(2,
+                         len(response['switching_pool'][0]['non-blocking-list']))
+        self.assertIn(
+            {'nbl-number': 2,
+             'interconnect-bandwidth': 0,
+             'lcp-list': ['XPDR2-NETWORK1', 'XPDR2-CLIENT2']},
+            response['switching_pool'][0]['non-blocking-list'])
+
+    def test_10_xpdr_device_disconnection(self):
         response = test_utils_rfc8040.unmount_device("XPDR-A2")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_10_xpdr_device_disconnected(self):
+    def test_11_xpdr_device_disconnected(self):
         response = test_utils_rfc8040.check_device_connection("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['connection-status']['error-type'], ('protocol', 'application'))
@@ -170,7 +181,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response['connection-status']['error-message'],
                          'Request could not be completed because the relevant data model content does not exist')
 
-    def test_11_xpdr_device_not_connected(self):
+    def test_12_xpdr_device_not_connected(self):
         response = test_utils_rfc8040.get_portmapping_node_info("XPDR-A2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['node-info']['error-type'], ('protocol', 'application'))

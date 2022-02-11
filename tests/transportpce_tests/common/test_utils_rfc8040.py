@@ -385,6 +385,18 @@ def portmapping_request(node: str, mapping: str):
             'mapping': mapping}
 
 
+def portmapping_switching_pool_request(node: str, switching_pool: str):
+    url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/switching-pool-lcp={}',
+           'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/switching-pool-lcp/{}'}
+    response = get_request(url[RESTCONF_VERSION].format('{}', node, switching_pool))
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-portmapping:switching-pool-lcp',
+                  'draft-bierman02': 'switching-pool-lcp'}
+    switching_pool = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'switching_pool': switching_pool}
+
+
 def portmapping_mc_capa_request(node: str, mc_capa: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/mc-capabilities={}',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/mc-capabilities/{}'}
