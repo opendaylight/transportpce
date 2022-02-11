@@ -16,6 +16,23 @@
       "message": "Ready to be merged\n\nplease provide some guidance in the remaining open comments so that it can be handled properly in shortcoming changes",
       "revId": "c37ecf1bce0c6488e86bebaa8faa319aafe5db3a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed360944_30346567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-11T13:19:03Z",
+      "side": 1,
+      "message": "-1: if presence of dead code.",
+      "revId": "c37ecf1bce0c6488e86bebaa8faa319aafe5db3a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
