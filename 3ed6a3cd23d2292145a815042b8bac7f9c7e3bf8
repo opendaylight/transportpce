@@ -157,6 +157,24 @@
       "parentUuid": "960c2cf3_e928094b",
       "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c823c846_d77fbf5b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-11T14:27:41Z",
+      "side": 1,
+      "message": "I think it would be preferable to remove isPceOtnNodeValid method, and adapt the UT consequently without this piece of code. A basic copy/paste risks not being so relevant.",
+      "parentUuid": "aee2fe40_8e18cd02",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
