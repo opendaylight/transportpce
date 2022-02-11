@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "853c965f_08327b8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-11T16:22:50Z",
+      "side": 1,
+      "message": "Apparently, for device 1.2.1 there is only one way to retreive the supported-interface-capability from the device, the first one.\nThe org-openroadm-port-capability augmentation didn\u0027t exist in revision 1.2.1.",
+      "parentUuid": "63083cfe_58eb52b1",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02e53b63_0f12ee97",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
