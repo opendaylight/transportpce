@@ -211,6 +211,24 @@
       "parentUuid": "a35fbd98_4cd081b2",
       "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd851907_e6dc86a2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T16:50:27Z",
+      "side": 1,
+      "message": "If you think these tests should be simply removed and not adapted, I am fine with that. But please propose a different change for it.\nThis is now almost completely unrelated to the scope here.",
+      "parentUuid": "6c375889_7379057e",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
