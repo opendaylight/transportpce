@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f73fe01_78db75e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:03:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d10350a2_52bb9d7b",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "223555cf_eb3cdf8a",
@@ -47,6 +71,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d90119e4_6badb19f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:03:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "223555cf_eb3cdf8a",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b8c062a_492d10fb",
@@ -60,6 +108,24 @@
       "writtenOn": "2022-02-10T17:24:45Z",
       "side": 1,
       "message": "Add the JIRA ticket to have it after automatically in the release notes.",
+      "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bec0f5c_a8476f79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:03:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b8c062a_492d10fb",
       "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -94,6 +160,24 @@
       "writtenOn": "2022-02-11T09:55:20Z",
       "side": 1,
       "message": "LGTM apart typo",
+      "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff39a15c_e1c1b1c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-11T13:03:33Z",
+      "side": 1,
+      "message": "\u003e LGTM apart typo\n\nFixed the commit message",
+      "parentUuid": "349abbf8_aab88f1f",
       "revId": "793616e623ca51c000858126ed2e44094a5ea16d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
