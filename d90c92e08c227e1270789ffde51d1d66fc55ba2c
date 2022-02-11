@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7f6cc69_5e6ecfc2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T19:37:06Z",
+      "side": 1,
+      "message": "Thx for the feedback this is something I suspected too.\nI will update 99692 consequently",
+      "parentUuid": "853c965f_08327b8c",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02e53b63_0f12ee97",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
