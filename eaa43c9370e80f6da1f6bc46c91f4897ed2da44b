@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49fe34fc_1fc0f21f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T19:56:20Z",
+      "side": 1,
+      "message": "$ export USE_ODL_RESTCONF_VERSION\u003ddraft-bierman02\n$ tox -p auto -e buildcontroller,build_karaf_tests221,build_karaf_tests71,sims221,sims71,tests221,tests71 portmapping\n[...]\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  buildcontroller: commands succeeded\n  build_karaf_tests221: commands succeeded\n  build_karaf_tests71: commands succeeded\n  sims221: commands succeeded\n  sims71: commands succeeded\n  tests71: commands succeeded\n  tests221: commands succeeded\n  congratulations :)\n",
+      "revId": "eaa43c9370e80f6da1f6bc46c91f4897ed2da44b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
