@@ -16,6 +16,24 @@
       "message": "Personally,I would have merged the two changes step 2 and step 3 together...\nIt would have relieved the gate and eased the backport without making the review more difficult...",
       "revId": "190573b814f081c1799ead5befa54d7d41bc8bda",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0257ab0_105fdf6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T09:27:06Z",
+      "side": 1,
+      "message": "There are pros and cons. I agree it can load the CI.\nBut smaller and atomic commits usually have less cons.\nThis is the common opinion among all experienced developers.\nEspecially at OpenStack (I\u0027ve already shared it with you) but not only.\nFor example at https://sparkbox.com/foundry/atomic_commits_with_git\n\nComing back here, you might have not noticed that this change was in merge conflict with your commit about the PCE bug you fixed and that I just merged.\nSo this change is no more mergeable now.\nContrary to Step 2 that can still be merged after I rebased it with the Gerrit UI.\n\nWith smaller commits, rebasing works can be handled more easily and reviews are usually much easier. What allows a more quick development pace.\nNote that I could have split my work here in even smaller pieces that I could have rebased directly without merge conflicts for some of them.\nAnd I think I should have but there were so many things to fix now that I didn\u0027t take the time to do it...\nI am currently trying to have a more pragmatic and global approach to sanitize quickly this class, one fix leading to another.\nI agree it creates some overlaps between steps 2 and 3 that affects the review.",
+      "parentUuid": "9bf49dbf_3eceac2f",
+      "revId": "190573b814f081c1799ead5befa54d7d41bc8bda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
