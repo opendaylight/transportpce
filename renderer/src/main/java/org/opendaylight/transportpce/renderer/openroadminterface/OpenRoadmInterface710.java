@@ -53,7 +53,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.Otsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtsiGroup;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.loopback.rev191129.maint.loopback.MaintLoopbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev200529.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.attributes.FlexoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
@@ -433,15 +432,13 @@ public class OpenRoadmInterface710 {
                     nodeId, logicalConnPoint));
         }
         // Create an OTUCn object
-        MaintLoopbackBuilder maintLoopbackBuilder = new MaintLoopbackBuilder();
-        maintLoopbackBuilder.setEnabled(false);
         OtuBuilder otuBuilder = new OtuBuilder()
             .setRate(OTUCn.class)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
-            .setDegthrPercentage(Uint16.valueOf(100))
-            .setMaintLoopback(maintLoopbackBuilder.build());
+            .setDegthrPercentage(Uint16.valueOf(100));
+
         if (apiInfoA != null) {
             otuBuilder.setTxSapi(apiInfoA.getSapi())
                 .setTxDapi(apiInfoA.getDapi())
