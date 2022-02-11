@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63083cfe_58eb52b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T13:57:25Z",
+      "side": 1,
+      "message": "OK looking at 1.2.1 portmapping\nThe first method is not even implemented.\n\nI don\u0027t think there is a chance this code would affect the device behavior.\nAm I wrong ?\n\nI am adding a new change on top of this one so that we can properly discuss and address this.\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99692\nIt\u0027s WIP because I am not sure at all of the revision dates to use and it seems there is no Ports1 and port.capability models with a different revision.\nSo I don\u0027t know what to put there.",
+      "parentUuid": "3052f49b_427f62e1",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02e53b63_0f12ee97",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I\u0027m having difficulty in writing the way you mentioned. Perhaps, if you can help me, I will modify the code accordingly.",
       "parentUuid": "02e53b63_0f12ee97",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e0f10a_d6a20430",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-11T13:57:25Z",
+      "side": 1,
+      "message": "My mistake, my comment was very confusing, not to say partially false.\n\nNull List raises NPE with for-loop.\nI was meaning indeed that your function should return an empty List instead of null so that the for-loop is not executed.\nEmpty lists are naturally generated when using streams.\n\nHere is my proposal with this new PS.\n\nHope this helps",
+      "parentUuid": "91bd2ffa_c09685f4",
       "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
