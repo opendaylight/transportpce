@@ -18,7 +18,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class GnpyConsumerImpl implements GnpyConsumer {
     @Override
     public boolean isAvailable() {
         try {
-            api.checkStatus();
+            api.getStatus();
             LOG.info("GNPy is available");
             return true;
         } catch (WebApplicationException | ProcessingException e) {

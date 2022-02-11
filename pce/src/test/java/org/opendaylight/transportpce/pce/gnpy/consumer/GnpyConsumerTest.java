@@ -53,7 +53,7 @@ public class GnpyConsumerTest extends JerseyTest {
                 "mylogin",
                 "mypassword",
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
-        QName pathQname = QName.create("gnpy:gnpy-api", "2019-01-03", "gnpy-api");
+        QName pathQname = Request.QNAME; //QName.create("gnpy:gnpy-api", "2019-01-03", "gnpy-api");
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
         Request request = gnpyApiConverter
                 .createDataObjectFromJsonString(yangId,

@@ -38,8 +38,8 @@ public class RequestSerializer extends StdSerializer<Request> {
         String requestStr = this.converter
                 .createJsonStringFromDataObject(this.idRequest, value,
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
-//        requestStr =  requestStr.replace("gnpy-eqpt-config:", "")
-//                .replace("gnpy-path-computation-simplified:", "").replace("gnpy-network-topology:", "");
+        requestStr =  requestStr.replace("gnpy-network-topology:", "");
+        //.replace("gnpy-eqpt-config:", "").replace("gnpy-path-computation-simplified:", "").
         LOG.info("Serialized request {}", requestStr);
         gen.writeRaw(requestStr);
     }

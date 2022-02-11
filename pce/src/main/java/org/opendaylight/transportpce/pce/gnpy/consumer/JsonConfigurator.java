@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import javax.ws.rs.ext.ContextResolver;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
 
 public class JsonConfigurator implements ContextResolver<ObjectMapper> {
 

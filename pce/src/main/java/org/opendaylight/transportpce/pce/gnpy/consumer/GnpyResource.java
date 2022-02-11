@@ -15,7 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Request;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev201022.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev201022.Result;
+
 
 @Path("/api/v1")
 public interface GnpyResource {
