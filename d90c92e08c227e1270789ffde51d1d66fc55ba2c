@@ -159,6 +159,24 @@
       "parentUuid": "91bd2ffa_c09685f4",
       "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f863f35f_b0b35591",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-12T12:33:30Z",
+      "side": 1,
+      "message": "Yes, thanks Guillaume, this works! I verified on the device as well!",
+      "parentUuid": "64e0f10a_d6a20430",
+      "revId": "d90c92e08c227e1270789ffde51d1d66fc55ba2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
