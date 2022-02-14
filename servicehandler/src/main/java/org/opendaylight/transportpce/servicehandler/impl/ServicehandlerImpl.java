@@ -16,6 +16,8 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
@@ -103,6 +105,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final String SERVICE_FEASIBILITY_CHECK_MSG = "serviceFeasibilityCheck: {}";
     private static final String SERVICE_DELETE_MSG = "serviceDelete: {}";
     private static final String SERVICE_CREATE_MSG = "serviceCreate: {}";
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     private DataBroker db;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -167,6 +170,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     @Override
     public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
         LOG.info("RPC serviceCreate received");
+        kafkaPublisher.publishNotification("service","RPC for serviceCreate received!");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.ServiceCreate);
@@ -201,6 +205,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
         LOG.info("RPC serviceCreate in progress...");
+        kafkaPublisher.publishNotification("service","RPC for serviceCreate in progress...");
         ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
         return ModelMappingUtils.createCreateServiceReply(
                 input, common.getAckFinalIndicator(),
@@ -211,6 +216,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceDeleteReqInfo().getServiceName();
         LOG.info("RPC serviceDelete request received for {}", serviceName);
+        kafkaPublisher.publishNotification("service","PC serviceDelete request received for " + serviceName);
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
