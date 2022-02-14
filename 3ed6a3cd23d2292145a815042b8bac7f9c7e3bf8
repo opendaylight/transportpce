@@ -53,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f65fd85_6ef0ec84",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-14T15:59:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b166b604_d6799a34",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "888bd18d_c0cc8dc7",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "idem, this condition can be removed too",
       "parentUuid": "888bd18d_c0cc8dc7",
+      "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f85bea2_cc61b1af",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-14T15:59:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8f6ffd7d_97d638e3",
       "revId": "3ed6a3cd23d2292145a815042b8bac7f9c7e3bf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
