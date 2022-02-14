@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74e98fa0_051d71b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-14T21:09:02Z",
+      "side": 1,
+      "message": "I am not sure if this is due to tests pr the protection itself. Any opinion about that ?\nIt may be be handled a different way.",
+      "revId": "404a587d86e7491203dfc95c3b34ea189a695f45",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd54338b_e03f37a4",
