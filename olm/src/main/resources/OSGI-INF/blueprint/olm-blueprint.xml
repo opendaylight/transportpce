@@ -36,6 +36,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="portMapping"
         interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
   <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
+  <reference id="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
 
   <bean id="olmPowerServiceImpl"
         class="org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl"

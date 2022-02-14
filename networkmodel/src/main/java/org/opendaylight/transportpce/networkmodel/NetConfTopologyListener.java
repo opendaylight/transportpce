@@ -26,6 +26,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -45,6 +47,7 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetConfTopologyListener.class);
@@ -54,6 +57,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final DeviceTransactionManager deviceTransactionManager;
     private final Map<String, NodeRegistration> registrations;
     private final PortMapping portMapping;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
              DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
@@ -85,6 +89,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                         && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
+                        // UTD
+                        kafkaPublisher.publishNotification("TOPOLOGY", this.getClass().getSimpleName(),
+                                "OpenRoadm node detected with nodeId: " + nodeId);
                         Optional<AvailableCapability> deviceCapabilityOpt = netconfNodeAfter
                             .getAvailableCapabilities().getAvailableCapability().stream()
                             .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
