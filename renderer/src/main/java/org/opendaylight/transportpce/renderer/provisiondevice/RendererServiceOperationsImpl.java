@@ -29,6 +29,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
@@ -103,6 +105,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final TransportpceOlmService olmService;
     private final DataBroker dataBroker;
     private final NotificationPublishService notificationPublishService;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
     private final PortMapping portMapping;
     private ListeningExecutorService executor;
 
@@ -448,10 +451,16 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             justification = "call in call() method")
     private boolean isServiceActivated(String nodeId, String tpId) {
         LOG.info("Starting service activation test on node {} and tp {}", nodeId, tpId);
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "Starting service activation test on node " + nodeId + " and tp " + tpId);
         for (int i = 0; i < 3; i++) {
             List<Measurements> measurements = getMeasurements(nodeId, tpId);
             if (measurements == null) {
                 LOG.warn("Device {} is not reporting PreFEC on TP: {}", nodeId, tpId);
+                // UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "Device " + nodeId + " is not reporting PreFEC on TP: " + tpId);
                 return true;
             }
             if (verifyPreFecBer(measurements)) {
@@ -511,9 +520,16 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
         LOG.info("Measurements: preFECCorrectedErrors = {}; FECUncorrectableBlocks = {}", preFecCorrectedErrors,
                 fecUncorrectableBlocks);
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "Measurements: preFECCorrectedErrors =  " + preFecCorrectedErrors + "; FECUncorrectableBlocks = "
+                        + fecUncorrectableBlocks);
 
         if (fecUncorrectableBlocks > Double.MIN_VALUE) {
             LOG.error("Data has uncorrectable errors, BER test failed");
+            // UTD
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "Data has uncorrectable errors, BER test failed");
             return false;
         }
 
@@ -521,6 +537,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         double threshold = 0.00002d;
         double result = preFecCorrectedErrors / numOfBitsPerSecond;
         LOG.info("PreFEC value is {}", Double.toString(result));
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "PreFEC value is " + Double.toString(result));
+
         return result <= threshold;
     }
 

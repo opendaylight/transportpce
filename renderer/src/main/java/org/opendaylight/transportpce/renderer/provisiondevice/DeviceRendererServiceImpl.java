@@ -39,6 +39,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -92,6 +94,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     private final CrossConnect crossConnect;
     private final PortMapping portMapping;
     private final NetworkModelService networkModelService;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public DeviceRendererServiceImpl(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
             OpenRoadmInterfaceFactory openRoadmInterfaceFactory, OpenRoadmInterfaces openRoadmInterfaces,
@@ -103,6 +106,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         this.crossConnect = crossConnect;
         this.portMapping = portMapping;
         this.networkModelService = networkModelService;
+    }
+
+    public KafkaPublisher getKafkaPublisher() {
+        return this.kafkaPublisher;
     }
 
     @SuppressWarnings("rawtypes")
@@ -133,6 +140,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             // take the index of the node
             int nodeIndex = nodes.indexOf(node);
             LOG.info("Starting provisioning for node : {}", nodeId);
+            //UTD kafkaPublish
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "Starting " + direction + " provisioning for node: " + nodeId);
             AEndApiInfo apiInfoA = null;
             ZEndApiInfo apiInfoZ = null;
             if (input.getAEndApiInfo() != null && input.getAEndApiInfo().getNodeId().contains(nodeId)) {
@@ -155,6 +165,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         LOG.info("Adding supporting OCH interface for node {}, dest tp {}, spectrumInformation {}",
                                 nodeId, destTp, spectrumInformation);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting OCH interface for node " + nodeId + ", dest tp " + destTp
+                                + ", spectrumInformation " + spectrumInformation);
                         crossConnectFlag++;
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, spectrumInformation);
@@ -171,6 +185,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
                         LOG.info("Adding supporting EThernet interface for node {}, src tp {}", nodeId, srcTp);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting EThernet interface for node " + nodeId + ", src tp " + srcTp);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(
@@ -179,6 +196,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         LOG.info("Adding supporting OCH interface for node {}, src tp {}, spectrumInformation {}",
                                 nodeId, srcTp, spectrumInformation);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting OCH interface for node " + nodeId + ", src tp " + srcTp
+                                        + ", spectrumInformation " + spectrumInformation);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
@@ -196,6 +217,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         LOG.info("Adding supporting EThernet interface for node {}, dest tp {}", nodeId, destTp);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting EThernet interface for node " + nodeId + ", dest tp " + destTp);
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(
@@ -205,6 +229,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             || srcTp.contains(StringConstants.PP_TOKEN))) {
                         LOG.info("Adding supporting OCH interface for node {}, src tp {}, spectrumInformation {}",
                                 nodeId, srcTp, spectrumInformation);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting OCH interface for node " + nodeId + ", src tp " + srcTp
+                                        + ", spectrumInformation " + spectrumInformation);
+
                         createdOchInterfaces.addAll(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaces(
                                 nodeId, srcTp, spectrumInformation));
                     }
@@ -212,12 +241,21 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             || destTp.contains(StringConstants.PP_TOKEN))) {
                         LOG.info("Adding supporting OCH interface for node {}, dest tp {}, spectrumInformation {}",
                                 nodeId, destTp, spectrumInformation);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Adding supporting OCH interface for node " + nodeId + ", dest tp " + destTp
+                                        + ", spectrumInformation " + spectrumInformation);
                         createdOchInterfaces.addAll(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaces(
                                 nodeId, destTp, spectrumInformation));
                     }
                     if (crossConnectFlag < 1) {
                         LOG.info("Creating cross connect between source {} and destination {} for node {}", srcTp,
                                 destTp, nodeId);
+                        // UTD
+                        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                                "Creating cross connect between source " + srcTp + " and destination " + destTp
+                                        + " for node " + nodeId);
+
                         Optional<String> connectionNameOpt =
                                 this.crossConnect.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
                         if (connectionNameOpt.isPresent()) {

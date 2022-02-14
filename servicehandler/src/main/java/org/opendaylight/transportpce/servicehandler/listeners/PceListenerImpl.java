@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.servicehandler.listeners;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -39,6 +41,7 @@ public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
     private static final String PUBLISHER = "PceListener";
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
@@ -153,6 +156,9 @@ public class PceListenerImpl implements TransportpcePceListener {
         switch (servicePathRpcResult.getStatus()) {
             case Failed:
                 LOG.error("PCE path computation failed !");
+                //UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "PCE path computation failed!.");
                 nbiNotification = publishNotificationProcessServiceBuilder
                         .setMessage("ServiceCreate request failed ...")
                         .setResponseFailed("PCE path computation failed !")
@@ -164,6 +170,9 @@ public class PceListenerImpl implements TransportpcePceListener {
                 return false;
             case Successful:
                 LOG.info("PCE calculation done OK !");
+                //UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "PCE calculation finished successfully!");
                 return true;
             default:
                 LOG.error("PCE path computation returned an unknown RpcStatusEx code {}",
