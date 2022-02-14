@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <netconf xmlns="urn:ietf:params:xml:ns:netmod:notification">
+  <streams>
+    <stream>
+      <name>NETCONF</name>
+    </stream>
+  </streams>
+</netconf>
+<org-openroadm-device xmlns="http://org/openroadm/device">
+  <info>
+    <node-id>ECI-TPDR1</node-id>
+    <macAddress>f8:54:af:f2:84:00</macAddress>
+    <vendor>ECI Telecom Ltd.</vendor>
+    <node-type>xpdr</node-type>
+    <openroadm-version>2.2.1</openroadm-version>
+    <serial-id>5503502833</serial-id>
+    <model>N/A</model>
+    <current-ipAddress>192.168.3.17</current-ipAddress>
+    <current-datetime>2012-08-31T06:37:21-04:00</current-datetime>
+    <softwareVersion>9.1R01.01</softwareVersion>
+  </info>
+  <circuit-packs>
+    <circuit-pack-name>s0-u0</circuit-pack-name>
+    <circuit-pack-category>
+      <type>circuitPack</type>
+    </circuit-pack-category>
+    <software-load-version>4.0.12</software-load-version>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503456179</serial-id>
+    <hardware-version>B.4</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>mio200</circuit-pack-type>
+    <type>MIO200</type>
+    <ports>
+      <port-name>p10</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P10</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p11</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P11</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p12</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P12</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p1</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P1</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p2</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P2</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p0</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <port-qual>switch-network</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P0</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p9</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P9</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p7</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P7</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p8</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P8</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p5</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P5</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p6</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P6</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p3</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P3</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p4</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P4</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <shelf>s0</shelf>
+    <cp-slots>
+      <slot-name>p11</slot-name>
+      <label>P11</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p10</slot-name>
+      <label>P10</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p12</slot-name>
+      <label>P12</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p2</slot-name>
+      <label>P2</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p1</slot-name>
+      <label>P1</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p0</slot-name>
+      <label>P0</label>
+      <slot-status>installed-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p6</slot-name>
+      <label>P6</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p5</slot-name>
+      <label>P5</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p4</slot-name>
+      <label>P4</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p3</slot-name>
+      <label>P3</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p9</slot-name>
+      <label>P9</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p8</slot-name>
+      <label>P8</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p7</slot-name>
+      <label>P7</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <slot>u0</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-u2</circuit-pack-name>
+    <circuit-pack-category>
+      <type>circuitPack</type>
+    </circuit-pack-category>
+    <software-load-version>4.0.12</software-load-version>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503456180</serial-id>
+    <hardware-version>B.4</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>mio200</circuit-pack-type>
+    <type>MIO200</type>
+    <ports>
+      <port-name>p10</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P10</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p11</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P11</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p12</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P12</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p1</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P1</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p2</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P2</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p0</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <port-qual>switch-network</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P0</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p9</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P9</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p7</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P7</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p8</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P8</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p5</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P5</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p6</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-1GE-ODU0</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P6</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p3</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P3</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <ports>
+      <port-name>p4</port-name>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2E-ODU2E</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU2-ODU2</supported-interface-capability>
+      <port-qual>switch-client</port-qual>
+      <operational-state>degraded</operational-state>
+      <label>P4</label>
+      <port-type>pluggable</port-type>
+      <port-direction>bidirectional</port-direction>
+    </ports>
+    <shelf>s0</shelf>
+    <cp-slots>
+      <slot-name>p11</slot-name>
+      <label>P11</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p10</slot-name>
+      <label>P10</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p12</slot-name>
+      <label>P12</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p2</slot-name>
+      <label>P2</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p1</slot-name>
+      <label>P1</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p0</slot-name>
+      <label>P0</label>
+      <slot-status>installed-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p6</slot-name>
+      <label>P6</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p5</slot-name>
+      <label>P5</label>
+      <slot-status>installed-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p4</slot-name>
+      <label>P4</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p3</slot-name>
+      <label>P3</label>
+      <slot-status>installed-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p9</slot-name>
+      <label>P9</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p8</slot-name>
+      <label>P8</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <cp-slots>
+      <slot-name>p7</slot-name>
+      <label>P7</label>
+      <slot-status>empty-not-prov</slot-status>
+    </cp-slots>
+    <slot>u2</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-rcpb</circuit-pack-name>
+    <circuit-pack-category>
+      <type>shelfProcessor</type>
+    </circuit-pack-category>
+    <software-load-version>v4.0.9+</software-load-version>
+    <operational-state>outOfService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503501366</serial-id>
+    <hardware-version>B03</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>RCP04X</circuit-pack-type>
+    <type>RCP04X</type>
+    <shelf>s0</shelf>
+    <slot>rcpb</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-rcpa</circuit-pack-name>
+    <circuit-pack-category>
+      <type>shelfProcessor</type>
+    </circuit-pack-category>
+    <software-load-version>v4.0.9+</software-load-version>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503501367</serial-id>
+    <hardware-version>B03</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>RCP04X</circuit-pack-type>
+    <type>RCP04X</type>
+    <shelf>s0</shelf>
+    <slot>rcpa</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-xFCM</circuit-pack-name>
+    <circuit-pack-category>
+      <type>fan</type>
+    </circuit-pack-category>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503430847</serial-id>
+    <hardware-version>A03</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>FCM04X</circuit-pack-type>
+    <type>FCM04X</type>
+    <shelf>s0</shelf>
+    <slot>xFCM</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-xTAMIM</circuit-pack-name>
+    <circuit-pack-category>
+      <type>accessPanel</type>
+    </circuit-pack-category>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5503502728</serial-id>
+    <hardware-version>A03</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>TAMIM04X</circuit-pack-type>
+    <type>TAMIM04X</type>
+    <shelf>s0</shelf>
+    <slot>xTAMIM</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-xPFM-B</circuit-pack-name>
+    <circuit-pack-category>
+      <type>powerSupply</type>
+    </circuit-pack-category>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5300000453</serial-id>
+    <hardware-version>B01</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>PFM04X</circuit-pack-type>
+    <type>PFM04X</type>
+    <shelf>s0</shelf>
+    <slot>xPFM</slot>
+  </circuit-packs>
+  <circuit-packs>
+    <circuit-pack-name>s0-xPFM-A</circuit-pack-name>
+    <circuit-pack-category>
+      <type>powerSupply</type>
+    </circuit-pack-category>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom</vendor>
+    <is-pluggable-optics>false</is-pluggable-optics>
+    <serial-id>5300007468</serial-id>
+    <hardware-version>B01</hardware-version>
+    <model>N/A</model>
+    <circuit-pack-type>PFM04X</circuit-pack-type>
+    <type>PFM04X</type>
+    <shelf>s0</shelf>
+    <slot>xPFM</slot>
+  </circuit-packs>
+  <xponder>
+    <xpdr-number>1</xpdr-number>
+    <xpdr-port>
+      <index>1</index>
+      <circuit-pack-name>s0-u2</circuit-pack-name>
+      <port-name>p0</port-name>
+    </xpdr-port>
+    <xpdr-port>
+      <index>3</index>
+      <circuit-pack-name>s0-u0</circuit-pack-name>
+      <port-name>p0</port-name>
+    </xpdr-port>
+    <xpdr-port>
+      <index>2</index>
+      <circuit-pack-name>s0-u2</circuit-pack-name>
+      <port-name>p3</port-name>
+    </xpdr-port>
+    <xpdr-port>
+      <index>4</index>
+      <circuit-pack-name>s0-u0</circuit-pack-name>
+      <port-name>p1</port-name>
+    </xpdr-port>
+    <xpdr-type>switch</xpdr-type>
+  </xponder>
+  <shelves>
+    <shelf-name>s0</shelf-name>
+    <shelf-type>opt9904x</shelf-type>
+    <slots>
+      <slot-name>u0</slot-name>
+      <label>0</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-u0</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>u1</slot-name>
+      <label>1</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>u2</slot-name>
+      <label>2</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-u2</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>u3</slot-name>
+      <label>3</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>u4</slot-name>
+      <label>4</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>u5</slot-name>
+      <label>5</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>xFCM</slot-name>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-xFCM</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>u6</slot-name>
+      <label>6</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>u7</slot-name>
+      <label>7</label>
+      <slot-status>empty-not-prov</slot-status>
+    </slots>
+    <slots>
+      <slot-name>rcpa</slot-name>
+      <label>A</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-rcpa</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>xTAMIM</slot-name>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-xTAMIM</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>xPFM-A</slot-name>
+      <label>A</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-xPFM-A</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>xPFM-B</slot-name>
+      <label>B</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-xPFM-B</provisioned-circuit-pack>
+    </slots>
+    <slots>
+      <slot-name>rcpb</slot-name>
+      <label>B</label>
+      <slot-status>installed-prov-match</slot-status>
+      <provisioned-circuit-pack>s0-rcpb</provisioned-circuit-pack>
+    </slots>
+    <operational-state>inService</operational-state>
+    <vendor>ECI Telecom Ltd.</vendor>
+    <serial-id>5503502833</serial-id>
+    <type>OPT9904X</type>
+    <hardware-version>B00</hardware-version>
+    <model>N/A</model>
+  </shelves>
+  <odu-switching-pools>
+    <switching-pool-number>1</switching-pool-number>
+    <non-blocking-list>
+      <nbl-number>1</nbl-number>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p11</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p12</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p10</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p12</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p1</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p2</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p0</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p3</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p1</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p4</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p2</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p5</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p3</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p6</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p4</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p7</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p5</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p8</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p6</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p9</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p7</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p8</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <slot-name>p9</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p11</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p10</slot-name>
+      </pluggable-optics-holder-list>
+      <pluggable-optics-holder-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <slot-name>p0</slot-name>
+      </pluggable-optics-holder-list>
+      <port-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <port-name>p3</port-name>
+      </port-list>
+      <port-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <port-name>p5</port-name>
+      </port-list>
+      <port-list>
+        <circuit-pack-name>s0-u0</circuit-pack-name>
+        <port-name>p0</port-name>
+      </port-list>
+      <port-list>
+        <circuit-pack-name>s0-u2</circuit-pack-name>
+        <port-name>p0</port-name>
+      </port-list>
+    </non-blocking-list>
+    <switching-pool-type>non-blocking</switching-pool-type>
+  </odu-switching-pools>
+</org-openroadm-device>
+</data>

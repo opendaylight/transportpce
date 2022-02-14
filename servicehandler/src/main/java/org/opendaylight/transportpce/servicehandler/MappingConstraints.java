@@ -11,6 +11,8 @@ package org.opendaylight.transportpce.servicehandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.Constraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.CoRoutingOrGeneral;
@@ -50,6 +52,8 @@ public class MappingConstraints {
         .routing.constraints.rev171017.routing.constraints.sp.HardConstraints servicePathHardConstraints;
     private org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
         .routing.constraints.rev171017.routing.constraints.sp.SoftConstraints servicePathSoftConstraints;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
+
 
     /**
      * MappingConstraints class constructor
@@ -218,6 +222,9 @@ public class MappingConstraints {
      */
     public void serviceToServicePathConstarints() {
         LOG.info("Mapping Service Constraints to ServicePath Constraints");
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "Mapping Service Constraints to ServicePath Constraints");
         if (serviceHardConstraints  !=  null) {
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
                 .rev171017.routing.constraints.sp.HardConstraints tempHard = (org.opendaylight.yang.gen

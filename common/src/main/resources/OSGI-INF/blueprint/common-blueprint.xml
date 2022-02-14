@@ -13,6 +13,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <reference id="mountPointService" interface="org.opendaylight.mdsal.binding.api.MountPointService" />
     <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
+    <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
+    <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
+    <reference id="bindingDOMCodecServices" interface="org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices" />
 
     <bean id="deviceTransactionManager" class="org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl"
           destroy-method="preDestroy" >
@@ -98,6 +101,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="crossConnect710" />
     </bean>
 
+    <bean id="kafkaPublisher" class="org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl" scope="singleton" >
+    </bean>
+
+
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
 
     <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
@@ -109,5 +116,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <service ref="crossConnectImpl" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
 
     <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
+
+    <service ref="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
 
 </blueprint>

@@ -339,39 +339,18 @@ module org-openroadm-common-types {
       "FEC Off";
   }
 
-  // Staircase FEC (duplications for backwards compatibility)
-  identity sc-fec {
-    status deprecated;
-    base fec-identity;
-    description
-      "Staircase FEC identification";
-  }
   identity scfec {
     base fec-identity;
     description
       "Staircase FEC identification";
   }
 
-  // Reed Solomon FEC (duplication for backwards compatibility)
-  identity rs-fec {
-    status deprecated;
-    base fec-identity;
-    description
-      "Reed Solomon FEC identification";
-  }
   identity rsfec {
     base fec-identity;
     description
       "Reed Solomon FEC identification";
   }
 
-  // OpenROADM FEC (duplication for backwards compatibility)
-  identity o-fec {
-    status deprecated;
-    base fec-identity;
-    description
-      "OpenROADM FEC identification";
-  }
   identity ofec {
     base fec-identity;
     description
