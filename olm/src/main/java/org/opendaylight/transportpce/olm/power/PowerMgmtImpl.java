@@ -20,6 +20,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.olm.util.OlmUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
@@ -43,6 +45,7 @@ public class PowerMgmtImpl implements PowerMgmt {
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
     private static final double MC_WIDTH_GRAN = 2 * GridConstant.GRANULARITY;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     private long timer1 = 120000;
     // openroadm spec value is 120000, functest value is 3000
@@ -366,6 +369,7 @@ public class PowerMgmtImpl implements PowerMgmt {
         powerVal = new BigDecimal(txPowerRangeMap.get("MaxTx"))
             .min(new BigDecimal(rxSRGPowerRangeMap.get("MaxRx")));
         LOG.info("Calculated Transponder Power value is {}" , powerVal);
+        kafkaPublisher.publishNotification("service","Calculated Transponder Power value for " + nodeId + " is: " + powerVal);
         return powerVal;
     }
 
