@@ -131,6 +131,11 @@ public class PceOtnNode implements PceNode {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
+        if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
+                && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
+            LOG.error("PceOtnNode: unsupported OTN Service Type {}", serviceType);
+            this.valid = false;
+        }
     }
 
     public void initXndrTps(String mode) {
