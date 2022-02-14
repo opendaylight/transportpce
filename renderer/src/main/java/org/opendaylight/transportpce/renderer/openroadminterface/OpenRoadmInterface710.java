@@ -17,6 +17,8 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -95,6 +97,7 @@ public class OpenRoadmInterface710 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -1101,14 +1104,21 @@ public class OpenRoadmInterface710 {
                     // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
                     LOG.info("Given modulation format {} with 31.6 Gbaud rate is 100G", modulationFormat);
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "Given modulation format is " + modulationFormat + " and rate is 100G (31.6 Gbaud)");
                     return 100;
                 } else {
                     // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "Given modulation format is " + modulationFormat + " and rate is 200G (63.1 Gbaud)");
                     return 200;
                 }
             case DpQam8:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
+                // UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "Given modulation format is " + modulationFormat + " and rate is 300G (63.1 Gbaud)");
                 return 300;
             case DpQam16:
                 // DpQam16 is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
@@ -1118,10 +1128,16 @@ public class OpenRoadmInterface710 {
                     // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
                     LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
+                    // UTD
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                            "Given modulation format  " + modulationFormat + " and rate is 200G (31.6 Gbaud)");
                     return 200;
                 } else {
                     // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
+                    // UTD
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                            "Given modulation format  " + modulationFormat + " and rate is 400G (63.1 Gbaud)");
                     return 400;
                 }
             default:
