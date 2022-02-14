@@ -211,74 +211,68 @@ public class PceOtnNode implements PceNode {
         }
         this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
                 || SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)
-                    && isAzOrIntermediateAvl(availableXpdrClientTps, availableXpdrNWTps,
-                        StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                            ? availableXpdrClientTps
-                            : null);
-                //TODO check whether it makes sense to pass twice availableXpdrClientTps tp isAzOrIntermediateAvl
-                //     and to differentiate SERVICE_TYPE_100GE_S case
-                //     better pass otnServiceType -> this should probably be refactored
+                    && checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
     }
 
-    private boolean isAzOrIntermediateAvl(List<TpId> clientTps, List<TpId> netwTps, List<TpId> clientTps0) {
-        switch (modeType) {
-            case "intermediate":
-                return checkSwPool(clientTps0, netwTps, 0, 2);
+    private boolean checkSwPool(List<TpId> netwTps, List<TpId> clientTps) {
 
-            case "AZ":
-                return checkSwPool(clientTps, netwTps, 1, 1);
-
-            default:
-                LOG.error("unknown mode type {}", modeType);
-                return false;
-        }
-    }
-
-    private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
         if (netwTps == null) {
             return false;
         }
-        if (clientTps != null && nbClient == 1 && nbNetw == 1) {
-            clientTps.sort(Comparator.comparing(TpId::getValue));
-            netwTps.sort(Comparator.comparing(TpId::getValue));
-            for (TpId nwTp : netwTps) {
-                for (TpId clTp : clientTps) {
-                    for (NonBlockingList nbl : new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
-                            .nonnullOduSwitchingPools().values().stream().findFirst().get()
-                                .getNonBlockingList().values())) {
-                        if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
-                            usableXpdrClientTps.add(clTp);
+        Node1 node1 = node.augmentation(Node1.class);
+        if (node1 == null) {
+            return false;
+        }
+        List<NonBlockingList> nblList = new ArrayList<>(
+                node1.getSwitchingPools().nonnullOduSwitchingPools()
+                        .values().stream().findFirst().get()
+                                .getNonBlockingList().values());
+        if (nblList == null) {
+            return false;
+        }
+        netwTps.sort(Comparator.comparing(TpId::getValue));
+
+        switch (modeType) {
+
+            case "intermediate":
+                for (NonBlockingList nbl: nblList) {
+                    for (TpId nwTp : netwTps) {
+                        if (nbl.getTpList().contains(nwTp)) {
                             usableXpdrNWTps.add(nwTp);
                         }
-                        if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
-                            //since nbClient == 1 && nbNetw == 1...
-                                && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
-                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                        if (usableXpdrNWTps.size() >= 2) {
                             return true;
                         }
                     }
                 }
-            }
-        }
-        if (nbClient == 0 && nbNetw == 2) {
-            netwTps.sort(Comparator.comparing(TpId::getValue));
-            //TODO compared to above, nested loops are inverted below - does it make really sense ?
-            //     there is room to rationalize things here
-            for (NonBlockingList nbl : new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
-                    .nonnullOduSwitchingPools().values().stream().findFirst().get()
-                        .getNonBlockingList().values())) {
-                for (TpId nwTp : netwTps) {
-                    if (nbl.getTpList().contains(nwTp)) {
-                        usableXpdrNWTps.add(nwTp);
-                    }
-                    if (usableXpdrNWTps.size() >= 2) {
-                    //since nbClient == 0 && nbNetw == 2...
-                        return true;
+                return false;
+
+            case "AZ":
+                if (clientTps == null) {
+                    return false;
+                }
+                clientTps.sort(Comparator.comparing(TpId::getValue));
+                for (NonBlockingList nbl: nblList) {
+                    for (TpId nwTp : netwTps) {
+                        for (TpId clTp : clientTps) {
+                            if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
+                                usableXpdrClientTps.add(clTp);
+                                usableXpdrNWTps.add(nwTp);
+                            }
+                            if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
+                                    && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
+                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                                return true;
+                            }
+                        }
                     }
                 }
-            }
+                return false;
+
+            default:
+                LOG.error("Unsupported mode type {}", modeType);
+                return false;
         }
-        return false;
     }
 
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
