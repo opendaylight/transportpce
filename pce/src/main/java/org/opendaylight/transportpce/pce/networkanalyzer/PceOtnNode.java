@@ -51,6 +51,33 @@ public class PceOtnNode implements PceNode {
      * For This Class the node passed shall be at the otn-openroadm Layer
      */
 
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
+=======
+    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
+    private static final List<String> SERVICE_TYPE_ODU_LIST = List.of(
+        StringConstants.SERVICE_TYPE_ODU4,
+        StringConstants.SERVICE_TYPE_ODUC4,
+        StringConstants.SERVICE_TYPE_ODUC3,
+        StringConstants.SERVICE_TYPE_ODUC2);
+    private static final List<OpenroadmNodeType> VALID_NODETYPES_LIST = List.of(
+        OpenroadmNodeType.MUXPDR,
+        OpenroadmNodeType.SWITCH,
+        OpenroadmNodeType.TPDR);
+    private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
+        StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
+        StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
+        StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
+    private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, 1,
+        StringConstants.SERVICE_TYPE_10GE, 10,
+        StringConstants.SERVICE_TYPE_100GE_M, 20);
+    private static final Map<String, String> SERVICE_TYPE_ETH_ODU_STRING_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, "ODU0",
+        StringConstants.SERVICE_TYPE_10GE, "ODU2e",
+        StringConstants.SERVICE_TYPE_100GE_M, "ODU4");
+
+>>>>>>> CHANGE (dd578c Refactor PCE network analyzer PceOtnNode step 4)
     private boolean valid = true;
 
     private final Node node;
@@ -181,16 +208,37 @@ public class PceOtnNode implements PceNode {
                             LOG.error("TP {} of {} does not allow any termination creation",
                                 tp.getTpId().getValue(), node.getNodeId().getValue());
                             continue;
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
+=======
+                        }
+                    } else if (SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)) {
+                        if (!checkOdtuTTPforLoOduCreation(
+                                ontTp1, SERVICE_TYPE_ETH_TS_NB_MAP.get(this.otnServiceType))) {
+                            LOG.error("TP {} of {} does not allow {} termination creation",
+                                tp.getTpId().getValue(),
+                                SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType),
+                                node.getNodeId().getValue());
+                            continue;
+                        }
+                    } else {
+                        LOG.error("TP {} of {} does not allow any termination creation",
+                            tp.getTpId().getValue(), node.getNodeId().getValue());
+                        continue;
+>>>>>>> CHANGE (dd578c Refactor PCE network analyzer PceOtnNode step 4)
                     }
                     LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                     break;
 
                 case XPONDERCLIENT:
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
                     if (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_100GE_M.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType)) {
+=======
+                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
+>>>>>>> CHANGE (dd578c Refactor PCE network analyzer PceOtnNode step 4)
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -208,6 +256,7 @@ public class PceOtnNode implements PceNode {
                     LOG.debug("unsupported ocn TP type {}", ocnTp1.getTpType());
             }
         }
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
         if (StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)
                 || StringConstants.SERVICE_TYPE_ODUC4.equals(this.otnServiceType)
                 || StringConstants.SERVICE_TYPE_ODUC3.equals(this.otnServiceType)
@@ -226,6 +275,30 @@ public class PceOtnNode implements PceNode {
             this.valid = true;
         } else {
             this.valid = false;
+=======
+        this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
+                || SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)
+                    && isAzOrIntermediateAvl(availableXpdrClientTps, availableXpdrNWTps,
+                        StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                            ? availableXpdrClientTps
+                            : null);
+                //TODO check whether it makes sense to pass twice availableXpdrClientTps tp isAzOrIntermediateAvl
+                //     and to differentiate SERVICE_TYPE_100GE_S case
+                //     better pass otnServiceType -> this should probably be refactored
+    }
+
+    private boolean isAzOrIntermediateAvl(List<TpId> clientTps, List<TpId> netwTps, List<TpId> clientTps0) {
+        switch (modeType) {
+            case "intermediate":
+                return checkSwPool(clientTps0, netwTps, 0, 2);
+
+            case "AZ":
+                return checkSwPool(clientTps, netwTps, 1, 1);
+
+            default:
+                LOG.error("unknown mode type {}", modeType);
+                return false;
+>>>>>>> CHANGE (dd578c Refactor PCE network analyzer PceOtnNode step 4)
         }
     }
 
@@ -447,6 +520,7 @@ public class PceOtnNode implements PceNode {
         return valid;
     }
 
+<<<<<<< HEAD   (0e5114 Merge "Getter for port-capability in port-mapping 2.2.1" int)
     public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
         if (pceOtnNode == null || pceOtnNode.node == null
             || pceOtnNode.getNodeId() == null || pceOtnNode.nodeType == null || pceOtnNode.getSupNetworkNodeId() == null
@@ -494,6 +568,8 @@ public class PceOtnNode implements PceNode {
                 || pceOtnNode.nodeType  == OpenroadmNodeType.TPDR;
     }
 
+=======
+>>>>>>> CHANGE (dd578c Refactor PCE network analyzer PceOtnNode step 4)
     @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
