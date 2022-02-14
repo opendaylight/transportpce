@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -96,6 +98,7 @@ public class OpenRoadmInterface710 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -1125,6 +1128,9 @@ public class OpenRoadmInterface710 {
                 return 0;
         }
         LOG.info("Given modulation format {} rate is {}", modulationFormat, rate);
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+            "Given modulation format  " + modulationFormat + " and rate is " + rate);
         return rate;
     }
 

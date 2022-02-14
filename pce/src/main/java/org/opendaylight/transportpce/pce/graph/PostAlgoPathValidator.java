@@ -21,6 +21,8 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -43,6 +45,8 @@ public class PostAlgoPathValidator {
     private static final double ADD_OSNR = 30;
     public static final Long CONST_OSNR = 1L;
     public static final double SYS_MARGIN = 0;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
+
 
     @SuppressWarnings("fallthrough")
     @SuppressFBWarnings(
@@ -404,7 +408,11 @@ public class PostAlgoPathValidator {
             LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}", path.getEdgeList().size());
             return false;
         }
+
         LOG.info("In checkOSNR: OSNR of the path is {} dB", osnrDb);
+        // UTD
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "PCE calculated OSNR of the path is " + osnrDb + " db");
         return ((osnrDb + SYS_MARGIN) > MIN_OSNR_W100G);
     }
 
