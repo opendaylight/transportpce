@@ -98,6 +98,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="crossConnect710" />
     </bean>
 
+    <bean id="kafkaPublisher" class="org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl" >
+    </bean>
+
+
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
 
     <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
