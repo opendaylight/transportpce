@@ -27,8 +27,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
   <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
   <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping"/>
+  <reference id="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
 
-  <bean id="pceServiceImpl"
+    <bean id="pceServiceImpl"
         class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"
         init-method="init" destroy-method="close">
     <argument ref="networkTransactionImpl"/>
