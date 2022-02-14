@@ -14,6 +14,7 @@
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
     <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
     <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
+    <reference id="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
 
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />

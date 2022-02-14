@@ -30,6 +30,10 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kafka.version>3.0.0</kafka.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -123,6 +127,11 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.version}</version>
     </dependency>
 
     <!-- Testing dependencies -->
