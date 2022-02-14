@@ -32,6 +32,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
     <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
 
+    <reference id="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
+
     <bean id="serviceDatastoreOperation" class="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl">
         <argument ref="dataBroker"/>
       </bean>
