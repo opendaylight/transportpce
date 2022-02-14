@@ -18,6 +18,8 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.util.OlmUtils;
@@ -43,6 +45,7 @@ public class PowerMgmtImpl implements PowerMgmt {
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
     private static final double MC_WIDTH_GRAN = 2 * GridConstant.GRANULARITY;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     private long timer1 = 120000;
     // openroadm spec value is 120000, functest value is 3000
@@ -139,7 +142,10 @@ public class PowerMgmtImpl implements PowerMgmt {
                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                     try {
                         LOG.info("Now going in sleep mode");
+                        kafkaPublisher.publishNotification("service","Starting Xpdr sleep for "
+                                + timer1 + " ms");
                         Thread.sleep(timer1);
+                        kafkaPublisher.publishNotification("service","Finished Xpdr sleep");
                     } catch (InterruptedException e) {
                         LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                         // FIXME shouldn't it be LOG.warn  or LOG.error?
@@ -191,7 +197,10 @@ public class PowerMgmtImpl implements PowerMgmt {
                             return false;
                         }
                         LOG.info("Roadm-connection: {} updated ", connectionNumber);
+                        kafkaPublisher.publishNotification("service","Starting Rdm sleep for "
+                                + timer2 + " ms");
                         Thread.sleep(timer2);
+                        kafkaPublisher.publishNotification("service","Finished Rdm sleep");
                         // TODO make this timer value configurable via OSGi blueprint
                         // although the value recommended by the white paper is 20 seconds.
                         // At least one vendor product needs 60 seconds
@@ -366,6 +375,8 @@ public class PowerMgmtImpl implements PowerMgmt {
         powerVal = new BigDecimal(txPowerRangeMap.get("MaxTx"))
             .min(new BigDecimal(rxSRGPowerRangeMap.get("MaxRx")));
         LOG.info("Calculated Transponder Power value is {}" , powerVal);
+        kafkaPublisher.publishNotification("service","Calculated Transponder Power value for "
+                + nodeId + " is: " + powerVal);
         return powerVal;
     }
 
