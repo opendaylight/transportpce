@@ -65,7 +65,6 @@ public class PceOtnNode implements PceNode {
     private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
         StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
-        StringConstants.SERVICE_TYPE_100GE_T, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
     private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
@@ -182,7 +181,6 @@ public class PceOtnNode implements PceNode {
                                 node.getNodeId().getValue());
                             continue;
                         }
-                    // TODO what about SERVICE_TYPE_100GE_T ?
                     } else {
                         LOG.error("TP {} of {} does not allow any termination creation",
                             tp.getTpId().getValue(), node.getNodeId().getValue());
@@ -193,9 +191,7 @@ public class PceOtnNode implements PceNode {
                     break;
 
                 case XPONDERCLIENT:
-                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
-                            && !StringConstants.SERVICE_TYPE_100GE_T.equals(this.otnServiceType)) {
-                            // TODO should we really exclude SERVICE_TYPE_100GE_T ?
+                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -214,12 +210,20 @@ public class PceOtnNode implements PceNode {
             }
         }
         this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
-                || SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)
-                    && isAzOrIntermediateAvl(mode, null, availableXpdrClientTps, availableXpdrNWTps)
-                || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                    && isAzOrIntermediateAvl(mode, availableXpdrClientTps, availableXpdrClientTps, availableXpdrNWTps);
-                //TODO very similar to isOtnServiceTypeValid method
-                //     check whether the different treatment for SERVICE_TYPE_100GE_S here is appropriate or not
+                || SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)
+                    && isAzOrIntermediateAvl(mode, availableXpdrClientTps, availableXpdrNWTps,
+                        StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
+                            ? availableXpdrClientTps
+                            : null);
+                //TODO check whether it makes sense to pass twice availableXpdrClientTps tp isAzOrIntermediateAvl
+                //     and to differentiate SERVICE_TYPE_100GE_S case
+                //     better pass otnServiceType -> this should probably be refactored
+    }
+
+    private boolean isAzOrIntermediateAvl(
+            String mdType, List<TpId> clientTps, List<TpId> netwTps, List<TpId> clientTps0) {
+        return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
+               || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);
     }
 
     private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
@@ -415,12 +419,6 @@ public class PceOtnNode implements PceNode {
             valid = false;
         }
         return valid;
-    }
-
-    private boolean isAzOrIntermediateAvl(
-            String mdType, List<TpId> clientTps0, List<TpId> clientTps, List<TpId> netwTps) {
-        return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
-               || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);
     }
 
     @Override
