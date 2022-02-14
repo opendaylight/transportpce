@@ -11,6 +11,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.renderer.provisiondevice.OLMRenderingResult;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
@@ -24,6 +26,7 @@ public class OlmPowerSetupTask implements Callable<OLMRenderingResult> {
 
     private final TransportpceOlmService olmService;
     private final ServicePowerSetupInput input;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public OlmPowerSetupTask(TransportpceOlmService olmService, ServicePowerSetupInput input) {
         this.olmService = olmService;
@@ -42,9 +45,11 @@ public class OlmPowerSetupTask implements Callable<OLMRenderingResult> {
         LOG.debug("Result: {}", result.getResult());
         if (ResponseCodes.SUCCESS_RESULT.equals(result.getResult().getResult())) {
             LOG.info("OLM power setup finished successfully");
+            kafkaPublisher.publishNotification("service","OLM power setup finished successfully.");
             return OLMRenderingResult.ok();
         } else {
             LOG.warn("OLM power setup not successfully finished");
+            kafkaPublisher.publishNotification("service","OLM power setup failed!.");
             return OLMRenderingResult.failed("Operation Failed");
         }
     }

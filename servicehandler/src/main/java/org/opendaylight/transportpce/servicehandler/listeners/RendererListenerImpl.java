@@ -18,6 +18,8 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
@@ -52,7 +54,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private Boolean tempService;
     private NotificationPublishService notificationPublishService;
     private final NetworkModelService networkModelService;
-
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public RendererListenerImpl(PathComputationService pathComputationService,
             NotificationPublishService notificationPublishService, NetworkModelService networkModelService) {
@@ -119,6 +121,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 return;
         }
         LOG.info("Service '{}' deleted !", notification.getServiceName());
+        kafkaPublisher.publishNotification("service","Service "+ notification.getServiceName() + " deleted !");
         if (this.input == null) {
             LOG.error("ServiceInput parameter is null !");
             return;
@@ -156,6 +159,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onSuccededServiceImplementation(RendererRpcResultSp notification) {
         LOG.info("Service implemented !");
+        kafkaPublisher.publishNotification("service","Service implementation finished successfully.");
         if (serviceDataStoreOperations == null) {
             LOG.debug("serviceDataStoreOperations is null");
             return;
@@ -231,6 +235,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onFailedServiceImplementation(String serviceName) {
         LOG.error("Renderer implementation failed !");
+        kafkaPublisher.publishNotification("service","Service Renderer failed!");
         Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
         sendNbiNotification(new PublishNotificationProcessServiceBuilder()
                 .setServiceName(service.getServiceName())

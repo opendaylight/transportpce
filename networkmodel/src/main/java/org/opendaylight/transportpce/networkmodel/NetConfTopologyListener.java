@@ -29,6 +29,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.NotificationsService;
@@ -54,6 +56,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final DeviceTransactionManager deviceTransactionManager;
     private final Map<String, NodeRegistration> registrations;
     private final PortMapping portMapping;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
              DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
@@ -98,6 +101,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                             .createOpenRoadmNode(nodeId, deviceCapabilityOpt.get().getCapability());
                         onDeviceConnected(nodeId,deviceCapabilityOpt.get().getCapability());
                         LOG.info("Device {} correctly connected to controller", nodeId);
+                        kafkaPublisher.publishNotification("TOPOLOGY","OpenRoadm node "
+                                + "detected with nodeId: " + nodeId);
                     }
                     if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
                         && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
