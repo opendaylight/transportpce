@@ -65,7 +65,6 @@ public class PceOtnNode implements PceNode {
     private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
         StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
-        StringConstants.SERVICE_TYPE_100GE_T, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
         StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
     private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
@@ -132,6 +131,11 @@ public class PceOtnNode implements PceNode {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
+        if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
+                && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
+            LOG.error("PceOtnNode: unsupported OTN Service Type {}", serviceType);
+            this.valid = false;
+        }
     }
 
     public void initXndrTps(String mode) {
@@ -182,7 +186,6 @@ public class PceOtnNode implements PceNode {
                                 node.getNodeId().getValue());
                             continue;
                         }
-                    // TODO what about SERVICE_TYPE_100GE_T ?
                     } else {
                         LOG.error("TP {} of {} does not allow any termination creation",
                             tp.getTpId().getValue(), node.getNodeId().getValue());
@@ -193,9 +196,7 @@ public class PceOtnNode implements PceNode {
                     break;
 
                 case XPONDERCLIENT:
-                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
-                            && !StringConstants.SERVICE_TYPE_100GE_T.equals(this.otnServiceType)) {
-                            // TODO should we really exclude SERVICE_TYPE_100GE_T ?
+                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
                         if (tp.augmentation(TerminationPoint1.class) == null) {
                             continue;
                         }
@@ -214,59 +215,69 @@ public class PceOtnNode implements PceNode {
             }
         }
         this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
-                || SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)
-                    && isAzOrIntermediateAvl(mode, null, availableXpdrClientTps, availableXpdrNWTps)
-                || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)
-                    && isAzOrIntermediateAvl(mode, availableXpdrClientTps, availableXpdrClientTps, availableXpdrNWTps);
-                //TODO very similar to isOtnServiceTypeValid method
-                //     check whether the different treatment for SERVICE_TYPE_100GE_S here is appropriate or not
+                || SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)
+                    && checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
     }
 
-    private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
+    private boolean checkSwPool(List<TpId> netwTps, List<TpId> clientTps) {
+
         if (netwTps == null) {
             return false;
         }
-        if (clientTps != null && nbClient == 1 && nbNetw == 1) {
-            clientTps.sort(Comparator.comparing(TpId::getValue));
-            netwTps.sort(Comparator.comparing(TpId::getValue));
-            for (TpId nwTp : netwTps) {
-                for (TpId clTp : clientTps) {
-                    for (NonBlockingList nbl : new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
-                            .nonnullOduSwitchingPools().values().stream().findFirst().get()
-                                .getNonBlockingList().values())) {
-                        if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
-                            usableXpdrClientTps.add(clTp);
+        Node1 node1 = node.augmentation(Node1.class);
+        if (node1 == null) {
+            return false;
+        }
+        List<NonBlockingList> nblList = new ArrayList<>(
+                node1.getSwitchingPools().nonnullOduSwitchingPools()
+                        .values().stream().findFirst().get()
+                                .getNonBlockingList().values());
+        if (nblList == null) {
+            return false;
+        }
+        netwTps.sort(Comparator.comparing(TpId::getValue));
+
+        switch (modeType) {
+
+            case "intermediate":
+                for (NonBlockingList nbl: nblList) {
+                    for (TpId nwTp : netwTps) {
+                        if (nbl.getTpList().contains(nwTp)) {
                             usableXpdrNWTps.add(nwTp);
                         }
-                        if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
-                            //since nbClient == 1 && nbNetw == 1...
-                                && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
-                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                        if (usableXpdrNWTps.size() >= 2) {
                             return true;
                         }
                     }
                 }
-            }
-        }
-        if (nbClient == 0 && nbNetw == 2) {
-            netwTps.sort(Comparator.comparing(TpId::getValue));
-            //TODO compared to above, nested loops are inverted below - does it make really sense ?
-            //     there is room to rationalize things here
-            for (NonBlockingList nbl : new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
-                    .nonnullOduSwitchingPools().values().stream().findFirst().get()
-                        .getNonBlockingList().values())) {
-                for (TpId nwTp : netwTps) {
-                    if (nbl.getTpList().contains(nwTp)) {
-                        usableXpdrNWTps.add(nwTp);
-                    }
-                    if (usableXpdrNWTps.size() >= 2) {
-                    //since nbClient == 0 && nbNetw == 2...
-                        return true;
+                return false;
+
+            case "AZ":
+                if (clientTps == null) {
+                    return false;
+                }
+                clientTps.sort(Comparator.comparing(TpId::getValue));
+                for (NonBlockingList nbl: nblList) {
+                    for (TpId nwTp : netwTps) {
+                        for (TpId clTp : clientTps) {
+                            if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
+                                usableXpdrClientTps.add(clTp);
+                                usableXpdrNWTps.add(nwTp);
+                            }
+                            if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
+                                    && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
+                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                                return true;
+                            }
+                        }
                     }
                 }
-            }
+                return false;
+
+            default:
+                LOG.error("Unsupported mode type {}", modeType);
+                return false;
         }
-        return false;
     }
 
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
@@ -409,53 +420,12 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean isValid() {
-        if (isNotValid(this)) {
+        if (nodeId == null || nodeType == null
+                || this.getSupNetworkNodeId() == null || this.getSupClliNodeId() == null) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
         return valid;
-    }
-
-    private boolean isNotValid(final PceOtnNode poNode) {
-        return poNode == null || poNode.nodeId == null || poNode.nodeType == null
-                || poNode.getSupNetworkNodeId() == null || poNode.getSupClliNodeId() == null;
-    }
-
-    public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
-        if (isNotValid(pceOtnNode) || pceOtnNode.otnServiceType == null) {
-            LOG.error(
-                "PceOtnNode: one of parameters is not populated : nodeId, node type, supporting nodeId, otnServiceType"
-            );
-            return false;
-        }
-        if (VALID_NODETYPES_LIST.contains(pceOtnNode.nodeType)) {
-            return isOtnServiceTypeValid(pceOtnNode);
-        }
-        LOG.error("PceOtnNode node type: node type is not one of MUXPDR or SWITCH or TPDR");
-        return false;
-    }
-
-    private boolean isOtnServiceTypeValid(final PceOtnNode poNode) {
-        if (poNode.modeType == null) {
-            return false;
-        }
-        //Todo refactor Strings (mode and otnServiceType ) to enums
-        if (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
-                && poNode.modeType.equals("AZ")) {
-            return true;
-        }
-        return (poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
-                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE)
-                || poNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_100GE_S))
-            && isAzOrIntermediateAvl(poNode.modeType, null, poNode.availableXpdrClientTps, poNode.availableXpdrNWTps);
-        //TODO SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType) might be more appropriate here
-        //     but only SERVICE_TYPE_100GE_S is managed and not SERVICE_TYPE_100GE_M and _T
-    }
-
-    private boolean isAzOrIntermediateAvl(
-            String mdType, List<TpId> clientTps0, List<TpId> clientTps, List<TpId> netwTps) {
-        return mdType.equals("intermediate") && checkSwPool(clientTps0, netwTps, 0, 2)
-               || mdType.equals("AZ") && checkSwPool(clientTps, netwTps, 1, 1);
     }
 
     @Override
