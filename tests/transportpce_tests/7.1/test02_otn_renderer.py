@@ -376,12 +376,20 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        # Here you have remove the added oducn supporting port interface
+        del self.NETWORK2_CHECK_DICT["supporting-oducn"]
 
     def test_21_check_no_interface_oduc2(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
+    # Check if port-mapping data is updated, where the supporting-oducn is deleted
+    def test_21a_check_no_oduc2(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-oducn"])
+
     # 1f) Delete OTUC2 device interfaces
+
     def test_22_service_path_delete_otuc2(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
             {
@@ -399,6 +407,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        del self.NETWORK2_CHECK_DICT["supporting-otucn"]
 
     def test_23_check_no_interface_otuc2(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC2")
@@ -412,6 +421,10 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_25_check_no_interface_otsi(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
         self.assertEqual(response['status_code'], requests.codes.conflict)
+
+    def test_25a_check_no_otuc2(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-otucn"])
 
     # 2a) create a OTUC3 device renderer
     def test_26_service_path_create_otuc3(self):
@@ -582,10 +595,15 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        del self.NETWORK2_CHECK_DICT["supporting-oducn"]
 
     def test_35_check_no_interface_oduc3(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC3")
         self.assertEqual(response['status_code'], requests.codes.conflict)
+
+    def test_35a_check_no_oduc3(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-oducn"])
 
     # 2f) Delete OTUC3 device interfaces
     def test_36_service_path_delete_otuc3(self):
@@ -605,6 +623,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        del self.NETWORK2_CHECK_DICT["supporting-otucn"]
 
     def test_37_check_no_interface_otuc3(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC3")
@@ -619,8 +638,12 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
+    def test_39a_check_no_otuc3(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-otucn"])
+
     # 3a) create a OTUC4 device renderer
-    def test_40_service_path_create_otuc3(self):
+    def test_40_service_path_create_otuc4(self):
         response = test_utils_rfc8040.device_renderer_service_path_request(
             {
                 'service-name': 'service_OTUC4',
@@ -788,10 +811,15 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        del self.NETWORK2_CHECK_DICT["supporting-oducn"]
 
     def test_49_check_no_interface_oduc4(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC4")
         self.assertEqual(response['status_code'], requests.codes.conflict)
+
+    def test_49a_check_no_oduc4(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-oducn"])
 
     # 3f) Delete OTUC4 device interfaces
     def test_50_service_path_delete_otuc4(self):
@@ -811,6 +839,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
+        del self.NETWORK2_CHECK_DICT["supporting-otucn"]
 
     def test_51_check_no_interface_otuc4(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC4")
@@ -824,6 +853,10 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_53_check_no_interface_otsi(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
         self.assertEqual(response['status_code'], requests.codes.conflict)
+
+    def test_53a_check_no_otuc4(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        self.assertRaises(KeyError, lambda: response["supporting-otucn"])
 
     # Disconnect the XPDR
     def test_54_xpdr_device_disconnection(self):
