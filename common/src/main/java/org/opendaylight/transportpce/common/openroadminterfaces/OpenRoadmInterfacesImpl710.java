@@ -187,6 +187,7 @@ public class OpenRoadmInterfacesImpl710 {
                     nodeId, intf2Delete.getSupportingCircuitPackName(), intf2Delete.getSupportingPort());
                 this.portMapping.deleteMapping(nodeId, oldMapping.getLogicalConnectionPoint());
                 this.portMapping710.updateMapping(nodeId, oldMapping);
+                // check after the
             }
 
         } else {
