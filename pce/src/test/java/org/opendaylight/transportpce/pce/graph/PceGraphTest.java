@@ -140,7 +140,7 @@ public class PceGraphTest {
         node = NodeUtils.getOTNNodeBuilder(NodeUtils.geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).build();
 
         PceOtnNode  pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical"), ServiceFormat.OTU.getName(), "DEGREE");
+                new NodeId("optical"), ServiceFormat.OTU.getName(), "serviceType", null);
         pceOtnNode.validateXponder("optical", "sl");
         pceOtnNode.validateXponder("not optical", "sl");
         pceOtnNode.initXndrTps("AZ");
@@ -149,7 +149,7 @@ public class PceGraphTest {
 
 
         PceOtnNode pceOtnNode2 = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
-                new NodeId("optical2"), ServiceFormat.OTU.getName(), "DEGREE");
+                new NodeId("optical2"), ServiceFormat.OTU.getName(), "serviceType", null);
         pceOtnNode2.validateXponder("optical", "sl");
         pceOtnNode2.validateXponder("not optical", "sl");
         pceOtnNode2.initXndrTps("AZ");
