@@ -942,7 +942,9 @@ public class PortMappingVersion710 {
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
         mpBldr.setSupportingOtu4(null)
-            .setSupportingOdu4(null);
+            .setSupportingOdu4(null)
+            .setSupportingOducn(null)
+            .setSupportingOtucn(null);
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId,
                 interfaces.getInterfaceName());
