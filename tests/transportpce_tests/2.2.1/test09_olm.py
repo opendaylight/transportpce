@@ -462,14 +462,14 @@ class TransportOlmTesting(unittest.TestCase):
    #"""to test case where SRG where the xpdr is connected to has no optical range data"""
 
     def test_31_connect_xprdA_to_roadmA(self):
-        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "2",
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "2", "1",
                                                           "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_32_connect_roadmA_to_xpdrA(self):
-        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "2",
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "2", "1",
                                                           "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -478,7 +478,7 @@ class TransportOlmTesting(unittest.TestCase):
     def test_33_servicePath_create_AToZ(self):
         response = test_utils.service_path_request("create", "test2", "2",
                                                    [{"node-id": "XPDR-A1",
-                                                     "dest-tp": "XPDR1-NETWORK2", "src-tp": "XPDR1-CLIENT2"},
+                                                     "dest-tp": "XPDR2-NETWORK1", "src-tp": "XPDR2-CLIENT1"},
                                                     {"node-id": "ROADM-A1",
                                                      "dest-tp": "DEG2-TTP-TXRX", "src-tp": "SRG1-PP2-TXRX"}],
                                                    196.1, 40, 196.075, 196.125, 753,
@@ -492,7 +492,7 @@ class TransportOlmTesting(unittest.TestCase):
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A1",
-            "interface/XPDR1-NETWORK2-753:760/org-openroadm-optical-channel-interfaces:och")
+            "interface/XPDR2-NETWORK1-753:760/org-openroadm-optical-channel-interfaces:och")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
@@ -501,7 +501,7 @@ class TransportOlmTesting(unittest.TestCase):
     def test_35_servicePath_delete_AToZ(self):
         response = test_utils.service_path_request("delete", "test", "1",
                                                    [{"node-id": "XPDR-A1",
-                                                     "dest-tp": "XPDR1-NETWORK2", "src-tp": "XPDR1-CLIENT2"},
+                                                     "dest-tp": "XPDR2-NETWORK1", "src-tp": "XPDR2-CLIENT1"},
                                                     {"node-id": "ROADM-A1",
                                                      "dest-tp": "DEG2-TTP-TXRX", "src-tp": "SRG1-PP2-TXRX"}],
                                                    196.053125, 40, 196.025, 196.08125, 761,

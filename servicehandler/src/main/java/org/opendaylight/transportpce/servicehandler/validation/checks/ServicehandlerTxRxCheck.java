@@ -140,18 +140,19 @@ public final class ServicehandlerTxRxCheck {
         if (rxDirection == null) {
             return new ComplianceCheckResult(false, LogMessages.RXDIR_NOT_SET);
         }
-        if (!checkPort(txDirection.getPort())) {
-            return new ComplianceCheckResult(false, LogMessages.TXDIR_PORT_NOT_SET);
-        }
-        if (!checkLgx(txDirection.getLgx())) {
-            return new ComplianceCheckResult(false, LogMessages.TXDIR_LGX_NOT_SET);
-        }
-        if (!checkPort(rxDirection.getPort())) {
-            return new ComplianceCheckResult(false, LogMessages.RXDIR_PORT_NOT_SET);
-        }
-        if (!checkLgx(rxDirection.getLgx())) {
-            return new ComplianceCheckResult(false, LogMessages.RXDIR_LGX_NOT_SET);
-        }
+// TODO : as soon as all leaves under port and lgx are not mandatory, these checks seems to be not relevant at all
+//        if (!checkPort(txDirection.getPort())) {
+//            return new ComplianceCheckResult(false, LogMessages.TXDIR_PORT_NOT_SET);
+//        }
+//        if (!checkLgx(txDirection.getLgx())) {
+//            return new ComplianceCheckResult(false, LogMessages.TXDIR_LGX_NOT_SET);
+//        }
+//        if (!checkPort(rxDirection.getPort())) {
+//            return new ComplianceCheckResult(false, LogMessages.RXDIR_PORT_NOT_SET);
+//        }
+//        if (!checkLgx(rxDirection.getLgx())) {
+//            return new ComplianceCheckResult(false, LogMessages.RXDIR_LGX_NOT_SET);
+//        }
         return new ComplianceCheckResult(true, "");
     }
 
