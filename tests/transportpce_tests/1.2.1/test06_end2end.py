@@ -42,10 +42,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "clli": "SNJSCAMCJP8",
             "tx-direction": {
                 "port": {
-                    "port-device-name":
-                        "ROUTER_SNJSCAMCJP8_000000.00_00",
                     "port-type": "router",
-                    "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
                     "port-rack": "000000.00",
                     "port-shelf": "00"
                 },
@@ -59,10 +56,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             },
             "rx-direction": {
                 "port": {
-                    "port-device-name":
-                        "ROUTER_SNJSCAMCJP8_000000.00_00",
                     "port-type": "router",
-                    "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
                     "port-rack": "000000.00",
                     "port-shelf": "00"
                 },
@@ -83,10 +77,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "clli": "SNJSCAMCJT4",
             "tx-direction": {
                 "port": {
-                    "port-device-name":
-                        "ROUTER_SNJSCAMCJT4_000000.00_00",
                     "port-type": "router",
-                    "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
                     "port-rack": "000000.00",
                     "port-shelf": "00"
                 },
@@ -100,10 +91,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             },
             "rx-direction": {
                 "port": {
-                    "port-device-name":
-                        "ROUTER_SNJSCAMCJT4_000000.00_00",
                     "port-type": "router",
-                    "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
                     "port-rack": "000000.00",
                     "port-shelf": "00"
                 },
