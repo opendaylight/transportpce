@@ -169,8 +169,16 @@ public class PceCalculation {
                 znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
                 break;
             default:
-                anodeId = input.getServiceAEnd().getNodeId();
-                znodeId = input.getServiceZEnd().getNodeId();
+                if (input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName() != null) {
+                    anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
+                } else {
+                    anodeId = input.getServiceAEnd().getNodeId();
+                }
+                if (input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName() != null) {
+                    anodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
+                } else {
+                    znodeId = input.getServiceZEnd().getNodeId();
+                }
                 break;
         }
     }
@@ -415,7 +423,7 @@ public class PceCalculation {
     }
 
     private void validateNode(Node node) {
-        LOG.debug("validateNode: node {} ", node);
+        LOG.info("validateNode: node {} ", node);
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
         if (node1 == null) {
@@ -483,14 +491,22 @@ public class PceCalculation {
                 if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
                     return true;
                 }
-                return false;
-            case "OTU":
                 if ("A".equals(azEndPoint) && pceNode.getNodeId().getValue()
-                    .equals(this.input.getServiceAEnd().getRxDirection().getPort().getPortDeviceName())) {
+                    .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName())) {
                     return true;
                 }
                 if ("Z".equals(azEndPoint) && pceNode.getNodeId().getValue()
-                    .equals(this.input.getServiceZEnd().getRxDirection().getPort().getPortDeviceName())) {
+                    .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName())) {
+                    return true;
+                }
+                return false;
+            case "OTU":
+                if ("A".equals(azEndPoint) && pceNode.getNodeId().getValue()
+                    .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName())) {
+                    return true;
+                }
+                if ("Z".equals(azEndPoint) && pceNode.getNodeId().getValue()
+                    .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName())) {
                     return true;
                 }
                 return false;
