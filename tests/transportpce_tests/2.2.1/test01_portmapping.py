@@ -138,19 +138,19 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_12_xpdr_portmapping_NETWORK2(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-NETWORK2")
+    def test_12_xpdr_portmapping_XPDR2_NETWORK1(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
-             'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'AMkDwQ7xTmRL', 'xponder-type': 'tpdr',
+             'logical-connection-point': 'XPDR2-NETWORK1', 'port-direction': 'bidirectional',
+             'connection-map-lcp': 'XPDR2-CLIENT1', 'port-qual': 'xpdr-network',
+             'lcp-hash-val': 'Bpl3hMYP3fE=', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_13_xpdr_portmapping_CLIENT1(self):
+    def test_13_xpdr_portmapping_XPDR1_CLIENT1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
@@ -163,16 +163,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_14_xpdr_portmapping_CLIENT2(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-CLIENT2")
+    def test_14_xpdr_portmapping_XPDR2_CLIENT1(self):
+        response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR2-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALg', 'xponder-type': 'tpdr',
+             'logical-connection-point': 'XPDR2-CLIENT1', 'port-direction': 'bidirectional',
+             'connection-map-lcp': 'XPDR2-NETWORK1', 'port-qual': 'xpdr-client',
+             'lcp-hash-val': 'ayWKnqXgcyA=', 'xponder-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
