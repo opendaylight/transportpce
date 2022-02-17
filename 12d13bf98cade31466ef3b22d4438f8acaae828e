@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c03fa6f3_a33c131b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9073
+      },
+      "writtenOn": "2022-02-17T20:07:37Z",
+      "side": 1,
+      "message": "add connection exception when kafka server is not ON.\ndefault producer 30s timeout is too long.",
+      "revId": "12d13bf98cade31466ef3b22d4438f8acaae828e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
