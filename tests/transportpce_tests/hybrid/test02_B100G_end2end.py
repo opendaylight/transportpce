@@ -1142,6 +1142,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.cr_serv_sample_data["input"]["service-name"] = "service-400GE"
         self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "400"
         self.cr_serv_sample_data["input"]["service-z-end"]["service-rate"] = "400"
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-device-name"]
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()

@@ -42,9 +42,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
-                            "port-device-name": "1/0/C1",
                             "port-type": "fixed",
-                            "port-name": "1",
                             "port-rack": "000000.00",
                             "port-shelf": "Chassis#1"
                         },
@@ -57,9 +55,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                     },
             "rx-direction": {
                         "port": {
-                            "port-device-name": "1/0/C1",
                             "port-type": "fixed",
-                            "port-name": "1",
                             "port-rack": "000000.00",
                             "port-shelf": "Chassis#1"
                         },
@@ -79,9 +75,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
-                            "port-device-name": "1/0/C1",
                             "port-type": "fixed",
-                            "port-name": "1",
                             "port-rack": "000000.00",
                             "port-shelf": "Chassis#1"
                         },
@@ -94,9 +88,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                     },
             "rx-direction": {
                         "port": {
-                            "port-device-name": "1/0/C1",
                             "port-type": "fixed",
-                            "port-name": "1",
                             "port-rack": "000000.00",
                             "port-shelf": "Chassis#1"
                         },

@@ -213,13 +213,14 @@ class TransportPCEtesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
-        listNode = ['XPDR-A1-XPDR1', 'ROADM-A1-SRG1', 'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2']
+        self.assertEqual(len(response['network'][0]['node']), 6)
+        listNode = ['XPDR-A1-XPDR1', 'XPDR-A1-XPDR2',
+                    'ROADM-A1-SRG1', 'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2']
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
             # Tests related to XPDRA nodes
-            if nodeId == 'XPDR-A1-XPDR1':
+            if nodeId in ('XPDR-A1-XPDR1', 'XPDR-A1-XPDR2'):
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'}, node['supporting-node'])
                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'}, node['supporting-node'])
                 self.assertEqual(nodeType, 'XPONDER')
@@ -232,12 +233,16 @@ class TransportPCEtesting(unittest.TestCase):
                         client += 1
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
-                    if tpId == 'XPDR1-NETWORK2':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT2')
-                    if tpId == 'XPDR1-CLIENT2':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK2')
-                self.assertEqual(client, 2)
-                self.assertEqual(network, 2)
+                    if tpId == 'XPDR1-NETWORK1':
+                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT1')
+                    if tpId == 'XPDR1-CLIENT1':
+                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK1')
+                    if tpId == 'XPDR2-NETWORK1':
+                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR2-CLIENT1')
+                    if tpId == 'XPDR2-CLIENT1':
+                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR2-NETWORK1')
+                self.assertEqual(client, 1)
+                self.assertEqual(network, 1)
                 listNode.remove(nodeId)
             elif nodeId in self.CHECK_DICT1:
                 self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
@@ -422,19 +427,19 @@ class TransportPCEtesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 8)
-        listNode = ['XPDR-A1-XPDR1',
+        self.assertEqual(len(response['network'][0]['node']), 9)
+        listNode = ['XPDR-A1-XPDR1', 'XPDR-A1-XPDR2',
                     'ROADM-A1-SRG1', 'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2',
                     'ROADM-C1-SRG1', 'ROADM-C1-DEG1', 'ROADM-C1-DEG2']
         # Tests related to XPDRA nodes
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
-            if nodeId == 'XPDR-A1-XPDR1':
+            if nodeId in ('XPDR-A1-XPDR1', 'XPDR-A1-XPDR2'):
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'}, node['supporting-node'])
                 self.assertEqual(nodeType, 'XPONDER')
                 nbTps = len(node['ietf-network-topology:termination-point'])
-                self.assertTrue(nbTps >= 4)
+                self.assertTrue(nbTps >= 2)
                 client = 0
                 network = 0
                 for tp in node['ietf-network-topology:termination-point']:
@@ -443,8 +448,8 @@ class TransportPCEtesting(unittest.TestCase):
                         client += 1
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
-                self.assertTrue(client == 2)
-                self.assertTrue(network == 2)
+                self.assertTrue(client == 1)
+                self.assertTrue(network == 1)
                 listNode.remove(nodeId)
         # Tests related to ROADMA nodes
             elif nodeId in self.CHECK_DICT1:
@@ -630,8 +635,9 @@ class TransportPCEtesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
-        listNode = ['XPDR-A1-XPDR1', 'ROADM-A1-SRG1', 'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2']
+        self.assertEqual(len(response['network'][0]['node']), 6)
+        listNode = ['XPDR-A1-XPDR1', 'XPDR-A1-XPDR2', 'ROADM-A1-SRG1',
+                    'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2']
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
@@ -646,6 +652,16 @@ class TransportPCEtesting(unittest.TestCase):
                         # pylint: disable=line-too-long
                         self.assertEqual((tp['org-openroadm-network-topology:xpdr-network-attributes']['tail-equipment-id']),
                                          'ROADM-A1-SRG1--SRG1-PP1-TXRX')
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'}, node['supporting-node'])
+                listNode.remove(nodeId)
+            elif nodeId == 'XPDR-A1-XPDR2':
+                for tp in node['ietf-network-topology:termination-point']:
+                    tpid = tp['tp-id']
+                    if tpid == 'XPDR2-CLIENT1':
+                        self.assertEqual((tp['org-openroadm-common-network:tp-type']), 'XPONDER-CLIENT')
+                    elif tpid == 'XPDR2-NETWORK1':
+                        self.assertEqual((tp['org-openroadm-common-network:tp-type']), 'XPONDER-NETWORK')
+                        # pylint: disable=line-too-long
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'}, node['supporting-node'])
                 listNode.remove(nodeId)
             # Tests related to ROADMA nodes
