@@ -204,8 +204,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             OPERATION_FAILED);
                 }
                 PathDescription pathDescription = pathDescriptionOpt.get();
-                Mapping mapping = portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
-                    service.getServiceAEnd().getTxDirection().getPort().getPortName());
+                Mapping mapping = null;
+                if (service.getServiceAEnd().getTxDirection().getPort().getPortName() != null) {
+                    mapping = portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
+                        service.getServiceAEnd().getTxDirection().getPort().getPortName());
+                }
                 String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
                     service.getServiceAEnd().getServiceRate(), mapping);
                 switch (serviceType) {

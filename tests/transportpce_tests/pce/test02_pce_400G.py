@@ -151,13 +151,13 @@ class TransportPCE400Gtesting(unittest.TestCase):
                                                         "clli": "NodeA",
                                                         "service-format": "OTU",
                                                         "node-id": "XPDR-A2",
-                                                        "rx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
+                                                        "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
                                                         },
                                                        {"service-rate": "400",
                                                         "clli": "NodeC",
                                                         "service-format": "OTU",
                                                         "node-id": "XPDR-C2",
-                                                        "rx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
+                                                        "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
                                                         })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
