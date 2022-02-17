@@ -374,7 +374,7 @@ public class PceOpticalNode implements PceNode {
             return;
         }
         // Detect A and Z
-        if (this.getSupNetworkNodeId().equals(anodeId) || (this.getSupNetworkNodeId().equals(znodeId))) {
+        if (anodeId.contains(this.getSupNetworkNodeId()) || (znodeId.contains(this.getSupNetworkNodeId()))) {
             LOG.info("validateAZxponder: A or Z node detected == {}", nodeId.getValue());
             initXndrTps(serviceFormat);
             return;
