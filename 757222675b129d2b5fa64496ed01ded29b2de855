@@ -46,6 +46,30 @@
       },
       "revId": "757222675b129d2b5fa64496ed01ded29b2de855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d7b6c6b_2848803e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:40:45Z",
+      "side": 1,
+      "message": "I agree with Gilles\n\nhttps://git.opendaylight.org/gerrit/c/docs/+/99775/3/docs/release-notes/projects/mdsal.rst\n\nhttps://git.opendaylight.org/gerrit/c/integration/distribution/+/99752",
+      "parentUuid": "36d70633_07e901b5",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "757222675b129d2b5fa64496ed01ded29b2de855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
