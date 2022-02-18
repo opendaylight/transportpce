@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3c934ff_0d1eef6d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PceSendingPceRPCsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 0,
+      "message": "no real modification here.\nSuch style issues unrelated to the change itself are better adressed in a separate change IMO",
+      "revId": "89927756515a11e14ea66a60e13575ee79b33eee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

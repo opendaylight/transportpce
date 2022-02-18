@@ -1,0 +1,339 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46dcc79_af66d29d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "Thanks Ahmed for this work.\n\nHere are my remarks.\n\nI voted -1 for 2 reasons.\nIf some pieces of this work come from the candi 3rd party project and are officially released there,\nwe must be very clear about that in the commit message.\nAnd we should better propagate the original license or at least mention it.\n\nAlso I don\u0027t understand the presence of the unused py38 profile in tox.ini envlist.\nMaybe it is an omission when you tried it locally.\nIf not and if python3.8 is really needed, we must also be very clear about that.\nAnd I don\u0027t think this is the right approach.\n\nHope this helps\nGuillaume",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc44cba0_6dee55ca",
+        "filename": "api/src/main/yang/gnpy-api@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "is it still TransportPCE ?\nI can see candi in the next modifications",
+      "range": {
+        "startLine": 24,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 70
+      },
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffbd0ca8_503dbf32",
+        "filename": "api/src/main/yang/gnpy-eqpt-config@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "this seems to come from the third-party project candi and no license is specified \u003d\u003e vote -1\n\nNB: EPL applies here otherwise",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9a05fa2_15ac7200",
+        "filename": "api/src/main/yang/gnpy-network-topology@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "this seems to come from the third-party project candi and no license is specified \u003d\u003e vote -1\n\nNB: EPL applies here otherwise",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f86e7a5_3f1632ac",
+        "filename": "api/src/main/yang/gnpy-path-computation-simplified@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "this seems to come from the third-party project candi and no license is specified \u003d\u003e vote -1\n\nNB: EPL applies here otherwise",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5f97d24_4db52c37",
+        "filename": "common/src/test/resources/expected_string.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I think some (auto?)formatting would help humans to read this file",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497f7f40_a2ddceb8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I am not sure the whole NS is needed for the cast here.",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149f5e50_dda5b47e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I think Empty case first is more indicated IMO\n\n       if (listAtoZ.isEmpty()) {\n            extractHardConstraints(pceHardConstraints);\n        } else {\n            Collections.sort(listAtoZ, atoZComparator);\n            extractRouteObjectIcludeAtoZ(listAtoZ);\n            for (Map.Entry\u003cRouteObjectIncludeExcludeKey, RouteObjectIncludeExclude\u003e a :\n                routeObjectIncludeExcludes.entrySet()) {\n                LOG.info(\"- A to Z : the index {} : {}\",a.getKey().getIndex(), a.getValue().getIndex());\n            }\n        }",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e8c7f7_8c3deff8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "208e5423_4ae95795",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "comments in French here",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8279840d_fee85db0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I think indent +4 or LF would ease the reading by separating clearly the function body from its declaration",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fce193f_55af462b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I think the intermediate variable gnpyRequest is not needed.\n\nreturn gnpyConsumer.computePaths(\n      new RequestBuilder()\n            .setTopology(\n                new TopologyBuilder()\n                .setElements(elementsList.stream().collect(Collectors.toMap(Elements::key, element -\u003e element)))\n                .setConnections(connectionsList).build())\n            .setService(\n                new ServiceBuilder()\n                .setPathRequest(pathRequestList.stream()\n                        .collect(Collectors.toMap(PathRequest::key, pathRequest -\u003e pathRequest)))\n                .build())\n            .build();\n)",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cdf42ea_55421d8e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyStatus.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "2022 rather ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825e3746_44aa4356",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/RequestSerializer.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "commented-out code blocks are reported by SONAR current rules",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2994020_db0af25d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/ResultDeserializer.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "commented-out code blocks are reported by SONAR current rules",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5279722_5714db8e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/RouteObjectIncludeExcludeKeyComparator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "value1 and value2  nullness are evaluated twice in the nominal case.\nif valueX.getIndex().intValue() is supposed to be positive, what about simply this ?\n\n        return Integer.compare(\n                value1 \u003d\u003d null ? -1 : value1.getIndex().intValue(),\n                value2 \u003d\u003d null ? -1 : value2.getIndex().intValue());",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ada65b4_4e26bdba",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "comments should be on a separate line according to current sonar rules.",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da4cdfa_49c5ee7c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyStub.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "commented-out lines of code are reported as warning by current SONAR instance",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49515f45_c01fa47d",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-18T15:24:55Z",
+      "side": 1,
+      "message": "I think this line should be removed.\nWe don\u0027t have such a profile and it induces python3.8\nI think it is preferable to keep basepython \u003d python3 to match any version of python 3 \u003d\u003e vote -1\nCI issues may be due to that line.",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
