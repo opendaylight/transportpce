@@ -22,6 +22,30 @@
       },
       "revId": "757222675b129d2b5fa64496ed01ded29b2de855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36d70633_07e901b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-18T14:08:32Z",
+      "side": 1,
+      "message": "Actually, no, because all MRI projects are using 8.0.11. If TransportPCE uses a different mdsal version, there is a risk to make distribution failing.",
+      "parentUuid": "6a1be5d9_e1ca1696",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "757222675b129d2b5fa64496ed01ded29b2de855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
