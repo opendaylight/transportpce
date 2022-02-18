@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1be5d9_e1ca1696",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2022-02-18T12:54:51Z",
+      "side": 1,
+      "message": "8.0.12 instead of 8.0.11",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "757222675b129d2b5fa64496ed01ded29b2de855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
