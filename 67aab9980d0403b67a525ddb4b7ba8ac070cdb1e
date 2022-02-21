@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df00305d_adb95852",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-21T08:09:19Z",
+      "side": 1,
+      "message": "LGTM apart cosmetic issues",
+      "revId": "67aab9980d0403b67a525ddb4b7ba8ac070cdb1e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1aab68_b81435de",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-21T08:09:19Z",
+      "side": 1,
+      "message": "conditions and \"return true\" have the same indentation.\nI think we should indent + 4 the 3 lines above to separate them clearly.",
+      "revId": "67aab9980d0403b67a525ddb4b7ba8ac070cdb1e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
