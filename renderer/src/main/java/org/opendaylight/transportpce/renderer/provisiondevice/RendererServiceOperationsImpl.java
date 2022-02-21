@@ -195,7 +195,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 // Obtain path description
                 Optional<
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service
-                    .path.PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
+                        .path.PathDescription> pathDescriptionOpt =
+                    getPathDescriptionFromDatastore(serviceName);
                 if (pathDescriptionOpt.isEmpty()) {
                     LOG.error("Unable to get path description for service {}!", serviceName);
                     sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
@@ -301,9 +302,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             value = "UPM_UNCALLED_PRIVATE_METHOD",
             justification = "call in call() method")
     private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-        .service.path.PathDescription> getPathDescriptionFromDatastore(String serviceName) {
+            .service.path.PathDescription> getPathDescriptionFromDatastore(String serviceName) {
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-            .service.path.PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
+                .service.path.PathDescription> pathDescriptionIID =
+            InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName))
                 .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                     .service.path.PathDescription.class);
