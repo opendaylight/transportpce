@@ -61,30 +61,22 @@ public final class PceTestData {
     }
 
     public static PathComputationRequestInput getEmptyPCERequest() {
-        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
-                .setRequestId("request1")
-                .build();
         return new PathComputationRequestInputBuilder()
-                .setServiceHandlerHeader(serviceHandlerHeader)
+                .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("request1").build())
                 .build();
     }
 
     public static PathComputationRequestInput getEmptyPCERequestServiceNameWithRequestId() {
-        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
-                .setRequestId("request1")
-                .build();
         return new PathComputationRequestInputBuilder()
                 .setServiceName("serviceName")
-                .setServiceHandlerHeader(serviceHandlerHeader)
+                .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("request1").build())
                 .build();
     }
 
     public static PathComputationRequestInput getEmptyPCERequestServiceNameWithOutRequestId() {
-        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
-                .build();
         return new PathComputationRequestInputBuilder()
                 .setServiceName("serviceName")
-                .setServiceHandlerHeader(serviceHandlerHeader)
+                .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().build())
                 .build();
     }
 
@@ -336,25 +328,29 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
-                .setHardConstraints(new HardConstraintsBuilder()
+                .setHardConstraints(
+                    new HardConstraintsBuilder()
                         .setCustomerCode(Arrays.asList("Some customer-code"))
-                        .setCoRouting(new CoRoutingBuilder()
-                            .setServiceIdentifierList(Map.of(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
-                                    .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
-                                new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
-                                    .build()))
-                            .build())
+                        .setCoRouting(
+                            new CoRoutingBuilder()
+                                .setServiceIdentifierList(Map.of(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                                        .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                                    new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                                        .build()))
+                                .build())
                         .build())
-                .setSoftConstraints(new SoftConstraintsBuilder()
+                .setSoftConstraints(
+                    new SoftConstraintsBuilder()
                         .setCustomerCode(Arrays.asList("Some customer-code"))
-                        .setCoRouting(new CoRoutingBuilder()
-                            .setServiceIdentifierList(Map.of(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
-                                    .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
-                                new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
-                                    .build()))
-                            .build())
+                        .setCoRouting(
+                            new CoRoutingBuilder()
+                                .setServiceIdentifierList(Map.of(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                                        .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                                    new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                                        .build()))
+                                .build())
                         .build())
                 .build();
     }
@@ -843,25 +839,29 @@ public final class PceTestData {
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .setServiceAEnd(serviceAEnd)
                 .setServiceZEnd(serviceZEnd)
-                .setHardConstraints(new HardConstraintsBuilder()
+                .setHardConstraints(
+                    new HardConstraintsBuilder()
                         .setCustomerCode(Arrays.asList("Some customer-code"))
-                        .setCoRouting(new CoRoutingBuilder()
-                            .setServiceIdentifierList(Map.of(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
-                                    .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
-                                new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
-                                    .build()))
-                            .build())
+                        .setCoRouting(
+                            new CoRoutingBuilder()
+                                .setServiceIdentifierList(Map.of(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                                        .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                                    new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                                        .build()))
+                                .build())
                         .build())
-                .setSoftConstraints(new SoftConstraintsBuilder()
+                .setSoftConstraints(
+                    new SoftConstraintsBuilder()
                         .setCustomerCode(Arrays.asList("Some customer-code"))
-                        .setCoRouting(new CoRoutingBuilder()
-                            .setServiceIdentifierList(Map.of(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
-                                    .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
-                                new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
-                                    .build()))
-                            .build())
+                        .setCoRouting(
+                            new CoRoutingBuilder()
+                                .setServiceIdentifierList(Map.of(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
+                                        .constraints.co.routing.ServiceIdentifierListKey("Some existing-service"),
+                                    new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
+                                        .build()))
+                                .build())
                         .build())
                 .build();
     }

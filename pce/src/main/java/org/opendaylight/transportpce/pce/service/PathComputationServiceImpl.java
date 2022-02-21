@@ -206,7 +206,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
                         RpcStatusEx.Successful, message, pathDescription);
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response
-                    .parameters.sp.response.parameters.PathDescription pathDescription1 =
+                        .parameters.sp.response.parameters.PathDescription pathDescription1 =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                             .response.parameters.sp.response.parameters.PathDescriptionBuilder()
                         .setAToZDirection(path.getAToZDirection())
