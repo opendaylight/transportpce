@@ -334,6 +334,23 @@
       "message": "I think this line should be removed.\nWe don\u0027t have such a profile and it induces python3.8\nI think it is preferable to keep basepython \u003d python3 to match any version of python 3 \u003d\u003e vote -1\nCI issues may be due to that line.",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8be04ce_0eb254cd",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T10:00:46Z",
+      "side": 1,
+      "message": "add here\nbasepython\u003d3.8\nif you need python3.8 for this profile\ncf line26",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
