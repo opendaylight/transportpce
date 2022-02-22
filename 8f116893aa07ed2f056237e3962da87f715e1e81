@@ -551,6 +551,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb575756_b6e81eae",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/RouteObjectIncludeExcludeKeyComparator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T22:05:45Z",
+      "side": 1,
+      "message": "If both values are null, we will have Integer.compare(-1,-1) that returns 0.\nSo I still think it is equivalent.",
+      "parentUuid": "77683a5e_be5a3f6a",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ada65b4_4e26bdba",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
         "patchSetId": 5
