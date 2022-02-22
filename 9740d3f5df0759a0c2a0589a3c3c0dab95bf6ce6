@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f27357_5b01537b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Thank you Guillaume for your review I took into consideration your remarks in the patchset 6",
+      "revId": "9740d3f5df0759a0c2a0589a3c3c0dab95bf6ce6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

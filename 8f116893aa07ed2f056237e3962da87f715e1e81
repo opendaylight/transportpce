@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ff12739_76bbb49f",
+        "filename": "api/src/main/yang/gnpy-api@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc44cba0_6dee55ca",
+      "range": {
+        "startLine": 24,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 70
+      },
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffbd0ca8_503dbf32",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "this seems to come from the third-party project candi and no license is specified \u003d\u003e vote -1\n\nNB: EPL applies here otherwise",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f6d08b9_1e603205",
+        "filename": "api/src/main/yang/gnpy-eqpt-config@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "The license used for all the yang files of GNPy is BSD 3-Clause License:\nhttps://github.com/Telecominfraproject/oopt-gnpy/blob/experimental/2021-candi/LICENSE",
+      "parentUuid": "ffbd0ca8_503dbf32",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -75,6 +117,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce110d38_20e16899",
+        "filename": "api/src/main/yang/gnpy-network-topology@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9a05fa2_15ac7200",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f86e7a5_3f1632ac",
@@ -88,6 +148,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "this seems to come from the third-party project candi and no license is specified \u003d\u003e vote -1\n\nNB: EPL applies here otherwise",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3302a2_abe2f173",
+        "filename": "api/src/main/yang/gnpy-path-computation-simplified@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f86e7a5_3f1632ac",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -126,6 +204,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72b73769_de809161",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "497f7f40_a2ddceb8",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "149f5e50_dda5b47e",
@@ -139,6 +235,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "I think Empty case first is more indicated IMO\n\n       if (listAtoZ.isEmpty()) {\n            extractHardConstraints(pceHardConstraints);\n        } else {\n            Collections.sort(listAtoZ, atoZComparator);\n            extractRouteObjectIcludeAtoZ(listAtoZ);\n            for (Map.Entry\u003cRouteObjectIncludeExcludeKey, RouteObjectIncludeExclude\u003e a :\n                routeObjectIncludeExcludes.entrySet()) {\n                LOG.info(\"- A to Z : the index {} : {}\",a.getKey().getIndex(), a.getValue().getIndex());\n            }\n        }",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fc667dd_0314872f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "149f5e50_dda5b47e",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -160,6 +274,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6f411a_902510a0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06e8c7f7_8c3deff8",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "208e5423_4ae95795",
@@ -173,6 +305,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "comments in French here",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1798ff09_5a587f4d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "208e5423_4ae95795",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -194,6 +344,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b998a6_ec61d8fb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8279840d_fee85db0",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fce193f_55af462b",
@@ -207,6 +375,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "I think the intermediate variable gnpyRequest is not needed.\n\nreturn gnpyConsumer.computePaths(\n      new RequestBuilder()\n            .setTopology(\n                new TopologyBuilder()\n                .setElements(elementsList.stream().collect(Collectors.toMap(Elements::key, element -\u003e element)))\n                .setConnections(connectionsList).build())\n            .setService(\n                new ServiceBuilder()\n                .setPathRequest(pathRequestList.stream()\n                        .collect(Collectors.toMap(PathRequest::key, pathRequest -\u003e pathRequest)))\n                .build())\n            .build();\n)",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c53eba0_34610363",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fce193f_55af462b",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -234,6 +420,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3a2aa97_ef92885a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyStatus.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cdf42ea_55421d8e",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "825e3746_44aa4356",
@@ -251,6 +461,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1223286e_82237671",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/RequestSerializer.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "825e3746_44aa4356",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2994020_db0af25d",
@@ -264,6 +492,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "commented-out code blocks are reported by SONAR current rules",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbef59b5_1b78a424",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/ResultDeserializer.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2994020_db0af25d",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -287,6 +533,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77683a5e_be5a3f6a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/RouteObjectIncludeExcludeKeyComparator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "I believe that the proposal does not cover all cases because if value1 is null we will return 1 and if both values are null, we will return 0.",
+      "parentUuid": "f5279722_5714db8e",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ada65b4_4e26bdba",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
         "patchSetId": 5
@@ -298,6 +562,24 @@
       "writtenOn": "2022-02-18T15:24:55Z",
       "side": 1,
       "message": "comments should be on a separate line according to current sonar rules.",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e880e8d_0b7ba0a3",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ada65b4_4e26bdba",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -319,6 +601,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae3658c_9fcdcd1e",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyStub.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8da4cdfa_49c5ee7c",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49515f45_c01fa47d",
@@ -336,6 +636,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ffc6d68_ac7bc7f3",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49515f45_c01fa47d",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8be04ce_0eb254cd",
@@ -349,6 +667,24 @@
       "writtenOn": "2022-02-22T10:00:46Z",
       "side": 1,
       "message": "add here\nbasepython\u003d3.8\nif you need python3.8 for this profile\ncf line26",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb17ddc1_2f49470d",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-22T20:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8be04ce_0eb254cd",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
