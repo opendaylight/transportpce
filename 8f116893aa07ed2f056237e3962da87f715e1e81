@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30f12479_36980e18",
+        "filename": "api/src/main/yang/gnpy-eqpt-config@2020-10-22.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T22:27:07Z",
+      "side": 1,
+      "message": "This license implies to ship a copy of it.\nI quote:\n\"* Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\"\n\nApart the copyright owner, it\u0027s the same than for OpenROADM models.\nI propose we use OpenROADM strategy and include it in the description field of each model.",
+      "parentUuid": "7f6d08b9_1e603205",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f9a05fa2_15ac7200",
         "filename": "api/src/main/yang/gnpy-network-topology@2020-10-22.yang",
         "patchSetId": 5
@@ -569,6 +587,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ed187f5_7b09838c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/RouteObjectIncludeExcludeKeyComparator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T22:27:07Z",
+      "side": 1,
+      "message": "if value1 is null we will have Integer.compare(-1, value2.getIndex().intValue()) that returns -1\nand we want 1 so I took the wrong limit.\n\nwhat about this rather ?\n\n        return Integer.compare(\n                value1 \u003d\u003d null ? Integer.MAX_VALUE : value1.getIndex().intValue(),\n                value2 \u003d\u003d null ? Integer.MAX_VALUE : value2.getIndex().intValue());",
+      "parentUuid": "fb575756_b6e81eae",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ada65b4_4e26bdba",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/consumer/GnpyConsumerTest.java",
         "patchSetId": 5
@@ -703,6 +739,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "b8be04ce_0eb254cd",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f87e0a_79c6d198",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T22:27:07Z",
+      "side": 1,
+      "message": "Correct\nbut this interpreter is not available in the CI\nso we have to fix this.\nI propose we make a try with \u0027basepython\u003d3\u0027 to see how it behaves.\n\n\n16:35:30 ✔ OK buildcontroller in 3 minutes, 4.129 seconds\n16:35:30 build_karaf_tests121 create: /w/workspace/transportpce-tox-verify-sulfur/.tox/build_karaf_tests121\n16:35:30 sims121 create: /w/workspace/transportpce-tox-verify-sulfur/.tox/sims121\n16:35:30 testsPCE create: /w/workspace/transportpce-tox-verify-sulfur/.tox/testsPCE\n16:35:30 ERROR: InterpreterNotFound: 3.8\n16:35:30 sims221 create: /w/workspace/transportpce-tox-verify-sulfur/.tox/sims221\n16:35:30 ERROR: invocation failed (exit code 1)\n16:35:30 ✖ FAIL testsPCE in 0.455 seconds",
+      "parentUuid": "bb17ddc1_2f49470d",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
