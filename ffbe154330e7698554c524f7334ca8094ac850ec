@@ -16,6 +16,23 @@
       "message": "Thanks for this change.\nWaiting for test result with real device in ATT lab",
       "revId": "ffbe154330e7698554c524f7334ca8094ac850ec",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bcf3938_8d67cfae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-22T23:17:58Z",
+      "side": 1,
+      "message": "LGTM. ",
+      "revId": "ffbe154330e7698554c524f7334ca8094ac850ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
