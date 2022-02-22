@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cad56fba_b2833703",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/MappingConstraintsTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-22T09:38:53Z",
+      "side": 1,
+      "message": "revision date split from NS.\n\nThere are several places where I find the existing code difficult to read,\nwhat complicates the migration here.\n\nAs this work is practically over and since some files are removed in the next changes, it would be difficult to fix everything now.\nI propose to address coding style issues after the 10.1 migration\n\nI started to work on this at https://git.opendaylight.org/gerrit/c/transportpce/+/99834",
+      "revId": "844a450c0897750699b3257188f043b25cec9b87",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
