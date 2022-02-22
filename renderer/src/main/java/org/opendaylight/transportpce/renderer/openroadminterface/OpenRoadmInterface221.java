@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.EthAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.Interface1Builder;
@@ -57,6 +58,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUTTP;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODUTTPCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OduFunctionIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.PayloadTypeDef;
@@ -252,6 +254,7 @@ public class OpenRoadmInterface221 {
             throw new OpenRoadmInterfaceException(
                     String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
+
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
             logicalConnPoint + "-ODU4");
         if (mapping.getSupportingOtu4() != null) {
@@ -268,7 +271,13 @@ public class OpenRoadmInterface221 {
             oduFunction = ODUCTP.class;
             monitoringMode = MonitoringMode.Monitored;
         } else {
-            oduFunction = ODUTTP.class;
+            // For TPDR it can be both CTP and TTP
+            if (mapping.getXponderType() == XpdrNodeTypes.Tpdr) {
+                oduFunction = ODUTTPCTP.class;
+                // For switch-ponder we still use TTP
+            } else {
+                oduFunction = ODUTTP.class;
+            }
             monitoringMode = MonitoringMode.Terminated;
             opu = new OpuBuilder()
                 .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
