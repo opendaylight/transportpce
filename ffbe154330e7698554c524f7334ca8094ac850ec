@@ -50,6 +50,23 @@
       "message": "I use swagger to edit the openroadm-topology directly on the freq-map.\nAnd reboot the node.\nThe freq-map is restored after the node is correctly connected to the controller.\n\n06:20:17.365 INFO [opendaylight-cluster-data-notification-dispatcher-70] Found node INFINERA-ROADMA in portmapping.\n06:20:17.365 INFO [opendaylight-cluster-data-notification-dispatcher-70] INFINERA-ROADMA already exists in portmapping but was reconnected",
       "revId": "ffbe154330e7698554c524f7334ca8094ac850ec",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82fbe703_47272957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-23T09:10:56Z",
+      "side": 1,
+      "message": "Thanks Bala and Tianliang for having tested it with real device.",
+      "revId": "ffbe154330e7698554c524f7334ca8094ac850ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
