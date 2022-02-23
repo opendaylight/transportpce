@@ -16,6 +16,24 @@
       "message": "should not be indent of 12 instead of 16?",
       "revId": "96c1401c674a85f18313edf0abc8f2993b2ed111",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ecb8634_9b700e13",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-23T15:49:20Z",
+      "side": 1,
+      "message": "both can be correct depending on the style\nI put the builder into the next line in PS6.\nIn that case, setters cannot be at 12 and should be at 16",
+      "parentUuid": "c57c1881_40594084",
+      "revId": "96c1401c674a85f18313edf0abc8f2993b2ed111",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
