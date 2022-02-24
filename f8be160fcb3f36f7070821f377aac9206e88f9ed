@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7783a493_7cb2bdde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T21:19:27Z",
+      "side": 1,
+      "message": "couldn\u0027t this capability be forced at mount time ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2bb8dc9_b08f6426",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T21:19:27Z",
+      "side": 1,
+      "message": "A for loop might be more indicated here IMO\n\nI\u0027ll propose you a few optimizations and refactoring in\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99860",
+      "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
