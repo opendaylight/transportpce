@@ -777,6 +777,24 @@
       "parentUuid": "bb17ddc1_2f49470d",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db48cbf5_cac32961",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-24T10:23:33Z",
+      "side": 1,
+      "message": "Locally, it works when we remove the basepython\u003dx line.",
+      "parentUuid": "63f87e0a_79c6d198",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
