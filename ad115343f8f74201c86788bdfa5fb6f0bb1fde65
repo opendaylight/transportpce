@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be734bd4_f47a7b9e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T16:40:39Z",
+      "side": 1,
+      "message": "This is also quite common and I agree it would have spared an indentation here and below.\n\nI voluntarily used here a convention that can be applied the same way everywhere (contrary to the one you propose) .\nIt is more verbose but it has some pros:\n- same rule to apply in any circumstances as said\n- avoid the temptation to put a setter on the allocation line and another at the   same line. It utusally happens with a oneliner allocations that are becoming later.\n- the same indentation can be kept when an intermediate variable is removed - the builder can be copied as it is in function arguments.\n- ease duplication CPD detection on long structures by decorrelating the var name from the builder structure.\nI am sure I forgot some of them.\n\nHere are some examples \n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99834/8/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java#b338\n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99834/8/pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java#b92",
+      "parentUuid": "49cc58e2_73480fea",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 40
+      },
+      "revId": "ad115343f8f74201c86788bdfa5fb6f0bb1fde65",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eaa1b590_ddce171c",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
         "patchSetId": 8
