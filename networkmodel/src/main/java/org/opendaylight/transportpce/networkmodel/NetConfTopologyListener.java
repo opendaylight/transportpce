@@ -22,9 +22,7 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -33,14 +31,10 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.NotificationsService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.StreamNameType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.streams.Stream;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,9 +124,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             notificationService.get(), this.dataBroker, this.portMapping);
         nodeRegistration.registerListeners();
         registrations.put(nodeId, nodeRegistration);
-        String streamName = getSupportedStream(nodeId);
-        LOG.info("Device is supporting notification stream {}",streamName);
-        subscribeStream(mountPoint, streamName, nodeId);
+
+        subscribeStream(mountPoint, nodeId);
     }
 
     private void onDeviceDisConnected(final String nodeId) {
@@ -141,7 +134,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         nodeRegistration.unregisterListeners();
     }
 
-    private boolean subscribeStream(MountPoint mountPoint, String streamName, String nodeId) {
+    private boolean subscribeStream(MountPoint mountPoint, String nodeId) {
         final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
         if (!service.isPresent()) {
             return false;
@@ -151,17 +144,29 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             LOG.error(RPC_SERVICE_FAILED, nodeId);
             return false;
         }
-        final CreateSubscriptionInputBuilder createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder()
+        // Set the default stream as OPENROADM
+        String streamName = "OPENROADM";
+        CreateSubscriptionInputBuilder createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder()
             .setStream(new StreamNameType(streamName));
         LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
         ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription = rpcService
             .createSubscription(createSubscriptionInputBuilder.build());
-        try {
-            subscription.get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error during subscription to stream {}", streamName, e);
+
+        boolean checkStreamSub = checkSupportedStream(streamName, subscription);
+        // If OpenROADM stream is not supported
+        if (!checkStreamSub) {
+            // Try NETCONF subscription
+            streamName = "NETCONF";
+            createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder()
+                .setStream(new StreamNameType(streamName));
+            LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
+            subscription = rpcService
+                .createSubscription(createSubscriptionInputBuilder.build());
+            return checkSupportedStream(streamName, subscription);
         }
-        return true;
+
+        return checkStreamSub;
+
     }
 
     @VisibleForTesting
@@ -175,21 +180,17 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.registrations = registrations;
     }
 
-    private String getSupportedStream(String nodeId) {
-        InstanceIdentifier<Streams> streamsIID = InstanceIdentifier.create(Netconf.class).child(Streams.class);
-        Optional<Streams> ordmInfoObject =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, streamsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (ordmInfoObject == null || ordmInfoObject.isEmpty() || ordmInfoObject.get().getStream().isEmpty()) {
-            LOG.error("List of streams supports by device is not present");
-            return "NETCONF";
+    private boolean checkSupportedStream(String streamName,
+        ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription) {
+        boolean subscriptionSuccessful = false;
+        try {
+            // Using if condition does not work, since we need to handle exceptions
+            subscriptionSuccessful = subscription.get().isSuccessful();
+            LOG.info("{} subscription is {}", streamName, subscription.get().isSuccessful());
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error during subscription to stream {}", streamName, e);
         }
-        for (Stream strm : ordmInfoObject.get().getStream().values()) {
-            LOG.debug("Streams are {}", strm);
-            if ("OPENROADM".equalsIgnoreCase(strm.getName().getValue())) {
-                return strm.getName().getValue();
-            }
-        }
-        return "NETCONF";
+        return subscriptionSuccessful;
     }
+
 }
