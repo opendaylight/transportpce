@@ -795,6 +795,24 @@
       "parentUuid": "63f87e0a_79c6d198",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d720108d_292aeb76",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T12:48:13Z",
+      "side": 1,
+      "message": "my mistake, it should be the interpreter name and not only the version\n\u0027basepython \u003d python3.8\u0027",
+      "parentUuid": "db48cbf5_cac32961",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
