@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4594de7a_29ce1f59",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/converter/JsonStringConverterTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-24T13:41:31Z",
+      "side": 1,
+      "message": "Yes, throws IOException is mentioned",
+      "parentUuid": "9551edd0_dfc6fb95",
+      "revId": "f892a6a8f6b07a1ddd247b037163adcb834456eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27dc0ea2_657e74eb",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/converter/JsonStringConverterTest.java",
         "patchSetId": 7
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-24T10:09:21Z",
       "side": 1,
       "message": "What about simply this ?\n\n\n    @Test\n    public void createJsonStringFromDataObjectTest() {\n        try (Reader reader \u003d new FileReader(\"src/test/resources/gnpy_request.json\", StandardCharsets.UTF_8)) {\n            assertEquals(\n                \"Should be a valid request\",\n                Files.readString(Paths.get(\"src/test/resources/expected_string.json\")),\n                new JsonStringConverter\u003cRequest\u003e(getDataStoreContextUtil().getBindingDOMCodecServices())\n                    .createJsonStringFromDataObject(\n                        InstanceIdentifier.builder(Request.class).build(),\n                        //gnpyRequest\n                        (Request) getDataStoreContextUtil()\n                            .getBindingDOMCodecServices()\n                            .fromNormalizedNode(\n                                YangInstanceIdentifier.of(Request.QNAME),\n                                JSONDataObjectConverter\n                                    .createWithDataStoreUtil(getDataStoreContextUtil())\n                                    .transformIntoNormalizedNode(reader)\n                                    .get())\n                            .getValue(),\n                        JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02));\n        } catch (IOException e) {\n            fail(\"Cannot load path description \");\n        }\n    }\n\n\n    @Test\n    public void createDataObjectFromJsonStringTest() throws IOException {\n        assertNotNull(\n            \"Should not be null\",\n            new JsonStringConverter\u003cRequest\u003e(getDataStoreContextUtil().getBindingDOMCodecServices());\n                .createDataObjectFromJsonString(\n                    YangInstanceIdentifier.of(Request.QNAME),\n                    Files.readString(Paths.get(\"src/test/resources/expected_string.json\")),\n                    JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02));\n\n    }",
+      "revId": "f892a6a8f6b07a1ddd247b037163adcb834456eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbcfeb06_1029a459",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/converter/JsonStringConverterTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2022-02-24T13:41:31Z",
+      "side": 1,
+      "message": "If you are sure of your code you can propose it in another change!",
+      "parentUuid": "27dc0ea2_657e74eb",
       "revId": "f892a6a8f6b07a1ddd247b037163adcb834456eb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
