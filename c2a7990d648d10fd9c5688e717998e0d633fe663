@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b1a47b7_2f7157fa",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T22:12:43Z",
+      "side": 0,
+      "message": "I think the case we try to fix was already catched in the core removed here.\nBut it was not completely managed, it returns only by default NETCONF and your devices expects OPENROADM. Both cases are possible.\n\nWouldn\u0027t make it sense to make some adaptations here to return a list of possible streams (and not just one) rather than deleting this code?\n\u003d\u003e vote -1\n\ncf refactoring at https://git.opendaylight.org/gerrit/c/transportpce/+/99860 to see how handle the list with the for loop.\n\nIt would be by default (\"OPENROADM\",\"NETCONF\") in the case the device advertizes nothing\n\nand we could adapt lines below such as this.\n\n        if (ordmInfoObject \u003d\u003d null || ordmInfoObject.isEmpty() || ordmInfoObject.get().getStream().isEmpty()) {\n            LOG.error(\"List of streams supports by device is not present\");\n            return List.of(\"OPENROADM\",\"NETCONF\");\n        }\n\n        List\u003cString\u003e streams \u003d new ArrayList\u003c\u003e();\n        for (Stream strm : ordmInfoObject.get().getStream().values()) {\n            LOG.debug(\"Streams are {}\", strm);\n            if (\"OPENROADM\".equalsIgnoreCase(strm.getName().getValue())\n                    || \"NETCONF\".equalsIgnoreCase(strm.getName().getValue())) {\n                streams.add(strm.getName().getValue());\n            }\n        }\n        return\n            streams.isEmpty()\n                ? List.of(\"OPENROADM\",\"NETCONF\")\n                : streams;",
+      "revId": "c2a7990d648d10fd9c5688e717998e0d633fe663",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
