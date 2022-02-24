@@ -69,6 +69,24 @@
       "parentUuid": "27dc0ea2_657e74eb",
       "revId": "f892a6a8f6b07a1ddd247b037163adcb834456eb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c82cc0_f259f444",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/converter/JsonStringConverterTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-24T15:28:53Z",
+      "side": 1,
+      "message": "fair enough",
+      "parentUuid": "cbcfeb06_1029a459",
+      "revId": "f892a6a8f6b07a1ddd247b037163adcb834456eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
