@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.networkmodel;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,8 +50,11 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final Map<String, NodeRegistration> registrations;
     private final PortMapping portMapping;
 
-    public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
-             DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
+    public NetConfTopologyListener(
+            final NetworkModelService networkModelService,
+            final DataBroker dataBroker,
+            DeviceTransactionManager deviceTransactionManager,
+            PortMapping portMapping) {
         this.networkModelService = networkModelService;
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
@@ -77,24 +81,24 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 case WRITE:
                     NetconfNode netconfNodeAfter = rootNode.getDataAfter().augmentation(NetconfNode.class);
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
-                        && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
+                            && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
-                        Optional<AvailableCapability> deviceCapabilityOpt = netconfNodeAfter
-                            .getAvailableCapabilities().getAvailableCapability().stream()
-                            .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                            .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
-                            .findFirst();
+                        Optional<AvailableCapability> deviceCapabilityOpt =
+                            netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
+                                .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
+                                .findFirst();
                         if (deviceCapabilityOpt.isEmpty()) {
                             LOG.error("Unable to get openroadm-device-capability");
                             return;
                         }
                         this.networkModelService
                             .createOpenRoadmNode(nodeId, deviceCapabilityOpt.get().getCapability());
-                        onDeviceConnected(nodeId,deviceCapabilityOpt.get().getCapability());
+                        onDeviceConnected(nodeId, deviceCapabilityOpt.get().getCapability());
                         LOG.info("Device {} correctly connected to controller", nodeId);
                     }
                     if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
-                        && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
+                            && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.warn("Node: {} is being disconnected", nodeId);
                     }
                     break;
@@ -108,20 +112,19 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private void onDeviceConnected(final String nodeId, String openRoadmVersion) {
         LOG.info("onDeviceConnected: {}", nodeId);
         Optional<MountPoint> mountPointOpt = this.deviceTransactionManager.getDeviceMountPoint(nodeId);
-        MountPoint mountPoint;
-        if (mountPointOpt.isPresent()) {
-            mountPoint = mountPointOpt.get();
-        } else {
+        if (mountPointOpt.isEmpty()) {
             LOG.error("Failed to get mount point for node {}", nodeId);
             return;
         }
+        MountPoint mountPoint = mountPointOpt.get();
         final Optional<NotificationService> notificationService = mountPoint.getService(NotificationService.class);
-        if (!notificationService.isPresent()) {
+        if (notificationService.isEmpty()) {
             LOG.error(RPC_SERVICE_FAILED, nodeId);
             return;
         }
-        NodeRegistration nodeRegistration = new NodeRegistration(nodeId, openRoadmVersion,
-            notificationService.get(), this.dataBroker, this.portMapping);
+        NodeRegistration nodeRegistration =
+            new NodeRegistration(
+                nodeId, openRoadmVersion, notificationService.get(), this.dataBroker, this.portMapping);
         nodeRegistration.registerListeners();
         registrations.put(nodeId, nodeRegistration);
 
@@ -130,13 +133,12 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     private void onDeviceDisConnected(final String nodeId) {
         LOG.info("onDeviceDisConnected: {}", nodeId);
-        NodeRegistration nodeRegistration = this.registrations.remove(nodeId);
-        nodeRegistration.unregisterListeners();
+        this.registrations.remove(nodeId).unregisterListeners();
     }
 
     private boolean subscribeStream(MountPoint mountPoint, String nodeId) {
         final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
-        if (!service.isPresent()) {
+        if (service.isEmpty()) {
             return false;
         }
         final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
@@ -145,34 +147,27 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             return false;
         }
         // Set the default stream as OPENROADM
-        String streamName = "OPENROADM";
-        CreateSubscriptionInputBuilder createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder()
-            .setStream(new StreamNameType(streamName));
-        LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
-        ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription = rpcService
-            .createSubscription(createSubscriptionInputBuilder.build());
-
-        boolean checkStreamSub = checkSupportedStream(streamName, subscription);
-        // If OpenROADM stream is not supported
-        if (!checkStreamSub) {
-            // Try NETCONF subscription
-            streamName = "NETCONF";
-            createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder()
-                .setStream(new StreamNameType(streamName));
+        for (String streamName : List.of("OPENROADM", "NETCONF")) {
             LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
-            subscription = rpcService
-                .createSubscription(createSubscriptionInputBuilder.build());
-            return checkSupportedStream(streamName, subscription);
+            ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription =
+                rpcService.createSubscription(
+                    new CreateSubscriptionInputBuilder().setStream(new StreamNameType(streamName)).build());
+            // If OpenROADM stream is not supported
+            // Try NETCONF subscription
+            if (checkSupportedStream(streamName, subscription)) {
+                return true;
+            }
         }
-
-        return checkStreamSub;
-
+        return false;
     }
 
     @VisibleForTesting
-    public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
-        DeviceTransactionManager deviceTransactionManager, PortMapping portMapping,
-        Map<String, NodeRegistration> registrations) {
+    public NetConfTopologyListener(
+            final NetworkModelService networkModelService,
+            final DataBroker dataBroker,
+            DeviceTransactionManager deviceTransactionManager,
+            PortMapping portMapping,
+            Map<String, NodeRegistration> registrations) {
         this.networkModelService = networkModelService;
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
@@ -180,13 +175,14 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.registrations = registrations;
     }
 
-    private boolean checkSupportedStream(String streamName,
-        ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription) {
+    private boolean checkSupportedStream(
+            String streamName,
+            ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription) {
         boolean subscriptionSuccessful = false;
         try {
             // Using if condition does not work, since we need to handle exceptions
             subscriptionSuccessful = subscription.get().isSuccessful();
-            LOG.info("{} subscription is {}", streamName, subscription.get().isSuccessful());
+            LOG.info("{} subscription is {}", streamName, subscriptionSuccessful);
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error during subscription to stream {}", streamName, e);
         }
