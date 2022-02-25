@@ -34,17 +34,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </dependencyManagement>
 
   <dependencies>
-    <!-- ord model dependencies -->
     <dependency>
       <groupId>org.opendaylight.transportpce.ordmodels</groupId>
       <artifactId>transportpce-ordmodels-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <!-- other model dependencies -->
     <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>ietf-netconf</artifactId>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>concepts</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
@@ -54,34 +55,40 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>ietf-netconf</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
-     <plugins>
-       <plugin>
-         <groupId>org.apache.felix</groupId>
-         <artifactId>maven-bundle-plugin</artifactId>
-         <!--version>3.0.1</version-->
-         <extensions>true</extensions>
-         <configuration>
-           <instructions>
-             <Include-Resource>{maven-resources},target/classes/LICENSE,META-INF/git.properties=-target/classes/META-INF/git.properties</Include-Resource>
-             <_exportcontents>
-               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.link,
-               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,*
-             </_exportcontents>
-           </instructions>
-         </configuration>
-       </plugin>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-javadoc-plugin</artifactId>
-         <configuration>
-           <sourcepath>*/target/generated-sources/mdsal-binding/*</sourcepath>
-           <excludePackageNames>*</excludePackageNames>
-         </configuration>
-       </plugin>
-     </plugins>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Include-Resource>{maven-resources},target/classes/LICENSE,META-INF/git.properties=-target/classes/META-INF/git.properties</Include-Resource>
+            <_exportcontents>
+              org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.link,
+              org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,*
+            </_exportcontents>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <sourcepath>*/target/generated-sources/mdsal-binding/*</sourcepath>
+          <excludePackageNames>*</excludePackageNames>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-
 </project>
