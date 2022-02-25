@@ -20,7 +20,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <artifactId>odl-transportpce-tapi</artifactId>
   <version>5.0.0-SNAPSHOT</version>
   <packaging>feature</packaging>
-
   <name>OpenDaylight :: transportpce :: tapi</name>
 
   <dependencies>
@@ -48,5 +47,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </plugin>
     </plugins>
   </build>
-
 </project>
