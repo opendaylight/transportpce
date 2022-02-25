@@ -240,44 +240,54 @@ public class PceOtnNode implements PceNode {
         switch (modeType) {
 
             case "intermediate":
-                for (NonBlockingList nbl: nblList) {
-                    for (TpId nwTp : netwTps) {
-                        if (nbl.getTpList().contains(nwTp)) {
-                            usableXpdrNWTps.add(nwTp);
-                        }
-                        if (usableXpdrNWTps.size() >= 2) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
+                return checkIntermediateSwPool(nblList, netwTps);
 
             case "AZ":
                 if (clientTps == null) {
                     return false;
                 }
                 clientTps.sort(Comparator.comparing(TpId::getValue));
-                for (NonBlockingList nbl: nblList) {
-                    for (TpId nwTp : netwTps) {
-                        for (TpId clTp : clientTps) {
-                            if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
-                                usableXpdrClientTps.add(clTp);
-                                usableXpdrNWTps.add(nwTp);
-                            }
-                            if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
-                                    && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
-                                clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
+                return checkAzSwPool(nblList, netwTps, clientTps);
 
             default:
                 LOG.error("Unsupported mode type {}", modeType);
                 return false;
         }
+    }
+
+
+    private boolean checkIntermediateSwPool(List<NonBlockingList> nblList, List<TpId> netwTps) {
+        for (NonBlockingList nbl: nblList) {
+            for (TpId nwTp : netwTps) {
+                if (nbl.getTpList().contains(nwTp)) {
+                    usableXpdrNWTps.add(nwTp);
+                }
+                if (usableXpdrNWTps.size() >= 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private boolean checkAzSwPool(List<NonBlockingList> nblList, List<TpId> netwTps, List<TpId> clientTps) {
+        for (NonBlockingList nbl: nblList) {
+            for (TpId nwTp : netwTps) {
+                for (TpId clTp : clientTps) {
+                    if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
+                        usableXpdrClientTps.add(clTp);
+                        usableXpdrNWTps.add(nwTp);
+                    }
+                    if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
+                            && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
+                        clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
