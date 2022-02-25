@@ -390,12 +390,19 @@ public class PowerMgmtImpl implements PowerMgmt {
         // we work at constant power spectral density (50 GHz channel width @-20dBm=37.5GHz)
         // 87.5 GHz channel width @-20dBm=75GHz
         if (input.getMcWidth() != null) {
-            // Units of MC-wdith are in GHz, meaning it should be 40/50/87.5GHz
+            // Units of MC-width are in GHz, meaning it should be 40/50/87.5GHz
             // TODO: Should we validate this units before proceeding?
             LOG.debug("Input Grid size is {}",input.getMcWidth().getValue());
 
             // We round-off the mc-width to the nearest grid-value based on the granularity of 12.5 GHz
-            double nbrMcSlots = Math.ceil(input.getMcWidth().getValue().doubleValue() / MC_WIDTH_GRAN);
+            double nbrMcSlots =
+                Math.ceil(
+                    input.getMcWidth().getValue()
+                        .setScale(2, RoundingMode.CEILING)
+                        // If we do not round the mc-width,
+                        // it could give erroneous values when taking the ceiling of it.
+                        .doubleValue()
+                        / MC_WIDTH_GRAN);
             LOG.debug("Nearest (ceil) number of slots {}", nbrMcSlots);
             BigDecimal mcWidth = new BigDecimal(MC_WIDTH_GRAN * nbrMcSlots);
             LOG.info("Given mc-width={}, Rounded mc-width={}", input.getMcWidth().getValue(), mcWidth);
@@ -405,6 +412,9 @@ public class PowerMgmtImpl implements PowerMgmt {
             // Addition of PSD value will give Pin[87.5 GHz]
             powerValue = powerValue.add(new BigDecimal(pdsVal, new MathContext(3,
                 RoundingMode.HALF_EVEN)));
+            // Make powervalue comply with the YANG precision (2) for power-dBm
+            powerValue = powerValue.setScale(2, RoundingMode.CEILING);
+
             LOG.info("P1[{}GHz]={} dB will be used for OSNR calculation", mcWidth, powerValue);
         }
         // FIXME compliancy with OpenROADM MSA and approximations used -- should be addressed with powermask update
