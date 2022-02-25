@@ -22,14 +22,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <dependencies>
-    <!-- ord model dependencies -->
     <dependency>
       <groupId>org.opendaylight.transportpce.ordmodels</groupId>
       <artifactId>transportpce-ordmodels-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <!-- other model dependencies -->
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>concepts</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-common</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-inet-types</artifactId>
@@ -38,8 +43,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
     </dependency>
-
-    <!-- to upgrade topology to 4.1 -->
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network-topology</artifactId>
@@ -47,6 +50,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
   </dependencies>
 </project>
