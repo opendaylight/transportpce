@@ -392,7 +392,14 @@ public class PowerMgmtImpl implements PowerMgmt {
             LOG.debug("Input Grid size is {}", input.getMcWidth().getValue());
 
             // We round-off the mc-width to the nearest grid-value based on the granularity of 12.5 GHz
-            double nbrMcSlots = Math.ceil(input.getMcWidth().getValue().doubleValue() / MC_WIDTH_GRAN);
+            double nbrMcSlots =
+                Math.ceil(
+                    input.getMcWidth().getValue()
+                        .setScale(2, RoundingMode.CEILING)
+                        // If we do not round the mc-width,
+                        // it could give erroneous values when taking the ceiling of it.
+                        .doubleValue()
+                        / MC_WIDTH_GRAN);
             LOG.debug("Nearest (ceil) number of slots {}", nbrMcSlots);
             mcWidth = new BigDecimal(MC_WIDTH_GRAN * nbrMcSlots);
             LOG.debug("Given mc-width={}, Rounded mc-width={}", input.getMcWidth().getValue(), mcWidth);
