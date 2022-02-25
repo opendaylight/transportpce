@@ -831,6 +831,24 @@
       "parentUuid": "db48cbf5_cac32961",
       "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9fc8e30_c9a0bf7b",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-25T07:33:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d720108d_292aeb76",
+      "revId": "8f116893aa07ed2f056237e3962da87f715e1e81",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
