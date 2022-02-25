@@ -6,63 +6,65 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.opendaylight.odlparent</groupId>
-        <artifactId>single-feature-parent</artifactId>
-        <version>9.0.13</version>
-        <relativePath />
-    </parent>
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>single-feature-parent</artifactId>
+    <version>9.0.13</version>
+    <relativePath/>
+  </parent>
 
-    <groupId>org.opendaylight.transportpce</groupId>
-    <artifactId>odl-transportpce-nbinotifications</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
-    <packaging>feature</packaging>
+  <groupId>org.opendaylight.transportpce</groupId>
+  <artifactId>odl-transportpce-nbinotifications</artifactId>
+  <version>4.3.0-SNAPSHOT</version>
+  <packaging>feature</packaging>
+  <name>OpenDaylight :: transportpce :: nbinotifications</name>
 
-    <name>OpenDaylight :: transportpce :: nbinotifications</name>
-    <properties>
+  <properties>
     <!-- skipped because we are using config file as artifact and it is not installed before running test -->
-        <skip.karaf.featureTest>true</skip.karaf.featureTest>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.opendaylight.transportpce</groupId>
-            <artifactId>odl-transportpce</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>transportpce-nbinotifications</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-dmaap-artifact</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>${basedir}/src/main/resources/org.opendaylight.transportpce.nbinotifications.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>config</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <skip.karaf.featureTest>true</skip.karaf.featureTest>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>odl-transportpce</artifactId>
+      <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-nbinotifications</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-dmaap-artifact</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${basedir}/src/main/resources/org.opendaylight.transportpce.nbinotifications.cfg</file>
+                  <type>cfg</type>
+                  <classifier>config</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
