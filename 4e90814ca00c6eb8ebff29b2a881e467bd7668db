@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "757c654a_0c73d523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-25T09:17:46Z",
+      "side": 1,
+      "message": "FYI it works locally but does not work in CI.\nI am not sure there is a simple solution",
+      "revId": "4e90814ca00c6eb8ebff29b2a881e467bd7668db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
