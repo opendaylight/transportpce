@@ -26,6 +26,36 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-network</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-networkmodel</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
@@ -34,6 +64,34 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-renderer</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>concepts</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc6991-ietf-yang-types</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-common-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>yang-binding</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
 
     <!-- Testing Dependencies -->
@@ -49,5 +107,4 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
        <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>
