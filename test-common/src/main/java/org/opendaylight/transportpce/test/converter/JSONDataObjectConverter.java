@@ -32,8 +32,9 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
-import org.opendaylight.yangtools.yang.model.api.SchemaPath;
+import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,10 +103,9 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
         JsonWriter jsonWriter = new JsonWriter(writer);
         JSONCodecFactory jsonCodecFactory =
             JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createLazy(getSchemaContext());
-        NormalizedNodeStreamWriter create =
-            JSONNormalizedNodeStreamWriter.createExclusiveWriter(jsonCodecFactory,
-            (SchemaPath)null, null, jsonWriter);
-
+        EffectiveStatementInference rootNode = SchemaInferenceStack.of(getSchemaContext()).toInference();
+        NormalizedNodeStreamWriter create = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
+                jsonCodecFactory, rootNode, rootNode.getEffectiveModelContext().NAME.getNamespace(), jsonWriter);
         try (NormalizedNodeWriter normalizedNodeWriter = NormalizedNodeWriter.forStreamWriter(create);) {
             normalizedNodeWriter
                     .write(convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).get());

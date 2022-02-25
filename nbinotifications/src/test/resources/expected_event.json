@@ -1,5 +1,5 @@
 {
-  "notification-process-service":{
+  "nbi-notifications:notification-process-service":{
     "common-id":"commond-id",
     "message":"message",
     "operational-state":"inService",
