@@ -29,7 +29,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev20032
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTUCnTs;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.SwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.termination.point.XpdrTpPortConnectionAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
@@ -102,7 +101,12 @@ public class PceOtnNode implements PceNode {
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private String clientPort;
 
-    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType,
+    public PceOtnNode(
+            Node node,
+            OpenroadmNodeType nodeType,
+            NodeId nodeId,
+            String pceNodeType,
+            String serviceType,
             String clientPort) {
         this.node = node;
         this.nodeId = nodeId;
@@ -127,7 +131,10 @@ public class PceOtnNode implements PceNode {
         this.tpAvailableTribSlot.clear();
         checkAvailableTribSlot();
         this.clientPort = clientPort;
-        if (node == null || nodeId == null || nodeType == null || !VALID_NODETYPES_LIST.contains(nodeType)) {
+        if (node == null
+                || nodeId == null
+                || nodeType == null
+                || !VALID_NODETYPES_LIST.contains(nodeType)) {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
@@ -155,26 +162,30 @@ public class PceOtnNode implements PceNode {
             return;
         }
         for (TerminationPoint tp : allTps) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 ocnTp1
-                = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+                    .TerminationPoint1 ocnTp1
+                = tp.augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                         .TerminationPoint1.class);
             if (ocnTp1 == null) {
                 LOG.warn("null ocn TP {}", tp);
                 continue;
             }
+            TerminationPoint1 ontTp1 = tp.augmentation(TerminationPoint1.class);
+            if (ontTp1 == null) {
+                continue;
+            }
             //TODO many nested structures below, this needs to be reworked
             switch (ocnTp1.getTpType()) {
                 case XPONDERNETWORK:
-                    if (tp.augmentation(TerminationPoint1.class) == null) {
-                        continue;
-                    }
-                    TerminationPoint1 ontTp1 = tp.augmentation(TerminationPoint1.class);
                     if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
                             || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)) {
                             // TODO verify the capability of network port to support ODU4 CTP interface creation
                         if (!checkTpForOdtuTermination(ontTp1)) {
-                            LOG.error("TP {} of {} does not allow ODU4 termination creation",
-                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                            LOG.error("TP {} of {} does not allow {} termination creation",
+                                tp.getTpId().getValue(),
+                                node.getNodeId().getValue(),
+                                "ODU4");
                             continue;
                         }
                     } else if (SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)) {
@@ -182,30 +193,34 @@ public class PceOtnNode implements PceNode {
                                 ontTp1, SERVICE_TYPE_ETH_TS_NB_MAP.get(this.otnServiceType))) {
                             LOG.error("TP {} of {} does not allow {} termination creation",
                                 tp.getTpId().getValue(),
-                                SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType),
-                                node.getNodeId().getValue());
+                                node.getNodeId().getValue(),
+                                SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType));
                             continue;
                         }
                     } else {
-                        LOG.error("TP {} of {} does not allow any termination creation",
-                            tp.getTpId().getValue(), node.getNodeId().getValue());
+                        LOG.error("TP {} of {} does not allow {} termination creation",
+                            tp.getTpId().getValue(),
+                            node.getNodeId().getValue(),
+                            "any");
                         continue;
                     }
-                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                    LOG.info("TP {} of XPONDER {} is validated",
+                        tp.getTpId(),
+                        node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                     break;
 
                 case XPONDERCLIENT:
                     if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
-                        if (tp.augmentation(TerminationPoint1.class) == null) {
-                            continue;
-                        }
-                        if (checkClientTp(tp.augmentation(TerminationPoint1.class))) {
-                            LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                        if (checkClientTp(ontTp1)) {
+                            LOG.info("TP {} of XPONDER {} is validated",
+                                tp.getTpId(),
+                                node.getNodeId().getValue());
                             this.availableXpdrClientTps.add(tp.getTpId());
                         } else {
                             LOG.error("TP {} of {} does not allow lo-ODU (ODU2e or ODU0) termination creation",
-                                tp.getTpId().getValue(), node.getNodeId().getValue());
+                                tp.getTpId().getValue(),
+                                node.getNodeId().getValue());
                         }
                     }
                     break;
@@ -275,11 +290,13 @@ public class PceOtnNode implements PceNode {
         for (NonBlockingList nbl: nblList) {
             for (TpId nwTp : netwTps) {
                 for (TpId clTp : clientTps) {
-                    if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
+                    if (nbl.getTpList().contains(clTp)
+                            && nbl.getTpList().contains(nwTp)) {
                         usableXpdrClientTps.add(clTp);
                         usableXpdrNWTps.add(nwTp);
                     }
-                    if (usableXpdrClientTps.size() >= 1 && usableXpdrNWTps.size() >= 1
+                    if (usableXpdrClientTps.size() >= 1
+                            && usableXpdrNWTps.size() >= 1
                             && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
                         clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
                         return true;
@@ -291,12 +308,12 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
-        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
-                .values()) {
+        for (SupportedInterfaceCapability sic :
+                ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.info("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.class) || sic.getIfCapType().equals(IfOtsiOtsigroup.class))
-                && (ontTp1.getXpdrTpPortConnectionAttributes() == null
-                    || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
+                    && (ontTp1.getXpdrTpPortConnectionAttributes() == null
+                        || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
                 return true;
             }
         }
@@ -321,8 +338,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
-        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
-                .values()) {
+        for (SupportedInterfaceCapability sic :
+                ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             // we could also check the administrative status of the tp
             if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
@@ -337,7 +354,8 @@ public class PceOtnNode implements PceNode {
         if (!isValid()) {
             return;
         }
-        if (this.nodeId.getValue().equals(anodeId) || (this.nodeId.getValue().equals(znodeId))) {
+        if (this.nodeId.getValue().equals(anodeId)
+                || (this.nodeId.getValue().equals(znodeId))) {
             initXndrTps("AZ");
         } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
             initXndrTps("intermediate");
@@ -351,14 +369,15 @@ public class PceOtnNode implements PceNode {
         if (this.nodeType != OpenroadmNodeType.TPDR) {
             return true;
         }
-        Node1 node1 = node.augmentation(Node1.class);
-        SwitchingPools sp = node1.getSwitchingPools();
-        List<OduSwitchingPools> osp = new ArrayList<>(sp.nonnullOduSwitchingPools().values());
-        for (OduSwitchingPools ospx : osp) {
-            List<NonBlockingList> nbl = new ArrayList<>(ospx.nonnullNonBlockingList().values());
-            for (NonBlockingList nbll : nbl) {
-                if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW && nbll.getTpList() != null
-                        && nbll.getTpList().contains(tp1.getTpId()) && nbll.getTpList().contains(tp2.getTpId())) {
+        for (OduSwitchingPools ospx :
+                node.augmentation(Node1.class)
+                    .getSwitchingPools()
+                    .nonnullOduSwitchingPools().values()) {
+            for (NonBlockingList nbll : ospx.nonnullNonBlockingList().values()) {
+                if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW
+                        && nbll.getTpList() != null
+                        && nbll.getTpList().contains(tp1.getTpId())
+                        && nbll.getTpList().contains(tp2.getTpId())) {
                     LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
                         tp1.getTpId(), tp2.getTpId());
                     return true;
@@ -413,11 +432,13 @@ public class PceOtnNode implements PceNode {
     public void checkAvailableTribSlot() {
         for (TerminationPoint tp :
             node.augmentation(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .Node1.class)
             .getTerminationPoint().values().stream()
             .filter(type -> type
                 .augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1.class)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+                        .TerminationPoint1.class)
                 .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
             .collect(Collectors.toList())
         ) {
@@ -430,8 +451,10 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean isValid() {
-        if (nodeId == null || nodeType == null
-                || this.getSupNetworkNodeId() == null || this.getSupClliNodeId() == null) {
+        if (nodeId == null
+                || nodeType == null
+                || this.getSupNetworkNodeId() == null
+                || this.getSupClliNodeId() == null) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
