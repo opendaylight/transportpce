@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63b9d850_43f9b5ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-26T12:01:46Z",
+      "side": 1,
+      "message": "No, it did not work. Here is the mount payload: \u003cnode xmlns\u003d\"urn:TBD:params:xml:ns:yang:network-topology\"\u003e\n    \u003cnode-id\u003eABCD\u003c/node-id\u003e\n    \u003chost xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003e123.45.678.900\u003c/host\u003e\n    \u003cport xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003e830\u003c/port\u003e\n    \u003cusername xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003eopenroadm\u003c/username\u003e\n    \u003cpassword xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003eopenroadm\u003c/password\u003e\n    \u003ctcp-only xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003efalse\u003c/tcp-only\u003e\n    \u003ckeepalive-delay xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003e180\u003c/keepalive-delay\u003e\n    \u003cyang-module-capabilities xmlns\u003d\"urn:opendaylight:netconf-node-topology\"\u003e\n        \u003ccapability\u003eurn:ietf:params:xml:ns:netmod:notification?module\u003dnc-notifications\u0026amp;revision\u003d2008-07-14\u003c/capability\u003e\n        \u003coverride\u003efalse\u003c/override\u003e\n    \u003c/yang-module-capabilities\u003e\n\u003c/node\u003e\n\n\nLOG: \n\n06:48:41.167 ERROR [opendaylight-cluster-data-notification-dispatcher-36] List of streams supports by device is not present\n06:48:41.168 INFO [opendaylight-cluster-data-notification-dispatcher-36] Device is supporting notification stream NETCONF\n06:48:41.168 INFO [opendaylight-cluster-data-notification-dispatcher-36] Triggering notification stream NETCONF for node ABCD\n\nEven though this node supports OPENROADM stream, the controller is selecting the  NETCONF stream and we are missing all the notifications.",
+      "parentUuid": "7783a493_7cb2bdde",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2bb8dc9_b08f6426",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
         "patchSetId": 1
