@@ -69,6 +69,24 @@
       "parentUuid": "cd85a70a_76b66efa",
       "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbde9b5b_c4f2c8f0",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-28T21:35:01Z",
+      "side": 1,
+      "message": "Also, if mc-width is null, then we will not have 2 digit precision for the calculated power",
+      "parentUuid": "9b2c789b_6871a740",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
