@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e2f1518_2e2434c7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-28T16:30:35Z",
+      "side": 1,
+      "message": "There is log info statement after that line. If we remove the precision here, then log statement might read incorrectly. Or we can modify the log statement as:\n\nLOG.info(\"P1[50GHz]\u003d{} dBm for spanloss {} based on OpenROADM-5.0 specs power target mask\", powerValue.setScale(2, RoundingMode.CEILING),\n            spanLossTx);\n\nRemoving the similar line.",
+      "parentUuid": "5c3b7300_2eea5559",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd85a70a_76b66efa",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
         "patchSetId": 1
