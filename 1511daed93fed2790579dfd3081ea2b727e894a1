@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8958929d_c105db98",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-02-28T19:55:36Z",
+      "side": 0,
+      "message": "this guard clause was already on line 214 (-\u003e196 now) just before the only place where this method is called.\nThus this check can be removed here.",
+      "revId": "1511daed93fed2790579dfd3081ea2b727e894a1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
