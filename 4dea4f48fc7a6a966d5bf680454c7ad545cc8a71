@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb7b405_cbb14250",
+        "filename": "api/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-28T19:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a10f915a_9fa6e8a6",
+      "revId": "4dea4f48fc7a6a966d5bf680454c7ad545cc8a71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bbb69f1_f8fa4bce",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-28T09:46:33Z",
       "side": 1,
       "message": "idem",
+      "revId": "4dea4f48fc7a6a966d5bf680454c7ad545cc8a71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a964529_ecc70204",
+        "filename": "ordmodels/device/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-02-28T19:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bbb69f1_f8fa4bce",
       "revId": "4dea4f48fc7a6a966d5bf680454c7ad545cc8a71",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
