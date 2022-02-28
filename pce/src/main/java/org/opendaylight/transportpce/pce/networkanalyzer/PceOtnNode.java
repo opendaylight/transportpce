@@ -178,50 +178,33 @@ public class PceOtnNode implements PceNode {
             //TODO many nested structures below, this needs to be reworked
             switch (ocnTp1.getTpType()) {
                 case XPONDERNETWORK:
-                    if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
-                            || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)) {
-                            // TODO verify the capability of network port to support ODU4 CTP interface creation
-                        if (!checkTpForOdtuTermination(ontTp1)) {
-                            LOG.error("TP {} of {} does not allow {} termination creation",
-                                tp.getTpId().getValue(),
-                                node.getNodeId().getValue(),
-                                "ODU4");
-                            continue;
-                        }
-                    } else if (SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)) {
-                        if (!checkOdtuTTPforLoOduCreation(
-                                ontTp1, SERVICE_TYPE_ETH_TS_NB_MAP.get(this.otnServiceType))) {
-                            LOG.error("TP {} of {} does not allow {} termination creation",
-                                tp.getTpId().getValue(),
-                                node.getNodeId().getValue(),
-                                SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType));
-                            continue;
-                        }
+                    String notCreatedServiceType = xpdrNetTpCreation(ontTp1);
+                    if (notCreatedServiceType == null) {
+                        LOG.info("TP {} of XPONDER {} is validated",
+                            tp.getTpId(),
+                            node.getNodeId().getValue());
+                        this.availableXpdrNWTps.add(tp.getTpId());
                     } else {
                         LOG.error("TP {} of {} does not allow {} termination creation",
                             tp.getTpId().getValue(),
                             node.getNodeId().getValue(),
-                            "any");
-                        continue;
+                            notCreatedServiceType);
                     }
-                    LOG.info("TP {} of XPONDER {} is validated",
-                        tp.getTpId(),
-                        node.getNodeId().getValue());
-                    this.availableXpdrNWTps.add(tp.getTpId());
                     break;
 
                 case XPONDERCLIENT:
-                    if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
-                        if (checkClientTp(ontTp1)) {
-                            LOG.info("TP {} of XPONDER {} is validated",
-                                tp.getTpId(),
-                                node.getNodeId().getValue());
-                            this.availableXpdrClientTps.add(tp.getTpId());
-                        } else {
-                            LOG.error("TP {} of {} does not allow lo-ODU (ODU2e or ODU0) termination creation",
-                                tp.getTpId().getValue(),
-                                node.getNodeId().getValue());
-                        }
+                    if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)) {
+                        continue;
+                    }
+                    if (checkClientTp(ontTp1)) {
+                        LOG.info("TP {} of XPONDER {} is validated",
+                            tp.getTpId(),
+                            node.getNodeId().getValue());
+                        this.availableXpdrClientTps.add(tp.getTpId());
+                    } else {
+                        LOG.error("TP {} of {} does not allow lo-ODU (ODU2e or ODU0) termination creation",
+                            tp.getTpId().getValue(),
+                            node.getNodeId().getValue());
                     }
                     break;
 
@@ -229,13 +212,40 @@ public class PceOtnNode implements PceNode {
                     LOG.debug("unsupported ocn TP type {}", ocnTp1.getTpType());
             }
         }
-        this.valid = SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
-                || SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)
-                    && checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
+        this.valid = checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
+    }
+
+    private String xpdrNetTpCreation(TerminationPoint1 ontTp1) {
+        if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)
+                || StringConstants.SERVICE_TYPE_100GE_S.equals(this.otnServiceType)) {
+                // TODO verify the capability of network port to support ODU4 CTP interface creation
+            if (checkTpForOdtuTermination(ontTp1)) {
+                //success
+                return null;
+            }
+            return "ODU4";
+        }
+        if (SERVICE_TYPE_ETH_TS_NB_MAP.containsKey(this.otnServiceType)) {
+            if (checkOdtuTTPforLoOduCreation(
+                    ontTp1,
+                    SERVICE_TYPE_ETH_TS_NB_MAP.get(this.otnServiceType))) {
+                //success
+                return null;
+            }
+            return SERVICE_TYPE_ETH_ODU_STRING_MAP.get(this.otnServiceType);
+        }
+        //failure
+        return "any";
     }
 
     private boolean checkSwPool(List<TpId> netwTps, List<TpId> clientTps) {
 
+        if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)) {
+            return true;
+        }
+        if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(this.otnServiceType)) {
+            return false;
+        }
         if (netwTps == null) {
             return false;
         }
@@ -342,8 +352,7 @@ public class PceOtnNode implements PceNode {
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             // we could also check the administrative status of the tp
-            if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)
-                    && sic.getIfCapType().equals(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType))) {
+            if (sic.getIfCapType().equals(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType))) {
                 return true;
             }
         }
