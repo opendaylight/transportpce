@@ -33,6 +33,24 @@
       "message": "I don\u0027t think it is usually a good idea to round intermediate variables.\n\nIs that something enforced by the norm ?",
       "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b2c789b_6871a740",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-02-28T16:14:04Z",
+      "side": 1,
+      "message": "If we do not round the mc-width, it could give erroneous values when taking the ceiling of it. Below is the example log:\n\nINFO [pool-24-thread-2] P1[50GHz]\u003d-3.60 dBm for spanloss 5.4 based on OpenROADM-5.0 specs power target mask\nINFO [pool-24-thread-2] Given mc-width\u003d50.00000000002000, Rounded mc-width\u003d62.5\nINFO [pool-24-thread-2] P1[62.5GHz]\u003d-2.631 dB will be used for OSNR calculation \n\nWhere, the ceiling(50.00000000002000/12.5) \u003d 5 and mc-width is calculated as 62.5, which is incorrect.\n\nThe normalization of mc-width was introduced to account for fixed grid or any other mc-width value is not an integer multiple of MC_WIDTH_GRAN.",
+      "parentUuid": "cd85a70a_76b66efa",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
