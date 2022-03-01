@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cc5424e_faa2024b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-01T17:16:55Z",
+      "side": 1,
+      "message": "Hi All,\nI\u0027ve updated the change with a new version of kafka-client dependency that should solve your issue with karaf crash when you install any other transportpce features.\nWith this new version, locally I can install odl-transportpce-swagger without any issue...",
+      "revId": "8f7aee4357c2072838f9c1be7c3e0292a38db879",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
