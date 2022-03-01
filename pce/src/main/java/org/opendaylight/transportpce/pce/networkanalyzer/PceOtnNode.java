@@ -74,6 +74,8 @@ public class PceOtnNode implements PceNode {
         StringConstants.SERVICE_TYPE_1GE, "ODU0",
         StringConstants.SERVICE_TYPE_10GE, "ODU2e",
         StringConstants.SERVICE_TYPE_100GE_M, "ODU4");
+    private static final String INTERMEDIATE_MODETYPE = "intermediate";
+    private static final String AZ_MODETYPE = "AZ";
 
     private boolean valid = true;
 
@@ -264,10 +266,10 @@ public class PceOtnNode implements PceNode {
 
         switch (modeType) {
 
-            case "intermediate":
+            case INTERMEDIATE_MODETYPE:
                 return checkIntermediateSwPool(nblList, netwTps);
 
-            case "AZ":
+            case AZ_MODETYPE:
                 if (clientTps == null) {
                     return false;
                 }
@@ -365,9 +367,9 @@ public class PceOtnNode implements PceNode {
         }
         if (this.nodeId.getValue().equals(anodeId)
                 || (this.nodeId.getValue().equals(znodeId))) {
-            initXndrTps("AZ");
+            initXndrTps(AZ_MODETYPE);
         } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
-            initXndrTps("intermediate");
+            initXndrTps(INTERMEDIATE_MODETYPE);
         } else {
             LOG.info("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
             valid = false;
@@ -406,7 +408,7 @@ public class PceOtnNode implements PceNode {
             return;
         }
         // Validate switch for use as an intermediate XPONDER on the path
-        initXndrTps("intermediate");
+        initXndrTps(INTERMEDIATE_MODETYPE);
         if (this.valid) {
             LOG.info("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
         } else {
