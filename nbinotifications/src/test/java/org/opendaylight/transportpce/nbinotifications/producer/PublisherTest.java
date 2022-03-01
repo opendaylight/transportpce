@@ -37,16 +37,16 @@ public class PublisherTest extends AbstractTest {
 
     @Before
     public void setUp() {
+        converterService = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
+        converterAlarm = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         NotificationServiceSerializer serializerService = new NotificationServiceSerializer();
         NotificationAlarmServiceSerializer serializerAlarm = new NotificationAlarmServiceSerializer();
-        Map<String, Object> properties = Map.of(ConfigConstants.CONVERTER, serializerService);
-        Map<String, Object> propertiesAlarm = Map.of(ConfigConstants.CONVERTER, serializerAlarm);
+        Map<String, Object> properties = Map.of(ConfigConstants.CONVERTER, converterService);
+        Map<String, Object> propertiesAlarm = Map.of(ConfigConstants.CONVERTER, converterAlarm);
         serializerService.configure(properties, false);
         serializerAlarm.configure(propertiesAlarm, false);
         mockProducer = new MockProducer<>(true, new StringSerializer(), serializerService);
         mockAlarmProducer = new MockProducer<>(true, new StringSerializer(), serializerAlarm);
-        converterService = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
-        converterAlarm = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         publisherService = new Publisher<>("test", mockProducer);
         publisherAlarm = new Publisher<>("test", mockAlarmProducer);
     }
