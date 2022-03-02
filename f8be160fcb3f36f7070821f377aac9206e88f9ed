@@ -123,6 +123,24 @@
       "parentUuid": "60a41ad1_d42024f2",
       "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65ddec5_d00e0590",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-02T13:11:46Z",
+      "side": 1,
+      "message": "I think we need both.\nDo you mind if propose a new PS here with a combined approach of the 2 changes + a fix to the last comment to address ?",
+      "parentUuid": "b5c1318c_e461b2ca",
+      "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
