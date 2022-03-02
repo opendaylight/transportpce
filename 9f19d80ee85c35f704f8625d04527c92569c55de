@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e0df5a_2f55342a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-02T10:04:11Z",
+      "side": 1,
+      "message": "The issue with GNPy functional test is due to the fact that this new serialization process adds the module prefix on the root JSON node, what is not correctly deserialized on GNPy side.\nWaiting for a patched version of GNPy...",
+      "revId": "9f19d80ee85c35f704f8625d04527c92569c55de",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
