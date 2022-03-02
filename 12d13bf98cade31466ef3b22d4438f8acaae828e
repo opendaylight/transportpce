@@ -16,6 +16,24 @@
       "message": "add connection exception when kafka server is not ON.\ndefault producer 30s timeout is too long.",
       "revId": "12d13bf98cade31466ef3b22d4438f8acaae828e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "136a8bd4_84670daf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9051
+      },
+      "writtenOn": "2022-03-02T08:22:29Z",
+      "side": 1,
+      "message": "I added support for a kafka.properties file. In there you can update the Kafka broker server and also set \"acks\u003dnone\" for the case where there is no Kafka broker server.",
+      "parentUuid": "c03fa6f3_a33c131b",
+      "revId": "12d13bf98cade31466ef3b22d4438f8acaae828e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
