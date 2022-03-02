@@ -16,6 +16,24 @@
       "message": "This code works! Thanks Guillaume",
       "revId": "43e4ba50603fc98eeb1461d8ae4d8487a671e2ad",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a33b194c_82dbafd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-02T07:45:06Z",
+      "side": 1,
+      "message": "You\u0027re welcome.\n\nI propose we squash this code with hte parent/previous change and we try to address the last comment at\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/99859/1/networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java#186\n\nand that is based on the modifications here",
+      "parentUuid": "24c321cc_c3d39886",
+      "revId": "43e4ba50603fc98eeb1461d8ae4d8487a671e2ad",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
