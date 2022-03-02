@@ -105,6 +105,24 @@
       "parentUuid": "f2bb8dc9_b08f6426",
       "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5c1318c_e461b2ca",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-03-02T11:25:36Z",
+      "side": 1,
+      "message": "The refactoring in  https://git.opendaylight.org/gerrit/c/transportpce/+/99860 works. Thanks Guillaume! This patch still has -1, so I don\u0027t know if we need this or just use the refactored patch.",
+      "parentUuid": "60a41ad1_d42024f2",
+      "revId": "f8be160fcb3f36f7070821f377aac9206e88f9ed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
