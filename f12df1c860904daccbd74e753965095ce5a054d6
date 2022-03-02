@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b6692ac_27461155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-02T08:06:05Z",
+      "side": 1,
+      "message": "Thanks for your answers Bala.\nHere is my feedback.\n\nHope this helps\nGuillaume",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c3b7300_2eea5559",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "There is log info statement after that line. If we remove the precision here, then log statement might read incorrectly. Or we can modify the log statement as:\n\nLOG.info(\"P1[50GHz]\u003d{} dBm for spanloss {} based on OpenROADM-5.0 specs power target mask\", powerValue.setScale(2, RoundingMode.CEILING),\n            spanLossTx);\n\nRemoving the similar line.",
       "parentUuid": "5c3b7300_2eea5559",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ddeef47_9ace9fa4",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-02T08:06:05Z",
+      "side": 1,
+      "message": "Agreed, I would prefer this last option.\n\nIf we go this way, there is also a similar LOG.info at line 412.\nMay we factorize the 2 LOG.info after and out of the if-block too ?\n\nI suspect there is room here to remove some LOG.info and optionaly replace them with some LOG.debug.\nThis way we wouldn\u0027t have to bother with LOGs redenring.",
+      "parentUuid": "6e2f1518_2e2434c7",
       "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -85,6 +120,24 @@
       "side": 1,
       "message": "Also, if mc-width is null, then we will not have 2 digit precision for the calculated power",
       "parentUuid": "9b2c789b_6871a740",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05125c24_b83d1c1d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-02T08:06:05Z",
+      "side": 1,
+      "message": "OK so if I understand well, this is really something needed by the norm.\nIs this correct ?\n\nIf so, I suggest we use here an airy style to clearly show the stack of operations and to let more options to add comments.\nFor example something such as this one:\n            double nbrMcSlots \u003d\n                Math.ceil(\n                    input.getMcWidth().getValue()\n                        .setScale(2, RoundingMode.CEILING)\n                        // If we do not round the mc-width,\n                        // it could give erroneous values when taking the ceiling of it. \n                        .doubleValue()\n                    / MC_WIDTH_GRAN);",
+      "parentUuid": "bbde9b5b_c4f2c8f0",
       "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
