@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,9 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -32,10 +35,14 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.NotificationsService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.StreamNameType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.streams.Stream;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +154,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             return false;
         }
         // Set the default stream as OPENROADM
-        for (String streamName : List.of("OPENROADM", "NETCONF")) {
+        for (String streamName : getSupportedStream(nodeId)) {
             LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
             ListenableFuture<RpcResult<CreateSubscriptionOutput>> subscription =
                 rpcService.createSubscription(
@@ -187,6 +194,29 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             LOG.error("Error during subscription to stream {}", streamName, e);
         }
         return subscriptionSuccessful;
+    }
+
+    private List<String> getSupportedStream(String nodeId) {
+        InstanceIdentifier<Streams> streamsIID = InstanceIdentifier.create(Netconf.class).child(Streams.class);
+        Optional<Streams> ordmInfoObject =
+                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, streamsIID,
+                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (ordmInfoObject == null || ordmInfoObject.isEmpty() || ordmInfoObject.get().getStream().isEmpty()) {
+            LOG.error("List of streams supports by device is not present");
+            return List.of("OPENROADM","NETCONF");
+        }
+        List<String> streams = new ArrayList<>();
+        for (Stream strm : ordmInfoObject.get().getStream().values()) {
+            LOG.debug("Streams are {}", strm);
+            if ("OPENROADM".equalsIgnoreCase(strm.getName().getValue())
+                    || "NETCONF".equalsIgnoreCase(strm.getName().getValue())) {
+                streams.add(strm.getName().getValue());
+            }
+        }
+        return
+            streams.isEmpty()
+                ? List.of("OPENROADM","NETCONF")
+                : streams;
     }
 
 }
