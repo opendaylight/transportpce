@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac42616_cc8de4c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-03-02T16:22:07Z",
+      "side": 1,
+      "message": "https://git.opendaylight.org/gerrit/c/transportpce/+/99859 \n\nHas been abandoned, since we addressed all comments here.",
+      "revId": "2307a3c8bb64e3780583e8d6d6762fb6a6349d87",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
