@@ -10,7 +10,6 @@
 package org.opendaylight.transportpce.pce.utils;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -182,7 +181,6 @@ public final class TransactionUtils {
                         .setSectionEltNumber(Uint16.valueOf(1)).build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
-        Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
         Augmentation<Link> aug11 = new Link1Builder()
                 .setAmplified(true)
                 .setOMSAttributes(new OMSAttributesBuilder()

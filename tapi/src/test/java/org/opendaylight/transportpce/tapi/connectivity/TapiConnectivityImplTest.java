@@ -100,7 +100,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
-    private boolean callbackRan;
 
     @Before
     public void setUp() throws InterruptedException, ExecutionException {
@@ -116,7 +115,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.PORTMAPPING_FILE);
 
-        callbackRan = false;
         MockitoAnnotations.openMocks(this);
 
         networkTransactionService = new NetworkTransactionImpl(
@@ -148,7 +146,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -177,7 +174,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -202,7 +198,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -228,7 +223,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -261,7 +255,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);

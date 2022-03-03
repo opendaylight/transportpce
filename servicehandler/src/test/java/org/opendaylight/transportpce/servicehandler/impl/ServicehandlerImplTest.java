@@ -87,13 +87,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
-    private boolean callbackRan;
 
     @Before
     public void setUp() {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
-        callbackRan = false;
         MockitoAnnotations.openMocks(this);
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getNewDataBroker());
     }
@@ -109,7 +107,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -134,7 +131,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -158,7 +154,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -181,7 +176,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -208,7 +202,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -232,7 +225,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -258,7 +250,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -281,7 +272,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -308,7 +298,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -343,7 +332,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -366,7 +354,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -393,7 +380,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -428,7 +414,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -451,7 +436,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -477,7 +461,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -512,7 +495,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -536,7 +518,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -562,7 +543,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -593,7 +573,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -616,7 +595,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -644,7 +622,6 @@ public class ServicehandlerImplTest extends AbstractTest  {
         result.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);

@@ -55,7 +55,6 @@ public final class MountPointUtils {
     }
 
     private MountPointUtils() {
-
     }
 
 }

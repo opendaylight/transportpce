@@ -29,11 +29,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPortsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
@@ -103,25 +99,18 @@ public class CrossConnectImpl221Test {
 
         Mockito.when(deviceTransactionManager.getDeviceTransaction("deviceId"))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
-        boolean res = crossConnectImpl221
-                .setPowerLevel("deviceId", OpticalControlMode.GainLoss, new BigDecimal(100), "1");
+        crossConnectImpl221.setPowerLevel("deviceId", OpticalControlMode.GainLoss, new BigDecimal(100), "1");
 
         Assert.assertTrue("set Level should be true", true);
     }
 
     @Test(expected = NullPointerException.class)
     public void postOtnCrossConnect() {
-        NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey("nodeId")).setNodeId("nodeId");
         Nodes nodes = Mockito.mock(Nodes.class);
         Mockito.when(nodes.getNodeId()).thenReturn("nodeId");
         Mockito.when(deviceTransactionManager.getDeviceTransaction(any()))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
         Optional<String> res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
         Assert.assertTrue("Optional value should have a value", res.isPresent());
-    }
-
-
-    private ConnectionPorts getConnectionPorts(String c1, String p1) {
-        return new ConnectionPortsBuilder().setCircuitPackName(c1).setPortName(p1).build();
     }
 }

@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 public final class JsonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
     private static JsonUtil instance;
@@ -74,7 +73,6 @@ public final class JsonUtil {
             LOG.error("Cannot deserialize JSON ", e);
             return null;
         }
-
     }
 
     public BindingDOMCodecServices getBindingDOMCodecServices() {

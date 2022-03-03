@@ -22,8 +22,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -181,7 +179,6 @@ public final class OlmPowerServiceRpcImplUtil {
     }
 
     public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInput2() {
-        Link1 link1 = new Link1Builder().build();
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
             .setLinkId(new LinkId("link 1"))
             .setSrcType(CalculateSpanlossBaseInput.SrcType.All).build();

@@ -14,7 +14,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 public final class CreateOtsOmsDataUtils {
 
     private CreateOtsOmsDataUtils() {
-
     }
 
     public static CreateOtsOmsInput buildCreateOtsOms() {

@@ -57,12 +57,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public final class ModelMappingUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(ModelMappingUtils.class);
-
     private ModelMappingUtils() {
     }
 

@@ -89,7 +89,6 @@ public class ServiceTypeTest {
         assertEquals("service-type should be ODU4", "ODU4", serviceType);
         serviceType = ServiceTypes.getOtnServiceType("ODU", Uint32.valueOf(400));
         assertEquals("service-type should be ODUC4", "ODUC4", serviceType);
-
     }
 
 }

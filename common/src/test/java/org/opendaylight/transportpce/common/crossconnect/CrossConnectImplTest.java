@@ -104,7 +104,8 @@ public class CrossConnectImplTest {
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(devV121);
         when(crossConnectImpl121.setPowerLevel(any(), any(), any(), any()))
                 .thenReturn(true);
-        res = crossConnectImpl.setPowerLevel("100", "srcTp", new BigDecimal(100), "power");
+        //FIXME: this part of the test needs to be reviewed
+        crossConnectImpl.setPowerLevel("100", "srcTp", new BigDecimal(100), "power");
         Assert.assertTrue(true);
     }
 }
