@@ -8,28 +8,18 @@
 
 package org.opendaylight.transportpce.pce.utils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLinkKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.amplified.link.SectionElementBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.OMSAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.SpanBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributesBuilder;
@@ -74,10 +64,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
-import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-public class NodeUtils {
+public final class NodeUtils {
 
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
 
@@ -91,10 +80,6 @@ public class NodeUtils {
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
         LinkId oppositeLinkId = new LinkId("OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1");
-        //For setting up attributes for openRoadm augment
-        OMSAttributesBuilder omsAttributesBuilder =
-                new OMSAttributesBuilder();
-
         // Augementation
         Augmentation<Link> aug11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
                 .Link1Builder()
@@ -103,7 +88,6 @@ public class NodeUtils {
                         .setSpan(new SpanBuilder().build())
                         .build())
                 .build();
-
         return new LinkBuilder()
                 .setSource(ietfSrcLinkBldr.build())
                 .setDestination(ietfDestLinkBldr.build())
@@ -162,109 +146,12 @@ public class NodeUtils {
         Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
             .setAdministrativeState(AdminStates.InService)
             .setOperationalState(State.InService).build();
-
-
         return new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
                 .withKey(new NodeKey(new NodeId("node 1")))
                 .addAugmentation(node1)
                 .addAugmentation(node11)
                 .setSupportingNode(supportingNodes1);
-    }
-
-    private Link genereateLinkBuilder() {
-
-        Map<LinkConcatenationKey,LinkConcatenation> linkConcentationValues = new HashMap<>();
-        LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
-                .setFiberType(LinkConcatenation.FiberType.Truewave)
-                .setPmd(new FiberPmd(BigDecimal.ONE))
-                .setSRLGId(Uint32.valueOf(1))
-                .setSRLGLength(Uint32.valueOf(1))
-                .build();
-        LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
-                .setFiberType(LinkConcatenation.FiberType.Truewave)
-                .setPmd(new FiberPmd(BigDecimal.ONE))
-                .setSRLGId(Uint32.valueOf(1))
-                .setSRLGLength(Uint32.valueOf(1))
-                .build();
-        linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
-        linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
-
-        Map<AmplifiedLinkKey,AmplifiedLink>
-                amplifiedLinkValues = new HashMap<>();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink al =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes
-                        .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                        .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529
-                                .amplified.link.attributes.amplified.link.section.element.section.element
-                                .SpanBuilder()
-                                .setSpan(
-                                        new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified
-                                                .link.attributes.amplified.link.section.element.section
-                                                .element.span.SpanBuilder()
-                                                .setAdministrativeState(AdminStates.InService)
-                                                .setAutoSpanloss(true)
-                                                .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
-                                                .setLinkConcatenation(linkConcentationValues)
-                                                .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                                .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
-                                                .build())
-                                .build())
-                        .build())
-                        .setSectionEltNumber(Uint16.valueOf(1)).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink al2 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes
-                        .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                        .setSectionElement(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link
-                                        .attributes.amplified.link.section.element.section.element.SpanBuilder()
-                                        .setSpan(
-                                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529
-                                                        .amplified.link
-                                                        .attributes.amplified.link.section.element.section.element.span
-                                                        .SpanBuilder()
-                                                        .setAdministrativeState(AdminStates.InService)
-                                                        .setAutoSpanloss(true)
-                                                        .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
-                                                        .setLinkConcatenation(linkConcentationValues)
-                                                        .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                                        .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
-                                                        .build())
-                                        .build())
-                        .build())
-                        .setSectionEltNumber(Uint16.valueOf(1)).build();
-
-        amplifiedLinkValues.put(al.key(),al);
-        amplifiedLinkValues.put(al2.key(),al2);
-        Augmentation<Link> aug11 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder()
-                        .setAmplified(true)
-                        .setOMSAttributes(new OMSAttributesBuilder()
-                                .setAmplifiedLink(new AmplifiedLinkBuilder()
-                                        .setAmplifiedLink(amplifiedLinkValues)
-                                        .build())
-                                .setSpan(new SpanBuilder().build())
-                                .build())
-                        .build();
-        Augmentation<Link> aug111 = new Link1Builder().setAdministrativeState(AdminStates.InService)
-                .setOperationalState(State.InService).build();
-
-        TransactionUtils.getNetworkForSpanLoss();
-        return new LinkBuilder()
-                .setLinkId(new LinkId("OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1"))
-                .setSource(
-                        new SourceBuilder()
-                                .setSourceNode(new NodeId("OpenROADM-3-2-DEG1"))
-                                .setSourceTp(new TpId("DEG1-TTP-TX")).build())
-                .setDestination(
-                        new DestinationBuilder()
-                                .setDestNode(new NodeId("OpenROADM-3-1-DEG1"))
-                                .setDestTp(new TpId("DEG1-TTP-RX")).build())
-                .addAugmentation(aug11)
-                .addAugmentation(aug111)
-                .build();
-
-
     }
 
     // OTN network node
@@ -334,8 +221,6 @@ public class NodeUtils {
                 new Node1Builder()
                         .setTerminationPoint(Map.of(xpdr.key(),xpdr))
                         .build();
-
-
         return new NodeBuilder()
                 .setNodeId(new NodeId("node_test"))
                 .withKey(new NodeKey(new NodeId("node 1")))
@@ -455,4 +340,7 @@ public class NodeUtils {
                 .setTpType(openroadmTpType);
     }
 
+    private NodeUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 }

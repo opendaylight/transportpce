@@ -70,7 +70,6 @@ public class PowerMgmtTest extends AbstractTest {
         dataBroker = this.getNewDataBroker();
         this.mountPoint = new MountPointStub(dataBroker);
         this.mountPointService = new MountPointServiceStub(mountPoint);
-        // this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(new MappingUtilsImpl(dataBroker));
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
@@ -189,6 +188,7 @@ public class PowerMgmtTest extends AbstractTest {
         Assert.assertEquals(true, output);
     }
     /*
+    TODO: see if this test is always relevant
     @Test
     public void testSetPowerPresentNodes31() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
@@ -238,6 +238,7 @@ public class PowerMgmtTest extends AbstractTest {
     }
 
     /*
+    TODO: see if this test is always relevant
     @Test
     public void testSetPowerPresentNodes41() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();

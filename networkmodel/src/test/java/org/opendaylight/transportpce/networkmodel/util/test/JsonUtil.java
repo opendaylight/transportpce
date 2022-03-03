@@ -31,14 +31,11 @@ import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 public final class JsonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
     private static JsonUtil instance;
 
     private EffectiveModelContext schemaCtx;
-
     private BindingNormalizedNodeSerializer codecRegistry;
 
     private JsonUtil() {
@@ -80,6 +77,5 @@ public final class JsonUtil {
             LOG.error("Cannot deserialize JSON ", e);
             return null;
         }
-
     }
 }

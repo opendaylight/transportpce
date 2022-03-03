@@ -25,12 +25,10 @@ import org.slf4j.LoggerFactory;
 public final class MockedNotificationServiceWrapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(MockedNotificationServiceWrapper.class);
-    private final Notification publishedNotification;
     private final NotificationPublishService notificationPublishService;
     private Boolean rendererFailed = false;
 
     public MockedNotificationServiceWrapper(NotificationPublishService notificationPublishService) {
-        this.publishedNotification = null;
         this.notificationPublishService = notificationPublishService;
     }
 

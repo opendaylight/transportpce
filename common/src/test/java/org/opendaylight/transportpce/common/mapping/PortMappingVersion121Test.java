@@ -76,8 +76,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.InterfacesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.PartnerPortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalTransport;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.LldpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
@@ -120,10 +118,6 @@ public class PortMappingVersion121Test {
         // mock 1 bidirectional port for degree
         Ports ports = getPortsWithInterfaces(interfacesList, "p1");
         List<Ports> portsList = Arrays.asList(ports);
-
-        // mock 2 bidirectional port for SRG
-        Ports ports1 = getPortsWithInterfaces(interfacesList, "p2");
-        List<Ports> portsList1 = Arrays.asList(ports1);
 
         // mock 2 unidirectional ports for degree
         Ports ports2 = getPorts("p2", Port.PortQual.RoadmExternal, "c3", "p3", Direction.Rx);
@@ -337,6 +331,8 @@ public class PortMappingVersion121Test {
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports));
 
+        // mock 2 bidirectional port for SRG
+        Ports ports1 = getPortsWithInterfaces(interfacesList, "p2");
         InstanceIdentifier<Ports> portID1 = getChild("c2", "p1");
         when(deviceTransactionManager.getDataFromDevice("node",
             LogicalDatastoreType.OPERATIONAL, portID1,
@@ -432,11 +428,6 @@ public class PortMappingVersion121Test {
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID6,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmSrgObject6));
-
-        Interface ifc1 = new InterfaceBuilder().withKey(new InterfaceKey("ifc1"))
-                .setType(OpticalTransport.class).build();
-        Interface ifc2 = new InterfaceBuilder().withKey(new InterfaceKey("ifc2"))
-                .setType(OpenROADMOpticalMultiplex.class).build();
 
         // test createMappingData with a node with 3 dgree + 3 srg + bidirectional & unidirectional ports
         assertTrue("creating mappingdata for existed node returns true",

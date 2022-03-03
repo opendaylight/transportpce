@@ -110,7 +110,6 @@ public class PceLinkTest extends AbstractTest {
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
-
     }
 
     @Test
@@ -164,7 +163,6 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getdestCLLI());
         Assert.assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
                 + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
-
     }
 
     @Test(expected = NullPointerException.class)
@@ -173,10 +171,7 @@ public class PceLinkTest extends AbstractTest {
         Node node = node1Builder.build();
         Assert.assertNotNull(node.augmentation(Node1.class));
         // OpenroadmNodeType nodeType = node.augmentation(Node1.class).;
-
-        PceOtnNode pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType",
-            null);
-
+        new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType", null);
     }
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
@@ -184,10 +179,8 @@ public class PceLinkTest extends AbstractTest {
                 .setLinkType(OpenroadmLinkType.OTNLINK)
                 .setOperationalState(State.InService)
                 .setAdministrativeState(AdminStates.InService);
-
         //create source link
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
-
     }
 
     private static LinkBuilder createXponderLink(String srcNode, String destNode, String srcTp, String destTp) {
@@ -195,10 +188,8 @@ public class PceLinkTest extends AbstractTest {
                 .setLinkType(OpenroadmLinkType.XPONDERINPUT)
                 .setAdministrativeState(AdminStates.InService)
                 .setOperationalState(State.InService);
-
         //create source link
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
-
     }
 
     private static LinkBuilder createLinkBuilder(
@@ -239,9 +230,7 @@ public class PceLinkTest extends AbstractTest {
                 .setOMSAttributes(omsAttributesBuilder
                         .build());
 
-
         linkBuilder.addAugmentation(linkBuilderNetworkLink.build());
-
         return linkBuilder;
     }
 
@@ -252,7 +241,6 @@ public class PceLinkTest extends AbstractTest {
                 .setOperationalState(State.InService)
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM);
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
-
     }
 
     private static LinkBuilder createRoadmToRoadmWithoutLinkLatency(
@@ -260,7 +248,6 @@ public class PceLinkTest extends AbstractTest {
         Link1Builder link1Builder = new Link1Builder()
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM);
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
-
     }
 
     private Map<SupportingNodeKey,SupportingNode> geSupportingNodes() {
@@ -282,8 +269,6 @@ public class PceLinkTest extends AbstractTest {
     }
 
     private NodeBuilder getNodeBuilder(Map<SupportingNodeKey,SupportingNode> supportingNodes1) {
-
-
         //update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder()
                 .withKey(new TerminationPointKey(new TpId("xpdr")));
@@ -298,8 +283,6 @@ public class PceLinkTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node11 =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
-
-
         return new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
                 .withKey(new NodeKey(new NodeId("node 1")))

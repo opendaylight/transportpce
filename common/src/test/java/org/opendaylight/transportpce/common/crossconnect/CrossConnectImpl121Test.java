@@ -30,8 +30,6 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPortsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
@@ -99,13 +97,8 @@ public class CrossConnectImpl121Test {
 
         Mockito.when(deviceTransactionManager.getDeviceTransaction("deviceId"))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
-        boolean res = crossConnectImpl121
-                .setPowerLevel("deviceId", OpticalControlMode.Power, new BigDecimal(100), "1");
+        crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, new BigDecimal(100), "1");
 
         Assert.assertTrue("set Level should be true", true);
-    }
-
-    private ConnectionPorts getConnectionPorts(String c1, String p1) {
-        return new ConnectionPortsBuilder().setCircuitPackName(c1).setPortName(p1).build();
     }
 }

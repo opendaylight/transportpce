@@ -25,8 +25,6 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOtnNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
-import org.opendaylight.transportpce.pce.utils.PceTestData;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev210701.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
@@ -42,7 +40,6 @@ public class PceGraphTest {
     private Node node = null;
     private PceLink pceLink = null;
     private PceGraph pceGraph = null;
-    private PathComputationRequestInput requestInput = PceTestData.getPCE_test2_request_54();
     private PceConstraints pceHardConstraints = null;
     private PceResult rc = null;
     private PceOpticalNode pceOpticalNode = null;

@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
-import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -65,7 +64,6 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private final OtnDeviceRendererService otnDeviceRendererService = Mockito.mock(OtnDeviceRendererService.class);
     private final PortMapping portMapping = Mockito.mock(PortMapping.class);
     private final CrossConnect crossConnect = Mockito.mock(CrossConnect.class);
-    private final ReadTransaction readTransaction = Mockito.mock(ReadTransaction.class);
     private TransportpceOlmService olmService;
 
     private void setMountPoint(MountPoint mountPoint) {

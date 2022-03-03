@@ -65,12 +65,11 @@ public final class NetworkmodelTestUtil {
         Map<MappingKey,Mapping> mappingList = new HashMap<>();
         createDegreeMappings(mappingList, 1, degNb);
         createSrgMappings(mappingList, 1, srgNb);
-        Nodes mappingNode = new NodesBuilder()
+        return new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Rdm).setNodeClli(clli).build())
             .setMapping(mappingList)
             .build();
-        return mappingNode;
     }
 
     public static Nodes createMappingForXpdr(String nodeId, String clli, int networkPortNb, int clientPortNb,

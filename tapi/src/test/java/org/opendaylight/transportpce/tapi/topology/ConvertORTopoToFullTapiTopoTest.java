@@ -104,14 +104,11 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToFullTapiTopoTest.class);
 
     private static Node otnMuxA;
-    private static Node otnMuxC;
     private static Node otnSwitch;
     private static Node tpdr100G;
     private static Node roadmA;
     private static Node roadmC;
     private static Network openroadmNet;
-    private static Map<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-        .networks.network.Link> otnLinks;
     private static Map<LinkKey, org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
         .networks.network.Link> ortopoLinks;
     private static Uuid topologyUuid;
@@ -143,7 +140,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")));
         FluentFuture<Optional<Node>> muxCFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, muxCIID);
-        otnMuxC = muxCFuture.get().get();
+        muxCFuture.get().get();
         KeyedInstanceIdentifier<Node, NodeKey> switchIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("otn-topology")))
@@ -180,7 +177,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .augmentation(Network1.class);
         FluentFuture<Optional<Network1>> linksFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, linksIID);
-        otnLinks = linksFuture.get().get().getLink();
+        linksFuture.get().get().getLink();
 
         InstanceIdentifier<Network1> links1IID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
