@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a26d73d_618acd80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-03T12:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a67cc201_100c914a",
+      "range": {
+        "startLine": 10,
+        "startChar": 18,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cde3676_7655fe52",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-03T07:32:20Z",
       "side": 1,
       "message": "GNPy",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 11
+      },
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6c7843e_ea150681",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-03T12:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cde3676_7655fe52",
       "range": {
         "startLine": 12,
         "startChar": 7,
@@ -81,6 +129,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7a219b7_1e708745",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/converter/JsonStringConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-03T12:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec3629f1_e1f67b81",
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be28b46e_aae18e0e",
@@ -94,6 +160,24 @@
       "writtenOn": "2022-03-03T07:32:20Z",
       "side": 1,
       "message": "I think a LF before Absolute.of would ease reading.\n\n            .fromNormalizedNodeRpcData(\n                Absolute.of(QName.create(schemaContext.getClass().getSimpleName())),\n                (ContainerNode) normalizedNode);",
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea81a079_c5cca635",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-03T12:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be28b46e_aae18e0e",
       "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
