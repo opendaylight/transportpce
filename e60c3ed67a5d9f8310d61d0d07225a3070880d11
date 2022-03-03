@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a865f872_15f28b65",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T19:22:52Z",
+      "side": 1,
+      "message": "In order to ease reading, I think that lines related to the builder should not be at the same indentation level than its setters and its build()",
+      "revId": "e60c3ed67a5d9f8310d61d0d07225a3070880d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0240be8_1177b971",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T19:22:52Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e60c3ed67a5d9f8310d61d0d07225a3070880d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2e44d4d_f6a6e46d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T19:22:52Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "e60c3ed67a5d9f8310d61d0d07225a3070880d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
