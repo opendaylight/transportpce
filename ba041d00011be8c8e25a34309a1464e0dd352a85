@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8904c6b_93b87397",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T09:11:59Z",
+      "side": 1,
+      "message": "I don\u0027t understand why the 2 issues are related.\nIf so, please explain why.\nIf not, I think this change should be split so that other branches can benefit from this bug fix whithout having to bump kafka version.\n\u003d\u003e vote -1",
+      "revId": "ba041d00011be8c8e25a34309a1464e0dd352a85",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
