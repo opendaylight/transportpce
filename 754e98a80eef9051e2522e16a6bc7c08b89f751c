@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a67cc201_100c914a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T07:32:20Z",
+      "side": 1,
+      "message": "coming",
+      "range": {
+        "startLine": 10,
+        "startChar": 18,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cde3676_7655fe52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T07:32:20Z",
+      "side": 1,
+      "message": "GNPy",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 11
+      },
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b5d0aa3_fdccef65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T07:32:20Z",
+      "side": 1,
+      "message": "LGTM apart typo in commit message and a few style comments.",
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec3629f1_e1f67b81",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/converter/JsonStringConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T07:32:20Z",
+      "side": 1,
+      "message": "I think a LF before toInference() would ease reading.\n    .of(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext())\n    .toInference();",
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be28b46e_aae18e0e",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-03T07:32:20Z",
+      "side": 1,
+      "message": "I think a LF before Absolute.of would ease reading.\n\n            .fromNormalizedNodeRpcData(\n                Absolute.of(QName.create(schemaContext.getClass().getSimpleName())),\n                (ContainerNode) normalizedNode);",
+      "revId": "754e98a80eef9051e2522e16a6bc7c08b89f751c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
