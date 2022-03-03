@@ -55,7 +55,7 @@ public class DataStoreContextImpl implements DataStoreContext {
         schemaCtx = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
         bindingDOMCodecServices = new BindingCodecContext(BindingRuntimeHelpers.createRuntimeContext());
         adapterFactory = new BindingAdapterFactory(new ConstantAdapterContext(bindingDOMCodecServices));
-        domNotificationRouter = DOMNotificationRouter.create(16);
+        domNotificationRouter = new DOMNotificationRouter(16);
         datastores = createDatastores();
         domDataBroker = createDOMDataBroker();
         dataBroker = createDataBroker();
