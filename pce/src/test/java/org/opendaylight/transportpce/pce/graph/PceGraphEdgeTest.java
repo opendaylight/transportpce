@@ -37,7 +37,7 @@ public class PceGraphEdgeTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         // Build Link
         link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
                 "OpenROADM-3-1-DEG1",
