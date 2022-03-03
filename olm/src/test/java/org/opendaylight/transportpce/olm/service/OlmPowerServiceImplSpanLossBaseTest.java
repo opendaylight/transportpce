@@ -85,7 +85,7 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.dataBroker = getDataBroker();
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1).when(this.mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
 
