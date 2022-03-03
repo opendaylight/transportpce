@@ -14,13 +14,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
-import org.opendaylight.transportpce.pce.gnpy.GnpyTopoImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.PathBandwidth;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.PathPropertiesBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetric;
@@ -36,16 +32,10 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     private PathComputationServiceImpl pathComputationServiceImpl;
     private static NetworkTransactionService networkTransactionService = null;
-    private static GnpyTopoImpl gnpyTopoImpl = null;
-    private static GnpyResult gnpyResult = null;
-    private DataStoreContext dataStoreContext = getDataStoreContextUtil();
-    private DataBroker dataBroker = getDataBroker();
 
     @Before
     public void setUp() {
         networkTransactionService = Mockito.mock(NetworkTransactionService.class);
-        gnpyTopoImpl = Mockito.mock(GnpyTopoImpl.class);
-        gnpyResult = Mockito.mock(GnpyResult.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
                 this.getNotificationPublishService(), null, null);

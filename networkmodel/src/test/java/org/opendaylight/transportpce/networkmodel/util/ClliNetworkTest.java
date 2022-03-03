@@ -50,23 +50,12 @@ public class ClliNetworkTest {
     }
 
     private NodeInfoBuilder computeNodeInfoBuilder() {
-        NodeInfoBuilder nodeBldr = new NodeInfoBuilder()
+        return new NodeInfoBuilder()
             .setNodeClli("NodeClliId")
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
             .setNodeType(NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmNodeVersion._121);
-        return nodeBldr;
-    }
-
-    private NodeInfoBuilder computeNodeInfoBuilderWithoutClli() {
-        NodeInfoBuilder nodeBldr = new NodeInfoBuilder()
-            .setNodeModel("NodeModel")
-            .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
-            .setNodeVendor("VendorA")
-            .setOpenroadmVersion(OpenroadmNodeVersion._121);
-        return nodeBldr;
     }
 }

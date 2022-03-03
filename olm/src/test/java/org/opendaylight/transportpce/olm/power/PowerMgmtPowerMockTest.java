@@ -48,14 +48,12 @@ import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.olm.util.OlmUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
@@ -64,7 +62,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.No
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.Ots;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -282,33 +279,24 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
     }
 
     private MappingBuilder getMappingBuilderDeg() {
-        MappingBuilder mappingBuilder = new MappingBuilder();
-        mappingBuilder.withKey(new MappingKey("deg"));
-        mappingBuilder.setLogicalConnectionPoint("logicalConnPoint");
-        mappingBuilder.setSupportingOts("OTS");
-        mappingBuilder.setSupportingCircuitPackName("2/0");
-        mappingBuilder.setSupportingOms("OMS");
-        mappingBuilder.setSupportingPort("8080");
-        mappingBuilder.setSupportingCircuitPackName("circuit1");
-        InstanceIdentifier<Mapping> portMappingIID =
-                InstanceIdentifier.builder(Network.class).child(Nodes.class, new NodesKey("node 1"))
-                        .child(Mapping.class, new MappingKey("deg")).build();
-        return mappingBuilder;
+        return new MappingBuilder()
+            .withKey(new MappingKey("deg"))
+            .setLogicalConnectionPoint("logicalConnPoint")
+            .setSupportingOts("OTS")
+            .setSupportingCircuitPackName("2/0")
+            .setSupportingOms("OMS")
+            .setSupportingPort("8080")
+            .setSupportingCircuitPackName("circuit1");
     }
 
     private MappingBuilder getMappingBuilderNetWork() {
-        MappingBuilder mappingBuilder = new MappingBuilder();
-        mappingBuilder.withKey(new MappingKey("network"));
-        mappingBuilder.setLogicalConnectionPoint("logicalConnPoint");
-        mappingBuilder.setSupportingOts("OTS");
-        mappingBuilder.setSupportingCircuitPackName("2/0");
-        mappingBuilder.setSupportingOms("OMS");
-        mappingBuilder.setSupportingPort("8080");
-        mappingBuilder.setSupportingCircuitPackName("circuit1");
-        InstanceIdentifier<Mapping> portMappingIID =
-                InstanceIdentifier.builder(Network.class).child(Nodes.class, new NodesKey("node 1"))
-                        .child(Mapping.class, new MappingKey("network")).build();
-        return mappingBuilder;
+        return new MappingBuilder()
+            .withKey(new MappingKey("network"))
+            .setLogicalConnectionPoint("logicalConnPoint")
+            .setSupportingOts("OTS")
+            .setSupportingCircuitPackName("2/0")
+            .setSupportingOms("OMS")
+            .setSupportingPort("8080")
+            .setSupportingCircuitPackName("circuit1");
     }
-
 }

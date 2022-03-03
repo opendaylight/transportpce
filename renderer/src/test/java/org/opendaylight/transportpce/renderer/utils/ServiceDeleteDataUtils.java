@@ -38,7 +38,6 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 public final class ServiceDeleteDataUtils {
 
     private ServiceDeleteDataUtils() {
-
     }
 
     public static PathDescription createTransactionPathDescription(String tpId) {

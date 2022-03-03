@@ -73,13 +73,11 @@ public class ModelMappingUtilsTest extends AbstractTest {
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
-    private boolean callbackRan;
 
     @Before
     public void setUp() {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
-        callbackRan = false;
     }
 
     @After
@@ -228,7 +226,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceDeleteOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -252,7 +249,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceDeleteOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -278,7 +274,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -302,7 +297,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -328,7 +322,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -352,7 +345,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -378,7 +370,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -402,7 +393,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceCreatOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);
@@ -424,7 +414,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
         serviceRestorationOutputF.addListener(new Runnable() {
             @Override
             public void run() {
-                callbackRan = true;
                 endSignal.countDown();
             }
         }, executorService);

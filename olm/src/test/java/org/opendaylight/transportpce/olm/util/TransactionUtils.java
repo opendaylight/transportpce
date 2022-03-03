@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.olm.util;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -281,7 +280,6 @@ public final class TransactionUtils {
             .setSectionEltNumber(Uint16.valueOf(1)).build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
-        Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
         Augmentation<Link> aug1 = new Link1Builder()
             .setAmplified(true)
             .setOMSAttributes(new OMSAttributesBuilder()
@@ -360,7 +358,7 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        Nodes nodes = new NodesBuilder()
+        return new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
                 .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes.Xpdr)
@@ -369,7 +367,6 @@ public final class TransactionUtils {
             .setCpToDegree(cpList)
             .setMapping(Map.of(map1.key(),map1))
             .build();
-        return nodes;
     }
 
     public static Nodes getNodes2(String nodeId, String mappingKey) {
@@ -392,7 +389,7 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        Nodes nodes = new NodesBuilder()
+        return new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
                 .setNodeType(null)
@@ -401,7 +398,6 @@ public final class TransactionUtils {
             .setCpToDegree(cpList)
             .setMapping(Map.of(map1.key(),map1))
             .build();
-        return nodes;
     }
 
     public static Nodes getNodes3(String nodeId, String mappingKey) {
@@ -424,7 +420,7 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        Nodes nodes = new NodesBuilder()
+        return new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
                 .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes.Rdm)
@@ -433,7 +429,6 @@ public final class TransactionUtils {
             .setCpToDegree(cpList)
             .setMapping(Map.of(map1.key(),map1))
             .build();
-        return nodes;
     }
 
     public static void writeNodeTransaction(String nodeId, DataBroker dataBroker, String mappingKey) {
