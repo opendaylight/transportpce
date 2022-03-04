@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "049288ff_d4b34c6b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-03-04T12:21:55Z",
+      "side": 1,
+      "message": "Drawback of this approach is if both streams are supported than the for-loop will pick NETCONF instead of OPENROADM. I would say at least break it once the OPENROADM stream is supported",
+      "revId": "2b44ddd810b88e176cb4b77a4a1230717c8a611b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50f4624d_36f19aff",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
         "patchSetId": 1
