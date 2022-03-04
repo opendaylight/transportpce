@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d4ac388_2bff34b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-03-04T20:49:39Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Code-Review-1\n\u003e \n\u003e revision date ?\n\nNo having a revision date will not work, since this is not a standard model. I suggest we leave it like that.",
+      "revId": "945205efe52720bd0ef9fa420362056bbc7b618e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
