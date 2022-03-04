@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e936ca1b_94183362",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-04T10:38:54Z",
+      "side": 1,
+      "message": "Hello,\nIf this change is above all dedicated to manage the OFC\u002722 demo, I think it could be set now:\n- as WIP\n- as Private, with TransportPCE developpers as reviewvers, in order to limit the visibility of this change to TransportPCE developper team.\nThanks a lot.",
+      "revId": "9e536a9f6cc96fa03944d884598529ee0e0ee327",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
