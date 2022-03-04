@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e7f7626_95d0ddd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-03-04T12:41:03Z",
+      "side": 1,
+      "message": "If there are device is advertising both notification streams we should enforce to use OPENROADM over NETCONF. ",
+      "revId": "2b44ddd810b88e176cb4b77a4a1230717c8a611b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "049288ff_d4b34c6b",
