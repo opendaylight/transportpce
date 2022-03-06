@@ -158,6 +158,24 @@
       "parentUuid": "05125c24_b83d1c1d",
       "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1391c340_c4e31eb5",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-03-06T18:19:31Z",
+      "side": 1,
+      "message": "\u003e If we do not round the mc-width, it could give erroneous values when taking the ceiling of it. Below is the example log:\n\n\u003e INFO [pool-24-thread-2] P1[50GHz]\u003d-3.60 dBm for spanloss 5.4 based on OpenROADM-5.0 specs power target mask\n\u003e INFO [pool-24-thread-2] Given mc-width\u003d50.00000000002000, Rounded mc-width\u003d62.5\n\u003e INFO [pool-24-thread-2] P1[62.5GHz]\u003d-2.631 dB will be used for OSNR calculation \n\n\u003e Where, the ceiling(50.00000000002000/12.5) \u003d 5 and mc-width is calculated as 62.5, which is incorrect.\n\nI don\u0027t understand. Since you\u0027re using RoundingMode.CEILING, the result will be the same anyway, won\u0027t it (since 50.00000000002000 will be rounded to 50.01)?",
+      "parentUuid": "cc1923f8_6224e422",
+      "revId": "f12df1c860904daccbd74e753965095ce5a054d6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
