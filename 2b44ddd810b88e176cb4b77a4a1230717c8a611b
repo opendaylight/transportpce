@@ -53,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f382d501_07002d54",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-06T19:45:18Z",
+      "side": 1,
+      "message": "it depends the way they are advertized with netmode by the devices.\nI influences t order in the list returned by getSupportStream(). I report your comment here.",
+      "parentUuid": "0202f3ae_7e28cbdd",
+      "revId": "2b44ddd810b88e176cb4b77a4a1230717c8a611b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50f4624d_36f19aff",
