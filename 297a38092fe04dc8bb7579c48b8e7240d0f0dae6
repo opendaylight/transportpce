@@ -51,6 +51,24 @@
       "message": "Bala reported a drawback of this approach.\nIf both streams are supported than the for-loop might pick NETCONF first instead of OPENROADM.\n\n\nSolution Proposal\n\nList\u003cString\u003e streams \u003d new ArrayList\u003c\u003e();\nList\u003cString\u003e netconfStreams \u003d new ArrayList\u003c\u003e();\nfor (Stream strm : ordmInfoObject.get().getStream().values()) {\n    LOG.debug(\"Streams are {}\", strm);\n    if (\"OPENROADM\".equalsIgnoreCase(strm.getName().getValue())\n        streams.add(strm.getName().getValue());\n    } else if (\"NETCONF\".equalsIgnoreCase(strm.getName().getValue())\n        netconfStreams.add(strm.getName().getValue());\n    }\n}\nstreams.addAll(netconfStreams);\nreturn\n    streams.isEmpty()\n        ? List.of(\"OPENROADM\",\"NETCONF\")\n        : streams;",
       "revId": "297a38092fe04dc8bb7579c48b8e7240d0f0dae6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c881b7e8_a9c12521",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-07T08:26:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5dacccd_3e6cc4aa",
+      "revId": "297a38092fe04dc8bb7579c48b8e7240d0f0dae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
