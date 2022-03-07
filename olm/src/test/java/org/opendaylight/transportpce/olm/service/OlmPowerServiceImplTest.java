@@ -44,7 +44,6 @@ import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.olm.stub.MountPointStub;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
-import org.opendaylight.transportpce.olm.util.OtsPmHolder;
 import org.opendaylight.transportpce.olm.util.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
@@ -98,7 +97,6 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     private PowerMgmt powerMgmtMock;
     @InjectMocks
     private OlmPowerService olmPowerServiceMock;
-    private OtsPmHolder otsPmHolder;
 
 
     @Before
@@ -137,7 +135,7 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
         this.olmPowerServiceMock = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmtMock,
             this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.olmPowerServiceMock = Mockito.mock(OlmPowerServiceImpl.class);
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

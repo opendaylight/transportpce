@@ -78,7 +78,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
         node = node1Builder.setNodeId(new NodeId("test")).build();
         availableBitSet.set(0,8);
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

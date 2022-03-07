@@ -37,8 +37,8 @@ import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
-import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
+import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack.Inference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -95,8 +95,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @return {@link Optional} instance of {@link NormalizedNode}.
      */
     @Override
-    public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull InputStream inputStream) {
+    public Optional<NormalizedNode> transformIntoNormalizedNode(@Nonnull InputStream inputStream) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputStream);
             return parseInputXML(reader);
@@ -106,15 +105,20 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
         }
     }
 
-    public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader, SchemaNode parentSchema) {
+    @Override
+    public Optional<NormalizedNode> transformIntoNormalizedNode(@Nonnull Reader inputReader) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
-            return parseInputXML(reader, parentSchema);
+            return parseInputXML(reader);
         } catch (XMLStreamException e) {
             LOG.warn("XMLStreamException: {}", e.getMessage());
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<NormalizedNode> transformIntoNormalizedNode(Reader inputReader, SchemaNode parentSchema) {
+        throw new UnsupportedOperationException("Not Implemented yet");
     }
 
     /**
@@ -123,9 +127,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param inputReader of the given XML
      * @return {@link Optional} instance of {@link NormalizedNode}.
      */
-    @Override
-    public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader) {
+    public Optional<NormalizedNode> transformInschemaContexttoNormalizedNode(@Nonnull Reader inputReader) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
             return parseInputXML(reader);
@@ -140,10 +142,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName) {
         Writer writer = new StringWriter();
         XMLStreamWriter xmlStreamWriter = createXmlStreamWriter(writer);
-        SchemaPath rpcOutputSchemaPath = SchemaPath.create(true, QName.create(rpcOutputQName.getModule(), rpcName),
-                rpcOutputQName);
-        try (NormalizedNodeWriter normalizedNodeWriter = createWriterBackedNormalizedNodeWriter(xmlStreamWriter,
-                rpcOutputSchemaPath)) {
+        try (NormalizedNodeWriter normalizedNodeWriter = createWriterBackedNormalizedNodeWriter(xmlStreamWriter)) {
             xmlStreamWriter.writeStartElement(XMLConstants.DEFAULT_NS_PREFIX,
                     rpcOutputQName.getLocalName(), rpcOutputQName.getNamespace().toString());
             xmlStreamWriter.writeDefaultNamespace(rpcOutputQName.getNamespace().toString());
@@ -172,11 +171,17 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
     @Override
     public <T extends DataObject> Writer writerFromDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType) {
-        Writer writer = new StringWriter();
 
-        try (NormalizedNodeWriter normalizedNodeWriter = createWriterBackedNormalizedNodeWriter(writer, null)) {
-            normalizedNodeWriter
-                    .write(convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).get());
+        Writer writer = new StringWriter();
+        Optional<NormalizedNode> normalizedNode = convertType
+            .toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass);
+        if (normalizedNode.isEmpty()) {
+            LOG.warn("enable to convert {} to {}", dataObjectClass, object.getClass());
+            return writer;
+        }
+
+        try (NormalizedNodeWriter normalizedNodeWriter = createWriterBackedNormalizedNodeWriter(writer)) {
+            normalizedNodeWriter.write(normalizedNode.get());
             normalizedNodeWriter.flush();
         } catch (IOException ioe) {
             throw new IllegalStateException(ioe);
@@ -184,20 +189,16 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
         return writer;
     }
 
-    private Optional<NormalizedNode> parseInputXML(
-            XMLStreamReader reader) {
+    private Optional<NormalizedNode> parseInputXML(XMLStreamReader reader) {
         return parseInputXML(reader, getSchemaContext());
     }
 
     private Optional<NormalizedNode> parseInputXML(XMLStreamReader reader, SchemaNode parentSchemaNode) {
         NormalizedNodeResult result = new NormalizedNodeResult();
-        EffectiveStatementInference schema = SchemaInferenceStack.ofSchemaPath(getSchemaContext(),
-            parentSchemaNode.getPath()).toInference();
+        EffectiveStatementInference schema = SchemaInferenceStack.of(getSchemaContext()).toInference();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-            XmlParserStream xmlParser = XmlParserStream
+                XmlParserStream xmlParser = XmlParserStream
                     .create(streamWriter, schema)) {
-//             XmlParserStream xmlParser = XmlParserStream
-//                     .create(streamWriter, XmlCodecFactory.create(getSchemaContext()), parentSchemaNode)) {
             xmlParser.parse(reader);
         } catch (XMLStreamException | URISyntaxException | IOException | SAXException e) {
             LOG.warn("An error occured during parsing XML input stream", e);
@@ -206,29 +207,17 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
         return Optional.ofNullable(result.getResult());
     }
 
-    private NormalizedNodeWriter createWriterBackedNormalizedNodeWriter(Writer backingWriter, SchemaPath pathToParent) {
+    private NormalizedNodeWriter createWriterBackedNormalizedNodeWriter(Writer backingWriter) {
         XMLStreamWriter createXMLStreamWriter = createXmlStreamWriter(backingWriter);
         NormalizedNodeStreamWriter streamWriter;
-        if (pathToParent == null) {
-            streamWriter = XMLStreamNormalizedNodeStreamWriter.create(createXMLStreamWriter,
-                    getSchemaContext());
-        } else {
-            streamWriter = XMLStreamNormalizedNodeStreamWriter.create(createXMLStreamWriter,
-                    getSchemaContext(), pathToParent);
-        }
+        streamWriter = XMLStreamNormalizedNodeStreamWriter.create(createXMLStreamWriter, getSchemaContext());
         return NormalizedNodeWriter.forStreamWriter(streamWriter);
     }
 
-    private NormalizedNodeWriter createWriterBackedNormalizedNodeWriter(XMLStreamWriter backingWriter,
-            SchemaPath pathToParent) {
-        NormalizedNodeStreamWriter streamWriter;
-        if (pathToParent == null) {
-            streamWriter = XMLStreamNormalizedNodeStreamWriter.create(backingWriter,
-                    getSchemaContext());
-        } else {
-            streamWriter = XMLStreamNormalizedNodeStreamWriter.create(backingWriter,
-                    getSchemaContext(), pathToParent);
-        }
+    private NormalizedNodeWriter createWriterBackedNormalizedNodeWriter(XMLStreamWriter backingWriter) {
+        Inference rootNode = SchemaInferenceStack.of(getSchemaContext()).toInference();
+        NormalizedNodeStreamWriter streamWriter = XMLStreamNormalizedNodeStreamWriter
+            .create(backingWriter, rootNode);
         return NormalizedNodeWriter.forStreamWriter(streamWriter);
     }
 

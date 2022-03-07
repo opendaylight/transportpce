@@ -102,7 +102,6 @@ public class PceOtnNodeTest extends AbstractTest {
         Assert.assertFalse("not valid otn service type", pceOtnNode.isValid());
         Assert.assertTrue("this.nodeType isn'tOpenroadmNodeType.TPDR" ,
                 pceOtnNode.validateSwitchingPoolBandwidth(null,null,1L));
-
     }
 
     @Test
@@ -127,7 +126,6 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.checkAvailableTribSlot();
         Assert.assertFalse("not valid otn service type" , pceOtnNode.isValid());
         Assert.assertFalse("checkTp returns false by default " , pceOtnNode.checkTP("tp"));
-
     }
 
     private Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
@@ -184,46 +182,11 @@ public class PceOtnNodeTest extends AbstractTest {
                 .setSupportingNode(supportingNodes1);
     }
 
-    private NodeBuilder getNodeBuilderEmpty(Map<SupportingNodeKey,SupportingNode> supportingNodes1,
-            OpenroadmTpType openroadmTpType) {
-
-        TerminationPoint1Builder tp1Bldr = getTerminationPoint1Builder(openroadmTpType);
-        TerminationPointBuilder xpdrTpBldr = getTerminationPointBuilder(openroadmTpType);
-        xpdrTpBldr.addAugmentation(tp1Bldr.build());
-        xpdrTpBldr.addAugmentation(createAnotherTerminationPoint(openroadmTpType).build());
-
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1 node1 = getNode1Empty();
-        TerminationPoint xpdr = xpdrTpBldr.build();
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1Rev180226 =
-                new Node1Builder()
-                        .setTerminationPoint(Map.of(xpdr.key(),xpdr))
-                        .build();
-        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
-                .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
-
-
-        return new NodeBuilder()
-                .setNodeId(new NodeId("node_test"))
-                .withKey(new NodeKey(new NodeId("node 1")))
-                .addAugmentation(node1Rev180226)
-                .addAugmentation(node1)
-                .addAugmentation(node11)
-                .setSupportingNode(supportingNodes1);
-    }
-
     private org.opendaylight
             .yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1 getNode1() {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder()
                 .setSrgAttributes(getSrgAttributes())
                 .setDegreeAttributes(getDegAttributes())
-                .build();
-    }
-
-    private org.opendaylight
-            .yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1 getNode1Empty() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder()
-                .setSrgAttributes(getEmptySrgAttributes())
-                .setDegreeAttributes(getEmptyDegAttributes())
                 .build();
     }
 
@@ -235,16 +198,6 @@ public class PceOtnNodeTest extends AbstractTest {
 
     private SrgAttributes getSrgAttributes() {
         return new SrgAttributesBuilder().setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available()).build();
-    }
-
-    private DegreeAttributes getEmptyDegAttributes() {
-        return (new DegreeAttributesBuilder())
-                .setAvailFreqMaps(Map.of())
-                .build();
-    }
-
-    private SrgAttributes getEmptySrgAttributes() {
-        return new SrgAttributesBuilder().setAvailFreqMaps(Map.of()).build();
     }
 
     private TerminationPointBuilder getTerminationPointBuilder(OpenroadmTpType openroadmTpType) {
@@ -320,5 +273,4 @@ public class PceOtnNodeTest extends AbstractTest {
                 .setTpType(openroadmTpType).setOperationalState(State.InService)
                 .setAdministrativeState(AdminStates.InService);
     }
-
 }

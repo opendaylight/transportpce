@@ -24,7 +24,7 @@ public final class TransactionUtils {
 
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     // deviceTx.put needs the "true" boolean parameter at the end in order to not compromise the Junit test suite
     // FIXME check if the InstanceIdentifier raw type can be avoided
     // Raw types use are discouraged since they lack type safety.

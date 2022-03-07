@@ -12,15 +12,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.Port;
 
 public class SortPort221ByNameTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void compareTest() {
@@ -30,6 +25,5 @@ public class SortPort221ByNameTest {
         when(port2.getPortName()).thenReturn("port2");
         SortPort221ByName sortPort221ByName = new SortPort221ByName();
         assertEquals(sortPort221ByName.compare(port2, port1), 1);
-
     }
 }

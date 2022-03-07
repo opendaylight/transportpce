@@ -18,7 +18,6 @@ import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
-import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 
 public interface DataObjectConverter {
 
@@ -27,8 +26,7 @@ public interface DataObjectConverter {
             @Nonnull QName rootNode);
 
     <T extends DataObject> Optional<T> getDataObjectFromRpc(
-            @Nonnull NormalizedNode normalizedNode,
-            @Nonnull SchemaPath rpcSchemaPath);
+            @Nonnull NormalizedNode normalizedNode);
 
     Optional<NormalizedNode> transformIntoNormalizedNode(
             @Nonnull InputStream inputStream);

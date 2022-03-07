@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.common.converter;
 
-import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,7 +17,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -31,7 +29,9 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaPath;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
+import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +54,6 @@ public class JsonStringConverter<T extends DataObject> {
      */
     public String createJsonStringFromDataObject(final InstanceIdentifier<T> id, T dataObject,
             JSONCodecFactorySupplier supplier) throws IOException {
-        final SchemaPath scPath = SchemaPath.create(FluentIterable.from(id.getPathArguments())
-                .transform(input -> BindingReflections.findQName(input.getType())), true);
         /*
          * This function needs : - context - scPath.getParent() -
          * scPath.getLastComponent().getNamespace(), -
@@ -66,8 +64,13 @@ public class JsonStringConverter<T extends DataObject> {
                 .getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext());
         try (Writer writer = new StringWriter();
                 JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer, 4);) {
-            NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
-                    codecFactory, scPath.getParent(), scPath.getLastComponent().getNamespace(), jsonWriter);
+            EffectiveStatementInference rootNode = SchemaInferenceStack
+                .of(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext())
+                .toInference();
+            rootNode.getEffectiveModelContext();
+            rootNode.getEffectiveModelContext();
+            NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter
+                .createExclusiveWriter(codecFactory, rootNode, EffectiveModelContext.NAME.getNamespace(), jsonWriter);
             try (NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(jsonStreamWriter)) {
                 nodeWriter.write(bindingDOMCodecServices.toNormalizedNode(id, dataObject).getValue());
                 nodeWriter.flush();
@@ -93,12 +96,12 @@ public class JsonStringConverter<T extends DataObject> {
         JsonReader reader = new JsonReader(new StringReader(jsonString));
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-                JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
-                        supplier
-                                .getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext()))) {
+                JsonParserStream jsonParser = JsonParserStream
+                    .create(
+                        streamWriter,
+                        supplier.getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext()))) {
             jsonParser.parse(reader);
-            return (T) bindingDOMCodecServices
-                    .fromNormalizedNode(path, result.getResult()).getValue();
+            return (T) bindingDOMCodecServices.fromNormalizedNode(path, result.getResult()).getValue();
         } catch (IOException e) {
             LOG.warn("An error occured during parsing Json input stream", e);
             return null;
