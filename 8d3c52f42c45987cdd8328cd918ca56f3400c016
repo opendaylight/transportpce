@@ -34,6 +34,24 @@
       "parentUuid": "3054025f_8c46c6c0",
       "revId": "8d3c52f42c45987cdd8328cd918ca56f3400c016",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10748cd_97673613",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-08T07:30:12Z",
+      "side": 0,
+      "message": "adressed in the previously mentionned change",
+      "parentUuid": "1d9a3802_20d2d018",
+      "revId": "8d3c52f42c45987cdd8328cd918ca56f3400c016",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
