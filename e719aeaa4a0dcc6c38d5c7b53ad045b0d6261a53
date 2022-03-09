@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ca7b853_c2f8af9d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2022-03-09T17:06:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "473e64a7_7133e2e0",
+      "revId": "e719aeaa4a0dcc6c38d5c7b53ad045b0d6261a53",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4914cad2_825a9f9a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-18T15:36:20Z",
       "side": 1,
       "message": ".equals and return have the same indentation.\nI think indent +4 would help readability\n\netc",
+      "revId": "e719aeaa4a0dcc6c38d5c7b53ad045b0d6261a53",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d9a552_6e40235a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2022-03-09T17:06:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4914cad2_825a9f9a",
       "revId": "e719aeaa4a0dcc6c38d5c7b53ad045b0d6261a53",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
