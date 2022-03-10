@@ -16,6 +16,24 @@
       "message": "please mention netopeer2 references in the commit message",
       "revId": "62bc8df81927d3405b8ec77b80ecaa636e7a160f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c53932_fb8c3215",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-10T16:03:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f13b279c_f8bd9ab3",
+      "revId": "62bc8df81927d3405b8ec77b80ecaa636e7a160f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
