@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5fd9eb9_d97f5edb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-10T09:02:39Z",
+      "side": 1,
+      "message": "\u0026\u0026 input.. conditions have the same indentation level than [az]nodeId \u003d ...\n\nI think indent +4 would help readability\n\nThough, dedicated functions might be more appropriate IMO since these chechs are pretty the same than at lines 485 and 493. Cf cyclomatic complexity warned by Sonar.",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d3b18b4_0a859f4a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-10T09:02:39Z",
+      "side": 1,
+      "message": "same conditions than above apart the inputs nullness check.\nI think a fallthrough might be more appropriate here.\nBut this means reworking a little the guard clauses to use early return false in the previous cases.",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64bfe046_b974149a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-10T09:02:39Z",
+      "side": 1,
+      "message": "commented-out code is warned by Sonar current configuration",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
