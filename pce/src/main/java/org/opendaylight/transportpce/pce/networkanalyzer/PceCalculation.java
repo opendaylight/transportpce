@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,12 +138,13 @@ public class PceCalculation {
         serviceFormatA = input.getServiceAEnd().getServiceFormat().getName();
         serviceFormatZ = input.getServiceZEnd().getServiceFormat().getName();
         serviceRate = input.getServiceAEnd().getServiceRate();
-        serviceType = ServiceTypes.getServiceType(serviceFormatA, serviceRate,
-            (NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
-            && input.getServiceAEnd().getTxDirection() != null
-            && input.getServiceAEnd().getTxDirection().getPort() != null
-            && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null)
-                ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
+        serviceType = ServiceTypes.getServiceType(
+            serviceFormatA,
+            serviceRate,
+            NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+                    && checkAendInputTxPort()
+                ? portMapping.getMapping(
+                    input.getServiceAEnd().getNodeId(),
                     input.getServiceAEnd().getTxDirection().getPort().getPortName())
                 : null);
 
@@ -155,23 +157,29 @@ public class PceCalculation {
         return true;
     }
 
-    private void getAZnodeId() {
-        if (input.getServiceAEnd() != null
+    private boolean checkAendInputTxPort() {
+        return input.getServiceAEnd() != null
             && input.getServiceAEnd().getTxDirection() != null
             && input.getServiceAEnd().getTxDirection().getPort() != null
-            && input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName() != null) {
-            anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
-        } else {
-            anodeId = input.getServiceAEnd().getNodeId();
-        }
-        if (input.getServiceZEnd() != null
+            && input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName() != null;
+    }
+
+    private boolean checkZendInputTxPort() {
+        return input.getServiceZEnd() != null
             && input.getServiceZEnd().getTxDirection() != null
             && input.getServiceZEnd().getTxDirection().getPort() != null
-            && input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName() != null) {
-            znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
-        } else {
-            znodeId = input.getServiceZEnd().getNodeId();
-        }
+            && input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName() != null;
+    }
+
+    private void getAZnodeId() {
+        anodeId =
+            checkAendInputTxPort()
+                ? input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName()
+                : input.getServiceAEnd().getNodeId();
+        znodeId =
+            checkZendInputTxPort()
+                ? input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName()
+                : input.getServiceZEnd().getNodeId();
     }
 
     private boolean readMdSal() {
@@ -475,6 +483,10 @@ public class PceCalculation {
         return;
     }
 
+    @SuppressWarnings("fallthrough")
+    @SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
     private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode, String azNodeId, String azEndPoint) {
         switch (serviceFormat) {
             case "Ethernet":
@@ -482,33 +494,20 @@ public class PceCalculation {
                 if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
                     return true;
                 }
-                if ("A".equals(azEndPoint)
-                        && this.input.getServiceAEnd().getTxDirection() != null
-                        && this.input.getServiceAEnd().getTxDirection().getPort() != null
-                        && this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName() != null
-                        && pceNode.getNodeId().getValue()
-                        .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName())) {
-                    return true;
-                }
-                if ("Z".equals(azEndPoint)
-                        && this.input.getServiceZEnd().getTxDirection() != null
-                        && this.input.getServiceZEnd().getTxDirection().getPort() != null
-                        && this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName() != null
-                        && pceNode.getNodeId().getValue()
-                        .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName())) {
-                    return true;
-                }
-                return false;
+            //fallthrough
             case "OTU":
-                if ("A".equals(azEndPoint) && pceNode.getNodeId().getValue()
-                        .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName())) {
-                    return true;
+                switch (azEndPoint) {
+                    case "A":
+                        return checkAendInputTxPort()
+                            && pceNode.getNodeId().getValue()
+                                .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName());
+                    case "Z":
+                        return checkZendInputTxPort()
+                            && pceNode.getNodeId().getValue()
+                                .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName());
+                    default:
+                        return false;
                 }
-                if ("Z".equals(azEndPoint) && pceNode.getNodeId().getValue()
-                        .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName())) {
-                    return true;
-                }
-                return false;
             default:
                 LOG.debug("Unsupported service Format {} for node {}", serviceFormat, pceNode.getNodeId().getValue());
                 return false;
@@ -780,7 +779,7 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
-                && mcCapabitility.getSlotWidthGranularity() != null) {
+                    && mcCapabitility.getSlotWidthGranularity() != null) {
                 return mcCapabitility.getSlotWidthGranularity().getValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
@@ -806,11 +805,11 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
-                && mcCapabitility.getCenterFreqGranularity() != null) {
+                    && mcCapabitility.getCenterFreqGranularity() != null) {
                 return mcCapabitility.getCenterFreqGranularity().getValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
-                && mcCapabitility.getCenterFreqGranularity() != null) {
+                    && mcCapabitility.getCenterFreqGranularity() != null) {
                 return mcCapabitility.getCenterFreqGranularity().getValue();
             }
         }
