@@ -765,26 +765,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_34_check_topo_ROADMA_SRG1()
         self.test_35_check_topo_ROADMA_DEG2()
 
-    def test_49_loop_create_eth_service(self):
-        for i in range(1, 6):
-            # pylint: disable=consider-using-f-string
-            print("iteration number {}".format(i))
-            print("eth service creation")
-            self.test_11_create_eth_service1()
-            print("check xc in ROADM-A1")
-            self.test_13_check_xc1_ROADMA()
-            print("check xc in ROADM-C1")
-            self.test_14_check_xc1_ROADMC()
-            print("eth service deletion\n")
-            self.test_30_delete_eth_service1()
-
-    def test_50_loop_create_oc_service(self):
-        response = test_utils.get_service_list_request("services/service1")
-        if response.status_code != 404:
-            response = test_utils.service_delete_request("service1")
-            time.sleep(5)
-
-        for i in range(1, 6):
+    def test_49_loop_create_oc_service(self):
+        for i in range(1, 3):
             # pylint: disable=consider-using-f-string
             print("iteration number {}".format(i))
             print("oc service creation")
@@ -795,6 +777,28 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_39_check_xc1_ROADMC()
             print("oc service deletion\n")
             self.test_44_delete_oc_service1()
+
+    def test_50_loop_create_eth_service(self):
+        response = test_utils.get_service_list_request("services/service1")
+        if response.status_code != 404:
+            response = test_utils.service_delete_request("service1")
+            time.sleep(5)
+        self.cr_serv_sample_data["input"]["connection-type"] = "service"
+        self.cr_serv_sample_data["input"]["service-a-end"]["node-id"] = "XPDR-A1"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "Ethernet"
+        self.cr_serv_sample_data["input"]["service-z-end"]["node-id"] = "XPDR-C1"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-format"] = "Ethernet"
+        for i in range(1, 3):
+            # pylint: disable=consider-using-f-string
+            print("iteration number {}".format(i))
+            print("eth service creation")
+            self.test_11_create_eth_service1()
+            print("check xc in ROADM-A1")
+            self.test_13_check_xc1_ROADMA()
+            print("check xc in ROADM-C1")
+            self.test_14_check_xc1_ROADMC()
+            print("eth service deletion\n")
+            self.test_30_delete_eth_service1()
 
     def test_51_disconnect_XPDRA(self):
         response = test_utils.unmount_device("XPDR-A1")
