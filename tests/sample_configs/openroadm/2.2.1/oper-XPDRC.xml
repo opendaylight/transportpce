@@ -268,7 +268,6 @@
         <cp-slot-name>4</cp-slot-name>
       </parent-circuit-pack>
     </circuit-packs>
-
     <connection-map>
       <connection-map-number>1</connection-map-number>
       <source>
@@ -313,6 +312,38 @@
         <port-name>C1</port-name>
       </destination>
     </connection-map>
+    <xponder>
+      <xpdr-number>1</xpdr-number>
+      <xpdr-type>tpdr</xpdr-type>
+      <xpdr-port>
+        <index>1</index>
+        <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
+        <port-name>1</port-name>
+        <eqpt-srg-id>1</eqpt-srg-id>
+      </xpdr-port>
+      <xpdr-port>
+        <index>2</index>
+        <circuit-pack-name>1/0/1-PLUG-CLIENT</circuit-pack-name>
+        <port-name>C1</port-name>
+        <eqpt-srg-id>1</eqpt-srg-id>
+      </xpdr-port>
+    </xponder>
+        <xponder>
+      <xpdr-number>2</xpdr-number>
+      <xpdr-type>tpdr</xpdr-type>
+      <xpdr-port>
+        <index>1</index>
+        <circuit-pack-name>1/0/2-PLUG-NET</circuit-pack-name>
+        <port-name>1</port-name>
+        <eqpt-srg-id>1</eqpt-srg-id>
+      </xpdr-port>
+      <xpdr-port>
+        <index>2</index>
+        <circuit-pack-name>1/0/2-PLUG-CLIENT</circuit-pack-name>
+        <port-name>C1</port-name>
+        <eqpt-srg-id>1</eqpt-srg-id>
+      </xpdr-port>
+    </xponder>
   </org-openroadm-device>
   <current-pm-list xmlns="http://org/openroadm/pm">
   <current-pm-entry>
