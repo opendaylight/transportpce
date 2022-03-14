@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc27411a_67e8d11f",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-14T15:34:21Z",
+      "side": 1,
+      "message": "Rethinking about this, the solution below suing float conversion might be more indicated here and in others tests.\nself.assertEqual(5.7, float(res[\u0027org-openroadm-optical-transport-interfaces:ots\u0027][\u0027span-loss-transmit\u0027]))",
+      "revId": "bcbd95698a5c37dc011e0d5b16960bdb2849f622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de212458_cd9293da",
         "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
         "patchSetId": 2
