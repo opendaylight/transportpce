@@ -49,7 +49,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
@@ -204,10 +203,17 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             OPERATION_FAILED);
                 }
                 PathDescription pathDescription = pathDescriptionOpt.get();
-                Mapping mapping = portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
-                    service.getServiceAEnd().getTxDirection().getPort().getPortName());
-                String serviceType = ServiceTypes.getServiceType(service.getServiceAEnd().getServiceFormat().getName(),
-                    service.getServiceAEnd().getServiceRate(), mapping);
+                String serviceType =
+                    ServiceTypes.getServiceType(
+                        service.getServiceAEnd().getServiceFormat().getName(),
+                        service.getServiceAEnd().getServiceRate(),
+                        service.getServiceAEnd().getTxDirection() == null
+                                || service.getServiceAEnd().getTxDirection().getPort() == null
+                                || service.getServiceAEnd().getTxDirection().getPort().getPortName() == null
+                            ? null
+                            : portMapping.getMapping(
+                                    service.getServiceAEnd().getNodeId().getValue(),
+                                    service.getServiceAEnd().getTxDirection().getPort().getPortName()));
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
