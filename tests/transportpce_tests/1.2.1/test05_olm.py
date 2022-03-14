@@ -21,6 +21,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportOlmTesting(unittest.TestCase):
@@ -30,17 +31,17 @@ class TransportOlmTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION),
-                                               ('roadma-full', cls.NODE_VERSION),
-                                               ('roadmc-full', cls.NODE_VERSION),
-                                               ('xpdrc', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION),
+                                                       ('roadma-full', cls.NODE_VERSION),
+                                                       ('roadmc-full', cls.NODE_VERSION),
+                                                       ('xpdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -49,48 +50,44 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(1)
 
     def test_01_xpdrA_device_connected(self):
-        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_xpdrC_device_connected(self):
-        response = test_utils.mount_device("XPDRC01", ('xpdrc', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("XPDRC01", ('xpdrc', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_03_rdmA_device_connected(self):
-        response = test_utils.mount_device("ROADMA01", ('roadma-full', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma-full', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_04_rdmC_device_connected(self):
-        response = test_utils.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils_rfc8040.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_05_connect_xprdA_to_roadmA(self):
-        response = test_utils.connect_xpdr_to_rdm_request("XPDRA01", "1", "1",
-                                                          "ROADMA01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_xpdr_to_rdm_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_06_connect_roadmA_to_xpdrA(self):
-        response = test_utils.connect_rdm_to_xpdr_request("XPDRA01", "1", "1",
-                                                          "ROADMA01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_rdm_to_xpdr_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_07_connect_xprdC_to_roadmC(self):
-        response = test_utils.connect_xpdr_to_rdm_request("XPDRC01", "1", "1",
-                                                          "ROADMC01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_xpdr_to_rdm_request(
+            {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_08_connect_roadmC_to_xpdrC(self):
-        response = test_utils.connect_rdm_to_xpdr_request("XPDRC01", "1", "1",
-                                                          "ROADMC01", "1", "SRG1-PP1-TXRX")
+        response = test_utils_rfc8040.connect_rdm_to_xpdr_request(
+            {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '1',
+             'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_09_create_OTS_ROADMA(self):
         response = test_utils.create_ots_oms_request("ROADMA01", "DEG1-TTP-TXRX")
@@ -204,22 +201,21 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_15_get_OTS_DEG1_TTP_TXRX_ROADMA(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMA01",
-            "interface/OTS-DEG1-TTP-TXRX/org-openroadm-optical-transport-interfaces:ots")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
-        self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
+        response = test_utils_rfc8040.check_node_attribute2_request(
+            'ROADMA01', 'interface', 'OTS-DEG1-TTP-TXRX', 'org-openroadm-optical-transport-interfaces:ots')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(float(response['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit']), 5.7)
+        self.assertEqual(float(response['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive']), 15.1)
+        # FIXME test_utils_rfc8040.check_node_attribute2_request retrives caluesin config DS
+        #      but values are different (6 and 15) in nonconfig/operational DS and should not
+        #      Honeynode simulator bug ?
 
     def test_16_get_OTS_DEG2_TTP_TXRX_ROADMC(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMC01",
-            "interface/OTS-DEG2-TTP-TXRX/org-openroadm-optical-transport-interfaces:ots")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
-        self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
+        response = test_utils_rfc8040.check_node_attribute2_request(
+            'ROADMC01', 'interface', 'OTS-DEG2-TTP-TXRX', 'org-openroadm-optical-transport-interfaces:ots')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(float(response['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit']), 15.1)
+        self.assertEqual(float(response['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive']), 5.7)
 
     def test_17_servicePath_create_AToZ(self):
         response = test_utils.service_path_request("create", "test", "1",
@@ -299,28 +295,24 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_20_get_interface_XPDRA_XPDR1_NETWORK1(self):
-        response = test_utils.check_netconf_node_request(
-            "XPDRA01",
-            "interface/XPDR1-NETWORK1-761:768/org-openroadm-optical-channel-interfaces:och")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(0, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
-        self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
+        response = test_utils_rfc8040.check_node_attribute2_request(
+            'XPDRA01', 'interface', 'XPDR1-NETWORK1-761:768', 'org-openroadm-optical-channel-interfaces:och')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(float(response['org-openroadm-optical-channel-interfaces:och']['transmit-power']), 0)
+        self.assertEqual(int(response['org-openroadm-optical-channel-interfaces:och']['wavelength-number']), 1)
 
     def test_21_get_roadmconnection_ROADMA(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(-3.3, res['roadm-connections'][0]['target-output-power'])
+        response = test_utils_rfc8040.check_node_attribute_request(
+            'ROADMA01', 'roadm-connections', 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("gainLoss", response['roadm-connections'][0]['opticalControlMode'])
+        self.assertEqual(float(response['roadm-connections'][0]['target-output-power']), -3.3)
 
     def test_22_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual("power", res['roadm-connections'][0]['opticalControlMode'])
+        response = test_utils_rfc8040.check_node_attribute_request(
+            'ROADMC01', 'roadm-connections', 'DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("power", response['roadm-connections'][0]['opticalControlMode'])
 
     def test_23_service_power_setup_XPDRC_XPDRA(self):
         url = "{}/operations/transportpce-olm:service-power-setup"
@@ -364,21 +356,18 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_24_get_interface_XPDRC_XPDR1_NETWORK1(self):
-        response = test_utils.check_netconf_node_request(
-            "XPDRC01",
-            "interface/XPDR1-NETWORK1-761:768/org-openroadm-optical-channel-interfaces:och")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(0, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
-        self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
+        response = test_utils_rfc8040.check_node_attribute2_request(
+            'XPDRC01', 'interface', 'XPDR1-NETWORK1-761:768', 'org-openroadm-optical-channel-interfaces:och')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(float(response['org-openroadm-optical-channel-interfaces:och']['transmit-power']), 0)
+        self.assertEqual(int(response['org-openroadm-optical-channel-interfaces:och']['wavelength-number']), 1)
 
     def test_25_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(-0.63, res['roadm-connections'][0]['target-output-power'])
+        response = test_utils_rfc8040.check_node_attribute_request(
+            'ROADMC01', 'roadm-connections', 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("gainLoss", response['roadm-connections'][0]['opticalControlMode'])
+        self.assertEqual(float(response['roadm-connections'][0]['target-output-power']), -0.63)
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
         url = "{}/operations/transportpce-olm:service-power-turndown"
@@ -423,19 +412,17 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_27_get_roadmconnection_ROADMA(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(-60, res['roadm-connections'][0]['target-output-power'])
+        response = test_utils_rfc8040.check_node_attribute_request(
+            'ROADMA01', 'roadm-connections', 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("off", response['roadm-connections'][0]['opticalControlMode'])
+        self.assertEqual(float(response['roadm-connections'][0]['target-output-power']), -60)
 
     def test_28_get_roadmconnection_ROADMC(self):
-        response = test_utils.check_netconf_node_request(
-            "ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
+        response = test_utils_rfc8040.check_node_attribute_request(
+            'ROADMC01', 'roadm-connections', 'DEG2-TTP-TXRX-SRG1-PP1-TXRX-761:768')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual("off", response['roadm-connections'][0]['opticalControlMode'])
 
     def test_29_servicePath_delete_AToZ(self):
         response = test_utils.service_path_request("delete", "test", "1",
@@ -474,18 +461,16 @@ class TransportOlmTesting(unittest.TestCase):
     #"""to test case where SRG where the xpdr is connected to has no optical range data"""
 
     def test_31_connect_xprdA_to_roadmA(self):
-        response = test_utils.connect_xpdr_to_rdm_request("XPDRA01", "1", "2",
-                                                          "ROADMA01", "1", "SRG1-PP2-TXRX")
+        response = test_utils_rfc8040.connect_xpdr_to_rdm_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '2',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_32_connect_roadmA_to_xpdrA(self):
-        response = test_utils.connect_rdm_to_xpdr_request("XPDRA01", "1", "2",
-                                                          "ROADMA01", "1", "SRG1-PP2-TXRX")
+        response = test_utils_rfc8040.connect_rdm_to_xpdr_request(
+            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '2',
+             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'})
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_33_servicePath_create_AToZ(self):
         response = test_utils.service_path_request("create", "test2", "2",
@@ -502,13 +487,11 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
-        response = test_utils.check_netconf_node_request(
-            "XPDRA01",
-            "interface/XPDR1-NETWORK2-753:760/org-openroadm-optical-channel-interfaces:och")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
-        self.assertEqual(2, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
+        response = test_utils_rfc8040.check_node_attribute2_request(
+            'XPDRA01', 'interface', 'XPDR1-NETWORK2-753:760', 'org-openroadm-optical-channel-interfaces:och')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(float(response['org-openroadm-optical-channel-interfaces:och']['transmit-power']), -5)
+        self.assertEqual(int(response['org-openroadm-optical-channel-interfaces:och']['wavelength-number']), 2)
 
     def test_35_servicePath_delete_AToZ(self):
         response = test_utils.service_path_request("delete", "test", "1",
@@ -524,12 +507,12 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_36_xpdrA_device_disconnected(self):
-        response = test_utils.unmount_device("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_37_xpdrC_device_disconnected(self):
-        response = test_utils.unmount_device("XPDRC01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("XPDRC01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_38_calculate_span_loss_current(self):
         url = "{}/operations/transportpce-olm:calculate-spanloss-current"
@@ -541,12 +524,12 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_39_rdmA_device_disconnected(self):
-        response = test_utils.unmount_device("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_40_rdmC_device_disconnected(self):
-        response = test_utils.unmount_device("ROADMC01")
-        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADMC01")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
 if __name__ == "__main__":
