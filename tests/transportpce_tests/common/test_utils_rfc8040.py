@@ -334,6 +334,20 @@ def check_node_attribute_request(node: str, attribute: str, attribute_value: str
             attribute: response_attribute}
 
 
+def check_node_attribute2_request(node: str, attribute: str, attribute_value: str, attribute2: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}/{}?content=config',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}/{}'}  # nopep8
+    response = get_request(url[RESTCONF_VERSION].format('{}', node, attribute, attribute_value, attribute2))
+    res = response.json()
+    if attribute2 in res.keys():
+        response_attribute = res[attribute2]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute2: response_attribute}
+
+
 def del_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}',  # nopep8
