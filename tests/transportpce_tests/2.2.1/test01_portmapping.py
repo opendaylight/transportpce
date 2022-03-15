@@ -138,7 +138,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_12_xpdr_portmapping_NETWORK2(self):
+    def test_12_xpdr_portmapping_XPDR2_NETWORK1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-NETWORK2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
@@ -150,7 +150,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_13_xpdr_portmapping_CLIENT1(self):
+    def test_13_xpdr_portmapping_XPDR1_CLIENT1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
@@ -163,7 +163,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
-    def test_14_xpdr_portmapping_CLIENT2(self):
+    def test_14_xpdr_portmapping_XPDR1_CLIENT2(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A1", "XPDR1-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
