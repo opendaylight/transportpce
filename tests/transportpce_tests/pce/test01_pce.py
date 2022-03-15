@@ -256,45 +256,9 @@ class TransportPCEtesting(unittest.TestCase):
     def test_18_success1_path_computation(self):
         response = test_utils.path_computation_request("request1", "service1",
                                                        {"service-format": "Ethernet", "service-rate": "100",
-                                                        "clli": "ORANGE2", "node-id": "XPONDER-2-2",
-                                                        "tx-direction": {"port": {
-                                                            "port-device-name": "Some port-device-name",
-                                                            "port-type": "Some port-type",
-                                                            "port-name": "Some port-name",
-                                                            "port-rack": "Some port-rack",
-                                                            "port-shelf": "Some port-shelf",
-                                                            "port-slot": "Some port-slot",
-                                                            "port-sub-slot": "Some port-sub-slot"
-                                                        }},
-                                                           "rx-direction": {"port": {
-                                                               "port-device-name": "Some port-device-name",
-                                                               "port-type": "Some port-type",
-                                                               "port-name": "Some port-name",
-                                                               "port-rack": "Some port-rack",
-                                                               "port-shelf": "Some port-shelf",
-                                                               "port-slot": "Some port-slot",
-                                                               "port-sub-slot": "Some port-sub-slot"
-                                                           }}},
+                                                        "clli": "ORANGE2", "node-id": "XPONDER-2-2"},
                                                        {"service-format": "Ethernet", "service-rate": "100",
-                                                           "clli": "ORANGE1", "node-id": "XPONDER-1-2",
-                                                           "tx-direction": {"port": {
-                                                               "port-device-name": "Some port-device-name",
-                                                               "port-type": "Some port-type",
-                                                               "port-name": "Some port-name",
-                                                               "port-rack": "Some port-rack",
-                                                               "port-shelf": "Some port-shelf",
-                                                               "port-slot": "Some port-slot",
-                                                               "port-sub-slot": "Some port-sub-slot"
-                                                           }},
-                                                           "rx-direction": {"port": {
-                                                               "port-device-name": "Some port-device-name",
-                                                               "port-type": "Some port-type",
-                                                               "port-name": "Some port-name",
-                                                               "port-rack": "Some port-rack",
-                                                               "port-shelf": "Some port-shelf",
-                                                               "port-slot": "Some port-slot",
-                                                               "port-sub-slot": "Some port-sub-slot"
-                                                           }}},
+                                                           "clli": "ORANGE1", "node-id": "XPONDER-1-2"},
                                                        {"customer-code": ["Some customer-code"],
                                                            "co-routing": {"existing-service": ["Some existing-service"]}
                                                         },

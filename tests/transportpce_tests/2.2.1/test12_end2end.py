@@ -40,18 +40,74 @@ class TransportPCEFulltesting(unittest.TestCase):
             "service-rate": "100",
             "node-id": "XPDR-A1",
             "service-format": "Ethernet",
-            "clli": "SNJSCAMCJP8",
-            "tx-direction": {},
-            "rx-direction": {},
+            "clli": "NodeA",
+            "tx-direction": {
+                        "port": {
+                            "port-device-name": "XPDR-A1-XPDR1",
+                            "port-type": "fixed",
+                            "port-name": "1/0/2-PLUG-CLIENT",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.3",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+            },
+            "rx-direction": {
+                "port": {
+                    "port-device-name": "XPDR-A1-XPDR1",
+                    "port-type": "fixed",
+                    "port-name": "1/0/2-PLUG-CLIENT",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                    "lgx-port-name": "LGX Back.4",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                }
+            },
             "optic-type": "gray"
         },
         "service-z-end": {
             "service-rate": "100",
             "node-id": "XPDR-C1",
             "service-format": "Ethernet",
-            "clli": "SNJSCAMCJT4",
-            "tx-direction": {},
-            "rx-direction": {},
+            "clli": "NodeC",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "XPDR-C1-XPDR2",
+                            "port-type": "router",
+                            "port-name": "1/0/2-PLUG-CLIENT",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.29",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+            "rx-direction": {
+                        "port": {
+                            "port-device-name": "XPDR-C1-XPDR2",
+                            "port-type": "router",
+                            "port-name": "1/0/2-PLUG-CLIENT",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.30",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",
@@ -113,7 +169,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
         time.sleep(2)
 
-    def test_07_connect_xprdC_N1_to_roadmC_PP1(self):
+    def test_07_connect_xprdC_xpdr1_N1_to_roadmC_PP1(self):
         response = test_utils.connect_xpdr_to_rdm_request("XPDR-C1", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -121,7 +177,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
         time.sleep(2)
 
-    def test_08_connect_roadmC_PP1_to_xpdrC_N1(self):
+    def test_08_connect_roadmC_PP1_to_xpdrC_xprd1_N1(self):
         response = test_utils.connect_rdm_to_xpdr_request("XPDR-C1", "1", "1",
                                                           "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -145,7 +201,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
         time.sleep(2)
 
-    def test_11_connect_xprdC_N2_to_roadmC_PP2(self):
+    def test_11_connect_xprdC_xpdr2_N1_to_roadmC_PP2(self):
         response = test_utils.connect_xpdr_to_rdm_request("XPDR-C1", "2", "1",
                                                           "ROADM-C1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -153,7 +209,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
         time.sleep(2)
 
-    def test_12_connect_roadmC_PP2_to_xpdrC_N2(self):
+    def test_12_connect_roadmC_PP2_to_xpdrC_xpdr2_N1(self):
         response = test_utils.connect_rdm_to_xpdr_request("XPDR-C1", "2", "1",
                                                           "ROADM-C1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -192,8 +248,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
 # test service-create for Eth service from xpdr to xpdr
-    def test_15_create_eth_service1(self):
-        self.cr_serv_sample_data["input"]["service-name"] = "service1"
+    def test_15_create_eth_service2(self):
+        self.cr_serv_sample_data["input"]["service-name"] = "service2"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -202,13 +258,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_16_get_eth_service1(self):
-        response = test_utils.get_service_list_request("services/service1")
+        response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
             res['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service1')
+            res['services'][0]['service-name'], 'service2')
         self.assertEqual(
             res['services'][0]['connection-type'], 'service')
         self.assertEqual(
@@ -239,20 +295,20 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_18_check_xc1_ROADMC(self):
         response = test_utils.check_netconf_node_request(
-            "ROADM-C1", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
+            "ROADM-C1", "roadm-connections/SRG1-PP2-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768',
+                'connection-name': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-761:768',
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
             }, **res['roadm-connections'][0]),
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
-            {'src-if': 'SRG1-PP1-TXRX-nmc-761:768'},
+            {'src-if': 'SRG1-PP2-TXRX-nmc-761:768'},
             res['roadm-connections'][0]['source'])
         self.assertDictEqual(
             {'dst-if': 'DEG1-TTP-TXRX-nmc-761:768'},
@@ -269,7 +325,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual({'frequency': 196.1,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            elif ele['tp-id'] in ('XPDR1-CLIENT2'):
+            elif ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT2'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
             elif ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertIn('org-openroadm-network-topology:xpdr-network-attributes', dict.keys(ele))
@@ -316,9 +372,17 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
         time.sleep(3)
 
-    @unittest.skip("Bug will be resolved in a future change")
-    def test_22_create_eth_service2(self):
-        self.cr_serv_sample_data["input"]["service-name"] = "service2"
+    def test_22_create_eth_service1(self):
+        self.cr_serv_sample_data["input"]["service-name"] = "service1"
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-device-name"]
+        del self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-name"]
+
         response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -326,24 +390,22 @@ class TransportPCEFulltesting(unittest.TestCase):
                       res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
-    @unittest.skip("Bug will be resolved in a future change")
-    def test_23_get_eth_service2(self):
-        response = test_utils.get_service_list_request("services/service2")
+    def test_23_get_eth_service1(self):
+        response = test_utils.get_service_list_request("services/service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
             res['services'][0]['administrative-state'],
             'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service2')
+            res['services'][0]['service-name'], 'service1')
         self.assertEqual(
             res['services'][0]['connection-type'], 'service')
         self.assertEqual(
             res['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
 
-    @unittest.skip("Bug will be resolved in a future change")
-    def test_24_check_xc2_ROADMA(self):
+    def test_24_check_xc1_ROADMA(self):
         response = test_utils.check_netconf_node_request(
             "ROADM-A1", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP2-TXRX-753:760")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -363,26 +425,20 @@ class TransportPCEFulltesting(unittest.TestCase):
             {'dst-if': 'SRG1-PP2-TXRX-nmc-753:760'},
             res['roadm-connections'][0]['destination'])
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_25_check_topo_XPDRA(self):
         response = test_utils.get_ordm_topo_request("node/XPDR-A1-XPDR1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ele['tp-id'] == 'XPDR1-NETWORK1':
-                self.assertEqual({'frequency': 196.1,
-                                  'width': 40},
-                                 ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            elif ele['tp-id'] == 'XPDR1-NETWORK2':
+            if ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertEqual({'frequency': 196.05,
                                   'width': 40},
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
-            elif ele['tp-id'] in ('XPDR1-CLIENT1', 'XPDR1-CLIENT2'):
+            elif ele['tp-id'] in ('XPDR1-CLIENT1'):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
         time.sleep(10)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_26_check_topo_ROADMA_SRG1(self):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -410,7 +466,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(10)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_27_check_topo_ROADMA_DEG2(self):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-DEG2")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -436,8 +491,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
         time.sleep(10)
 
-# creation service test on a non-available resource
-    @unittest.skip("Bug will be resolved in a future change")
+#     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service3"
         response = test_utils.service_create_request(self.cr_serv_sample_data)
@@ -449,7 +503,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
 # add a test that check the openroadm-service-list still only contains 2 elements
-    @unittest.skip("Bug will be resolved in a future change")
     def test_29_delete_eth_service3(self):
         response = test_utils.service_delete_request("service3")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -467,7 +520,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                       res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_31_delete_eth_service2(self):
         response = test_utils.service_delete_request("service2")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -509,7 +561,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(freq_map_array[94], 255, "Index 2 should  be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ele['tp-id'] in ('SRG1-PP1-TXRX'):
+            if ele['tp-id'] in ('SRG1-PP1-TXRX', 'SRG1-PP2-TXRX'):
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
@@ -624,7 +676,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_40_create_oc_service2(self):
         self.cr_serv_sample_data["input"]["service-name"] = "service2"
         self.cr_serv_sample_data["input"]["connection-type"] = "roadm-line"
@@ -639,7 +690,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                       res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_41_get_oc_service2(self):
         response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -655,7 +705,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['services'][0]['lifecycle-state'], 'planned')
         time.sleep(2)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_42_check_xc2_ROADMA(self):
         response = test_utils.check_netconf_node_request(
             "ROADM-A1", "roadm-connections/SRG1-PP2-TXRX-DEG2-TTP-TXRX-753:760")
@@ -679,7 +728,31 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_43_check_topo_ROADMA(self):
-        self.test_26_check_topo_ROADMA_SRG1()
+        response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+        liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        for ele in liste_tp:
+            if ele['tp-id'] == 'SRG1-PP1-TXRX':
+                freq_map = base64.b64decode(
+                    ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
+                freq_map_array = [int(x) for x in freq_map]
+                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[94], 255, "Lambda 2 should be available")
+            elif ele['tp-id'] == 'SRG1-PP2-TXRX':
+                freq_map = base64.b64decode(
+                    ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
+                freq_map_array = [int(x) for x in freq_map]
+                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+            elif ele['tp-id'] == 'SRG1-PP3-TXRX':
+                self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
+        time.sleep(10)
         self.test_27_check_topo_ROADMA_DEG2()
         time.sleep(3)
 
@@ -691,7 +764,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                       res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
-    @unittest.skip("Bug will be resolved in a future change")
     def test_45_delete_oc_service2(self):
         response = test_utils.service_delete_request("service2")
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -749,11 +821,11 @@ class TransportPCEFulltesting(unittest.TestCase):
             # pylint: disable=consider-using-f-string
             print("iteration number {}".format(i))
             print("eth service creation")
-            self.test_15_create_eth_service1()
+            self.test_15_create_eth_service2()
             print("check xc in ROADM-A1")
             self.test_17_check_xc1_ROADMA()
             print("eth service deletion\n")
-            self.test_30_delete_eth_service1()
+            self.test_31_delete_eth_service2()
 
     def test_51_disconnect_XPDRA(self):
         response = test_utils.unmount_device("XPDR-A1")
