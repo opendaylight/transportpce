@@ -646,6 +646,9 @@ class TransportPCEtesting(unittest.TestCase):
                         # pylint: disable=line-too-long
                         self.assertEqual((tp['org-openroadm-network-topology:xpdr-network-attributes']['tail-equipment-id']),
                                          'ROADM-A1-SRG1--SRG1-PP1-TXRX')
+                    elif tpid == 'XPDR2-NETWORK1':
+                        self.assertEqual((tp['org-openroadm-common-network:tp-type']), 'XPONDER-NETWORK')
+                        # pylint: disable=line-too-long
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'}, node['supporting-node'])
                 listNode.remove(nodeId)
             # Tests related to ROADMA nodes
