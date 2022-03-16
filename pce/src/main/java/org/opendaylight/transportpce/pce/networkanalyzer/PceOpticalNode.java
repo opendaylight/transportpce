@@ -20,7 +20,7 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -28,10 +28,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev21121
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOtsiOtsigroup;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -186,9 +186,7 @@ public class PceOpticalNode implements PceNode {
                 }
                 return false;
             case "100GE":
-                if (mapping.getSupportedInterfaceCapability().contains(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.IfOCH.class)
-                        || mapping.getSupportedInterfaceCapability().contains(IfOCH.class)
+                if (mapping.getSupportedInterfaceCapability().contains(IfOCH.class)
                         || mapping.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
                     return true;
                 } else {

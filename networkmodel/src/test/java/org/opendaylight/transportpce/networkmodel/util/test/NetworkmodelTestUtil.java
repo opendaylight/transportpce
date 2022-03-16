@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -35,7 +35,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.TpSupportedInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.otn.tp.attributes.OdtuTpnPool;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
@@ -245,9 +248,8 @@ public final class NetworkmodelTestUtil {
             int networkPortNb, int clientPortNb,
         XpdrNodeTypes xpdrNodeType) {
         for (int i = 1; i <= networkPortNb; i++) {
-            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
-            supportedIntf.add(org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH.class);
+            List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            supportedIntf.add(IfOCH.class);
             MappingBuilder mappingBldr = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-NETWORK" + i)
                 .setPortDirection("bidirectional")
@@ -263,9 +265,8 @@ public final class NetworkmodelTestUtil {
             mappingMap.put(mapping.key(),mapping);
         }
         for (int i = 1; i <= clientPortNb; i++) {
-            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
-            supportedIntf.add(org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE.class);
+            List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            supportedIntf.add(If100GE.class);
             Mapping mapping = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-CLIENT" + i)
                 .setPortDirection("bidirectional")
