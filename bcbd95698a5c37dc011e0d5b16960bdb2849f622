@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03e73c5a_d812cd2b",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-16T10:26:31Z",
+      "side": 1,
+      "message": "fixed here\nLooking back to tests already migrated, similar case are melt into full dictionary case, what makes this cast less or not relevant at all.",
+      "parentUuid": "fc27411a_67e8d11f",
+      "revId": "bcbd95698a5c37dc011e0d5b16960bdb2849f622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de212458_cd9293da",
