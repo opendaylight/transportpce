@@ -25,7 +25,7 @@ module transportpce-portmapping {
   }
   import org-openroadm-port-types {
     prefix org-openroadm-port-types;
-    revision-date 2020-03-27;
+    revision-date 2020-12-11;
   }
 
 
@@ -39,20 +39,25 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2022-03-16 {
+    description
+      "Align org-openroadm-port-types model version to the latest one,
+      that is 2020-12-11";
+  }
   revision 2022-01-14 {
-        description
-        "Modify the container names for ODUCn and OTUCn supporting interfaces";
+    description
+      "Modify the container names for ODUCn and OTUCn supporting interfaces";
   }
   revision 2021-09-27 {
-      description
+    description
       "Add supporting-otu interface in mapping";
   }
   revision 2021-04-26 {
-      description
+    description
       "Adding mux-profile information to support 400G Muxponder";
   }
   revision 2021-04-25 {
-      description
+    description
       "OpenROADM version fix 7.1.0 -> 7.1";
   }
   revision 2021-03-15 {

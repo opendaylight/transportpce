@@ -42,7 +42,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
