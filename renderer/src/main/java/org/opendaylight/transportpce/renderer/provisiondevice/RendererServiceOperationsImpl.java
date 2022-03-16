@@ -47,7 +47,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
@@ -130,7 +130,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
                 LOG.info("Using {}G rate", serviceRate);
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316
                         .network.Nodes mappingNode =
                     portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                         ? portMapping.getNode(input.getServiceAEnd().getNodeId())

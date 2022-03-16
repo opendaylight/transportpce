@@ -206,9 +206,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          len(response['switching_pool'][0]['non-blocking-list']))
         self.assertIn(
             {'nbl-number': 11,
-             'interconnect-bandwidth': 0,
+             'lcp-list': ['XPDR1-CLIENT1', 'XPDR1-NETWORK1'],
              'interconnect-bandwidth-unit': 1000000000,
-             'lcp-list': ['XPDR1-NETWORK1', 'XPDR1-CLIENT1']},
+             'interconnect-bandwidth': 0},
             response['switching_pool'][0]['non-blocking-list'])
 
     def test_19_spdr_switching_pool_2(self):
@@ -220,11 +220,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          len(response['switching_pool'][0]['non-blocking-list']))
         self.assertIn(
             {'nbl-number': 2,
-             'interconnect-bandwidth': 0,
+             'lcp-list': ['XPDR2-NETWORK2', 'XPDR2-NETWORK3', 'XPDR2-CLIENT1',
+                          'XPDR2-CLIENT2', 'XPDR2-NETWORK1', 'XPDR2-CLIENT3',
+                          'XPDR2-CLIENT4', 'XPDR2-NETWORK4'],
              'interconnect-bandwidth-unit': 1000000000,
-             'lcp-list': ["XPDR2-CLIENT3", "XPDR2-CLIENT4", "XPDR2-NETWORK4",
-                          "XPDR2-NETWORK1", "XPDR2-NETWORK3", "XPDR2-NETWORK2",
-                          "XPDR2-CLIENT1", "XPDR2-CLIENT2"]},
+             'interconnect-bandwidth': 0},
             response['switching_pool'][0]['non-blocking-list'])
 
     def test_20_spdr_switching_pool_3(self):
@@ -283,17 +283,17 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR2-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {"logical-connection-point": "XPDR2-CLIENT2",
-             "supporting-circuit-pack-name": "CP2-QSFP2",
-             "supported-interface-capability": ["org-openroadm-port-types:if-100GE-ODU4",
-                                                "org-openroadm-port-types:if-100GE"],
-             "supporting-port": "CP2-QSFP2-P1",
-             "lcp-hash-val": "AN/WSSRXne3t",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xponder-type": "switch",
-             "port-qual": "switch-client",
-             "port-oper-state": "InService"},
+            {'logical-connection-point': 'XPDR2-CLIENT2',
+             'supporting-port': 'CP2-QSFP2-P1',
+             'lcp-hash-val': 'AN/WSSRXne3t',
+             'port-direction': 'bidirectional',
+             'xponder-type': 'switch',
+             'port-qual': 'switch-client',
+             'supporting-circuit-pack-name': 'CP2-QSFP2',
+             'port-admin-state': 'InService',
+             'port-oper-state': 'InService',
+             'supported-interface-capability': ['org-openroadm-port-types:if-100GE',
+                                                'org-openroadm-port-types:if-100GE-ODU4']},
             response['mapping'])
 
     def test_25_spdr_portmapping_XPDR2_NETWORK2(self):
