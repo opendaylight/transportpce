@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.Charset;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,8 +24,8 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
@@ -47,11 +46,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -142,20 +138,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
-
-    private static Map<String, Class<? extends SupportedIfCapability>> supIfCapaMap = Map.ofEntries(
-        new AbstractMap.SimpleEntry<>("IfOtsiOtsigroup", IfOtsiOtsigroup.class),
-        new AbstractMap.SimpleEntry<>("IfOTUCnODUCn", IfOTUCnODUCn.class),
-        new AbstractMap.SimpleEntry<>("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class),
-        new AbstractMap.SimpleEntry<>("IfOCH", IfOCH.class),
-        new AbstractMap.SimpleEntry<>("If100GEODU4", If100GEODU4.class),
-        new AbstractMap.SimpleEntry<>("If10GEODU2e", If10GEODU2e.class),
-        new AbstractMap.SimpleEntry<>("If10GEODU2", If10GEODU2.class),
-        new AbstractMap.SimpleEntry<>("If1GEODU0", If1GEODU0.class),
-        new AbstractMap.SimpleEntry<>("If400GE", If400GE.class),
-        new AbstractMap.SimpleEntry<>("If100GE", If100GE.class),
-        new AbstractMap.SimpleEntry<>("If10GE", If10GE.class),
-        new AbstractMap.SimpleEntry<>("If1GE", If1GE.class));
 
     public TapiNetworkModelServiceImpl(final R2RTapiLinkDiscovery linkDiscovery,
                                        NetworkTransactionService networkTransactionService, TapiLink tapiLink) {
@@ -1216,13 +1198,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
     }
 
-    private static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
-        if (!supIfCapaMap.containsKey(ifCapType)) {
-            return null;
-        }
-        return supIfCapaMap.get(ifCapType);
-    }
-
     private String getNodeType(XpdrNodeTypes xponderType) {
         switch (xponderType.getIntValue()) {
             case 1:
@@ -1429,8 +1404,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         ArrayList<Class<? extends SupportedIfCapability>> newSupIfCapList = new ArrayList<Class<? extends
             SupportedIfCapability>>();
         xpdrNetMaps.get(index).getSupportedInterfaceCapability()
-            .forEach(a -> newSupIfCapList.add(convertSupIfCapa(xpdrNetMaps.get(index).getSupportedInterfaceCapability()
-                .get(0).getSimpleName())));
+            .forEach(a -> newSupIfCapList.add(xpdrNetMaps.get(index).getSupportedInterfaceCapability().get(0)));
         return newSupIfCapList;
     }
 }

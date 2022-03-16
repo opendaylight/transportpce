@@ -17,25 +17,26 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If400GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU2EODU2E;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU2ODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOTUCnODUCn;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2EODU2E;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2ODU2;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class MappingUtilsImpl implements MappingUtils {
 
     private static Map<String, Class<? extends SupportedIfCapability>> capTypeClassMap = new HashMap<>() {
         {
+            put("IfOtsiOtsigroup", IfOtsiOtsigroup.class);
             put("IfOTUCnODUCn", IfOTUCnODUCn.class);
             put("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class);
             put("IfOCH", IfOCH.class);
@@ -130,6 +132,7 @@ public class MappingUtilsImpl implements MappingUtils {
 
     public static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
         if (!capTypeClassMap.containsKey(ifCapType)) {
+            LOG.error("supported-if-capability {} not supported", ifCapType);
             return null;
         }
         return capTypeClassMap.get(ifCapType);

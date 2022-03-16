@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +18,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220114.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -54,18 +53,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.XpdrAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.otn.tp.attributes.OdtuTpnPool;
@@ -125,20 +112,6 @@ public final class OpenRoadmOtnTopology {
         Uint32.valueOf(1), ODTU4TsAllocated.class,
         Uint32.valueOf(10), ODTU4TsAllocated.class,
         Uint32.valueOf(100), ODTUCnTs.class);
-
-    private static Map<String, Class<? extends SupportedIfCapability>> supIfCapaMap = Map.ofEntries(
-        new AbstractMap.SimpleEntry<>("IfOtsiOtsigroup", IfOtsiOtsigroup.class),
-        new AbstractMap.SimpleEntry<>("IfOTUCnODUCn", IfOTUCnODUCn.class),
-        new AbstractMap.SimpleEntry<>("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class),
-        new AbstractMap.SimpleEntry<>("IfOCH", IfOCH.class),
-        new AbstractMap.SimpleEntry<>("If100GEODU4", If100GEODU4.class),
-        new AbstractMap.SimpleEntry<>("If10GEODU2e", If10GEODU2e.class),
-        new AbstractMap.SimpleEntry<>("If10GEODU2", If10GEODU2.class),
-        new AbstractMap.SimpleEntry<>("If1GEODU0", If1GEODU0.class),
-        new AbstractMap.SimpleEntry<>("If400GE", If400GE.class),
-        new AbstractMap.SimpleEntry<>("If100GE", If100GE.class),
-        new AbstractMap.SimpleEntry<>("If10GE", If10GE.class),
-        new AbstractMap.SimpleEntry<>("If1GE", If1GE.class));
 
     private OpenRoadmOtnTopology() {
     }
@@ -736,11 +709,10 @@ public final class OpenRoadmOtnTopology {
                     mapping.getLogicalConnectionPoint(), node.getNodeId());
             } else {
                 XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
-                for (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                        .SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
+                for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
                     SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                        .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa.getSimpleName())))
-                        .setIfCapType(convertSupIfCapa(supInterCapa.getSimpleName()))
+                        .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
+                        .setIfCapType(supInterCapa)
                         .build();
                     supIfMap.put(supIfCapa.key(), supIfCapa);
                 }
@@ -800,11 +772,9 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends
-            org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability>> list) {
+    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends SupportedIfCapability>> list) {
 
-        for (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability>
-                class1 : list) {
+        for (Class<? extends  SupportedIfCapability> class1 : list) {
             if (RATE_MAP.containsKey(class1.getSimpleName())) {
                 return RATE_MAP.get(class1.getSimpleName());
             }
@@ -875,12 +845,5 @@ public final class OpenRoadmOtnTopology {
         return nodeName.contains(XPDR)
                 ? nodeName
                 : new StringBuilder(nodeName).append("-").append(tpName.split("-")[0]).toString();
-    }
-
-    private static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
-        if (!supIfCapaMap.containsKey(ifCapType)) {
-            return null;
-        }
-        return supIfCapaMap.get(ifCapType);
     }
 }
