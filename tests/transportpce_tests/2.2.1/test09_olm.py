@@ -20,7 +20,6 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils  # nopep8
 import test_utils_rfc8040  # nopep8
 
 
@@ -90,115 +89,89 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_09_create_OTS_ROADMA(self):
-        response = test_utils.create_ots_oms_request("ROADM-A1", "DEG1-TTP-TXRX")
-        time.sleep(10)
+        response = test_utils_rfc8040.device_renderer_create_ots_oms_request('ROADM-A1', 'DEG1-TTP-TXRX')
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADM-A1',
-                      res["output"]["result"])
 
     def test_10_create_OTS_ROADMC(self):
-        response = test_utils.create_ots_oms_request("ROADM-C1", "DEG2-TTP-TXRX")
+        response = test_utils_rfc8040.device_renderer_create_ots_oms_request('ROADM-C1', 'DEG2-TTP-TXRX')
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADM-C1',
-                      res["output"]["result"])
 
     def test_11_get_PM_ROADMA(self):
-        url = "{}/operations/transportpce-olm:get-pm"
-        data = {
-            "input": {
-                "node-id": "ROADM-A1",
-                "resource-type": "interface",
-                "granularity": "15min",
-                "resource-identifier": {
-                    "resource-name": "OTS-DEG2-TTP-TXRX"
-                }
+        response = test_utils_rfc8040.olm_get_pm_request({
+            'node-id': 'ROADM-A1',
+            'resource-type': 'interface',
+            'granularity': '15min',
+            'resource-identifier': {
+                'resource-name': 'OTS-DEG2-TTP-TXRX'
             }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
-            "pmparameter-name": "OpticalPowerOutput",
-            "pmparameter-value": "2.5"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalPowerOutput',
+            'pmparameter-value': '2.5'
+        }, response['output']['measurements'])
         self.assertIn({
-            "pmparameter-name": "OpticalReturnLoss",
-            "pmparameter-value": "40"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalReturnLoss',
+            'pmparameter-value': '40'
+        }, response['output']['measurements'])
         self.assertIn({
-            "pmparameter-name": "OpticalPowerInput",
-            "pmparameter-value": "-21.1"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalPowerInput',
+            'pmparameter-value': '-21.1'
+        }, response['output']['measurements'])
 
     def test_12_get_PM_ROADMC(self):
-        url = "{}/operations/transportpce-olm:get-pm"
-        data = {
-            "input": {
-                "node-id": "ROADM-C1",
-                "resource-type": "interface",
-                "granularity": "15min",
-                "resource-identifier": {
-                    "resource-name": "OTS-DEG1-TTP-TXRX"
-                }
+        response = test_utils_rfc8040.olm_get_pm_request({
+            'node-id': 'ROADM-C1',
+            'resource-type': 'interface',
+            'granularity': '15min',
+            'resource-identifier': {
+                'resource-name': 'OTS-DEG1-TTP-TXRX'
             }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
-            "pmparameter-name": "OpticalPowerOutput",
-            "pmparameter-value": "4.6"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalPowerOutput',
+            'pmparameter-value': '4.6'
+        }, response['output']['measurements'])
         self.assertIn({
-            "pmparameter-name": "OpticalReturnLoss",
-            "pmparameter-value": "49.1"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalReturnLoss',
+            'pmparameter-value': '49.1'
+        }, response['output']['measurements'])
         self.assertIn({
-            "pmparameter-name": "OpticalPowerInput",
-            "pmparameter-value": "-15.1"
-        }, res["output"]["measurements"])
+            'pmparameter-name': 'OpticalPowerInput',
+            'pmparameter-value': '-15.1'
+        }, response['output']['measurements'])
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-base"
-        data = {
-            "input": {
-                "src-type": "link",
-                "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
-            }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.olm_calculate_spanloss_base_request({
+            'src-type': 'link',
+            'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
-                      res["output"]["result"])
+                      response['output']['result'])
         self.assertIn({
-            "spanloss": "17.6",
-            "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
-        }, res["output"]["spans"])
+            'spanloss': '17.6',
+            'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+        }, response['output']['spans'])
         time.sleep(5)
 
     def test_14_calculate_span_loss_base_all(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-base"
-        data = {
-            "input": {
-                "src-type": "all"
-            }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.olm_calculate_spanloss_base_request({
+            'src-type': 'all'
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
-                      res["output"]["result"])
+                      response['output']['result'])
         self.assertIn({
-            "spanloss": "25.7",
-            "link-id": "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX"
-        }, res["output"]["spans"])
+            'spanloss': '25.7',
+            'link-id': 'ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX'
+        }, response['output']['spans'])
         self.assertIn({
-            "spanloss": "17.6",
-            "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
-        }, res["output"]["spans"])
+            'spanloss': '17.6',
+            'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+        }, response['output']['spans'])
         time.sleep(5)
 
     def test_15_get_OTS_DEG2_TTP_TXRX_ROADMA(self):
@@ -268,41 +241,36 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
-        url = "{}/operations/transportpce-olm:service-power-setup"
-        data = {
-            "input": {
-                "service-name": "test",
-                "wave-number": 1,
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDR-A1"
-                    },
-                    {
-                        "dest-tp": "DEG2-TTP-TXRX",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADM-A1"
-                    },
-                    {
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "src-tp": "DEG1-TTP-TXRX",
-                        "node-id": "ROADM-C1"
-                    },
-                    {
-                        "dest-tp": "XPDR1-CLIENT1",
-                        "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDR-C1"
-                    }
-                ],
-                "lower-spectral-slot-number": 761,
-                "higher-spectral-slot-number": 768
-            }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Success', res["output"]["result"])
+        response = test_utils_rfc8040.olm_service_power_setup_request({
+            'service-name': 'test',
+            'wave-number': 1,
+            'nodes': [
+                {
+                    'dest-tp': 'XPDR1-NETWORK1',
+                    'src-tp': 'XPDR1-CLIENT1',
+                    'node-id': 'XPDR-A1'
+                },
+                {
+                    'dest-tp': 'DEG2-TTP-TXRX',
+                    'src-tp': 'SRG1-PP1-TXRX',
+                    'node-id': 'ROADM-A1'
+                },
+                {
+                    'dest-tp': 'SRG1-PP1-TXRX',
+                    'src-tp': 'DEG1-TTP-TXRX',
+                    'node-id': 'ROADM-C1'
+                },
+                {
+                    'dest-tp': 'XPDR1-CLIENT1',
+                    'src-tp': 'XPDR1-NETWORK1',
+                    'node-id': 'XPDR-C1'
+                }
+            ],
+            'lower-spectral-slot-number': 761,
+            'higher-spectral-slot-number': 768
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Success', response['output']['result'])
 
     def test_20_get_interface_XPDRA_XPDR1_NETWORK1(self):
         response = test_utils_rfc8040.check_node_attribute2_request(
@@ -325,41 +293,36 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual("power", response['roadm-connections'][0]['opticalControlMode'])
 
     def test_23_service_power_setup_XPDRC_XPDRA(self):
-        url = "{}/operations/transportpce-olm:service-power-setup"
-        data = {
-            "input": {
-                "service-name": "test",
-                "wave-number": 1,
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDR-C1"
-                    },
-                    {
-                        "dest-tp": "DEG1-TTP-TXRX",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADM-C1"
-                    },
-                    {
-                        "src-tp": "DEG2-TTP-TXRX",
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADM-A1"
-                    },
-                    {
-                        "src-tp": "XPDR1-NETWORK1",
-                        "dest-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDR-A1"
-                    }
-                ],
-                "lower-spectral-slot-number": 761,
-                "higher-spectral-slot-number": 768
-            }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Success', res["output"]["result"])
+        response = test_utils_rfc8040.olm_service_power_setup_request({
+            'service-name': 'test',
+            'wave-number': 1,
+            'nodes': [
+                {
+                    'dest-tp': 'XPDR1-NETWORK1',
+                    'src-tp': 'XPDR1-CLIENT1',
+                    'node-id': 'XPDR-C1'
+                },
+                {
+                    'dest-tp': 'DEG1-TTP-TXRX',
+                    'src-tp': 'SRG1-PP1-TXRX',
+                    'node-id': 'ROADM-C1'
+                },
+                {
+                    'src-tp': 'DEG2-TTP-TXRX',
+                    'dest-tp': 'SRG1-PP1-TXRX',
+                    'node-id': 'ROADM-A1'
+                },
+                {
+                    'src-tp': 'XPDR1-NETWORK1',
+                    'dest-tp': 'XPDR1-CLIENT1',
+                    'node-id': 'XPDR-A1'
+                }
+            ],
+            'lower-spectral-slot-number': 761,
+            'higher-spectral-slot-number': 768
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Success', response['output']['result'])
 
     def test_24_get_interface_XPDRC_XPDR1_NETWORK1(self):
         response = test_utils_rfc8040.check_node_attribute2_request(
@@ -376,41 +339,36 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(float(response['roadm-connections'][0]['target-output-power']), 2.0)
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
-        url = "{}/operations/transportpce-olm:service-power-turndown"
-        data = {
-            "input": {
-                "service-name": "test",
-                "wave-number": 1,
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDR-A1"
-                    },
-                    {
-                        "dest-tp": "DEG2-TTP-TXRX",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADM-A1"
-                    },
-                    {
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "src-tp": "DEG1-TTP-TXRX",
-                        "node-id": "ROADM-C1"
-                    },
-                    {
-                        "dest-tp": "XPDR1-CLIENT1",
-                        "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDR-C1"
-                    }
-                ],
-                "lower-spectral-slot-number": 761,
-                "higher-spectral-slot-number": 768
-            }
-        }
-        response = test_utils.post_request(url, data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Success', res["output"]["result"])
+        response = test_utils_rfc8040.olm_service_power_turndown_request({
+            'service-name': 'test',
+            'wave-number': 1,
+            'nodes': [
+                {
+                    'dest-tp': 'XPDR1-NETWORK1',
+                    'src-tp': 'XPDR1-CLIENT1',
+                    'node-id': 'XPDR-A1'
+                },
+                {
+                    'dest-tp': 'DEG2-TTP-TXRX',
+                    'src-tp': 'SRG1-PP1-TXRX',
+                    'node-id': 'ROADM-A1'
+                },
+                {
+                    'dest-tp': 'SRG1-PP1-TXRX',
+                    'src-tp': 'DEG1-TTP-TXRX',
+                    'node-id': 'ROADM-C1'
+                },
+                {
+                    'dest-tp': 'XPDR1-CLIENT1',
+                    'src-tp': 'XPDR1-NETWORK1',
+                    'node-id': 'XPDR-C1'
+                }
+            ],
+            'lower-spectral-slot-number': 761,
+            'higher-spectral-slot-number': 768
+        })
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Success', response['output']['result'])
 
     def test_27_get_roadmconnection_ROADMA(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -551,12 +509,10 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_38_calculate_span_loss_current(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-current"
-        response = test_utils.post_request(url, None)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.olm_calculate_spanloss_current_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
-                      res["output"]["result"])
+                      response["output"]["result"])
         time.sleep(5)
 
     def test_39_rdmA_device_disconnected(self):
