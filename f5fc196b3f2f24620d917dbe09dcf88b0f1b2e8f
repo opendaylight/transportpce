@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d97c0fa_aeb62605",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T19:18:14Z",
+      "side": 1,
+      "message": "$ export USE_ODL_RESTCONF_VERSION\u003ddraft-bierman02\n$ tox -p auto -e tests121,tests221 olm\n✔ OK tests121 in 3 minutes, 44.046 seconds\n[...]\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  tests121: commands succeeded\n  tests221: commands succeeded\n  congratulations :)\n",
+      "revId": "f5fc196b3f2f24620d917dbe09dcf88b0f1b2e8f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
