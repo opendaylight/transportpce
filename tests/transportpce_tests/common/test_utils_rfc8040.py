@@ -493,7 +493,7 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
     return response
 
 #
-# TransportPCE network-utils and service-path and service-implementation operations
+# TransportPCE internal API RPCs
 #
 
 
@@ -559,7 +559,7 @@ def device_renderer_otn_service_path_request(payload: dict):
             'output': return_output}
 
 
-def device_renderer_service_implementation_request(payload: dict):
+def renderer_service_implementation_request(payload: dict):
     url = "{}/operations/transportpce-renderer:service-implementation-request"
     if RESTCONF_VERSION == 'draft-bierman02':
         data = prepend_dict_keys({'input': payload}, 'transportpce-renderer:')
