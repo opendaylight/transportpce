@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4c60ef4_7dd7d72b",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T13:22:01Z",
+      "side": 1,
+      "message": "I am not sure whether this is the best option or not, but it is at least more coherent.\nI propose we fix that in a separate commit if needed.",
+      "parentUuid": "808a2fe6_8960ff17",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bc0233a2_02ba04ce",
         "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
         "patchSetId": 6
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-17T09:41:14Z",
       "side": 1,
       "message": "idem here\nwe should probably change these values",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8b5834_33a2b5b7",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T13:22:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bc0233a2_02ba04ce",
       "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ce1d55_53dd88df",
+        "filename": "tests/transportpce_tests/2.2.1/test09_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T13:22:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e337b34_753b3ecf",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d2ca914_8b25cb72",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-03-17T09:41:14Z",
       "side": 1,
       "message": "idem here",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb8cef9_248f5e66",
+        "filename": "tests/transportpce_tests/2.2.1/test09_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T13:22:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d2ca914_8b25cb72",
       "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
