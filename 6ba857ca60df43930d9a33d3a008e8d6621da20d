@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "808a2fe6_8960ff17",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T09:41:14Z",
+      "side": 1,
+      "message": "the service name and wave nbr were not coherent with test33 request creation",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc0233a2_02ba04ce",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T09:41:14Z",
+      "side": 1,
+      "message": "idem here\nwe should probably change these values",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e337b34_753b3ecf",
+        "filename": "tests/transportpce_tests/2.2.1/test09_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T09:41:14Z",
+      "side": 1,
+      "message": "idem here",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d2ca914_8b25cb72",
+        "filename": "tests/transportpce_tests/2.2.1/test09_olm.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-17T09:41:14Z",
+      "side": 1,
+      "message": "idem here",
+      "revId": "6ba857ca60df43930d9a33d3a008e8d6621da20d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
