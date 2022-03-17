@@ -543,6 +543,18 @@ def connect_rdm_to_xpdr_request(payload: dict):
     return post_request(url, data)
 
 
+def device_renderer_create_ots_oms_request(nodeid: str, lcp: str):
+    url = "{}/operations/transportpce-device-renderer:create-ots-oms"
+    payload = {
+        'node-id': nodeid,
+        'logical-connection-point': lcp}
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-device-renderer:')
+    else:
+        data = {'input': payload}
+    return post_request(url, data)
+
+
 def device_renderer_service_path_request(payload: dict):
     url = "{}/operations/transportpce-device-renderer:service-path"
     if RESTCONF_VERSION == 'draft-bierman02':
@@ -582,6 +594,77 @@ def renderer_service_implementation_request(payload: dict):
     response = post_request(url, data)
     res = response.json()
     return_key = {'rfc8040': 'transportpce-renderer:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def olm_get_pm_request(payload: dict):
+    url = "{}/operations/transportpce-olm:get-pm"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-olm:')
+    else:
+        data = {'input': payload}
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-olm:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def olm_calculate_spanloss_base_request(payload: dict):
+    url = "{}/operations/transportpce-olm:calculate-spanloss-base"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-olm:')
+    else:
+        data = {'input': payload}
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-olm:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def olm_service_power_setup_request(payload: dict):
+    url = "{}/operations/transportpce-olm:service-power-setup"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-olm:')
+    else:
+        data = {'input': payload}
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-olm:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def olm_service_power_turndown_request(payload: dict):
+    url = "{}/operations/transportpce-olm:service-power-turndown"
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-olm:')
+    else:
+        data = {'input': payload}
+    response = post_request(url, data)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-olm:output',
+                  'draft-bierman02': 'output'}
+    return_output = res[return_key[RESTCONF_VERSION]]
+    return {'status_code': response.status_code,
+            'output': return_output}
+
+
+def olm_calculate_spanloss_current_request():
+    url = "{}/operations/transportpce-olm:calculate-spanloss-current"
+    response = post_request(url, None)
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-olm:output',
                   'draft-bierman02': 'output'}
     return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
