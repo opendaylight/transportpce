@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a98793a_e840aa12",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2022-03-17T14:33:27Z",
+      "side": 1,
+      "message": "This is no more relevant as soon as test_07 is no longer disabled",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 50
+      },
+      "revId": "10985ba50f96391c8a617327b70ea142bc312182",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
