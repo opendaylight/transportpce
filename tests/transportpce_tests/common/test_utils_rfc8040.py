@@ -543,6 +543,18 @@ def connect_rdm_to_xpdr_request(payload: dict):
     return post_request(url, data)
 
 
+def device_renderer_create_ots_oms_request(nodeid: str, lcp: str):
+    url = "{}/operations/transportpce-device-renderer:create-ots-oms"
+    payload = {
+        'node-id': nodeid,
+        'logical-connection-point': lcp}
+    if RESTCONF_VERSION == 'draft-bierman02':
+        data = prepend_dict_keys({'input': payload}, 'transportpce-device-renderer:')
+    else:
+        data = {'input': payload}
+    return post_request(url, data)
+
+
 def device_renderer_service_path_request(payload: dict):
     url = "{}/operations/transportpce-device-renderer:service-path"
     if RESTCONF_VERSION == 'draft-bierman02':

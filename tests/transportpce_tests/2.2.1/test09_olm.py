@@ -90,19 +90,12 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_09_create_OTS_ROADMA(self):
-        response = test_utils.create_ots_oms_request("ROADM-A1", "DEG1-TTP-TXRX")
-        time.sleep(10)
+        response = test_utils_rfc8040.device_renderer_create_ots_oms_request('ROADM-A1', 'DEG1-TTP-TXRX')
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADM-A1',
-                      res["output"]["result"])
 
     def test_10_create_OTS_ROADMC(self):
-        response = test_utils.create_ots_oms_request("ROADM-C1", "DEG2-TTP-TXRX")
+        response = test_utils_rfc8040.device_renderer_create_ots_oms_request('ROADM-C1', 'DEG2-TTP-TXRX')
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADM-C1',
-                      res["output"]["result"])
 
     def test_11_get_PM_ROADMA(self):
         url = "{}/operations/transportpce-olm:get-pm"
