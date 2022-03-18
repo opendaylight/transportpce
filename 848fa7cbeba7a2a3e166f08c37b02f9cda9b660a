@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2ea19b_c08ee43f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-18T20:58:01Z",
+      "side": 1,
+      "message": "$ export USE_ODL_RESTCONF_VERSION\u003ddraft-bierman02\n$ tox -p auto -e tests121,tests221 renderer_service_path_nominal\n[..]\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  tests121: commands succeeded\n  tests221: commands succeeded\n  congratulations :)\n\n$ tox -e tests221 flex_grid otn_renderer otn_sh_renderer\n[..]\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  tests221: commands succeeded\n  congratulations :)\n\n\n\n\n",
+      "revId": "848fa7cbeba7a2a3e166f08c37b02f9cda9b660a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
