@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ecca90_79e38f99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-18T20:36:12Z",
+      "side": 1,
+      "message": "$ export USE_ODL_RESTCONF_VERSION\u003ddraft-bierman02\n$ tox -p auto -e tests121,tests221 olm topology\n\n[..]\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  tests121: commands succeeded\n  tests221: commands succeeded\n  congratulations :)\n\n",
+      "revId": "0adc2224446e77f098e07409185a9404c40ead85",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
