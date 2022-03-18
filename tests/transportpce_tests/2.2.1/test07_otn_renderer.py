@@ -88,7 +88,8 @@ class TransportPCEtesting(unittest.TestCase):
             response['mapping'])
 
     def test_04_service_path_create_OCH_OTU4(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
                 'wave-number': '7',
@@ -159,7 +160,8 @@ class TransportPCEtesting(unittest.TestCase):
                              response['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_08_otn_service_path_create_ODU4(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODU4',
                 'operation': 'create',
@@ -205,7 +207,8 @@ class TransportPCEtesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_11_otn_service_path_create_10GE(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service1',
                 'operation': 'create',
@@ -313,7 +316,8 @@ class TransportPCEtesting(unittest.TestCase):
                              response['odu-connection'][0]['source'])
 
     def test_16_otn_service_path_delete_10GE(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service1',
                 'operation': 'delete',
@@ -348,7 +352,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_21_otn_service_path_delete_ODU4(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODU4',
                 'operation': 'delete',
@@ -365,7 +370,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_23_service_path_delete_OCH_OTU4(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
                 'wave-number': '7',
