@@ -65,7 +65,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_03_service_create_OTU4(self):
-        response = test_utils_rfc8040.renderer_service_implementation_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-renderer', 'service-implementation-request',
             {
                 'service-name': 'SPDRA-SPDRC-OTU4-ODU4',
                 'connection-type': 'infrastructure',
@@ -248,7 +249,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test creation of ODU4 service
     def test_08_service_create_ODU4(self):
-        response = test_utils_rfc8040.renderer_service_implementation_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-renderer', 'service-implementation-request',
             {
                 'service-name':
                 'SPDRA-SPDRC-OTU4-ODU4',
@@ -401,7 +403,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test creation of 10G service
     def test_11_service_create_10GE(self):
-        response = test_utils_rfc8040.renderer_service_implementation_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-renderer', 'service-implementation-request',
             {
                 'service-name': 'SPDRA-SPDRC-10G',
                 'connection-type': 'service',
