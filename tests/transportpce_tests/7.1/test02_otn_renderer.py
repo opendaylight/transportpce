@@ -66,7 +66,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # this test has been removed, since it already exists in port-mapping
     # 1a) create a OTUC2 device renderer
     def test_02_service_path_create_otuc2(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC2',
                 'wave-number': '0',
@@ -163,7 +164,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 1b) create a ODUC2 device renderer
     def test_07_otn_service_path_create_oduc2(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC2',
                 'operation': 'create',
@@ -217,7 +219,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 1c) create Ethernet device renderer
     def test_10_otn_service_path_create_100ge(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_Ethernet',
                 'operation': 'create',
@@ -329,7 +332,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 1d) Delete Ethernet device interfaces
     def test_15_otn_service_path_delete_100ge(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_Ethernet',
                 'operation': 'delete',
@@ -366,7 +370,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 1e) Delete ODUC2 device interfaces
     def test_20_otn_service_path_delete_oduc2(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC2',
                 'operation': 'delete',
@@ -391,7 +396,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # 1f) Delete OTUC2 device interfaces
 
     def test_22_service_path_delete_otuc2(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC2',
                 'wave-number': '0',
@@ -428,7 +434,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 2a) create a OTUC3 device renderer
     def test_26_service_path_create_otuc3(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC3',
                 'wave-number': '0',
@@ -526,7 +533,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 2b) create a ODUC3 device renderer
     def test_31_otn_service_path_create_oduc3(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC3',
                 'operation': 'create',
@@ -585,7 +593,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 2e) Delete ODUC3 device interfaces
     def test_34_otn_service_path_delete_oduc3(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC3',
                 'operation': 'delete',
@@ -607,7 +616,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 2f) Delete OTUC3 device interfaces
     def test_36_service_path_delete_otuc3(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC3',
                 'wave-number': '0',
@@ -644,7 +654,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 3a) create a OTUC4 device renderer
     def test_40_service_path_create_otuc4(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC4',
                 'wave-number': '0',
@@ -742,7 +753,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 3b) create a ODUC4 device renderer
     def test_45_otn_service_path_create_oduc3(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC4',
                 'operation': 'create',
@@ -801,7 +813,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 3e) Delete ODUC4 device interfaces
     def test_48_otn_service_path_delete_oduc4(self):
-        response = test_utils_rfc8040.device_renderer_otn_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'otn-service-path',
             {
                 'service-name': 'service_ODUC4',
                 'operation': 'delete',
@@ -823,7 +836,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # 3f) Delete OTUC4 device interfaces
     def test_50_service_path_delete_otuc4(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_OTUC4',
                 'wave-number': '0',

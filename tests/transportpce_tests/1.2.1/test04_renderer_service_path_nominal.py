@@ -87,7 +87,8 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
                 'wave-number': '7',
@@ -241,7 +242,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('not-reserved-inuse', response['circuit-packs'][0]["equipment-state"])
 
     def test_14_service_path_delete(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
                 'wave-number': '7',
