@@ -525,36 +525,6 @@ def prepend_dict_keys(input_dict: dict, prefix: str):
     return return_dict
 
 
-def connect_xpdr_to_rdm_request(payload: dict):
-    url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
-    if RESTCONF_VERSION == 'draft-bierman02':
-        data = prepend_dict_keys({'input': {'links-input': payload}}, 'networkutils:')
-    else:
-        data = {'input': {'links-input': payload}}
-    return post_request(url, data)
-
-
-def connect_rdm_to_xpdr_request(payload: dict):
-    url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
-    if RESTCONF_VERSION == 'draft-bierman02':
-        data = prepend_dict_keys({'input': {'links-input': payload}}, 'networkutils:')
-    else:
-        data = {'input': {'links-input': payload}}
-    return post_request(url, data)
-
-
-def device_renderer_create_ots_oms_request(nodeid: str, lcp: str):
-    url = "{}/operations/transportpce-device-renderer:create-ots-oms"
-    payload = {
-        'node-id': nodeid,
-        'logical-connection-point': lcp}
-    if RESTCONF_VERSION == 'draft-bierman02':
-        data = prepend_dict_keys({'input': payload}, 'transportpce-device-renderer:')
-    else:
-        data = {'input': payload}
-    return post_request(url, data)
-
-
 def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
     # pylint: disable=consider-using-f-string
     url = "{}/operations/{}:{}".format('{}', api_module, rpc)
