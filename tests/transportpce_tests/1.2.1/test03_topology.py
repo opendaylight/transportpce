@@ -253,17 +253,19 @@ class TransportPCETopologyTesting(unittest.TestCase):
     # Connect the tail XPDRA to ROADMA and vice versa
     def test_10_connect_tail_xpdr_rdm(self):
         # Connect the tail: XPDRA to ROADMA
-        response = test_utils_rfc8040.connect_xpdr_to_rdm_request(
-            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
-             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-xpdr-rdm-links',
+            {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_11_connect_tail_rdm_xpdr(self):
         # Connect the tail: ROADMA to XPDRA
-        response = test_utils_rfc8040.connect_rdm_to_xpdr_request(
-            {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
-             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'})
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-rdm-xpdr-links',
+            {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
