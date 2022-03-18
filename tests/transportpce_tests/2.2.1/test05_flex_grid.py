@@ -96,7 +96,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # Renderer interface creations
     def test_07_device_renderer(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request(
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
             {
                 'modulation-format': 'dp-qpsk',
                 'operation': 'create',

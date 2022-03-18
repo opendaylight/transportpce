@@ -97,15 +97,17 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_11_get_PM_ROADMA(self):
-        response = test_utils_rfc8040.olm_get_pm_request({
-            'node-id': 'ROADM-A1',
-            'resource-type': 'interface',
-            'granularity': '15min',
-            'resource-identifier': {
-                'resource-name': 'OTS-DEG2-TTP-TXRX'
-            }
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'get-pm',
+            {
+                'node-id': 'ROADM-A1',
+                'resource-type': 'interface',
+                'granularity': '15min',
+                'resource-identifier': {
+                    'resource-name': 'OTS-DEG2-TTP-TXRX'
+                }
 
-        })
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
             'pmparameter-name': 'OpticalPowerOutput',
@@ -121,14 +123,16 @@ class TransportOlmTesting(unittest.TestCase):
         }, response['output']['measurements'])
 
     def test_12_get_PM_ROADMC(self):
-        response = test_utils_rfc8040.olm_get_pm_request({
-            'node-id': 'ROADM-C1',
-            'resource-type': 'interface',
-            'granularity': '15min',
-            'resource-identifier': {
-                'resource-name': 'OTS-DEG1-TTP-TXRX'
-            }
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'get-pm',
+            {
+                'node-id': 'ROADM-C1',
+                'resource-type': 'interface',
+                'granularity': '15min',
+                'resource-identifier': {
+                    'resource-name': 'OTS-DEG1-TTP-TXRX'
+                }
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
             'pmparameter-name': 'OpticalPowerOutput',
@@ -144,10 +148,12 @@ class TransportOlmTesting(unittest.TestCase):
         }, response['output']['measurements'])
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
-        response = test_utils_rfc8040.olm_calculate_spanloss_base_request({
-            'src-type': 'link',
-            'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'calculate-spanloss-base',
+            {
+                'src-type': 'link',
+                'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
                       response['output']['result'])
@@ -158,9 +164,11 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_14_calculate_span_loss_base_all(self):
-        response = test_utils_rfc8040.olm_calculate_spanloss_base_request({
-            'src-type': 'all'
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'calculate-spanloss-base',
+            {
+                'src-type': 'all'
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
                       response['output']['result'])
@@ -189,86 +197,92 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(float(response['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive']), 17.6)
 
     def test_17_servicePath_create_AToZ(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test',
-            'wave-number': '1',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'create',
-            'nodes':
-            [{'node-id': 'XPDR-A1',
-              'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
-             {'node-id': 'ROADM-A1',
-              'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'ROADM-C1',
-              'dest-tp': 'SRG1-PP1-TXRX', 'src-tp': 'DEG1-TTP-TXRX'},
-             {'node-id': 'XPDR-C1',
-              'dest-tp': 'XPDR1-CLIENT1', 'src-tp': 'XPDR1-NETWORK1'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test',
+                'wave-number': '1',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'create',
+                'nodes':
+                [{'node-id': 'XPDR-A1',
+                  'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
+                 {'node-id': 'ROADM-A1',
+                    'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'ROADM-C1',
+                     'dest-tp': 'SRG1-PP1-TXRX', 'src-tp': 'DEG1-TTP-TXRX'},
+                    {'node-id': 'XPDR-C1',
+                     'dest-tp': 'XPDR1-CLIENT1', 'src-tp': 'XPDR1-NETWORK1'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         time.sleep(10)
 
     def test_18_servicePath_create_ZToA(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test',
-            'wave-number': '1',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'create',
-            'nodes':
-            [{'node-id': 'XPDR-C1',
-              'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
-             {'node-id': 'ROADM-C1',
-              'dest-tp': 'DEG1-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'ROADM-A1',
-              'src-tp': 'DEG2-TTP-TXRX', 'dest-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'XPDR-A1',
-              'src-tp': 'XPDR1-NETWORK1', 'dest-tp': 'XPDR1-CLIENT1'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test',
+                'wave-number': '1',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'create',
+                'nodes':
+                [{'node-id': 'XPDR-C1',
+                  'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
+                 {'node-id': 'ROADM-C1',
+                    'dest-tp': 'DEG1-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'ROADM-A1',
+                     'src-tp': 'DEG2-TTP-TXRX', 'dest-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'XPDR-A1',
+                     'src-tp': 'XPDR1-NETWORK1', 'dest-tp': 'XPDR1-CLIENT1'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         time.sleep(10)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
-        response = test_utils_rfc8040.olm_service_power_setup_request({
-            'service-name': 'test',
-            'wave-number': 1,
-            'nodes': [
-                {
-                    'dest-tp': 'XPDR1-NETWORK1',
-                    'src-tp': 'XPDR1-CLIENT1',
-                    'node-id': 'XPDR-A1'
-                },
-                {
-                    'dest-tp': 'DEG2-TTP-TXRX',
-                    'src-tp': 'SRG1-PP1-TXRX',
-                    'node-id': 'ROADM-A1'
-                },
-                {
-                    'dest-tp': 'SRG1-PP1-TXRX',
-                    'src-tp': 'DEG1-TTP-TXRX',
-                    'node-id': 'ROADM-C1'
-                },
-                {
-                    'dest-tp': 'XPDR1-CLIENT1',
-                    'src-tp': 'XPDR1-NETWORK1',
-                    'node-id': 'XPDR-C1'
-                }
-            ],
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'service-power-setup',
+            {
+                'service-name': 'test',
+                'wave-number': 1,
+                'nodes': [
+                    {
+                        'dest-tp': 'XPDR1-NETWORK1',
+                        'src-tp': 'XPDR1-CLIENT1',
+                        'node-id': 'XPDR-A1'
+                    },
+                    {
+                        'dest-tp': 'DEG2-TTP-TXRX',
+                        'src-tp': 'SRG1-PP1-TXRX',
+                        'node-id': 'ROADM-A1'
+                    },
+                    {
+                        'dest-tp': 'SRG1-PP1-TXRX',
+                        'src-tp': 'DEG1-TTP-TXRX',
+                        'node-id': 'ROADM-C1'
+                    },
+                    {
+                        'dest-tp': 'XPDR1-CLIENT1',
+                        'src-tp': 'XPDR1-NETWORK1',
+                        'node-id': 'XPDR-C1'
+                    }
+                ],
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success', response['output']['result'])
 
@@ -293,34 +307,36 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual("power", response['roadm-connections'][0]['opticalControlMode'])
 
     def test_23_service_power_setup_XPDRC_XPDRA(self):
-        response = test_utils_rfc8040.olm_service_power_setup_request({
-            'service-name': 'test',
-            'wave-number': 1,
-            'nodes': [
-                {
-                    'dest-tp': 'XPDR1-NETWORK1',
-                    'src-tp': 'XPDR1-CLIENT1',
-                    'node-id': 'XPDR-C1'
-                },
-                {
-                    'dest-tp': 'DEG1-TTP-TXRX',
-                    'src-tp': 'SRG1-PP1-TXRX',
-                    'node-id': 'ROADM-C1'
-                },
-                {
-                    'src-tp': 'DEG2-TTP-TXRX',
-                    'dest-tp': 'SRG1-PP1-TXRX',
-                    'node-id': 'ROADM-A1'
-                },
-                {
-                    'src-tp': 'XPDR1-NETWORK1',
-                    'dest-tp': 'XPDR1-CLIENT1',
-                    'node-id': 'XPDR-A1'
-                }
-            ],
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'service-power-setup',
+            {
+                'service-name': 'test',
+                'wave-number': 1,
+                'nodes': [
+                    {
+                        'dest-tp': 'XPDR1-NETWORK1',
+                        'src-tp': 'XPDR1-CLIENT1',
+                        'node-id': 'XPDR-C1'
+                    },
+                    {
+                        'dest-tp': 'DEG1-TTP-TXRX',
+                        'src-tp': 'SRG1-PP1-TXRX',
+                        'node-id': 'ROADM-C1'
+                    },
+                    {
+                        'src-tp': 'DEG2-TTP-TXRX',
+                        'dest-tp': 'SRG1-PP1-TXRX',
+                        'node-id': 'ROADM-A1'
+                    },
+                    {
+                        'src-tp': 'XPDR1-NETWORK1',
+                        'dest-tp': 'XPDR1-CLIENT1',
+                        'node-id': 'XPDR-A1'
+                    }
+                ],
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success', response['output']['result'])
 
@@ -339,34 +355,36 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(float(response['roadm-connections'][0]['target-output-power']), 2.0)
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
-        response = test_utils_rfc8040.olm_service_power_turndown_request({
-            'service-name': 'test',
-            'wave-number': 1,
-            'nodes': [
-                {
-                    'dest-tp': 'XPDR1-NETWORK1',
-                    'src-tp': 'XPDR1-CLIENT1',
-                    'node-id': 'XPDR-A1'
-                },
-                {
-                    'dest-tp': 'DEG2-TTP-TXRX',
-                    'src-tp': 'SRG1-PP1-TXRX',
-                    'node-id': 'ROADM-A1'
-                },
-                {
-                    'dest-tp': 'SRG1-PP1-TXRX',
-                    'src-tp': 'DEG1-TTP-TXRX',
-                    'node-id': 'ROADM-C1'
-                },
-                {
-                    'dest-tp': 'XPDR1-CLIENT1',
-                    'src-tp': 'XPDR1-NETWORK1',
-                    'node-id': 'XPDR-C1'
-                }
-            ],
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'service-power-turndown',
+            {
+                'service-name': 'test',
+                'wave-number': 1,
+                'nodes': [
+                    {
+                        'dest-tp': 'XPDR1-NETWORK1',
+                        'src-tp': 'XPDR1-CLIENT1',
+                        'node-id': 'XPDR-A1'
+                    },
+                    {
+                        'dest-tp': 'DEG2-TTP-TXRX',
+                        'src-tp': 'SRG1-PP1-TXRX',
+                        'node-id': 'ROADM-A1'
+                    },
+                    {
+                        'dest-tp': 'SRG1-PP1-TXRX',
+                        'src-tp': 'DEG1-TTP-TXRX',
+                        'node-id': 'ROADM-C1'
+                    },
+                    {
+                        'dest-tp': 'XPDR1-CLIENT1',
+                        'src-tp': 'XPDR1-NETWORK1',
+                        'node-id': 'XPDR-C1'
+                    }
+                ],
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success', response['output']['result'])
 
@@ -384,53 +402,57 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual("off", response['roadm-connections'][0]['opticalControlMode'])
 
     def test_29_servicePath_delete_AToZ(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test',
-            'wave-number': '1',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'delete',
-            'nodes':
-            [{'node-id': 'XPDR-A1',
-              'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
-             {'node-id': 'ROADM-A1',
-              'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'ROADM-C1',
-              'dest-tp': 'SRG1-PP1-TXRX', 'src-tp': 'DEG1-TTP-TXRX'},
-             {'node-id': 'XPDR-C1',
-              'dest-tp': 'XPDR1-CLIENT1', 'src-tp': 'XPDR1-NETWORK1'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test',
+                'wave-number': '1',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'delete',
+                'nodes':
+                [{'node-id': 'XPDR-A1',
+                  'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
+                 {'node-id': 'ROADM-A1',
+                    'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'ROADM-C1',
+                     'dest-tp': 'SRG1-PP1-TXRX', 'src-tp': 'DEG1-TTP-TXRX'},
+                    {'node-id': 'XPDR-C1',
+                     'dest-tp': 'XPDR1-CLIENT1', 'src-tp': 'XPDR1-NETWORK1'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         time.sleep(10)
 
     def test_30_servicePath_delete_ZToA(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test',
-            'wave-number': '1',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'delete',
-            'nodes':
-            [{'node-id': 'XPDR-C1',
-              'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
-             {'node-id': 'ROADM-C1',
-              'dest-tp': 'DEG1-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'ROADM-A1',
-              'src-tp': 'DEG2-TTP-TXRX', 'dest-tp': 'SRG1-PP1-TXRX'},
-             {'node-id': 'XPDR-A1',
-              'src-tp': 'XPDR1-NETWORK1', 'dest-tp': 'XPDR1-CLIENT1'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 761,
-            'higher-spectral-slot-number': 768
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test',
+                'wave-number': '1',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'delete',
+                'nodes':
+                [{'node-id': 'XPDR-C1',
+                  'dest-tp': 'XPDR1-NETWORK1', 'src-tp': 'XPDR1-CLIENT1'},
+                 {'node-id': 'ROADM-C1',
+                    'dest-tp': 'DEG1-TTP-TXRX', 'src-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'ROADM-A1',
+                     'src-tp': 'DEG2-TTP-TXRX', 'dest-tp': 'SRG1-PP1-TXRX'},
+                    {'node-id': 'XPDR-A1',
+                     'src-tp': 'XPDR1-NETWORK1', 'dest-tp': 'XPDR1-CLIENT1'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 761,
+                'higher-spectral-slot-number': 768
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         time.sleep(10)
@@ -450,23 +472,25 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_33_servicePath_create_AToZ(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test2',
-            'wave-number': '2',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'create',
-            'nodes':
-            [{'node-id': 'XPDR-A1',
-              'dest-tp': 'XPDR1-NETWORK2', 'src-tp': 'XPDR1-CLIENT2'},
-             {'node-id': 'ROADM-A1',
-              'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP2-TXRX'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 753,
-            'higher-spectral-slot-number': 760
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test2',
+                'wave-number': '2',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'create',
+                'nodes':
+                [{'node-id': 'XPDR-A1',
+                  'dest-tp': 'XPDR1-NETWORK2', 'src-tp': 'XPDR1-CLIENT2'},
+                 {'node-id': 'ROADM-A1',
+                    'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP2-TXRX'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 753,
+                'higher-spectral-slot-number': 760
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes', response['output']['result'])
         time.sleep(10)
@@ -479,23 +503,25 @@ class TransportOlmTesting(unittest.TestCase):
 #         self.assertEqual(2, response['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_35_servicePath_delete_AToZ(self):
-        response = test_utils_rfc8040.device_renderer_service_path_request({
-            'service-name': 'test2',
-            'wave-number': '2',
-            'modulation-format': 'dp-qpsk',
-            'operation': 'delete',
-            'nodes':
-            [{'node-id': 'XPDR-A1',
-              'dest-tp': 'XPDR1-NETWORK2', 'src-tp': 'XPDR1-CLIENT2'},
-             {'node-id': 'ROADM-A1',
-              'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP2-TXRX'}],
-            'center-freq': 196.1,
-            'nmc-width': 40,
-            'min-freq': 196.075,
-            'max-freq': 196.125,
-            'lower-spectral-slot-number': 753,
-            'higher-spectral-slot-number': 760
-        })
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-device-renderer', 'service-path',
+            {
+                'service-name': 'test2',
+                'wave-number': '2',
+                'modulation-format': 'dp-qpsk',
+                'operation': 'delete',
+                'nodes':
+                [{'node-id': 'XPDR-A1',
+                  'dest-tp': 'XPDR1-NETWORK2', 'src-tp': 'XPDR1-CLIENT2'},
+                 {'node-id': 'ROADM-A1',
+                    'dest-tp': 'DEG2-TTP-TXRX', 'src-tp': 'SRG1-PP2-TXRX'}],
+                'center-freq': 196.1,
+                'nmc-width': 40,
+                'min-freq': 196.075,
+                'max-freq': 196.125,
+                'lower-spectral-slot-number': 753,
+                'higher-spectral-slot-number': 760
+            })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Request processed', response['output']['result'])
         time.sleep(10)
@@ -509,7 +535,9 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_38_calculate_span_loss_current(self):
-        response = test_utils_rfc8040.olm_calculate_spanloss_current_request()
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-olm', 'calculate-spanloss-current',
+            None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Success',
                       response["output"]["result"])
