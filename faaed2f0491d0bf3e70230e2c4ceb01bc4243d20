@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6357df8a_d62f9f27",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-20T15:15:57Z",
+      "side": 1,
+      "message": "addressed in https://git.opendaylight.org/gerrit/c/transportpce/+/100061",
+      "parentUuid": "f5fd9eb9_d97f5edb",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d3b18b4_0a859f4a",
@@ -53,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa312230_884570b3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-20T15:15:57Z",
+      "side": 1,
+      "message": "addressed in https://git.opendaylight.org/gerrit/c/transportpce/+/100061",
+      "parentUuid": "57908ac5_f9a12287",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64bfe046_b974149a",
@@ -66,6 +102,24 @@
       "writtenOn": "2022-03-10T09:02:39Z",
       "side": 1,
       "message": "commented-out code is warned by Sonar current configuration",
+      "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc55ab95_b59d72bb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-20T15:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64bfe046_b974149a",
       "revId": "faaed2f0491d0bf3e70230e2c4ceb01bc4243d20",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
