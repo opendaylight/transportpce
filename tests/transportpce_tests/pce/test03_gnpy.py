@@ -36,8 +36,8 @@ class TransportGNPYtesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # pylint: disable=bare-except
+        sample_files_parsed = False
         try:
-            sample_files_parsed = False
             TOPO_CLLINET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                              "..", "..", "sample_configs", "gnpy", "clliNetwork.json")
             with open(TOPO_CLLINET_FILE, 'r', encoding='utf-8') as topo_cllinet:
