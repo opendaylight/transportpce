@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe809486_cdc1657c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-31T11:55:59Z",
+      "side": 1,
+      "message": "Thanks for your review. See my answers.",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "555e24d1_7fad5c3e",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-03-31T09:30:30Z",
       "side": 1,
       "message": "what about this ?\n\nString maxWdmHc \u003d\n    soft.getMaxWdmHopCount() \u003d\u003d null\n        ? hard.getMaxWdmHopCount() \u003d\u003d null\n            ? null\n            : hard.getMaxWdmHopCount().toString()\n        :  hard.getMaxWdmHopCount() \u003d\u003d null\n            ? soft.getMaxWdmHopCount().toString()\n            : soft.getMaxWdmHopCount().intValue() \u003c\u003d hard.getMaxWdmHopCount().intValue()\n                ? soft.getMaxWdmHopCount().toString()\n                : hard.getMaxWdmHopCount().toString();",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bae7d6e1_8bbc2f59",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-31T11:55:59Z",
+      "side": 1,
+      "message": "Your proposal based on nested ternary operators is true, but personally, I find it completely unreadable!\nI would prefer an optimization based on classical if-then-else strcuture...",
+      "parentUuid": "555e24d1_7fad5c3e",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -65,6 +100,24 @@
       "writtenOn": "2022-03-31T09:30:30Z",
       "side": 1,
       "message": "a ternoray operator is more indicated here IMO",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c19793_80d1b406",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-31T11:55:59Z",
+      "side": 1,
+      "message": "For here, since this is not a nested case, I agree to use ternary operator.",
+      "parentUuid": "06b0902f_e3f3b972",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -116,6 +169,24 @@
       "writtenOn": "2022-03-31T09:30:30Z",
       "side": 1,
       "message": "I don\u0027t think intermediate variables are required here",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4552502e_bd009df8",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ConstraintsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-03-31T11:55:59Z",
+      "side": 1,
+      "message": "Inntermediate variables are not theorically required. But, given the diversity of objects to put on the Map, it really eases the readability and any future modifications on them.",
+      "parentUuid": "af176f46_791d7a82",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
