@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4172a8f5_785b7bbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:36:12Z",
+      "side": 1,
+      "message": "latest",
+      "revId": "832e90e3959638edb9393c51b0b2d0ad006eb8b9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02555d59_26cc4929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:36:12Z",
+      "side": 1,
+      "message": "LGTM apart cosmetic issues",
+      "revId": "832e90e3959638edb9393c51b0b2d0ad006eb8b9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58bcd9a9_3e1f90a1",
+        "filename": "api/src/main/yang/transportpce-portmapping@2022-03-16.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:36:12Z",
+      "side": 1,
+      "message": "indent +2",
+      "revId": "832e90e3959638edb9393c51b0b2d0ad006eb8b9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
