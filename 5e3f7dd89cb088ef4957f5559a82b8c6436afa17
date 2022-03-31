@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f7e8052_04fd49e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T08:56:54Z",
+      "side": 1,
+      "message": "LGTM but we have to track ORDM models clean-up proposals in a JIRA ticket or anywhere else before closing related comments",
+      "revId": "5e3f7dd89cb088ef4957f5559a82b8c6436afa17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
