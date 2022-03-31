@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95bd8d65_21c9e3ba",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:06:52Z",
+      "side": 1,
+      "message": "@Gilles\nI propose we acknowledge all related comments since we have agreed that rules details should be discussed later with a more global approach.\nThe idea is to have a coherent coding style to ease code maintenance\nand from that standpoint, I am fine with your modifications.",
+      "parentUuid": "be734bd4_f47a7b9e",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 40
+      },
+      "revId": "ad115343f8f74201c86788bdfa5fb6f0bb1fde65",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eaa1b590_ddce171c",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
         "patchSetId": 8
