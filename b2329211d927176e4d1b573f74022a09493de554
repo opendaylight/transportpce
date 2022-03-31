@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67834d33_461742f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "LGTM though I think there is room to some optimizations here",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555e24d1_7fad5c3e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "what about this ?\n\nString maxWdmHc \u003d\n    soft.getMaxWdmHopCount() \u003d\u003d null\n        ? hard.getMaxWdmHopCount() \u003d\u003d null\n            ? null\n            : hard.getMaxWdmHopCount().toString()\n        :  hard.getMaxWdmHopCount() \u003d\u003d null\n            ? soft.getMaxWdmHopCount().toString()\n            : soft.getMaxWdmHopCount().intValue() \u003c\u003d hard.getMaxWdmHopCount().intValue()\n                ? soft.getMaxWdmHopCount().toString()\n                : hard.getMaxWdmHopCount().toString();",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eab7cc2b_021e2b69",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06b0902f_e3f3b972",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "a ternoray operator is more indicated here IMO",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d98d0b0c_86db0822",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "I would have preferred a LF after equal from a readability standpoint.\n\n        HardConstraints initialHardConstraints \u003d\n            buildHardConstraint(null, false, null, null, null, null, false, false, null, null);",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b9de82a_387eb1ca",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af176f46_791d7a82",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ConstraintsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "I don\u0027t think intermediate variables are required here",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c956ec8_bfdee31a",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ConstraintsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c160d67e_a1b1dc84",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ConstraintsUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-03-31T09:30:30Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
