@@ -140,6 +140,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd7195e_1a7080e7",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-01T14:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9c19793_80d1b406",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d98d0b0c_86db0822",
@@ -157,6 +175,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da07afe1_0bb5a9d2",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-01T14:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d98d0b0c_86db0822",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b9de82a_387eb1ca",
@@ -170,6 +206,24 @@
       "writtenOn": "2022-03-31T09:30:30Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7510be7b_710e454b",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraintsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-01T14:14:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b9de82a_387eb1ca",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
