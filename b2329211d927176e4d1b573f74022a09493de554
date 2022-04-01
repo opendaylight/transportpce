@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29d78b5a_2fc54b3a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:18:07Z",
+      "side": 1,
+      "message": "This comment purpose is mostly to indicate that\nsoft.getMaxWdmHopCount() and hard.getMaxWdmHopCount() nullness are sometimes evaluated twice, what can be avoided.\nI agree this can be adressed with nested if-structures also.\n\nBoth nested if-structures and ternary operators can be advertised by Sonar.\nSo I proposed nested ternary operators because I think they are more readable than nested if-structures in that case.\nBut I agree they might sound less readable for people not used to them.\nNote specialists opinions vary on the topic.\nYou can have more details here at this URL\nhttps://medium.com/javascript-scene/nested-ternaries-are-great-361bddd0f340\n\nIn that particular case, with a good indentation and LF placements, the variable allocation is presented under a tree formatting, what is quite convenient for experienced users to evaluate cases when occurs a particular value.\n\nThis is also more aligned with coding style remarks we add on the previous change about having a code more compact.\n\nThat said, this might be a little more optimized by inverting the nullness checks orderto reduce the nesting imbrications...",
+      "parentUuid": "bae7d6e1_8bbc2f59",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eab7cc2b_021e2b69",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
         "patchSetId": 6
