@@ -100,6 +100,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eaeff5a_d09da49a",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-node-types@2021-05-28.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "ticket opened at https://github.com/OpenROADM/OpenROADM_MSA_Private/issues/872",
+      "parentUuid": "8559e820_2210d7a7",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e466a7c_cb7d3369",
@@ -113,6 +131,24 @@
       "writtenOn": "2022-02-01T08:32:33Z",
       "side": 1,
       "message": "idem",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3800e541_87ee156c",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-optical-channel-types@2021-12-10.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e466a7c_cb7d3369",
       "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -134,6 +170,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a26360_facbf9d1",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-phy-codes@2021-05-28.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da397b94_9b661223",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ea356a0_2b212297",
@@ -147,6 +201,24 @@
       "writtenOn": "2022-02-01T08:32:33Z",
       "side": 1,
       "message": "tabs here",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c7f2ca_77102515",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-operational-mode-catalog@2021-12-10.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0ea356a0_2b212297",
       "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -168,6 +240,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03cc7626_4fb25c16",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-service@2021-12-10.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be275f2e_d5960bac",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e33f634b_b75042b7",
@@ -181,6 +271,24 @@
       "writtenOn": "2022-02-01T08:32:33Z",
       "side": 1,
       "message": "idem\netc",
+      "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9392ed80_c6bc673c",
+        "filename": "ordmodels/service/src/main/yang/org-openroadm-topology@2021-12-10.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-01T09:02:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e33f634b_b75042b7",
       "revId": "ecfe66dcaa7d0356389d3ce5d633cb1cb0d202bb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
