@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8596c332_b155b2ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-03T07:55:08Z",
+      "side": 1,
+      "message": "V-1 due to new pylint version and well known issue on one TAPI test",
+      "revId": "2df684ce7a8e782a32000dd0e5ae74ea39ae1c1f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
