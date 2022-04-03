@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea706441_bb1a2015",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-03T08:00:45Z",
+      "side": 1,
+      "message": "V-1 due to multiple issues at first sight due to network connectivity issues (impossible to start some sims...)",
+      "revId": "dab8abe2f5cece597566b843c168a7e31a9ac5bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
