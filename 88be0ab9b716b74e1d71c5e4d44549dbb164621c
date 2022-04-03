@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2399e11d_f1e3b60c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-03T07:42:58Z",
+      "side": 1,
+      "message": "Due to new pyling version: solved at the top of the relation chain\n ___________________________________ summary ____________________________________\nbuildcontroller: commands succeeded\ntestsPCE: commands succeeded\nsims121: commands succeeded\nbuild_karaf_tests121: commands succeeded\ntests121: commands succeeded\nsims221: commands succeeded\nbuild_karaf_tests221: commands succeeded\nsims71: commands succeeded\nbuild_karaf_tests71: commands succeeded\ntests71: commands succeeded\ntests221: commands succeeded\nbuild_karaf_tests_hybrid: commands succeeded\ntests_hybrid: commands succeeded\ndocs: commands succeeded\ndocs-linkcheck: commands succeeded\ncheckbashisms: commands succeeded\npre-commit: commands succeeded\ngitlint: commands succeeded\nERROR:   pylint: parallel child exit code 1",
+      "revId": "88be0ab9b716b74e1d71c5e4d44549dbb164621c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
