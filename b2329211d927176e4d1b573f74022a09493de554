@@ -88,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77990e7f_c5532dee",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-04T08:06:04Z",
+      "side": 1,
+      "message": "Decided during TransportPCE meeting to keep it as it is for readability reason.\nAck",
+      "parentUuid": "29d78b5a_2fc54b3a",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eab7cc2b_021e2b69",
@@ -101,6 +119,24 @@
       "writtenOn": "2022-03-31T09:30:30Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d6e8bfd_95b21d86",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-04T08:06:04Z",
+      "side": 1,
+      "message": "Decided during TransportPCE meeting to keep it as it is for readability reason.\nAck",
+      "parentUuid": "eab7cc2b_021e2b69",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
