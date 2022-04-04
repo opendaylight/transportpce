@@ -18,19 +18,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev21
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.common.constraints.LinkIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRouting;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Distance;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.DistanceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Diversity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.DiversityBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Exclude;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.ExcludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.HopCount;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.HopCountBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Latency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.LatencyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.TEMetric;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.TEMetricBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierListBuilder;
@@ -110,78 +105,69 @@ public final class ConstraintsUtils {
                                                       Double maxLatency, boolean hopCount, boolean teMetric,
                                                       String maxDistance, String coRoutingServiceId) {
 
-        List<String> operationalModeList = null;
-        if (operationalMode) {
-            operationalModeList = Arrays.asList("operational-mode 1", "operational-mode 2");
-        }
-        Diversity diversity = null;
-        if (diversityServiceList != null && !diversityServiceList.isEmpty()) {
-            Map<
-                ServiceIdentifierListKey,
-                org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
-                        .constraints.ServiceIdentifierList> serviceIdList = new HashMap<>();
+        Map<ServiceIdentifierListKey,
+            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
+                    .constraints.ServiceIdentifierList>
+                serviceIdList = new HashMap<>();
+        if (diversityServiceList != null) {
             for (String serviceId : diversityServiceList) {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
                         .constraints.ServiceIdentifierList sil = createServiceIdentifierListForDiversity(serviceId);
                 serviceIdList.put(sil.key(), sil);
             }
-            diversity = new DiversityBuilder()
-                .setDiversityType(DiversityType.Serial)
-                .setServiceIdentifierList(serviceIdList)
-                .build();
         }
 
-        Latency latency = null;
-        if (maxLatency != null) {
-            latency = new LatencyBuilder()
-                .setMaxLatency(new BigDecimal(maxLatency))
-                .build();
-        }
-        HopCount hc = null;
-        if (hopCount) {
-            hc = new HopCountBuilder()
-                .setMaxWdmHopCount(Uint8.valueOf(3))
-                .setMaxOtnHopCount(Uint8.valueOf(5))
-                .build();
-        }
         Map<String, Exclude> excludeMap = initialiseExcludeMap();
-        Exclude exclu = exclude == null || !excludeMap.containsKey(exclude)
-            ? null
-            : excludeMap.get(exclude);
-
         Map<String, Include> includeMap = initialiseIncludeMap();
-        Include inclu = include == null || !includeMap.containsKey(include)
-            ? null
-            : includeMap.get(include);
-
-        TEMetric tem = null;
-        if (teMetric) {
-            tem = new TEMetricBuilder()
-                .setMaxWdmTEMetric(Uint32.valueOf(8))
-                .setMaxOtnTEMetric(Uint32.valueOf(11))
-                .build();
-        }
-        Distance distance = null;
-        if (maxDistance != null) {
-            distance = new DistanceBuilder()
-                .setMaxDistance(new BigDecimal(maxDistance))
-                .build();
-        }
         Map<String, CoRouting> coRoutingMap = initialiseCoRoutingMap();
-        CoRouting coRouting = coRoutingServiceId == null || !coRoutingMap.containsKey(coRoutingServiceId)
-            ? null
-            : coRoutingMap.get(coRoutingServiceId);
+
         return new HardConstraintsBuilder()
             .setCustomerCode(customerCode)
-            .setOperationalMode(operationalModeList)
-            .setDiversity(diversity)
-            .setExclude(exclu)
-            .setInclude(inclu)
-            .setLatency(latency)
-            .setHopCount(hc)
-            .setTEMetric(tem)
-            .setDistance(distance)
-            .setCoRouting(coRouting)
+            .setOperationalMode(
+                operationalMode
+                    ? Arrays.asList("operational-mode 1", "operational-mode 2")
+                    : null)
+            .setDiversity(
+                serviceIdList.isEmpty()
+                    ? null
+                    : new DiversityBuilder()
+                        .setDiversityType(DiversityType.Serial)
+                        .setServiceIdentifierList(serviceIdList)
+                        .build())
+            .setExclude(
+                exclude == null || !excludeMap.containsKey(exclude)
+                    ? null
+                    : excludeMap.get(exclude))
+            .setInclude(
+                include == null || !includeMap.containsKey(include)
+                    ? null
+                    : includeMap.get(include))
+            .setLatency(
+                maxLatency == null
+                    ? null
+                    : new LatencyBuilder().setMaxLatency(new BigDecimal(maxLatency)).build())
+            .setHopCount(
+                hopCount
+                    ? new HopCountBuilder()
+                        .setMaxWdmHopCount(Uint8.valueOf(3))
+                        .setMaxOtnHopCount(Uint8.valueOf(5))
+                        .build()
+                    : null)
+            .setTEMetric(
+                teMetric
+                    ? new TEMetricBuilder()
+                        .setMaxWdmTEMetric(Uint32.valueOf(8))
+                        .setMaxOtnTEMetric(Uint32.valueOf(11))
+                        .build()
+                    : null)
+            .setDistance(
+                maxDistance == null
+                    ? null
+                    : new DistanceBuilder().setMaxDistance(new BigDecimal(maxDistance)).build())
+            .setCoRouting(
+                coRoutingServiceId == null || !coRoutingMap.containsKey(coRoutingServiceId)
+                    ? null
+                    : coRoutingMap.get(coRoutingServiceId))
             .build();
     }
 
@@ -200,25 +186,36 @@ public final class ConstraintsUtils {
     }
 
     private static Map<String, Exclude> initialiseExcludeMap() {
+        HashMap<String, Exclude> excludeHashMap =  new HashMap<>();
         LinkIdentifier linkId1 = new LinkIdentifierBuilder()
             .setLinkId("link-id 1")
             .setLinkNetworkId("openroadm-topology")
             .build();
-        Exclude exclude1 = new ExcludeBuilder()
-            .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
-            .build();
-        Exclude exclude2 = new ExcludeBuilder()
-            .setNodeId(List.of(new NodeIdType("node-id-2")))
-            .build();
-        Exclude exclude3 = new ExcludeBuilder()
-            .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
-            .build();
-        Exclude exclude4 = new ExcludeBuilder()
-            .setFiberBundle(List.of("fiber-1", "fiber-2"))
-            .build();
-        Exclude exclude5 = new ExcludeBuilder()
-            .setFiberBundle(List.of("fiber-2", "fiber-3"))
-            .build();
+        excludeHashMap.put(
+            "link1",
+            new ExcludeBuilder()
+                .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
+                .build());
+        excludeHashMap.put(
+            "node",
+            new ExcludeBuilder()
+                .setNodeId(List.of(new NodeIdType("node-id-2")))
+                .build());
+        excludeHashMap.put(
+            "service",
+            new ExcludeBuilder()
+                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
+                .build());
+        excludeHashMap.put(
+            "fiber1",
+            new ExcludeBuilder()
+                .setFiberBundle(List.of("fiber-1", "fiber-2"))
+                .build());
+        excludeHashMap.put(
+            "fiber2",
+            new ExcludeBuilder()
+                .setFiberBundle(List.of("fiber-2", "fiber-3"))
+                .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")
             .setLinkNetworkId("openroadm-topology")
@@ -227,33 +224,45 @@ public final class ConstraintsUtils {
             .setLinkId("link-id 3")
             .setLinkNetworkId("openroadm-topology")
             .build();
-        Exclude exclude6 = new ExcludeBuilder()
-            .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
-            .build();
-        return Map.of("link1", exclude1, "node", exclude2, "service", exclude3, "fiber1", exclude4, "fiber2", exclude5,
-            "link2", exclude6);
+        excludeHashMap.put(
+            "link2",
+            new ExcludeBuilder()
+                .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
+                .build());
+        return excludeHashMap;
     }
 
     private static Map<String, Include> initialiseIncludeMap() {
+        HashMap<String, Include> includeHashMap =  new HashMap<>();
         LinkIdentifier linkId1 = new LinkIdentifierBuilder()
             .setLinkId("link-id 1")
             .setLinkNetworkId("openroadm-topology")
             .build();
-        Include exclude1 = new IncludeBuilder()
-            .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
-            .build();
-        Include exclude2 = new IncludeBuilder()
-            .setNodeId(List.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
-            .build();
-        Include exclude3 = new IncludeBuilder()
-            .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
-            .build();
-        Include exclude4 = new IncludeBuilder()
-            .setFiberBundle(List.of("fiber-1", "fiber-2"))
-            .build();
-        Include exclude5 = new IncludeBuilder()
-            .setFiberBundle(List.of("fiber-2", "fiber-3"))
-            .build();
+        includeHashMap.put(
+            "link1",
+            new IncludeBuilder()
+                .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
+                .build());
+        includeHashMap.put(
+            "node",
+            new IncludeBuilder()
+                .setNodeId(List.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
+                .build());
+        includeHashMap.put(
+            "service",
+            new IncludeBuilder()
+                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
+                .build());
+        includeHashMap.put(
+            "fiber1",
+            new IncludeBuilder()
+                .setFiberBundle(List.of("fiber-1", "fiber-2"))
+                .build());
+        includeHashMap.put(
+            "fiber2",
+            new IncludeBuilder()
+                .setFiberBundle(List.of("fiber-2", "fiber-3"))
+                .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")
             .setLinkNetworkId("openroadm-topology")
@@ -262,11 +271,12 @@ public final class ConstraintsUtils {
             .setLinkId("link-id 3")
             .setLinkNetworkId("openroadm-topology")
             .build();
-        Include exclude6 = new IncludeBuilder()
-            .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
-            .build();
-        return Map.of("link1", exclude1, "node", exclude2, "service", exclude3, "fiber1", exclude4, "fiber2", exclude5,
-            "link2", exclude6);
+        includeHashMap.put(
+            "link2",
+            new IncludeBuilder()
+                .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
+                .build());
+        return includeHashMap;
     }
 
     private static Map<String, CoRouting> initialiseCoRoutingMap() {
@@ -290,12 +300,10 @@ public final class ConstraintsUtils {
                 .setSite(true)
                 .build())
             .build();
-        CoRouting coRouting1 = new CoRoutingBuilder()
-            .setServiceIdentifierList(Map.of(sil1.key(), sil1, sil2.key(), sil2))
-            .build();
-        CoRouting coRouting2 = new CoRoutingBuilder()
-            .setServiceIdentifierList(Map.of(sil3.key(), sil3))
-            .build();
-        return Map.of("coRouting1", coRouting1, "coRouting2", coRouting2);
+        return Map.of(
+            "coRouting1",
+            new CoRoutingBuilder().setServiceIdentifierList(Map.of(sil1.key(), sil1, sil2.key(), sil2)).build(),
+            "coRouting2",
+            new CoRoutingBuilder().setServiceIdentifierList(Map.of(sil3.key(), sil3)).build());
     }
 }
