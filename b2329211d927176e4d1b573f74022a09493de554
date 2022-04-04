@@ -106,6 +106,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11537de7_eacf4e33",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-04T11:08:40Z",
+      "side": 1,
+      "message": "The optimization issue pointed here are the unneeded undelerlying string conversion have been adressed in https://git.opendaylight.org/gerrit/c/transportpce/+/100381",
+      "parentUuid": "77990e7f_c5532dee",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eab7cc2b_021e2b69",
@@ -137,6 +155,23 @@
       "side": 1,
       "message": "Decided during TransportPCE meeting to keep it as it is for readability reason.\nAck",
       "parentUuid": "eab7cc2b_021e2b69",
+      "revId": "b2329211d927176e4d1b573f74022a09493de554",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8b963d_84f95145",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/DowngradeConstraints.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-04T11:08:40Z",
+      "side": 1,
+      "message": "I think it should be setMaxOtnHopCount rather.\nAdressed in the same relation chain",
       "revId": "b2329211d927176e4d1b573f74022a09493de554",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
