@@ -334,8 +334,8 @@ public class DowngradeConstraintsTest {
             initialSoftConstraints.getHopCount(), generatedSoftConstraints.getHopCount());
         assertEquals("updated soft constraints max-wdm-hop-count should be '3'",
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
-        assertNull("updated soft constraints max-otn-hop-count should be null",
-            generatedSoftConstraints.getHopCount().getMaxOtnHopCount());
+        assertEquals("updated soft constraints max-otn-hop-count should be '5'",
+            5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
 
         // test addition of hard hop-count when no soft hop-count
         initialHardConstraints = buildHardConstraint(null, false, null, null, null, null, true, false, null, null);
@@ -346,8 +346,8 @@ public class DowngradeConstraintsTest {
             initialHardConstraints.getHopCount(), generatedSoftConstraints.getHopCount());
         assertEquals("updated soft constraints max-wdm-hop-count should be '3'",
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
-        assertNull("updated soft constraints max-otn-hop-count should be null",
-            generatedSoftConstraints.getHopCount().getMaxOtnHopCount());
+        assertEquals("updated soft constraints max-otn-hop-count should be '5'",
+            5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
 
         // test addition of hard hop-count when existing soft hop-count
         initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, true, false, null, null);
@@ -355,8 +355,8 @@ public class DowngradeConstraintsTest {
             initialHardConstraints, initialSoftConstraints);
         assertEquals("updated soft constraints max-wdm-hop-count should be '3'",
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
-        assertNull("updated soft constraints max-otn-hop-count should be null",
-            generatedSoftConstraints.getHopCount().getMaxOtnHopCount());
+        assertEquals("updated soft constraints max-otn-hop-count should be '5'",
+            5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
     }
 
     @Test

@@ -141,6 +141,7 @@ public final class ConstraintsUtils {
         if (hopCount) {
             hc = new HopCountBuilder()
                 .setMaxWdmHopCount(Uint8.valueOf(3))
+                .setMaxOtnHopCount(Uint8.valueOf(5))
                 .build();
         }
         Map<String, Exclude> excludeMap = initialiseExcludeMap();
@@ -157,6 +158,7 @@ public final class ConstraintsUtils {
         if (teMetric) {
             tem = new TEMetricBuilder()
                 .setMaxWdmTEMetric(Uint32.valueOf(8))
+                .setMaxOtnTEMetric(Uint32.valueOf(11))
                 .build();
         }
         Distance distance = null;

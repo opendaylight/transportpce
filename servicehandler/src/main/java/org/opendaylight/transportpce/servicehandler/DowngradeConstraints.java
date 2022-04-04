@@ -302,7 +302,7 @@ public final class DowngradeConstraints {
             hcBldr.setMaxWdmHopCount(Uint8.valueOf(maxWdmHc));
         }
         if (maxOtnHc != null) {
-            hcBldr.setMaxWdmHopCount(Uint8.valueOf(maxOtnHc));
+            hcBldr.setMaxOtnHopCount(Uint8.valueOf(maxOtnHc));
         }
         return hcBldr.build();
     }
