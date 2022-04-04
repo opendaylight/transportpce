@@ -39,7 +39,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev21
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraintsBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
-import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,7 @@ public final class DowngradeConstraints {
         SoftConstraintsBuilder softConstraintsBuilder = new SoftConstraintsBuilder(softConstraints);
         if (hardConstraints.getCustomerCode() != null && !hardConstraints.getCustomerCode().isEmpty()) {
             if (softConstraintsBuilder.getCustomerCode() == null
-                || softConstraintsBuilder.getCustomerCode().isEmpty()) {
+                    || softConstraintsBuilder.getCustomerCode().isEmpty()) {
                 softConstraintsBuilder.setCustomerCode(hardConstraints.getCustomerCode());
             } else {
                 List<String> updatedCustomerCode = new ArrayList<>(softConstraintsBuilder.getCustomerCode());
@@ -76,7 +75,7 @@ public final class DowngradeConstraints {
         }
         if (hardConstraints.getOperationalMode() != null && !hardConstraints.getOperationalMode().isEmpty()) {
             if (softConstraintsBuilder.getOperationalMode() == null
-                || softConstraintsBuilder.getOperationalMode().isEmpty()) {
+                    || softConstraintsBuilder.getOperationalMode().isEmpty()) {
                 softConstraintsBuilder.setOperationalMode(hardConstraints.getOperationalMode());
             } else {
                 List<String> updatedOperationalMode = new ArrayList<>(softConstraintsBuilder.getOperationalMode());
@@ -277,32 +276,28 @@ public final class DowngradeConstraints {
         if (soft == null) {
             return new HopCountBuilder(hard).build();
         }
-        String maxWdmHc = null;
-        if (soft.getMaxWdmHopCount() != null && hard.getMaxWdmHopCount() != null) {
-            maxWdmHc = soft.getMaxWdmHopCount().intValue() <= hard.getMaxWdmHopCount().intValue()
-                ? soft.getMaxWdmHopCount().toString()
-                : hard.getMaxWdmHopCount().toString();
-        } else if (hard.getMaxWdmHopCount() != null) {
-            maxWdmHc = hard.getMaxWdmHopCount().toString();
-        } else if (soft.getMaxWdmHopCount() != null) {
-            maxWdmHc = soft.getMaxWdmHopCount().toString();
-        }
-        String maxOtnHc = null;
-        if (soft.getMaxOtnHopCount() != null && hard.getMaxOtnHopCount() != null) {
-            maxOtnHc = soft.getMaxOtnHopCount().intValue() <= hard.getMaxOtnHopCount().intValue()
-                ? soft.getMaxOtnHopCount().toString()
-                : hard.getMaxOtnHopCount().toString();
-        } else if (hard.getMaxOtnHopCount() != null) {
-            maxOtnHc = hard.getMaxOtnHopCount().toString();
-        } else if (soft.getMaxOtnHopCount() != null) {
-            maxOtnHc = soft.getMaxOtnHopCount().toString();
-        }
         HopCountBuilder hcBldr = new HopCountBuilder();
-        if (maxWdmHc != null) {
-            hcBldr.setMaxWdmHopCount(Uint8.valueOf(maxWdmHc));
+        if (soft.getMaxWdmHopCount() == null) {
+            if (hard.getMaxWdmHopCount() != null) {
+                hcBldr.setMaxWdmHopCount(hard.getMaxWdmHopCount());
+            }
+        } else {
+            hcBldr.setMaxWdmHopCount(
+                hard.getMaxWdmHopCount() == null
+                        || soft.getMaxWdmHopCount().intValue() <= hard.getMaxWdmHopCount().intValue()
+                    ? soft.getMaxWdmHopCount()
+                    : hard.getMaxWdmHopCount());
         }
-        if (maxOtnHc != null) {
-            hcBldr.setMaxOtnHopCount(Uint8.valueOf(maxOtnHc));
+        if (soft.getMaxOtnHopCount() == null) {
+            if (hard.getMaxOtnHopCount() != null) {
+                hcBldr.setMaxOtnHopCount(hard.getMaxOtnHopCount());
+            }
+        } else {
+            hcBldr.setMaxOtnHopCount(
+                hard.getMaxOtnHopCount() == null
+                        || soft.getMaxOtnHopCount().intValue() <= hard.getMaxOtnHopCount().intValue()
+                    ? soft.getMaxOtnHopCount()
+                    : hard.getMaxOtnHopCount());
         }
         return hcBldr.build();
     }
@@ -311,32 +306,28 @@ public final class DowngradeConstraints {
         if (soft == null) {
             return new TEMetricBuilder(hard).build();
         }
-        String maxWdmTem = null;
-        if (soft.getMaxWdmTEMetric() != null && hard.getMaxWdmTEMetric() != null) {
-            maxWdmTem = soft.getMaxWdmTEMetric().intValue() <= hard.getMaxWdmTEMetric().intValue()
-                ? soft.getMaxWdmTEMetric().toString()
-                : hard.getMaxWdmTEMetric().toString();
-        } else if (hard.getMaxWdmTEMetric() != null) {
-            maxWdmTem = hard.getMaxWdmTEMetric().toString();
-        } else if (soft.getMaxWdmTEMetric() != null) {
-            maxWdmTem = soft.getMaxWdmTEMetric().toString();
-        }
-        String maxOtnTem = null;
-        if (soft.getMaxOtnTEMetric() != null && hard.getMaxOtnTEMetric() != null) {
-            maxOtnTem = soft.getMaxOtnTEMetric().intValue() <= hard.getMaxOtnTEMetric().intValue()
-                ? soft.getMaxOtnTEMetric().toString()
-                : hard.getMaxOtnTEMetric().toString();
-        } else if (hard.getMaxOtnTEMetric() != null) {
-            maxOtnTem = hard.getMaxOtnTEMetric().toString();
-        } else if (soft.getMaxOtnTEMetric() != null) {
-            maxOtnTem = soft.getMaxOtnTEMetric().toString();
-        }
         TEMetricBuilder temBldr = new TEMetricBuilder();
-        if (maxWdmTem != null) {
-            temBldr.setMaxWdmTEMetric(Uint32.valueOf(maxWdmTem));
+        if (soft.getMaxWdmTEMetric() == null) {
+            if (hard.getMaxWdmTEMetric() != null) {
+                temBldr.setMaxWdmTEMetric(hard.getMaxWdmTEMetric());
+            }
+        } else {
+            temBldr.setMaxWdmTEMetric(
+                hard.getMaxWdmTEMetric() == null
+                        || soft.getMaxWdmTEMetric().intValue() <= hard.getMaxWdmTEMetric().intValue()
+                    ? soft.getMaxWdmTEMetric()
+                    : hard.getMaxWdmTEMetric());
         }
-        if (maxOtnTem != null) {
-            temBldr.setMaxOtnTEMetric(Uint32.valueOf(maxOtnTem));
+        if (soft.getMaxOtnTEMetric() == null) {
+            if (hard.getMaxOtnTEMetric() != null) {
+                temBldr.setMaxOtnTEMetric(hard.getMaxWdmTEMetric());
+            }
+        } else {
+            temBldr.setMaxOtnTEMetric(
+                hard.getMaxOtnTEMetric() == null
+                        || soft.getMaxOtnTEMetric().intValue() <= hard.getMaxOtnTEMetric().intValue()
+                    ? soft.getMaxOtnTEMetric()
+                    : hard.getMaxOtnTEMetric());
         }
         return temBldr.build();
     }
