@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "151095cc_18f27df1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-05T09:34:46Z",
+      "side": 1,
+      "message": "note there is currently no Junit test for TE metrics.\nThis is the reason why I only added OTN hop count UT.",
+      "revId": "97b42df7417ca71f7327cf1c51e809995a213fcf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
