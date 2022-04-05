@@ -317,7 +317,7 @@ public class DowngradeConstraintsTest {
     }
 
     @Test
-    public void testUpdateSoftConstraintsForHopCount() {
+    public void testUpdateSoftConstraintsForHopCountAndTEmetric() {
         HardConstraints initialHardConstraints =
             buildHardConstraint(null, false, null, null, null, null, false, false, null, null);
         SoftConstraints initialSoftConstraints =
@@ -327,7 +327,7 @@ public class DowngradeConstraintsTest {
         assertNull("updated soft constraints should contain no hop-count constraint",
             generatedSoftConstraints.getHopCount());
 
-        initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, true, false, null, null);
+        initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, true, true, null, null);
         generatedSoftConstraints = DowngradeConstraints.updateSoftConstraints(
             initialHardConstraints, initialSoftConstraints);
         assertEquals("updated soft constraints should not be changed",
@@ -336,9 +336,13 @@ public class DowngradeConstraintsTest {
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
         assertEquals("updated soft constraints max-otn-hop-count should be '5'",
             5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
+        assertEquals("updated soft constraints max-wdm-TE-metric should be '8'",
+            8, generatedSoftConstraints.getTEMetric().getMaxWdmTEMetric().intValue());
+        assertEquals("updated soft constraints max-otn-TE-metric should be '11'",
+            11, generatedSoftConstraints.getTEMetric().getMaxOtnTEMetric().intValue());
 
         // test addition of hard hop-count when no soft hop-count
-        initialHardConstraints = buildHardConstraint(null, false, null, null, null, null, true, false, null, null);
+        initialHardConstraints = buildHardConstraint(null, false, null, null, null, null, true, true, null, null);
         initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, false, false, null, null);
         generatedSoftConstraints = DowngradeConstraints.updateSoftConstraints(
             initialHardConstraints, initialSoftConstraints);
@@ -348,15 +352,23 @@ public class DowngradeConstraintsTest {
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
         assertEquals("updated soft constraints max-otn-hop-count should be '5'",
             5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
+        assertEquals("updated soft constraints max-wdm-TE-metric should be '8'",
+            8, generatedSoftConstraints.getTEMetric().getMaxWdmTEMetric().intValue());
+        assertEquals("updated soft constraints max-otn-TE-metric should be '11'",
+            11, generatedSoftConstraints.getTEMetric().getMaxOtnTEMetric().intValue());
 
         // test addition of hard hop-count when existing soft hop-count
-        initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, true, false, null, null);
+        initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, true, true, null, null);
         generatedSoftConstraints = DowngradeConstraints.updateSoftConstraints(
             initialHardConstraints, initialSoftConstraints);
         assertEquals("updated soft constraints max-wdm-hop-count should be '3'",
             3, generatedSoftConstraints.getHopCount().getMaxWdmHopCount().intValue());
         assertEquals("updated soft constraints max-otn-hop-count should be '5'",
             5, generatedSoftConstraints.getHopCount().getMaxOtnHopCount().intValue());
+        assertEquals("updated soft constraints max-wdm-TE-metric should be '8'",
+            8, generatedSoftConstraints.getTEMetric().getMaxWdmTEMetric().intValue());
+        assertEquals("updated soft constraints max-otn-TE-metric should be '11'",
+            11, generatedSoftConstraints.getTEMetric().getMaxOtnTEMetric().intValue());
     }
 
     @Test
