@@ -33,6 +33,40 @@
       "message": "docs-linkcheck false positive",
       "revId": "243c10e435e94466615d3a52d958371752a3982d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84f5228_bd971da3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-06T10:01:01Z",
+      "side": 1,
+      "message": "idem\n\nalso LF should be improved here \u003d\u003e vote -1",
+      "revId": "243c10e435e94466615d3a52d958371752a3982d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dfe2b8b_5f8def96",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-06T10:01:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "243c10e435e94466615d3a52d958371752a3982d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
