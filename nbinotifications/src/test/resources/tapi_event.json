@@ -1,0 +1,28 @@
+{
+  "nbi-notifications:notification-tapi-service": {
+    "layer-protocol-name": "ETH",
+    "notification-type": "ATTRIBUTE_VALUE_CHANGE",
+    "changed-attributes": [
+      {
+        "value-name": "administrativeState",
+        "old-value": "LOCKED",
+        "new-value": "UNLOCKED"
+      },
+      {
+        "value-name": "operationalState",
+        "old-value": "DISABLED",
+        "new-value": "ENABLED"
+      }
+    ],
+    "target-object-name": [
+      {
+        "value-name": "Connectivity Service Name",
+        "value": "76d8f07b-ead5-4132-8eb8-cf3fdef7e079"
+      }
+    ],
+    "uuid": "6ae49721-7f96-4924-b23b-31e5bee4946b",
+    "target-object-type": "CONNECTIVITY_SERVICE",
+    "event-time-stamp": "2022-04-06T09:06:01+00:00",
+    "target-object-identifier": "76d8f07b-ead5-4132-8eb8-cf3fdef7e079"
+  }
+}
