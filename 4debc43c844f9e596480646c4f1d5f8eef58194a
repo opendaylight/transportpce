@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea969c0_8da80ef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-04-06T13:36:23Z",
+      "side": 1,
+      "message": "All the tests are passing but onPublishTapiNotificationServiceTest from NbiNotificationsListenerImplTest file.\nAny feedback will be welcome 😊",
+      "revId": "4debc43c844f9e596480646c4f1d5f8eef58194a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
