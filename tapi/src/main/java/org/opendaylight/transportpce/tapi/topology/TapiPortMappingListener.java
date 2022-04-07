@@ -58,6 +58,9 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                     for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
                         Mapping oldMapping = mappingBef.get(entry.getKey());
                         Mapping newMapping = mappingAft.get(entry.getKey());
+                        if (oldMapping == null || newMapping == null) {
+                            continue;
+                        }
                         if (!oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
                                 || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
                             this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());

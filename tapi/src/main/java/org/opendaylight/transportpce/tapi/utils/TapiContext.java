@@ -17,6 +17,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
@@ -28,6 +29,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
@@ -385,6 +388,7 @@ public class TapiContext {
     }
 
     public void deleteConnectivityService(Uuid serviceUuid) {
+        // TODO: handle case where the infrastructure service is removed before the top level service?
         ConnectivityService connectivityService = getConnectivityService(serviceUuid);
         if (connectivityService == null) {
             LOG.error("Service doesnt exist in tapi context");
@@ -393,7 +397,7 @@ public class TapiContext {
         for (org.opendaylight.yang.gen.v1
                 .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.Connection connection:
                     connectivityService.getConnection().values()) {
-            deleteConnection(connection.getConnectionUuid());
+            deleteConnection(connection.getConnectionUuid(), serviceUuid, connectivityService.getServiceLayer());
         }
         InstanceIdentifier<ConnectivityService> connectivityServIID =
                 InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
@@ -410,7 +414,7 @@ public class TapiContext {
         }
     }
 
-    private void deleteConnection(Uuid connectionUuid) {
+    private void deleteConnection(Uuid connectionUuid, Uuid serviceUuid, LayerProtocolName serviceLayer) {
         // First read connectivity service with service uuid and update info
         InstanceIdentifier<org.opendaylight.yang.gen.v1
             .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection> connectionIID =
@@ -421,14 +425,95 @@ public class TapiContext {
                         .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection.class,
                     new org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey(
-                            connectionUuid))
+                        connectionUuid))
                 .build();
+        Connection connection = getConnection(connectionUuid);
+        if (connection != null && isNotUsedByOtherService(connection, serviceUuid)) {
+            Map<LowerConnectionKey, LowerConnection> lowerConnectionMap = connection.getLowerConnection();
+            if (lowerConnectionMap != null) {
+                for (LowerConnection lowerConnection:lowerConnectionMap.values()) {
+                    // check layer of connection, for DSR service we only need to delete DSR layer
+                    // connection and XC at ODU. For ODU, only need to delete ODU connections and for
+                    // photonic media services all the photonic media. And when it is ETH we need to delete
+                    // everything and also without checking the lower connection layer
+                    Connection conn1 = getConnection(lowerConnection.getConnectionUuid());
+                    if (conn1 == null) {
+                        // connection not found in tapi context
+                        continue;
+                    }
+                    LayerProtocolName lowerConnLayer = conn1.getLayerProtocolName();
+                    switch (serviceLayer.getIntValue()) {
+                        case 0:
+                        case 3:
+                            // PHOTONIC & ODU
+                            if (lowerConnLayer.equals(serviceLayer)) {
+                                deleteConnection(lowerConnection.getConnectionUuid(), serviceUuid, serviceLayer);
+                            }
+                            break;
+                        case 1:
+                            // ETH
+                            deleteConnection(lowerConnection.getConnectionUuid(), serviceUuid, serviceLayer);
+                            break;
+                        case 2:
+                            // DSR
+                            if (lowerConnLayer.equals(serviceLayer) || (lowerConnLayer.equals(LayerProtocolName.ODU)
+                                    && conn1.getName().values().stream().anyMatch(
+                                            name -> name.getValue().contains("XC")))) {
+                                deleteConnection(lowerConnection.getConnectionUuid(), serviceUuid, serviceLayer);
+                            }
+                            break;
+                        default:
+                            LOG.info("Unknown service Layer: {}", serviceLayer.getName());
+                    }
+                }
+            }
+        }
         try {
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, connectionIID);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to delete TAPI Connection", e);
         }
+    }
+
+    private boolean isNotUsedByOtherService(Connection connection, Uuid serviceUuid) {
+        Map<ConnectivityServiceKey, ConnectivityService> connServicesMap = getConnectivityServices();
+        if (connServicesMap == null) {
+            LOG.info("isNotUsedByOtherService: No service in tapi context!");
+            return true;
+        }
+        for (ConnectivityService connService: connServicesMap.values()) {
+            if (connService.getConnection() == null || connService.getUuid().equals(serviceUuid)) {
+                LOG.info("isNotUsedByOtherService: There are no connections in service {} or service in loop is the "
+                        + "service to be deleted", connService.getUuid().getValue());
+                continue;
+            }
+            if (connService.getConnection().containsKey(
+                    new org.opendaylight.yang.gen.v1
+                        .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.ConnectionKey(
+                            connection.getUuid()))) {
+                LOG.info("isNotUsedByOtherService: Connection {} is in used by service {}. Cannot remove it from "
+                        + "context", connection.getUuid().getValue(), connService.getUuid().getValue());
+                return false;
+            }
+            LOG.info("isNotUsedByOtherService: Going to check lower connections");
+            for (org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.Connection
+                    conn:connService.getConnection().values()) {
+                Connection connection1 = getConnection(conn.getConnectionUuid());
+                if (connection1 == null || connection1.getLowerConnection() == null) {
+                    continue;
+                }
+                if (connection1.getLowerConnection().containsKey(new LowerConnectionKey(connection.getUuid()))) {
+                    LOG.info("isNotUsedByOtherService: Lower Connection {} is in used by service {}. Cannot remove it "
+                            + "from context", connection.getUuid().getValue(), connService.getUuid().getValue());
+                    return false;
+                }
+            }
+        }
+        LOG.info("isNotUsedByOtherService: No other service uses connection {}, therefore it can be safely deleted",
+                connection.getUuid());
+        return true;
     }
 
     public Connection getConnection(Uuid connectionUuid) {
