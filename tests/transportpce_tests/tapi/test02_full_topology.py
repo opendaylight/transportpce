@@ -136,12 +136,14 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.mount_tapi_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        time.sleep(2)
 
     def test_02_connect_spdrC(self):
         print("Connecting SPDRC")
         response = test_utils.mount_tapi_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        time.sleep(2)
 
     def test_03_connect_rdmA(self):
         print("Connecting ROADMA")
@@ -155,6 +157,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.mount_tapi_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        time.sleep(2)
 
     def test_05_connect_sprdA_1_N1_to_roadmA_PP1(self):
         response = test_utils.connect_xpdr_to_rdm_request("SPDR-SA1", "1", "1",
@@ -319,6 +322,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.cr_serv_sample_data["input"]["end-point"][1]["layer-protocol-name"] = "ODU"
         self.cr_serv_sample_data["input"]["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = "8116d0af-39fa-3df5-bed2-dd2cd5e8217d"
         self.cr_serv_sample_data["input"]["connectivity-constraint"]["service-layer"] = "ODU"
+        self.cr_serv_sample_data["input"]["connectivity-constraint"]["service-level"] = self.uuid_services.pm
 
         response = test_utils.tapi_create_connectivity_request(self.cr_serv_sample_data)
         time.sleep(self.WAITING)
@@ -373,6 +377,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.cr_serv_sample_data["input"]["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = "25812ef2-625d-3bf8-af55-5e93946d1c22"
         self.cr_serv_sample_data["input"]["connectivity-constraint"]["service-layer"] = "DSR"
         self.cr_serv_sample_data["input"]["connectivity-constraint"]["requested-capacity"]["total-size"]["value"] = "10"
+        self.cr_serv_sample_data["input"]["connectivity-constraint"]["service-level"] = self.uuid_services.odu
 
         response = test_utils.tapi_create_connectivity_request(self.cr_serv_sample_data)
         time.sleep(self.WAITING)
