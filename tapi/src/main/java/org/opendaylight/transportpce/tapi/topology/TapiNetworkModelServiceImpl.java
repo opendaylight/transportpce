@@ -39,15 +39,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -594,6 +585,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
+            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+                xpdrNetMaps.get(i).getSupportedInterfaceCapability();
+
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, true,
@@ -615,6 +609,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setValue(String.join("+", nodeId, TapiStringConstants.E_ODU,
                     xpdrClMaps.get(i).getLogicalConnectionPoint()))
                 .build();
+
+            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+                xpdrClMaps.get(i).getSupportedInterfaceCapability();
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
@@ -1082,8 +1079,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.info("SIC list = {}", sicList);
         for (Class<? extends SupportedIfCapability> supInterCapa : sicList) {
             SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                    .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa)))
-                    .setIfCapType(convertSupIfCapa(supInterCapa))
+                    .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
+                    .setIfCapType(supInterCapa)
                     .build();
             supIfMap.put(supIfCapa.key(), supIfCapa);
         }
@@ -1163,33 +1160,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         return sclpqList;
-    }
-
-    private static Class<? extends SupportedIfCapability> convertSupIfCapa(Class<? extends
-            SupportedIfCapability> ifCapType) {
-        LOG.info("Interface Capability type = {}", ifCapType.getSimpleName());
-        switch (ifCapType.getSimpleName()) {
-            case "If100GEODU4":
-                return If100GEODU4.class;
-            case "IfOCHOTU4ODU4":
-                return IfOCHOTU4ODU4.class;
-            case "If1GEODU0":
-                return If1GEODU0.class;
-            case "If10GEODU2e":
-                return If10GEODU2e.class;
-            case "If10GEODU2":
-                return If10GEODU2.class;
-            case "If100GE":
-                return If100GE.class;
-            case "If10GE":
-                return If10GE.class;
-            case "If1GE":
-                return If1GE.class;
-            case "IfOCH":
-                return IfOCH.class;
-            default:
-                return null;
-        }
     }
 
     private String getNodeType(XpdrNodeTypes xponderType) {
@@ -1392,5 +1362,4 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.error("Error committing into datastore", e);
         }
     }
-
 }
