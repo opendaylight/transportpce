@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad2f4eb_721e7766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-04-07T12:25:10Z",
+      "side": 1,
+      "message": "First draft, I need to test it still. But it shows more or less how it should behave",
+      "revId": "927ed3240f5c23ba41c5838d8c15fc624c0d2ec9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
