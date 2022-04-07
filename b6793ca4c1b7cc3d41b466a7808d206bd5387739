@@ -1,6 +1,138 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e2b216_e9da8ae4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "Beyond these modifications, I\u0027ve also noticed that TapiNetworkModelServiceImpl class still contains an useless convertSupIfCapa method that should has been removed with my already merged change 100135... It went through the net...\nI could propose a separate change to fix that.",
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f592657_397cb416",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "this could be removed to simplify code if getChangedNodeUuids would never return null, but instead an empty list.",
+      "range": {
+        "startLine": 245,
+        "startChar": 8,
+        "endLine": 247,
+        "endChar": 9
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3e1f066_e6d05c05",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "This parameter seems not being used. Should be removed.",
+      "range": {
+        "startLine": 255,
+        "startChar": 54,
+        "endLine": 255,
+        "endChar": 67
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b791a22_c3656b61",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "You can have directly the UTF8 constant with java.nio.charset.StandardCharsets.UTF_8",
+      "range": {
+        "startLine": 332,
+        "startChar": 30,
+        "endLine": 332,
+        "endChar": 54
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d9082c_d0fbfa11",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "idem. Should be changed everywhere in the class.",
+      "range": {
+        "startLine": 337,
+        "startChar": 30,
+        "endLine": 337,
+        "endChar": 54
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "382e5eea_ca60582d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-07T09:39:15Z",
+      "side": 1,
+      "message": "it should be better to return the empty uuids list instead of null.",
+      "range": {
+        "startLine": 347,
+        "startChar": 12,
+        "endLine": 347,
+        "endChar": 23
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "491ce97d_96a32397",
