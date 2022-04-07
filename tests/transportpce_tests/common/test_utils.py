@@ -66,6 +66,7 @@ TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'applicatio
 
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
+CODE_SHOULD_BE_200_OR_201 = 'Http status code should be 200 or 201'
 
 SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "log")
 

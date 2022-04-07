@@ -134,27 +134,30 @@ class TransportPCEtesting(unittest.TestCase):
     def test_01_connect_spdrA(self):
         print("Connecting SPDRA")
         response = test_utils.mount_tapi_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        self.assertIn(response.status_code,
+                      (requests.codes.created, requests.codes.ok) , test_utils.CODE_SHOULD_BE_200_OR_201)
+        time.sleep(2)
 
     def test_02_connect_spdrC(self):
         print("Connecting SPDRC")
         response = test_utils.mount_tapi_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        self.assertIn(response.status_code,
+                      (requests.codes.created, requests.codes.ok) , test_utils.CODE_SHOULD_BE_200_OR_201)
+        time.sleep(2)
 
     def test_03_connect_rdmA(self):
         print("Connecting ROADMA")
         response = test_utils.mount_tapi_device("ROADM-A1", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        self.assertIn(response.status_code,
+                      (requests.codes.created, requests.codes.ok) , test_utils.CODE_SHOULD_BE_200_OR_201)
         time.sleep(2)
 
     def test_04_connect_rdmC(self):
         print("Connecting ROADMC")
         response = test_utils.mount_tapi_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        self.assertIn(response.status_code,
+                      (requests.codes.created, requests.codes.ok) , test_utils.CODE_SHOULD_BE_200_OR_201)
+        time.sleep(2)
 
     def test_05_connect_sprdA_1_N1_to_roadmA_PP1(self):
         response = test_utils.connect_xpdr_to_rdm_request("SPDR-SA1", "1", "1",
