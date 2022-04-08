@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcac2450_a878668b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-04-08T21:10:21Z",
+      "side": 1,
+      "message": "I have added some code to TapiPceListener and ConnectivityUtils because there was an issue when multiple roadms where found in the path description. Now this problem is solved.\nAlso I still need to solve the comments so I mark it -1",
+      "revId": "f1c2066783433955f82b87ad1523a219911ce184",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
