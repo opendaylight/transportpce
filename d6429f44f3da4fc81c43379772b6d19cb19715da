@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "089368be_9935a307",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-08T09:55:41Z",
+      "side": 1,
+      "message": "Capability",
+      "revId": "d6429f44f3da4fc81c43379772b6d19cb19715da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f66bba80_961e25a3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
