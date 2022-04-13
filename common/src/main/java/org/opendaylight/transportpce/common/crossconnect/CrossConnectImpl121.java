@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.common.crossconnect;
 
 import com.google.common.util.concurrent.FluentFuture;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.connection.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.connection.SourceBuilder;
@@ -39,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,8 +71,10 @@ public class CrossConnectImpl121 {
         rdmConnBldr.setDestination(new DestinationBuilder()
                 .setDstIf(spectrumInformation.getIdentifierFromParams(destTp))
                 .build());
-        InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionNumber()));
+        InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionNumber()))
+            .build();
 
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
@@ -191,15 +194,16 @@ public class CrossConnectImpl121 {
     }
 
     private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
-        return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+        return InstanceIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
+            .build();
     }
 
     private String generateConnectionNumber(String srcTp, String destTp, String spectralSlotName) {
         return String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, destTp, spectralSlotName);
     }
 
-    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctNumber) {
+    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, Decimal64 powerValue, String ctNumber) {
 
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctNumber);
         if (rdmConnOpt.isPresent()) {
@@ -227,8 +231,10 @@ public class CrossConnectImpl121 {
             }
 
             // post the cross connect on the device
-            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(ctNumber));
+            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(ctNumber))
+                .build();
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);

@@ -456,8 +456,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'otu-interface-id': ['XPDR2-NETWORK1-OTUC3'],
-             'och-interface-id': ['XPDR2-NETWORK1-755:768',
-                                  'XPDR2-NETWORK1-OTSIGROUP-300G']},
+             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-300G',
+                                  'XPDR2-NETWORK1-755:768']},
             response['output']['node-interface'])
 
     def test_27_get_portmapping_network1(self):
@@ -678,8 +678,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'otu-interface-id': ['XPDR2-NETWORK1-OTUC4'],
-             'och-interface-id': ['XPDR2-NETWORK1-755:768',
-                                  'XPDR2-NETWORK1-OTSIGROUP-400G']},
+             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-400G',
+                                  'XPDR2-NETWORK1-755:768']},
             response['output']['node-interface'])
 
     def test_41_get_portmapping_network1(self):

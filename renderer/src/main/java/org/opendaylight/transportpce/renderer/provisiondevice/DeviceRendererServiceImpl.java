@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -137,11 +137,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             if (input.getZEndApiInfo() != null && input.getZEndApiInfo().getNodeId().contains(nodeId)) {
                 apiInfoZ = input.getZEndApiInfo();
             }
-            List<String> createdEthInterfaces = new ArrayList<>();
-            List<String> createdOtuInterfaces = new ArrayList<>();
-            List<String> createdOduInterfaces = new ArrayList<>();
-            List<String> createdOchInterfaces = new ArrayList<>();
-            List<String> createdConnections = new ArrayList<>();
+            Set<String> createdEthInterfaces = new HashSet<>();
+            Set<String> createdOtuInterfaces = new HashSet<>();
+            Set<String> createdOduInterfaces = new HashSet<>();
+            Set<String> createdOchInterfaces = new HashSet<>();
+            Set<String> createdConnections = new HashSet<>();
             int crossConnectFlag = 0;
             try {
                 // if the node is currently mounted then proceed
@@ -157,9 +157,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         // Split the string based on # pass the last element as the supported Interface
                         // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
                         String[] listOfSuppOchInf = supportingOchInterface.split("#");
-                        createdOchInterfaces = Arrays.asList(listOfSuppOchInf);
+                        createdOchInterfaces = Set.of(listOfSuppOchInf);
                         // Taking the last element
-                        supportingOchInterface = createdOchInterfaces.get(createdOchInterfaces.size() - 1);
+                        supportingOchInterface = listOfSuppOchInf[createdOchInterfaces.size() - 1];
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
                                 nodeId, destTp, supportingOchInterface, apiInfoA, apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
@@ -168,7 +168,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         } else {
                             // This is needed for 7.1 device models for 400GE, since we have ODUC4 and ODUflex
                             // are combined
-                            createdOduInterfaces = Arrays.asList(this.openRoadmInterfaceFactory
+                            createdOduInterfaces = Set.of(this.openRoadmInterfaceFactory
                                 .createOpenRoadmOdu4HOInterface(
                                     nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07).split("#"));
                         }
@@ -471,7 +471,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         boolean success = true;
         Map<FailedToRollbackKey,FailedToRollback> failedToRollbackList = new HashMap<>();
         for (NodeInterface nodeInterfaces : input.nonnullNodeInterface().values()) {
-            List<String> failedInterfaces = new ArrayList<>();
+            Set<String> failedInterfaces = new HashSet<>();
             String nodeId = nodeInterfaces.getNodeId();
             for (String connectionId : nodeInterfaces.getConnectionId()) {
                 List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);
