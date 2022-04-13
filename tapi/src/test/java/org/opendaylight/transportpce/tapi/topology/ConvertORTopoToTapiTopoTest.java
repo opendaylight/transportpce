@@ -824,7 +824,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
             1, node.getLayerProtocolName().size());
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
-            LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().get(0));
+            LayerProtocolName.PHOTONICMEDIA,
+            node.getLayerProtocolName().stream().findFirst().get());
         List<OwnedNodeEdgePoint> nepsI = node.nonnullOwnedNodeEdgePoint().values().stream()
             .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
@@ -1292,10 +1293,12 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             Uint64.valueOf(100), link.getTotalPotentialCapacity().getTotalSize().getValue());
         if ("OTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-                LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
+                LayerProtocolName.PHOTONICMEDIA.getName(),
+                link.getLayerProtocolName().stream().findFirst().get().getName());
         } else if ("ODTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers ODU",
-                LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
+                LayerProtocolName.ODU.getName(),
+                link.getLayerProtocolName().stream().findFirst().get().getName());
         }
         assertEquals("otn tapi link should be BIDIRECTIONAL",
             ForwardingDirection.BIDIRECTIONAL, link.getDirection());
@@ -1328,7 +1331,8 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertEquals("bad name for the link", linkName, link.getName().get(new NameKey("OMS link name")).getValue());
         assertEquals("bad uuid for link", linkUuid, link.getUuid());
         assertEquals("oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-            LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
+            LayerProtocolName.PHOTONICMEDIA.getName(),
+            link.getLayerProtocolName().stream().findFirst().get().getName());
         assertEquals("otn tapi link should be BIDIRECTIONAL",
             ForwardingDirection.BIDIRECTIONAL, link.getDirection());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210

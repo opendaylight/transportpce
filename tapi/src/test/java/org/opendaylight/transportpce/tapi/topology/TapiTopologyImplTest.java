@@ -628,10 +628,12 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uint64.valueOf(100), link.getTotalPotentialCapacity().getTotalSize().getValue());
         if ("OTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-                LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
+                LayerProtocolName.PHOTONICMEDIA.getName(),
+                link.getLayerProtocolName().stream().findFirst().get().getName());
         } else if ("ODTU4".equals(prefix)) {
             assertEquals("otn link should be between 2 nodes of protocol layers ODU",
-                LayerProtocolName.ODU.getName(), link.getLayerProtocolName().get(0).getName());
+                LayerProtocolName.ODU.getName(),
+                link.getLayerProtocolName().stream().findFirst().get().getName());
         }
         assertEquals("transitional link should be BIDIRECTIONAL",
             ForwardingDirection.BIDIRECTIONAL, link.getDirection());

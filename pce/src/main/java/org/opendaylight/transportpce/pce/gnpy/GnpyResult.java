@@ -8,10 +8,11 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.NumUnnumHop;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetric;
@@ -24,6 +25,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev21
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,6 @@ public class GnpyResult {
         }
         LOG.info("The response id is {}; ", responses.get(0).getResponseId());
         this.response = responses.get(0);
-        analyzeResult();
     }
 
     public boolean getPathFeasibility() {
@@ -79,7 +80,7 @@ public class GnpyResult {
                     LOG.info("GNPy : path is not feasible : {}", noPathType);
                     for (PathMetric pathMetric : pathMetricList) {
                         String metricType = pathMetric.getMetricType().getSimpleName();
-                        BigDecimal accumulativeValue = pathMetric.getAccumulativeValue();
+                        Decimal64 accumulativeValue = pathMetric.getAccumulativeValue();
                         LOG.info("Metric type {} // AccumulatriveValue {}", metricType, accumulativeValue);
                     }
                 }
@@ -91,7 +92,7 @@ public class GnpyResult {
                 // Path metrics
                 for (PathMetric pathMetric : pathMetricList) {
                     String metricType = pathMetric.getMetricType().getSimpleName();
-                    BigDecimal accumulativeValue = pathMetric.getAccumulativeValue();
+                    Decimal64 accumulativeValue = pathMetric.getAccumulativeValue();
                     LOG.info("Metric type {} // AccumulatriveValue {}", metricType, accumulativeValue);
                 }
                 // Path route objects
@@ -106,7 +107,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        List<NodeIdType> nodeIdList = new ArrayList<>();
+        Set<NodeIdType> nodeIdList = new HashSet<>();
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
                 NumUnnumHop numUnnumHop = (NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
