@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.olm.util;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +66,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -233,18 +233,18 @@ public final class TransactionUtils {
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
             .addAugmentation(new LinkConcatenation1Builder()
                 .setFiberType(FiberType.Truewave)
-                .setPmd(new FiberPmd(BigDecimal.ONE))
+                .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                 .build())
             .setSRLGId(Uint32.valueOf(1))
-            .setSRLGLength(BigDecimal.valueOf(1))
+            .setSRLGLength(Decimal64.valueOf("1"))
             .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
             .addAugmentation(new LinkConcatenation1Builder()
                 .setFiberType(FiberType.Truewave)
-                .setPmd(new FiberPmd(BigDecimal.ONE))
+                .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                 .build())
             .setSRLGId(Uint32.valueOf(1))
-            .setSRLGLength(BigDecimal.valueOf(1))
+            .setSRLGLength(Decimal64.valueOf("1"))
             .build();
         linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
         linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
@@ -259,10 +259,10 @@ public final class TransactionUtils {
                                 .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
                                     .setAdministrativeState(AdminStates.InService)
                                     .setAutoSpanloss(true)
-                                    .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
+                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
                                     .setLinkConcatenation(linkConcentationValues)
-                                    .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                    .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
+                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
+                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
                                     .build())
                     .build())
                 .build())
@@ -276,10 +276,10 @@ public final class TransactionUtils {
                                 .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
                                     .setAdministrativeState(AdminStates.InService)
                                     .setAutoSpanloss(true)
-                                    .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
+                                    .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
                                     .setLinkConcatenation(linkConcentationValues)
-                                    .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                    .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
+                                    .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
+                                    .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
                                     .build())
                                     .build())
             .build())

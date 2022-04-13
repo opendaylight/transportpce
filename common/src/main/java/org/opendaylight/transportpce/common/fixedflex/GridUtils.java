@@ -20,6 +20,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Mo
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -44,8 +45,10 @@ public final class GridUtils {
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
-                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(GridConstant.GRANULARITY)))
-                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY)))
+                .setFreqMapGranularity(
+                    new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.GRANULARITY))))
+                .setStartEdgeFreq(
+                    new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY))))
                 .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();
@@ -85,15 +88,16 @@ public final class GridUtils {
     /**
      * Get the bit index for the frequency.
      *
-     * @param frequency BigDecimal
+     * @param atozMinFrequency BigDecimal
      * @return the bit index of the frequency. Throw IllegalArgumentException if
      *         index not in range of 0 GridConstant.EFFECTIVE_BITS
      */
-    public static int getIndexFromFrequency(BigDecimal frequency) {
-        double nvalue = (frequency.doubleValue() - GridConstant.CENTRAL_FREQUENCY) * (1000 / GridConstant.GRANULARITY);
+    public static int getIndexFromFrequency(Decimal64 atozMinFrequency) {
+        double nvalue = (atozMinFrequency.doubleValue() - GridConstant.CENTRAL_FREQUENCY)
+            * (1000 / GridConstant.GRANULARITY);
         int index =  (int) Math.round(nvalue + 284);
         if (index < 0 || index > GridConstant.EFFECTIVE_BITS) {
-            throw new IllegalArgumentException("Frequency not in range " + frequency);
+            throw new IllegalArgumentException("Frequency not in range " + atozMinFrequency);
         }
         return index;
     }
@@ -121,7 +125,7 @@ public final class GridUtils {
      * @return central frequency in THz
      */
     public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
-        return new FrequencyTHz(computeCentralFrequency(minFrequency, maxFrequency));
+        return new FrequencyTHz(Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)));
 
     }
 
@@ -136,7 +140,8 @@ public final class GridUtils {
         getCentralFrequencyWithPrecision(BigDecimal minFrequency,
             BigDecimal maxFrequency, int precision) {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
-                computeCentralFrequency(minFrequency, maxFrequency).setScale(precision, RoundingMode.HALF_EVEN));
+                Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)
+                    .setScale(precision, RoundingMode.HALF_EVEN)));
 
     }
 
@@ -155,7 +160,7 @@ public final class GridUtils {
      * @param frequency BigDecimal
      * @return the lower spectral index
      */
-    public static int getLowerSpectralIndexFromFrequency(BigDecimal frequency) {
+    public static int getLowerSpectralIndexFromFrequency(Decimal64 frequency) {
         return getIndexFromFrequency(frequency) + 1;
     }
 
@@ -164,7 +169,7 @@ public final class GridUtils {
      * @param frequency BigDecimal
      * @return the lower spectral index
      */
-    public static int getHigherSpectralIndexFromFrequency(BigDecimal frequency) {
+    public static int getHigherSpectralIndexFromFrequency(Decimal64 frequency) {
         return getIndexFromFrequency(frequency);
     }
 
@@ -185,23 +190,22 @@ public final class GridUtils {
             spectrumInformation.setWaveLength(input.getWaveNumber());
         }
         if (input.getMinFreq() != null) {
-            spectrumInformation.setMinFrequency(input.getMinFreq().getValue());
+            spectrumInformation.setMinFrequency(input.getMinFreq().getValue().decimalValue());
         } else {
             spectrumInformation.setMinFrequency(
                     GridUtils.getStartFrequencyFromIndex(input.getLowerSpectralSlotNumber().intValue() - 1));
         }
         if (input.getMaxFreq() != null) {
-            spectrumInformation.setMaxFrequency(input.getMaxFreq().getValue());
+            spectrumInformation.setMaxFrequency(input.getMaxFreq().getValue().decimalValue());
         } else {
             spectrumInformation.setMaxFrequency(
                     GridUtils.getStopFrequencyFromIndex(input.getHigherSpectralSlotNumber().intValue() - 1));
         }
         if (input.getCenterFreq() != null) {
-            spectrumInformation.setCenterFrequency(input.getCenterFreq().getValue());
+            spectrumInformation.setCenterFrequency(input.getCenterFreq().getValue().decimalValue());
         } else {
-            spectrumInformation.setCenterFrequency(GridUtils
-                    .getCentralFrequency(spectrumInformation.getMinFrequency(),
-                            spectrumInformation.getMaxFrequency()).getValue());
+            spectrumInformation.setCenterFrequency(GridUtils.getCentralFrequency(spectrumInformation.getMinFrequency(),
+                            spectrumInformation.getMaxFrequency()).getValue().decimalValue());
         }
         if (input.getNmcWidth() != null) {
             spectrumInformation.setWidth(input.getNmcWidth().getValue());

@@ -9,13 +9,15 @@ module pathdescription-stub {
   }
 
   description
-    "YANG model for providing path-description through data container for testing purpose";
+    "YANG model for providing path-description through data container
+    for testing purpose";
 
   revision 2020-12-11 {
     description
-      "first version";
+        "first version";
     reference
-      "YANG model for providing path-description through data container for testing purpose";
+        "YANG model for providing path-description through data container
+        for testing purpose";
   }
 
   container path-description {
