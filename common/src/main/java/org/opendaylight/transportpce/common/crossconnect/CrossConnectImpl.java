@@ -12,7 +12,6 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -21,6 +20,7 @@ import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,18 +105,19 @@ public class CrossConnectImpl implements CrossConnect {
         return null;
     }
 
-    public boolean setPowerLevel(String nodeId, String mode, BigDecimal powerValue, String connectionNumber) {
+    @Override
+    public boolean setPowerLevel(String nodeId, String mode, Decimal64 powerValue, String connectionNumber) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion) && OpticalControlMode.forName(mode).isPresent()) {
-            return crossConnectImpl121.setPowerLevel(nodeId,OpticalControlMode.forName(mode).get(),
-                powerValue,connectionNumber);
+            return crossConnectImpl121.setPowerLevel(nodeId,OpticalControlMode.forName(mode).get(), powerValue,
+                connectionNumber);
         }
         else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)
             && org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode.forName(mode)
             .isPresent()) {
             return crossConnectImpl221.setPowerLevel(nodeId,
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode.forName(mode)
-                .get(), powerValue,connectionNumber);
+                .get(), powerValue, connectionNumber);
         }
         return false;
     }

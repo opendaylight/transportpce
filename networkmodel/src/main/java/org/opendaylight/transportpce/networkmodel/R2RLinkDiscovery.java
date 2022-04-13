@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
@@ -61,8 +62,10 @@ public class R2RLinkDiscovery {
     public boolean readLLDP(NodeId nodeId, String nodeVersion) {
         switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_1_2_1:
-                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Protocols.class);
+                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier
+                    .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                    .child(Protocols.class)
+                    .build();
                 Optional<Protocols> protocol121Object = this.deviceTransactionManager.getDataFromDevice(
                     nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID, Timeouts.DEVICE_READ_TIMEOUT,
                     Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -78,11 +81,15 @@ public class R2RLinkDiscovery {
                 return rdm2rdmLinkCreatedv121(nodeId, nbr121List);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                    .container.org.openroadm.device.Protocols> protocols221IID =
-                        InstanceIdentifier.create(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice.class)
-                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
-                                .org.openroadm.device.container.org.openroadm.device.Protocols.class);
+                        .container.org.openroadm.device.Protocols> protocols221IID = InstanceIdentifier
+                    .builderOfInherited(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData.class,
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
+                            .OrgOpenroadmDevice.class)
+                    .child(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
+                            .org.openroadm.device.Protocols.class)
+                    .build();
                 Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
                     .container.org.openroadm.device.Protocols> protocol221Object = this.deviceTransactionManager
                     .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols221IID,

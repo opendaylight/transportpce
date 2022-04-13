@@ -11,11 +11,13 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
-import unittest
-import time
-import requests
 # pylint: disable=wrong-import-order
 import sys
+import time
+import unittest
+
+import requests
+
 sys.path.append("transportpce_tests/common")
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
@@ -36,8 +38,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            "xponder-type": "tpdr",
                            "port-admin-state": "InService",
                            "port-oper-state": "InService"}
-    CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-OCH-OTU4-ODU4",
-                           "org-openroadm-port-types:if-100GE"]
+    CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-100GE",
+                           "org-openroadm-port-types:if-OCH-OTU4-ODU4"]
     NODE_VERSION = "7.1"
 
     @classmethod
@@ -77,14 +79,14 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.assertEqual(
             self.CLIENT_CAPABILITIES,
-            response["mapping"][0]["supported-interface-capability"])
+            sorted(response["mapping"][0]["supported-interface-capability"]))
 
     def test_03_check_client_capabilities(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-C2", "XPDR3-CLIENT1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.assertEqual(
             self.CLIENT_CAPABILITIES,
-            response["mapping"][0]["supported-interface-capability"])
+            sorted(response["mapping"][0]["supported-interface-capability"]))
 
     def test_04_100g_ofec_service_path_create(self):
         response = test_utils_rfc8040.transportpce_api_rpc_request(
@@ -124,8 +126,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                  "XPDR3-NETWORK1-OTUC1"
              ],
              "odu-interface-id": [
-                 "XPDR3-NETWORK1-ODUC1",
-                 "XPDR3-NETWORK1-ODU4"
+                 "XPDR3-NETWORK1-ODU4",
+                 "XPDR3-NETWORK1-ODUC1"
              ],
              "och-interface-id": [
                  "XPDR3-NETWORK1-265:272",
@@ -134,15 +136,18 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              "eth-interface-id": [
                  "XPDR3-CLIENT1-ETHERNET"
              ]},
-            response["output"]["node-interface"][0])
+            {x: (sorted(response["output"]["node-interface"][0][x])
+                 if isinstance(response["output"]["node-interface"][0][x], list)
+                 else response["output"]["node-interface"][0][x])
+             for x in response["output"]["node-interface"][0].keys()})
         self.assertEqual(
             {"node-id": z_side,
              "otu-interface-id": [
                  "XPDR3-NETWORK1-OTUC1"
              ],
              "odu-interface-id": [
-                 "XPDR3-NETWORK1-ODUC1",
-                 "XPDR3-NETWORK1-ODU4"
+                 "XPDR3-NETWORK1-ODU4",
+                 "XPDR3-NETWORK1-ODUC1"
              ],
              "och-interface-id": [
                  "XPDR3-NETWORK1-265:272",
@@ -151,7 +156,10 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              "eth-interface-id": [
                  "XPDR3-CLIENT1-ETHERNET"
              ]},
-            response["output"]["node-interface"][1])
+            {x: (sorted(response["output"]["node-interface"][1][x])
+                 if isinstance(response["output"]["node-interface"][1][x], list)
+                 else response["output"]["node-interface"][1][x])
+             for x in response["output"]["node-interface"][1].keys()})
 
     def test_05_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR3-NETWORK1")

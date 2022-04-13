@@ -12,7 +12,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Assert;
@@ -23,6 +22,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 @Ignore
@@ -97,7 +97,7 @@ public class CrossConnectImplTest {
 
     @Test
     public void setPowerLevel() {
-        boolean res = crossConnectImpl.setPowerLevel("100", "srcTp", new BigDecimal(100), "power");
+        boolean res = crossConnectImpl.setPowerLevel("100", "srcTp", Decimal64.valueOf("100"), "power");
         Assert.assertFalse("Power Level sgould be false",res);
 
         String devV121 = "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device";
@@ -105,7 +105,7 @@ public class CrossConnectImplTest {
         when(crossConnectImpl121.setPowerLevel(any(), any(), any(), any()))
                 .thenReturn(true);
         //FIXME: this part of the test needs to be reviewed
-        crossConnectImpl.setPowerLevel("100", "srcTp", new BigDecimal(100), "power");
+        crossConnectImpl.setPowerLevel("100", "srcTp", Decimal64.valueOf("100"), "power");
         Assert.assertTrue(true);
     }
 }

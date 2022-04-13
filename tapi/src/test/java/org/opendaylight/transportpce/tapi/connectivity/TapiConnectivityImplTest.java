@@ -55,7 +55,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceOutput;
-import org.opendaylight.yangtools.yang.common.RpcError;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,7 +139,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl, tapiserviceHandlerListenerImpl);
+            tapipceListenerImpl, tapirendererListenerImpl);
 
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
             tapiConnectivity.createConnectivityService(new CreateConnectivityServiceInputBuilder().build());
@@ -153,8 +153,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(
-            RpcError.ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
@@ -168,7 +167,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl, tapiserviceHandlerListenerImpl);
+            tapipceListenerImpl, tapirendererListenerImpl);
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
             tapiConnectivity.createConnectivityService(input);
         result.addListener(new Runnable() {
@@ -191,7 +190,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl, tapiserviceHandlerListenerImpl);
+            tapipceListenerImpl, tapirendererListenerImpl);
 
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
             tapiConnectivity.deleteConnectivityService(new DeleteConnectivityServiceInputBuilder().build());
@@ -205,8 +204,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(
-            RpcError.ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
@@ -217,7 +215,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl, tapiserviceHandlerListenerImpl);
+            tapipceListenerImpl, tapirendererListenerImpl);
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
             tapiConnectivity.deleteConnectivityService(input);
         result.addListener(new Runnable() {
@@ -230,8 +228,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(
-            RpcError.ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
@@ -243,7 +240,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl, tapiserviceHandlerListenerImpl);
+            tapipceListenerImpl, tapirendererListenerImpl);
 
         ServiceCreateInput createInput = TapiConnectivityDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -199,14 +200,14 @@ public final class TopologyUtils {
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
                 .setNode(tapiNodeList)
-                .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
+                .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
                     LayerProtocolName.DSR))
                 .setLink(tapiLinkList).build();
         }
         return new TopologyBuilder()
             .setName(Map.of(name.key(), name))
             .setUuid(topoUuid)
-            .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
+            .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
                 LayerProtocolName.DSR))
             .build();
     }
