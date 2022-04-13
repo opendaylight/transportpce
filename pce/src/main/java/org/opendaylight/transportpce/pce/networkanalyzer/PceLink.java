@@ -159,7 +159,7 @@ public class PceLink implements Serializable {
     }
 
     //Compute the OSNR of a span
-    public double calcSpanOSNR() {
+    private double calcSpanOSNR() {
         if (this.omsAttributesSpan == null) {
             return 0L;
         }

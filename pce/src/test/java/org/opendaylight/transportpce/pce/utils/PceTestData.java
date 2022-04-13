@@ -7,9 +7,8 @@
  */
 package org.opendaylight.transportpce.pce.utils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInputBuilder;
@@ -47,6 +46,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
@@ -146,7 +146,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -155,7 +155,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -231,7 +231,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -240,7 +240,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -316,7 +316,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -325,7 +325,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -460,13 +460,13 @@ public final class PceTestData {
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
                 .setExclude(new ExcludeBuilder()
-                    .setNodeId(Arrays.asList(new NodeIdType("OpenROADM-2-2")))
+                    .setNodeId(Set.of(new NodeIdType("OpenROADM-2-2")))
                     .build())
                 .setInclude(new IncludeBuilder()
-                    .setNodeId(Arrays.asList(new NodeIdType("XPONDER-1-2")))
+                    .setNodeId(Set.of(new NodeIdType("XPONDER-1-2")))
                     .build())
                 .setLatency(new LatencyBuilder()
-                    .setMaxLatency(BigDecimal.valueOf(3223))
+                    .setMaxLatency(Decimal64.valueOf("3223"))
                     .build())
                 .build())
             .build();
@@ -533,7 +533,7 @@ public final class PceTestData {
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
                 .setExclude(new ExcludeBuilder()
-                    .setNodeId(Arrays.asList(
+                    .setNodeId(Set.of(
                         new NodeIdType("OpenROADM-2-1"),
                         new NodeIdType("OpenROADM-2-2")))
                     .build())
@@ -670,7 +670,7 @@ public final class PceTestData {
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
                 .setLatency(new LatencyBuilder()
-                    .setMaxLatency(BigDecimal.valueOf(3223))
+                    .setMaxLatency(Decimal64.valueOf("3223"))
                     .build())
                 .setDiversity(new DiversityBuilder()
                     .setServiceIdentifierList(Map.of(
@@ -801,7 +801,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
@@ -810,7 +810,7 @@ public final class PceTestData {
                     .build())
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co

@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -169,7 +168,7 @@ public class ConvertORTopoToTapiTopo {
             .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.DSR)).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(this.ietfNodeType.getName()).build();
-        List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR, LayerProtocolName.ODU);
+        Set<LayerProtocolName> dsrLayerProtocols = Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
             .Node dsrNode = createTapiNode(Map.of(nameDsr.key(), nameDsr, nameNodeType.key(), nameNodeType),
             dsrLayerProtocols);
@@ -182,7 +181,7 @@ public class ConvertORTopoToTapiTopo {
         this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI), nodeUuid);
         Name nameOtsi =  new NameBuilder().setValueName("otsi node name")
             .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)).build();
-        List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
+        Set<LayerProtocolName> otsiLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
             .Node otsiNode = createTapiNode(Map.of(nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
             otsiLayerProtocols);
@@ -241,8 +240,8 @@ public class ConvertORTopoToTapiTopo {
                 Link tapLink = this.tapiLink.createTapiLink(otnlink.getSource().getSourceNode().getValue(),
                     otnlink.getSource().getSourceTp().getValue(), otnlink.getDestination().getDestNode().getValue(),
                     otnlink.getDestination().getDestTp().getValue(), TapiStringConstants.OTN_XPDR_XPDR_LINK, nodesQual,
-                    nodesQual, tpsQual, tpsQual, adminState, operState, List.of(layerProtocolName),
-                    List.of(layerProtocolName.getName()), this.tapiTopoUuid);
+                    nodesQual, tpsQual, tpsQual, adminState, operState, Set.of(layerProtocolName),
+                    Set.of(layerProtocolName.getName()), this.tapiTopoUuid);
                 linksToNotConvert.add(oppositeLinkId);
                 tapiLinks.put(tapLink.key(), tapLink);
             }
@@ -257,7 +256,7 @@ public class ConvertORTopoToTapiTopo {
             .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(OpenroadmNodeType.ROADM.getName()).build();
-        List<LayerProtocolName> nodeLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
+        Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
 
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiPhotonicNodes
             = pruneTapiPhotonicNodes();
@@ -297,7 +296,7 @@ public class ConvertORTopoToTapiTopo {
             TpId tpid2 = new TpId(tp.augmentation(
                     org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1.class)
                 .getAssociatedConnectionMapPort());
-            List<TpId> tpList = new ArrayList<>();
+            Set<TpId> tpList = new HashSet<>();
             tpList.add(tpid1);
             tpList.add(tpid2);
             NonBlockingList nbl = new NonBlockingListBuilder()
@@ -319,7 +318,7 @@ public class ConvertORTopoToTapiTopo {
             prunedTapiPhotonicNodes = new ArrayList<>();
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiPhotonicNodes
             = this.tapiNodes.values().stream()
-            .filter(n -> LayerProtocolName.PHOTONICMEDIA.equals(n.getLayerProtocolName().get(0)))
+            .filter(n -> LayerProtocolName.PHOTONICMEDIA.equals(n.getLayerProtocolName().stream().findFirst().get()))
             .collect(Collectors.toList());
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node
             : tapiPhotonicNodes) {
@@ -354,7 +353,7 @@ public class ConvertORTopoToTapiTopo {
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
-            createTapiNode(Map<NameKey, Name> nodeNames, List<LayerProtocolName> layerProtocols) {
+            createTapiNode(Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
@@ -589,7 +588,7 @@ public class ConvertORTopoToTapiTopo {
                 .setUuid(nepUuid)
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -646,13 +645,13 @@ public class ConvertORTopoToTapiTopo {
         return msipl;
     }
 
-    private List<Class<? extends LAYERPROTOCOLQUALIFIER>>
+    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>>
             createSupportedCepLayerProtocolQualifier(TerminationPoint tp, LayerProtocolName lpn) {
         Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
-        List<SupportedInterfaceCapability> sicList = new ArrayList<>(
-            tp.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.otn.network.topology.rev211210.TerminationPoint1.class).getTpSupportedInterfaces()
-                .getSupportedInterfaceCapability().values());
+        Collection<SupportedInterfaceCapability> sicList = tp.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1.class)
+            .getTpSupportedInterfaces()
+            .getSupportedInterfaceCapability().values();
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
@@ -696,7 +695,7 @@ public class ConvertORTopoToTapiTopo {
                     break;
             }
         }
-        return new ArrayList<>(sclpqSet);
+        return sclpqSet;
     }
 
     private void createTapiTransitionalLinks() {
@@ -704,9 +703,8 @@ public class ConvertORTopoToTapiTopo {
             Link transiLink = tapiLink.createTapiLink(this.ietfNodeId, tp.getTpId().getValue(), this.ietfNodeId,
                 tp.getTpId().getValue(), TapiStringConstants.TRANSITIONAL_LINK, TapiStringConstants.DSR,
                 TapiStringConstants.OTSI, TapiStringConstants.I_ODU, TapiStringConstants.I_OTSI,
-                "inService", "inService", Arrays.asList(LayerProtocolName.ODU,
-                    LayerProtocolName.PHOTONICMEDIA),
-                Arrays.asList(LayerProtocolName.ODU.getName(), LayerProtocolName.PHOTONICMEDIA.getName()),
+                "inService", "inService", Set.of(LayerProtocolName.ODU, LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.ODU.getName(), LayerProtocolName.PHOTONICMEDIA.getName()),
                 this.tapiTopoUuid);
             this.tapiLinks.put(transiLink.key(), transiLink);
         }
@@ -744,7 +742,7 @@ public class ConvertORTopoToTapiTopo {
                             .getBytes(Charset.forName("UTF-8")))
                         .toString()))
                 .setName(Map.of(linkName.key(), linkName))
-                .setLayerProtocolName(List.of(LayerProtocolName.PHOTONICMEDIA))
+                .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
                 .setNodeEdgePoint(nepMap)
                 .setDirection(ForwardingDirection.BIDIRECTIONAL)
                 .build();
