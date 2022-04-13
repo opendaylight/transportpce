@@ -44,7 +44,7 @@ public interface DataObjectConverter {
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName);
 
     <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
-            Class<T> dataObjectClass);
+            Class dataObjectClass);
 
     public interface ConvertType<T> {
         Optional<NormalizedNode> toNormalizedNodes(T object, Class<T> clazz);

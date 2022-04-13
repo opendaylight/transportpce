@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -111,7 +112,7 @@ public class PceConstraintsCalc {
     private void readExclude(Exclude exclude, PceConstraints constraints) {
         //TODO: Implement other exclude constraints: fiber-bundle, link-identifier
         // and supporting-service-name
-        List<NodeIdType> nodes = exclude.getNodeId();
+        Set<NodeIdType> nodes = exclude.getNodeId();
         if (nodes != null) {
             List<String> elementsToExclude = new ArrayList<>();
             for (NodeIdType node : nodes) {
@@ -119,7 +120,7 @@ public class PceConstraintsCalc {
             }
             constraints.setExcludeSupNodes(elementsToExclude);
         }
-        List<Uint32> srlgs = exclude.getSrlgId();
+        Set<Uint32> srlgs = exclude.getSrlgId();
         if (srlgs != null) {
             List<Long> elementsToExclude = new ArrayList<>();
             for (Uint32 srlg : srlgs) {
@@ -127,7 +128,7 @@ public class PceConstraintsCalc {
             }
             constraints.setExcludeSRLG(elementsToExclude);
         }
-        List<String> sites = exclude.getSite();
+        Set<String> sites = exclude.getSite();
         if (sites != null) {
             constraints.setExcludeCLLI(exclude.getSite());
         }
@@ -139,19 +140,19 @@ public class PceConstraintsCalc {
     }
 
     private void readInclude(Include include, PceConstraints constraints) {
-        List<NodeIdType> nodes = include.getNodeId();
+        Set<NodeIdType> nodes = include.getNodeId();
         if (nodes != null) {
             for (NodeIdType node : nodes) {
                 constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.NODE, node.getValue()));
             }
         }
-        List<Uint32> srlgs = include.getSrlgId();
+        Set<Uint32> srlgs = include.getSrlgId();
         if (srlgs != null) {
             for (Uint32 srlg : srlgs) {
                 constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.SRLG, srlg.toString()));
             }
         }
-        List<String> sites = include.getSite();
+        Set<String> sites = include.getSite();
         if (sites != null) {
             for (String site : sites) {
                 constraints.setListToInclude(new ResourcePair(PceConstraints.ResourceType.CLLI, site));

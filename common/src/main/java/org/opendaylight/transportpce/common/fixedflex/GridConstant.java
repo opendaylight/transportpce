@@ -10,11 +10,11 @@ package org.opendaylight.transportpce.common.fixedflex;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import java.math.BigDecimal;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
@@ -34,13 +34,13 @@ public final class GridConstant {
     public static final int NB_SLOTS_100G = 8;
     public static final int NB_SLOTS_400G = 14;
     public static final double OUTPUT_POWER_100GB_DBM = 2;
-    public static final BigDecimal OUTPUT_POWER_100GB_W = BigDecimal.valueOf(0.0015849);
-    public static final BigDecimal OUTPUT_POWER_400GB_W =  BigDecimal.valueOf(0.0027735);
-    public static final BigDecimal WIDTH_80 = BigDecimal.valueOf(80);
-    public static final BigDecimal WIDTH_75 = BigDecimal.valueOf(75);
-    public static final BigDecimal WIDTH_40 = BigDecimal.valueOf(40);
-    public static final BigDecimal SLOT_WIDTH_50 = BigDecimal.valueOf(50);
-    public static final BigDecimal SLOT_WIDTH_87_5 = BigDecimal.valueOf(87.5);
+    public static final Decimal64 OUTPUT_POWER_100GB_W = Decimal64.valueOf("0.0015849");
+    public static final Decimal64 OUTPUT_POWER_400GB_W =  Decimal64.valueOf("0.0027735");
+    public static final Decimal64 WIDTH_80 = Decimal64.valueOf("80");
+    public static final Decimal64 WIDTH_75 = Decimal64.valueOf("75");
+    public static final Decimal64 WIDTH_40 = Decimal64.valueOf("40");
+    public static final Decimal64 SLOT_WIDTH_50 = Decimal64.valueOf("50");
+    public static final Decimal64 SLOT_WIDTH_87_5 = Decimal64.valueOf("87.5");
 
     /**
      * Map for associate service type with nb slots.
@@ -69,7 +69,7 @@ public final class GridConstant {
     /**
      * Map to associate width format to slot width.
      */
-    public static final Map<BigDecimal, BigDecimal> WIDTH_SLOT_WIDTH_MAP = Map.of(
+    public static final Map<Decimal64, Decimal64> WIDTH_SLOT_WIDTH_MAP = Map.of(
             WIDTH_40, SLOT_WIDTH_50,
             WIDTH_75, SLOT_WIDTH_87_5,
             WIDTH_80, SLOT_WIDTH_87_5);
@@ -81,7 +81,7 @@ public final class GridConstant {
     /**
      * Map to associate service rate and modulation format to frequency slot width.
      */
-    public static final Table<Uint32, ModulationFormat, BigDecimal> FREQUENCY_SLOT_WIDTH_TABLE =
+    public static final Table<Uint32, ModulationFormat, Decimal64> FREQUENCY_SLOT_WIDTH_TABLE =
             initFrequencySlotWidthTable();
     public static final String SPECTRAL_SLOT_SEPARATOR = ":";
     public static final String NAME_PARAMETERS_SEPARATOR = "-";
@@ -107,8 +107,8 @@ public final class GridConstant {
         return frequencyWidthTable;
     }
 
-    private static Table<Uint32, ModulationFormat, BigDecimal> initFrequencySlotWidthTable() {
-        Table<Uint32, ModulationFormat, BigDecimal> frequencyWidthTable = HashBasedTable.create();
+    private static Table<Uint32, ModulationFormat, Decimal64> initFrequencySlotWidthTable() {
+        Table<Uint32, ModulationFormat, Decimal64> frequencyWidthTable = HashBasedTable.create();
         frequencyWidthTable.put(ServiceRateConstant.RATE_100, ModulationFormat.DpQpsk, SLOT_WIDTH_50);
         frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQam16, SLOT_WIDTH_50);
         frequencyWidthTable.put(ServiceRateConstant.RATE_200, ModulationFormat.DpQpsk, SLOT_WIDTH_87_5);
