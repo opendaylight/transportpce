@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,8 +99,8 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
-                atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(rc.getMinFreq()));
+                atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())));
+                atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())));
                 atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
@@ -145,8 +146,8 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(rc.getMaxFreq()));
-                ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(rc.getMinFreq()));
+                ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())));
+                ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())));
                 ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:

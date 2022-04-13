@@ -50,7 +50,7 @@ public final class MapUtils {
         for (Node node : allNodes) {
             if (excClliNodes.contains(node.getNodeId().getValue())) {
                 LOG.debug("mapDiversityConstraints setExcludeCLLI for node {}", node.getNodeId().getValue());
-                pceHardConstraints.setExcludeCLLI(Arrays.asList(getCLLI(node)));
+                pceHardConstraints.setExcludeCLLI(List.of(getCLLI(node)));
             }
 
             if (excNodes.contains(node.getNodeId().getValue())) {

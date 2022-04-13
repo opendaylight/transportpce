@@ -13,8 +13,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -99,7 +99,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
             .setServiceAEnd(ServiceDataUtils.getServiceAEndBuildReconfigure().build())
             .setServiceZEnd(ServiceDataUtils.getServiceZEndBuildReconfigure().build())
             .setHardConstraints(new HardConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
@@ -109,7 +109,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
                     .build())
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .setCoRouting(new CoRoutingBuilder()
                     .setServiceIdentifierList(Map.of(
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210
