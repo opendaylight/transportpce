@@ -58,13 +58,13 @@ public interface PceNode {
 
     /**
      * For optical node the slot width granularity from mc capabilities.
-     * @return BigDecimal.
+     * @return Decimal64.
      */
     BigDecimal getSlotWidthGranularity();
 
     /**
      * For optical node the central-frequency granularity from mc capabilities.
-     * @return BigDecimal.
+     * @return Decimal64.
      */
     BigDecimal getCentralFreqGranularity();
 }

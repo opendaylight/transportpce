@@ -135,7 +135,7 @@ public class TapiProvider {
         tapiInitialORMapping.performServInitialMapping();
 
         TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
-                pceListenerImpl, rendererListenerImpl, serviceHandlerListenerImpl);
+                pceListenerImpl, rendererListenerImpl);
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils, tapiLink);
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);

@@ -9,13 +9,14 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -246,8 +247,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String.join("+", nodeId, TapiStringConstants.DSR)).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(getNodeType(xponderType)).build();
-        List<LayerProtocolName> dsrLayerProtocols = Arrays.asList(LayerProtocolName.DSR,
-            LayerProtocolName.ODU);
+        Set<LayerProtocolName> dsrLayerProtocols = Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU);
         Node dsrNode = createTapiXpdrNode(Map.of(nameDsr.key(), nameDsr, nameNodeType.key(), nameNodeType),
             dsrLayerProtocols, nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
 
@@ -259,7 +259,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .getBytes(Charset.forName("UTF-8"))).toString());
         Name nameOtsi =  new NameBuilder().setValueName("otsi node name").setValue(
             String.join("+", nodeId, TapiStringConstants.OTSI)).build();
-        List<LayerProtocolName> otsiLayerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
+        Set<LayerProtocolName> otsiLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         Node otsiNode = createTapiXpdrNode(Map.of(nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
             otsiLayerProtocols, nodeId, nodeUuidOtsi, xpdrClMaps, xpdrNetMaps, xponderType, null);
 
@@ -428,7 +428,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
     }
 
-    private Node createTapiXpdrNode(Map<NameKey, Name> nameMap, List<LayerProtocolName> layerProtocols,
+    private Node createTapiXpdrNode(Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
                                     String nodeId, Uuid nodeUuid, List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps,
                                     XpdrNodeTypes xponderType, OduSwitchingPools oorOduSwitchingPool) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
@@ -683,7 +683,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setUuid(nepUuid)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName.key(), nepName))
-            .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -702,7 +702,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setUuid(nepUuid1)
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName1.key(), nepName1))
-                .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -727,7 +727,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setUuid(nepUuid2)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName2.key(), nepName2))
-            .setSupportedCepLayerProtocolQualifier(List.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -790,7 +790,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(OpenroadmNodeType.ROADM.getName()).build();
         // Protocol Layer
-        List<LayerProtocolName> layerProtocols = Arrays.asList(LayerProtocolName.PHOTONICMEDIA);
+        Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -861,9 +861,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Link transiLink = tapiLink.createTapiLink(nodeId, mapping.getLogicalConnectionPoint(), nodeId,
                 mapping.getLogicalConnectionPoint(), TapiStringConstants.TRANSITIONAL_LINK, TapiStringConstants.DSR,
                 TapiStringConstants.OTSI, TapiStringConstants.I_ODU, TapiStringConstants.I_OTSI,
-                "inService", "inService", Arrays.asList(LayerProtocolName.ODU,
-                    LayerProtocolName.PHOTONICMEDIA),
-                Arrays.asList(LayerProtocolName.ODU.getName(), LayerProtocolName.PHOTONICMEDIA.getName()),
+                "inService", "inService", Set.of(LayerProtocolName.ODU, LayerProtocolName.PHOTONICMEDIA),
+                Set.of(LayerProtocolName.ODU.getName(), LayerProtocolName.PHOTONICMEDIA.getName()),
                 this.tapiTopoUuid);
             linkMap.put(transiLink.key(), transiLink);
         }
@@ -879,7 +878,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.info("XPDr net associated LCP = {}", xpdrNetMaps.get(i - 1).getConnectionMapLcp());
             TpId tpid1 = new TpId(xpdrNetMaps.get(i - 1).getLogicalConnectionPoint());
             TpId tpid2 = new TpId(xpdrNetMaps.get(i - 1).getConnectionMapLcp());
-            List<TpId> tpList = new ArrayList<>();
+            Set<TpId> tpList = new HashSet<>();
             tpList.add(tpid1);
             tpList.add(tpid2);
             NonBlockingList nbl = new NonBlockingListBuilder()
@@ -897,7 +896,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private OduSwitchingPools createSwtchSwitchPool(List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps,
                                                     Integer xpdrNb) {
-        List<TpId> tpl = new ArrayList<>();
+        Set<TpId> tpl = new HashSet<>();
         TpId tpId = null;
         for (int i = 1; i <= xpdrClMaps.size(); i++) {
             tpId = new TpId("XPDR" + xpdrNb + TapiStringConstants.CLIENT + i);
@@ -924,7 +923,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private OduSwitchingPools createMuxSwitchPool(List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
         Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         for (int i = 1; i <= xpdrClMaps.size(); i++) {
-            List<TpId> tpList = new ArrayList<>();
+            Set<TpId> tpList = new HashSet<>();
             TpId tpId = new TpId("XPDR" + xpdrNb + TapiStringConstants.CLIENT + i);
             tpList.add(tpId);
             tpId = new TpId("XPDR" + xpdrNb + "-NETWORK1");
@@ -985,7 +984,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .build();
             RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
                 .setRiskCharacteristicName("risk characteristic")
-                .setRiskIdentifierList(List.of("risk identifier1", "risk identifier2"))
+                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
                 .build();
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
@@ -1061,7 +1060,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .build();
             RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
                 .setRiskCharacteristicName("risk characteristic")
-                .setRiskIdentifierList(List.of("risk identifier1", "risk identifier2"))
+                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
                 .build();
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
@@ -1079,10 +1078,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return nodeRuleGroupMap;
     }
 
-    private List<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedLayerProtocolQualifier(
+    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedLayerProtocolQualifier(
             List<Class<? extends SupportedIfCapability>> sicList, LayerProtocolName lpn) {
         if (sicList == null) {
-            return List.of(PHOTONICLAYERQUALIFIEROMS.class);
+            return Set.of(PHOTONICLAYERQUALIFIEROMS.class);
         }
         Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supIfMap = new HashMap<>();
         LOG.info("SIC list = {}", sicList);
@@ -1093,7 +1092,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .build();
             supIfMap.put(supIfCapa.key(), supIfCapa);
         }
-        List<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new ArrayList<>();
+        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new HashSet<>();
         for (SupportedInterfaceCapability sic : supIfMap.values()) {
             switch (lpn.getName()) {
                 case "DSR":
@@ -1404,7 +1403,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         ArrayList<Class<? extends SupportedIfCapability>> newSupIfCapList = new ArrayList<Class<? extends
             SupportedIfCapability>>();
         xpdrNetMaps.get(index).getSupportedInterfaceCapability()
-            .forEach(a -> newSupIfCapList.add(xpdrNetMaps.get(index).getSupportedInterfaceCapability().get(0)));
+            .forEach(a -> newSupIfCapList.add(
+                xpdrNetMaps.get(index).getSupportedInterfaceCapability().stream().findFirst().get()));
         return newSupIfCapList;
     }
 }

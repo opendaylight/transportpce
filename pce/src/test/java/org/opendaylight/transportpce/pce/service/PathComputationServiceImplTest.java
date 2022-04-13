@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.pce.service;
 
-import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
@@ -27,6 +26,7 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.ResponseBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.ResponseKey;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.NoPathCaseBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.PathCaseBuilder;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 
 public class PathComputationServiceImplTest extends AbstractTest {
 
@@ -65,7 +65,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
     @Test
     public void testPathComputationRequestPathCase() {
         PathMetric pathMetric = new PathMetricBuilder()
-                .setAccumulativeValue(new BigDecimal(21))
+                .setAccumulativeValue(Decimal64.valueOf("21"))
                 .setMetricType(PathBandwidth.class).build();
         Response response = new ResponseBuilder()
                 .withKey(new ResponseKey("responseId")).setResponseType(new PathCaseBuilder()
