@@ -19,6 +19,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
@@ -32,7 +33,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Int
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.States;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,8 +62,10 @@ public class OpenRoadmInterfacesImpl121 {
                 nodeId), e);
         }
 
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            Interface.class, new InterfaceKey(ifBuilder.getName()));
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(ifBuilder.getName()))
+            .build();
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -103,8 +105,10 @@ public class OpenRoadmInterfacesImpl121 {
 
 
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(Interface.class, new InterfaceKey(interfaceName));
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(interfaceName))
+            .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
@@ -133,8 +137,10 @@ public class OpenRoadmInterfacesImpl121 {
                     + " deleting it!", interfaceName, AdminStates.OutOfService), ex);
             }
 
-            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                Interface.class, new InterfaceKey(interfaceName));
+            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(Interface.class, new InterfaceKey(interfaceName))
+                .build();
             Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(
                 nodeId);
             DeviceTransaction deviceTx;
@@ -176,8 +182,10 @@ public class OpenRoadmInterfacesImpl121 {
     public void postEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException {
 
-        InstanceIdentifier<CircuitPacks> circuitPackIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            CircuitPacks.class, new CircuitPacksKey(circuitPackName));
+        InstanceIdentifier<CircuitPacks> circuitPackIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
+            .build();
         Optional<CircuitPacks> cpOpt = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.CONFIGURATION, circuitPackIID, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -245,9 +253,11 @@ public class OpenRoadmInterfacesImpl121 {
     }
 
     private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {
-        KeyedInstanceIdentifier<Ports, PortsKey> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(ifBuilder.getSupportingCircuitPackName()))
-            .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()));
+            .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()))
+            .build();
         Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
             portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
         if (port.getInterfaces() == null) {
