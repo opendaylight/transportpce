@@ -8,13 +8,14 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 public interface PceNode {
@@ -40,9 +41,9 @@ public interface PceNode {
 
     NodeId getNodeId();
 
-    Map<String, List<Uint16>> getAvailableTribPorts();
+    Map<String, Set<Uint16>> getAvailableTribPorts();
 
-    Map<String, List<Uint16>> getAvailableTribSlots();
+    Map<String, Set<Uint16>> getAvailableTribSlots();
 
     /**
      * Get the version of node.
@@ -58,13 +59,13 @@ public interface PceNode {
 
     /**
      * For optical node the slot width granularity from mc capabilities.
-     * @return BigDecimal.
+     * @return Decimal64.
      */
-    BigDecimal getSlotWidthGranularity();
+    Decimal64 getSlotWidthGranularity();
 
     /**
      * For optical node the central-frequency granularity from mc capabilities.
-     * @return BigDecimal.
+     * @return Decimal64.
      */
-    BigDecimal getCentralFreqGranularity();
+    Decimal64 getCentralFreqGranularity();
 }
