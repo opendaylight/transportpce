@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
@@ -62,6 +64,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.Resource;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,10 +90,10 @@ public class GnpyServiceImpl {
     private String currentNodeId = null;
     private AToZComparator atoZComparator =  new AToZComparator();
     private ZToAComparator ztoAComparator =  new ZToAComparator();
-    private static final Table<Uint32, BigDecimal, String> TRX_MODE_TABLE = initTrxModeTable();
+    private static final Table<Uint32, Decimal64, String> TRX_MODE_TABLE = initTrxModeTable();
 
-    private static Table<Uint32, BigDecimal, String> initTrxModeTable() {
-        Table<Uint32, BigDecimal, String> trxModeTable = HashBasedTable.create();
+    private static Table<Uint32, Decimal64, String> initTrxModeTable() {
+        Table<Uint32, Decimal64, String> trxModeTable = HashBasedTable.create();
         trxModeTable.put(ServiceRateConstant.RATE_100, GridConstant.SLOT_WIDTH_50, "100 Gbit/s, 27.95 Gbaud, DP-QPSK");
         trxModeTable.put(ServiceRateConstant.RATE_200, GridConstant.SLOT_WIDTH_50, "200 Gbit/s, 31.57 Gbaud, DP-16QAM");
         trxModeTable.put(ServiceRateConstant.RATE_200, GridConstant.SLOT_WIDTH_87_5, "200 Gbit/s, DP-QPSK");
@@ -99,7 +102,7 @@ public class GnpyServiceImpl {
         return trxModeTable;
     }
 
-    public static final Map<Uint32, BigDecimal> RATE_OUTPUTPOWER = Map.of(
+    public static final Map<Uint32, Decimal64> RATE_OUTPUTPOWER = Map.of(
             ServiceRateConstant.RATE_100, GridConstant.OUTPUT_POWER_100GB_W,
             ServiceRateConstant.RATE_400, GridConstant.OUTPUT_POWER_400GB_W);
 
@@ -270,7 +273,7 @@ public class GnpyServiceImpl {
     private List<String> getListToInclude(PceConstraints pceHardConstraints) {
         List<String> listNodeToInclude = new ArrayList<>();
         if (pceHardConstraints != null) {
-            List<ResourcePair> listToInclude = pceHardConstraints.getListToInclude();
+            Set<ResourcePair> listToInclude = pceHardConstraints.getListToInclude();
             Iterator<ResourcePair> it = listToInclude.iterator();
             while (it.hasNext()) {
                 ResourcePair rs = it.next();
@@ -341,7 +344,7 @@ public class GnpyServiceImpl {
     //Create the path constraints
     private PathConstraints createPathConstraints(Long rate, String modulationFormat, FrequencyTHz minFrequency,
             FrequencyTHz maxFrequency) {
-        BigDecimal spacing = GridConstant.SLOT_WIDTH_50;
+        BigDecimal spacing = GridConstant.SLOT_WIDTH_50.decimalValue();
         int mvalue = GridConstant.NB_SLOTS_100G;
         int nvalue = 0;
         if (minFrequency != null && maxFrequency != null && modulationFormat != null) {
@@ -352,9 +355,10 @@ public class GnpyServiceImpl {
             if (optionalModulationFormat.isPresent()) {
                 mformat = optionalModulationFormat.get();
             }
-            spacing = GridConstant.FREQUENCY_SLOT_WIDTH_TABLE.get(Uint32.valueOf(rate), mformat);
-            FrequencyTHz centralFrequency = GridUtils
-                    .getCentralFrequency(minFrequency.getValue(), maxFrequency.getValue());
+            spacing = GridConstant.FREQUENCY_SLOT_WIDTH_TABLE.get(Uint32.valueOf(rate), mformat).decimalValue();
+            FrequencyTHz centralFrequency = GridUtils.getCentralFrequency(
+                    minFrequency.getValue().decimalValue(),
+                    maxFrequency.getValue().decimalValue());
             int centralFrequencyBitSetIndex = GridUtils.getIndexFromFrequency(centralFrequency.getValue());
             mvalue = (int) Math.ceil(spacing.doubleValue() / (GridConstant.GRANULARITY));
             nvalue = GridUtils.getNFromFrequencyIndex(centralFrequencyBitSetIndex);
@@ -365,20 +369,21 @@ public class GnpyServiceImpl {
                 .setM(Uint32.valueOf(mvalue / 2)).setN(nvalue).build();
 
         TeBandwidth teBandwidth = new TeBandwidthBuilder()
-                .setPathBandwidth(BigDecimal.valueOf(rate * 1e9))
+                .setPathBandwidth(Decimal64.valueOf(BigDecimal.valueOf(rate * 1e9)))
                 .setTechnology("flexi-grid").setTrxType("OpenROADM MSA ver. 5.0")
-                .setTrxMode(TRX_MODE_TABLE.get(Uint32.valueOf(rate), spacing))
-                .setOutputPower(GridUtils.convertDbmW(GridConstant.OUTPUT_POWER_100GB_DBM
-                        + 10 * Math.log10(mvalue / (double)GridConstant.NB_SLOTS_100G)))
+                .setTrxMode(TRX_MODE_TABLE.get(Uint32.valueOf(rate), Decimal64.valueOf(spacing)))
+                .setOutputPower(Decimal64.valueOf(GridUtils.convertDbmW(GridConstant.OUTPUT_POWER_100GB_DBM
+                        + 10 * Math.log10(mvalue / (double)GridConstant.NB_SLOTS_100G))))
                 .setEffectiveFreqSlot(Map.of(effectiveFreqSlot.key(), effectiveFreqSlot))
-                .setSpacing(spacing.multiply(BigDecimal.valueOf(1e9))).build();
+                .setSpacing(Decimal64.valueOf(spacing.multiply(BigDecimal.valueOf(1e9))))
+                .build();
         return new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
     }
 
     //Create the synchronization
     private List<Synchronization> extractSynchronization(Uint32 requestId) {
         // Create RequestIdNumber
-        List<String> requestIdNumber = new ArrayList<>();
+        Set<String> requestIdNumber = new HashSet<>();
         requestIdNumber.add(requestId.toString());
         // Create a synchronization
         Svec svec = new SvecBuilder().setRelaxable(true)
