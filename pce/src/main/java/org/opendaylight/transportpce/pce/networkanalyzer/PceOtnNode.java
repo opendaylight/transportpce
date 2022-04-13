@@ -8,13 +8,13 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -41,6 +41,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,8 +90,8 @@ public class PceOtnNode implements PceNode {
     private final AdminStates adminStates;
     private final State state;
 
-    private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
-    private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
+    private Map<String, Set<Uint16>> tpAvailableTribPort = new TreeMap<>();
+    private Map<String, Set<Uint16>> tpAvailableTribSlot = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<>();
     private List<String> usedXpdrNWTps = new ArrayList<>();
     private List<TpId> availableXpdrNWTps;
@@ -103,13 +104,8 @@ public class PceOtnNode implements PceNode {
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private String clientPort;
 
-    public PceOtnNode(
-            Node node,
-            OpenroadmNodeType nodeType,
-            NodeId nodeId,
-            String pceNodeType,
-            String serviceType,
-            String clientPort) {
+    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType,
+                      String clientPort) {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
@@ -129,9 +125,7 @@ public class PceOtnNode implements PceNode {
             .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1.class)
             .getOperationalState();
         this.tpAvailableTribPort.clear();
-        checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
-        checkAvailableTribSlot();
         this.clientPort = clientPort;
         if (node == null
                 || nodeId == null
@@ -258,9 +252,6 @@ public class PceOtnNode implements PceNode {
                 node1.getSwitchingPools().nonnullOduSwitchingPools()
                         .values().stream().findFirst().get()
                                 .getNonBlockingList().values());
-        if (nblList == null) {
-            return false;
-        }
         netwTps.sort(Comparator.comparing(TpId::getValue));
 
         switch (modeType) {
@@ -508,12 +499,12 @@ public class PceOtnNode implements PceNode {
     }
 
     @Override
-    public Map<String, List<Uint16>> getAvailableTribPorts() {
+    public Map<String, Set<Uint16>> getAvailableTribPorts() {
         return tpAvailableTribPort;
     }
 
     @Override
-    public Map<String, List<Uint16>> getAvailableTribSlots() {
+    public Map<String, Set<Uint16>> getAvailableTribSlots() {
         return tpAvailableTribSlot;
     }
 
@@ -578,7 +569,7 @@ public class PceOtnNode implements PceNode {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
     */
     @Override
-    public BigDecimal getSlotWidthGranularity() {
+    public Decimal64 getSlotWidthGranularity() {
         return null;
     }
 
@@ -588,7 +579,7 @@ public class PceOtnNode implements PceNode {
      * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
      */
     @Override
-    public BigDecimal getCentralFreqGranularity() {
+    public Decimal64 getCentralFreqGranularity() {
         return null;
     }
 }

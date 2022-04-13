@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -157,7 +157,7 @@ public class OpenRoadmOtnInterface221 {
         if (isCTP) {
             oduFunction = ODUCTP.class;
             monitoringMode = MonitoringMode.Monitored;
-            List<Uint16> tribSlots = new ArrayList<>();
+            Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
             IntStream.range(tribSlotIndex, tribSlotIndex + 8)
@@ -233,7 +233,7 @@ public class OpenRoadmOtnInterface221 {
         if (isCTP) {
             oduFunction = ODUCTP.class;
             monitoringMode = MonitoringMode.Monitored;
-            List<Uint16> tribSlots = new ArrayList<>();
+            Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
             IntStream.range(tribSlotIndex, tribSlotIndex + 8)
@@ -309,7 +309,7 @@ public class OpenRoadmOtnInterface221 {
         if (isCTP) {
             oduFunction = ODUCTP.class;
             monitoringMode = MonitoringMode.Monitored;
-            List<Uint16> tribSlots = new ArrayList<>();
+            Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
             IntStream.range(tribSlotIndex, tribSlotIndex + 8)

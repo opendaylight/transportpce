@@ -40,6 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.ParentCircuitPackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
@@ -85,7 +86,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -284,45 +284,43 @@ public class PortMappingVersion121Test {
         Protocols protocols = new ProtocolsBuilder().addAugmentation(augmentation).build();
 
         // mock responses for deviceTransactionManager calls
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device
-            .rev170206.org.openroadm.device.container.org.openroadm.device.Degree> deviceIID = InstanceIdentifier
-            .create(OrgOpenroadmDevice.class)
-            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                    .rev170206.org.openroadm.device.container.org.openroadm.device.Degree.class,
-                                new DegreeKey(Uint16.valueOf(1)));
+        InstanceIdentifier<Degree> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Degree.class, new DegreeKey(Uint16.valueOf(1)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmDegreeObject));
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-            .org.openroadm.device.container.org.openroadm.device.Degree> deviceIID3 = InstanceIdentifier
-            .create(OrgOpenroadmDevice.class)
-            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-            .org.openroadm.device.container.org.openroadm.device.Degree.class,
-                                new DegreeKey(Uint16.valueOf(2)));
+        InstanceIdentifier<Degree> deviceIID3 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Degree.class, new DegreeKey(Uint16.valueOf(2)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID3,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmDegreeObject3));
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-            .org.openroadm.device.container.org.openroadm.device.Degree> deviceIID5 = InstanceIdentifier
-            .create(OrgOpenroadmDevice.class)
-            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-            .org.openroadm.device.container.org.openroadm.device.Degree.class,
-                                new DegreeKey(Uint16.valueOf(3)));
+        InstanceIdentifier<Degree> deviceIID5 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Degree.class, new DegreeKey(Uint16.valueOf(3)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID5,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmDegreeObject5));
 
-        InstanceIdentifier<Protocols> protocoliid =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Protocols.class);
+        InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Protocols.class)
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, protocoliid,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(protocols));
 
         Interface interfaceObject = new InterfaceBuilder().withKey(new InterfaceKey("itf1"))
                 .setSupportingCircuitPackName("sc1").build();
-        InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+        InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(portConfig.getIfName()))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, interfaceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(interfaceObject));
@@ -371,60 +369,81 @@ public class PortMappingVersion121Test {
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID55,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports55));
 
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
+        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Info.class)
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, infoIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(info));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c1"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c1"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID2 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c2"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID2 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c2"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID2,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject2));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID3 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c3"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID3 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c3"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID3,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject3));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID4 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c4"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID4 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c4"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID4,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject4));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID5 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c5"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID5 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c5"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID5,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject5));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID6 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c6"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID6 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c6"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID6,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject6));
 
-        InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(1)));
+        InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(1)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmSrgObject));
 
-        InstanceIdentifier<SharedRiskGroup> srgIID4 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(2)));
+        InstanceIdentifier<SharedRiskGroup> srgIID4 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(2)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID4,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmSrgObject4));
 
-        InstanceIdentifier<SharedRiskGroup> srgIID6 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(3)));
+        InstanceIdentifier<SharedRiskGroup> srgIID6 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(3)))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID6,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmSrgObject6));
@@ -540,7 +559,10 @@ public class PortMappingVersion121Test {
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID5,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports5));
 
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
+        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Info.class)
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, infoIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(info));
 
@@ -550,26 +572,34 @@ public class PortMappingVersion121Test {
         CircuitPacks circuitPackObject3 = getCircuitPacks(portsList2, "c3", "pc3");
         CircuitPacks circuitPackObject4 = getCircuitPacks(portsList4, "c4", "pc4");
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c1"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c1"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID2 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c2"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID2 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c2"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID2,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject2));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID3 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c3"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID3 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c3"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID3,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject3));
 
-        InstanceIdentifier<CircuitPacks> circuitPacksIID4 = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey("c4"));
+        InstanceIdentifier<CircuitPacks> circuitPacksIID4 = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("c4"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID4,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(circuitPackObject4));
@@ -582,7 +612,9 @@ public class PortMappingVersion121Test {
 
         OrgOpenroadmDevice deviceObject = new OrgOpenroadmDeviceBuilder().setCircuitPacks(circuitPacksMap)
                 .setConnectionMap(connectionMapMap).build();
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(deviceObject));
 
@@ -617,9 +649,12 @@ public class PortMappingVersion121Test {
     }
 
     @NonNull
-    private KeyedInstanceIdentifier<Ports, PortsKey> getChild(String c4, String p5) {
-        return InstanceIdentifier.create(OrgOpenroadmDevice.class).child(CircuitPacks.class, new CircuitPacksKey(c4))
-                .child(Ports.class, new PortsKey(p5));
+    private InstanceIdentifier<Ports> getChild(String c4, String p5) {
+        return InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(c4))
+            .child(Ports.class, new PortsKey(p5))
+            .build();
     }
 
     private ConnectionMap getConnectionMap(List<Destination> destinationList) {

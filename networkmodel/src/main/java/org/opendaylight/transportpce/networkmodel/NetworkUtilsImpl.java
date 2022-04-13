@@ -69,15 +69,13 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
             if (!linkOptional.isPresent()) {
                 LOG.info("Link not present");
                 return RpcResultBuilder
-                    .success(new DeleteLinkOutputBuilder().setResult(
-                        "Fail"))
+                    .success(new DeleteLinkOutputBuilder().setResult("Fail").build())
                     .buildFuture();
             }
         } catch (ExecutionException | InterruptedException e) {
             LOG.error("readMdSal: Error reading link {}", input.getLinkId());
             return RpcResultBuilder
-                .success(new DeleteLinkOutputBuilder().setResult(
-                    "Fail"))
+                .success(new DeleteLinkOutputBuilder().setResult("Fail").build())
                 .buildFuture();
         }
 
@@ -88,8 +86,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
             LOG.info("Link with linkId: {} deleted from {} layer.",
                 input.getLinkId(), NetworkUtils.OVERLAY_NETWORK_ID);
             return RpcResultBuilder
-                .success(new DeleteLinkOutputBuilder().setResult(
-                    "Link {} deleted successfully"))
+                .success(new DeleteLinkOutputBuilder().setResult("Link {} deleted successfully").build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
             return RpcResultBuilder.<DeleteLinkOutput>failed().buildFuture();
@@ -101,8 +98,9 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         boolean createRdmLinks = OrdLink.createRdm2RdmLinks(input, this.dataBroker);
         if (createRdmLinks) {
             return RpcResultBuilder
-                .success(new InitRoadmNodesOutputBuilder().setResult(
-                    "Unidirectional Roadm-to-Roadm Link created successfully"))
+                .success(new InitRoadmNodesOutputBuilder()
+                    .setResult("Unidirectional Roadm-to-Roadm Link created successfully")
+                    .build())
                 .buildFuture();
         } else {
             return RpcResultBuilder.<InitRoadmNodesOutput>failed().buildFuture();
@@ -116,7 +114,9 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         boolean createXpdrRdmLinks = Rdm2XpdrLink.createXpdrRdmLinks(input.getLinksInput(), this.dataBroker);
         if (createXpdrRdmLinks) {
             return RpcResultBuilder
-                .success(new InitXpdrRdmLinksOutputBuilder().setResult("Xponder Roadm Link created successfully"))
+                .success(new InitXpdrRdmLinksOutputBuilder()
+                    .setResult("Xponder Roadm Link created successfully")
+                    .build())
                 .buildFuture();
         } else {
             LOG.error("init-xpdr-rdm-links rpc failed due to a bad input parameter");
@@ -130,7 +130,9 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         boolean createRdmXpdrLinks = Rdm2XpdrLink.createRdmXpdrLinks(input.getLinksInput(), this.dataBroker);
         if (createRdmXpdrLinks) {
             return RpcResultBuilder
-                .success(new InitRdmXpdrLinksOutputBuilder().setResult("Roadm Xponder links created successfully"))
+                .success(new InitRdmXpdrLinksOutputBuilder()
+                    .setResult("Roadm Xponder links created successfully")
+                    .build())
                 .buildFuture();
         } else {
             LOG.error("init-rdm-xpdr-links rpc failed due to a bad input parameter");

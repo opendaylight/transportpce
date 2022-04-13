@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -40,9 +41,9 @@ public final class MapUtils {
 
     public static void mapDiversityConstraints(List<Node> allNodes, List<Link> allLinks,
             PceConstraints pceHardConstraints) {
-        List<String> excClliNodes = pceHardConstraints.getExcludeClliNodes();
-        List<String> excNodes = pceHardConstraints.getExcludeNodes();
-        List<String> excSrlgLinks = pceHardConstraints.getExcludeSrlgLinks();
+        Set<String> excClliNodes = pceHardConstraints.getExcludeClliNodes();
+        Set<String> excNodes = pceHardConstraints.getExcludeNodes();
+        Set<String> excSrlgLinks = pceHardConstraints.getExcludeSrlgLinks();
 
         LOG.info("mapDiversityConstraints before : ExcludeClliNodes {} \n ExcludeNodes {} \n ExcludeSrlgLinks {}",
                 excClliNodes, excNodes, excSrlgLinks);
@@ -50,7 +51,7 @@ public final class MapUtils {
         for (Node node : allNodes) {
             if (excClliNodes.contains(node.getNodeId().getValue())) {
                 LOG.debug("mapDiversityConstraints setExcludeCLLI for node {}", node.getNodeId().getValue());
-                pceHardConstraints.setExcludeCLLI(Arrays.asList(getCLLI(node)));
+                pceHardConstraints.setExcludeCLLI(Set.of(getCLLI(node)));
             }
 
             if (excNodes.contains(node.getNodeId().getValue())) {

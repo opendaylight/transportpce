@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +22,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -52,6 +52,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -258,7 +259,7 @@ public class OpenRoadmInterface121 {
                 .setWavelengthNumber(spectrumInformation.getWaveLength())
                 .setModulationFormat(modulationFormat)
                 .setRate(R100G.class)
-                .setTransmitPower(new PowerDBm(new BigDecimal("-5")));
+                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")));
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -329,8 +330,10 @@ public class OpenRoadmInterface121 {
 
     public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
         DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(RoadmConnections.class, new RoadmConnectionsKey(xc));
+        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
+            .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);

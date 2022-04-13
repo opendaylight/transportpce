@@ -42,7 +42,6 @@ public class DeviceListener221 implements OrgOpenroadmDeviceListener {
      *            ChangeNotification object
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void onChangeNotification(ChangeNotification notification) {
         if (notification.getEdit() == null) {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
@@ -57,12 +56,10 @@ public class DeviceListener221 implements OrgOpenroadmDeviceListener {
                 case "Ports":
                     LinkedList<PathArgument> path = new LinkedList<>();
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<Ports> portIID = (InstanceIdentifier<Ports>) InstanceIdentifier
-                        .create(path);
+                    InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
                     String portName = InstanceIdentifier.keyOf(portIID).getPortName();
                     path.removeLast();
-                    InstanceIdentifier<CircuitPacks> cpIID = (InstanceIdentifier<CircuitPacks>) InstanceIdentifier
-                        .create(path);
+                    InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.unsafeOf(path);
                     String cpName = InstanceIdentifier.keyOf(cpIID).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
