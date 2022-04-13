@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.common.crossconnect;
 
 import com.google.common.util.concurrent.FluentFuture;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,11 +30,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Po
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.GetConnectionPortTrailInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.GetConnectionPortTrailOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OduConnection.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.connection.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.connection.SourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.get.connection.port.trail.output.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
@@ -43,6 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,9 +88,10 @@ public class CrossConnectImpl221 {
                         .setDstIf(spectrumInformation.getIdentifierFromParams(destTp,"nmc"))
                         .build());
 
-        InstanceIdentifier<RoadmConnections> rdmConnectionIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionName()));
+        InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionName()))
+            .build();
 
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
@@ -222,7 +225,7 @@ public class CrossConnectImpl221 {
     }
 
 
-    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctName) {
+    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, Decimal64 powerValue, String ctName) {
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctName);
         if (rdmConnOpt.isPresent()) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
@@ -249,8 +252,10 @@ public class CrossConnectImpl221 {
             }
 
             // post the cross connect on the device
-            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(ctName));
+            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(ctName))
+                .build();
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                     deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -269,15 +274,17 @@ public class CrossConnectImpl221 {
     }
 
     private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
-        return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+        return InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
+            .build();
     }
 
-    private InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-            .container.org.openroadm.device.OduConnection> generateOduConnectionIID(String connectionNumber) {
-        return InstanceIdentifier.create(OrgOpenroadmDevice.class).child(org.opendaylight.yang.gen.v1.http.org
-                    .openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection.class,
-                new OduConnectionKey(connectionNumber));
+    private InstanceIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
+        return InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(connectionNumber))
+            .build();
     }
 
     private String generateConnectionName(String srcTp, String destTp, String spectralSlotName) {
@@ -296,13 +303,10 @@ public class CrossConnectImpl221 {
                         .SourceBuilder().setSrcIf(srcTp).build())
                 .setDirection(Direction.Bidirectional);
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                .container.org.openroadm.device.OduConnection> oduConnectionIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                                        .container.org.openroadm.device.OduConnection.class,
-                                new OduConnectionKey(oduConnectionBuilder.getConnectionName())
-                        );
+        InstanceIdentifier<OduConnection> oduConnectionIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(oduConnectionBuilder.getConnectionName()))
+            .build();
 
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;

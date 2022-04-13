@@ -7,8 +7,9 @@
  */
 package org.opendaylight.transportpce.pce.constraints;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.slf4j.Logger;
@@ -28,21 +29,21 @@ public class PceConstraints {
     // e.g.: nodesToExclude - topo-level nodes IDs - comes from diversity constraints
     //     : supNodesToExclude - supporting nodes IDs - comes from exclude list
     // "mapConstraints" class converts diversity elements into correct names
-    private List<String> nodesToExclude = new ArrayList<>();
-    private List<String> supNodesToExclude = new ArrayList<>();
+    private Set<String> nodesToExclude = new HashSet<>();
+    private Set<String> supNodesToExclude = new HashSet<>();
 
-    private List<Long> srlgToExclude = new ArrayList<>();
-    private List<String> srlgLinksToExclude = new ArrayList<>();
+    private Set<Long> srlgToExclude = new HashSet<>();
+    private Set<String> srlgLinksToExclude = new HashSet<>();
 
-    private List<String> clliToExclude = new ArrayList<>();
-    private List<String> clliNodesToExclude = new ArrayList<>();
+    private Set<String> clliToExclude = new HashSet<>();
+    private Set<String> clliNodesToExclude = new HashSet<>();
 
     ///Structures related to INCLUDE constraints
-    private List<String> nodesToInclude = new ArrayList<>();
-    private List<PceOpticalNode> pceNodesToInclude = new ArrayList<>();
-    private List<ResourcePair> listToInclude = new ArrayList<>();
+    private Set<String> nodesToInclude = new HashSet<>();
+    private Set<PceOpticalNode> pceNodesToInclude = new HashSet<>();
+    private Set<ResourcePair> listToInclude = new HashSet<>();
 
-    private List<String> srlgNames = new ArrayList<>();
+    private Set<String> srlgNames = new HashSet<>();
 
     public enum ResourceType {
         NONE, NODE, SRLG, CLLI;
@@ -70,7 +71,7 @@ public class PceConstraints {
 
     // Exclude nodes / SRLD / CLLI
 
-    public List<String> getExcludeSupNodes() {
+    public Set<String> getExcludeSupNodes() {
         LOG.debug("in Pceconstraints getExcludeSupNodes size = {}", supNodesToExclude.size());
         return supNodesToExclude;
     }
@@ -80,7 +81,7 @@ public class PceConstraints {
         supNodesToExclude.addAll(supNodes);
     }
 
-    public List<Long> getExcludeSRLG() {
+    public Set<Long> getExcludeSRLG() {
         LOG.debug("in Pceconstraints getExcludeSRLG size = {}", srlgToExclude.size());
         return srlgToExclude;
     }
@@ -90,12 +91,12 @@ public class PceConstraints {
         srlgToExclude.addAll(srlg);
     }
 
-    public List<String> getExcludeCLLI() {
+    public Set<String> getExcludeCLLI() {
         LOG.debug("in Pceconstraints getExcludeCLLI size = {}", clliToExclude.size());
         return clliToExclude;
     }
 
-    public void setExcludeCLLI(List<String> clli) {
+    public void setExcludeCLLI(Set<String> clli) {
         LOG.debug("in Pceconstraints setExcludeCLLI size = {}", clli.size());
         clliToExclude.addAll(clli);
     }
@@ -103,7 +104,7 @@ public class PceConstraints {
     // CLLI nodes are defined as result of 'diversity 'node'' constraints
     // clliNodesToExclude are saved as nodes, during NW analysis the relevant
     // CLLI IDs are added to clliToExclude
-    public List<String> getExcludeClliNodes() {
+    public Set<String> getExcludeClliNodes() {
         LOG.info("in Pceconstraints getExcludeClliNodes size = {}", clliNodesToExclude.size());
         return clliNodesToExclude;
     }
@@ -113,7 +114,7 @@ public class PceConstraints {
         clliNodesToExclude.addAll(clli);
     }
 
-    public List<String> getExcludeSrlgLinks() {
+    public Set<String> getExcludeSrlgLinks() {
         LOG.info("in Pceconstraints getExcludeSrlgNodes size = {}", srlgLinksToExclude.size());
         return srlgLinksToExclude;
     }
@@ -123,7 +124,7 @@ public class PceConstraints {
         srlgLinksToExclude.addAll(srlg);
     }
 
-    public List<String> getExcludeNodes() {
+    public Set<String> getExcludeNodes() {
         LOG.info("in Pceconstraints getExcludeNodes size = {}", nodesToExclude.size());
         return nodesToExclude;
     }
@@ -134,7 +135,7 @@ public class PceConstraints {
     }
 
     // Include nodes
-    public List<String> getIncludeNodes() {
+    public Set<String> getIncludeNodes() {
         LOG.debug("in Pceconstraints getIncludeNodes size = {}", nodesToInclude.size());
         return nodesToInclude;
     }
@@ -144,7 +145,7 @@ public class PceConstraints {
         nodesToInclude.addAll(nodes);
     }
 
-    public List<PceOpticalNode> getIncludePceNodes() {
+    public Set<PceOpticalNode> getIncludePceNodes() {
         LOG.debug("in Pceconstraints getIncludePceNodes size = {}", pceNodesToInclude.size());
         return pceNodesToInclude;
     }
@@ -175,7 +176,7 @@ public class PceConstraints {
 
     }
 
-    public List<ResourcePair> getListToInclude() {
+    public Set<ResourcePair> getListToInclude() {
         return listToInclude;
     }
 
@@ -190,7 +191,7 @@ public class PceConstraints {
         }
     }
 
-    public List<String> getSRLGnames() {
+    public Set<String> getSRLGnames() {
         return srlgNames;
     }
 }

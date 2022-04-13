@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -905,7 +906,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             String message,
             PathDescription pathDescription,
             Link notifLink,
-            List<String> supportedLinks,
+            Set<String> supportedLinks,
             String serviceType) {
         send(
             buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
@@ -928,7 +929,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             String message,
             PathDescription pathDescription,
             Link notifLink,
-            List<String> supportedLinks,
+            Set<String> supportedLinks,
             String serviceType) {
         RendererRpcResultSpBuilder builder =
             new RendererRpcResultSpBuilder()
@@ -981,23 +982,23 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     .build();
     }
 
-    private List<String> getSupportedLinks(List<String> allSupportLinks, String serviceType) {
+    private Set<String> getSupportedLinks(Set<String> allSupportLinks, String serviceType) {
         //TODO a Map might be more indicated here
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
                 return allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.ODTU4.getName())).collect(Collectors.toList());
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODTU4.getName())).collect(Collectors.toSet());
             case StringConstants.SERVICE_TYPE_100GE_M:
                 return allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.ODUC4.getName())).collect(Collectors.toList());
+                    .filter(lk -> lk.startsWith(OtnLinkType.ODUC4.getName())).collect(Collectors.toSet());
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_100GE_S:
                 return allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toList());
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTU4.getName())).collect(Collectors.toSet());
             case StringConstants.SERVICE_TYPE_ODUC4:
                 return allSupportLinks.stream()
-                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toList());
+                    .filter(lk -> lk.startsWith(OtnLinkType.OTUC4.getName())).collect(Collectors.toSet());
             default:
                 return null;
         }

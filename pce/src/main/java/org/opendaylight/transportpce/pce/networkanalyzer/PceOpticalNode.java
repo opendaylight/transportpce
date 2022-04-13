@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -16,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.Supp
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +62,12 @@ public class PceOpticalNode implements PceNode {
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
     private BitSet frequenciesBitSet;
     private String version;
-    private BigDecimal slotWidthGranularity;
-    private BigDecimal centralFreqGranularity;
+    private Decimal64 slotWidthGranularity;
+    private Decimal64 centralFreqGranularity;
 
     public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
-        OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity,
-        BigDecimal centralFreqGranularity) {
+        OpenroadmNodeType nodeType, String version, Decimal64 slotWidthGranularity,
+        Decimal64 centralFreqGranularity) {
 
         if (deviceNodeId != null
                 && serviceType != null
@@ -451,12 +452,12 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public Map<String, List<Uint16>> getAvailableTribPorts() {
+    public Map<String, Set<Uint16>> getAvailableTribPorts() {
         return null;
     }
 
     @Override
-    public Map<String, List<Uint16>> getAvailableTribSlots() {
+    public Map<String, Set<Uint16>> getAvailableTribSlots() {
         return null;
     }
 
@@ -486,7 +487,7 @@ public class PceOpticalNode implements PceNode {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSlotWidthGranularity()
     */
     @Override
-    public BigDecimal getSlotWidthGranularity() {
+    public Decimal64 getSlotWidthGranularity() {
         return slotWidthGranularity;
     }
 
@@ -496,7 +497,7 @@ public class PceOpticalNode implements PceNode {
      * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getCentralFreqGranularity()
      */
     @Override
-    public BigDecimal getCentralFreqGranularity() {
+    public Decimal64 getCentralFreqGranularity() {
         return centralFreqGranularity;
     }
 
