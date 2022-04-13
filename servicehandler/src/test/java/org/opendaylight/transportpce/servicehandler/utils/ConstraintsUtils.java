@@ -7,11 +7,9 @@
  */
 package org.opendaylight.transportpce.servicehandler.utils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.DiversityConstraints.DiversityType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.common.constraints.LinkIdentifier;
@@ -36,6 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev21
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.service.applicability.g.ServiceApplicabilityBuilder;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
@@ -64,8 +63,8 @@ public final class ConstraintsUtils {
      * @param  coRoutingServiceId   set co-routing constraints
      * @return                      the hard-constraints
      */
-    public static SoftConstraints buildSoftConstraint(List<String> customerCode, boolean operationalMode,
-                                                      List<String> diversityServiceList, String exclude, String include,
+    public static SoftConstraints buildSoftConstraint(Set<String> customerCode, boolean operationalMode,
+                                                      Set<String> diversityServiceList, String exclude, String include,
                                                       Double maxLatency, boolean hopCount, boolean teMetric,
                                                       String maxDistance, String coRoutingServiceId) {
 
@@ -100,8 +99,8 @@ public final class ConstraintsUtils {
      * @param  coRoutingServiceId   set co-routing constraints
      * @return                      the hard-constraints
      */
-    public static HardConstraints buildHardConstraint(List<String> customerCode, boolean operationalMode,
-                                                      List<String> diversityServiceList, String exclude, String include,
+    public static HardConstraints buildHardConstraint(Set<String> customerCode, boolean operationalMode,
+                                                      Set<String> diversityServiceList, String exclude, String include,
                                                       Double maxLatency, boolean hopCount, boolean teMetric,
                                                       String maxDistance, String coRoutingServiceId) {
 
@@ -125,7 +124,7 @@ public final class ConstraintsUtils {
             .setCustomerCode(customerCode)
             .setOperationalMode(
                 operationalMode
-                    ? Arrays.asList("operational-mode 1", "operational-mode 2")
+                    ? Set.of("operational-mode 1", "operational-mode 2")
                     : null)
             .setDiversity(
                 serviceIdList.isEmpty()
@@ -145,7 +144,7 @@ public final class ConstraintsUtils {
             .setLatency(
                 maxLatency == null
                     ? null
-                    : new LatencyBuilder().setMaxLatency(new BigDecimal(maxLatency)).build())
+                    : new LatencyBuilder().setMaxLatency(Decimal64.valueOf(String.valueOf(maxLatency))).build())
             .setHopCount(
                 hopCount
                     ? new HopCountBuilder()
@@ -163,7 +162,7 @@ public final class ConstraintsUtils {
             .setDistance(
                 maxDistance == null
                     ? null
-                    : new DistanceBuilder().setMaxDistance(new BigDecimal(maxDistance)).build())
+                    : new DistanceBuilder().setMaxDistance(Decimal64.valueOf(String.valueOf(maxDistance))).build())
             .setCoRouting(
                 coRoutingServiceId == null || !coRoutingMap.containsKey(coRoutingServiceId)
                     ? null
@@ -199,22 +198,22 @@ public final class ConstraintsUtils {
         excludeHashMap.put(
             "node",
             new ExcludeBuilder()
-                .setNodeId(List.of(new NodeIdType("node-id-2")))
+                .setNodeId(Set.of(new NodeIdType("node-id-2")))
                 .build());
         excludeHashMap.put(
             "service",
             new ExcludeBuilder()
-                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
+                .setSupportingServiceName(Set.of("supported-service-1", "supported-service-5"))
                 .build());
         excludeHashMap.put(
             "fiber1",
             new ExcludeBuilder()
-                .setFiberBundle(List.of("fiber-1", "fiber-2"))
+                .setFiberBundle(Set.of("fiber-1", "fiber-2"))
                 .build());
         excludeHashMap.put(
             "fiber2",
             new ExcludeBuilder()
-                .setFiberBundle(List.of("fiber-2", "fiber-3"))
+                .setFiberBundle(Set.of("fiber-2", "fiber-3"))
                 .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")
@@ -246,22 +245,22 @@ public final class ConstraintsUtils {
         includeHashMap.put(
             "node",
             new IncludeBuilder()
-                .setNodeId(List.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
+                .setNodeId(Set.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
                 .build());
         includeHashMap.put(
             "service",
             new IncludeBuilder()
-                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
+                .setSupportingServiceName(Set.of("supported-service-1", "supported-service-5"))
                 .build());
         includeHashMap.put(
             "fiber1",
             new IncludeBuilder()
-                .setFiberBundle(List.of("fiber-1", "fiber-2"))
+                .setFiberBundle(Set.of("fiber-1", "fiber-2"))
                 .build());
         includeHashMap.put(
             "fiber2",
             new IncludeBuilder()
-                .setFiberBundle(List.of("fiber-2", "fiber-3"))
+                .setFiberBundle(Set.of("fiber-2", "fiber-3"))
                 .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")

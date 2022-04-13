@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Fr
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R100G;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -70,6 +70,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,10 +153,9 @@ public class OpenRoadmInterface221 {
             MediaChannelTrailTerminationPoint.class,
             spectrumInformation.getIdentifierFromParams(logicalConnPoint, "mc"))
                 .setSupportingInterface(portMap.getSupportingOms());
-
         McTtpBuilder mcTtpBuilder = new McTtpBuilder()
-            .setMinFreq(new FrequencyTHz(spectrumInformation.getMinFrequency()))
-            .setMaxFreq(new FrequencyTHz(spectrumInformation.getMaxFrequency()));
+            .setMinFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMinFrequency())))
+            .setMaxFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMaxFrequency())));
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder
@@ -190,7 +190,7 @@ public class OpenRoadmInterface221 {
         }
 
         NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
-                .setFrequency(new FrequencyTHz(spectrumInformation.getCenterFrequency()))
+                .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
                 .setWidth(new FrequencyGHz(spectrumInformation.getWidth()));
 
         // Create Interface1 type object required for adding as augmentation
@@ -216,9 +216,9 @@ public class OpenRoadmInterface221 {
         }
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder()
-            .setFrequency(new FrequencyTHz(spectrumInformation.getCenterFrequency()))
+            .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
             .setRate(R100G.class)
-            .setTransmitPower(new PowerDBm(new BigDecimal("-5")))
+            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
             .setModulationFormat(modulationFormat);
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -496,8 +496,10 @@ public class OpenRoadmInterface221 {
 
     public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
         DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(RoadmConnections.class, new RoadmConnectionsKey(xc));
+        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
+            .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -522,8 +524,10 @@ public class OpenRoadmInterface221 {
 
     public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
         DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<OduConnection> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(OduConnection.class, new OduConnectionKey(xc));
+        InstanceIdentifier<OduConnection> xciid = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(xc))
+            .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<OduConnection> oduConnectionOpt = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);

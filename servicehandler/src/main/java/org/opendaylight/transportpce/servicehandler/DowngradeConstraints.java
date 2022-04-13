@@ -7,10 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
@@ -68,7 +66,7 @@ public final class DowngradeConstraints {
                     || softConstraintsBuilder.getCustomerCode().isEmpty()) {
                 softConstraintsBuilder.setCustomerCode(hardConstraints.getCustomerCode());
             } else {
-                List<String> updatedCustomerCode = new ArrayList<>(softConstraintsBuilder.getCustomerCode());
+                Set<String> updatedCustomerCode = new HashSet<>(softConstraintsBuilder.getCustomerCode());
                 updatedCustomerCode.addAll(hardConstraints.getCustomerCode());
                 softConstraintsBuilder.setCustomerCode(updatedCustomerCode);
             }
@@ -78,7 +76,7 @@ public final class DowngradeConstraints {
                     || softConstraintsBuilder.getOperationalMode().isEmpty()) {
                 softConstraintsBuilder.setOperationalMode(hardConstraints.getOperationalMode());
             } else {
-                List<String> updatedOperationalMode = new ArrayList<>(softConstraintsBuilder.getOperationalMode());
+                Set<String> updatedOperationalMode = new HashSet<>(softConstraintsBuilder.getOperationalMode());
                 updatedOperationalMode.addAll(hardConstraints.getOperationalMode());
                 softConstraintsBuilder.setOperationalMode(updatedOperationalMode);
             }
@@ -128,7 +126,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> fiberList = new HashSet<>(includeBldr.getFiberBundle());
                 fiberList.addAll(hard.getFiberBundle());
-                includeBldr.setFiberBundle(new ArrayList<>(fiberList));
+                includeBldr.setFiberBundle(new HashSet<>(fiberList));
             }
         }
         if (hard.getNodeId() != null && !hard.getNodeId().isEmpty()) {
@@ -137,7 +135,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<NodeIdType> nodeIdList = new HashSet<>(includeBldr.getNodeId());
                 nodeIdList.addAll(hard.getNodeId());
-                includeBldr.setNodeId(new ArrayList<>(nodeIdList));
+                includeBldr.setNodeId(new HashSet<>(nodeIdList));
             }
         }
         if (hard.getSite() != null && !hard.getSite().isEmpty()) {
@@ -146,7 +144,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> siteList = new HashSet<>(includeBldr.getSite());
                 siteList.addAll(hard.getSite());
-                includeBldr.setSite(new ArrayList<>(siteList));
+                includeBldr.setSite(new HashSet<>(siteList));
             }
         }
         if (hard.getSrlgId() != null && !hard.getSrlgId().isEmpty()) {
@@ -155,7 +153,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<Uint32> srlgList = new HashSet<>(includeBldr.getSrlgId());
                 srlgList.addAll(hard.getSrlgId());
-                includeBldr.setSrlgId(new ArrayList<>(srlgList));
+                includeBldr.setSrlgId(new HashSet<>(srlgList));
             }
         }
         if (hard.getSupportingServiceName() != null && !hard.getSupportingServiceName().isEmpty()) {
@@ -164,7 +162,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> serviceList = new HashSet<>(includeBldr.getSupportingServiceName());
                 serviceList.addAll(hard.getSupportingServiceName());
-                includeBldr.setSupportingServiceName(new ArrayList<>(serviceList));
+                includeBldr.setSupportingServiceName(new HashSet<>(serviceList));
             }
         }
         if (hard.getLinkIdentifier() != null && !hard.getLinkIdentifier().isEmpty()) {
@@ -188,7 +186,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> fiberList = new HashSet<>(excludeBldr.getFiberBundle());
                 fiberList.addAll(hard.getFiberBundle());
-                excludeBldr.setFiberBundle(new ArrayList<>(fiberList));
+                excludeBldr.setFiberBundle(new HashSet<>(fiberList));
             }
         }
         if (hard.getNodeId() != null && !hard.getNodeId().isEmpty()) {
@@ -197,7 +195,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<NodeIdType> nodeIdList = new HashSet<>(excludeBldr.getNodeId());
                 nodeIdList.addAll(hard.getNodeId());
-                excludeBldr.setNodeId(new ArrayList<>(nodeIdList));
+                excludeBldr.setNodeId(new HashSet<>(nodeIdList));
             }
         }
         if (hard.getSite() != null && !hard.getSite().isEmpty()) {
@@ -206,7 +204,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> siteList = new HashSet<>(excludeBldr.getSite());
                 siteList.addAll(hard.getSite());
-                excludeBldr.setSite(new ArrayList<>(siteList));
+                excludeBldr.setSite(new HashSet<>(siteList));
             }
         }
         if (hard.getSrlgId() != null && !hard.getSrlgId().isEmpty()) {
@@ -215,7 +213,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<Uint32> srlgList = new HashSet<>(excludeBldr.getSrlgId());
                 srlgList.addAll(hard.getSrlgId());
-                excludeBldr.setSrlgId(new ArrayList<>(srlgList));
+                excludeBldr.setSrlgId(new HashSet<>(srlgList));
             }
         }
         if (hard.getSupportingServiceName() != null && !hard.getSupportingServiceName().isEmpty()) {
@@ -224,7 +222,7 @@ public final class DowngradeConstraints {
             } else {
                 Set<String> serviceList = new HashSet<>(excludeBldr.getSupportingServiceName());
                 serviceList.addAll(hard.getSupportingServiceName());
-                excludeBldr.setSupportingServiceName(new ArrayList<>(serviceList));
+                excludeBldr.setSupportingServiceName(new HashSet<>(serviceList));
             }
         }
         if (hard.getLinkIdentifier() != null && !hard.getLinkIdentifier().isEmpty()) {

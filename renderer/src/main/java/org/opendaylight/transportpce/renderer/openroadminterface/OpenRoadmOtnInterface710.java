@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -28,8 +28,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUTTPCTP;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.PayloadTypeDef;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.OduAttributes.MonitoringMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.odu.container.OduBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.opu.OpuBuilder;
@@ -95,7 +95,7 @@ public class OpenRoadmOtnInterface710 {
         if (portMap == null) {
             throwException(nodeId, logicalConnPoint);
         }
-        List<String> supportingInterfaceList = new ArrayList<>();
+        Set<String> supportingInterfaceList = new HashSet<>();
         String supportingInterface = null;
         if (isNetworkPort) {
             supportingInterface = portMap.getSupportingOducn();
@@ -124,15 +124,17 @@ public class OpenRoadmOtnInterface710 {
             maxTribSlotNumber.getValue());
         // If it is a network port we have fill the required trib-slots and trib-ports
         if (isNetworkPort) {
-            List<OpucnTribSlotDef> opucnTribSlotDefList = new ArrayList<>();
+            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef>
+                opucnTribSlotDefList = new HashSet<>();
             // Escape characters are used to here to take the literal dot
             Uint16 tribPortNumber = Uint16.valueOf(minTribSlotNumber.getValue().split("\\.")[0]);
             Uint16 startTribSlot = Uint16.valueOf(minTribSlotNumber.getValue().split("\\.")[1]);
             Uint16 endTribSlot = Uint16.valueOf(maxTribSlotNumber.getValue().split("\\.")[1]);
 
             IntStream.range(startTribSlot.intValue(), endTribSlot.intValue() + 1)
-                .forEach(
-                    nbr -> opucnTribSlotDefList.add(OpucnTribSlotDef.getDefaultInstance(tribPortNumber + "." + nbr))
+                .forEach(nbr -> opucnTribSlotDefList.add(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef
+                    .getDefaultInstance(tribPortNumber + "." + nbr))
                 );
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                 .setTribPortNumber(tribPortNumber)

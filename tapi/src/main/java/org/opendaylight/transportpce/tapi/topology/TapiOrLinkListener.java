@@ -9,9 +9,9 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
@@ -89,7 +89,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                     TapiStringConstants.OMS_XPDR_RDM_LINK, getQual(srcNode), getQual(destNode),
                     TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
                     link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                    List.of(LayerProtocolName.PHOTONICMEDIA), List.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                    Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                     tapiTopoUuid));
             }
         }

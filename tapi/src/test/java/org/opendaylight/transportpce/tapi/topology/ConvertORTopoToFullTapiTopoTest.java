@@ -776,7 +776,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
             1, node.getLayerProtocolName().size());
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
-            LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().get(0));
+            LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().stream().findFirst().get());
 
         switch (otsiNodeType) {
             case "switch":
@@ -1273,7 +1273,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             new NameKey("OMS link name")).getValue());
         assertEquals("bad uuid for link", linkUuid, link.getUuid());
         assertEquals("oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-            LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
+            LayerProtocolName.PHOTONICMEDIA.getName(),
+            link.getLayerProtocolName().stream().findFirst().get().getName());
         assertEquals("otn tapi link should be BIDIRECTIONAL",
             ForwardingDirection.BIDIRECTIONAL, link.getDirection());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
@@ -1305,7 +1306,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             new NameKey("XPDR-RDM link name")).getValue());
         assertEquals("bad uuid for link", linkUuid, link.getUuid());
         assertEquals("oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA",
-            LayerProtocolName.PHOTONICMEDIA.getName(), link.getLayerProtocolName().get(0).getName());
+            LayerProtocolName.PHOTONICMEDIA.getName(),
+            link.getLayerProtocolName().stream().findFirst().get().getName());
         assertEquals("otn tapi link should be BIDIRECTIONAL",
             ForwardingDirection.BIDIRECTIONAL, link.getDirection());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
