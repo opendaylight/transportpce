@@ -61,6 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -295,8 +296,8 @@ public class GnpyTopoImpl {
         String nodeId = ila.getNodeId().getValue();
         mapDisgNodeRefNode.put(nodeId, nodeId);
         Elements element = createElementsEdfa(LATITUDE, LONGITUTE, REGION, CITY,
-                ila.getGain().getValue(), ila.getTilt().getValue(),
-                ila.getOutVoaAtt().getValue(), "std_medium_gain",
+                ila.getGain().getValue().decimalValue(), ila.getTilt().getValue().decimalValue(),
+                ila.getOutVoaAtt().getValue().decimalValue(), "std_medium_gain",
                 nodeId);
         this.elements.put(element.key(),element);
         return nodeId;
@@ -337,15 +338,19 @@ public class GnpyTopoImpl {
     private Elements createElementsFiber(double latitude, double longitude, String region, String city, String uidFiber,
             double length, double attIn, double lossCoef, double connIn, double connOut, String typeVariety) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
-        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        Fiber fiber = new FiberBuilder().setLength(BigDecimal.valueOf(length)).setLengthUnits(Km.class)
-                .setAttIn(BigDecimal.valueOf(attIn)).setLossCoef(BigDecimal.valueOf(lossCoef))
-                .setConIn(BigDecimal.valueOf(connIn))
-                .setConOut(BigDecimal.valueOf(connOut)).build();
+        Fiber fiber = new FiberBuilder()
+            .setLength(Decimal64.valueOf(String.valueOf(length)))
+            .setLengthUnits(Km.class)
+            .setAttIn(Decimal64.valueOf(String.valueOf(attIn)))
+            .setLossCoef(Decimal64.valueOf(String.valueOf(lossCoef)))
+            .setConIn(Decimal64.valueOf(String.valueOf(connIn)))
+            .setConOut(Decimal64.valueOf(String.valueOf(connOut)))
+            .build();
         Params params1 = new ParamsBuilder().setFiberroadmfused(fiber).build();
         return new ElementsBuilder().setUid(uidFiber)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Fiber.class)
@@ -359,13 +364,16 @@ public class GnpyTopoImpl {
     private Elements createElementsEdfa(double latitude, double longitude, String region, String city,
             BigDecimal gainTarget, BigDecimal tiltTarget, BigDecimal outVoa, String typeVariety, String uidEdfa) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
-        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        Operational operational = new OperationalBuilder().setGainTarget(gainTarget).setTiltTarget(tiltTarget)
-                .setOutVoa(outVoa).build();
+        Operational operational = new OperationalBuilder()
+            .setGainTarget(Decimal64.valueOf(gainTarget))
+            .setTiltTarget(Decimal64.valueOf(tiltTarget))
+            .setOutVoa(Decimal64.valueOf(outVoa))
+            .build();
         Edfa edfa = new EdfaBuilder()
                 .setOperational(operational).build();
         return new ElementsBuilder().setUid(uidEdfa)
@@ -378,12 +386,14 @@ public class GnpyTopoImpl {
      */
     private Elements createElementsRoadm(double latitude, double longitude, String region, String city,
             double targetPchOutDb, String uidRoadm) {
-        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
-        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        Roadm roadm = new RoadmBuilder().setTargetPchOutDb(BigDecimal.valueOf(targetPchOutDb)).build();
+        Roadm roadm = new RoadmBuilder()
+            .setTargetPchOutDb(Decimal64.valueOf(String.valueOf(targetPchOutDb)))
+            .build();
         Params params1 = new ParamsBuilder().setFiberroadmfused(roadm).build();
         return new ElementsBuilder().setUid(uidRoadm)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Roadm.class)
@@ -395,8 +405,8 @@ public class GnpyTopoImpl {
      */
     private Elements createElementsTransceiver(double latitude, double longitude, String region, String city,
             String uidTrans) {
-        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
-        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
+        Coordinate c1 = new Coordinate(Decimal64.valueOf(String.valueOf(latitude)));
+        Coordinate c2 = new Coordinate(Decimal64.valueOf(String.valueOf(longitude)));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();

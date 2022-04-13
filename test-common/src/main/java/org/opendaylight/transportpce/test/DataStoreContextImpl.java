@@ -9,10 +9,11 @@ package org.opendaylight.transportpce.test;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.LinkedList;
-import java.util.List;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -45,9 +46,9 @@ public class DataStoreContextImpl implements DataStoreContext {
     private BindingDOMCodecServices bindingDOMCodecServices;
     private BindingAdapterFactory adapterFactory ;
 
-
+    @SuppressFBWarnings(value = "MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR")
     public DataStoreContextImpl() {
-        List<YangModuleInfo> moduleInfos = new LinkedList<>();
+        Set<YangModuleInfo> moduleInfos = new HashSet<>();
         ServiceLoader<YangModelBindingProvider> yangProviderLoader = ServiceLoader.load(YangModelBindingProvider.class);
         for (YangModelBindingProvider yangModelBindingProvider : yangProviderLoader) {
             moduleInfos.add(yangModelBindingProvider.getModuleInfo());
@@ -74,12 +75,12 @@ public class DataStoreContextImpl implements DataStoreContext {
     }
 
     @Override
-    public NotificationService createNotificationService() {
+    public final NotificationService createNotificationService() {
         return adapterFactory.createNotificationService(domNotificationRouter);
     }
 
     @Override
-    public NotificationPublishService createNotificationPublishService() {
+    public final NotificationPublishService createNotificationPublishService() {
         return adapterFactory.createNotificationPublishService(domNotificationRouter);
     }
 

@@ -9,7 +9,9 @@
 package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +54,7 @@ public class PceConstraintsTest extends AbstractTest {
     @Test
     public void setAndGetExcludeCLLITest() {
         Assert.assertEquals(0, pceConstraints.getExcludeCLLI().size());
-        List<String> nodes = new ArrayList<>();
+        Set<String> nodes = new HashSet<>();
         nodes.add("test");
         pceConstraints.setExcludeCLLI(nodes);
         Assert.assertEquals(1, pceConstraints.getExcludeCLLI().size());

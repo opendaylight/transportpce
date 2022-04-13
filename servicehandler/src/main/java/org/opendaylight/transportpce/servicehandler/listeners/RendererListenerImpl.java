@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -301,8 +302,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     private void updateOtnTopology(RendererRpcResultSp notification, boolean isDeletion) {
         Link link = notification.getLink();
-        List<String> supportedLinkIds = notification.getLinkId();
-        if (link == null && supportedLinkIds == null) {
+        List<String> supportedLinkIds = new ArrayList<>(notification.getLinkId());
+        if (link == null && notification.getLinkId() == null) {
             return;
         }
 
