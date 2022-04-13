@@ -9,8 +9,8 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcError;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -70,12 +70,13 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
             TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
-            List.of(LayerProtocolName.PHOTONICMEDIA), List.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
+            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
         InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
         if (link == null) {
             LOG.error("Error creating link object");
-            return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed().withError(RpcError.ErrorType.RPC,
-                "Failed to create link in topology").buildFuture();
+            return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
+                .withError(ErrorType.RPC, "Failed to create link in topology")
+                .buildFuture();
         }
         if (putLinkInTopology(link)) {
             output = new InitRoadmRoadmTapiLinkOutputBuilder()
@@ -96,12 +97,13 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
             TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
-            List.of(LayerProtocolName.PHOTONICMEDIA), List.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
+            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
         InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
         if (link == null) {
             LOG.error("Error creating link object");
-            return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed().withError(RpcError.ErrorType.RPC,
-                "Failed to create link in topology").buildFuture();
+            return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
+                .withError(ErrorType.RPC, "Failed to create link in topology")
+                .buildFuture();
         }
         if (putLinkInTopology(link)) {
             output = new InitXpdrRdmTapiLinkOutputBuilder()
@@ -125,8 +127,9 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
                 .setResult("Link successfully deleted from tapi topology").build()).buildFuture();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to delete TAPI link", e);
-            return RpcResultBuilder.<DeleteTapiLinkOutput>failed().withError(RpcError.ErrorType.RPC,
-                "Failed to delete link from topology").buildFuture();
+            return RpcResultBuilder.<DeleteTapiLinkOutput>failed()
+                .withError(ErrorType.RPC, "Failed to delete link from topology")
+                .buildFuture();
         }
     }
 

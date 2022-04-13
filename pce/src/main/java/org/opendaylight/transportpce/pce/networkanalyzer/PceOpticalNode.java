@@ -66,7 +66,7 @@ public class PceOpticalNode implements PceNode {
 
     public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
         OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity,
-        BigDecimal centralFreqGranularity) {
+                          BigDecimal centralFreqGranularity) {
 
         if (deviceNodeId != null
                 && serviceType != null

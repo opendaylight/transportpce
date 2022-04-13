@@ -9,9 +9,9 @@ package org.opendaylight.transportpce.tapi.utils;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -71,8 +71,8 @@ public class TapiLink {
 
     public Link createTapiLink(String srcNodeid, String srcTpId, String dstNodeId, String dstTpId, String linkType,
                                String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
-                               String adminState, String operState, List<LayerProtocolName> layerProtoNameList,
-                               List<String> transLayerNameList, Uuid tapiTopoUuid) {
+                               String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
+                               Set<String> transLayerNameList, Uuid tapiTopoUuid) {
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
         String sourceNodeKey = String.join("+", srcNodeid, srcNodeQual);
         String sourceNepKey = String.join("+", srcNodeid, srcTpQual, srcTpId);
@@ -143,7 +143,7 @@ public class TapiLink {
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
             .setRiskCharacteristicName("risk characteristic")
-            .setRiskIdentifierList(List.of("risk identifier1", "risk identifier2"))
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
             .build();
         ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
             .setValidationMechanism("validation mechanism")

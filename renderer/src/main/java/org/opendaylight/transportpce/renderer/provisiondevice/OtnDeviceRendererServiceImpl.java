@@ -10,10 +10,12 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OpucnTribSlotDef;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.node.interfaces.NodeInterface;
@@ -51,7 +53,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     private final CrossConnect crossConnect;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final DeviceTransactionManager deviceTransactionManager;
-    private final NetworkModelService networkModelService;
 
     public OtnDeviceRendererServiceImpl(OpenRoadmInterfaceFactory openRoadmInterfaceFactory, CrossConnect crossConnect,
                                         OpenRoadmInterfaces openRoadmInterfaces,
@@ -61,7 +62,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         this.crossConnect = crossConnect;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.deviceTransactionManager = deviceTransactionManager;
-        this.networkModelService = networkModelService;
     }
 
 //TODO Align log messages and returned results messages
@@ -329,8 +329,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 apiInfoZ = input.getZEndApiInfo();
             }
             // check if the node is mounted or not?
-            List<String> createdEthInterfaces = new ArrayList<>();
-            List<String> createdOduInterfaces = new ArrayList<>();
+            Set<String> createdEthInterfaces = new HashSet<>();
+            Set<String> createdOduInterfaces = new HashSet<>();
             switch (input.getServiceRate().intValue()) {
                 case 1:
                     LOG.info("Input service is 1G");
@@ -392,10 +392,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     LOG.info("Input service is 100G");
                     // Take the first and last value in the list of OpucnTribSlot (assuming SH would provide
                     // min and max value only, size two)
-                    OpucnTribSlotDef minOpucnTs = OpucnTribSlotDef.getDefaultInstance(
-                        input.getOpucnTribSlots().get(0).getValue());
-                    OpucnTribSlotDef maxOpucnTs = OpucnTribSlotDef.getDefaultInstance(
-                        input.getOpucnTribSlots().get(1).getValue());
+                    OpucnTribSlotDef minOpucnTs = input.getOpucnTribSlots().stream()
+                        .min((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).get();
+                    OpucnTribSlotDef maxOpucnTs = input.getOpucnTribSlots().stream()
+                        .max((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).get();
                     if (node.getClientTp() != null) {
                         createdEthInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmEth100GInterface(
                             node.getNodeId(), node.getClientTp()));
@@ -429,9 +429,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             }
 
             // implement cross connect
-            List<String> createdConnections = new ArrayList<>();
+            Set<String> createdConnections = new HashSet<>();
             if (!createdOduInterfaces.isEmpty()) {
-                Optional<String> connectionNameOpt = postCrossConnect(createdOduInterfaces, node);
+                Optional<String> connectionNameOpt = postCrossConnect(new ArrayList<>(createdOduInterfaces), node);
                 createdConnections.add(connectionNameOpt.get());
                 LOG.info("Created cross connects");
             }
@@ -457,8 +457,8 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 apiInfoZ = input.getZEndApiInfo();
             }
             // check if the node is mounted or not?
-            List<String> createdEthInterfaces = new ArrayList<>();
-            List<String> createdOduInterfaces = new ArrayList<>();
+            Set<String> createdEthInterfaces = new HashSet<>();
+            Set<String> createdOduInterfaces = new HashSet<>();
             switch (input.getServiceRate().intValue()) {
                 case 100:
                     LOG.info("Input service is 100G");
@@ -493,9 +493,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             }
 
             // implement cross connect
-            List<String> createdConnections = new ArrayList<>();
+            Set<String> createdConnections = new HashSet<>();
             if (createdOduInterfaces.size() == 2) {
-                Optional<String> connectionNameOpt = postCrossConnect(createdOduInterfaces, node);
+                Optional<String> connectionNameOpt = postCrossConnect(new ArrayList<>(createdOduInterfaces), node);
                 createdConnections.add(connectionNameOpt.get());
                 LOG.info("Created cross connects");
             }
@@ -552,7 +552,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             nodeInterfaces.add(new NodeInterfaceBuilder()
                     .withKey(new NodeInterfaceKey(node.getNodeId()))
                     .setNodeId(node.getNodeId())
-                    .setOduInterfaceId(List.of(
+                    .setOduInterfaceId(Set.of(
                         // though this is odu, actually it has ODUCn interfaces
                         openRoadmInterfaceFactory.createOpenRoadmOtnOducnInterface(node.getNodeId(),
                             node.getNetworkTp(), supportingOtuInterface, tgtNode.getNodeId(), tgtNode.getNetworkTp())))
