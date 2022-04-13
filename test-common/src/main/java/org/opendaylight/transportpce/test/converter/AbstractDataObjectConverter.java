@@ -112,7 +112,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
 
     @Override
     public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
-            Class<T> dataObjectClass) {
+            Class dataObjectClass) {
         Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =
                 codecRegistry.toNormalizedNode(InstanceIdentifier.create(dataObjectClass), object);
         return Optional.ofNullable(normalizedNode.getValue());
@@ -120,11 +120,12 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
 
     @Override
     public <T extends DataObject> ConvertType<T> dataContainer() {
-        return (object, objectClass) -> {
-            NormalizedNode value =
-                    getCodecRegistry().toNormalizedNode(InstanceIdentifier.create(objectClass), object).getValue();
-            return Optional.ofNullable(value);
-        };
+//        return (object, objectClass) -> {
+//            NormalizedNode value =
+//                    getCodecRegistry().toNormalizedNode(InstanceIdentifier.create(objectClass), object).getValue();
+//            return Optional.ofNullable(value);
+//        };
+        return null;
     }
 
     @Override
