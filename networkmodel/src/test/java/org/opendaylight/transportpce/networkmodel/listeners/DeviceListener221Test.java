@@ -24,6 +24,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.notification.EditBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
@@ -76,9 +77,11 @@ public class DeviceListener221Test {
     }
 
     private ImmutableList<Edit> createEditList() {
-        InstanceIdentifier<Ports> portId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+        InstanceIdentifier<Ports> portId = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
-            .child(Ports.class, new PortsKey("port1"));
+            .child(Ports.class, new PortsKey("port1"))
+            .build();
         Edit edit = new EditBuilder()
             .setOperation(EditOperationType.Merge)
             .setTarget(portId)
@@ -88,8 +91,10 @@ public class DeviceListener221Test {
     }
 
     private ImmutableList<Edit> createBadEditList() {
-        InstanceIdentifier<CircuitPacks> cpId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"));
+        InstanceIdentifier<CircuitPacks> cpId = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
+            .build();
         Edit edit = new EditBuilder()
             .setOperation(EditOperationType.Merge)
             .setTarget(cpId)

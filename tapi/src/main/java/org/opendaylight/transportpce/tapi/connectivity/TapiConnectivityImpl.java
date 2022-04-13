@@ -17,7 +17,6 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
@@ -77,7 +76,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connection.end.point.details.output.ConnectionEndPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.Service;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.ServiceKey;
-import org.opendaylight.yangtools.yang.common.RpcError;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -95,19 +94,16 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     private final ConnectivityUtils connectivityUtils;
     private TapiPceListenerImpl pceListenerImpl;
     private TapiRendererListenerImpl rendererListenerImpl;
-    private TapiServiceHandlerListenerImpl serviceHandlerListenerImpl;
 
     public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler, TapiContext tapiContext,
                                 ConnectivityUtils connectivityUtils, TapiPceListenerImpl pceListenerImpl,
-                                TapiRendererListenerImpl rendererListenerImpl,
-                                TapiServiceHandlerListenerImpl serviceHandlerListenerImpl) {
+                                TapiRendererListenerImpl rendererListenerImpl) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
         this.tapiContext = tapiContext;
         this.connectivityUtils = connectivityUtils;
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
-        this.serviceHandlerListenerImpl = serviceHandlerListenerImpl;
     }
 
     @Override
@@ -128,8 +124,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.tapiContext.getTapiContext()
                     .getServiceInterfacePoint();
             if (sipMap == null) {
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "SIP list is empty").buildFuture();
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "SIP list is empty")
+                    .buildFuture();
             }
             if (sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst().get()
                     .getServiceInterfacePoint().getServiceInterfacePointUuid()))
@@ -139,31 +136,36 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                 // TODO: differentiate between OTN service and GbE service in TAPI
                 ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
                 if (sci == null) {
-                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                        "Couldnt map Service create input").buildFuture();
+                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                        .withError(ErrorType.RPC, "Couldnt map Service create input")
+                        .buildFuture();
                 }
                 LOG.info("Service Create input = {}", sci);
                 output = this.serviceHandler.serviceCreate(sci);
                 if (!output.isDone()) {
-                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                        "Service create RPC failed").buildFuture();
+                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                        .withError(ErrorType.RPC, "Service create RPC failed")
+                        .buildFuture();
                 }
             } else {
                 LOG.error("Unknown UUID");
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "SIPs do not exist in tapi context").buildFuture();
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "SIPs do not exist in tapi context")
+                    .buildFuture();
             }
         }
         try {
             if (output == null) {
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "Failed to create service").buildFuture();
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to create service")
+                    .buildFuture();
             }
             LOG.info("Service create request was successful");
             if (output.get().getResult().getConfigurationResponseCommon().getResponseCode()
                     .equals(ResponseCodes.RESPONSE_FAILED)) {
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "Failed to create service").buildFuture();
+                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to create service")
+                    .buildFuture();
             }
             LOG.info("Output of service request = {}", output.get().getResult());
         } catch (InterruptedException | ExecutionException e) {
@@ -235,8 +237,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         ConnectivityService service = this.tapiContext.getConnectivityService(serviceUuid);
         if (service == null) {
             LOG.error("Service {} doesnt exist in tapi context", input.getServiceIdOrName());
-            return RpcResultBuilder.<GetConnectivityServiceDetailsOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "Service doesnt exist in datastore").buildFuture();
+            return RpcResultBuilder.<GetConnectivityServiceDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Service doesnt exist in datastore")
+                .buildFuture();
         }
         return RpcResultBuilder.success(new GetConnectivityServiceDetailsOutputBuilder().setService(
             new org.opendaylight.yang.gen.v1.urn
@@ -259,8 +262,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         Connection connection = this.tapiContext.getConnection(connectionUuid);
         if (connection == null) {
             LOG.error("Connection {} doesnt exist in tapi context", input.getConnectionIdOrName());
-            return RpcResultBuilder.<GetConnectionDetailsOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "Connection doesnt exist in datastore").buildFuture();
+            return RpcResultBuilder.<GetConnectionDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Connection doesnt exist in datastore")
+                .buildFuture();
         }
         return RpcResultBuilder.success(new GetConnectionDetailsOutputBuilder().setConnection(
                 new ConnectionBuilder(connection).build()).build()).buildFuture();
@@ -299,8 +303,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                 LOG.error("Failed to delete service.", e);
             }
         }
-        return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed().withError(RpcError.ErrorType.RPC,
-            "Failed to delete Service").buildFuture();
+        return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+            .withError(ErrorType.RPC, "Failed to delete Service")
+            .buildFuture();
     }
 
     @Override
@@ -310,8 +315,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         Map<ConnectivityServiceKey, ConnectivityService> connMap = this.tapiContext.getConnectivityServices();
         if (connMap == null) {
             LOG.error("No services in tapi context");
-            return RpcResultBuilder.<GetConnectivityServiceListOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "No services exist in datastore").buildFuture();
+            return RpcResultBuilder.<GetConnectivityServiceListOutput>failed()
+                .withError(ErrorType.RPC, "No services exist in datastore")
+                .buildFuture();
         }
 
         Map<ServiceKey, Service> serviceMap = new HashMap<>();
@@ -336,8 +342,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         ConnectionEndPoint cep = this.tapiContext.getTapiCEP(topoUuid, nodeUuid, nepUuid, cepUuid);
         if (cep == null) {
             LOG.error("Cep doesnt exist in tapi context");
-            return RpcResultBuilder.<GetConnectionEndPointDetailsOutput>failed().withError(RpcError.ErrorType.RPC,
-                    "No cep with given Uuid exists in datastore").buildFuture();
+            return RpcResultBuilder.<GetConnectionEndPointDetailsOutput>failed()
+                .withError(ErrorType.RPC, "No cep with given Uuid exists in datastore")
+                .buildFuture();
         }
         return RpcResultBuilder.success(new GetConnectionEndPointDetailsOutputBuilder().setConnectionEndPoint(
             new ConnectionEndPointBuilder(cep).build()).build()).buildFuture();

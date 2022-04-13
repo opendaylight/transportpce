@@ -18,8 +18,7 @@ import static org.junit.Assert.assertTrue;
 import static org.opendaylight.transportpce.servicehandler.utils.ConstraintsUtils.buildHardConstraint;
 import static org.opendaylight.transportpce.servicehandler.utils.ConstraintsUtils.buildSoftConstraint;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
@@ -48,7 +47,7 @@ public class DowngradeConstraintsTest {
             initialHardConstraints, initialSoftConstraints);
         assertNull("updated soft constraints should contain no customer code",
             generatedSoftConstraints.getCustomerCode());
-        List<String> softCustomerCode = Arrays.asList("soft-customer-code 3", "soft-customer-code 4");
+        Set<String> softCustomerCode = Set.of("soft-customer-code 3", "soft-customer-code 4");
         initialSoftConstraints =
             buildSoftConstraint(softCustomerCode, false, null, null, null, null, false, false, null, null);
         generatedSoftConstraints = DowngradeConstraints.updateSoftConstraints(
@@ -56,7 +55,7 @@ public class DowngradeConstraintsTest {
         assertEquals(initialSoftConstraints.getCustomerCode(), generatedSoftConstraints.getCustomerCode());
 
         // test addition of hard customer-code when no soft customer-code
-        List<String> hardCustomerCode = Arrays.asList("hard-customer-code 1", "hard-customer-code 2");
+        Set<String> hardCustomerCode = Set.of("hard-customer-code 1", "hard-customer-code 2");
         initialHardConstraints =
             buildHardConstraint(hardCustomerCode, false, null, null, null, null, false, false, null, null);
         initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, false, false, null, null);
@@ -87,7 +86,7 @@ public class DowngradeConstraintsTest {
             initialHardConstraints, initialSoftConstraints);
         assertNull("updated soft constraints should contain no diversity constraint",
             generatedSoftConstraints.getDiversity());
-        List<String> softDiversityServiceid = Arrays.asList("soft-service 3");
+        Set<String> softDiversityServiceid = Set.of("soft-service 3");
         initialSoftConstraints =
             buildSoftConstraint(null, false, softDiversityServiceid, null, null, null, false, false, null, null);
         generatedSoftConstraints = DowngradeConstraints.updateSoftConstraints(
@@ -95,7 +94,7 @@ public class DowngradeConstraintsTest {
         assertEquals(initialSoftConstraints.getDiversity(), generatedSoftConstraints.getDiversity());
 
         // test addition of hard diversity when no soft diversity
-        List<String> hardDiversityServiceid = Arrays.asList("hard-service 1", "hard-service 2");
+        Set<String> hardDiversityServiceid = Set.of("hard-service 1", "hard-service 2");
         initialHardConstraints =
             buildHardConstraint(null, false, hardDiversityServiceid, null, null, null, false, false, null, null);
         initialSoftConstraints = buildSoftConstraint(null, false, null, null, null, null, false, false, null, null);
@@ -477,7 +476,7 @@ public class DowngradeConstraintsTest {
         assertNull("generated soft constraints should be empty", genSoftConstraints.getCoRouting());
         assertNull("generated soft constraints should be empty", genSoftConstraints.getLatency());
 
-        List<String> hardCustomerCode = Arrays.asList("customer-code 1", "customer-code 2");
+        Set<String> hardCustomerCode = Set.of("customer-code 1", "customer-code 2");
         initialHardConstraints =
             buildHardConstraint(hardCustomerCode, false, null, "link1", "node", null, false, false, null, null);
         genSoftConstraints = DowngradeConstraints.convertToSoftConstraints(initialHardConstraints);
