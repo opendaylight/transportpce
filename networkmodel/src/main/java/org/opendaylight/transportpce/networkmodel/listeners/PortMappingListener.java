@@ -17,12 +17,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PortMappingListener implements DataTreeChangeListener<Mapping> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PortMappingListener.class);
 
     private final NetworkModelService networkModelService;
 
@@ -44,8 +40,9 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
                     path.addAll((Collection<? extends PathArgument>) change.getRootPath().getRootIdentifier()
                         .getPathArguments());
                     path.removeLast();
-                    @SuppressWarnings("unchecked") InstanceIdentifier<Nodes> portmappintNodeID =
-                        (InstanceIdentifier<Nodes>) InstanceIdentifier.create(path);
+                    InstanceIdentifier<Nodes> portmappintNodeID = InstanceIdentifier.unsafeOf(path);
+                    //                    @SuppressWarnings("unchecked") InstanceIdentifier<Nodes> portmappintNodeID =
+//                        (InstanceIdentifier<Nodes>) InstanceIdentifier.create(path);
                     String nodeId = InstanceIdentifier.keyOf(portmappintNodeID).getNodeId();
                     networkModelService.updateOpenRoadmTopologies(nodeId, newMapping);
                 }

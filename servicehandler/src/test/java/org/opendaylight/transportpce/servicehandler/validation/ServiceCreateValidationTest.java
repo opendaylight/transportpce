@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation;
 
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.OperationResult;
@@ -45,7 +45,7 @@ public class ServiceCreateValidationTest {
                         new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
                             .build()))
                     .build())
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .build())
             .setSoftConstraints(new SoftConstraintsBuilder()
                 .setCoRouting(new CoRoutingBuilder()
@@ -55,7 +55,7 @@ public class ServiceCreateValidationTest {
                         new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
                             .build()))
                     .build())
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .build()).build();
         OperationResult result =
                 ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
@@ -82,7 +82,7 @@ public class ServiceCreateValidationTest {
                         new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
                             .build()))
                     .build())
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .build()).setHardConstraints(null).build();
         OperationResult result =
                 ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
@@ -100,7 +100,7 @@ public class ServiceCreateValidationTest {
                         new ServiceIdentifierListBuilder().setServiceIdentifier("Some existing-service")
                             .build()))
                     .build())
-                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .setCustomerCode(Set.of("Some customer-code"))
                 .build()).build();
         OperationResult result =
                 ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);

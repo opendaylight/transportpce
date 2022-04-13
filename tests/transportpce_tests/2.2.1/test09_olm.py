@@ -125,15 +125,15 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
             'pmparameter-name': 'OpticalPowerOutput',
-            'pmparameter-value': '2.5'
+            'pmparameter-value': '2.50'
         }, response['output']['measurements'])
         self.assertIn({
             'pmparameter-name': 'OpticalReturnLoss',
-            'pmparameter-value': '40'
+            'pmparameter-value': '40.00'
         }, response['output']['measurements'])
         self.assertIn({
             'pmparameter-name': 'OpticalPowerInput',
-            'pmparameter-value': '-21.1'
+            'pmparameter-value': '-21.10'
         }, response['output']['measurements'])
 
     def test_12_get_PM_ROADMC(self):
@@ -150,15 +150,15 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn({
             'pmparameter-name': 'OpticalPowerOutput',
-            'pmparameter-value': '4.6'
+            'pmparameter-value': '4.60'
         }, response['output']['measurements'])
         self.assertIn({
             'pmparameter-name': 'OpticalReturnLoss',
-            'pmparameter-value': '49.1'
+            'pmparameter-value': '49.10'
         }, response['output']['measurements'])
         self.assertIn({
             'pmparameter-name': 'OpticalPowerInput',
-            'pmparameter-value': '-15.1'
+            'pmparameter-value': '-15.10'
         }, response['output']['measurements'])
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
