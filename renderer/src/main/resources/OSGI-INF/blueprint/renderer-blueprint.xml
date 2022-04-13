@@ -72,7 +72,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="openRoadmInterfaces" />
     <argument ref="crossConnect" />
     <argument ref="portMapping" />
-    <argument ref="networkModelService" />
   </bean>
 
   <bean id="otnDeviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl" >

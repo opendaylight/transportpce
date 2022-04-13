@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.common.fixedflex;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
@@ -20,7 +21,7 @@ public class SpectrumInformation {
     private Uint32 waveLength;
     private int lowerSpectralSlotNumber;
     private int higherSpectralSlotNumber;
-    private BigDecimal width = GridConstant.WIDTH_40;
+    private Decimal64 width = GridConstant.WIDTH_40;
     private BigDecimal centerFrequency;
     private BigDecimal minFrequency;
     private BigDecimal maxFrequency;
@@ -93,7 +94,7 @@ public class SpectrumInformation {
      * Get the frequency width.
      * @return the width
      */
-    public BigDecimal getWidth() {
+    public Decimal64 getWidth() {
         return width;
     }
 
@@ -101,7 +102,7 @@ public class SpectrumInformation {
      * Set the frequency width.
      * @param width the width to set
      */
-    public void setWidth(BigDecimal width) {
+    public void setWidth(Decimal64 width) {
         this.width = width;
     }
 
