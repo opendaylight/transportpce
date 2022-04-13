@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,6 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServiceListTopology;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
@@ -91,18 +91,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final CrossConnect crossConnect;
     private final PortMapping portMapping;
-    private final NetworkModelService networkModelService;
 
     public DeviceRendererServiceImpl(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
             OpenRoadmInterfaceFactory openRoadmInterfaceFactory, OpenRoadmInterfaces openRoadmInterfaces,
-            CrossConnect crossConnect, PortMapping portMapping, NetworkModelService networkModelService) {
+            CrossConnect crossConnect, PortMapping portMapping) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaceFactory = openRoadmInterfaceFactory;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.portMapping = portMapping;
-        this.networkModelService = networkModelService;
     }
 
     @SuppressWarnings("rawtypes")
@@ -130,8 +128,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
             String nodeId = node.getNodeId();
-            // take the index of the node
-            int nodeIndex = nodes.indexOf(node);
             LOG.info("Starting provisioning for node : {}", nodeId);
             AEndApiInfo apiInfoA = null;
             ZEndApiInfo apiInfoZ = null;
@@ -141,11 +137,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             if (input.getZEndApiInfo() != null && input.getZEndApiInfo().getNodeId().contains(nodeId)) {
                 apiInfoZ = input.getZEndApiInfo();
             }
-            List<String> createdEthInterfaces = new ArrayList<>();
-            List<String> createdOtuInterfaces = new ArrayList<>();
-            List<String> createdOduInterfaces = new ArrayList<>();
-            List<String> createdOchInterfaces = new ArrayList<>();
-            List<String> createdConnections = new ArrayList<>();
+            Set<String> createdEthInterfaces = new HashSet<>();
+            Set<String> createdOtuInterfaces = new HashSet<>();
+            Set<String> createdOduInterfaces = new HashSet<>();
+            Set<String> createdOchInterfaces = new HashSet<>();
+            Set<String> createdConnections = new HashSet<>();
             int crossConnectFlag = 0;
             try {
                 // if the node is currently mounted then proceed
@@ -467,7 +463,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         boolean success = true;
         Map<FailedToRollbackKey,FailedToRollback> failedToRollbackList = new HashMap<>();
         for (NodeInterface nodeInterfaces : input.nonnullNodeInterface().values()) {
-            List<String> failedInterfaces = new ArrayList<>();
+            Set<String> failedInterfaces = new HashSet<>();
             String nodeId = nodeInterfaces.getNodeId();
             for (String connectionId : nodeInterfaces.getConnectionId()) {
                 List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);

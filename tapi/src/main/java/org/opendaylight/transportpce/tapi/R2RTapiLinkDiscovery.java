@@ -9,9 +9,9 @@ package org.opendaylight.transportpce.tapi;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
@@ -64,8 +65,10 @@ public class R2RTapiLinkDiscovery {
         switch (nodeVersion) {
             case 1:
                 // 1.2.1
-                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Protocols.class);
+                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier
+                    .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                    .child(Protocols.class)
+                    .build();
                 Optional<Protocols> protocol121Object = this.deviceTransactionManager.getDataFromDevice(
                     nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID, Timeouts.DEVICE_READ_TIMEOUT,
                     Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -82,11 +85,14 @@ public class R2RTapiLinkDiscovery {
             case 2:
                 // 2.2.1
                 InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                    .container.org.openroadm.device.Protocols> protocols221IID =
-                        InstanceIdentifier.create(org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice.class)
-                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
-                                .org.openroadm.device.container.org.openroadm.device.Protocols.class);
+                        .container.org.openroadm.device.Protocols> protocols221IID = InstanceIdentifier
+                    .builderOfInherited(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData.class,
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
+                            .OrgOpenroadmDevice.class)
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
+                        .container.org.openroadm.device.Protocols.class)
+                    .build();
                 Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
                     .container.org.openroadm.device.Protocols> protocol221Object = this.deviceTransactionManager
                     .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols221IID,
@@ -228,7 +234,7 @@ public class R2RTapiLinkDiscovery {
             TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
-            List.of(LayerProtocolName.PHOTONICMEDIA), List.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
+            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
         LOG.info("Tapi R2R Link OMS link created = {}", omsLink);
         return omsLink;
     }
@@ -249,7 +255,7 @@ public class R2RTapiLinkDiscovery {
             Stream<CpToDegree> cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
                 .filter(cp -> cp.getInterfaceName().equals(interfaceName));
             if (cpToDegStream != null) {
-                @SuppressWarnings("unchecked") Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
+                Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
                 if (firstCpToDegree.isEmpty() || (firstCpToDegree == null)) {
                     LOG.debug("Not found so returning nothing");
                     return null;

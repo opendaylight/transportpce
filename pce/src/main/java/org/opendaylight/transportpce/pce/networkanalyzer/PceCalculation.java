@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,6 +52,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -783,7 +783,7 @@ public class PceCalculation {
      * @param nodeId NodeId
      * @return slot width granularity
      */
-    private BigDecimal getSlotWidthGranularity(String deviceNodeId, NodeId nodeId) {
+    private Decimal64 getSlotWidthGranularity(String deviceNodeId, NodeId nodeId) {
         // nodeId: openroadm-topology level node
         // deviceNodeId: openroadm-network level node
         List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
@@ -809,7 +809,7 @@ public class PceCalculation {
      * @param nodeId NodeId
      * @return center-freq granularity
      */
-    private BigDecimal getCentralFreqGranularity(String deviceNodeId, NodeId nodeId) {
+    private Decimal64 getCentralFreqGranularity(String deviceNodeId, NodeId nodeId) {
         // nodeId: openroadm-topology level node
         // deviceNodeId: openroadm-network level node
         List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);

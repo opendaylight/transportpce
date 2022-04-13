@@ -91,6 +91,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -416,15 +417,17 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                         spanLossRx = ots.getSpanLossReceive();
                         spanLossTx = ots.getSpanLossTransmit();
                     } else {
-                        spanLossRx = new RatioDB(spanLoss);
-                        spanLossTx = new RatioDB(spanLoss);
+                        spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss));
+                        spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss));
                     }
                     Interface1Builder intf1Builder = new Interface1Builder();
                     if (direction.equals("TX")) {
-                        otsBuilder.setSpanLossTransmit(new RatioDB(spanLoss));
+                        otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss)));
                         otsBuilder.setSpanLossReceive(spanLossRx);
                     } else {
-                        otsBuilder.setSpanLossTransmit(spanLossTx).setSpanLossReceive(new RatioDB(spanLoss));
+                        otsBuilder
+                            .setSpanLossTransmit(spanLossTx)
+                            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(spanLoss)));
                     }
                     interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                     openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
@@ -468,9 +471,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                         spanLossTx = ots.getSpanLossTransmit();
                     } else {
                         spanLossRx = new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(spanLoss);
+                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss));
                         spanLossTx = new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(spanLoss);
+                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss));
                     }
                     org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
                         .rev181019.Interface1Builder intf1Builder =
@@ -478,12 +481,14 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                             .transport.interfaces.rev181019.Interface1Builder();
                     if (direction.equals("TX")) {
                         otsBuilder.setSpanLossTransmit(new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(spanLoss));
+                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss)));
                         otsBuilder.setSpanLossReceive(spanLossRx);
                     } else {
-                        otsBuilder.setSpanLossTransmit(spanLossTx).setSpanLossReceive(
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB(spanLoss)
-                        );
+                        otsBuilder
+                            .setSpanLossTransmit(spanLossTx)
+                            .setSpanLossReceive(
+                                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB(
+                                    Decimal64.valueOf(spanLoss)));
                     }
                     interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                     openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);

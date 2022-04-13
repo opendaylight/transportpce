@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -60,6 +59,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 public class PceOpticalNodeTest extends AbstractTest {
@@ -314,8 +314,9 @@ public class PceOpticalNodeTest extends AbstractTest {
         byteArray[7] = (byte) GridConstant.AVAILABLE_SLOT_VALUE;
         Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
-                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(GridConstant.GRANULARITY)))
-                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY)))
+                .setFreqMapGranularity(new FrequencyGHz(Decimal64.valueOf(String.valueOf(GridConstant.GRANULARITY))))
+                .setStartEdgeFreq(
+                    new FrequencyTHz(Decimal64.valueOf(String.valueOf(GridConstant.START_EDGE_FREQUENCY))))
                 .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();

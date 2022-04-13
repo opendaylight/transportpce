@@ -8,12 +8,12 @@
 
 package org.opendaylight.transportpce.common.crossconnect;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 
 public interface CrossConnect {
 
@@ -98,8 +98,7 @@ public interface CrossConnect {
      *            Name of the cross connect.
      * @return true/false based on status of operation.
      */
-    boolean setPowerLevel(String deviceId, String mode, BigDecimal powerValue,
-                          String connectionNumber);
+    boolean setPowerLevel(String deviceId, String mode, Decimal64 powerValue, String connectionNumber);
 
     Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node) throws
             OpenRoadmInterfaceException;

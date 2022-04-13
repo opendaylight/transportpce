@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -163,20 +165,20 @@ public class PostAlgoPathValidator {
         double latency = 0;
 
         for (PceGraphEdge edge : path.getEdgeList()) {
-            try {
-                latency += edge.link().getLatency();
-                LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId().getValue(), latency);
-            } catch (NullPointerException e) {
+            if (edge.link() == null || edge.link().getLatency() == null) {
                 LOG.warn("- In checkLatency: the link {} does not contain latency field",
                     edge.link().getLinkId().getValue());
+                return false;
             }
+            latency += edge.link().getLatency();
+            LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId().getValue(), latency);
         }
         return (latency < maxLatency);
     }
 
     // Check the inclusion if it is defined in the hard constraints
     private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput) {
-        List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
+        Set<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
         if (listToInclude.isEmpty()) {
             return true;
         }
@@ -293,15 +295,15 @@ public class PostAlgoPathValidator {
             String linkDestTp = edge.link().getDestTP().getValue();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
-            List<Uint16> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
-            List<Uint16> commonEdgeTpnPool = new ArrayList<>();
+            Set<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
+            Set<Uint16> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
+            Set<Uint16> commonEdgeTpnPool = new TreeSet<>();
             for (Uint16 srcTpn : srcTpnPool) {
                 if (destTpnPool.contains(srcTpn)) {
                     commonEdgeTpnPool.add(srcTpn);
                 }
             }
-            Collections.sort(commonEdgeTpnPool);
+
             if (!commonEdgeTpnPool.isEmpty()) {
                 Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
                 Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
@@ -328,8 +330,8 @@ public class PostAlgoPathValidator {
             String linkDestTp = edge.link().getDestTP().getValue();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
-            List<Uint16> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
+            Set<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
+            Set<Uint16> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
             List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
             List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 integer : srcTsPool) {

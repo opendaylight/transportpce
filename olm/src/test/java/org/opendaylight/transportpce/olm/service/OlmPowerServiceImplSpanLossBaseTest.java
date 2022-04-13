@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.olm.service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,6 +39,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
@@ -55,6 +55,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,10 +103,14 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
                 iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
-        InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"));
-        InstanceIdentifier<Interface> interfacesIIDC = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"));
+        InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
+            .build();
+        InstanceIdentifier<Interface> interfacesIIDC = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
+            .build();
         Optional<Interface> interfaceA = Optional.of(new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").build());
         Optional<Interface> interfaceC = Optional.of(new InterfaceBuilder().setName("OTS-DEG1-TTP-TXRX").build());
         Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.CONFIGURATION,
@@ -115,8 +120,10 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
                 interfacesIIDC, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(interfaceC);
 
-        Ots otsValue = new OtsBuilder().setSpanLossTransmit(new RatioDB(new BigDecimal(25)))
-                .setSpanLossReceive(new RatioDB(new BigDecimal(25))).build();
+        Ots otsValue = new OtsBuilder()
+            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("25")))
+            .setSpanLossReceive(new RatioDB(Decimal64.valueOf("25")))
+            .build();
         Interface1 ots = new Interface1Builder().setOts(otsValue).build();
         Interface interA = new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").setType(OpticalTransport.class)
                 .addAugmentation(ots).build();

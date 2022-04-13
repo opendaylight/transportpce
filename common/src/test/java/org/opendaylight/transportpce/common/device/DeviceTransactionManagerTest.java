@@ -32,6 +32,7 @@ import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
@@ -55,7 +56,8 @@ public class DeviceTransactionManagerTest {
     private DeviceTransactionManagerImpl transactionManager;
     private String defaultDeviceId = "device-id";
     private LogicalDatastoreType defaultDatastore = LogicalDatastoreType.OPERATIONAL;
-    private InstanceIdentifier<Network> defaultIid = InstanceIdentifier.create(Network.class);
+    private InstanceIdentifier<Network> defaultIid = InstanceIdentifier
+        .builder(Networks.class).child(Network.class).build();
     private Network defaultData;
     private long defaultTimeout = 1000;
     private TimeUnit defaultTimeUnit = TimeUnit.MILLISECONDS;
