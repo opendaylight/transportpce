@@ -3,22 +3,125 @@ module pathdescription-stub {
   namespace "pathdescription-stub";
   prefix pathdescription-stub;
 
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-    revision-date 2021-07-05;
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+  }
+
+  import org-openroadm-common-state-types {
+    prefix org-openroadm-common-state-types;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2018-11-30;
   }
 
   description
-    "YANG model for providing path-description through data container for testing purpose";
+    "YANG model for providing path-description through data container
+    for testing purpose";
 
   revision 2020-12-11 {
     description
-      "first version";
+        "first version";
     reference
-      "YANG model for providing path-description through data container for testing purpose";
+        "YANG model for providing path-description through data container
+        for testing purpose";
   }
 
   container path-description {
-    uses transportpce-pathDescription:path-description;
+    description
+        "Topology reports the individual hops along the service in the
+        A to Z direction and Z to A directions. This includes both ports
+        internal to a device and those at its edge that are available
+        for externally connections. It includes both physical and logical
+        ports. Physical ports are ordered with the logical ports that
+        run over them as follows: a.\tOn ingress to a node/card, physical
+        then logical b.\tOn egress to a node/card, logical then physical";
+    container aToZ-direction {
+      leaf aToZ-wavelength-number {
+        type uint32;
+      }
+      leaf aToZ-min-frequency {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+                "Minimum frequency in THz.";
+      }
+      leaf aToZ-max-frequency {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+                "Maximum frequency in THz.";
+      }
+      leaf min-trib-slot {
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+                "Minimum trib slots in the form of 'A.B', where A and B correspond
+                to port-number and trib-slots respectively";
+      }
+      leaf max-trib-slot {
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+                "Maximum trib slots in the form of 'A.B', where A and B correspond
+                to port-number and trib-slots respectively";
+      }
+      leaf rate {
+        type uint32;
+        mandatory true;
+      }
+      leaf modulation-format {
+        type string;
+        // enum ?
+      }
+      list aToZ {
+        key "id";
+        leaf id {
+          type string;
+          description
+                    "Unique identifier for this topology component within this service";
+        }
+      }
+    }
+    container zToA-direction {
+      list zToA {
+        key "id";
+        leaf id {
+          type string;
+          description
+                    "Unigue identifier for this topology component within this service";
+        }
+      }
+      leaf zToA-wavelength-number {
+        type uint32;
+      }
+      leaf zToA-min-frequency {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+                "Minimum frequency in THz.";
+      }
+      leaf zToA-max-frequency {
+        type org-openroadm-common-optical-channel-types:frequency-THz;
+        description
+                "Maximum frequency in THz.";
+      }
+      leaf min-trib-slot {
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+                "Minimum trib slots in the form of 'A.B', where A and B correspond
+                to port-number and trib-slots respectively";
+      }
+      leaf max-trib-slot {
+        type org-openroadm-otn-common-types:opucn-trib-slot-def;
+        description
+                "Maximum trib slots in the form of 'A.B', where A and B correspond
+                to port-number and trib-slots respectively";
+      }
+      leaf rate {
+        type uint32;
+        mandatory true;
+      }
+      leaf modulation-format {
+        type string;
+        // enum ?
+      }
+    }
   }
 }

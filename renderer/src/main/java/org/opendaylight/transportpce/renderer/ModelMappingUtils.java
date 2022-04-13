@@ -10,10 +10,12 @@ package org.opendaylight.transportpce.renderer;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.NodeIdPair;
@@ -42,7 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OpucnTribSlotDef;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
@@ -55,6 +57,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.NodesKey;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -89,8 +92,10 @@ public final class ModelMappingUtils {
                         .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
             }
             // Set the MC-width for the OLM
-            olmSetupBldr.setMcWidth(new FrequencyGHz(atoZDirection.getAToZMaxFrequency().getValue()
-                .subtract(atoZDirection.getAToZMinFrequency().getValue()).multiply(new BigDecimal(1000))));
+            olmSetupBldr.setMcWidth(new FrequencyGHz(Decimal64.valueOf(
+                    atoZDirection.getAToZMaxFrequency().getValue().decimalValue()
+                    .subtract(atoZDirection.getAToZMinFrequency().getValue().decimalValue())
+                    .multiply(new BigDecimal(1000)))));
         }
         return olmSetupBldr.build();
     }
@@ -135,8 +140,9 @@ public final class ModelMappingUtils {
             .setOperation(operation)
             .setNodes(nodeLists.getRendererNodeList())
             .setNmcWidth(new FrequencyGHz(GridConstant.WIDTH_40))
-            .setMcWidth(new FrequencyGHz(pathDescription.getAToZDirection().getAToZMaxFrequency().getValue()
-                       .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue())));
+            .setMcWidth(new FrequencyGHz(Decimal64.valueOf(
+                    pathDescription.getAToZDirection().getAToZMaxFrequency().getValue().decimalValue()
+                    .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue().decimalValue()))));
         if (atoZDirection.getAToZWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(atoZDirection.getAToZWavelengthNumber());
@@ -158,9 +164,10 @@ public final class ModelMappingUtils {
                             .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
         }
         if (atoZDirection.getAToZMinFrequency() != null && atoZDirection.getAToZMaxFrequency() != null) {
-            servicePathInputBuilder.setCenterFreq(
-                    GridUtils.getCentralFrequencyWithPrecision(atoZDirection.getAToZMinFrequency().getValue(),
-                            atoZDirection.getAToZMaxFrequency().getValue(), scale));
+            servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
+                    atoZDirection.getAToZMinFrequency().getValue().decimalValue(),
+                    atoZDirection.getAToZMaxFrequency().getValue().decimalValue(),
+                    scale));
         }
         if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
@@ -191,8 +198,9 @@ public final class ModelMappingUtils {
             .setServiceName(serviceName)
             .setNodes(nodeLists.getRendererNodeList())
             .setNmcWidth(new FrequencyGHz(GridConstant.WIDTH_40))
-            .setMcWidth(new FrequencyGHz(pathDescription.getAToZDirection().getAToZMaxFrequency().getValue()
-                        .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue())));
+            .setMcWidth(new FrequencyGHz(Decimal64.valueOf(
+                    pathDescription.getAToZDirection().getAToZMaxFrequency().getValue().decimalValue()
+                    .subtract(pathDescription.getAToZDirection().getAToZMinFrequency().getValue().decimalValue()))));
         if (ztoADirection.getZToAWavelengthNumber() != null) {
             servicePathInputBuilder
                 .setWaveNumber(ztoADirection.getZToAWavelengthNumber());
@@ -214,9 +222,10 @@ public final class ModelMappingUtils {
                             .getHigherSpectralIndexFromFrequency(ztoADirection.getZToAMaxFrequency().getValue())));
         }
         if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
-            servicePathInputBuilder.setCenterFreq(
-                    GridUtils.getCentralFrequencyWithPrecision(ztoADirection.getZToAMinFrequency().getValue(),
-                            ztoADirection.getZToAMaxFrequency().getValue(), scale));
+            servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
+                    ztoADirection.getZToAMinFrequency().getValue().decimalValue(),
+                    ztoADirection.getZToAMaxFrequency().getValue().decimalValue(),
+                    scale));
         }
         if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
@@ -277,9 +286,11 @@ public final class ModelMappingUtils {
                 .setTribSlot(minTribSlot);
         }
         if (serviceRate.intValue() == 100) {
-            List<OpucnTribSlotDef> opucnTribSlotDefList = new ArrayList<>();
-            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMinTribSlot());
-            opucnTribSlotDefList.add(pathDescription.getAToZDirection().getMaxTribSlot());
+            Set<OpucnTribSlotDef> opucnTribSlotDefList = new HashSet<>();
+            opucnTribSlotDefList.add(
+                new OpucnTribSlotDef(pathDescription.getAToZDirection().getMinTribSlot().getValue()));
+            opucnTribSlotDefList.add(
+                new OpucnTribSlotDef(pathDescription.getAToZDirection().getMaxTribSlot().getValue()));
             otnServicePathInputBuilder.setOpucnTribSlots(opucnTribSlotDefList);
         }
         return otnServicePathInputBuilder.build();
@@ -291,8 +302,8 @@ public final class ModelMappingUtils {
         return new ServicePathInputBuilder().setServiceName(serviceName).build();
     }
 
-    public static List<String> getLinksFromServicePathDescription(PathDescription pathDescription) {
-        List<String> linkidList = new ArrayList<>();
+    public static Set<String> getLinksFromServicePathDescription(PathDescription pathDescription) {
+        Set<String> linkidList = new HashSet<>();
         pathDescription.getAToZDirection().getAToZ().values().stream()
             .filter(lk -> "Link".equals(lk.getResource().getResource().implementedInterface().getSimpleName()))
             .forEach(rsc -> {

@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
@@ -55,6 +54,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 
@@ -140,9 +140,9 @@ public class PceLinkTest extends AbstractTest {
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
-        Assert.assertNotNull(pceLink.calcSpanOSNR());
+        Assert.assertNotNull(pceLink.getosnr());
         Assert.assertEquals(1, pceLink.getsrlgList().size());
-        Assert.assertTrue(7.857119000000001 == pceLink.calcSpanOSNR());
+        Assert.assertTrue(7.857119000000001 == pceLink.getosnr());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNotNull(pceLink.getDestTP());
@@ -158,7 +158,6 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getUsedBandwidth());
         Assert.assertNotNull(pceLink.getsourceNetworkSupNodeId());
         Assert.assertNotNull(pceLink.getdestNetworkSupNodeId());
-        Assert.assertNotNull(pceLink.getosnr());
         Assert.assertNotNull(pceLink.getSourceTP());
         Assert.assertNotNull(pceLink.getsourceCLLI());
         Assert.assertNotNull(pceLink.getdestCLLI());
@@ -197,7 +196,7 @@ public class PceLinkTest extends AbstractTest {
         //For setting up attributes for openRoadm augment
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
                 .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
-                .setSRLGLength(BigDecimal.valueOf(20))
+                .setSRLGLength(Decimal64.valueOf("20"))
                 .addAugmentation(new LinkConcatenation1Builder()
                     .setFiberType(FiberType.Dsf)
                     .build())
@@ -205,7 +204,7 @@ public class PceLinkTest extends AbstractTest {
         OMSAttributesBuilder omsAttributesBuilder =
                 new OMSAttributesBuilder()
                         .setSpan(new SpanBuilder()
-                                .setSpanlossCurrent(new RatioDB(new BigDecimal("55")))
+                                .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("55")))
                                 .setLinkConcatenation(Map.of(linkConcatenation.key(),
                                         linkConcatenation
                                 )).build());

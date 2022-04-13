@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.networkmodel.service;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -63,6 +62,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,8 +98,8 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         if (atoZDirection != null && atoZDirection.getAToZMinFrequency() != null) {
             LOG.info("Update frequencies for a to z direction {}, used {}", atoZDirection, used);
             List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
-            BigDecimal atozMinFrequency = atoZDirection.getAToZMinFrequency().getValue();
-            BigDecimal atozMaxFrequency = atoZDirection.getAToZMaxFrequency().getValue();
+            Decimal64 atozMinFrequency = atoZDirection.getAToZMinFrequency().getValue();
+            Decimal64 atozMaxFrequency = atoZDirection.getAToZMaxFrequency().getValue();
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
                     .forName(atoZDirection.getModulationFormat());
             if (!optionalModulationFormat.isPresent()) {
@@ -117,8 +117,8 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         if (ztoADirection != null && ztoADirection.getZToAMinFrequency() != null) {
             LOG.info("Update frequencies for z to a direction {}, used {}", ztoADirection, used);
             List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
-            BigDecimal ztoaMinFrequency = ztoADirection.getZToAMinFrequency().getValue();
-            BigDecimal ztoaMaxFrequency = ztoADirection.getZToAMaxFrequency().getValue();
+            Decimal64 ztoaMinFrequency = ztoADirection.getZToAMinFrequency().getValue();
+            Decimal64 ztoaMaxFrequency = ztoADirection.getZToAMaxFrequency().getValue();
             Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
                     .forName(ztoADirection.getModulationFormat());
             if (!optionalModulationFormat.isPresent()) {
@@ -199,14 +199,14 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Set frequency map for nodes in nodeIds.
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param nodeIds List of node id
      * @param used boolean true if min and max frequencies are used, false otherwise.
      */
-    private void setFrequencies4Nodes(BigDecimal minFrequency, BigDecimal maxFrequency,
+    private void setFrequencies4Nodes(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
             List<String> nodeIds, boolean used) {
-        updateFreqMaps4Nodes(nodeIds, minFrequency, maxFrequency, used);
+        updateFreqMaps4Nodes(nodeIds, atozMinFrequency, atozMaxFrequency, used);
     }
 
 
@@ -277,19 +277,19 @@ public class FrequenciesServiceImpl implements FrequenciesService {
 
     /**
      * Update availFreqMapsMap for min and max frequencies for termination point in tpIds.
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param rate Uint32
      * @param modulationFormat ModulationFormat
      * @param tpIds List of NodeIdPair
      * @param sed boolean true if min and max frequencies are used, false otherwise.
      */
-    private void setFrequencies4Tps(BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate,
+    private void setFrequencies4Tps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate,
             ModulationFormat modulationFormat, List<NodeIdPair> tpIds, boolean used) {
         String strTpIdsList = String.join(", ", tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList()));
         LOG.debug("Update frequencies for termination points {}, rate {}, modulation format {},"
                 + "min frequency {}, max frequency {}, used {}", strTpIdsList, rate, modulationFormat,
-                minFrequency, maxFrequency, used);
+                atozMinFrequency, atozMaxFrequency, used);
         WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
         for (NodeIdPair idPair : tpIds) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1
@@ -312,41 +312,41 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                 case DEGREETXTTP:
                 case DEGREETXRXTTP:
                     networkTerminationPointBuilder.setTxTtpAttributes(updateTxTtpAttributes(networkTerminationPoint,
-                            minFrequency,maxFrequency,used));
+                            atozMinFrequency,atozMaxFrequency,used));
                     break;
                 case DEGREERXTTP:
                     networkTerminationPointBuilder.setRxTtpAttributes(updateRxTtpAttributes(networkTerminationPoint,
-                            minFrequency,maxFrequency,used));
+                            atozMinFrequency,atozMaxFrequency,used));
                     break;
                 case DEGREETXCTP:
                 case DEGREERXCTP:
                 case DEGREETXRXCTP:
                     networkTerminationPointBuilder.setCtpAttributes(updateCtpAttributes(networkTerminationPoint,
-                            minFrequency,maxFrequency,used));
+                            atozMinFrequency,atozMaxFrequency,used));
                     break;
                 case SRGTXCP:
                 case SRGRXCP:
                 case SRGTXRXCP:
                     networkTerminationPointBuilder.setCpAttributes(updateCpAttributes(networkTerminationPoint,
-                            minFrequency,maxFrequency,used));
+                            atozMinFrequency,atozMaxFrequency,used));
                     break;
                 case SRGTXRXPP:
                 case SRGRXPP:
                 case SRGTXPP:
                     networkTerminationPointBuilder.setPpAttributes(updatePpAttributes(networkTerminationPoint,
-                            minFrequency,maxFrequency,used));
+                            atozMinFrequency,atozMaxFrequency,used));
                     break;
                 case XPONDERNETWORK:
                     networkTerminationPointBuilder.setXpdrNetworkAttributes(
                             updateXpdrNetworkAttributes(networkTerminationPoint,
-                                    minFrequency, maxFrequency, rate, modulationFormat, used)).build();
+                                    atozMinFrequency, atozMaxFrequency, rate, modulationFormat, used)).build();
                     break;
                 case XPONDERCLIENT:
                     break;
                 case XPONDERPORT:
                     networkTerminationPointBuilder.setXpdrPortAttributes(
                             updateXpdrPortAttributes(networkTerminationPoint,
-                                    minFrequency, maxFrequency, rate, modulationFormat, used)).build();
+                                    atozMinFrequency, atozMaxFrequency, rate, modulationFormat, used)).build();
                     break;
                 default:
                     LOG.warn("Termination point type {} not managed", commonNetworkTerminationPoint.getTpType());
@@ -361,10 +361,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         } catch (ExecutionException | TimeoutException e) {
             LOG.error(
                 "Something went wrong for frequencies update (min frequency {}, max frequency {}, used {} for TPs {}",
-                minFrequency, maxFrequency, used, strTpIdsList, e);
+                atozMinFrequency, atozMaxFrequency, used, strTpIdsList, e);
         } catch (InterruptedException e) {
             LOG.error("Frequencies update (min frequency {}, max frequency {}, used {} for TPs {} was interrupted",
-                    minFrequency, maxFrequency, used,
+                    atozMinFrequency, atozMaxFrequency, used,
                     strTpIdsList, e);
             Thread.currentThread().interrupt();
         }
@@ -373,15 +373,15 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     /**
      * Update availFreqMapsMap for min and max frequencies for nodes in nodeIds.
      * @param nodeIds  List of node id
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      */
-    private void updateFreqMaps4Nodes(List<String> nodeIds, BigDecimal minFrequency, BigDecimal maxFrequency,
+    private void updateFreqMaps4Nodes(List<String> nodeIds, Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
             boolean used) {
         String strNodesList = String.join(", ", nodeIds);
         LOG.debug("Update frequencies for nodes {}, min frequency {}, max frequency {}, used {}",
-                strNodesList, minFrequency, maxFrequency, used);
+                strNodesList, atozMinFrequency, atozMaxFrequency, used);
         WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
         for (String nodeId : nodeIds) {
             Node1 networkNode = getNetworkNodeFromDatastore(nodeId);
@@ -398,12 +398,12 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             switch (commonNetworkNode.getNodeType()) {
                 case DEGREE:
                     networkNodeBuilder.setDegreeAttributes(
-                            updateDegreeAttributes(networkNode.getDegreeAttributes(), minFrequency,
-                                    maxFrequency, used));
+                            updateDegreeAttributes(networkNode.getDegreeAttributes(), atozMinFrequency,
+                                    atozMaxFrequency, used));
                     break;
                 case SRG:
-                    networkNodeBuilder.setSrgAttributes(
-                            updateSrgAttributes(networkNode.getSrgAttributes(), minFrequency, maxFrequency, used));
+                    networkNodeBuilder.setSrgAttributes(updateSrgAttributes(
+                            networkNode.getSrgAttributes(), atozMinFrequency, atozMaxFrequency, used));
                     break;
                 default:
                     LOG.warn("Node type not managed {}", commonNetworkNode.getNodeType());
@@ -415,10 +415,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         try {
             updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (ExecutionException | TimeoutException e) {
-            LOG.error("Cannot update frequencies {} {} for nodes {}", minFrequency, maxFrequency,
+            LOG.error("Cannot update frequencies {} {} for nodes {}", atozMinFrequency, atozMaxFrequency,
                     strNodesList, e);
         } catch (InterruptedException e) {
-            LOG.error("Update of frequencies {} {} for nodes {} was interrupted", minFrequency, maxFrequency,
+            LOG.error("Update of frequencies {} {} for nodes {} was interrupted", atozMinFrequency, atozMaxFrequency,
                     strNodesList, e);
             Thread.currentThread().interrupt();
         }
@@ -479,18 +479,18 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     /**
      * Update Wavelength for xpdr port attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param rate Uint32
      * @param modulationFormat ModulationFormat
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return XpdrPortAttributes with Wavelength updated
      */
     private XpdrPortAttributes updateXpdrPortAttributes(TerminationPoint1 networkTerminationPoint,
-            BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate, ModulationFormat modulationFormat,
+            Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate, ModulationFormat modulationFormat,
             boolean used) {
         LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         XpdrPortAttributesBuilder xpdrPortAttributesBuilder;
         if (networkTerminationPoint != null) {
             xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder(networkTerminationPoint.getXpdrPortAttributes());
@@ -500,7 +500,8 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
         if (used) {
             waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
-                    .setFrequency(GridUtils.getCentralFrequency(minFrequency, maxFrequency));
+                    .setFrequency(GridUtils
+                            .getCentralFrequency(atozMinFrequency.decimalValue(), atozMaxFrequency.decimalValue()));
         }
         return xpdrPortAttributesBuilder.setWavelength(waveLengthBuilder.build()).build();
     }
@@ -508,18 +509,18 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     /**
      * Update Wavelength for xpdr network attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param rate Uint32
      * @param modulationFormat ModulationFormat
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return XpdrNetworkAttributes with Wavelength updated
      */
     private XpdrNetworkAttributes updateXpdrNetworkAttributes(TerminationPoint1 networkTerminationPoint,
-            BigDecimal minFrequency, BigDecimal maxFrequency, Uint32 rate, ModulationFormat modulationFormat,
+            Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate, ModulationFormat modulationFormat,
             boolean used) {
         LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         XpdrNetworkAttributesBuilder xpdrNetworkAttributesBuilder;
         if (networkTerminationPoint != null) {
             xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder(
@@ -530,7 +531,8 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
         if (used) {
             waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
-                    .setFrequency(GridUtils.getCentralFrequency(minFrequency, maxFrequency));
+                    .setFrequency(GridUtils
+                            .getCentralFrequency(atozMinFrequency.decimalValue(), atozMaxFrequency.decimalValue()));
             xpdrNetworkAttributesBuilder.setWavelength(waveLengthBuilder.build());
         } else {
             xpdrNetworkAttributesBuilder.setWavelength(null);
@@ -541,15 +543,15 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     /**
      * Update freqMaps for pp attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return PpAttributes with frequency map updated
      */
-    private PpAttributes updatePpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private PpAttributes updatePpAttributes(TerminationPoint1 networkTerminationPoint, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update pp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         PpAttributesBuilder ppAttributesBuilder;
         if (networkTerminationPoint != null) {
             ppAttributesBuilder = new PpAttributesBuilder(networkTerminationPoint.getPpAttributes());
@@ -557,22 +559,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             ppAttributesBuilder = new PpAttributesBuilder();
         }
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ppAttributesBuilder.getAvailFreqMaps();
-        return ppAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
-                .build();
+        return ppAttributesBuilder
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for cp attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return CpAttributes with frequency map updated
      */
-    private CpAttributes updateCpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private CpAttributes updateCpAttributes(TerminationPoint1 networkTerminationPoint, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update cp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         CpAttributesBuilder cpAttributesBuilder;
         if (networkTerminationPoint != null) {
             cpAttributesBuilder = new CpAttributesBuilder(networkTerminationPoint.getCpAttributes());
@@ -580,22 +583,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             cpAttributesBuilder = new CpAttributesBuilder();
         }
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = cpAttributesBuilder.getAvailFreqMaps();
-        return cpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
-                .build();
+        return cpAttributesBuilder
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for ctp attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return CtpAttributes with frequency map updated
      */
-    private CtpAttributes updateCtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private CtpAttributes updateCtpAttributes(TerminationPoint1 networkTerminationPoint, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update ctp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         CtpAttributesBuilder ctpAttributesBuilder;
         if (networkTerminationPoint != null) {
             ctpAttributesBuilder = new CtpAttributesBuilder(networkTerminationPoint.getCtpAttributes());
@@ -603,22 +607,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             ctpAttributesBuilder = new CtpAttributesBuilder();
         }
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ctpAttributesBuilder.getAvailFreqMaps();
-        return ctpAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
-                .build();
+        return ctpAttributesBuilder
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for rxtp attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return RxTtpAttributes with frequency map updated
      */
-    private RxTtpAttributes updateRxTtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private RxTtpAttributes updateRxTtpAttributes(TerminationPoint1 networkTerminationPoint, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update rx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         RxTtpAttributesBuilder rxTtpAttributesBuilder;
         if (networkTerminationPoint != null) {
             rxTtpAttributesBuilder = new RxTtpAttributesBuilder(networkTerminationPoint.getRxTtpAttributes());
@@ -627,21 +632,22 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         }
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = rxTtpAttributesBuilder.getAvailFreqMaps();
         return rxTtpAttributesBuilder
-                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for txtp attributes.
      * @param networkTerminationPoint TerminationPoint1
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return TxTtpAttributes with frequency map updated
      */
-    private TxTtpAttributes updateTxTtpAttributes(TerminationPoint1 networkTerminationPoint, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private TxTtpAttributes updateTxTtpAttributes(TerminationPoint1 networkTerminationPoint, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update tx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
-                networkTerminationPoint, minFrequency, maxFrequency, used);
+                networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
         TxTtpAttributesBuilder txTtpAttributesBuilder;
         if (networkTerminationPoint != null) {
             txTtpAttributesBuilder = new TxTtpAttributesBuilder(networkTerminationPoint.getTxTtpAttributes());
@@ -650,19 +656,20 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         }
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = txTtpAttributesBuilder.getAvailFreqMaps();
         return txTtpAttributesBuilder
-                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for srg attributes of srgAttributes.
      * @param srgAttributes SrgAttributes
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return SrgAttributes with frequency map updated
      */
-    private SrgAttributes updateSrgAttributes(SrgAttributes srgAttributes, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private SrgAttributes updateSrgAttributes(SrgAttributes srgAttributes, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
         SrgAttributesBuilder srgAttributesBuilder;
         if (srgAttributes == null) {
@@ -671,20 +678,21 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
         }
         availFreqMapsMap = srgAttributesBuilder.getAvailFreqMaps();
-        return srgAttributesBuilder.setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used))
-                .build();
+        return srgAttributesBuilder
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update freqMaps for degree attributes of degreeAttributes.
      * @param degreeAttributes DegreeAttributes
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      * @return DegreeAttributes with frequency map updated
      */
-    private DegreeAttributes updateDegreeAttributes(DegreeAttributes degreeAttributes, BigDecimal minFrequency,
-            BigDecimal maxFrequency, boolean used) {
+    private DegreeAttributes updateDegreeAttributes(DegreeAttributes degreeAttributes, Decimal64 atozMinFrequency,
+            Decimal64 atozMaxFrequency, boolean used) {
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
         DegreeAttributesBuilder degreeAttributesBuilder;
         if (degreeAttributes == null) {
@@ -694,21 +702,22 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         }
         availFreqMapsMap = degreeAttributesBuilder.getAvailFreqMaps();
         return degreeAttributesBuilder
-                .setAvailFreqMaps(updateFreqMaps(minFrequency, maxFrequency, availFreqMapsMap, used)).build();
+            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .build();
     }
 
     /**
      * Update availFreqMapsMap for min and max frequencies for cband AvailFreqMaps.
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
+     * @param atozMinFrequency BigDecimal
+     * @param atozMaxFrequency BigDecimal
      * @param availFreqMapsMap Map
      * @param used boolean
      * @return updated Update availFreqMapsMap for min and max frequencies for cband AvailFreqMaps.
      */
-    private Map<AvailFreqMapsKey, AvailFreqMaps> updateFreqMaps(BigDecimal minFrequency, BigDecimal maxFrequency,
+    private Map<AvailFreqMapsKey, AvailFreqMaps> updateFreqMaps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
             Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap, boolean used) {
-        int beginIndex = GridUtils.getIndexFromFrequency(minFrequency);
-        int endIndex = GridUtils.getIndexFromFrequency(maxFrequency);
+        int beginIndex = GridUtils.getIndexFromFrequency(atozMinFrequency);
+        int endIndex = GridUtils.getIndexFromFrequency(atozMaxFrequency);
         if (availFreqMapsMap == null) {
             availFreqMapsMap = GridUtils.initFreqMaps4FixedGrid2Available();
         }
@@ -717,12 +726,12 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             BitSet bitSetFreq = BitSet.valueOf(availFreqMaps.getFreqMap());
             LOG.debug(
                  "Update frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
-                 beginIndex, endIndex, minFrequency, maxFrequency, !used, bitSetFreq);
+                 beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
             //if used = true then bit must be set to false to indicate the slot is no more available
             bitSetFreq.set(beginIndex, endIndex, !used);
             LOG.debug(
                 "Updated frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
-                beginIndex, endIndex, minFrequency, maxFrequency, !used, bitSetFreq);
+                beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
             Map<AvailFreqMapsKey, AvailFreqMaps> updatedFreqMaps = new HashMap<>();
             byte[] frequenciesByteArray = bitSetFreq.toByteArray();
             AvailFreqMaps updatedAvailFreqMaps = new AvailFreqMapsBuilder(availFreqMaps)

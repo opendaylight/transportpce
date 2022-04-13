@@ -10,8 +10,10 @@ package org.opendaylight.transportpce.networkmodel.util.test;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingBuilder;
@@ -156,12 +158,12 @@ public final class NetworkmodelTestUtil {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder()
             .setRate(ODU4.class);
         if (withTpnTsPool) {
-            List<Uint16> tsPool = new ArrayList<>();
+            Set<Uint16> tsPool = new HashSet<>();
             for (int i = 0; i < 80; i++) {
                 tsPool.add(Uint16.valueOf(i + 1));
             }
             xtpcaBldr.setTsPool(tsPool);
-            List<Uint16> tpnPool = new ArrayList<>();
+            Set<Uint16> tpnPool = new HashSet<>();
             for (int i = 1; i <= 80; i++) {
                 tpnPool.add(Uint16.valueOf(i));
             }
@@ -248,7 +250,7 @@ public final class NetworkmodelTestUtil {
             int networkPortNb, int clientPortNb,
         XpdrNodeTypes xpdrNodeType) {
         for (int i = 1; i <= networkPortNb; i++) {
-            List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            Set<Class<? extends SupportedIfCapability>> supportedIntf = new HashSet<>();
             supportedIntf.add(IfOCH.class);
             MappingBuilder mappingBldr = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-NETWORK" + i)
@@ -265,7 +267,7 @@ public final class NetworkmodelTestUtil {
             mappingMap.put(mapping.key(),mapping);
         }
         for (int i = 1; i <= clientPortNb; i++) {
-            List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            Set<Class<? extends SupportedIfCapability>> supportedIntf = new HashSet<>();
             supportedIntf.add(If100GE.class);
             Mapping mapping = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-CLIENT" + i)

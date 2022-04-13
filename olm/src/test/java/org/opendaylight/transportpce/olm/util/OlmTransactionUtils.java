@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.olm.util;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +21,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev1911
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Location;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -74,6 +74,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -102,19 +103,19 @@ public final class OlmTransactionUtils {
                 .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
                 .addAugmentation(new LinkConcatenation1Builder()
                     .setFiberType(FiberType.Truewave)
-                    .setPmd(new FiberPmd(BigDecimal.ONE))
+                    .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                     .build())
                 .setSRLGId(Uint32.valueOf(1))
-                .setSRLGLength(BigDecimal.valueOf(1))
+                .setSRLGLength(Decimal64.valueOf("1"))
                 .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
                 .withKey(new LinkConcatenationKey(Uint32.valueOf(2)))
                 .addAugmentation(new LinkConcatenation1Builder()
                     .setFiberType(FiberType.Truewave)
-                    .setPmd(new FiberPmd(BigDecimal.ONE))
+                    .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                     .build())
                 .setSRLGId(Uint32.valueOf(1))
-                .setSRLGLength(BigDecimal.valueOf(1))
+                .setSRLGLength(Decimal64.valueOf("1"))
                 .build();
         linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
         linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
@@ -154,10 +155,10 @@ public final class OlmTransactionUtils {
                                                 .span.SpanBuilder()
                                                 .setAdministrativeState(AdminStates.InService)
                                                 .setAutoSpanloss(true)
-                                                .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
+                                                .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
                                                 .setLinkConcatenation(linkConcentationValues)
-                                                .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                                .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
+                                                .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
+                                                .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
                                                 .build())
                                         .build())
                                 .build())
@@ -176,10 +177,10 @@ public final class OlmTransactionUtils {
                                                 .span.SpanBuilder()
                                                 .setAdministrativeState(AdminStates.InService)
                                                 .setAutoSpanloss(true)
-                                                .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
+                                                .setEngineeredSpanloss(new RatioDB(Decimal64.valueOf("1")))
                                                 .setLinkConcatenation(linkConcentationValues)
-                                                .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                                .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
+                                                .setSpanlossBase(new RatioDB(Decimal64.valueOf("1")))
+                                                .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("1")))
                                                 .build())
                                         .build())
                                 .build())
@@ -248,7 +249,7 @@ public final class OlmTransactionUtils {
                 .withKey(new MeasurementKey(PmGranularity._15min))
                 .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215
                         .PmGranularity._15min)
-                .setPmParameterValue(new PmDataType(new BigDecimal("-3.5")))
+                .setPmParameterValue(new PmDataType(Decimal64.valueOf("-3.5")))
                 .setValidity(Validity.Complete)
                 .build();
         CurrentPm cpA = new CurrentPmBuilder()
@@ -258,8 +259,10 @@ public final class OlmTransactionUtils {
                         .OpticalPowerOutput)
                 .setMeasurement(Map.of(measurementA.key(),measurementA))
                 .build();
-        InstanceIdentifier<Interface> interfaceIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"));
+        InstanceIdentifier<Interface> interfaceIIDA = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
+            .build();
         CurrentPmEntry currentPmEntryA = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpA.key(),cpA))
                 .setPmResourceInstance(interfaceIIDA)
@@ -276,7 +279,7 @@ public final class OlmTransactionUtils {
     public static Optional<CurrentPmList> getCurrentPmListC() {
         Measurement measurementC = new MeasurementBuilder()
                 .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmGranularity._15min)
-                .setPmParameterValue(new PmDataType(new BigDecimal("-18.1")))
+                .setPmParameterValue(new PmDataType(Decimal64.valueOf("-18.1")))
                 .setValidity(Validity.Complete)
                 .build();
         CurrentPm cpC = new CurrentPmBuilder()
@@ -286,8 +289,10 @@ public final class OlmTransactionUtils {
                         .OpticalPowerInput)
                 .setMeasurement(Map.of(measurementC.key(),measurementC))
                 .build();
-        InstanceIdentifier<Interface> interfaceIIDC = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"));
+        InstanceIdentifier<Interface> interfaceIIDC = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
+            .build();
         CurrentPmEntry currentPmEntryC = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpC.key(),cpC))
                 .setPmResourceInstance(interfaceIIDC)
