@@ -145,8 +145,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                  "XPDR3-NETWORK1-ODU4"
              ],
              "och-interface-id": [
-                 "XPDR3-NETWORK1-265:272",
-                 "XPDR3-NETWORK1-OTSIGROUP-100G"
+                 "XPDR3-NETWORK1-OTSIGROUP-100G",
+                 "XPDR3-NETWORK1-265:272"
              ],
              "eth-interface-id": [
                  "XPDR3-CLIENT1-ETHERNET"

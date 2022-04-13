@@ -11,8 +11,10 @@ package org.opendaylight.transportpce.networkmodel.util;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -409,12 +411,12 @@ public final class OpenRoadmOtnTopology {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr =
             new XpdrTpPortConnectionAttributesBuilder(otnTp1Bldr.getXpdrTpPortConnectionAttributes());
         if (addingTsTpnPoolTermination) {
-            List<Uint16> tsPool = new ArrayList<>();
+            Set<Uint16> tsPool = new HashSet<>();
             for (int i = 1; i <= NB_TRIB_SLOTS; i++) {
                 tsPool.add(Uint16.valueOf(i));
             }
             xtpcaBldr.setTsPool(tsPool);
-            List<Uint16> tpnPool = new ArrayList<>();
+            Set<Uint16> tpnPool = new HashSet<>();
             int nbTribPort = NB_TRIB_PORTS;
             if (OtnLinkType.ODUC4.equals(linkType)) {
                 nbTribPort = 4;
@@ -443,7 +445,7 @@ public final class OpenRoadmOtnTopology {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr =
             new XpdrTpPortConnectionAttributesBuilder(
                 tpBldr.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes());
-        List<Uint16> tsPool = new ArrayList<>(xtpcaBldr.getTsPool());
+        Set<Uint16> tsPool = new HashSet<>(xtpcaBldr.getTsPool());
         if (isDeletion) {
             for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
                 tsPool.add(Uint16.valueOf(i));
@@ -454,12 +456,12 @@ public final class OpenRoadmOtnTopology {
             }
         }
         xtpcaBldr.setTsPool(tsPool);
-        List<Uint16> tpnPool;
+        Set<Uint16> tpnPool;
         List<OdtuTpnPool> odtuTpnPoolValues = new ArrayList<>(xtpcaBldr.getOdtuTpnPool().values());
         if (odtuTpnPoolValues.get(0).getTpnPool() == null) {
-            tpnPool = new ArrayList<>();
+            tpnPool = new HashSet<>();
         } else {
-            tpnPool = new ArrayList<>(odtuTpnPoolValues.get(0).getTpnPool());
+            tpnPool = new HashSet<>(odtuTpnPoolValues.get(0).getTpnPool());
             if (isDeletion) {
                 tpnPool.add(Uint16.valueOf(tribPortNb));
             } else {
@@ -573,7 +575,7 @@ public final class OpenRoadmOtnTopology {
         // TODO: will need to be completed
         Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         for (int i = 1; i <= node.getNbTpClient(); i++) {
-            List<TpId> tpList = new ArrayList<>();
+            Set<TpId> tpList = new HashSet<>();
             tpList.add(new TpId("XPDR" + node.getXpdrNb() + CLIENT + i));
             tpList.add(new TpId("XPDR" + node.getXpdrNb() + "-NETWORK1"));
             NonBlockingList nbl = new NonBlockingListBuilder()
@@ -625,7 +627,7 @@ public final class OpenRoadmOtnTopology {
 
     private static Node createSwitch(OtnTopoNode node) {
 
-        List<TpId> tpl = new ArrayList<>();
+        Set<TpId> tpl = new HashSet<>();
         for (int i = 1; i <= node.getNbTpClient(); i++) {
             tpl.add(new TpId("XPDR" + node.getXpdrNb() + CLIENT + i));
         }
@@ -772,7 +774,7 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    private static Class<? extends OduRateIdentity> fixRate(List<Class<? extends SupportedIfCapability>> list) {
+    private static Class<? extends OduRateIdentity> fixRate(Set<Class<? extends SupportedIfCapability>> list) {
 
         for (Class<? extends  SupportedIfCapability> class1 : list) {
             if (RATE_MAP.containsKey(class1.getSimpleName())) {

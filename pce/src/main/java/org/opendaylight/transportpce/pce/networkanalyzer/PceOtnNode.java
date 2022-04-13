@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -103,13 +104,10 @@ public class PceOtnNode implements PceNode {
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private String clientPort;
 
-    public PceOtnNode(
-            Node node,
-            OpenroadmNodeType nodeType,
-            NodeId nodeId,
-            String pceNodeType,
-            String serviceType,
-            String clientPort) {
+    @SuppressFBWarnings(value = "MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
+        justification = "need to initialise available tribport and tribslt")
+    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType,
+                      String clientPort) {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
@@ -258,9 +256,6 @@ public class PceOtnNode implements PceNode {
                 node1.getSwitchingPools().nonnullOduSwitchingPools()
                         .values().stream().findFirst().get()
                                 .getNonBlockingList().values());
-        if (nblList == null) {
-            return false;
-        }
         netwTps.sort(Comparator.comparing(TpId::getValue));
 
         switch (modeType) {
@@ -435,7 +430,7 @@ public class PceOtnNode implements PceNode {
             if (portConAttr != null && portConAttr.getOdtuTpnPool() != null) {
                 OdtuTpnPool otPool = portConAttr.getOdtuTpnPool().values().stream().findFirst().get();
                 if (checkFirstOdtuTpn(otPool)) {
-                    tpAvailableTribPort.put(tp.getTpId().getValue(), otPool.getTpnPool());
+                    tpAvailableTribPort.put(tp.getTpId().getValue(), new ArrayList<>(otPool.getTpnPool()));
                 }
             }
         }
@@ -457,7 +452,7 @@ public class PceOtnNode implements PceNode {
             XpdrTpPortConnectionAttributes portConAttr =
                 tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes();
             if (portConAttr != null && portConAttr.getTsPool() != null) {
-                tpAvailableTribSlot.put(tp.getTpId().getValue(), portConAttr.getTsPool());
+                tpAvailableTribSlot.put(tp.getTpId().getValue(), new ArrayList<>(portConAttr.getTsPool()));
             }
         }
     }
