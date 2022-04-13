@@ -68,7 +68,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,7 +130,7 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
             this.deviceTransactionManager);
         this.olmPowerService = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmt,
             this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
-        this.powerMgmtMock = PowerMockito.mock(PowerMgmtImpl.class);
+        this.powerMgmtMock = Mockito.mock(PowerMgmtImpl.class);
         this.olmPowerServiceMock = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmtMock,
             this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.olmPowerServiceMock = Mockito.mock(OlmPowerServiceImpl.class);

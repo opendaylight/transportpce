@@ -185,7 +185,7 @@ final class OlmUtils121 {
             measurement.setPmparameterName(measure.getMeasurement().getPmParameterName().getType().toString());
             if (measure.getMeasurement().getPmParameterValue().getDecimal64() != null) {
                 measurement.setPmparameterValue(measure.getMeasurement().getPmParameterValue().getDecimal64()
-                    .toPlainString());
+                    .toString());
             } else if (measure.getMeasurement().getPmParameterValue().getUint64() != null) {
                 measurement.setPmparameterValue(measure.getMeasurement().getPmParameterValue().getUint64().toString());
             }

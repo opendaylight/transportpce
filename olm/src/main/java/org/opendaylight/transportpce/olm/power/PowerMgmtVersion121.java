@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
@@ -38,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.och.container.OchBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,9 +64,11 @@ public final class PowerMgmtVersion121 {
      */
     public static Map<String, Double> getXponderPowerRange(String circuitPackName, String portName, String deviceId,
             DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
-                .child(Ports.class, new PortsKey(portName));
+        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
+            .child(Ports.class, new PortsKey(portName))
+            .build();
         Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.debug("Fetching logical Connection Point value for port {} at circuit pack {}", portName, circuitPackName);
         Optional<Ports> portObject =
@@ -105,9 +109,11 @@ public final class PowerMgmtVersion121 {
         Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.debug("Coming inside SRG power range");
         LOG.debug("Mapping object exists.");
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
-                .child(Ports.class, new PortsKey(portName));
+        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
+            .child(Ports.class, new PortsKey(portName))
+            .build();
         LOG.debug("Fetching logical Connection Point value for port {} at circuit pack {}{}", portName,
                 circuitPackName, portIID);
         Optional<Ports> portObject =
@@ -158,7 +164,7 @@ public final class PowerMgmtVersion121 {
         OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                         .Interface1.class).getOch());
-        ochBuilder.setTransmitPower(new PowerDBm(txPower));
+        ochBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)));
         ochInterfaceBuilder.addAugmentation(new Interface1Builder().setOch(ochBuilder.build()).build());
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
@@ -176,8 +182,10 @@ public final class PowerMgmtVersion121 {
                     + "setup!", nodeId, e);
             return false;
         }
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey(interfaceName));
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(interfaceName))
+            .build();
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -221,7 +229,7 @@ public final class PowerMgmtVersion121 {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
-                rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
+                rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
             }
             RoadmConnections newRdmConn = rdmConnBldr.build();
             Future<Optional<DeviceTransaction>> deviceTxFuture =
@@ -240,8 +248,10 @@ public final class PowerMgmtVersion121 {
                 return false;
             }
             // post the cross connect on the device
-            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
+                .build();
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);

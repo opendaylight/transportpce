@@ -80,7 +80,9 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
                         .buildFuture();
             }
         }
-        return RpcResultBuilder.success(new ServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
+        return RpcResultBuilder
+            .success(new ServicePathOutputBuilder().setResult("Invalid operation").build())
+            .buildFuture();
     }
 
     @Override
@@ -97,7 +99,9 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
                         .deleteOtnServicePath(input, serviceType)).buildFuture();
             }
         }
-        return RpcResultBuilder.success(new OtnServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
+        return RpcResultBuilder
+            .success(new OtnServicePathOutputBuilder().setResult("Invalid operation").build())
+            .buildFuture();
     }
 
     /**
