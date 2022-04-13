@@ -26,6 +26,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.inventory.query.Queries;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlots;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlotsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
@@ -99,7 +100,10 @@ public class INode121 {
 
     public boolean addNode(String deviceId) {
 
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
+        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Info.class)
+            .build();
         Optional<Info> infoOpt =
                 deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, infoIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -198,7 +202,9 @@ public class INode121 {
     }
 
     public void getRoadmShelves(String nodeId) throws InterruptedException, ExecutionException {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -227,7 +233,9 @@ public class INode121 {
     }
 
     public void getCircuitPacks(String nodeId) throws InterruptedException, ExecutionException {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1026,7 +1034,9 @@ public class INode121 {
 
     private void persistDevInterfaces(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1054,8 +1064,10 @@ public class INode121 {
 
     private void persistDevProtocols(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Protocols.class);
+        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Protocols.class)
+            .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1097,8 +1109,10 @@ public class INode121 {
 
     private void persistDevProtocolLldpPortConfig(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Protocols.class);
+        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Protocols.class)
+            .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1140,8 +1154,10 @@ public class INode121 {
 
     private void persistDevProtocolLldpNbrList(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Protocols.class);
+        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Protocols.class)
+            .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1203,7 +1219,9 @@ public class INode121 {
 
     private void persistDevInternalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1248,7 +1266,9 @@ public class INode121 {
 
     private void persistDevExternalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1296,7 +1316,9 @@ public class INode121 {
 
     private void persistDevPhysicalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1356,7 +1378,9 @@ public class INode121 {
 
     private void persistDevDegree(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1487,7 +1511,9 @@ public class INode121 {
 
     private void persistDevSrg(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1598,7 +1624,9 @@ public class INode121 {
 
         //int opticalcontrolmodeEnu=-1;
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1663,7 +1691,9 @@ public class INode121 {
 
     private void persistDevConnectionMap(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1706,7 +1736,9 @@ public class INode121 {
 
     private void persistDevWavelengthMap(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);

@@ -36,8 +36,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            "xponder-type": "tpdr",
                            "port-admin-state": "InService",
                            "port-oper-state": "InService"}
-    CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-OCH-OTU4-ODU4",
-                           "org-openroadm-port-types:if-100GE"]
+    CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-100GE",
+                           "org-openroadm-port-types:if-OCH-OTU4-ODU4"]
     NODE_VERSION = "7.1"
 
     @classmethod

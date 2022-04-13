@@ -8,12 +8,13 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -78,6 +79,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otsi.group.interfaces.rev
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
@@ -150,9 +152,9 @@ public class OpenRoadmInterface710 {
         }
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder()
-            .setFrequency(new FrequencyTHz(spectrumInformation.getCenterFrequency()))
+            .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
             .setRate(R100G.class)
-            .setTransmitPower(new PowerDBm(new BigDecimal("-5")))
+            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
             .setModulationFormat(modulationFormat);
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -198,8 +200,8 @@ public class OpenRoadmInterface710 {
 
         // OTSI interface specific data
         OtsiBuilder  otsiBuilder = new OtsiBuilder()
-            .setFrequency(new FrequencyTHz(spectrumInformation.getCenterFrequency()))
-            .setTransmitPower(new PowerDBm(new BigDecimal("-5")))
+            .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
+            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
             .setProvisionMode(ProvisionModeType.Explicit)
             .setFec(Ofec.class)
             .setModulationFormat(modulationFormat);
@@ -344,7 +346,7 @@ public class OpenRoadmInterface710 {
             logicalConnPoint + String.join("-", "", "OTSIGROUP", serviceRate + "G"));
 
         // Create a list
-        List<String> listSupportingOtsiInterface = new ArrayList<>();
+        Set<String> listSupportingOtsiInterface = new HashSet<>();
         listSupportingOtsiInterface.add(supportingOtsiInterface);
         otsiGroupInterfaceBldr.setSupportingInterfaceList(listSupportingOtsiInterface);
 
@@ -400,7 +402,7 @@ public class OpenRoadmInterface710 {
             otuInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOtu.class,
             logicalConnPoint + "-OTU4");
         // Supporting interface list
-        List<String> listSupportingOChInterface = new ArrayList<>();
+        Set<String> listSupportingOChInterface = new HashSet<>();
         listSupportingOChInterface.add(supportOchInterface);
         otuInterfaceBldr.setSupportingInterfaceList(listSupportingOChInterface);
 
@@ -501,7 +503,7 @@ public class OpenRoadmInterface710 {
             logicalConnPoint + "-OTUC" + otucnrate);
 
         // Create a list
-        List<String> listSupportingOtsiGroupInterface = new ArrayList<>();
+        Set<String> listSupportingOtsiGroupInterface = new HashSet<>();
         listSupportingOtsiGroupInterface.add(supportingOtsiGroupInterface);
 
         otuInterfaceBuilder.setSupportingInterfaceList(listSupportingOtsiGroupInterface);
@@ -554,7 +556,7 @@ public class OpenRoadmInterface710 {
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
             logicalConnPoint + "-ODU4");
-        List<String> listSupportingOtu4Interface = new ArrayList<>();
+        Set<String> listSupportingOtu4Interface = new HashSet<>();
         if (mapping.getSupportingOtu4() != null) {
             listSupportingOtu4Interface.add(mapping.getSupportingOtu4());
             oduInterfaceBldr.setSupportingInterfaceList(listSupportingOtu4Interface);
@@ -628,7 +630,7 @@ public class OpenRoadmInterface710 {
 
         // Create a list
         String supportingOtucn;
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         if (mapping.getSupportingOtucn() != null) {
             listSupportingOtucnInterface.add(mapping.getSupportingOtucn());
             supportingOtucn = mapping.getSupportingOtucn();
@@ -723,7 +725,7 @@ public class OpenRoadmInterface710 {
             alogicalConnPoint + ODUC + oducnrate);
 
         // Create a list
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         listSupportingOtucnInterface.add(supportingOtucn);
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
@@ -757,7 +759,7 @@ public class OpenRoadmInterface710 {
 
         // Parent Odu-allocation
         // Set the trib-slot array
-        List<OpucnTribSlotDef> tribslots = new ArrayList<>();
+        Set<OpucnTribSlotDef> tribslots = new HashSet<>();
         // Here the int stream is based on rate
         // Get the rate, which can be 1, 2, 3 or 4 4=400G, 1=100G
         String rate = supportingOducn.substring(supportingOducn.length() - 1);
@@ -799,7 +801,7 @@ public class OpenRoadmInterface710 {
         InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
             logicalConnPoint);
 
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         listSupportingOtucnInterface.add(supportingOducn);
 
         oduflexInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
@@ -842,7 +844,7 @@ public class OpenRoadmInterface710 {
         }
         // Parent Odu-allocation
         // Set the trib-slot array
-        List<OpucnTribSlotDef> tribslots = new ArrayList<>();
+        Set<OpucnTribSlotDef> tribslots = new HashSet<>();
         // Here the int stream is based on rate
         // Get the rate, which can be 1, 2, 3 or 4 4=400G, 1=100G
         String rate = supportingOducn.substring(supportingOducn.lastIndexOf('-') + 1);
@@ -883,7 +885,7 @@ public class OpenRoadmInterface710 {
             alogicalConnPoint);
 
 
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         listSupportingOtucnInterface.add(supportingOducn);
 
         oduflexInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
@@ -972,7 +974,7 @@ public class OpenRoadmInterface710 {
             logicalConnPoint + ODUC + oducnrate);
 
         // Create a list
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         listSupportingOtucnInterface.add(supportingOtucn);
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
@@ -1048,7 +1050,7 @@ public class OpenRoadmInterface710 {
             alogicalConnPoint + ODUC + oducnrate);
 
         // Create a list
-        List<String> listSupportingOtucnInterface = new ArrayList<>();
+        Set<String> listSupportingOtucnInterface = new HashSet<>();
         listSupportingOtucnInterface.add(supportingOtucn);
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);

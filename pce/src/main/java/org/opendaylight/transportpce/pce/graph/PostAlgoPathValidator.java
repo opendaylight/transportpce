@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -301,7 +302,7 @@ public class PostAlgoPathValidator {
                     commonEdgeTpnPool.add(srcTpn);
                 }
             }
-            Collections.sort(commonEdgeTpnPool);
+
             if (!commonEdgeTpnPool.isEmpty()) {
                 Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
                 Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
@@ -447,8 +448,10 @@ public class PostAlgoPathValidator {
                         pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity());
                     isFlexGrid = false;
                 }
-                if ((pceNode.getSlotWidthGranularity().equals(GridConstant.SLOT_WIDTH_50))
-                    && (pceNode.getCentralFreqGranularity().equals(GridConstant.SLOT_WIDTH_50))) {
+                if ((pceNode.getSlotWidthGranularity().setScale(0, RoundingMode.CEILING)
+                        .equals(GridConstant.SLOT_WIDTH_50))
+                        && (pceNode.getCentralFreqGranularity().setScale(0, RoundingMode.CEILING)
+                        .equals(GridConstant.SLOT_WIDTH_50))) {
                     LOG.info("Node {}: version is {} with slot width granularity  {} and central "
                             + "frequency granularity is {} -> fixed grid mode",
                         pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity(),
