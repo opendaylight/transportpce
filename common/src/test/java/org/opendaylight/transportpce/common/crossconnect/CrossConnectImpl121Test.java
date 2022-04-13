@@ -12,7 +12,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.junit.Assert;
@@ -30,11 +29,13 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class CrossConnectImpl121Test {
@@ -52,9 +53,10 @@ public class CrossConnectImpl121Test {
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
 
         //mock responses for deviceTransactionManager calls
-        InstanceIdentifier<RoadmConnections> deviceIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(RoadmConnections.class, new RoadmConnectionsKey("1"));
+        InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -87,9 +89,10 @@ public class CrossConnectImpl121Test {
     // TODO : fix commit
     @Test(expected = NullPointerException.class)
     public void setPowerLevelTest() {
-        InstanceIdentifier<RoadmConnections> deviceIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(RoadmConnections.class, new RoadmConnectionsKey("1"));
+        InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
+            .build();
         when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -97,7 +100,7 @@ public class CrossConnectImpl121Test {
 
         Mockito.when(deviceTransactionManager.getDeviceTransaction("deviceId"))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
-        crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, new BigDecimal(100), "1");
+        crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, Decimal64.valueOf("100"), "1");
 
         Assert.assertTrue("set Level should be true", true);
     }

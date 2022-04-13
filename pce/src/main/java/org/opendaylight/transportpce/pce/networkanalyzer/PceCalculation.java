@@ -12,11 +12,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -76,7 +74,7 @@ public class PceCalculation {
     ///////////// Intermediate data/////////////////
     private List<PceLink> addLinks = new ArrayList<>();
     private List<PceLink> dropLinks = new ArrayList<>();
-    private HashSet<NodeId> azSrgs = new HashSet<>();
+    private List<NodeId> azSrgs = new ArrayList<>();
 
     private PceNode aendPceNode = null;
     private PceNode zendPceNode = null;
@@ -89,7 +87,7 @@ public class PceCalculation {
     // this List serves calculation of ZtoA path description
     // TODO maybe better solution is possible
     private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
-    private Set<LinkId> linksToExclude = new HashSet<>();
+    private List<LinkId> linksToExclude = new ArrayList<>();
     private PceResult returnStructure;
     private PortMapping portMapping;
 
@@ -793,14 +791,14 @@ public class PceCalculation {
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
                     && mcCapabitility.getSlotWidthGranularity() != null) {
-                return mcCapabitility.getSlotWidthGranularity().getValue();
+                return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
                     && mcCapabitility.getSlotWidthGranularity() != null) {
-                return mcCapabitility.getSlotWidthGranularity().getValue();
+                return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
             }
         }
-        return GridConstant.SLOT_WIDTH_50;
+        return GridConstant.SLOT_WIDTH_50.decimalValue();
     }
 
     /**
@@ -819,13 +817,13 @@ public class PceCalculation {
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
                     && mcCapabitility.getCenterFreqGranularity() != null) {
-                return mcCapabitility.getCenterFreqGranularity().getValue();
+                return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
                     && mcCapabitility.getCenterFreqGranularity() != null) {
-                return mcCapabitility.getCenterFreqGranularity().getValue();
+                return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
             }
         }
-        return GridConstant.SLOT_WIDTH_50;
+        return GridConstant.SLOT_WIDTH_50.decimalValue();
     }
 }

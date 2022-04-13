@@ -50,7 +50,6 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
      *            ChangeNotification object
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void onChangeNotification(ChangeNotification notification) {
         LOG.debug("device71 notification received = {}", notification);
         if (notification.getEdit() == null) {
@@ -68,12 +67,10 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<Ports> portIID = (InstanceIdentifier<Ports>) InstanceIdentifier
-                        .create(path);
+                    InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
                     String portName = InstanceIdentifier.keyOf(portIID).getPortName();
                     path.removeLast();
-                    InstanceIdentifier<CircuitPacks> cpIID = (InstanceIdentifier<CircuitPacks>) InstanceIdentifier
-                        .create(path);
+                    InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.unsafeOf(path);
                     String cpName = InstanceIdentifier.keyOf(cpIID).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
@@ -94,14 +91,13 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
                 case "OduSwitchingPools":
                     LOG.info("odu-switching-pools modified on device {}", nodeId);
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    ospIID = (InstanceIdentifier<OduSwitchingPools>) InstanceIdentifier.create(path);
+                    ospIID = InstanceIdentifier.unsafeOf(path);
                     break;
                 case "PortList":
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<PortList> plIID = (InstanceIdentifier<PortList>) InstanceIdentifier.create(path);
+                    InstanceIdentifier<PortList> plIID = InstanceIdentifier.unsafeOf(path);
                     path.removeLast();
-                    InstanceIdentifier<NonBlockingList> nblIID =
-                        (InstanceIdentifier<NonBlockingList>) InstanceIdentifier.create(path);
+                    InstanceIdentifier<NonBlockingList> nblIID = InstanceIdentifier.unsafeOf(path);
                     Uint16 nblNb = InstanceIdentifier.keyOf(nblIID).getNblNumber();
                     List<InstanceIdentifier<PortList>> iidList = nbliidMap.containsKey(nblNb)
                         ? nbliidMap.get(nblNb) : new ArrayList<>();

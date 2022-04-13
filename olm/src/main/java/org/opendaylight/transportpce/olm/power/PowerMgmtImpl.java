@@ -30,6 +30,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,7 +182,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             spanLossTx);
                         return false;
                     }
-                    BigDecimal powerValue = getRdmPowerValue(spanLossTx, input);
+                    Decimal64 powerValue = Decimal64.valueOf(getRdmPowerValue(spanLossTx, input));
                     try {
                         if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), powerValue,
                                 connectionNumber)) {
@@ -302,7 +303,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     }
                     return interfaceOpt.get()
                             .augmentation(Interface1.class)
-                            .getOts().getSpanLossTransmit().getValue();
+                            .getOts().getSpanLossTransmit().getValue().decimalValue();
                 case 2:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
                             .interfaces.grp.Interface> interfaceOpt1 =
@@ -320,7 +321,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     return interfaceOpt1.get()
                             .augmentation(org.opendaylight.yang.gen.v1.http.org
                                 .openroadm.optical.transport.interfaces.rev181019.Interface1.class)
-                            .getOts().getSpanLossTransmit().getValue();
+                            .getOts().getSpanLossTransmit().getValue().decimalValue();
                 // TODO no case 3 ?
                 default:
                     return null;
@@ -444,8 +445,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                     input.getNodes().get(i).getSrcTp(), destTpId, spectralSlotName);
             try {
                 if (destTpId.toUpperCase(Locale.getDefault()).contains("DEG")) {
-                    if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), new BigDecimal(-60),
-                            connectionNumber)) {
+                    if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(),
+                            Decimal64.valueOf("-60"), connectionNumber)) {
                         LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
