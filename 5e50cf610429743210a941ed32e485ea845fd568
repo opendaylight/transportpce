@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4558ac5b_75fbd514",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-15T12:07:02Z",
+      "side": 1,
+      "message": "Thanks Robert for having detected this errors.",
+      "revId": "5e50cf610429743210a941ed32e485ea845fd568",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b17b2e86_c041b386",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-04-15T09:41:58Z",
       "side": 1,
       "message": "stray change?",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "5e50cf610429743210a941ed32e485ea845fd568",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ffd9783_e41ceed8",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-15T12:07:02Z",
+      "side": 1,
+      "message": "oups...\na little too much automatic bump...",
+      "parentUuid": "b17b2e86_c041b386",
       "range": {
         "startLine": 25,
         "startChar": 4,
@@ -47,6 +88,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f67db57c_5928eaee",
+        "filename": "networkmodel/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-15T12:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eadc73e4_0047ffdc",
+      "range": {
+        "startLine": 44,
+        "startChar": 17,
+        "endLine": 44,
+        "endChar": 23
+      },
+      "revId": "5e50cf610429743210a941ed32e485ea845fd568",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9051684d_3c0d88b3",
@@ -60,6 +125,30 @@
       "writtenOn": "2022-04-15T09:41:58Z",
       "side": 1,
       "message": "you can also remove this, it comes out of the box",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 17
+      },
+      "revId": "5e50cf610429743210a941ed32e485ea845fd568",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28fb91a8_5316e2ef",
+        "filename": "olm/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-15T12:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9051684d_3c0d88b3",
       "range": {
         "startLine": 107,
         "startChar": 4,
