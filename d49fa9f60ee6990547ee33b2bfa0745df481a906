@@ -16,6 +16,24 @@
       "message": "Hello Robert, Guillaume,\nI\u0027ve been trying to migrate the TransportPCE master branch to Sulfur for a few days, but I\u0027m running into some weird things that I don\u0027t see happening on other MRI projects that have already been migrated.\nI put my progress on gerrit to allow you, if necessary and could find a few moments for that, to take a look at it.\nWhen locally I overpass the step of compiling models, the compilation fails on our way of using InstanceIdentifier.create(), but I really can\u0027t figure out what can be wrong with what we\u0027ve been doing for a few years and which seems to me in line with what is in the sulfur migration guide (see for example line 111 of /common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java \u003d\u003e InstanceIdentifier\u003c Info \u003e infoIID \u003d InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);)\nThanks in advance for your help.",
       "revId": "d49fa9f60ee6990547ee33b2bfa0745df481a906",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca537979_3d4569d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-15T14:36:56Z",
+      "side": 1,
+      "message": "I can\u0027t go that far for the moment but I got a similar issue in test-common with mvn3.8.5\n\n[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.0:compile (default-compile) on project test-common: Compilation failure: Compilation failure: \n[ERROR] /home/guillaume/git_ws/transportpce/test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java:[117,66] method create in class org.opendaylight.yangtools.yang.binding.InstanceIdentifier\u003cT\u003e cannot be applied to given types;\n[ERROR]   required: java.lang.Class\u003cT\u003e\n[ERROR]   found: java.lang.Class\u003cT\u003e\n[ERROR]   reason: inference variable T has incompatible bounds\n[ERROR]     equality constraints: T\n[ERROR]     lower bounds: org.opendaylight.yangtools.yang.binding.ChildOf\u003c? extends org.opendaylight.yangtools.yang.binding.DataRoot\u003e\n[ERROR] /home/guillaume/git_ws/transportpce/test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java:[125,75] method create in class org.opendaylight.yangtools.yang.binding.InstanceIdentifier\u003cT\u003e cannot be applied to given types;\n[ERROR]   required: java.lang.Class\u003cT\u003e\n[ERROR]   found: java.lang.Class\u003cT\u003e\n[ERROR]   reason: inference variable T has incompatible bounds\n[ERROR]     equality constraints: T\n[ERROR]     lower bounds: org.opendaylight.yangtools.yang.binding.ChildOf\u003c? extends org.opendaylight.yangtools.yang.binding.DataRoot\u003e",
+      "parentUuid": "72251777_4dc4929a",
+      "revId": "d49fa9f60ee6990547ee33b2bfa0745df481a906",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
