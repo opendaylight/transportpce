@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72251777_4dc4929a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-15T09:12:20Z",
+      "side": 1,
+      "message": "Hello Robert, Guillaume,\nI\u0027ve been trying to migrate the TransportPCE master branch to Sulfur for a few days, but I\u0027m running into some weird things that I don\u0027t see happening on other MRI projects that have already been migrated.\nI put my progress on gerrit to allow you, if necessary and could find a few moments for that, to take a look at it.\nWhen locally I overpass the step of compiling models, the compilation fails on our way of using InstanceIdentifier.create(), but I really can\u0027t figure out what can be wrong with what we\u0027ve been doing for a few years and which seems to me in line with what is in the sulfur migration guide (see for example line 111 of /common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java \u003d\u003e InstanceIdentifier\u003c Info \u003e infoIID \u003d InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);)\nThanks in advance for your help.",
+      "revId": "d49fa9f60ee6990547ee33b2bfa0745df481a906",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
