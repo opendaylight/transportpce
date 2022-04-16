@@ -34,6 +34,24 @@
       "parentUuid": "72251777_4dc4929a",
       "revId": "d49fa9f60ee6990547ee33b2bfa0745df481a906",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149ee9e4_a1678507",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2022-04-16T21:13:32Z",
+      "side": 1,
+      "message": "Ah, right, so this is the InstanceIdentifier tightening. This needs to go through InstanceIdentifier.builderOfInherited(), like done on line 44 here: https://git.opendaylight.org/gerrit/c/bgpcep/+/100057/18/bgp/openconfig-rp-impl/src/main/java/org/opendaylight/protocol/bgp/openconfig/routing/policy/impl/BGPRibPolicyImpl.java#44",
+      "parentUuid": "ca537979_3d4569d2",
+      "revId": "d49fa9f60ee6990547ee33b2bfa0745df481a906",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
