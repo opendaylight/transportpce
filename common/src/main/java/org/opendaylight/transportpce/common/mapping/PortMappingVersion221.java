@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,6 +58,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Di
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
@@ -124,7 +126,10 @@ public class PortMappingVersion221 {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
+        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Info.class)
+            .build();
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -186,9 +191,11 @@ public class PortMappingVersion221 {
             LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.UPDATE, "a null value");
             return false;
         }
-        InstanceIdentifier<Ports> portId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
-                .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()));
+        InstanceIdentifier<Ports> portId = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
+            .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
+            .build();
         try {
             Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
                 portId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
@@ -247,7 +254,9 @@ public class PortMappingVersion221 {
     }
 
     private OrgOpenroadmDevice getXpdrDevice(String nodeId) {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -346,7 +355,7 @@ public class PortMappingVersion221 {
                 if (nbl.getPortList() == null) {
                     continue;
                 }
-                List<String> lcpList = new ArrayList<>();
+                Set<String> lcpList = new HashSet<>();
                 for (PortList item : nbl.nonnullPortList().values()) {
                     String key = item.getCircuitPackName() + "+" + item.getPortName();
                     if (!lcpMap.containsKey(key)) {
@@ -404,8 +413,10 @@ public class PortMappingVersion221 {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks> srgCps
                 = new ArrayList<>();
             LOG.debug(PortMappingUtils.GETTING_CP_LOGMSG, deviceId, srgCounter);
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)));
+            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)))
+                .build();
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -483,9 +494,11 @@ public class PortMappingVersion221 {
                 nodeId, port.getPortName(), circuitPackName);
             return null;
         }
-        InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+        InstanceIdentifier<Ports> port2ID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(port.getPartnerPort().getCircuitPackName()))
-            .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName()));
+            .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName()))
+            .build();
         Optional<Ports> port2Object = this.deviceTransactionManager
             .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -509,8 +522,10 @@ public class PortMappingVersion221 {
     }
 
     private List<Ports> getPortList(String circuitPackName, String nodeId) {
-        InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName));
+        InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
+            .build();
         Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
              LogicalDatastoreType.OPERATIONAL, cpIID,
              Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -544,8 +559,10 @@ public class PortMappingVersion221 {
 
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.debug(PortMappingUtils.GETTING_CONPORT_LOGMSG, deviceId, degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
+            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)))
+                .build();
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -572,8 +589,10 @@ public class PortMappingVersion221 {
         // if not present assume to be 20 (temporary)
         Integer maxSrg = ordmInfo.getMaxSrgs() == null ? 20 : ordmInfo.getMaxSrgs().toJava();
         for (int srgCounter = 1; srgCounter <= maxSrg; srgCounter++) {
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)));
+            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)))
+                .build();
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -587,8 +606,10 @@ public class PortMappingVersion221 {
 
     private Map<String, String> getEthInterfaceList(String nodeId) {
         LOG.info(PortMappingUtils.GETTING_ETH_LIST_LOGMSG, nodeId);
-        InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(Protocols.class);
+        InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Protocols.class)
+            .build();
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -602,8 +623,10 @@ public class PortMappingVersion221 {
             if (!portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                 continue;
             }
-            InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+            InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(Interface.class, new InterfaceKey(portConfig.getIfName()))
+                .build();
             Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
                 LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -612,8 +635,10 @@ public class PortMappingVersion221 {
             }
             String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
             cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
-            InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName));
+            InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName))
+                .build();
             Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -847,8 +872,8 @@ public class PortMappingVersion221 {
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
-        List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211
-            .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+        Set<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211
+            .SupportedIfCapability>> supportedIntf = new HashSet<>();
         for (String sup: getSupIfCapList(port)) {
             if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
                 supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
@@ -883,7 +908,7 @@ public class PortMappingVersion221 {
     }
 
     private List<String> getSupIfCapList(Ports port) {
-        List<Class<? extends SupportedIfCapability>> supIfCapClassList = port.getSupportedInterfaceCapability();
+        Set<Class<? extends SupportedIfCapability>> supIfCapClassList = port.getSupportedInterfaceCapability();
         if (supIfCapClassList != null) {
             return supIfCapClassList
                     .stream().map(e -> e.getSimpleName())
@@ -1109,9 +1134,11 @@ public class PortMappingVersion221 {
     }
 
     private Ports getTtpPort(ConnectionPorts cp, String cpName, String nodeId) {
-        InstanceIdentifier<Ports> portID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+        InstanceIdentifier<Ports> portID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(cpName))
-            .child(Ports.class, new PortsKey(cp.getPortName()));
+            .child(Ports.class, new PortsKey(cp.getPortName()))
+            .build();
         LOG.debug(PortMappingUtils.FETCH_CONNECTIONPORT_LOGMSG, nodeId, cp.getPortName(), cpName);
         Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, portID, Timeouts.DEVICE_READ_TIMEOUT,
@@ -1196,8 +1223,10 @@ public class PortMappingVersion221 {
     }
 
     private Optional<Interface> getInterfaceFromDevice(String nodeId, String interfaceName) {
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(Interface.class, new InterfaceKey(interfaceName));
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey(interfaceName))
+            .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
