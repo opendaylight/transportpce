@@ -367,8 +367,10 @@ public class OpenRoadmInterface710 {
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
             // Create OTSi and OTSi-group
             String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);
-            interfaceOchOtsiOtsigroup = createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,
+            String interfaceOtsigroup = createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,
                 spectrumInformation);
+            // Concat the two names for this interface
+            interfaceOchOtsiOtsigroup = interfaceOtsiName + "#" + interfaceOtsigroup;
         }
 
         return interfaceOchOtsiOtsigroup;
@@ -877,17 +879,19 @@ public class OpenRoadmInterface710 {
         }
         // Depending on OTU4 or OTUCn, supporting interface should
         // reflect that
-        String interfaceOdu4Oducn = null;
+        String interfaceOdu4OducnOduflex = null;
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
             // create OTU4 interface
-            interfaceOdu4Oducn = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
+            interfaceOdu4OducnOduflex = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
-            interfaceOdu4Oducn = createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
+            String interfaceOduflex = createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
+            // Here we concat the two interfaces
+            interfaceOdu4OducnOduflex = interfaceOducn + "#" + interfaceOduflex;
         }
 
-        return interfaceOdu4Oducn;
+        return interfaceOdu4OducnOduflex;
     }
 
     public String createOpenRoadmOtnOducnInterface(String nodeId, String logicalConnPoint,

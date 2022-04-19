@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -158,15 +159,23 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         crossConnectFlag++;
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, spectrumInformation);
-                        createdOchInterfaces.add(supportingOchInterface);
+                        // Split the string based on # pass the last element as the supported Interface
+                        // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
+                        String[] listOfSuppOchInf = supportingOchInterface.split("#");
+                        createdOchInterfaces = Arrays.asList(listOfSuppOchInf);
+                        // Taking the last element
+                        supportingOchInterface = createdOchInterfaces.get(createdOchInterfaces.size() - 1);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
                                 nodeId, destTp, supportingOchInterface, apiInfoA, apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (srcTp == null) {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                         } else {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                    nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07));
+                            String supportingOduInterface = this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
+                                nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07);
+                            // This is needed for 7.1 device models for 400GE, since we have ODUC4 and ODUflex are combined
+                            String[] listOfSuppOdu = supportingOduInterface.split("#");
+                            createdOduInterfaces = Arrays.asList(listOfSuppOdu);
                         }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
