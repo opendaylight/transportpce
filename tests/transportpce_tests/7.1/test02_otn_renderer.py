@@ -86,7 +86,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'otu-interface-id': ['XPDR2-NETWORK1-OTUC2'],
-             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-200G']}, response['output']['node-interface'])
+             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-200G',
+                                  'XPDR2-NETWORK1-755:768']},
+            response['output']['node-interface'])
 
     def test_03_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
@@ -454,7 +456,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'otu-interface-id': ['XPDR2-NETWORK1-OTUC3'],
-             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-300G']}, response['output']['node-interface'])
+             'och-interface-id': ['XPDR2-NETWORK1-755:768',
+                                  'XPDR2-NETWORK1-OTSIGROUP-300G']},
+            response['output']['node-interface'])
 
     def test_27_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
@@ -674,7 +678,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'otu-interface-id': ['XPDR2-NETWORK1-OTUC4'],
-             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-400G']}, response['output']['node-interface'])
+             'och-interface-id': ['XPDR2-NETWORK1-755:768',
+                                  'XPDR2-NETWORK1-OTSIGROUP-400G']},
+            response['output']['node-interface'])
 
     def test_41_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
