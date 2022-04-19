@@ -21,7 +21,9 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OduConnection.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes;
@@ -38,20 +40,17 @@ public class CrossConnectImpl710 {
         this.deviceTransactionManager = deviceTransactionManager;
     }
 
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container
-        .org.openroadm.device.OduConnection> getOtnCrossConnect(String deviceId, String connectionNumber) {
-
+    public Optional<OduConnection> getOtnCrossConnect(String deviceId, String connectionNumber) {
         return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL,
             generateOduConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
-    private InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device
-        .container.org.openroadm.device.OduConnection> generateOduConnectionIID(String connectionNumber) {
-
-        return InstanceIdentifier.create(OrgOpenroadmDevice.class).child(org.opendaylight.yang.gen.v1.http.org
-                .openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnection.class,
-            new OduConnectionKey(connectionNumber));
+    private InstanceIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
+        return InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(connectionNumber))
+            .build();
     }
 
     public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node) {
@@ -67,15 +66,10 @@ public class CrossConnectImpl710 {
                 .SourceBuilder().setSrcIf(srcTp).build())
             .setDirection(Direction.Bidirectional);
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device
-            .container.org.openroadm.device.OduConnection> oduConnectionIID =
-            InstanceIdentifier.create(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container
-                    .OrgOpenroadmDevice.class)
-                .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device
-                .container.org.openroadm.device.OduConnection.class,
-                    new OduConnectionKey(oduConnectionBuilder.getConnectionName())
-                );
+        InstanceIdentifier<OduConnection> oduConnectionIID = InstanceIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(oduConnectionBuilder.getConnectionName()))
+            .build();
 
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
