@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23985ab9_81ed1f0b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-25T07:03:01Z",
+      "side": 1,
+      "message": "I think intermediates variable are not needed here",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60cdce8a_21c1d19b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-25T07:03:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "379b61d6_65269c7a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-25T07:03:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
