@@ -649,10 +649,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_32_check_interface_ODU4_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-CLIENT1-ODU4-service-100GE")
+            "XPDR-A2", "interface/XPDR2-CLIENT1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4-service-100GE',
+        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
                         'supporting-interface-list': 'XPDR2-CLIENT1-ETHERNET-100G',
@@ -674,10 +674,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_33_check_interface_ODU4_NETWORK_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-ODU4-service-100GE")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4-service-100GE',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                         'supporting-interface-list': 'XPDR2-NETWORK1-ODUC4',
@@ -706,20 +706,20 @@ class TransportPCEtesting(unittest.TestCase):
     def test_34_check_ODU4_connection_xpdra2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-A2",
-            "odu-connection/XPDR2-CLIENT1-ODU4-service-100GE-x-XPDR2-NETWORK1-ODU4-service-100GE")
+            "odu-connection/XPDR2-CLIENT1-ODU4-x-XPDR2-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {
             'connection-name':
-            'XPDR2-CLIENT1-ODU4-service-100GE-x-XPDR2-NETWORK1-ODU4-service-100GE',
+            'XPDR2-CLIENT1-ODU4-x-XPDR2-NETWORK1-ODU4',
             'direction': 'bidirectional'
         }
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4-service-100GE'},
+        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4-service-100GE'},
+        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4'},
                              res['odu-connection'][0]['source'])
 
     def test_35_check_interface_100GE_CLIENT_xpdrc2(self):
@@ -741,10 +741,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_36_check_interface_ODU4_CLIENT_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-C2", "interface/XPDR2-CLIENT1-ODU4-service-100GE")
+            "XPDR-C2", "interface/XPDR2-CLIENT1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4-service-100GE',
+        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
                         'supporting-interface-list': 'XPDR2-CLIENT1-ETHERNET-100G',
@@ -766,10 +766,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_37_check_interface_ODU4_NETWORK_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-C2", "interface/XPDR2-NETWORK1-ODU4-service-100GE")
+            "XPDR-C2", "interface/XPDR2-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4-service-100GE',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                         'supporting-interface-list': 'XPDR2-NETWORK1-ODUC4',
@@ -804,20 +804,20 @@ class TransportPCEtesting(unittest.TestCase):
     def test_38_check_ODU4_connection_xpdrc2(self):
         response = test_utils.check_netconf_node_request(
             "XPDR-C2",
-            "odu-connection/XPDR2-CLIENT1-ODU4-service-100GE-x-XPDR2-NETWORK1-ODU4-service-100GE")
+            "odu-connection/XPDR2-CLIENT1-ODU4-x-XPDR2-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {
             'connection-name':
-            'XPDR2-CLIENT1-ODU4-service-100GE-x-XPDR2-NETWORK1-ODU4-service-100GE',
+            'XPDR2-CLIENT1-ODU4-x-XPDR2-NETWORK1-ODU4',
             'direction': 'bidirectional'
         }
 
         self.assertDictEqual(dict(input_dict_1, **res['odu-connection'][0]),
                              res['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4-service-100GE'},
+        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4'},
                              res['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4-service-100GE'},
+        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4'},
                              res['odu-connection'][0]['source'])
 
     def test_39_check_otn_topo_links(self):
@@ -959,12 +959,12 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_50_check_no_interface_ODU4_NETWORK_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-NETWORK1-ODU4-service-100GE")
+            "XPDR-A2", "interface/XPDR2-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_51_check_no_interface_ODU4_CLIENT_xpdra2(self):
         response = test_utils.check_netconf_node_request(
-            "XPDR-A2", "interface/XPDR2-CLIENT1-ODU4-service-100GE")
+            "XPDR-A2", "interface/XPDR2-CLIENT1-ODU4")
         self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_52_check_no_interface_100GE_CLIENT_xpdra2(self):

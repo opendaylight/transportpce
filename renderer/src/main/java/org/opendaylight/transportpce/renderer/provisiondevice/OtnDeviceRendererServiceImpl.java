@@ -187,10 +187,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             String connectionNumber = "";
             switch (serviceType) {
                 case StringConstants.SERVICE_TYPE_100GE_S:
-                    connectionNumber = getConnectionNumber(null, node, networkTp, "ODU4");
+                    connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
                     break;
                 case StringConstants.SERVICE_TYPE_100GE_M:
-                    connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU4");
+                    connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
                     otnLinkTps.add(new LinkTpBuilder()
                         .setNodeId(nodeId)
                         .setTpId(networkTp)
@@ -207,7 +207,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
                         interfacesToDelete.add(networkTp + "-ODU4");
                         interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
-                        connectionNumber = getConnectionNumber(null, node, networkTp, "ODU4");
+                        connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
                     }
                     break;
                 case StringConstants.SERVICE_TYPE_ODUC2:
@@ -224,18 +224,18 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
                         interfacesToDelete.add(networkTp + "-" + serviceType);
                         interfacesToDelete.add(node.getNetwork2Tp() + "-" + serviceType);
-                        connectionNumber = getConnectionNumber(null, node, networkTp, serviceType);
+                        connectionNumber = getConnectionNumber(node, networkTp, serviceType);
                     }
                     break;
                 case StringConstants.SERVICE_TYPE_10GE:
-                    connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU2e");
+                    connectionNumber = getConnectionNumber(node, networkTp, "ODU2e");
                     otnLinkTps.add(new LinkTpBuilder()
                         .setNodeId(nodeId)
                         .setTpId(networkTp)
                         .build());
                     break;
                 case StringConstants.SERVICE_TYPE_1GE:
-                    connectionNumber = getConnectionNumber(input.getServiceName(), node, networkTp, "ODU0");
+                    connectionNumber = getConnectionNumber(node, networkTp, "ODU0");
                     otnLinkTps.add(new LinkTpBuilder()
                         .setNodeId(nodeId)
                         .setTpId(networkTp)
@@ -296,7 +296,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 .build();
     }
 
-    private String getConnectionNumber(String serviceName, Nodes node, String networkTp, String oduType) {
+    private String getConnectionNumber(Nodes node, String networkTp, String oduType) {
         List<String> list1 = new ArrayList<>();
         List<String> list2 = new ArrayList<>(Arrays.asList("x"));
         if (node.getClientTp() != null) {
@@ -307,10 +307,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             list2.addAll(Arrays.asList(node.getNetwork2Tp(), oduType));
         } else {
             return "";
-        }
-        if (serviceName != null) {
-            list1.add(serviceName);
-            list2.add(serviceName);
         }
         list1.addAll(list2);
         return String.join("-", list1);
@@ -372,13 +368,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         createdOduInterfaces.add(
                             // suppporting interface?, payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(),
-                                node.getClientTp(), input.getServiceName(), false, input.getTribPortNumber(),
+                                node.getClientTp(),  false, input.getTribPortNumber(),
                                 input.getTribSlot(), apiInfoA, apiInfoZ, PT_03));
                     }
                     createdOduInterfaces.add(
                         // supporting interface? payload ?
                         openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getNetworkTp(),
-                            input.getServiceName(), true, input.getTribPortNumber(), input.getTribSlot(), null,
+                             true, input.getTribPortNumber(), input.getTribSlot(), null,
                             null, null));
                     linkTpList.add(
                         new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
@@ -386,7 +382,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         createdOduInterfaces.add(
                             // supporting interface? payload ?
                             openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(),
-                                node.getNetwork2Tp(), input.getServiceName(), true, input.getTribPortNumber(),
+                                node.getNetwork2Tp(), true, input.getTribPortNumber(),
                                 input.getTribSlot(), null, null, null));
                         linkTpList.add(
                             new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());

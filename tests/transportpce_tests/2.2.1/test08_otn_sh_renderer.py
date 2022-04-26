@@ -518,9 +518,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_13_check_interface_ODU2E_CLIENT(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
+            "SPDR-SA1", "interface", "XPDR1-CLIENT1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G',
+        input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-SFP4',
                         'supporting-interface': 'XPDR1-CLIENT1-ETHERNET10G',
@@ -543,25 +543,25 @@ class TransportPCEtesting(unittest.TestCase):
     def test_14_check_ODU2E_connection(self):
         response = test_utils_rfc8040.check_node_attribute_request(
             "SPDR-SA1",
-            "odu-connection", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+            "odu-connection", "XPDR1-CLIENT1-ODU2e-x-XPDR1-NETWORK1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {
             'connection-name':
-            'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
+            'XPDR1-CLIENT1-ODU2e-x-XPDR1-NETWORK1-ODU2e',
             'direction': 'bidirectional'
         }
         self.assertDictEqual(dict(input_dict_1, **response['odu-connection'][0]),
                              response['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e'},
                              response['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e'},
                              response['odu-connection'][0]['source'])
 
     def test_15_check_interface_ODU2E_NETWORK(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-ODU4',
@@ -590,9 +590,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Test the interfaces on SPDR-C1
     def test_16_check_interface_ODU2E_NETWORK(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-ODU4',
@@ -633,9 +633,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_check_interface_ODU2E_CLIENT(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SC1", "interface", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G")
+            "SPDR-SC1", "interface", "XPDR1-CLIENT1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G',
+        input_dict_1 = {'name': 'XPDR1-CLIENT1-ODU2e',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-SFP4',
                         'supporting-interface': 'XPDR1-CLIENT1-ETHERNET10G',
@@ -657,25 +657,25 @@ class TransportPCEtesting(unittest.TestCase):
     def test_19_check_ODU2E_connection(self):
         response = test_utils_rfc8040.check_node_attribute_request(
             "SPDR-SC1",
-            "odu-connection", "XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+            "odu-connection", "XPDR1-CLIENT1-ODU2e-x-XPDR1-NETWORK1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
         input_dict_1 = {
             'connection-name':
-            'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G-x-XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
+            'XPDR1-CLIENT1-ODU2e-x-XPDR1-NETWORK1-ODU2e',
             'direction': 'bidirectional'
         }
         self.assertDictEqual(dict(input_dict_1, **response['odu-connection'][0]),
                              response['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e'},
                              response['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e-SPDRA-SPDRC-10G'},
+        self.assertDictEqual({'src-if': 'XPDR1-CLIENT1-ODU2e'},
                              response['odu-connection'][0]['source'])
 
     def test_20_check_interface_ODU2E_NETWORK(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G")
+            "SPDR-SC1", "interface", "XPDR1-NETWORK1-ODU2e")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-SPDRA-SPDRC-10G',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-ODU4',
