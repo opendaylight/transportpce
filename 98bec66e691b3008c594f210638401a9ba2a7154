@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f196942_a4f78a09",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T14:15:44Z",
+      "side": 1,
+      "message": "\u003e I thought it would have better readability. OTSi interface name is used as the supporting interface for the OTSi-group. \n\u003e \n\u003e Are you suggesting this way:\n\u003e \n\u003e // Create OTSi and OTSi-group and concat the names of the interface\n\u003e             String interfaceOtsiName \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);\n\u003e             // Concat the two names for this interface\n\u003e             interfaceOchOtsiOtsigroup \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation)\n\u003e                 + \"#\" + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,\n\u003e                 spectrumInformation);\n\n// Create OTSi and OTSi-group and concat the names of the interface\n            String interfaceOtsiName \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);\n            // Concat the two names for this interface\n            interfaceOchOtsiOtsigroup \u003d interfaceOtsiName\n                + \"#\" + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,\n                spectrumInformation);",
+      "parentUuid": "8cf4af79_5f28f9a7",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60cdce8a_21c1d19b",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 2
