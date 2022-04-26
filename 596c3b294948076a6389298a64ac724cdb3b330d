@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bff63988_913407f5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-26T21:28:06Z",
+      "side": 1,
+      "message": "still interfaceOtsiName  not needed here",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "663f0774_90b4cf7b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-26T21:28:06Z",
+      "side": 1,
+      "message": "idem for interfaceOducn",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd2ac00_5ca56fe0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-26T21:28:06Z",
+      "side": 1,
+      "message": "idem for supportingOduInterface",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
