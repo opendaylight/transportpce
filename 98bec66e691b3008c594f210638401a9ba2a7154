@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8cf4af79_5f28f9a7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T12:05:17Z",
+      "side": 1,
+      "message": "I thought it would have better readability. OTSi interface name is used as the supporting interface for the OTSi-group. \n\nAre you suggesting this way:\n\n// Create OTSi and OTSi-group and concat the names of the interface\n            String interfaceOtsiName \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);\n            // Concat the two names for this interface\n            interfaceOchOtsiOtsigroup \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation)\n                + \"#\" + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,\n                spectrumInformation);",
+      "parentUuid": "23985ab9_81ed1f0b",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60cdce8a_21c1d19b",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 2
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9d3460d_afcb252e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T12:05:17Z",
+      "side": 1,
+      "message": "my comment earlier",
+      "parentUuid": "60cdce8a_21c1d19b",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "379b61d6_65269c7a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 2
@@ -48,6 +84,24 @@
       "writtenOn": "2022-04-25T07:03:01Z",
       "side": 1,
       "message": "idem",
+      "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c65b303_93c2d5b4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T12:05:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "379b61d6_65269c7a",
       "revId": "98bec66e691b3008c594f210638401a9ba2a7154",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
