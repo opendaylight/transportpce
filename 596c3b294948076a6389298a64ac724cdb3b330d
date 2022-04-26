@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad490835_dd6aeca8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T23:37:56Z",
+      "side": 1,
+      "message": "interfaceOtsiName is the name of the supporting interface for the OtsiGroup interface. How can do that it with the variable. Sorry, I\u0027m not following.\n\n// If below is the code you are suggesting, then it would create OTSi interface twice\n\ninterfaceOchOtsiOtsigroup \u003d createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation) + \u0027#\u0027 + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation),\n                spectrumInformation);",
+      "parentUuid": "bff63988_913407f5",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "663f0774_90b4cf7b",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
         "patchSetId": 3
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7795429_1ee07834",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T23:37:56Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "663f0774_90b4cf7b",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cdd2ac00_5ca56fe0",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -48,6 +84,24 @@
       "writtenOn": "2022-04-26T21:28:06Z",
       "side": 1,
       "message": "idem for supportingOduInterface",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ba21ea8_c4e3269f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-26T23:37:56Z",
+      "side": 1,
+      "message": "I\u0027m okay to remove the variable, but wouldn\u0027t make it less readable?",
+      "parentUuid": "cdd2ac00_5ca56fe0",
       "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
