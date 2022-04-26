@@ -132,7 +132,7 @@ public class OpenRoadmOtnInterface221 {
         return ethernetInterfaceName;
     }
 
-    public String createOpenRoadmOdu2eInterface(String nodeId, String logicalConnPoint, String serviceName,
+    public String createOpenRoadmOdu2eInterface(String nodeId, String logicalConnPoint,
             boolean isCTP, int tribPortNumber, int tribSlotIndex, AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ,
             String payloadType) throws OpenRoadmInterfaceException {
 
@@ -142,7 +142,7 @@ public class OpenRoadmOtnInterface221 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
-            logicalConnPoint + "-ODU2e-" + serviceName);
+            logicalConnPoint + "-ODU2e");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
         }
@@ -208,7 +208,7 @@ public class OpenRoadmOtnInterface221 {
         return oduInterfaceBldr.getName();
     }
 
-    public String createOpenRoadmOdu0Interface(String nodeId, String logicalConnPoint, String serviceName,
+    public String createOpenRoadmOdu0Interface(String nodeId, String logicalConnPoint,
             boolean isCTP, int tribPortNumber, int tribSlotIndex, AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ,
             String payloadType) throws OpenRoadmInterfaceException {
 
@@ -218,7 +218,7 @@ public class OpenRoadmOtnInterface221 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
-            logicalConnPoint + "-ODU0-" + serviceName);
+            logicalConnPoint + "-ODU0");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
         }
@@ -284,7 +284,7 @@ public class OpenRoadmOtnInterface221 {
         return oduInterfaceBldr.getName();
     }
 
-    public String createOpenRoadmOdu2Interface(String nodeId, String logicalConnPoint, String serviceName,
+    public String createOpenRoadmOdu2Interface(String nodeId, String logicalConnPoint,
             boolean isCTP, int tribPortNumber, int tribSlotIndex, AEndApiInfo apiInfoA, ZEndApiInfo apiInfoZ,
             String payloadType) throws OpenRoadmInterfaceException {
 
@@ -294,7 +294,7 @@ public class OpenRoadmOtnInterface221 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
-            logicalConnPoint + "-ODU2-" + serviceName);
+            logicalConnPoint + "-ODU2");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
         }
