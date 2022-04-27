@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44a8430_f09d9cf9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-27T07:34:40Z",
+      "side": 1,
+      "message": "ah my mistake, I didn\u0027t notice it was used inside  createOpenRoadmOtsiGroupInterface()",
+      "parentUuid": "ad490835_dd6aeca8",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "663f0774_90b4cf7b",
@@ -71,6 +89,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a34633a8_2d4272e6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-27T07:34:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a7795429_1ee07834",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdd2ac00_5ca56fe0",
@@ -102,6 +138,24 @@
       "side": 1,
       "message": "I\u0027m okay to remove the variable, but wouldn\u0027t make it less readable?",
       "parentUuid": "cdd2ac00_5ca56fe0",
+      "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3063c27_208bda2f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-04-27T07:34:40Z",
+      "side": 1,
+      "message": "With a proper formatting, I don\u0027t think so or at least so much.",
+      "parentUuid": "5ba21ea8_c4e3269f",
       "revId": "596c3b294948076a6389298a64ac724cdb3b330d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
