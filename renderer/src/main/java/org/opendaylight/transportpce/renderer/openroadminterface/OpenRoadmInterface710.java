@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev2003
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic14;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic24;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic28;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic36;
@@ -35,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.ty
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ProvisionModeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R100G;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R100GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R200GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R300GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R400GOtsi;
@@ -209,6 +211,15 @@ public class OpenRoadmInterface710 {
         // Use the rate to switch rather than modulation format
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         switch (serviceRate) {
+            case 100:
+                LOG.info("Given modulation format and spectral width 50GHz {} and thus rate is 100G",
+                    modulationFormat);
+                LOG.info("FOIC is 1.4 for 31.6 Gbaud and rate is 100");
+                flexoBuilder.setFoicType(Foic14.class)
+                    .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
+                otsiBuilder.setOtsiRate(R100GOtsi.class)
+                    .setFlexo(flexoBuilder.build());
+                break;
             case 200:
                 LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
                 if (modulationFormat == ModulationFormat.DpQam16) {
@@ -308,6 +319,9 @@ public class OpenRoadmInterface710 {
             .setGroupId(Uint32.valueOf(1));
         boolean rateNotFound = false;
         switch (serviceRate) {
+            case 100:
+                otsiGroupBuilder.setGroupRate(R100GOtsi.class);
+                break;
             case 200:
                 otsiGroupBuilder.setGroupRate(R200GOtsi.class);
                 break;
@@ -457,6 +471,10 @@ public class OpenRoadmInterface710 {
         String otucnrate = null;
         boolean rateNotFound = false;
         switch (rate) {
+            case "100G":
+                otuBuilder.setOtucnNRate(Uint16.valueOf(1));
+                otucnrate = "1";
+                break;
             case "200G":
                 otuBuilder.setOtucnNRate(Uint16.valueOf(2));
                 otucnrate = "2";
@@ -875,8 +893,7 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-        // Depending on OTU4 or OTUCn, supporting interface should
-        // reflect that
+        // Depending on OTU4 or OTUCn, supporting interface should reflect that
         String interfaceOdu4Oducn = null;
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
             // create OTU4 interface
@@ -884,7 +901,17 @@ public class OpenRoadmInterface710 {
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
-            interfaceOdu4Oducn = createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
+            // If the rate is 100G, then create ODU4 instead of ODUFlex
+            // Get the rate
+            String rate = interfaceOducn.substring(interfaceOducn.lastIndexOf('-') + 1);
+            if (rate.equals("1")) {
+                // create an ODU4 interface, else it would be ODUflex
+                interfaceOdu4Oducn = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
+            }
+            else {
+                // TODO: If the rate is 200G on 31.6 GBaud, what would be the ODUflex container?
+                interfaceOdu4Oducn = createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
+            }
         }
 
         return interfaceOdu4Oducn;
@@ -1053,8 +1080,21 @@ public class OpenRoadmInterface710 {
 
         switch (modulationFormat) {
             case DpQpsk:
-                LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
-                return 200;
+                // DpQpsk is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
+                // Here take the difference of highest and lowest spectral numbers and determine the width
+                LOG.info("The width with guard band {}", (spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
+                if ((spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
+                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
+                    LOG.info("The baud-rate is 31.6 GBaud");
+                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
+                    return 100;
+                } else {
+                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
+                    LOG.info("The baud-rate is 63.1 GBaud");
+                    return 200;
+                }
             case DpQam8:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
                 return 300;
@@ -1065,12 +1105,12 @@ public class OpenRoadmInterface710 {
                     - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
                 if ((spectrumInformation.getHigherSpectralSlotNumber()
                     - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
-                    // Based on roll-of-factor of 0.5, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
+                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
                     LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
                     return 200;
                 } else {
-                    // Based on roll-of-factor of 0.5, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
+                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
                     return 400;
                 }
