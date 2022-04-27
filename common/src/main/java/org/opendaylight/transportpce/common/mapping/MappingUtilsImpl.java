@@ -34,6 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOC
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2EODU2E;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
@@ -52,6 +53,7 @@ public class MappingUtilsImpl implements MappingUtils {
             put("IfOtsiOtsigroup", IfOtsiOtsigroup.class);
             put("IfOTUCnODUCn", IfOTUCnODUCn.class);
             put("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class);
+            put("IfOTU4ODU4", IfOTU4ODU4.class);
             put("IfOCH", IfOCH.class);
             put("If100GEODU4", If100GEODU4.class);
             put("If10GEODU2e", If10GEODU2e.class);
