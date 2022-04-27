@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev2003
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic14;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic24;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic28;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic36;
@@ -35,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.ty
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ProvisionModeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R100G;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R100GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R200GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R300GOtsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.R400GOtsi;
@@ -88,7 +90,7 @@ public class OpenRoadmInterface710 {
     private static final String RATE_EXCEPTION_MESSAGE =
         "Unable to get the rate";
     private static final String ODUC = "-ODUC";
-    private static final List<String> SUPPORTED_ODUCN_RATES = List.of("2", "3", "4");
+    private static final List<String> SUPPORTED_ODUCN_RATES = List.of("1", "2", "3", "4");
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
@@ -203,6 +205,15 @@ public class OpenRoadmInterface710 {
         // Use the rate to switch rather than modulation format
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         switch (serviceRate) {
+            case 100:
+                LOG.info("Given modulation format and spectral width 50GHz {} and thus rate is 100G",
+                    modulationFormat);
+                LOG.info("FOIC is 1.4 for 31.6 Gbaud and rate is 100");
+                flexoBuilder.setFoicType(Foic14.class)
+                    .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1))));
+                otsiBuilder.setOtsiRate(R100GOtsi.class)
+                    .setFlexo(flexoBuilder.build());
+                break;
             case 200:
                 LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
                 if (modulationFormat == ModulationFormat.DpQam16) {
@@ -302,6 +313,9 @@ public class OpenRoadmInterface710 {
             .setGroupId(Uint32.valueOf(1));
         boolean rateNotFound = false;
         switch (serviceRate) {
+            case 100:
+                otsiGroupBuilder.setGroupRate(R100GOtsi.class);
+                break;
             case 200:
                 otsiGroupBuilder.setGroupRate(R200GOtsi.class);
                 break;
@@ -453,6 +467,10 @@ public class OpenRoadmInterface710 {
         String otucnrate = null;
         boolean rateNotFound = false;
         switch (rate) {
+            case "100G":
+                otuBuilder.setOtucnNRate(Uint16.valueOf(1));
+                otucnrate = "1";
+                break;
             case "200G":
                 otuBuilder.setOtucnNRate(Uint16.valueOf(2));
                 otucnrate = "2";
@@ -732,42 +750,55 @@ public class OpenRoadmInterface710 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
                     nodeId, logicalConnPoint));
         }
-        // OPU payload
-        OpuBuilder opuBuilder = new OpuBuilder()
-            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-            .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
 
         // Parent Odu-allocation
         // Set the trib-slot array
         List<OpucnTribSlotDef> tribslots = new ArrayList<>();
-        IntStream.range(1, 5).forEach(a -> IntStream.range(1, 21).forEach(b -> tribslots.add(
+        // Here the int stream is based on rate
+        // Get the rate, which can be 1, 2, 3 or 4 4=400G, 1=100G
+        String rate = supportingOducn.substring(supportingOducn.length() - 1);
+        IntStream.range(1, Integer.parseInt(rate) + 1).forEach(a -> IntStream.range(1, 21).forEach(b -> tribslots.add(
             OpucnTribSlotDef.getDefaultInstance(a + "." + b))));
 
         ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
             .setTribPortNumber(Uint16.valueOf(1))
             .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build());
 
+        // OPU payload
+        OpuBuilder opuBuilder = new OpuBuilder();
+
         // Create an ODUFlex object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUflexCbr.class)
-            .setOduflexCbrService(ODUflexCbr400G.class)
             .setOduFunction(ODUTTPCTP.class)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
-            .setOpu(opuBuilder.build())
             .setParentOduAllocation(parentOduAllocationBuilder.build());
 
+        if (rate.equals("1")) {
+            opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("07"));
+            oduBuilder.setRate(ODU4.class);
+            logicalConnPoint += "-ODU4";
+        } else if (rate.equals("4")) {
+            opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
+            oduBuilder.setRate(ODUflexCbr.class).setOduflexCbrService(ODUflexCbr400G.class);
+            logicalConnPoint += "-ODUFLEX";
+        }
+
+        // Build the OPU container to the ODU builder
+        oduBuilder.setOpu(opuBuilder.build());
+
         InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
-            logicalConnPoint + "-ODUFLEX");
+            logicalConnPoint);
 
         List<String> listSupportingOtucnInterface = new ArrayList<>();
         listSupportingOtucnInterface.add(supportingOducn);
 
         oduflexInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
-
 
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder
             oduflexIf1Builder =
@@ -805,40 +836,48 @@ public class OpenRoadmInterface710 {
                     znodeId, zlogicalConnPoint));
 
         }
-        // OPU payload
-        OpuBuilder opuBuilder = new OpuBuilder()
-            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-            .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
-
         // Parent Odu-allocation
         // Set the trib-slot array
         List<OpucnTribSlotDef> tribslots = new ArrayList<>();
-        IntStream.range(1, 5).forEach(a -> IntStream.range(1, 21).forEach(b -> tribslots.add(
+        // Here the int stream is based on rate
+        // Get the rate, which can be 1, 2, 3 or 4 4=400G, 1=100G
+        String rate = supportingOducn.substring(supportingOducn.lastIndexOf('-') + 1);
+        IntStream.range(1, Integer.parseInt(rate) + 1).forEach(a -> IntStream.range(1, 21).forEach(b -> tribslots.add(
             OpucnTribSlotDef.getDefaultInstance(a + "." + b))));
 
         ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
             .setTribPortNumber(Uint16.valueOf(1))
             .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build());
 
+        // OPU payload
+        OpuBuilder opuBuilder = new OpuBuilder();
+
         // Create an ODUFlex object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUflexCbr.class)
-            .setOduflexCbrService(ODUflexCbr400G.class)
             .setOduFunction(ODUTTPCTP.class)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
             .setDegthrPercentage(Uint16.valueOf(100))
-            .setTxSapi(portMapA.getLcpHashVal())
-            .setTxDapi(portMapZ.getLcpHashVal())
-            .setExpectedSapi(portMapZ.getLcpHashVal())
-            .setExpectedDapi(portMapA.getLcpHashVal())
             .setOpu(opuBuilder.build())
             .setParentOduAllocation(parentOduAllocationBuilder.build());
 
+        if (rate.equals("1")) {
+            opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("07"));
+            oduBuilder.setRate(ODU4.class);
+            alogicalConnPoint += "-ODU4";
+        } else if (rate.equals("4")) {
+            opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
+            oduBuilder.setRate(ODUflexCbr.class).setOduflexCbrService(ODUflexCbr400G.class);
+            alogicalConnPoint += "-ODUFLEX";
+        }
+
         InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
-            alogicalConnPoint + "-ODUFLEX");
+            alogicalConnPoint);
+
 
         List<String> listSupportingOtucnInterface = new ArrayList<>();
         listSupportingOtucnInterface.add(supportingOducn);
@@ -874,17 +913,16 @@ public class OpenRoadmInterface710 {
         // Depending on OTU4 or OTUCn, supporting interface should
         // reflect that
         String interfaceOdu4OducnOduflex = null;
+        // Depending on OTU4 or OTUCn, supporting interface should reflect that
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
             // create OTU4 interface
             interfaceOdu4OducnOduflex = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
-            // Here we concat the two interfaces
-            interfaceOdu4OducnOduflex = interfaceOducn + "#"
+            interfaceOdu4OducnOduflex  = interfaceOducn + "#"
                 + createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
         }
-
         return interfaceOdu4OducnOduflex;
     }
 
@@ -1051,8 +1089,21 @@ public class OpenRoadmInterface710 {
 
         switch (modulationFormat) {
             case DpQpsk:
-                LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
-                return 200;
+                // DpQpsk is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
+                // Here take the difference of highest and lowest spectral numbers and determine the width
+                LOG.info("The width with guard band {}", (spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
+                if ((spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
+                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
+                    LOG.info("The baud-rate is 31.6 GBaud");
+                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 100G", modulationFormat);
+                    return 100;
+                } else {
+                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
+                    LOG.info("The baud-rate is 63.1 GBaud");
+                    return 200;
+                }
             case DpQam8:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
                 return 300;
@@ -1063,12 +1114,12 @@ public class OpenRoadmInterface710 {
                     - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY);
                 if ((spectrumInformation.getHigherSpectralSlotNumber()
                     - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY == 50.0) {
-                    // Based on roll-of-factor of 0.5, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
+                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
                     LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
                     return 200;
                 } else {
-                    // Based on roll-of-factor of 0.5, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
+                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
                     return 400;
                 }
