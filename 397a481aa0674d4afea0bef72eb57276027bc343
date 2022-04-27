@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f796b394_3e550540",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-04-27T10:14:41Z",
+      "side": 1,
+      "message": "TAPI test is failing. I don\u0027t know why.\n\n20:50:40   File \"/w/workspace/transportpce-tox-verify-chlorine/tests/transportpce_tests/2.2.1/test13_tapi_full_multi_layer.py\", line 257, in test_13_get_tapi_topology_details\n20:50:40     self.assertEqual(nbLink, 15, \u0027There should be 15 TAPI links\u0027)\n20:50:40 AssertionError: 14 !\u003d 15 : There should be 15 TAPI links\n___________________________________ summary ____________________________________\n21:03:16   buildcontroller: commands succeeded\n21:03:16   testsPCE: commands succeeded\n21:03:16   sims121: commands succeeded\n21:03:16   build_karaf_tests121: commands succeeded\n21:03:16   tests121: commands succeeded\n21:03:16   sims221: commands succeeded\n21:03:16   build_karaf_tests221: commands succeeded\n21:03:16   sims71: commands succeeded\n21:03:16   build_karaf_tests71: commands succeeded\n21:03:16   tests71: commands succeeded\n21:03:16 ERROR:   tests221: parallel child exit code 1\n21:03:16   build_karaf_tests_hybrid: commands succeeded\n21:03:16   tests_hybrid: commands succeeded\n21:03:16   docs: commands succeeded\n21:03:16   docs-linkcheck: commands succeeded\n21:03:16   checkbashisms: commands succeeded\n21:03:16   pre-commit: commands succeeded\n21:03:16   gitlint: commands succeeded\n21:03:16   pylint: commands succeeded\n21:03:16 + tox_status\u003d1",
+      "revId": "397a481aa0674d4afea0bef72eb57276027bc343",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
