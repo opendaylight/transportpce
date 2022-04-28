@@ -27,9 +27,9 @@ else
         fi
 fi
 
-#download maven image 3.6.3 and install it
-wget -nv https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
+#download maven image 3.8.5 and install it
+wget -nv https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz -P /tmp
 sudo mkdir -p /opt
-sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
-sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
+sudo tar xf /tmp/apache-maven-3.8.5-bin.tar.gz -C /opt
+sudo ln -s /opt/apache-maven-3.8.5 /opt/maven
 sudo ln -s /opt/maven/bin/mvn /usr/bin/mvn
