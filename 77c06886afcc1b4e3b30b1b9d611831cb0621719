@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f28a25c7_400d7288",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-28T06:48:06Z",
+      "side": 1,
+      "message": "I see that the gate reveals exactly the same problem as the one I have locally.\n\n18:06:20 Caused by: org.opendaylight.yangtools.yang.parser.spi.source.YangVersionLinkageException: Cannot import by revision version 1.1 module org-openroadm-maintenance-testsignal [at /w/workspace/transportpce-maven-verify-chlorine-mvn38-openjdk11/ordmodels/device/src/main/yang/org-openroadm-otn-odu-interfaces@2018-10-19.yang:13:3]",
+      "revId": "77c06886afcc1b4e3b30b1b9d611831cb0621719",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
