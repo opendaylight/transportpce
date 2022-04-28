@@ -33,47 +33,44 @@ public final class CreateConnectivityServiceValidation {
     public static OperationResult validateCreateConnectivityServiceRequest(CreateConnectivityServiceInput input) {
 
         LOG.info("checking rpc create-connectivity-service input parameters...");
-        try {
-            LOG.info("checking EndPoints...");
-            List<EndPoint> endPointList = new ArrayList<>(input.getEndPoint().values());
-            ComplianceCheckResult endPointCheckResult = EndPointCheck.check(endPointList);
-            if (endPointCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service end-points compliant !");
-            } else {
-                return OperationResult.failed(endPointCheckResult.getMessage());
-            }
+        LOG.info("checking EndPoints...");
+        if (input.getEndPoint() == null) {
+            return OperationResult.failed("Service End-Point must not be null");
+        }
+        List<EndPoint> endPointList = new ArrayList<>(input.getEndPoint().values());
+        ComplianceCheckResult endPointCheckResult = EndPointCheck.check(endPointList);
+        if (endPointCheckResult.hasPassed()) {
+            LOG.info("create-connectivity-service end-points compliant !");
+        } else {
+            return OperationResult.failed(endPointCheckResult.getMessage());
+        }
 
-            LOG.info("checking ConnConstraint...");
-            ConnectivityConstraint connectivityConstraint = input.getConnectivityConstraint();
-            ComplianceCheckResult conConstraintCheckResult = ConnConstraintCheck.check(connectivityConstraint);
-            if (conConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service connectivity constraints compliant !");
-            } else {
-                return OperationResult.failed(conConstraintCheckResult.getMessage());
-            }
+        LOG.info("checking ConnConstraint...");
+        ConnectivityConstraint connectivityConstraint = input.getConnectivityConstraint();
+        ComplianceCheckResult conConstraintCheckResult = ConnConstraintCheck.check(connectivityConstraint);
+        if (conConstraintCheckResult.hasPassed()) {
+            LOG.info("create-connectivity-service connectivity constraints compliant !");
+        } else {
+            return OperationResult.failed(conConstraintCheckResult.getMessage());
+        }
 
-            LOG.info("checking ResilienceConstraint...");
-            ResilienceConstraint resilienceConstraintList = input.getResilienceConstraint();
-            ComplianceCheckResult resilienceConstraintCheckResult = ResilienceConstraintCheck.check(
-                resilienceConstraintList);
-            if (resilienceConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service resilience constraints compliant !");
-            } else {
-                return OperationResult.failed(resilienceConstraintCheckResult.getMessage());
-            }
+        LOG.info("checking ResilienceConstraint...");
+        ResilienceConstraint resilienceConstraintList = input.getResilienceConstraint();
+        ComplianceCheckResult resilienceConstraintCheckResult = ResilienceConstraintCheck.check(
+            resilienceConstraintList);
+        if (resilienceConstraintCheckResult.hasPassed()) {
+            LOG.info("create-connectivity-service resilience constraints compliant !");
+        } else {
+            return OperationResult.failed(resilienceConstraintCheckResult.getMessage());
+        }
 
-            LOG.info("checking TopoConstraint...");
-            TopologyConstraint topoConstraint = input.getTopologyConstraint();
-            ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint);
-            if (topoConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service topo constraints compliant !");
-            } else {
-                return OperationResult.failed(topoConstraintCheckResult.getMessage());
-            }
-
-        } catch (NullPointerException e) {
-            LOG.error("one of input parameter is null ", e);
-            return OperationResult.failed("one of input parameter is null.");
+        LOG.info("checking TopoConstraint...");
+        TopologyConstraint topoConstraint = input.getTopologyConstraint();
+        ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint);
+        if (topoConstraintCheckResult.hasPassed()) {
+            LOG.info("create-connectivity-service topo constraints compliant !");
+        } else {
+            return OperationResult.failed(topoConstraintCheckResult.getMessage());
         }
         return OperationResult.ok("Validation successful.");
     }
