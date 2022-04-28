@@ -163,13 +163,13 @@ public class PostAlgoPathValidator {
         double latency = 0;
 
         for (PceGraphEdge edge : path.getEdgeList()) {
-            try {
-                latency += edge.link().getLatency();
-                LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId().getValue(), latency);
-            } catch (NullPointerException e) {
+            if (edge.link() == null || edge.link().getLatency() == null) {
                 LOG.warn("- In checkLatency: the link {} does not contain latency field",
                     edge.link().getLinkId().getValue());
+                return false;
             }
+            latency += edge.link().getLatency();
+            LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId().getValue(), latency);
         }
         return (latency < maxLatency);
     }
