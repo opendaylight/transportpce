@@ -88,13 +88,7 @@ public class OpenRoadmInterface710 {
     private static final String RATE_EXCEPTION_MESSAGE =
         "Unable to get the rate";
     private static final String ODUC = "-ODUC";
-    private static final List<String> SUPPORTED_ODUCN_RATES = new ArrayList<>() {
-        {
-            add("2");
-            add("3");
-            add("4");
-        }
-    };
+    private static final List<String> SUPPORTED_ODUCN_RATES = List.of("2", "3", "4");
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
