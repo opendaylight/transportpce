@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4507dc8_9d88a3b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-28T08:49:45Z",
+      "side": 1,
+      "message": "Thanks for this unavoidable update...",
+      "revId": "444161fbdf1da7851d5b6f80cf5b00061301c2b1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
