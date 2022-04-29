@@ -45,7 +45,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
@@ -165,15 +164,6 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getdestCLLI());
         Assert.assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
                 + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testPceOTNNode() {
-        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-        Assert.assertNotNull(node.augmentation(Node1.class));
-        // OpenroadmNodeType nodeType = node.augmentation(Node1.class).;
-        new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType", null);
     }
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
