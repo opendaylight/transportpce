@@ -16,6 +16,24 @@
       "message": "I think it affects lighty build too",
       "revId": "6a4deb746ae624f4136d2916da2fbede97691477",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19e47b01_4c75a90d",
+        "filename": "renderer/src/main/resources/OSGI-INF/blueprint/renderer-blueprint.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-04-29T12:48:59Z",
+      "side": 0,
+      "message": "Yes, sure. Thank you for having seen that.",
+      "parentUuid": "eeca483a_62abf8f6",
+      "revId": "6a4deb746ae624f4136d2916da2fbede97691477",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
