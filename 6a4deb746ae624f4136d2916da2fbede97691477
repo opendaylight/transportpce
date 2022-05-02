@@ -22,6 +22,30 @@
       },
       "revId": "6a4deb746ae624f4136d2916da2fbede97691477",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35583945_e5723766",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-02T10:22:25Z",
+      "side": 1,
+      "message": "Yes indeed. Thanks Robert for your remark.",
+      "parentUuid": "524e0125_f0a46446",
+      "range": {
+        "startLine": 91,
+        "startChar": 62,
+        "endLine": 91,
+        "endChar": 75
+      },
+      "revId": "6a4deb746ae624f4136d2916da2fbede97691477",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
