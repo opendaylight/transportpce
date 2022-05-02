@@ -88,8 +88,7 @@ public class OpenRoadmOtnInterface710 {
     }
 
     public String createOpenRoadmOdu4Interface(String nodeId, String logicalConnPoint,
-        String serviceName, String payLoad,
-        boolean isNetworkPort, OpucnTribSlotDef minTribSlotNumber, OpucnTribSlotDef maxTribSlotNumber)
+        String payLoad, boolean isNetworkPort, OpucnTribSlotDef minTribSlotNumber, OpucnTribSlotDef maxTribSlotNumber)
         throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -114,7 +113,7 @@ public class OpenRoadmOtnInterface710 {
         supportingInterfaceList.add(supportingInterface);
 
         InterfaceBuilder oduIfBuilder = createGenericInterfaceBuilder(
-            portMap, OtnOdu.class, logicalConnPoint + "-ODU4-" + serviceName)
+            portMap, OtnOdu.class, logicalConnPoint + "-ODU4")
             .setSupportingInterfaceList(supportingInterfaceList);
         // Agument ODU4 specific interface data
         OduBuilder oduBuilder = new OduBuilder().setRate(ODU4.class)
