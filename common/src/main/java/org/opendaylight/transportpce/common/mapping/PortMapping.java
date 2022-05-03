@@ -24,6 +24,8 @@ public interface PortMapping {
 
     PortMappingVersion221 getPortMappingVersion221();
 
+    PortMappingVersion710 getPortMappingVersion710();
+
     /**
      * This method creates logical to physical port mapping for a given device.
      * Instead of parsing all the circuit packs/ports in the device, this methods

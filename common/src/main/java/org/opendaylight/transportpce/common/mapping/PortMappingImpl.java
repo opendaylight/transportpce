@@ -62,6 +62,11 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
+    public PortMappingVersion710 getPortMappingVersion710() {
+        return portMappingVersion710;
+    }
+
+    @Override
     public boolean createMappingData(String nodeId, String nodeVersion) {
         switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_1_2_1:
@@ -229,4 +234,5 @@ public class PortMappingImpl implements PortMapping {
     public boolean isNodeExist(String nodeId) {
         return this.getNode(nodeId) != null;
     }
+
 }
