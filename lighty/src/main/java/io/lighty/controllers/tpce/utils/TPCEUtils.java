@@ -327,10 +327,10 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.gnpy.gnpy.eqpt.config.rev181119.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev210831.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.gnpy.path.rev200909.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.gnpy.gnpy.eqpt.config.rev220221.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.gnpy.path.rev220221.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705
@@ -341,6 +341,8 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.$YangModuleInfoImpl.getInstance(),
 
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.$YangModuleInfoImpl
+                .getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev170119.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana.afn.safi.rev130704.$YangModuleInfoImpl
@@ -349,8 +351,6 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.$YangModuleInfoImpl
                     .getInstance(),
-            //org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.library.rev160621
-            //        .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.$YangModuleInfoImpl
