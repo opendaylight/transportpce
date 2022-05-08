@@ -115,10 +115,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final OlmProvider olmProvider;
     // renderer beans
     private final RendererProvider rendererProvider;
-    // T-api
-    private final TapiProvider tapiProvider;
     // service-handler beans
     private final ServicehandlerProvider servicehandlerProvider;
+    // T-api
+    private TapiProvider tapiProvider;
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
     /**
@@ -128,7 +128,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             "ServiceHandler", "RendererListener");
     private final List<String> publisherAlarmList = Arrays.asList("ServiceListener");
 
-    public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification,
+    public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
                             String olmtimer1, String olmtimer2) {
         LOG.info("Initializing transaction providers ...");
         deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(),
@@ -208,30 +208,31 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
                 networkModelListenerImpl, servicehandler);
+        if (activateTapi) {
+            LOG.info("Creating tapi beans ...");
+            TapiLink tapiLink = new TapiLink(networkTransaction);
+            R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
+                deviceTransactionManager, tapiLink);
+            TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
+                    .getBindingDataBroker());
+            TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
+            TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(lightyServices
+                    .getBindingDataBroker());
+            TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
+                    networkTransaction, tapiLink);
+            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
+                tapilinkDiscoveryImpl, networkTransaction, tapiLink);
+            TapiNetconfTopologyListener tapiNetConfTopologyListener =
+                    new TapiNetconfTopologyListener(tapiNetworkModelService);
+            TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransaction);
+            TapiPortMappingListener tapiPortMappingListener =
+                new TapiPortMappingListener(tapiNetworkModelService);
 
-        LOG.info("Creating tapi beans ...");
-        TapiLink tapiLink = new TapiLink(networkTransaction);
-        R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
-            deviceTransactionManager, tapiLink);
-        TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
-                .getBindingDataBroker());
-        TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
-        TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(lightyServices
-                .getBindingDataBroker());
-        TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
-                networkTransaction, tapiLink);
-        TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
-            tapilinkDiscoveryImpl, networkTransaction, tapiLink);
-        TapiNetconfTopologyListener tapiNetConfTopologyListener =
-                new TapiNetconfTopologyListener(tapiNetworkModelService);
-        TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransaction);
-        TapiPortMappingListener tapiPortMappingListener =
-            new TapiPortMappingListener(tapiNetworkModelService);
-
-        tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-            tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, tapiPceListenerImpl,
-            tapiRendererListenerImpl, tapiServiceHandlerListener, lightyServices.getNotificationService(),
-            orLinkListener);
+            tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
+                tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, tapiPceListenerImpl,
+                tapiRendererListenerImpl, tapiServiceHandlerListener, lightyServices.getNotificationService(),
+                orLinkListener);
+        }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
@@ -252,8 +253,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         rendererProvider.init();
         LOG.info("Initializing service-handler provider ...");
         servicehandlerProvider.init();
-        LOG.info("Initializing tapi provider ...");
-        tapiProvider.init();
+        if (tapiProvider != null) {
+            LOG.info("Initializing tapi provider ...");
+            tapiProvider.init();
+        }
         if (nbiNotificationsProvider != null) {
             LOG.info("Initializing nbi-notifications provider ...");
             nbiNotificationsProvider.init();
@@ -264,10 +267,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
     @Override
     protected boolean stopProcedure() {
-        nbiNotificationsProvider.close();
-        LOG.info("Shutting down nbi-notifications provider ...");
-        tapiProvider.close();
-        LOG.info("Shutting down service-handler provider ...");
+        if (nbiNotificationsProvider != null) {
+            nbiNotificationsProvider.close();
+            LOG.info("Shutting down nbi-notifications provider ...");
+        }
+        if (tapiProvider != null) {
+            tapiProvider.close();
+            LOG.info("Shutting down service-handler provider ...");
+        }
         servicehandlerProvider.close();
         LOG.info("Shutting down renderer provider ...");
         rendererProvider.close();

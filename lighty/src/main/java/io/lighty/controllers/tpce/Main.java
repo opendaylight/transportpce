@@ -47,6 +47,7 @@ public class Main {
 
     private static final String RESTCONF_OPTION_NAME = "restconf";
     private static final String NBINOTIFICATION_OPTION_NAME = "nbinotification";
+    private static final String TAPI_OPTION_NAME = "tapi";
     private static final String OLMTIMER1_OPTION_NAME = "olmtimer1";
     private static final String OLMTIMER2_OPTION_NAME = "olmtimer2";
 
@@ -55,11 +56,11 @@ public class Main {
     private ShutdownHook shutdownHook;
 
     public void start() {
-        start(null, false, null, null, false);
+        start(null, false, false, null, null, false);
     }
 
     @SuppressWarnings("checkstyle:Illegalcatch")
-    public void start(String restConfConfigurationFile, boolean activateNbiNotification,
+    public void start(String restConfConfigurationFile, boolean activateNbiNotification, boolean activateTapi,
                       String olmtimer1, String olmtimer2, boolean registerShutdownHook) {
         long startTime = System.nanoTime();
         TpceBanner.print();
@@ -85,7 +86,7 @@ public class Main {
             // 3. NETCONF SBP configuration
             NetconfConfiguration netconfSBPConfig = NetconfConfigUtils.createDefaultNetconfConfiguration();
             startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook,
-                    activateNbiNotification, olmtimer1, olmtimer2);
+                    activateNbiNotification, activateTapi, olmtimer1, olmtimer2);
             float duration = (System.nanoTime() - startTime) / 1_000_000f;
             LOG.info("lighty.io and RESTCONF-NETCONF started in {}ms", duration);
         } catch (ConfigurationException | ExecutionException | IOException e) {
@@ -115,11 +116,17 @@ public class Main {
                 .required(false)
                 .build();
         Option useNbiNotificationsOption = Option.builder(NBINOTIFICATION_OPTION_NAME)
-                .desc("Activate NBI notifications feature")
-                .argName(NBINOTIFICATION_OPTION_NAME)
-                .hasArg(false)
-                .required(false)
-                .build();
+            .desc("Activate NBI notifications feature")
+            .argName(NBINOTIFICATION_OPTION_NAME)
+            .hasArg(false)
+            .required(false)
+            .build();
+        Option useTapiOption = Option.builder(TAPI_OPTION_NAME)
+            .desc("Activate TAPI feature")
+            .argName(TAPI_OPTION_NAME)
+            .hasArg(false)
+            .required(false)
+            .build();
         Option olmTimer1Option = Option.builder(OLMTIMER1_OPTION_NAME)
                 .desc("OLM timer 1 value")
                 .argName(OLMTIMER1_OPTION_NAME)
@@ -135,6 +142,7 @@ public class Main {
         Options options = new Options();
         options.addOption(restconfFileOption);
         options.addOption(useNbiNotificationsOption);
+        options.addOption(useTapiOption);
         options.addOption(olmTimer1Option);
         options.addOption(olmTimer2Option);
         return options;
@@ -142,8 +150,8 @@ public class Main {
 
     private void startLighty(ControllerConfiguration controllerConfiguration,
             RestConfConfiguration restConfConfiguration, NetconfConfiguration netconfSBPConfiguration,
-            boolean registerShutdownHook, boolean activateNbiNotification, String olmtimer1, String olmtimer2)
-                    throws ConfigurationException, ExecutionException, InterruptedException {
+            boolean registerShutdownHook, boolean activateNbiNotification, boolean activateTapi, String olmtimer1,
+            String olmtimer2) throws ConfigurationException, ExecutionException, InterruptedException {
 
         // 1. initialize and start Lighty controller (MD-SAL, Controller, YangTools,
         // Akka)
@@ -172,7 +180,7 @@ public class Main {
 
         // 4. start TransportPCE beans
         TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices(), activateNbiNotification,
-            olmtimer1, olmtimer2);
+            activateTapi, olmtimer1, olmtimer2);
         transportPCE.start().get();
 
         // 5. Register shutdown hook for graceful shutdown.
@@ -192,10 +200,11 @@ public class Main {
             CommandLine commandLine = new DefaultParser().parse(options, args);
             String restConfConfigurationFile = commandLine.getOptionValue(RESTCONF_OPTION_NAME, null);
             boolean useNbiNotifications = commandLine.hasOption(NBINOTIFICATION_OPTION_NAME);
+            boolean useTapi = commandLine.hasOption(TAPI_OPTION_NAME);
             String olmtimer1 = commandLine.getOptionValue(OLMTIMER1_OPTION_NAME, null);
             String olmtimer2 = commandLine.getOptionValue(OLMTIMER2_OPTION_NAME, null);
             Main app = new Main();
-            app.start(restConfConfigurationFile, useNbiNotifications, olmtimer1, olmtimer2, true);
+            app.start(restConfConfigurationFile, useNbiNotifications, useTapi, olmtimer1, olmtimer2, true);
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(
