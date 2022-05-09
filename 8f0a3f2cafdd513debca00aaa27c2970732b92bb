@@ -16,6 +16,41 @@
       "message": "NB still an issue with nbinotifications run locally with docker with both Karaf and lighty builds\n\n$ tox -e nbinotifications \n[..]\nnbinotifications run-test: commands[1] | ./launch_tests.sh with_docker nbinotifications\nnosetests --with-xunit transportpce_tests/with_docker/test02_nbinotifications.py\n........F.F...FFF.F.FFF....\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_09_get_notifications_service1 (with_docker.test02_nbinotifications.TransportNbiNotificationstesting)\n..\nAssertionError: 501 !\u003d 204\n-------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\nexecution of test_09_get_notifications_service1\n{\"input\": {\"connection-type\": \"service\", \"id-consumer\": \"consumer\", \"group-id\": \"transportpceTest\"}}\n\n--------------------- \u003e\u003e end captured stdout \u003c\u003c ----------------------\n-------------------- \u003e\u003e begin captured logging \u003c\u003c --------------------\nurllib3.connectionpool: DEBUG: Starting new HTTP connection (1): localhost:8181\nurllib3.connectionpool: DEBUG: http://localhost:8181 \"POST /restconf/operations/nbi-notifications:get-notifications-process-service/ HTTP/1.1\" 501 215\n--------------------- \u003e\u003e end captured logging \u003c\u003c ---------------------\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_11_get_notifications_service1 (with_docker.test02_nbinotifications.TransportNbiNotificationstesting)\n..\nAssertionError: 501 !\u003d 200\n-------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\nexecution of test_11_get_notifications_service1\n{\"input\": {\"connection-type\": \"service\", \"id-consumer\": \"consumer\", \"group-id\": \"transportpceTest\"}}\n\n--------------------- \u003e\u003e end captured stdout \u003c\u003c ----------------------\n-------------------- \u003e\u003e begin captured logging \u003c\u003c --------------------\nurllib3.connectionpool: DEBUG: Starting new HTTP connection (1): localhost:8181\nurllib3.connectionpool: DEBUG: http://localhost:8181 \"POST /restconf/operations/nbi-notifications:get-notifications-process-service/ HTTP/1.1\" 501 215\n--------------------- \u003e\u003e end captured logging \u003c\u003c ---------------------\n..\n----------------------------------------------------------------------\nRan 27 tests in 131.321s\n\nFAILED (failures\u003d9)\n",
       "revId": "8f0a3f2cafdd513debca00aaa27c2970732b92bb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac98471e_6c8bcb72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-09T08:48:15Z",
+      "side": 1,
+      "message": "Yes indeed. Solved in change https://git.opendaylight.org/gerrit/c/transportpce/+/101009",
+      "parentUuid": "39c55cd6_7bd5e12d",
+      "revId": "8f0a3f2cafdd513debca00aaa27c2970732b92bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef9c701_a6eabcbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-09T08:48:15Z",
+      "side": 1,
+      "message": "Thanks to have seen it (nbinotifications not being run in the gate)",
+      "revId": "8f0a3f2cafdd513debca00aaa27c2970732b92bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
