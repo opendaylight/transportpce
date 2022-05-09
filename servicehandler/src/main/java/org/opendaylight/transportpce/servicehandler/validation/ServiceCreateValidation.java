@@ -31,61 +31,56 @@ public final class ServiceCreateValidation {
          * -request header compliancy are verified.
          */
         LOG.debug("checking Service Compliance ...");
-        try {
-            String serviceNmame = input.getServiceName();
-            SdncRequestHeader sdncRequestHeader = input.getSdncRequestHeader();
-            ConnectionType conType = input.getConnectionType();
-            ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerComplianceCheck.check(
-                    serviceNmame, sdncRequestHeader, conType, rpcActions, true, true);
-            if (serviceHandlerCheckResult.hasPassed()) {
-                LOG.debug("Service request compliant !");
-            } else {
-                return OperationResult.failed(serviceHandlerCheckResult.getMessage());
-            }
+        String serviceNmame = input.getServiceName();
+        SdncRequestHeader sdncRequestHeader = input.getSdncRequestHeader();
+        ConnectionType conType = input.getConnectionType();
+        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerComplianceCheck.check(
+                serviceNmame, sdncRequestHeader, conType, rpcActions, true, true);
+        if (serviceHandlerCheckResult.hasPassed()) {
+            LOG.debug("Service request compliant !");
+        } else {
+            return OperationResult.failed(serviceHandlerCheckResult.getMessage());
+        }
+        /*
+         * If compliant, service-request parameters are verified in order to
+         * check if there is no missing parameter that prevents calculating
+         * a path and implement a service.
+         */
+        LOG.debug("checking Tx/Rx Info for AEnd ...");
+        ComplianceCheckResult txrxCheckAEnd = ServicehandlerTxRxCheck.check(input.getServiceAEnd(),
+                ServiceEndpointType.SERVICEAEND);
+        if (txrxCheckAEnd.hasPassed()) {
+            LOG.debug("Tx/Rx Info for AEnd checked !");
+        } else {
+            return OperationResult.failed(txrxCheckAEnd.getMessage());
+        }
+
+        LOG.debug("checking Tx/Rx Info for ZEnd ...");
+        ComplianceCheckResult txrxCheckZEnd = ServicehandlerTxRxCheck.check(input.getServiceZEnd(),
+                ServiceEndpointType.SERVICEZEND);
+        if (txrxCheckZEnd.hasPassed()) {
+            LOG.debug("Tx/Rx Info for ZEnd checked");
             /*
-             * If compliant, service-request parameters are verified in order to
-             * check if there is no missing parameter that prevents calculating
-             * a path and implement a service.
+             * If OK, common-id is verified in order to see if there is
+             * no routing policy provided. If yes, the routing
+             * constraints of the policy are recovered and coherency
+             * with hard/soft constraints provided in the input of the
+             * RPC.
              */
-            LOG.debug("checking Tx/Rx Info for AEnd ...");
-            ComplianceCheckResult txrxCheckAEnd = ServicehandlerTxRxCheck.check(input.getServiceAEnd(),
-                    ServiceEndpointType.SERVICEAEND);
-            if (txrxCheckAEnd.hasPassed()) {
-                LOG.debug("Tx/Rx Info for AEnd checked !");
-            } else {
-                return OperationResult.failed(txrxCheckAEnd.getMessage());
-            }
+        } else {
+            return OperationResult.failed(txrxCheckZEnd.getMessage());
+        }
 
-            LOG.debug("checking Tx/Rx Info for ZEnd ...");
-            ComplianceCheckResult txrxCheckZEnd = ServicehandlerTxRxCheck.check(input.getServiceZEnd(),
-                    ServiceEndpointType.SERVICEZEND);
-            if (txrxCheckZEnd.hasPassed()) {
-                LOG.debug("Tx/Rx Info for ZEnd checked");
-                /*
-                 * If OK, common-id is verified in order to see if there is
-                 * no routing policy provided. If yes, the routing
-                 * constraints of the policy are recovered and coherency
-                 * with hard/soft constraints provided in the input of the
-                 * RPC.
-                 */
+        if (input.getCommonId() != null) {
+            LOG.debug("Common-id specified");
+            // Check coherency with hard/soft constraints
+            if (CheckCoherencyHardSoft.check(input.getHardConstraints(), input.getSoftConstraints())) {
+                LOG.debug("hard/soft constraints coherent !");
             } else {
-                return OperationResult.failed(txrxCheckZEnd.getMessage());
+                return OperationResult.failed("hard/soft constraints are not coherent !");
             }
-
-            if (input.getCommonId() != null) {
-                LOG.debug("Common-id specified");
-                // Check coherency with hard/soft constraints
-                if (CheckCoherencyHardSoft.check(input.getHardConstraints(), input.getSoftConstraints())) {
-                    LOG.debug("hard/soft constraints coherent !");
-                } else {
-                    return OperationResult.failed("hard/soft constraints are not coherent !");
-                }
-            } else {
-                LOG.warn("Common-id not specified !");
-            }
-        } catch (NullPointerException e) {
-            LOG.error("one of input parameter is null ",e);
-            return OperationResult.failed("one of input parameter is null.");
+        } else {
+            LOG.warn("Common-id not specified !");
         }
         return OperationResult.ok("Validation successful.");
     }

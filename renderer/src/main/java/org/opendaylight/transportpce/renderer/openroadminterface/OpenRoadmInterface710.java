@@ -88,13 +88,7 @@ public class OpenRoadmInterface710 {
     private static final String RATE_EXCEPTION_MESSAGE =
         "Unable to get the rate";
     private static final String ODUC = "-ODUC";
-    private static final List<String> SUPPORTED_ODUCN_RATES = new ArrayList<>() {
-        {
-            add("2");
-            add("3");
-            add("4");
-        }
-    };
+    private static final List<String> SUPPORTED_ODUCN_RATES = List.of("2", "3", "4");
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
@@ -365,9 +359,11 @@ public class OpenRoadmInterface710 {
             // create OCH interface
             interfaceOchOtsiOtsigroup = createOpenRoadmOchInterface(nodeId, logicalConnPoint, spectrumInformation);
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
-            // Create OTSi and OTSi-group
+            // Create OTSi and OTSi-group and concat the names of the interface
             String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);
-            interfaceOchOtsiOtsigroup = createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,
+            // Concat the two names for this interface
+            interfaceOchOtsiOtsigroup = interfaceOtsiName
+                + "#" + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName,
                 spectrumInformation);
         }
 
@@ -877,17 +873,19 @@ public class OpenRoadmInterface710 {
         }
         // Depending on OTU4 or OTUCn, supporting interface should
         // reflect that
-        String interfaceOdu4Oducn = null;
+        String interfaceOdu4OducnOduflex = null;
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
             // create OTU4 interface
-            interfaceOdu4Oducn = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
+            interfaceOdu4OducnOduflex = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
         } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
-            interfaceOdu4Oducn = createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
+            // Here we concat the two interfaces
+            interfaceOdu4OducnOduflex = interfaceOducn + "#"
+                + createOpenRoadmOduflexInterface(nodeId, logicalConnPoint, interfaceOducn);
         }
 
-        return interfaceOdu4Oducn;
+        return interfaceOdu4OducnOduflex;
     }
 
     public String createOpenRoadmOtnOducnInterface(String nodeId, String logicalConnPoint,

@@ -112,12 +112,8 @@ public class GnpyServiceImpl {
         this.mapDisgNodeRefNode = gnpyTopo.getMapDisgNodeRefNode();
         this.mapLinkFiber = gnpyTopo.getMapLinkFiber();
         this.trxList = gnpyTopo.getTrxList();
-        try {
-            this.pathRequest = extractPathRequest(input, atoz, requestId.toJava(), pceHardConstraints);
-            this.synchronization = extractSynchronization(requestId);
-        } catch (NullPointerException e) {
-            throw new GnpyException("In GnpyServiceImpl: one of the elements is null",e);
-        }
+        this.pathRequest = extractPathRequest(input, atoz, requestId.toJava(), pceHardConstraints);
+        this.synchronization = extractSynchronization(requestId);
     }
 
     public GnpyServiceImpl(PathComputationRequestInput input, ZToADirection ztoa, Uint32 requestId,
@@ -126,12 +122,8 @@ public class GnpyServiceImpl {
         this.mapDisgNodeRefNode = gnpyTopo.getMapDisgNodeRefNode();
         this.mapLinkFiber = gnpyTopo.getMapLinkFiber();
         this.trxList = gnpyTopo.getTrxList();
-        try {
-            pathRequest = extractPathRequest(input, ztoa, requestId.toJava(), pceHardConstraints);
-            synchronization = extractSynchronization(requestId);
-        } catch (NullPointerException e) {
-            throw new GnpyException("In GnpyServiceImpl: one of the elements of service is null",e);
-        }
+        pathRequest = extractPathRequest(input, ztoa, requestId.toJava(), pceHardConstraints);
+        synchronization = extractSynchronization(requestId);
     }
 
     private Map<PathRequestKey, PathRequest> extractPathRequest(

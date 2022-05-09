@@ -181,7 +181,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 portMapping);
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaceFactory,
-                openRoadmInterfaces, crossConnect, portMapping, networkModelService);
+                openRoadmInterfaces, crossConnect, portMapping);
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory,
                 crossConnect, openRoadmInterfaces, deviceTransactionManager, networkModelService);
         rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService,

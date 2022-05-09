@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +43,6 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServiceListTopology;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
@@ -91,18 +91,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final CrossConnect crossConnect;
     private final PortMapping portMapping;
-    private final NetworkModelService networkModelService;
 
     public DeviceRendererServiceImpl(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
             OpenRoadmInterfaceFactory openRoadmInterfaceFactory, OpenRoadmInterfaces openRoadmInterfaces,
-            CrossConnect crossConnect, PortMapping portMapping, NetworkModelService networkModelService) {
+            CrossConnect crossConnect, PortMapping portMapping) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaceFactory = openRoadmInterfaceFactory;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.portMapping = portMapping;
-        this.networkModelService = networkModelService;
     }
 
     @SuppressWarnings("rawtypes")
@@ -130,8 +128,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
             String nodeId = node.getNodeId();
-            // take the index of the node
-            int nodeIndex = nodes.indexOf(node);
             LOG.info("Starting provisioning for node : {}", nodeId);
             AEndApiInfo apiInfoA = null;
             ZEndApiInfo apiInfoZ = null;
@@ -158,15 +154,23 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         crossConnectFlag++;
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, spectrumInformation);
-                        createdOchInterfaces.add(supportingOchInterface);
+                        // Split the string based on # pass the last element as the supported Interface
+                        // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
+                        String[] listOfSuppOchInf = supportingOchInterface.split("#");
+                        createdOchInterfaces = Arrays.asList(listOfSuppOchInf);
+                        // Taking the last element
+                        supportingOchInterface = createdOchInterfaces.get(createdOchInterfaces.size() - 1);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
                                 nodeId, destTp, supportingOchInterface, apiInfoA, apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (srcTp == null) {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                         } else {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
-                                    nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07));
+                            // This is needed for 7.1 device models for 400GE, since we have ODUC4 and ODUflex
+                            // are combined
+                            createdOduInterfaces = Arrays.asList(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOdu4HOInterface(
+                                    nodeId, destTp, false, apiInfoA, apiInfoZ, PT_07).split("#"));
                         }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {

@@ -97,11 +97,7 @@ public class GnpyTopoImpl {
      */
     public GnpyTopoImpl(final NetworkTransactionService networkTransactionService) throws GnpyException {
         this.networkTransactionService = networkTransactionService;
-        try {
-            extractTopo();
-        } catch (NullPointerException e) {
-            throw new GnpyException("In GnpyTopoImpl: one of the elements is null",e);
-        }
+        extractTopo();
     }
 
     /*
