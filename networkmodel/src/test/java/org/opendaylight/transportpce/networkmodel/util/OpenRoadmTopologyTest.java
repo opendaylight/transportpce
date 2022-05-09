@@ -79,7 +79,7 @@ public class OpenRoadmTopologyTest {
 
     @Test
     public void createTopologyShardForDegreeTest() {
-        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2, 0);
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2, List.of());
         TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
         assertNotNull(topologyShard);
         assertEquals("Should contain 2 Degree nodes only", 2, topologyShard.getNodes().size());
@@ -110,7 +110,8 @@ public class OpenRoadmTopologyTest {
 
     @Test
     public void createTopologyShardForSrgTest() {
-        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 0, 1);
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 0,
+            List.of(Integer.valueOf(1)));
         TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
         assertNotNull(topologyShard);
         List<Node> nodes = topologyShard.getNodes();
@@ -120,8 +121,27 @@ public class OpenRoadmTopologyTest {
     }
 
     @Test
+    public void createTopologyShardForMultipleSrgTest() {
+        List<Integer> srgNbs = List.of(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(10),
+            Integer.valueOf(11));
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 0, srgNbs);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        assertNotNull(topologyShard);
+        List<Node> nodes = topologyShard.getNodes().stream()
+            .sorted((n1, n2) -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue()))
+            .collect(Collectors.toList());
+        assertEquals("Should contain 4 SRG nodes", 4, nodes.size());
+        assertEquals("Should contain 0 link", 0, topologyShard.getLinks().size());
+        checkSrgNode("1", nodes.get(0));
+        checkSrgNode("10", nodes.get(1));
+        checkSrgNode("11", nodes.get(2));
+        checkSrgNode("2", nodes.get(3));
+    }
+
+    @Test
     public void createTopologyShardForCompleteRdmNodeTest() {
-        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2, 2);
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2,
+            List.of(Integer.valueOf(1), Integer.valueOf(2)));
         TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
         assertNotNull(topologyShard);
         assertEquals("Should contain 2 Deg and 2 SRG nodes", 4, topologyShard.getNodes().size());
@@ -182,7 +202,7 @@ public class OpenRoadmTopologyTest {
     @Ignore
     @Test
     public void createTopologyShardForRdmWithoutClliTest() {
-        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", null, 2, 0);
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", null, 2, List.of());
         TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
         assertNull("clli must not be null", topologyShard);
     }
