@@ -102,8 +102,8 @@ public final class OpenRoadmTopology {
                 }
             }
             for (String str : nodeShardList) {
-                List<Mapping> interList = mappingList.stream().filter(x -> x.getLogicalConnectionPoint().contains(str))
-                    .collect(Collectors.toList());
+                List<Mapping> interList = mappingList.stream().filter(x -> x.getLogicalConnectionPoint()
+                    .split("-")[0].equals(str)).collect(Collectors.toList());
                 if (str.contains("DEG")) {
                     mapDeg.put(str, interList);
                 } else if (str.contains("SRG")) {

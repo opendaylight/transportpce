@@ -61,10 +61,12 @@ public final class NetworkmodelTestUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkmodelTestUtil.class);
 
-    public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, int srgNb) {
+    public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, List<Integer> srgNbs) {
         Map<MappingKey,Mapping> mappingList = new HashMap<>();
         createDegreeMappings(mappingList, 1, degNb);
-        createSrgMappings(mappingList, 1, srgNb);
+        for (Integer integer : srgNbs) {
+            createSrgMappings(mappingList, integer.intValue());
+        }
         return new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Rdm).setNodeClli(clli).build())
@@ -225,18 +227,15 @@ public final class NetworkmodelTestUtil {
         return mappingMap;
     }
 
-    private static Map<MappingKey,Mapping> createSrgMappings(Map<MappingKey,Mapping> mappingMap,
-            int srgNbStart, int srgNbStop) {
-        for (int i = srgNbStart; i <= srgNbStop; i++) {
-            for (int j = 1; j <= 4; j++) {
-                Mapping mapping = new MappingBuilder()
-                    .setLogicalConnectionPoint("SRG" + i + "-PP" + j + "-TXRX")
-                    .setPortDirection("bidirectional")
-                    .setSupportingPort("C" + j)
-                    .setSupportingCircuitPackName(3 + i + "/0")
-                    .build();
-                mappingMap.put(mapping.key(),mapping);
-            }
+    private static Map<MappingKey,Mapping> createSrgMappings(Map<MappingKey,Mapping> mappingMap, int srgNb) {
+        for (int j = 1; j <= 4; j++) {
+            Mapping mapping = new MappingBuilder()
+                .setLogicalConnectionPoint("SRG" + srgNb + "-PP" + j + "-TXRX")
+                .setPortDirection("bidirectional")
+                .setSupportingPort("C" + j)
+                .setSupportingCircuitPackName(3 + srgNb + "/0")
+                .build();
+            mappingMap.put(mapping.key(),mapping);
         }
         return mappingMap;
     }
