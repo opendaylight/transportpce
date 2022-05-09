@@ -16,6 +16,24 @@
       "message": "opendaylight-user@root\u003e logout \n.........FF..FFFF.F.FFF....\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_10_create_eth_service1 (with_docker.test02_nbinotifications.TransportNbiNotificationstesting)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/guillaume/git_ws/transportpce/tests/transportpce_tests/with_docker/test02_nbinotifications.py\", line 166, in test_10_create_eth_service1\n    self.assertEqual(response.status_code, requests.codes.ok)\nAssertionError: 400 !\u003d 200\n",
       "revId": "c2cd48a552c93e08c6042a90eb516b3c8d689014",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08923ac9_e63de0e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-09T15:28:01Z",
+      "side": 1,
+      "message": "weird...\nOn which machine do you obtain these results?\nAre you sure you are running the latest version of honyenode?",
+      "parentUuid": "f83d33b2_d0d149d4",
+      "revId": "c2cd48a552c93e08c6042a90eb516b3c8d689014",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
