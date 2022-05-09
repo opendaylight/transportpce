@@ -33,6 +33,23 @@
       "message": "new name should be tests/transportpce_tests/tapi/test02_full_multi_layer.py",
       "revId": "0001f7ad1c536df38c7f4e3beb6ecd90b4cad53e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f313b22_a735b608",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-09T09:00:29Z",
+      "side": 1,
+      "message": "Forcing these 2 variables in tox.ini is related to the next change in the relation chain indeed\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/101011\n\nThey used to be hardcoded in clean-start-controller.sh before",
+      "revId": "0001f7ad1c536df38c7f4e3beb6ecd90b4cad53e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
