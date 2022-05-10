@@ -33,6 +33,24 @@
       "message": "...........................\n----------------------------------------------------------------------\nRan 27 tests in 193.042s\n\nOK\nnbinotifications run-test: commands[2] | ./dockercmd.sh container rm -f tpce_kafka1\n75f35611c8200f3267e90efda191e85a5145645e2c8d3f433c5277b04ab171c0\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  nbinotifications: commands succeeded\n  congratulations :)\n",
       "revId": "8ed6f7dc9322851ff0dfdc5aba6fa925cbcaf0ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "716c3ada_02d9e94f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-10T12:03:00Z",
+      "side": 1,
+      "message": "cool!",
+      "parentUuid": "05f24834_67cad388",
+      "revId": "8ed6f7dc9322851ff0dfdc5aba6fa925cbcaf0ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
