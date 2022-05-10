@@ -34,6 +34,24 @@
       "parentUuid": "f83d33b2_d0d149d4",
       "revId": "c2cd48a552c93e08c6042a90eb516b3c8d689014",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e435a0_0a148c8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-10T09:02:29Z",
+      "side": 1,
+      "message": "I assume yes\n\n$ git log --oneline -2\nc2cd48a5 (HEAD -\u003e review/guillaume_lambert/100977) Fix failure in nbinotifications functional tests\n9b579092 (origin/master, origin/HEAD, master) Upgrade honeynode version\n$ tox -e sims221,sims121,sims71\n[..]\n$ podman container rm -f tpce_kafka1 \n[..]\n$ tox -e nbinotifications\nopendaylight-user@root\u003e logout \n.........FF..FFFF.F.FFF....\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_10_create_eth_service1 (with_docker.test02_nbinotifications.TransportNbiNotificationstesting)",
+      "parentUuid": "08923ac9_e63de0e6",
+      "revId": "c2cd48a552c93e08c6042a90eb516b3c8d689014",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
