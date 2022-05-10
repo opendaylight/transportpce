@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e0e7a6a_3a22bcfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2022-05-10T12:11:03Z",
+      "side": 1,
+      "message": "LGTM and my apologies to forget to update nbnotification tests after modifications of the service handler checks.",
+      "revId": "d2bff27cb6b8ece0d7391c31ba0e7e1832805b33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
