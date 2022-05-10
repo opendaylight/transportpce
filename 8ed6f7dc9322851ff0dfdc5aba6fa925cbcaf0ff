@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe65244_bcb6f371",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-10T11:52:45Z",
+      "side": 1,
+      "message": "@Guillaume\nLet you try nbinotifiations functional tests with this new PS...",
+      "revId": "8ed6f7dc9322851ff0dfdc5aba6fa925cbcaf0ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
