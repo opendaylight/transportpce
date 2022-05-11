@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e51a6fd_58a265d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-11T09:07:56Z",
+      "side": 1,
+      "message": "These last 2 changes will need to be reverted before Sufur bump\nbut till then, they will speed tests up and will ensure lighty build is not impacted by other changes meanwhile.",
+      "revId": "5fc0e44bdf389cdd7da89d3eececb487fc64fef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
