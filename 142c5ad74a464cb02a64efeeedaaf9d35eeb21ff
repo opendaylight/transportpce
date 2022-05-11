@@ -34,6 +34,24 @@
       "parentUuid": "dc5b9574_47956c05",
       "revId": "142c5ad74a464cb02a64efeeedaaf9d35eeb21ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3af370e2_89e6dc46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-11T07:02:41Z",
+      "side": 1,
+      "message": "ah yes I assumed the failure was due to UT\nI didn\u0027t noticed  it was because of docs-linkcheck\n\n17:56:41 ___________________________________ summary ____________________________________\n17:56:41   buildcontroller: commands succeeded\n17:56:41   testsPCE: commands succeeded\n17:56:41   sims121: commands succeeded\n17:56:41   build_karaf_tests121: commands succeeded\n17:56:41   tests121: commands succeeded\n17:56:41   sims221: commands succeeded\n17:56:41   build_karaf_tests221: commands succeeded\n17:56:41   sims71: commands succeeded\n17:56:41   build_karaf_tests71: commands succeeded\n17:56:41   tests71: commands succeeded\n17:56:41   tests221: commands succeeded\n17:56:41   build_karaf_tests_hybrid: commands succeeded\n17:56:41   tests_hybrid: commands succeeded\n17:56:41   docs: commands succeeded\n17:56:41 ERROR:   docs-linkcheck: parallel child exit code 1\n17:56:41   checkbashisms: commands succeeded\n17:56:41   pre-commit: commands succeeded\n17:56:41   gitlint: commands succeeded\n17:56:41   pylint: commands succeeded",
+      "parentUuid": "3feab77d_b5d17f3f",
+      "revId": "142c5ad74a464cb02a64efeeedaaf9d35eeb21ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
