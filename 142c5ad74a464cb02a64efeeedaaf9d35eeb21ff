@@ -16,6 +16,24 @@
       "message": "@Gilles can we use a different commit for UT ?\nRelease is coming soon and I think it is more important we have this fix merged before it.",
       "revId": "142c5ad74a464cb02a64efeeedaaf9d35eeb21ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3feab77d_b5d17f3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-11T06:59:23Z",
+      "side": 1,
+      "message": "I purposely put the test with the fix/functional change. It better shows that this error case is now tested.",
+      "parentUuid": "dc5b9574_47956c05",
+      "revId": "142c5ad74a464cb02a64efeeedaaf9d35eeb21ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
