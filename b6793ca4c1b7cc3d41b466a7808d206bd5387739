@@ -286,6 +286,24 @@
       "parentUuid": "491ce97d_96a32397",
       "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21053cd1_ac2a40a7",
+        "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:43:47Z",
+      "side": 1,
+      "message": "I do agree it would be better but I think there were already some adaptations  made here (config false at some places in PS2 if I am not mistaken)",
+      "parentUuid": "814da268_c6055f8b",
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
