@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f06123_526fefb2",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8031206_a99ae362",
+      "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32c5dfd7_44a058b1",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-06T10:09:06Z",
       "side": 1,
       "message": "LF not needed \u003d\u003e vote -1",
+      "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb7c1bdc_0b12db01",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32c5dfd7_44a058b1",
       "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61ae20d5_7aa2f1ca",
+        "filename": "nbinotifications/src/test/resources/expected_event.json",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dc9d68e_2e72e69f",
+      "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce015860_d4e317e7",
@@ -69,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e373961_4ac2fc4d",
+        "filename": "nbinotifications/src/test/resources/expected_event_alarm_service.json",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce015860_d4e317e7",
+      "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "989f1242_efa2ea45",
@@ -82,6 +154,24 @@
       "writtenOn": "2022-04-06T10:09:06Z",
       "side": 1,
       "message": "OK but is there any real modification here ?\nIMO formatting modifications are better adressed in a separate change",
+      "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568f6821_6cad74c3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:42Z",
+      "side": 1,
+      "message": "Done. This auto tab is due to my IntelliJ.... it happens when I get the code from gerrit and open it 😞",
+      "parentUuid": "989f1242_efa2ea45",
       "revId": "b99a942d2f13b4edf0e763240b467899ec3c46d9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
