@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd55fc61_587beca9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "previous indentation was better IMO",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2e704e4_f22a1fac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "method declaration is not well separated from body with a LF or a indent +8\n\u003d\u003e vote -1",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adc2c3a2_7c351ef1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "indent +4 here",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c525703d_34aad390",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "and here would be better IMO",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "216ec0fd_2e2b506e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "previous indentation was better IMO",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ffc64d_a03d1656",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e3c65d_7cd24380",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6053056_c3857eb3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c1b74ea_9e020c89",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceListenerImpl.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:51:49Z",
+      "side": 1,
+      "message": "more or less the same remarks in this file here",
+      "revId": "c77034b15744cdca3e74f736c5d37a9c2882bc02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
