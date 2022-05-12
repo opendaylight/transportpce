@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f184ab41_e84837ce",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:57:22Z",
+      "side": 1,
+      "message": "indentation style not very adapted here IMO\nthe LF could be avoided to keep parameter type declaration on the same line with a different style",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7e4ca57_5778e53f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:57:22Z",
+      "side": 1,
+      "message": "LF not needed here",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fdd4cae_597385b0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-12T19:57:22Z",
+      "side": 1,
+      "message": "NS split",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
