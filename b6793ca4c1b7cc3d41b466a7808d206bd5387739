@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c440970_e914567f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f592657_397cb416",
+      "range": {
+        "startLine": 245,
+        "startChar": 8,
+        "endLine": 247,
+        "endChar": 9
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3e1f066_e6d05c05",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-07T09:39:15Z",
       "side": 1,
       "message": "This parameter seems not being used. Should be removed.",
+      "range": {
+        "startLine": 255,
+        "startChar": 54,
+        "endLine": 255,
+        "endChar": 67
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdeb5d44_26b3574b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3e1f066_e6d05c05",
       "range": {
         "startLine": 255,
         "startChar": 54,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a458aead_646bbfb3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b791a22_c3656b61",
+      "range": {
+        "startLine": 332,
+        "startChar": 30,
+        "endLine": 332,
+        "endChar": 54
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96d9082c_d0fbfa11",
@@ -110,6 +182,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71b1d96_0922ed22",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96d9082c_d0fbfa11",
+      "range": {
+        "startLine": 337,
+        "startChar": 30,
+        "endLine": 337,
+        "endChar": 54
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "382e5eea_ca60582d",
@@ -123,6 +219,30 @@
       "writtenOn": "2022-04-07T09:39:15Z",
       "side": 1,
       "message": "it should be better to return the empty uuids list instead of null.",
+      "range": {
+        "startLine": 347,
+        "startChar": 12,
+        "endLine": 347,
+        "endChar": 23
+      },
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f539a938_e11ef7af",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-12T19:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "382e5eea_ca60582d",
       "range": {
         "startLine": 347,
         "startChar": 12,
