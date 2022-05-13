@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2711d840_b3adf5c6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-13T07:35:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f184ab41_e84837ce",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7e4ca57_5778e53f",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb53115_206ba6f7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-13T07:35:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7e4ca57_5778e53f",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fdd4cae_597385b0",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-05-12T19:57:22Z",
       "side": 1,
       "message": "NS split",
+      "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27344494_c0654e1d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-13T07:35:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fdd4cae_597385b0",
       "revId": "093efddbd2b155ee2fa2cd2e4fbd7f711fea69ae",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
