@@ -34,6 +34,24 @@
       "parentUuid": "ea4b7568_a7191119",
       "revId": "151b25450ca4db3e23641d419b17f88ad9063855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32d46d6e_94fdaf24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-05-13T10:27:46Z",
+      "side": 1,
+      "message": "Consider that a failure on the docslink is out of the scope of our possibilities...\n@Guillaume: could you modify our tox profile to avoid having this regular failure?",
+      "parentUuid": "9cba64b3_03036b28",
+      "revId": "151b25450ca4db3e23641d419b17f88ad9063855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
