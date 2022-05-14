@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "339ef802_eab672e0",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-14T12:22:37Z",
+      "side": 1,
+      "message": "@Gilles, @Guillaume, let me know if this work around is okey for the test. Remember I cannot mock the tapiPublisherService because it is dynamic in the sense that it gets populated after receiving the createNotificationSubscriptionService request. Therefore the test only fails in the case that the sendEvent function (which is called after the listener receives a TapiNotification) fails",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "2e3b804dd8efb874f67eab7041a468c8d8f05457",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
