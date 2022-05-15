@@ -70,6 +70,24 @@
       "parentUuid": "32d46d6e_94fdaf24",
       "revId": "151b25450ca4db3e23641d419b17f88ad9063855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c65568_32ea692e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-15T11:23:47Z",
+      "side": 1,
+      "message": "@Gilles I cannot this is really an underlay infra connectivy issue and we do need this test do detect dead URLs",
+      "parentUuid": "480c7851_bf9546ec",
+      "revId": "151b25450ca4db3e23641d419b17f88ad9063855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
