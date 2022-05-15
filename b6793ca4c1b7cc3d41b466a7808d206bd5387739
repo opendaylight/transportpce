@@ -304,6 +304,24 @@
       "parentUuid": "814da268_c6055f8b",
       "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad53f90_c2ce99c3",
+        "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-15T11:28:14Z",
+      "side": 1,
+      "message": "forgot to put verified -1\n\u003d\u003e if so, we need to clarify if these are really tapi models or a derived work with slight differences\nIn that case, we must add a NOTICE in jar ressources",
+      "parentUuid": "21053cd1_ac2a40a7",
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
