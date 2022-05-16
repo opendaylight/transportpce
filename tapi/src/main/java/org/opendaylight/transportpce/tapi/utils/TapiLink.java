@@ -98,6 +98,12 @@ public class TapiLink {
             .build();
         nepList.put(destNep.key(), destNep);
         NameBuilder linkName = new NameBuilder();
+        if ((linkType.equals(TapiStringConstants.OMS_XPDR_RDM_LINK)
+                    || linkType.equals(TapiStringConstants.OMS_RDM_RDM_LINK))
+                && (!nodeExistsinTapiTopo(sourceUuidNode, tapiTopoUuid)
+                    || !nodeExistsinTapiTopo(destUuidNode, tapiTopoUuid))) {
+            return null;
+        }
         // TODO: variables for each type
         switch (linkType) {
             case TapiStringConstants.OMS_RDM_RDM_LINK:
@@ -181,6 +187,24 @@ public class TapiLink {
             .setServerIntegrityProcessCharacteristic("server integrity process")
             .setValidationMechanism(Map.of(validationMechanism.key(), validationMechanism))
             .build();
+    }
+
+    private boolean nodeExistsinTapiTopo(Uuid nodeUuid, Uuid tapiTopoUuid) {
+        InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                .child(TopologyContext.class).child(Topology.class, new TopologyKey(tapiTopoUuid))
+                .child(Node.class, new NodeKey(nodeUuid)).build();
+        try {
+            Optional<Node> optNode = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID)
+                    .get();
+            if (!optNode.isPresent()) {
+                LOG.error("Node with uuid {} is not present in datastore", nodeUuid);
+                return false;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read node in topology", e);
+            return false;
+        }
+        return true;
     }
 
     public AdministrativeState setTapiAdminState(String adminState) {
