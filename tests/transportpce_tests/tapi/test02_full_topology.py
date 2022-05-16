@@ -33,7 +33,7 @@ class UuidServices:
         self.dsr = None
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TransportTapitesting(unittest.TestCase):
 
     processes = []
     WAITING = 20  # nominal value is 300
@@ -116,6 +116,7 @@ class TransportPCEtesting(unittest.TestCase):
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
+        cls.processes = test_utils.start_tpce()
         cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
                                                ('roadma', cls.NODE_VERSION),
                                                ('roadmc', cls.NODE_VERSION),
@@ -132,29 +133,22 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_spdrA(self):
-        print("Connecting SPDRA")
-        response = test_utils.mount_tapi_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_connect_spdrC(self):
-        print("Connecting SPDRC")
-        response = test_utils.mount_tapi_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
+        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
-        print("Connecting ROADMA")
-        response = test_utils.mount_tapi_device("ROADM-A1", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
-        time.sleep(2)
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_connect_rdmC(self):
-        print("Connecting ROADMC")
-        response = test_utils.mount_tapi_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
-        self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_05_connect_sprdA_1_N1_to_roadmA_PP1(self):
         response = test_utils.connect_xpdr_to_rdm_request("SPDR-SA1", "1", "1",
