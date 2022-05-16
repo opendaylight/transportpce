@@ -322,6 +322,24 @@
       "parentUuid": "21053cd1_ac2a40a7",
       "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37f032a4_7ef98a74",
+        "filename": "tapimodels/src/main/yang/tapi-notification@2018-12-10.yang",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-16T08:01:39Z",
+      "side": 1,
+      "message": "It is the tapi model. It is exactly how it was written in the original repository: https://github.com/OpenNetworkingFoundation/TAPI/blob/ac2ccf54b97bdf48afae2108f1f9a48a231c1ef7/YANG/tapi-notification%402018-12-10.yang",
+      "parentUuid": "dad53f90_c2ce99c3",
+      "revId": "b6793ca4c1b7cc3d41b466a7808d206bd5387739",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
