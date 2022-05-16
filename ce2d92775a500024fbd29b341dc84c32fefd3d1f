@@ -16,6 +16,24 @@
       "message": "14:26:57 [ERROR] /w/workspace/transportpce-tox-verify-chlorine/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[233,21] constructor TapiNetworkModelListenerImpl in class org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl cannot be applied to given types;\n14:26:57   required: org.opendaylight.transportpce.common.network.NetworkTransactionService,org.opendaylight.mdsal.binding.api.NotificationPublishService\n14:26:57   found: org.opendaylight.transportpce.common.network.NetworkTransactionService\n14:26:57   reason: actual and formal argument lists differ in length\n14:26:57 [INFO] 1 error",
       "revId": "ce2d92775a500024fbd29b341dc84c32fefd3d1f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a86244b1_3f46baa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-16T08:07:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a340c7c0_bf34adc1",
+      "revId": "ce2d92775a500024fbd29b341dc84c32fefd3d1f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
