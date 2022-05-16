@@ -33,7 +33,7 @@ class UuidServices:
         self.dsr = None
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TransportTapitesting(unittest.TestCase):
 
     processes = []
     WAITING = 20  # nominal value is 300
@@ -116,6 +116,7 @@ class TransportPCEtesting(unittest.TestCase):
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
+        cls.processes = test_utils.start_tpce()
         cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
                                                ('roadma', cls.NODE_VERSION),
                                                ('roadmc', cls.NODE_VERSION),
