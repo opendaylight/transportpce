@@ -96,7 +96,11 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private void putTapiLinkInTopology(
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link tapiXpdrLink) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link tapiXpdrLink) {
+        if (tapiXpdrLink == null) {
+            LOG.error("Couldnt create tapi link. Null link received... some node doesnt exist in datastore");
+            return;
+        }
         LOG.info("Creating tapi link in TAPI topology context");
         InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)

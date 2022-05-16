@@ -374,6 +374,25 @@ public class TapiContext {
         }
     }
 
+    public Topology getTopologyDetails(Uuid topoUuid) {
+        InstanceIdentifier<Topology> topologycontextIID =
+            InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+                .child(TopologyContext.class).child(Topology.class, new TopologyKey(topoUuid)).build();
+        try {
+            Optional<Topology> optTopo = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL, topologycontextIID).get();
+            if (!optTopo.isPresent()) {
+                LOG.error("Topology with uuid {} is not present in datastore", topoUuid);
+                return null;
+            }
+            return optTopo.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read topology", e);
+            return null;
+        }
+    }
+
     public ConnectivityService getConnectivityService(Uuid serviceUuid) {
         try {
             // First read connectivity service with service uuid and update info
