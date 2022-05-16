@@ -203,6 +203,23 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Node roadmNode = createRoadmTapiNode(orNodeId, onepMap);
             mergeNodeinTopology(Map.of(roadmNode.key(), roadmNode));
             mergeSipsinContext(this.sipMap);
+            /* TODO: Delete after verifying */
+            InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                .child(TopologyContext.class).child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .child(Node.class, new NodeKey(roadmNode.getUuid())).build();
+            try {
+                Optional<Node> optNode = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID)
+                        .get();
+                if (!optNode.isPresent()) {
+                    LOG.error("Couldnt find node = {}", orNodeId);
+                    mergeNodeinTopology(Map.of(roadmNode.key(), roadmNode));
+                } else {
+                    LOG.info("Node {} is inside datastore, and should also be in topology", orNodeId);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Couldnt read node in topology", e);
+            }
+            /* TODO: Delete after verifying. UNTIL HERE */
             // TODO add states corresponding to device config -> based on mapping.
             //  This should be possible after Gilles work is merged
 
@@ -1379,45 +1396,38 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private void mergeNodeinTopology(Map<NodeKey, Node> nodeMap) {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        LOG.info("Creating tapi node in TAPI topology context");
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-            .build();
-
-        Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build();
-
-        // merge in datastore
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID,
-                topology);
         try {
+            LOG.info("Going to merge {} in topology", nodeMap.toString());
+            InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .build();
+            Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build();
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID, topology);
             this.networkTransactionService.commit().get();
+            LOG.info("Node added successfully.");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error populating TAPI topology: ", e);
         }
-        LOG.info("Node added succesfully.");
     }
 
     private void mergeLinkinTopology(Map<LinkKey, Link> linkMap) {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        LOG.info("Creating tapi node in TAPI topology context");
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-            .build();
-
-        Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build();
-
-        // merge in datastore
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID,
-                topology);
         try {
+            InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .build();
+            Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build();
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID, topology);
             this.networkTransactionService.commit().get();
+            LOG.info("Roadm Link added succesfully.");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error populating TAPI topology: ", e);
         }
-        LOG.info("Roadm Link added succesfully.");
     }
 
     private void mergeSipsinContext(Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips) {
@@ -1428,8 +1438,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             contextBuilder.setServiceInterfacePoint(sips);
             InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
             // merge in datastore
-            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, contextIID,
-                    contextBuilder.build());
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, contextIID, contextBuilder.build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIPs merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -1487,8 +1496,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         ConnectivityContext connContext = null;
         try {
             Optional<ConnectivityContext> optConnContext =
-                    this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID)
-                            .get();
+                    this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID).get();
             if (!optConnContext.isPresent()) {
                 LOG.error("Couldnt retrieve connectivity context from datastore");
                 return;
@@ -1535,13 +1543,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private void updateConnection(Connection updConn) {
-        // TODO: check if this IID is correct
-        InstanceIdentifier<Connection> connectionIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
-                .child(ConnectivityContext.class).child(Connection.class,
-                        new ConnectionKey(updConn.getUuid())).build();
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID, updConn);
         try {
+            // TODO: check if this IID is correct
+            InstanceIdentifier<Connection> connectionIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                .child(ConnectivityContext.class).child(Connection.class, new ConnectionKey(updConn.getUuid())).build();
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID, updConn);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error committing into datastore", e);
@@ -1550,12 +1557,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private void updateConnectivityService(ConnectivityService updService) {
         // TODO: check if this IID is correct
-        InstanceIdentifier<ConnectivityService> connectivityserviceIID = InstanceIdentifier.builder(Context.class)
+        try {
+            InstanceIdentifier<ConnectivityService> connectivityserviceIID = InstanceIdentifier.builder(Context.class)
                 .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
                 .child(ConnectivityContext.class).child(ConnectivityService.class,
-                        new ConnectivityServiceKey(updService.getUuid())).build();
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivityserviceIID, updService);
-        try {
+                            new ConnectivityServiceKey(updService.getUuid())).build();
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivityserviceIID, updService);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error committing into datastore", e);
