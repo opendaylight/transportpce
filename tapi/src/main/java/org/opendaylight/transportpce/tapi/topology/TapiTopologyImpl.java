@@ -152,24 +152,21 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         // TODO -> Add check for Full T0 Multilayer
+        // TODO --> add support for uuid or name
         if (!TapiStringConstants.T0_MULTILAYER.equals(input.getTopologyIdOrName())
             && !TapiStringConstants.TPDR_100G.equals(input.getTopologyIdOrName())) {
             if (TapiStringConstants.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
                 Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName()
                     .getBytes(Charset.forName("UTF-8"))).toString());
-                Context context = this.tapiContext.getTapiContext();
-                Map<TopologyKey,
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology>
-                    topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
-                if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topoUuid)))) {
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
+                        tapiTopology = this.tapiContext.getTopologyDetails(topoUuid);
+                if (tapiTopology == null) {
                     LOG.error("Topology {} not found in datastore", input.getTopologyIdOrName());
                     return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                         .withError(RpcError.ErrorType.RPC, "Invalid Topology name").buildFuture();
                 }
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
-                    topology = topologyMap.get(new TopologyKey(topoUuid));
                 return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                        .setTopology(this.topologyUtils.transformTopology(topology))
+                        .setTopology(this.topologyUtils.transformTopology(tapiTopology))
                         .build())
                     .buildFuture();
             }
@@ -460,7 +457,6 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
 
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupFor100gTpdrNode(
             Uuid topoUuid, Uuid nodeUuid, Collection<OwnedNodeEdgePoint> onepl) {
-
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
             nepMap = new HashMap<>();
