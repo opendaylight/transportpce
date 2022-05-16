@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d490bb1d_b81c9172",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-05-16T08:08:46Z",
+      "side": 1,
+      "message": "@Gilles, @Guillaume the only thing I didnt do here is to modify the tox.ini to add the TAPI dependency to the NBINotification tests because I am unsure if it is just adding INSTALL_TAPI\u003dTrue on setenv, or there is something else I need to do. Please let me know",
+      "revId": "f55437b522ef22f6b36b4ddd41d1f2ad820403db",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
