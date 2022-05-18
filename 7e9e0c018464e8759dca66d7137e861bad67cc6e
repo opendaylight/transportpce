@@ -68,6 +68,24 @@
       "parentUuid": "cfac2ccd_f90516d4",
       "revId": "7e9e0c018464e8759dca66d7137e861bad67cc6e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1533eab_d9370cc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-18T05:25:53Z",
+      "side": 1,
+      "message": "\"Build timed out (after 360 minutes). Marking the build as failed.\"\n\n\nLet\u0027s try a recheck and see if it behaves better today.\nThe CI was pretty loaded past days because of the coming release.",
+      "parentUuid": "0acd6b42_100a1a19",
+      "revId": "7e9e0c018464e8759dca66d7137e861bad67cc6e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
