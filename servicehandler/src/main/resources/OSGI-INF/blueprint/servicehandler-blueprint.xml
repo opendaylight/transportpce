@@ -44,7 +44,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </bean>
 
     <bean id="serviceListener" class="org.opendaylight.transportpce.servicehandler.listeners.ServiceListener">
-        <argument ref="dataBroker" />
+        <argument ref="serviceHandlerImpl" />
+        <argument ref="serviceDatastoreOperation" />
         <argument ref="notificationPublishService" />
     </bean>
 
