@@ -23,10 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
+import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEnd;
@@ -55,7 +56,9 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 public class ServiceListenerTest {
 
     @Mock
-    private DataBroker dataBroker;
+    private ServicehandlerImpl servicehandler;
+    @Mock
+    private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
     private NotificationPublishService notificationPublishService;
 
@@ -70,7 +73,8 @@ public class ServiceListenerTest {
 
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        ServiceListener listener = new ServiceListener(dataBroker, notificationPublishService);
+        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -96,12 +100,13 @@ public class ServiceListenerTest {
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.getDataAfter()).thenReturn(serviceDown);
-        ServiceListener listener = new ServiceListener(dataBroker, notificationPublishService);
+        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
         verify(service, times(3)).getDataBefore();
-        verify(service, times(2)).getDataAfter();
+        verify(service, times(1)).getDataAfter();
         PublishNotificationAlarmService publishNotificationAlarmService =
                 buildNotificationAlarmService(serviceDown, "The service is now outOfService");
         try {
@@ -123,7 +128,8 @@ public class ServiceListenerTest {
 
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        ServiceListener listener = new ServiceListener(dataBroker, notificationPublishService);
+        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(2)).getModificationType();
@@ -139,13 +145,13 @@ public class ServiceListenerTest {
     private Services buildService(State state, AdminStates adminStates) {
         ServiceAEnd serviceAEnd = getServiceAEndBuild().build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                    .setClli("clli")
-                    .setServiceFormat(ServiceFormat.OC)
-                    .setServiceRate(Uint32.valueOf(1))
-                    .setNodeId(new NodeIdType("XPONDER-3-2"))
-                    .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
-                    .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
-                    .build();
+                .setClli("clli")
+                .setServiceFormat(ServiceFormat.OC)
+                .setServiceRate(Uint32.valueOf(1))
+                .setNodeId(new NodeIdType("XPONDER-3-2"))
+                .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
+                .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                .build();
         ServicesBuilder builtInput = new ServicesBuilder()
                 .setCommonId("commonId")
                 .setConnectionType(ConnectionType.Service)
@@ -165,7 +171,7 @@ public class ServiceListenerTest {
                 .setServiceFormat(ServiceFormat.OC)
                 .setServiceRate(Uint32.valueOf(1))
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
-                .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
+                .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
                 .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
     }
 
