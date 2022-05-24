@@ -314,28 +314,37 @@
       <serial-id>serial-id</serial-id>
     </shelves>
     <otsigroup-capability-profile>
-      <profile-name>FOIC3.6-OTUC3</profile-name>
-      <otucn-n-rate>4</otucn-n-rate>
-      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic4.8</foic-type>
-      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <profile-name>FOIC1.4-OTUC1</profile-name>
+      <otucn-n-rate>1</otucn-n-rate>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic1.4</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODU4</otn-odu-mux-hierarchy-profile-name>
       <otn-capability-profile-name>Otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
       <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+    </otsigroup-capability-profile>
+    <otsigroup-capability-profile>
+      <profile-name>FOIC2.4-FOIC2.8-OTUC2</profile-name>
+      <otucn-n-rate>2</otucn-n-rate>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic2.8</foic-type>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic2.4</foic-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <otn-capability-profile-name>Otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
+      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+    </otsigroup-capability-profile>
+    <otsigroup-capability-profile>
+      <profile-name>FOIC3.6-OTUC3</profile-name>
+      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODU4</otn-odu-mux-hierarchy-profile-name>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic3.6</foic-type>
+      <otucn-n-rate>3</otucn-n-rate>
+      <otn-capability-profile-name>otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
     </otsigroup-capability-profile>
     <otsigroup-capability-profile>
       <profile-name>FOIC4.8-OTUC4</profile-name>
-      <otucn-n-rate>4</otucn-n-rate>
-      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic4.8</foic-type>
-      <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
-      <otn-capability-profile-name>Otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
       <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
-    </otsigroup-capability-profile>
-    <otsigroup-capability-profile>
-      <profile-name>FOIC2.4-OTUC2</profile-name>
-      <otucn-n-rate>4</otucn-n-rate>
-      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic4.8</foic-type>
       <otn-odu-mux-hierarchy-profile-name>one-stage-ODUCn-ODUflex-ODU4</otn-odu-mux-hierarchy-profile-name>
-      <otn-capability-profile-name>Otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
-      <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OTUCn-ODUCn</if-cap-type>
+      <foic-type xmlns:x="http://org/openroadm/common-optical-channel-types">x:foic4.8</foic-type>
+      <otucn-n-rate>4</otucn-n-rate>
+      <otn-capability-profile-name>otn-ODUCn-TTP-no-protection</otn-capability-profile-name>
     </otsigroup-capability-profile>
     <mc-capability-profile>
       <profile-name>mc-capa-profile1</profile-name>
@@ -393,6 +402,58 @@
       <serial-id>serial-id</serial-id>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-name>1/1/3-PLUG-CLIENT</circuit-pack-name>
+      <product-code>product-code</product-code>
+      <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
+      <is-physical>true</is-physical>
+      <clei>clei</clei>
+      <model>model</model>
+      <manufacture-date>2021-02-08T15:23:43Z</manufacture-date>
+      <shelf>1</shelf>
+      <ports>
+        <port-name>C1</port-name>
+        <administrative-state>inService</administrative-state>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+            <otn-capability>
+              <otn-capability-profile-name>xponder-client-no-protection</otn-capability-profile-name>
+            </otn-capability>
+          </supported-interface-capability>
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
+          </supported-interface-capability>
+        </port-capabilities>
+        <port-type>QSFP28</port-type>
+        <faceplate-label>faceplate-label</faceplate-label>
+        <is-physical>true</is-physical>
+        <operational-state>inService</operational-state>
+        <port-direction>bidirectional</port-direction>
+        <lifecycle-state>deployed</lifecycle-state>
+        <port-qual>xpdr-client</port-qual>
+      </ports>
+      <type>Plug_Client_100GE</type>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <slot>1</slot>
+      <administrative-state>inService</administrative-state>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/1</circuit-pack-name>
+        <cp-slot-name>slot-1</cp-slot-name>
+      </parent-circuit-pack>
+      <faceplate-label>faceplate-label</faceplate-label>
+      <vendor>vendor-A</vendor>
+      <is-passive>false</is-passive>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <operational-state>inService</operational-state>
+      <lifecycle-state>deployed</lifecycle-state>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-type>Plug_Client_100GE</circuit-pack-type>
+      <hardware-version>hardware-version</hardware-version>
+      <serial-id>serial-id</serial-id>
+    </circuit-packs>
+    <circuit-packs>
       <circuit-pack-name>1/2/2-PLUG-NET</circuit-pack-name>
       <product-code>product-code</product-code>
       <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
@@ -408,7 +469,10 @@
             <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
             <otsigroup-capability-profile-name>FOIC4.8-OTUC4</otsigroup-capability-profile-name>
             <otsigroup-capability-profile-name>FOIC3.6-OTUC3</otsigroup-capability-profile-name>
-            <otsigroup-capability-profile-name>FOIC2.4-OTUC2</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC2.4-FOIC2.8-OTUC2</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC1.4-OTUC1</otsigroup-capability-profile-name>
+            <optical-operational-mode-profile-name>OR-W-100G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+            <optical-operational-mode-profile-name>OR-W-200G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
           </supported-interface-capability>
         </port-capabilities>
         <is-physical>true</is-physical>
@@ -647,7 +711,10 @@
             <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
             <otsigroup-capability-profile-name>FOIC4.8-OTUC4</otsigroup-capability-profile-name>
             <otsigroup-capability-profile-name>FOIC3.6-OTUC3</otsigroup-capability-profile-name>
-            <otsigroup-capability-profile-name>FOIC2.4-OTUC2</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC2.4-FOIC2.8-OTUC2</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC1.4-OTUC1</otsigroup-capability-profile-name>
+            <optical-operational-mode-profile-name>OR-W-100G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+            <optical-operational-mode-profile-name>OR-W-200G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
           </supported-interface-capability>
         </port-capabilities>
         <is-physical>true</is-physical>
@@ -670,6 +737,66 @@
       <type>Plug_Line_400G</type>
       <is-pluggable-optics>true</is-pluggable-optics>
       <slot>1</slot>
+      <administrative-state>inService</administrative-state>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/1</circuit-pack-name>
+        <cp-slot-name>slot-2</cp-slot-name>
+      </parent-circuit-pack>
+      <faceplate-label>faceplate-label</faceplate-label>
+      <vendor>vendor-A</vendor>
+      <is-passive>false</is-passive>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <operational-state>inService</operational-state>
+      <lifecycle-state>deployed</lifecycle-state>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-type>Plug_Line_400G</circuit-pack-type>
+      <hardware-version>hardware-version</hardware-version>
+      <serial-id>serial-id</serial-id>
+    </circuit-packs>
+    <circuit-packs>
+      <circuit-pack-name>1/1/4-PLUG-NET</circuit-pack-name>
+      <product-code>product-code</product-code>
+      <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
+      <is-physical>true</is-physical>
+      <clei>clei</clei>
+      <model>model</model>
+      <manufacture-date>2021-02-08T15:23:43Z</manufacture-date>
+      <shelf>1</shelf>
+      <ports>
+        <port-name>L1</port-name>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
+            <otsigroup-capability-profile-name>FOIC4.8-OTUC4</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC3.6-OTUC3</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC2.4-FOIC2.8-OTUC2</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>FOIC1.4-OTUC1</otsigroup-capability-profile-name>
+            <optical-operational-mode-profile-name>OR-W-100G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+            <optical-operational-mode-profile-name>OR-W-200G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+          </supported-interface-capability>
+        </port-capabilities>
+        <is-physical>true</is-physical>
+        <port-direction>bidirectional</port-direction>
+        <port-wavelength-type>wavelength</port-wavelength-type>
+        <port-qual>xpdr-network</port-qual>
+        <administrative-state>inService</administrative-state>
+        <port-type>CFP2-DCO</port-type>
+        <faceplate-label>faceplate-label</faceplate-label>
+        <operational-state>inService</operational-state>
+        <transponder-port>
+          <port-power-capability-max-rx>13</port-power-capability-max-rx>
+          <port-power-capability-min-tx>-5</port-power-capability-min-tx>
+          <port-power-capability-min-rx>-22</port-power-capability-min-rx>
+          <port-power-capability-max-tx>0</port-power-capability-max-tx>
+        </transponder-port>
+        <lifecycle-state>deployed</lifecycle-state>
+        <mc-capability-profile-name>mc-capability-profile</mc-capability-profile-name>
+      </ports>
+      <type>Plug_Line_400G</type>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <slot>4</slot>
       <administrative-state>inService</administrative-state>
       <parent-circuit-pack>
         <circuit-pack-name>1/1</circuit-pack-name>
@@ -740,7 +867,8 @@
       <slot>1</slot>
       <cp-slots>
         <slot-name>slot-4</slot-name>
-        <slot-status>empty-not-prov</slot-status>
+        <slot-status>installed-prov-match</slot-status>
+        <provisioned-circuit-pack>1/1/4-PLUG-NETWORK</provisioned-circuit-pack>
         <label>4</label>
       </cp-slots>
       <cp-slots>
@@ -751,8 +879,9 @@
       </cp-slots>
       <cp-slots>
         <slot-name>slot-3</slot-name>
-        <slot-status>empty-not-prov</slot-status>
+        <slot-status>installed-prov-match</slot-status>
         <label>3</label>
+        <provisioned-circuit-pack>1/1/3-PLUG-CLIENT</provisioned-circuit-pack>
       </cp-slots>
       <cp-slots>
         <slot-name>slot-1</slot-name>
@@ -818,6 +947,21 @@
         <circuit-pack-name>1/2/2-PLUG-NET</circuit-pack-name>
       </xpdr-port>
       <xpdr-type>mpdr</xpdr-type>
+      <lifecycle-state>deployed</lifecycle-state>
+    </xponder>
+    <xponder>
+      <xpdr-number>3</xpdr-number>
+      <xpdr-port>
+        <index>2</index>
+        <port-name>L1</port-name>
+        <circuit-pack-name>1/1/4-PLUG-NET</circuit-pack-name>
+      </xpdr-port>
+      <xpdr-port>
+        <index>1</index>
+        <port-name>C1</port-name>
+        <circuit-pack-name>1/1/3-PLUG-CLIENT</circuit-pack-name>
+      </xpdr-port>
+      <xpdr-type>tpdr</xpdr-type>
       <lifecycle-state>deployed</lifecycle-state>
     </xponder>
   </org-openroadm-device>
