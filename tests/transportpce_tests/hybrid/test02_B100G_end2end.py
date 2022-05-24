@@ -239,7 +239,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 4, 'There should be 4 nodes')
+        self.assertEqual(nbNode, 6, 'There should be 6 nodes')
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_12_create_OTUC4_service(self):
