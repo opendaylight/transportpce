@@ -249,19 +249,21 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_22_spdr_portmapping_XPDR1_CLIENT1(self):
         response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn(
-            {"logical-connection-point": "XPDR1-CLIENT1",
-             "supporting-circuit-pack-name": "CP1-SFP1",
-             "supported-interface-capability": ["org-openroadm-port-types:if-10GE-ODU2e",
-                                                "org-openroadm-port-types:if-10GE-ODU2"],
-             "supporting-port": "CP1-SFP1-P1",
-             "lcp-hash-val": "FqlcrxV7p30=",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xponder-type": "mpdr",
-             "port-qual": "xpdr-client",
-             "port-oper-state": "InService"},
-            response['mapping'])
+        expected_subset_response = {
+            "logical-connection-point": "XPDR1-CLIENT1",
+            "supporting-circuit-pack-name": "CP1-SFP1",
+            "supporting-port": "CP1-SFP1-P1",
+            "lcp-hash-val": "FqlcrxV7p30=",
+            "port-direction": "bidirectional",
+            "port-admin-state": "InService",
+            "xponder-type": "mpdr",
+            "port-qual": "xpdr-client",
+            "port-oper-state": "InService"}
+        expected_sorted_list = ["org-openroadm-port-types:if-10GE-ODU2",
+                                "org-openroadm-port-types:if-10GE-ODU2e"]
+        subset = {k: v for k, v in response['mapping'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['mapping'][0]['supported-interface-capability']), expected_sorted_list)
 
     def test_23_spdr_portmapping_XPDR1_NETWORK1(self):
         response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-NETWORK1")
@@ -282,19 +284,21 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_24_spdr_portmapping_XPDR2_CLIENT2(self):
         response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR2-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn(
-            {'logical-connection-point': 'XPDR2-CLIENT2',
-             'supporting-port': 'CP2-QSFP2-P1',
-             'lcp-hash-val': 'AN/WSSRXne3t',
-             'port-direction': 'bidirectional',
-             'xponder-type': 'switch',
-             'port-qual': 'switch-client',
-             'supporting-circuit-pack-name': 'CP2-QSFP2',
-             'port-admin-state': 'InService',
-             'port-oper-state': 'InService',
-             'supported-interface-capability': ['org-openroadm-port-types:if-100GE',
-                                                'org-openroadm-port-types:if-100GE-ODU4']},
-            response['mapping'])
+        expected_subset_response = {
+            'logical-connection-point': 'XPDR2-CLIENT2',
+            'supporting-port': 'CP2-QSFP2-P1',
+            'lcp-hash-val': 'AN/WSSRXne3t',
+            'port-direction': 'bidirectional',
+            'xponder-type': 'switch',
+            'port-qual': 'switch-client',
+            'supporting-circuit-pack-name': 'CP2-QSFP2',
+            'port-admin-state': 'InService',
+            'port-oper-state': 'InService'}
+        expected_sorted_list = ['org-openroadm-port-types:if-100GE',
+                                'org-openroadm-port-types:if-100GE-ODU4']
+        subset = {k: v for k, v in response['mapping'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['mapping'][0]['supported-interface-capability']), expected_sorted_list)
 
     def test_25_spdr_portmapping_XPDR2_NETWORK2(self):
         response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR2-NETWORK2")
