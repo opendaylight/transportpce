@@ -453,12 +453,14 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
-        self.assertIn(
-            {'node-id': 'XPDR-A2',
-             'otu-interface-id': ['XPDR2-NETWORK1-OTUC3'],
-             'och-interface-id': ['XPDR2-NETWORK1-755:768',
-                                  'XPDR2-NETWORK1-OTSIGROUP-300G']},
-            response['output']['node-interface'])
+        expected_subset_response = {
+            'node-id': 'XPDR-A2',
+            'otu-interface-id': ['XPDR2-NETWORK1-OTUC3']}
+        expected_sorted_list = ['XPDR2-NETWORK1-755:768',
+                                'XPDR2-NETWORK1-OTSIGROUP-300G']
+        subset = {k: v for k, v in response['output']['node-interface'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['output']['node-interface'][0]['och-interface-id']), expected_sorted_list)
 
     def test_27_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
@@ -675,12 +677,14 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
-        self.assertIn(
-            {'node-id': 'XPDR-A2',
-             'otu-interface-id': ['XPDR2-NETWORK1-OTUC4'],
-             'och-interface-id': ['XPDR2-NETWORK1-755:768',
-                                  'XPDR2-NETWORK1-OTSIGROUP-400G']},
-            response['output']['node-interface'])
+        expected_subset_response = {
+            'node-id': 'XPDR-A2',
+            'otu-interface-id': ['XPDR2-NETWORK1-OTUC4']}
+        expected_sorted_list = ['XPDR2-NETWORK1-755:768',
+                                'XPDR2-NETWORK1-OTSIGROUP-400G']
+        subset = {k: v for k, v in response['output']['node-interface'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['output']['node-interface'][0]['och-interface-id']), expected_sorted_list)
 
     def test_41_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
