@@ -259,7 +259,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['services'][0]['operational-state'], 'outOfService')
-        self.assertEqual(res['services'][0]['administrative-state'], 'outOfService')
+        self.assertEqual(res['services'][0]['administrative-state'], 'inService')
         time.sleep(1)
 
     def test_17_restore_status_line_port_xpdra(self):

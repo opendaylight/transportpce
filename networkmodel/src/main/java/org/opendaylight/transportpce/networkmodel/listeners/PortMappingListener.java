@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
+import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
@@ -33,20 +34,22 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
                 Mapping oldMapping = change.getRootNode().getDataBefore();
                 Mapping newMapping = change.getRootNode().getDataAfter();
                 if (oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
-                    || oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
+                        && oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
                     return;
                 } else {
-                    LinkedList<PathArgument> path = new LinkedList<>();
-                    path.addAll((Collection<? extends PathArgument>) change.getRootPath().getRootIdentifier()
-                        .getPathArguments());
-                    path.removeLast();
-                    InstanceIdentifier<Nodes> portmappintNodeID = InstanceIdentifier.unsafeOf(path);
-                    //                    @SuppressWarnings("unchecked") InstanceIdentifier<Nodes> portmappintNodeID =
-//                        (InstanceIdentifier<Nodes>) InstanceIdentifier.create(path);
-                    String nodeId = InstanceIdentifier.keyOf(portmappintNodeID).getNodeId();
-                    networkModelService.updateOpenRoadmTopologies(nodeId, newMapping);
+                    networkModelService.updateOpenRoadmTopologies(
+                            getNodeIdFromMappingDataTreeIdentifier(change.getRootPath()), newMapping);
                 }
             }
         }
+    }
+
+    protected String getNodeIdFromMappingDataTreeIdentifier(DataTreeIdentifier<Mapping> dataTreeIdentifier) {
+        LinkedList<PathArgument> path = new LinkedList<>((Collection<? extends PathArgument>)
+                dataTreeIdentifier.getRootIdentifier().getPathArguments());
+        path.removeLast();
+        InstanceIdentifier<Nodes> portMappingNodeID = InstanceIdentifier.unsafeOf(path);
+        return InstanceIdentifier.keyOf(portMappingNodeID).getNodeId();
+
     }
 }
