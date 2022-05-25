@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -373,7 +374,8 @@ public class GnpyServiceImpl {
                 .setTechnology("flexi-grid").setTrxType("OpenROADM MSA ver. 5.0")
                 .setTrxMode(TRX_MODE_TABLE.get(Uint32.valueOf(rate), Decimal64.valueOf(spacing)))
                 .setOutputPower(Decimal64.valueOf(GridUtils.convertDbmW(GridConstant.OUTPUT_POWER_100GB_DBM
-                        + 10 * Math.log10(mvalue / (double)GridConstant.NB_SLOTS_100G))))
+                        + 10 * Math.log10(mvalue / (double)GridConstant.NB_SLOTS_100G)))
+                        .scaleTo(6, RoundingMode.CEILING))
                 .setEffectiveFreqSlot(Map.of(effectiveFreqSlot.key(), effectiveFreqSlot))
                 .setSpacing(Decimal64.valueOf(spacing.multiply(BigDecimal.valueOf(1e9))))
                 .build();
