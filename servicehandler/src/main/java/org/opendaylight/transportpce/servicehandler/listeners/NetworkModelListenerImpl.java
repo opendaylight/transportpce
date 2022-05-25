@@ -18,11 +18,11 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
@@ -59,12 +59,13 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
 
     @Override
     public void onTopologyUpdateResult(TopologyUpdateResult notification) {
-        LOG.debug("Topology update notification: {}", notification.toString());
+        LOG.debug("Topology update notification: {}", notification);
         if (compareTopologyUpdateResult(notification)) {
             LOG.warn("TopologyUpdateResult already wired !");
             return;
         }
-        topologyUpdateResult = notification;
+        topologyUpdateResult = new TopologyUpdateResultBuilder().setTopologyChanges(
+                new HashMap<>(notification.getTopologyChanges())).build();
         // Update service datastore and service path description
         updateServicePaths(notification);
     }
@@ -73,16 +74,15 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
      * Process topology update result.
      * @param notification the result notification.
      */
-    private void updateServicePaths(TopologyUpdateResult notification) {
+    protected void updateServicePaths(TopologyUpdateResult notification) {
         @Nullable
         Map<TopologyChangesKey, TopologyChanges> topologyChanges = notification.getTopologyChanges();
         Optional<ServicePathList> servicePathListOptional = this.serviceDataStoreOperations.getServicePaths();
-        ServicePathList servicePathList = null;
-        if (!servicePathListOptional.isPresent()) {
+        if (servicePathListOptional.isEmpty()) {
             LOG.warn("Enable to retrieve service path list");
             return;
         }
-        servicePathList = servicePathListOptional.get();
+        ServicePathList servicePathList = servicePathListOptional.get();
         for (ServicePaths servicePaths : servicePathList.getServicePaths().values()) {
             String serviceName = servicePaths.getServicePathName();
             PathDescription pathDescription = servicePaths.getPathDescription();
@@ -98,12 +98,11 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             // update service in the datastore. Only path description with all elements in service can have a service
             // in service. Therefore we check if all the states of the path description resources are inService
             Optional<Services> serviceOptional = this.serviceDataStoreOperations.getService(serviceName);
-            Services services = null;
-            if (!serviceOptional.isPresent()) {
+            if (serviceOptional.isEmpty()) {
                 LOG.error("Couldn't retrieve service");
                 continue;
             }
-            services = serviceOptional.get();
+            Services services = serviceOptional.get();
             OperationResult operationResult1 = null;
             switch (services.getOperationalState()) {
                 case InService:
@@ -112,7 +111,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                         //if (operationResult1 != null && operationResult1.isSuccess()) {
                         //null check probably no more needed
                         if (this.serviceDataStoreOperations
-                                .modifyService(serviceName, State.OutOfService, AdminStates.OutOfService)
+                                .modifyService(serviceName, State.OutOfService, services.getAdministrativeState())
                                 .isSuccess()) {
                             LOG.info("Service state of {} correctly updated to outOfService in datastore", serviceName);
                             continue;
@@ -128,7 +127,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                         //if (operationResult1 != null && operationResult1.isSuccess()) {
                         //null check probably no more needed
                         if (this.serviceDataStoreOperations
-                                .modifyService(serviceName, State.InService, AdminStates.InService)
+                                .modifyService(serviceName, State.InService, services.getAdministrativeState())
                                 .isSuccess()) {
                             LOG.info("Service state of {} correctly updated to inService in datastore", serviceName);
                             continue;
@@ -145,14 +144,12 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         }
     }
 
-    private Map<ZToAKey, ZToA> changePathElementStateZA(Map<TopologyChangesKey, TopologyChanges> topologyChanges,
+    protected Map<ZToAKey, ZToA> changePathElementStateZA(Map<TopologyChangesKey, TopologyChanges> topologyChanges,
         PathDescription pathDescription) {
-
         Map<ZToAKey, ZToA> newztoaMap = new HashMap<>(pathDescription.getZToADirection().getZToA());
         List<ZToA> tpResources = pathDescription.getZToADirection().getZToA().values().stream()
-            .filter(ele -> ele.getResource().getResource().implementedInterface().getSimpleName()
-                .equals("TerminationPoint"))
-            .collect(Collectors.toList());
+                .filter(ele -> ele.getResource().getResource() instanceof TerminationPoint)
+                .collect(Collectors.toList());
         for (ZToA ztoA : tpResources) {
             String ztoAid = ztoA.getId();
             State ztoAState = ztoA.getResource().getState();
@@ -177,13 +174,12 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         return newztoaMap;
     }
 
-    private Map<AToZKey, AToZ> changePathElementStateAZ(Map<TopologyChangesKey,
+    protected Map<AToZKey, AToZ> changePathElementStateAZ(Map<TopologyChangesKey,
             TopologyChanges> topologyChanges, PathDescription pathDescription) {
 
         Map<AToZKey, AToZ> newatozMap = new HashMap<>(pathDescription.getAToZDirection().getAToZ());
         List<AToZ> tpResources = pathDescription.getAToZDirection().getAToZ().values().stream()
-            .filter(ele -> ele.getResource().getResource().implementedInterface().getSimpleName()
-                .equals("TerminationPoint"))
+            .filter(ele -> ele.getResource().getResource() instanceof TerminationPoint)
             .collect(Collectors.toList());
         for (AToZ atoZ : tpResources) {
             String atoZid = atoZ.getId();
@@ -223,7 +219,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             .build();
     }
 
-    private boolean allElementsinPathinService(Map<AToZKey, AToZ> updatedAtoZ, Map<ZToAKey, ZToA> updatedZtoA) {
+    protected boolean allElementsinPathinService(Map<AToZKey, AToZ> updatedAtoZ, Map<ZToAKey, ZToA> updatedZtoA) {
         boolean allEleminService = true;
         Iterator<AToZ> i1 = updatedAtoZ.values().iterator();
         Iterator<ZToA> i2 = updatedZtoA.values().iterator();
@@ -240,14 +236,8 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
     }
 
     private boolean compareTopologyUpdateResult(TopologyUpdateResult notification) {
-        if (topologyUpdateResult == null) {
-            return false;
-        }
-        if (topologyUpdateResult.getTopologyChanges().values()
-                .equals(notification.getTopologyChanges().values())) {
-            return false;
-        }
-        return true;
+        return topologyUpdateResult != null && topologyUpdateResult.getTopologyChanges()
+                .equals(notification.getTopologyChanges());
     }
 
     public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
