@@ -25,21 +25,20 @@ import org.slf4j.LoggerFactory;
 public class GnpyConsumerImpl implements GnpyConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerImpl.class);
 
-    private GnpyResource api;
-    JsonStringConverter<Request> gnpyRequestConverter;
-    JsonStringConverter<Result> resultConverter;
+    private final GnpyResource api;
 
     public GnpyConsumerImpl(String baseUrl, String username, String password,
             BindingDOMCodecServices bindingDOMCodecServices) {
-        gnpyRequestConverter = new JsonStringConverter<>(bindingDOMCodecServices);
-        resultConverter = new JsonStringConverter<>(bindingDOMCodecServices);
+        JsonStringConverter<Request> gnpyRequestConverter = new JsonStringConverter<>(bindingDOMCodecServices);
+        JsonStringConverter<Result> resultConverter = new JsonStringConverter<>(bindingDOMCodecServices);
 
-        JsonConfigurator jsonConfigurator = new JsonConfigurator(gnpyRequestConverter, resultConverter);
         Client client = ClientBuilder.newClient();
         HttpAuthenticationFeature authFeature = HttpAuthenticationFeature.basic(username, password);
         client.register(authFeature);
         client.register(new LoggingFeature(java.util.logging.Logger.getLogger(this.getClass().getName())))
-            .register(JacksonFeature.class).register(jsonConfigurator);
+            .register(JacksonFeature.class)
+                .register(new ResultMessageBodyReader(resultConverter))
+                .register(new RequestMessageBodyWriter(gnpyRequestConverter));
         api = WebResourceFactory.newResource(GnpyResource.class, client.target(baseUrl));
     }
 
