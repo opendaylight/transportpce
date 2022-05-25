@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -347,7 +348,7 @@ public class GnpyTopoImpl {
             .setLength(Decimal64.valueOf(String.valueOf(length)))
             .setLengthUnits(Km.class)
             .setAttIn(Decimal64.valueOf(String.valueOf(attIn)))
-            .setLossCoef(Decimal64.valueOf(String.valueOf(lossCoef)))
+            .setLossCoef(Decimal64.valueOf(String.valueOf(lossCoef)).scaleTo(5, RoundingMode.CEILING))
             .setConIn(Decimal64.valueOf(String.valueOf(connIn)))
             .setConOut(Decimal64.valueOf(String.valueOf(connOut)))
             .build();
