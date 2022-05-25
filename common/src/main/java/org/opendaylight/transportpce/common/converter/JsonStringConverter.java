@@ -13,9 +13,13 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -63,7 +67,7 @@ public class JsonStringConverter<T extends DataObject> {
         JSONCodecFactory codecFactory = supplier
                 .getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext());
         try (Writer writer = new StringWriter();
-                JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer, 4);) {
+                JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer, 4)) {
             EffectiveStatementInference rootNode = SchemaInferenceStack
                 .of(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext())
                 .toInference();
@@ -93,17 +97,36 @@ public class JsonStringConverter<T extends DataObject> {
     @SuppressWarnings("unchecked")
     public T createDataObjectFromJsonString(YangInstanceIdentifier path, String jsonString,
             JSONCodecFactorySupplier supplier) {
-        JsonReader reader = new JsonReader(new StringReader(jsonString));
+        return createDataObjectFromReader(path, new StringReader(jsonString), supplier);
+    }
+
+    public T createDataObjectFromInputStream(YangInstanceIdentifier path, InputStream jsonStream,
+                                            JSONCodecFactorySupplier supplier) {
+        return createDataObjectFromReader(path, new InputStreamReader(jsonStream, StandardCharsets.UTF_8), supplier);
+    }
+
+    /**
+     * Create a dataObject of T type from Reader.
+     * @param path YangInstanceIdentifier
+     * @param inputReader Reader (could be all class implementing Reader) containing Json data.
+     * @param supplier RFC7951 or DRAFT_LHOTKA_NETMOD_YANG_JSON_02
+     * @return the created object.
+     */
+    private T createDataObjectFromReader(YangInstanceIdentifier path, Reader inputReader,
+                                         JSONCodecFactorySupplier supplier) {
+
         NormalizedNodeResult result = new NormalizedNodeResult();
-        try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-                JsonParserStream jsonParser = JsonParserStream
-                    .create(
-                        streamWriter,
-                        supplier.getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext()))) {
+        try (JsonReader reader = new JsonReader(inputReader);
+             NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
+             JsonParserStream jsonParser = JsonParserStream
+                     .create(
+                             streamWriter,
+                             supplier.getShared(bindingDOMCodecServices
+                                     .getRuntimeContext().getEffectiveModelContext()))) {
             jsonParser.parse(reader);
             return (T) bindingDOMCodecServices.fromNormalizedNode(path, result.getResult()).getValue();
         } catch (IOException e) {
-            LOG.warn("An error occured during parsing Json input stream", e);
+            LOG.warn("An error occured during parsing input reader", e);
             return null;
         }
     }
