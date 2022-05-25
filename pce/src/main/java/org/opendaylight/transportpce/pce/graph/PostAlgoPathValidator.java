@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -201,42 +202,19 @@ public class PostAlgoPathValidator {
             pceHardConstraintsInput));
 
         // validation: check each type for each element
-        for (ResourcePair next : listToInclude) {
-            int indx = -1;
-            switch (next.getType()) {
-                case NODE:
-                    if (listOfElementsSubNode.contains(next.getName())) {
-                        indx = listOfElementsSubNode.indexOf(next.getName());
-                    }
-                    break;
-                case SRLG:
-                    if (listOfElementsSRLG.contains(next.getName())) {
-                        indx = listOfElementsSRLG.indexOf(next.getName());
-                    }
-                    break;
-                case CLLI:
-                    if (listOfElementsCLLI.contains(next.getName())) {
-                        indx = listOfElementsCLLI.indexOf(next.getName());
-                    }
-                    break;
-                default:
-                    LOG.warn(" in checkInclude vertex list unsupported resource type: [{}]", next.getType());
-            }
+        List<String> listNodeToInclude = listToInclude
+                .stream().filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
+                .map(ResourcePair::getName).collect(Collectors.toList());
+        List<String> listSrlgToInclude = listToInclude
+                .stream().filter(rp -> PceConstraints.ResourceType.SRLG.equals(rp.getType()))
+                .map(ResourcePair::getName).collect(Collectors.toList());
+        List<String> listClliToInclude = listToInclude
+                .stream().filter(rp -> PceConstraints.ResourceType.CLLI.equals(rp.getType()))
+                .map(ResourcePair::getName).collect(Collectors.toList());
 
-            if (indx < 0) {
-                LOG.debug(" in checkInclude stopped : {} ", next.getName());
-                return false;
-            }
-
-            LOG.debug(" in checkInclude next found {} in {}", next.getName(), path.getVertexList());
-
-            listOfElementsSubNode.subList(0, indx).clear();
-            listOfElementsCLLI.subList(0, indx).clear();
-            listOfElementsSRLG.subList(0, indx).clear();
-        }
-
-        LOG.info(" in checkInclude passed : {} ", path.getVertexList());
-        return true;
+        return listOfElementsSubNode.containsAll(listNodeToInclude)
+                && listOfElementsSRLG.containsAll(listSrlgToInclude)
+                && listOfElementsCLLI.containsAll(listClliToInclude);
     }
 
     private List<String> listOfElementsBuild(List<PceGraphEdge> pathEdges, PceConstraints.ResourceType type,
@@ -449,7 +427,7 @@ public class PostAlgoPathValidator {
                 }
                 if ((pceNode.getSlotWidthGranularity().equals(GridConstant.SLOT_WIDTH_50.decimalValue()))
                     && (pceNode.getCentralFreqGranularity().equals(GridConstant.SLOT_WIDTH_50.decimalValue()))) {
-                    LOG.info("Node {}: version is {} with slot width granularity  {} and central "
+                    LOG.debug("Node {}: version is {} with slot width granularity  {} and central "
                             + "frequency granularity is {} -> fixed grid mode",
                         pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity(),
                         pceNode.getCentralFreqGranularity());
