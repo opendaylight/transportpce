@@ -33,6 +33,24 @@
       "message": "trailin blanks etc",
       "revId": "6fc378a30fd84a557c7fb8d59929518e44bd03bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bcfdf4d_e07dba8b",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-05-25T10:46:56Z",
+      "side": 1,
+      "message": "Thank Guillaume, I have pushed the change after doing the pre-commit. I don\u0027t know why other tests are failing (may be an issue with the gate). There is no code change in the patch except the addition of new functional test.",
+      "parentUuid": "168ebd2d_31250488",
+      "revId": "6fc378a30fd84a557c7fb8d59929518e44bd03bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
