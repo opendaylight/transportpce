@@ -620,7 +620,7 @@
                 }
               ],
               "spacing": 50000000000,
-              "path_bandwidth": 100
+              "path_bandwidth": 1000000000.0
             }
           }
         }
