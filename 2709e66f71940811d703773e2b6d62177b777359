@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e71139a8_e4824b91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2022-05-26T13:24:38Z",
+      "side": 1,
+      "message": "the test_06_path_computation_NotFoundByPCE_FoundByGNPy failed because requests sent to gnpy (request id 3 and 4) are not the same as in phosphorus. Diff sent to Gilles.",
+      "revId": "2709e66f71940811d703773e2b6d62177b777359",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
