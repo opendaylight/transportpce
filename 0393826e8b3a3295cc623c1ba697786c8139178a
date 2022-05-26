@@ -52,6 +52,24 @@
       "parentUuid": "50da0c3f_8713f4c3",
       "revId": "0393826e8b3a3295cc623c1ba697786c8139178a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10e69302_7e68e95c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-05-26T11:56:35Z",
+      "side": 1,
+      "message": "Sorry Guillaume, I don\u0027t understand your comment here. We are using the spectralWidth value only at DpQpsk and DpQam16. For each of these two modulation formats two rates are possible depending on the spectralWidth.",
+      "parentUuid": "bf85d2ee_4cbbb656",
+      "revId": "0393826e8b3a3295cc623c1ba697786c8139178a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
