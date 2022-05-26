@@ -224,8 +224,7 @@ public class OpenRoadmInterface710 {
                     LOG.info("FOIC is 2.8 for 31.6 Gbaud and rate is 200");
                     // FOIC rate is different
                     flexoBuilder.setFoicType(Foic28.class)
-                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
-                            Uint8.valueOf(3), Uint8.valueOf(4))));
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
                 } else {
                     // default is dp-qpsk for 200G under 63.1 GBaud
                     flexoBuilder.setFoicType(Foic24.class)

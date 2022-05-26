@@ -188,6 +188,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, spectrumInformation);
                         createdOchInterfaces.add(supportingOchInterface);
+                        // Split the string based on # pass the last element as the supported Interface
+                        // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
+                        String[] listOfSuppOchInf = supportingOchInterface.split("#");
+                        createdOchInterfaces = Arrays.asList(listOfSuppOchInf);
+                        // Taking the last element
+                        supportingOchInterface = createdOchInterfaces.get(createdOchInterfaces.size() - 1);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
                                 nodeId, srcTp, supportingOchInterface, apiInfoA, apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
