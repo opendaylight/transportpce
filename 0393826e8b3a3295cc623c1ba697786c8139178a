@@ -70,6 +70,24 @@
       "parentUuid": "bf85d2ee_4cbbb656",
       "revId": "0393826e8b3a3295cc623c1ba697786c8139178a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e6ccd2_64ae54ee",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-27T05:12:33Z",
+      "side": 1,
+      "message": "OK if so let\u0027s initiate something below. Is it more clear like that ?\n\nMap\u003cModulation Format, Integer\u003e rate1 \u003d Map.of(DpQpsk , 100, DpQam16 , 200);\nMap\u003cModulation Format, Integer\u003e rate2 \u003d Map.of(DpQpsk , 200, DpQam16 , 400);\n\n        switch (modulationFormat) {\n            case DpQpsk:\n            case DpQam16:\n                // DpQpsk and DpQam16 are possible for both 31.6 or 63.1 GBaud, for which spectral width is different\n                // Here take the difference of highest and lowest spectral numbers and determine the width\n               double spectralWidth \u003d (spectrumInformation.getHigherSpectralSlotNumber()\n            - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;\n                LOG.info(\"The width with guard band {}\", spectralWidth);\n                if (spectralWidth \u003d\u003d 50.0) {\n                    // Based on roll-of-factor of 0.2, 50 - 12.5 \u003d 37.5GHz translates to 31.6 GBaud\n                    LOG.info(\"The baud-rate is 31.6 GBaud\");\n                    LOG.info(\"Given modulation format {} with 31.6 Gbaud rate is {}G\", modulationFormat, rate1.get(modulationFormat));\n                    return rate1.get(modulationFormat);\n                } else {\n                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 \u003d 75GHz translates to 63.1 GBaud\n                    LOG.info(\"The baud-rate is 63.1 GBaud\");\n                    return rate2.get(modulationFormat);\n                }\n            case DpQam8:\n                LOG.info(\"Given modulation format is {} and thus rate is 300G\", modulationFormat);\n                return 300;\n            default:\n                LOG.error(\"Modulation format is required to select the rate\");\n                break;\n        }",
+      "parentUuid": "10e69302_7e68e95c",
+      "revId": "0393826e8b3a3295cc623c1ba697786c8139178a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
