@@ -69,6 +69,24 @@
       "parentUuid": "0bcfdf4d_e07dba8b",
       "revId": "6fc378a30fd84a557c7fb8d59929518e44bd03bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16160f5f_d660bd77",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-XPDRC2.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-27T05:13:48Z",
+      "side": 1,
+      "message": "You\u0027re welcome. Thanks for this contribution 😊",
+      "parentUuid": "26eb2e19_2198d411",
+      "revId": "6fc378a30fd84a557c7fb8d59929518e44bd03bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
