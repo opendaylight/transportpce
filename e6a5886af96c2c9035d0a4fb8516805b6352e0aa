@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8667aaec_caf6fc23",
+        "filename": "tests/transportpce_tests/2.2.1/test01_portmapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-05-27T05:22:30Z",
+      "side": 1,
+      "message": "Depending whether the key existence is guaranteed or not, I guess you can use my_dict.pop(\u0027key\u0027, None) or del my_dict[\u0027key\u0027] to create the subset from the response.",
+      "revId": "e6a5886af96c2c9035d0a4fb8516805b6352e0aa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
