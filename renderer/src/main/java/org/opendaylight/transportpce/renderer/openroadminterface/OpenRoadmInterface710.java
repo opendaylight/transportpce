@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -1090,40 +1091,34 @@ public class OpenRoadmInterface710 {
         justification = "call in call() method")
     private int getServiceRate(ModulationFormat modulationFormat, SpectrumInformation spectrumInformation) {
 
-        double spectralWidth = (spectrumInformation.getHigherSpectralSlotNumber()
-            - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;
         switch (modulationFormat) {
             case DpQpsk:
-                // DpQpsk is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
+            case DpQam16:
+                // DpQpsk and DpQam16 are possible for both 31.6 or 63.1 GBaud, for which spectral width is different
                 // Here take the difference of highest and lowest spectral numbers and determine the width
+                double spectralWidth = (spectrumInformation.getHigherSpectralSlotNumber()
+                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;
                 LOG.info("The width with guard band {}", spectralWidth);
                 if (spectralWidth == 50.0) {
+                    Map<ModulationFormat, Integer> rateMap = Map.of(
+                            ModulationFormat.DpQpsk , 100,
+                            ModulationFormat.DpQam16 , 200);
                     // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
-                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 100G", modulationFormat);
-                    return 100;
+                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is {}",
+                        modulationFormat, rateMap.get(modulationFormat));
+                    return rateMap.get(modulationFormat);
                 } else {
+                    Map<ModulationFormat, Integer> rateMap = Map.of(
+                            ModulationFormat.DpQpsk , 200,
+                            ModulationFormat.DpQam16 , 400);
                     // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
-                    return 200;
+                    return rateMap.get(modulationFormat);
                 }
             case DpQam8:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
                 return 300;
-            case DpQam16:
-                // DpQam16 is possible for both 31.6 or 63.1 GBaud, for which spectral width is different
-                // Here take the difference of highest and lowest spectral numbers and determine the width
-                LOG.info("The width with guard band {}", spectralWidth);
-                if (spectralWidth == 50.0) {
-                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
-                    LOG.info("The baud-rate is 31.6 GBaud");
-                    LOG.info("Given modulation format {} with 31.6 Gbaud rate is 200G", modulationFormat);
-                    return 200;
-                } else {
-                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
-                    LOG.info("The baud-rate is 63.1 GBaud");
-                    return 400;
-                }
             default:
                 LOG.error("Modulation format is required to select the rate");
                 break;
