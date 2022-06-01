@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7121b0_40cf8aee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2022-06-01T12:16:47Z",
+      "side": 1,
+      "message": "Only test_25_get_roadmconnection_ROADMC now failed because au Decimal64 bug about negative number.",
+      "revId": "e1ea274b6a247ed6cf22f811d46f29a3e7105810",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
