@@ -16,6 +16,24 @@
       "message": "Only test_25_get_roadmconnection_ROADMC now failed because au Decimal64 bug about negative number.",
       "revId": "e1ea274b6a247ed6cf22f811d46f29a3e7105810",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6eb8bc_3ddff440",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-01T15:56:37Z",
+      "side": 1,
+      "message": "cool!\nThank you very much Emmanuelle for resolving the PCE issues, including the GNPy functional test failures, and for reenabling associated unitary tests.",
+      "parentUuid": "be7121b0_40cf8aee",
+      "revId": "e1ea274b6a247ed6cf22f811d46f29a3e7105810",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
