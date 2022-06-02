@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "096cd675_b7742395",
+        "filename": "tests/transportpce_tests/7.1/test03_renderer_or_modes.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-02T11:59:20Z",
+      "side": 1,
+      "message": "I wonder if we really need a new test suite to test this feature.\nTests could be split between the two existing functional test suite: portmapping and otn-renderer.\nThat would be more efficient:\n- avoiding restarting TPCE and sims for a new test suite\n- avoiding starting two sims and test twice the same thing (configurations of XPDR-A2 and XPDR-C2 is the same)",
+      "revId": "eb9c879bf8f2a332b212578b6d1546e9c13a9464",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
