@@ -418,16 +418,16 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         del self.NETWORK2_CHECK_DICT["supporting-otucn"]
 
     def test_23_check_no_interface_otuc2(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC2")
+        response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-OTUC2")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_24_check_no_interface_otsig(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "XPDR-A1", "interface", "XPDR2-NETWORK1-OTSIGROUP-200G")
+            "XPDR-A2", "interface", "XPDR2-NETWORK1-OTSIGROUP-200G")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_25_check_no_interface_otsi(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
+        response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-755:768")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_25a_check_no_otuc2(self):
