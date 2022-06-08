@@ -12,6 +12,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.resiliency.ServiceResiliency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInput;
@@ -43,6 +44,7 @@ public class ServiceInput {
     private ServiceEndpoint serviceZEnd;
     private String customer;
     private String customerContact;
+    private ServiceResiliency serviceResiliency;
     private boolean serviceReconfigure;
 
     public ServiceInput(ServiceCreateInput serviceCreateInput) {
@@ -56,6 +58,7 @@ public class ServiceInput {
         setServiceZEnd(serviceCreateInput.getServiceZEnd());
         setCustomer(serviceCreateInput.getCustomer());
         setCustomerContact(serviceCreateInput.getCustomerContact());
+        setServiceResiliency(serviceCreateInput.getServiceResiliency());
         setServiceReconfigure(false);
     }
 
@@ -73,6 +76,7 @@ public class ServiceInput {
         setServiceZEnd(serviceReconfigureInput.getServiceZEnd());
         setCustomer(serviceReconfigureInput.getCustomer());
         setCustomerContact(serviceReconfigureInput.getCustomerContact());
+        setServiceResiliency(serviceReconfigureInput.getServiceResiliency());
         setServiceReconfigure(true);
     }
 
@@ -93,6 +97,7 @@ public class ServiceInput {
         setServiceZEnd(tempServiceCreateInput.getServiceZEnd());
         setCustomer(tempServiceCreateInput.getCustomer());
         setCustomerContact(tempServiceCreateInput.getCustomerContact());
+        setServiceResiliency(tempServiceCreateInput.getServiceResiliency());
         setServiceReconfigure(false);
     }
 
@@ -107,6 +112,7 @@ public class ServiceInput {
         setServiceZEnd(serviceFeasibilityCheckInput.getServiceZEnd());
         setCustomer(serviceFeasibilityCheckInput.getCustomer());
         setCustomerContact(serviceFeasibilityCheckInput.getCustomerContact());
+        setServiceResiliency(serviceFeasibilityCheckInput.getServiceResiliency());
         setServiceReconfigure(false);
     }
 
@@ -128,7 +134,8 @@ public class ServiceInput {
                 .setServiceAEnd(new ServiceAEndBuilder(serviceAEnd).build())
                 .setServiceZEnd(new ServiceZEndBuilder(serviceZEnd).build())
                 .setCustomer(customer)
-                .setCustomerContact(customerContact);
+                .setCustomerContact(customerContact)
+                .setServiceResiliency(serviceResiliency);
         if (isServiceReconfigure()) {
             serviceCreateInputBuilder.setServiceName(newServiceName);
         } else {
@@ -138,14 +145,20 @@ public class ServiceInput {
     }
 
     public TempServiceCreateInput getTempServiceCreateInput() {
-        return new TempServiceCreateInputBuilder().setCommonId(commonId)
-                .setConnectionType(connectionType).setSdncRequestHeader(sdncRequestHeader)
-                .setHardConstraints(hardConstraints).setSoftConstraints(softConstraints)
+        return new TempServiceCreateInputBuilder()
+                .setCommonId(commonId)
+                .setConnectionType(connectionType)
+                .setSdncRequestHeader(sdncRequestHeader)
+                .setHardConstraints(hardConstraints)
+                .setSoftConstraints(softConstraints)
                 .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service
                         .create.input.ServiceAEndBuilder(serviceAEnd).build())
                 .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service
-                        .create.input.ServiceZEndBuilder(serviceZEnd).build()).setCustomer(customer)
-                .setCustomerContact(customerContact).build();
+                        .create.input.ServiceZEndBuilder(serviceZEnd).build())
+                .setCustomer(customer)
+                .setCustomerContact(customerContact)
+                .setServiceResiliency(serviceResiliency)
+                .build();
     }
 
     public String getServiceName() {
@@ -234,6 +247,14 @@ public class ServiceInput {
 
     public void setNewServiceName(String newServiceName) {
         this.newServiceName = newServiceName;
+    }
+
+    public void setServiceResiliency(ServiceResiliency serviceResiliency) {
+        this.serviceResiliency = serviceResiliency;
+    }
+
+    public ServiceResiliency getServiceResiliency() {
+        return serviceResiliency;
     }
 
     public boolean isServiceReconfigure() {
