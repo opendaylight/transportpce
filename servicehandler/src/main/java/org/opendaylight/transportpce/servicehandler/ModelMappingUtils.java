@@ -455,6 +455,7 @@ public final class ModelMappingUtils {
                 .setConnectionType(serviceCreateInput.getConnectionType())
                 .setCustomer(serviceCreateInput.getCustomer())
                 .setCustomerContact(serviceCreateInput.getCustomerContact())
+                .setServiceResiliency(serviceCreateInput.getServiceResiliency())
                 .setHardConstraints(serviceCreateInput.getHardConstraints())
                 .setSoftConstraints(serviceCreateInput.getSoftConstraints())
                 .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader())
