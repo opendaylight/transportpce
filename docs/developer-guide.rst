@@ -472,9 +472,9 @@ through the NETCONF connector.
 Connecting nodes
 ~~~~~~~~~~~~~~~~
 
-To connect a node, use the following JSON RPC
+To connect a node, use the following RESTconf request
 
-**REST API** : *POST /restconf/config/network-topology:network-topology/topology/topology-netconf/node/<node-id>*
+**REST API** : *PUT /rests/data/network-topology:network-topology/topology=topology-netconf/node=<node-id>*
 
 **Sample JSON Data**
 
@@ -506,7 +506,7 @@ To connect a node, use the following JSON RPC
 Then check that the netconf session has been correctly established between the controller and the
 node. the status of **netconf-node-topology:connection-status** must be **connected**
 
-**REST API** : *GET /restconf/operational/network-topology:network-topology/topology/topology-netconf/node/<node-id>*
+**REST API** : *GET /rests/data/network-topology:network-topology/topology=topology-netconf/node=<node-id>?content=nonconfig*
 
 
 Node configuration discovery
@@ -517,9 +517,9 @@ discovery of the node configuration datastore and creates **Logical Connection P
 physical ports related to transmission. All *circuit-packs* inside the node configuration are
 analyzed.
 
-Use the following JSON RPC to check that function internally named *portMapping*.
+Use the following RESTconf URI to check that function internally named *portMapping*.
 
-**REST API** : *GET /restconf/config/portmapping:network*
+**REST API** : *GET /rests/data/transportpce-portmapping:network*
 
 .. note::
 
@@ -550,26 +550,26 @@ created by transportPCE. Nevertheless, depending on the configuration inside opt
 topology can be partial. Check that link of type *ROADMtoROADM* exists between two adjacent rdm
 nodes.
 
-**REST API** : *GET /restconf/config/ietf-network:network/openroadm-topology*
+**REST API** : *GET /rests/data/ietf-network:networks/network=openroadm-topology*
 
 If it is not the case, you need to manually complement the topology with *ROADMtoROADM* link using
 the following REST RPC:
 
 
-**REST API** : *POST /restconf/operations/networkutils:init-roadm-nodes*
+**REST API** : *POST /rests/operations/transportpce-networkutils:init-roadm-nodes*
 
 **Sample JSON Data**
 
 .. code:: json
 
     {
-      "networkutils:input": {
-        "networkutils:rdm-a-node": "<node-id-A>",
-        "networkutils:deg-a-num": "<degree-A-number>",
-        "networkutils:termination-point-a": "<Logical-Connection-Point>",
-        "networkutils:rdm-z-node": "<node-id-Z>",
-        "networkutils:deg-z-num": "<degree-Z-number>",
-        "networkutils:termination-point-z": "<Logical-Connection-Point>"
+      "input": {
+        "rdm-a-node": "<node-id-A>",
+        "deg-a-num": "<degree-A-number>",
+        "termination-point-a": "<Logical-Connection-Point>",
+        "rdm-z-node": "<node-id-Z>",
+        "deg-z-num": "<degree-Z-number>",
+        "termination-point-z": "<Logical-Connection-Point>"
       }
     }
 
@@ -581,21 +581,21 @@ following REST RPCs:
 From xpdr to rdm:
 ^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/networkutils:init-xpdr-rdm-links*
+**REST API** : *POST /rests/operations/transportpce-networkutils:init-xpdr-rdm-links*
 
 **Sample JSON Data**
 
 .. code:: json
 
     {
-      "networkutils:input": {
-        "networkutils:links-input": {
-          "networkutils:xpdr-node": "<xpdr-node-id>",
-          "networkutils:xpdr-num": "1",
-          "networkutils:network-num": "<xpdr-network-port-number>",
-          "networkutils:rdm-node": "<rdm-node-id>",
-          "networkutils:srg-num": "<srg-number>",
-          "networkutils:termination-point-num": "<Logical-Connection-Point>"
+      "input": {
+        "links-input": {
+          "xpdr-node": "<xpdr-node-id>",
+          "xpdr-num": "1",
+          "network-num": "<xpdr-network-port-number>",
+          "rdm-node": "<rdm-node-id>",
+          "srg-num": "<srg-number>",
+          "termination-point-num": "<Logical-Connection-Point>"
         }
       }
     }
@@ -603,21 +603,21 @@ From xpdr to rdm:
 From rdm to xpdr:
 ^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/networkutils:init-rdm-xpdr-links*
+**REST API** : *POST /rests/operations/transportpce-networkutils:init-rdm-xpdr-links*
 
 **Sample JSON Data**
 
 .. code:: json
 
     {
-      "networkutils:input": {
-        "networkutils:links-input": {
-          "networkutils:xpdr-node": "<xpdr-node-id>",
-          "networkutils:xpdr-num": "1",
-          "networkutils:network-num": "<xpdr-network-port-number>",
-          "networkutils:rdm-node": "<rdm-node-id>",
-          "networkutils:srg-num": "<srg-number>",
-          "networkutils:termination-point-num": "<Logical-Connection-Point>"
+      "input": {
+        "links-input": {
+          "xpdr-node": "<xpdr-node-id>",
+          "xpdr-num": "1",
+          "network-num": "<xpdr-network-port-number>",
+          "rdm-node": "<rdm-node-id>",
+          "srg-num": "<srg-number>",
+          "termination-point-num": "<Logical-Connection-Point>"
         }
       }
     }
@@ -629,7 +629,7 @@ Before creating an OTN service, your topology must contain at least two xpdr dev
 or SWITCH type connected to two different rdm devices. To check that these xpdr are present in the
 OTN topology, use the following command on the REST API :
 
-**REST API** : *GET /restconf/config/ietf-network:network/otn-topology*
+**REST API** : *GET /rests/data/ietf-network:networks/network=otn-topology*
 
 An optical connectivity service shall have been created in a first setp. Since Magnesium SR2, the OTN
 links are automatically populated in the topology after the Och, OTU4 and ODU4 interfaces have
