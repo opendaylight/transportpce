@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c8004f_a6f07bea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2022-06-09T13:24:01Z",
+      "side": 1,
+      "message": "URIs mentioned in https://docs.opendaylight.org/projects/transportpce/en/latest/developer-guide.html#running-transportpce-project have some errors.\n\nI have updated them to working URIs and also used URIs based on RFC8040.\n\nKindly review as you get a chance.\n\nThanks,\nRoshan",
+      "revId": "44f511445896b113f755419a0aaaf08f0b9185ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
