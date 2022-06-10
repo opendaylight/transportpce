@@ -14,6 +14,7 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.validation.checks.CheckCoherencyHardSoft;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
+import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerServiceResiliencyCheck;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
@@ -82,6 +83,18 @@ public final class ServiceCreateValidation {
         } else {
             LOG.warn("Common-id not specified !");
         }
+
+        if (input.getServiceResiliency() != null) {
+            LOG.debug("Service-resiliency specified");
+            ComplianceCheckResult complianceCheckResult = ServicehandlerServiceResiliencyCheck
+                    .check(input.getServiceResiliency());
+            if (complianceCheckResult.hasPassed()) {
+                LOG.debug("Service-resiliency checked !");
+            } else {
+                return OperationResult.failed(complianceCheckResult.getMessage());
+            }
+        }
+
         return OperationResult.ok("Validation successful.");
     }
 
