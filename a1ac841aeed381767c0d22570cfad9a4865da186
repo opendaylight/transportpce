@@ -33,6 +33,40 @@
       "message": "14:48:20 gitlint run-test: commands[0] | gitlint --config ../.gitlint\n14:48:21 ✔ OK gitlint in 10.469 seconds",
       "revId": "a1ac841aeed381767c0d22570cfad9a4865da186",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7766879c_561f2182",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-10T13:52:24Z",
+      "side": 1,
+      "message": "I think a oneliner is more indicated here",
+      "revId": "a1ac841aeed381767c0d22570cfad9a4865da186",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a5f80e5_51c720fc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-10T13:52:24Z",
+      "side": 1,
+      "message": "I think the LF is misplaced.\nit splits the arg of the filter() attribute\n\netc",
+      "revId": "a1ac841aeed381767c0d22570cfad9a4865da186",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
