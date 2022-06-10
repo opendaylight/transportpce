@@ -33,6 +33,24 @@
       "message": "Thanks Roshan.\n\nLGTM but I\u0027ll wait for the Chlorine bump to merge it.\nOtherwise, we\u0027ll need to modify it to describe old and new formats such as done in BGPCEP documentation at https://docs.opendaylight.org/projects/bgpcep/en/v0.16.14/bgp/bgp-user-guide-protocol-configuration.html\nOld URLs are still supported in Sulfur and the bump is not effective yet in transportpce.\n",
       "revId": "44f511445896b113f755419a0aaaf08f0b9185ca",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17542951_0590d316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2022-06-10T04:48:04Z",
+      "side": 1,
+      "message": "Thanks Guillaume for the review. \n\nPlease note that this is not just a conversion of URIs into RFC8040 format.\nSome of the URIs as well as the example payloads were not working with Phosphorus itself. I was able to figure out the working URIs (both in old and the new formats). Since this dev guide is not meant as an exhaustive spec of all URIs, I just chose to give the working RFC8040 format.\n\nThe purpose of this submission was two-fold.\na) Get corrected URIs in the documentation to help others who would refer to it to get an env up and running.\nb) Test waters with the change request process. (This purpse is now served :-))",
+      "parentUuid": "997fb47e_d0a13496",
+      "revId": "44f511445896b113f755419a0aaaf08f0b9185ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
