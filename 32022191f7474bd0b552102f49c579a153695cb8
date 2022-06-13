@@ -16,6 +16,24 @@
       "message": "you could specify in the commit message body the maven release you are using",
       "revId": "32022191f7474bd0b552102f49c579a153695cb8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "129cfc09_fd6ef4fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-13T12:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce04e3f6_3af04a7a",
+      "revId": "32022191f7474bd0b552102f49c579a153695cb8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
