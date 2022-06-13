@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce04e3f6_3af04a7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-13T09:42:30Z",
+      "side": 1,
+      "message": "you could specify in the commit message body the maven release you are using",
+      "revId": "32022191f7474bd0b552102f49c579a153695cb8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
