@@ -3,6 +3,149 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "406b2ed6_9be3be3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "Fix issues in listeners",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f5d206_d0958862",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "In PortMappingListener, change the predicate that conditions the topology update",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ec4f299_18540a70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e604715a_eadb06a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "update only the OperationalState of the service after the topology update (and no longer the AdminState)",
+      "range": {
+        "startLine": 12,
+        "startChar": 27,
+        "endLine": 14,
+        "endChar": 29
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d54ef0d_1821cb15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "on the same line",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 20
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91bd9962_18e330ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa7e08e_5c30ca1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "Thanks Thierry for these modifications.",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72fbc963_922ce872",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 2
@@ -14,6 +157,29 @@
       "writtenOn": "2022-06-14T13:41:17Z",
       "side": 1,
       "message": "What about this rather ?\n\n        topologyUpdateResult \u003d new TopologyUpdateResultBuilder()\n            .setTopologyChanges(new HashMap\u003c\u003e(notification.getTopologyChanges()))\n            .build();",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e584895_2f564290",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:47:26Z",
+      "side": 1,
+      "message": "not sure new HashMap is necessary",
+      "range": {
+        "startLine": 68,
+        "startChar": 16,
+        "endLine": 68,
+        "endChar": 29
+      },
       "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
