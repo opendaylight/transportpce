@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48927213_8b33cb28",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T12:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "042a92b9_7c6cfe19",
+      "revId": "ed6bc5f14fb65a9bd127ae4ae3156bad8fc9fe5c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb351a1b_a75f6fa6",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-13T09:42:53Z",
       "side": 1,
       "message": "revision date shouild not be  split from NS base\n\netc",
+      "revId": "ed6bc5f14fb65a9bd127ae4ae3156bad8fc9fe5c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be648603_85df6868",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T12:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb351a1b_a75f6fa6",
       "revId": "ed6bc5f14fb65a9bd127ae4ae3156bad8fc9fe5c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
