@@ -1,6 +1,63 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "01c3d97a_741db6f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:53:56Z",
+      "side": 1,
+      "message": "Add service-resiliency handling in service-create",
+      "revId": "31f6195c68e9f6c60a4d8bd5516b4724aa8caf6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1700b3a3_da79807f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:53:56Z",
+      "side": 1,
+      "message": "Add possibility to specify the service-resiliency attribute in the input of the service-create RPC.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 35
+      },
+      "revId": "31f6195c68e9f6c60a4d8bd5516b4724aa8caf6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b399b202_36b80589",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-14T13:53:56Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "31f6195c68e9f6c60a4d8bd5516b4724aa8caf6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1c6dd081_fb58b024",
