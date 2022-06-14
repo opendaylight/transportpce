@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3375ec53_02d7c91a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerServiceResiliencyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:43:12Z",
+      "side": 1,
+      "message": "indent +4 the last 2 lines would help readability IMO\n\netc",
+      "revId": "ce840522df429adc68f762f9e5aad500c69c2a0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
