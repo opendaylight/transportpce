@@ -64,8 +64,9 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             LOG.warn("TopologyUpdateResult already wired !");
             return;
         }
-        topologyUpdateResult = new TopologyUpdateResultBuilder().setTopologyChanges(
-                new HashMap<>(notification.getTopologyChanges())).build();
+        topologyUpdateResult = new TopologyUpdateResultBuilder()
+                .setTopologyChanges(new HashMap<>(notification.getTopologyChanges()))
+                .build();
         // Update service datastore and service path description
         updateServicePaths(notification);
     }
@@ -104,43 +105,39 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             }
             Services services = serviceOptional.get();
             OperationResult operationResult1 = null;
+            State newState;
             switch (services.getOperationalState()) {
                 case InService:
-                    if (!allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                        LOG.debug("Service={} needs to be updated to outOfService", serviceName);
-                        //if (operationResult1 != null && operationResult1.isSuccess()) {
-                        //null check probably no more needed
-                        if (this.serviceDataStoreOperations
-                                .modifyService(serviceName, State.OutOfService, services.getAdministrativeState())
-                                .isSuccess()) {
-                            LOG.info("Service state of {} correctly updated to outOfService in datastore", serviceName);
-                            continue;
-                        } else {
-                            LOG.error("Service state of {} cannot be updated to outOfService in datastore",
-                                serviceName);
-                        }
+                    if (allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                        LOG.debug("Service {} state does not need to be modified", serviceName);
+                        continue;
                     }
+                    newState = State.OutOfService;
                     break;
                 case OutOfService:
-                    if (allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
-                        LOG.debug("Service={} needs to be updated to inService", serviceName);
-                        //if (operationResult1 != null && operationResult1.isSuccess()) {
-                        //null check probably no more needed
-                        if (this.serviceDataStoreOperations
-                                .modifyService(serviceName, State.InService, services.getAdministrativeState())
-                                .isSuccess()) {
-                            LOG.info("Service state of {} correctly updated to inService in datastore", serviceName);
-                            continue;
-                        } else {
-                            LOG.error("Service state of {} cannot be updated to inService in datastore", serviceName);
-                        }
+                    if (!allElementsinPathinService(updatedAtoZ, updatedZtoA)) {
+                        LOG.debug("Service {} state does not need to be modified", serviceName);
+                        continue;
                     }
+                    newState = State.InService;
                     break;
                 default:
                     LOG.warn("Service {} state not managed", serviceName);
                     continue;
             }
-            LOG.debug("Service {} state does not need to be modified", serviceName);
+
+
+            LOG.debug("Service={} needs to be updated to {}", serviceName, newState);
+            //if (operationResult1 != null && operationResult1.isSuccess()) {
+            //null check probably no more needed
+            if (this.serviceDataStoreOperations
+                    .modifyService(serviceName, newState, services.getAdministrativeState())
+                    .isSuccess()) {
+                LOG.info("Service state of {} correctly updated to {} in datastore", serviceName, newState);
+                continue;
+            }
+            LOG.error("Service state of {} cannot be updated to {} in datastore", serviceName, newState);
+
         }
     }
 
@@ -236,8 +233,8 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
     }
 
     private boolean compareTopologyUpdateResult(TopologyUpdateResult notification) {
-        return topologyUpdateResult != null && topologyUpdateResult.getTopologyChanges()
-                .equals(notification.getTopologyChanges());
+        return topologyUpdateResult != null
+                && topologyUpdateResult.getTopologyChanges().equals(notification.getTopologyChanges());
     }
 
     public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
