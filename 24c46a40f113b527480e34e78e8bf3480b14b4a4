@@ -184,6 +184,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cef5b78_7618385f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:56:51Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/101584/1",
+      "parentUuid": "72fbc963_922ce872",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "318dea77_ccc811bb",
@@ -197,6 +215,24 @@
       "writtenOn": "2022-06-14T13:41:17Z",
       "side": 1,
       "message": "cases InService and OutOfService are very similar\nI think they can be cascaded if an intermediate variable is introduced:",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f874ead_e608162b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:56:51Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/101584/1",
+      "parentUuid": "318dea77_ccc811bb",
       "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
