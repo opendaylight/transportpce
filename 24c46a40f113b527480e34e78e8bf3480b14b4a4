@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72fbc963_922ce872",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:41:17Z",
+      "side": 1,
+      "message": "What about this rather ?\n\n        topologyUpdateResult \u003d new TopologyUpdateResultBuilder()\n            .setTopologyChanges(new HashMap\u003c\u003e(notification.getTopologyChanges()))\n            .build();",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "318dea77_ccc811bb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:41:17Z",
+      "side": 1,
+      "message": "cases InService and OutOfService are very similar\nI think they can be cascaded if an intermediate variable is introduced:",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
