@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3203cfa_c842107d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": ".filter() arg split here",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320e118a_f6871c39",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f26424f_a793c791",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "previous indentation was better separating setter and allocation+builder",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b8e266_5dbad017",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba56e669_b1b7eb63",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d900dc76_7d0f1a18",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1969e4af_58ad2e9b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da1cd1e_80fb1559",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "307d9775_20975ae7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "What about simply something like this ?\n\nfindFirst().get()\n.augmentation(org.opendaylight.yang.gen.v1.http\n         .org.openroadm.common.network.rev211210.TerminationPoint1.class)\n.getOperationalState();",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a71b3b6_8f7a7859",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93e9158_9752d8a2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "What about this ?\n        return InstanceIdentifier.builder(Networks.class)\n            .child(Network.class, new NetworkKey(new ...))",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f8a1a3_b7cb33a7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-14T13:06:34Z",
+      "side": 1,
+      "message": "new line not needed",
+      "revId": "2d6f596398920f2b10224512ce5c9f5ee9a510af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
