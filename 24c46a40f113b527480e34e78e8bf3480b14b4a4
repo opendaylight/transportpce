@@ -204,6 +204,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72232ef8_9be717d2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T12:22:09Z",
+      "side": 1,
+      "message": "I tried to replaced it with the following line :\n\n    topologyUpdateResult \u003d new TopologyUpdateResultBuilder()\n                .setTopologyChanges(notification.getTopologyChanges())\n                .build();\n\nUnfortunately, when running and testing it, I always got the following log :\n\n    \"TopologyUpdateResult already wired !\"\n\nThis log should appear only when the notification that arrives is similar to the last one that was processed. However, this doesn\u0027t happen when the \u0027new HashMap\u0027 constructor is present.\nIt looks like we need to declare a new HashMap in order to create an object copy of the TopologyChanges Map instead of copying just its reference.",
+      "parentUuid": "3e584895_2f564290",
+      "range": {
+        "startLine": 68,
+        "startChar": 16,
+        "endLine": 68,
+        "endChar": 29
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "318dea77_ccc811bb",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
         "patchSetId": 2
