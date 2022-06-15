@@ -47,6 +47,13 @@ module gnpy-path-computation-simplified {
     OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2022-06-15 {
+    description
+      "change fraction digits from 2 to 6 for accumulative-value leaf, from 5 to 6 for output-power leaf";
+    reference
+      "YANG model for api input for path computation with gnpy";
+  }
+
   revision 2022-02-21 {
     description
       "draft for GNPy4TPCE preversion - non official version relevant for v2.4 GNPy file format";
@@ -142,7 +149,7 @@ module gnpy-path-computation-simplified {
       }
       leaf output-power{
         type decimal64 {
-          fraction-digits 5;
+          fraction-digits 6;
         }
         units W;
         description "optical power setting to be used for the propagation";
@@ -493,7 +500,7 @@ module gnpy-path-computation-simplified {
     }
     leaf accumulative-value {
       type decimal64 {
-          fraction-digits 2;
+          fraction-digits 6;
       }
       description "TE path metric accumulative value";
     }

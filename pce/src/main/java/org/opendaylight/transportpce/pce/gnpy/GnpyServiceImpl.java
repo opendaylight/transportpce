@@ -28,32 +28,32 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.gnpy.utils.AToZComparator;
 import org.opendaylight.transportpce.pce.gnpy.utils.ZToAComparator;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.Elements;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.ElementsKey;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.RouteIncludeEro;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.TeHopType;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.TePathDisjointness;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.common.constraints_config.TeBandwidth;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.common.constraints_config.TeBandwidthBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.Type;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.NumUnnumHopBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.num.unnum.hop.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.constraints.PathConstraints;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.constraints.PathConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.gnpy.specific.parameters.EffectiveFreqSlot;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.gnpy.specific.parameters.EffectiveFreqSlotBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.path.route.objects.ExplicitRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.path.route.objects.ExplicitRouteObjectsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.path.route.objects.explicit.route.objects.RouteObjectIncludeExclude;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeKey;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.service.PathRequest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.service.PathRequestBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.service.PathRequestKey;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.Synchronization;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.SynchronizationBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.synchronization.Svec;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.synchronization.info.synchronization.SvecBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.Elements;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.ElementsKey;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.RouteIncludeEro;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.TeHopType;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.TePathDisjointness;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.common.constraints_config.TeBandwidth;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.common.constraints_config.TeBandwidthBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.explicit.route.hop.Type;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.explicit.route.hop.type.NumUnnumHopBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.explicit.route.hop.type.num.unnum.hop.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.constraints.PathConstraints;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.constraints.PathConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.gnpy.specific.parameters.EffectiveFreqSlot;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.gnpy.specific.parameters.EffectiveFreqSlotBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.path.route.objects.ExplicitRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.path.route.objects.ExplicitRouteObjectsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.path.route.objects.explicit.route.objects.RouteObjectIncludeExclude;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeKey;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.service.PathRequestBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.service.PathRequestKey;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.synchronization.info.Synchronization;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.synchronization.info.SynchronizationBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.synchronization.info.synchronization.Svec;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.synchronization.info.synchronization.SvecBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220118.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -327,7 +327,7 @@ public class GnpyServiceImpl {
 
     // Add routeObjectIncludeExclude
     private RouteObjectIncludeExclude addRouteObjectIncludeExclude(String nodeId, Uint32 teTpValue, Long index) {
-        NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev220221.explicit.route.hop.type.num
+        NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev220615.explicit.route.hop.type.num
             .unnum.hop.NumUnnumHopBuilder()
                 .setNodeId(nodeId)
                 .setLinkTpId(teTpValue.toString())

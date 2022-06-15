@@ -44,6 +44,13 @@ module gnpy-network-topology {
     OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2022-06-15 {
+    description
+      "change fraction digits from 2 to 5 for loss_coef leaf";
+    reference
+      "YANG model for api input for path computation with gnpy";
+  }
+
   revision 2022-02-21 {
     description
       "draft for GNPy4TPCE preversion - non official version relevant for v2.4 GNPy file format";
@@ -163,7 +170,7 @@ module gnpy-network-topology {
     }
     leaf loss_coef {
       type decimal64 {
-        fraction-digits 2;
+        fraction-digits 5;
       }
       mandatory true;
       units db/km;

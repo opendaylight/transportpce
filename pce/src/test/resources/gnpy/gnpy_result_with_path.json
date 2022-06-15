@@ -23,7 +23,7 @@
                         },
                         {
                             "metric-type": "reference_power",
-                            "accumulative-value": 0.0015848931924611136
+                            "accumulative-value": 0.001584
                         },
                         {
                             "metric-type": "path_bandwidth",

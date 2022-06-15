@@ -18,7 +18,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
