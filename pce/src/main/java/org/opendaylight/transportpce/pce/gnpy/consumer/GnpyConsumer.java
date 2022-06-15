@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.pce.gnpy.consumer;
 
 
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 
 
 public interface GnpyConsumer {

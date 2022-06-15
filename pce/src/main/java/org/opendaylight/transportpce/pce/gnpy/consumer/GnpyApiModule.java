@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.PackageVersion;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 
 
 

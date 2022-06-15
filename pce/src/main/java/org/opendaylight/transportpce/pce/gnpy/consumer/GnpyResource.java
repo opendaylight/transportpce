@@ -15,7 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 
 
 @Path("/api/v1")

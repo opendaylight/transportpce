@@ -19,30 +19,30 @@ import java.util.stream.IntStream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Coordinate;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Km;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.edfa.params.Operational;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.edfa.params.OperationalBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.Edfa;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.EdfaBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.FiberRoadmBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.Transceiver;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.TransceiverBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.Params;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.ParamsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.Fiber;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.FiberBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.Roadm;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.RoadmBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.location.attributes.Location;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.location.attributes.LocationBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.Connections;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.ConnectionsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.Elements;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.ElementsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.ElementsKey;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.elements.Metadata;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.topo.elements.MetadataBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Coordinate;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Km;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.edfa.params.Operational;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.edfa.params.OperationalBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.Edfa;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.EdfaBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.FiberRoadmBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.Transceiver;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.TransceiverBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.Params;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.ParamsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.Fiber;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.FiberBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.Roadm;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.element.type.choice.element.type.fiberroadm.params.fiberroadmfused.RoadmBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.location.attributes.Location;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.location.attributes.LocationBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.Connections;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.ConnectionsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.Elements;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.ElementsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.ElementsKey;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.elements.Metadata;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.topo.elements.MetadataBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.SpanAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev211210.amplified.link.attributes.AmplifiedLink;
@@ -348,7 +348,7 @@ public class GnpyTopoImpl {
                 .setConOut(BigDecimal.valueOf(connOut)).build();
         Params params1 = new ParamsBuilder().setFiberroadmfused(fiber).build();
         return new ElementsBuilder().setUid(uidFiber)
-                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Fiber.class)
+                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Fiber.class)
                 .setTypeVariety(typeVariety).setMetadata(metadata1)
                 .setElementType(new FiberRoadmBuilder().setParams(params1).build()).build();
     }
@@ -369,7 +369,7 @@ public class GnpyTopoImpl {
         Edfa edfa = new EdfaBuilder()
                 .setOperational(operational).build();
         return new ElementsBuilder().setUid(uidEdfa)
-                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Edfa.class)
+                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Edfa.class)
                 .setMetadata(metadata1).setElementType(edfa).setTypeVariety(typeVariety).build();
     }
 
@@ -386,7 +386,7 @@ public class GnpyTopoImpl {
         Roadm roadm = new RoadmBuilder().setTargetPchOutDb(BigDecimal.valueOf(targetPchOutDb)).build();
         Params params1 = new ParamsBuilder().setFiberroadmfused(roadm).build();
         return new ElementsBuilder().setUid(uidRoadm)
-                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Roadm.class)
+                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Roadm.class)
                 .setMetadata(metadata1).setElementType(new FiberRoadmBuilder().setParams(params1).build()).build();
     }
 
@@ -402,7 +402,7 @@ public class GnpyTopoImpl {
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
         Transceiver transceiver = new TransceiverBuilder().build();
         return new ElementsBuilder().setUid(uidTrans)
-                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220221.Transceiver.class)
+                .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Transceiver.class)
                 .setMetadata(metadata1).setElementType(transceiver).build();
     }
 

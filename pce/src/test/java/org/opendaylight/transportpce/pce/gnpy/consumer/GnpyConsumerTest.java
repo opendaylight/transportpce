@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;

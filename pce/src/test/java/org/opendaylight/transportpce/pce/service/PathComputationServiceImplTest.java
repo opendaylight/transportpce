@@ -17,16 +17,16 @@ import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.PathBandwidth;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.PathPropertiesBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.generic.path.properties.path.properties.PathMetricBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.no.path.info.NoPathBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.ResponseBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.ResponseKey;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.NoPathCaseBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev220221.result.response.response.type.PathCaseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.PathBandwidth;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.PathPropertiesBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.path.properties.PathMetricBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.no.path.info.NoPathBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.ResponseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.ResponseKey;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCaseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCaseBuilder;
 
 public class PathComputationServiceImplTest extends AbstractTest {
 
