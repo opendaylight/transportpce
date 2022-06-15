@@ -22,6 +22,30 @@
       },
       "revId": "d816bf3d4650caf7c0c18269577e0296dcff9b79",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17f1b37d_4eed5859",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-15T07:38:42Z",
+      "side": 1,
+      "message": "I am closing the comment here and I propose we discuss these coding style rules in change 101544\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/101544\n\nBoth solutions are possible. There are pros and cons.\n\nThis solution can be seen as a contraction of\n        topologyUpdateResult \u003d\n            new TopologyUpdateResultBuilder()\n                .setTopologyChanges(new HashMap\u003c\u003e(notification.getTopologyChanges()))\n                .build();\n\nIn case the intermediate variable is removed and the builder migrated to a function argument, this lets the indentation untouched.\nIt can also ease CPD detection.",
+      "parentUuid": "9f123e59_6a1f4845",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 68,
+        "endChar": 16
+      },
+      "revId": "d816bf3d4650caf7c0c18269577e0296dcff9b79",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
