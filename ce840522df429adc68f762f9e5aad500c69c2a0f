@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b0e239_7aa181fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:01:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f1a1eb5_81a370ee",
+      "revId": "ce840522df429adc68f762f9e5aad500c69c2a0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3375ec53_02d7c91a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-14T13:43:12Z",
       "side": 1,
       "message": "indent +4 the last 2 lines would help readability IMO\n\netc",
+      "revId": "ce840522df429adc68f762f9e5aad500c69c2a0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352710c9_733d215b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerServiceResiliencyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:01:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3375ec53_02d7c91a",
       "revId": "ce840522df429adc68f762f9e5aad500c69c2a0f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
