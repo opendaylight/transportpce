@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f74fc42_a2615c22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "406b2ed6_9be3be3d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63f5d206_d0958862",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-14T13:47:26Z",
       "side": 1,
       "message": "In PortMappingListener, change the predicate that conditions the topology update",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c0d70ac_abc14e74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63f5d206_d0958862",
       "range": {
         "startLine": 9,
         "startChar": 2,
@@ -64,6 +112,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e23a61_6bbd8455",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec4f299_18540a70",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e604715a_eadb06a4",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-06-14T13:47:26Z",
       "side": 1,
       "message": "update only the OperationalState of the service after the topology update (and no longer the AdminState)",
+      "range": {
+        "startLine": 12,
+        "startChar": 27,
+        "endLine": 14,
+        "endChar": 29
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21258285_9d0a5e95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e604715a_eadb06a4",
       "range": {
         "startLine": 12,
         "startChar": 27,
@@ -110,6 +200,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f460f939_ae171124",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d54ef0d_1821cb15",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 20
+      },
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91bd9962_18e330ab",
@@ -123,6 +237,24 @@
       "writtenOn": "2022-06-14T13:47:26Z",
       "side": 1,
       "message": "LF not needed",
+      "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeac4593_771f6e6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-15T13:02:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91bd9962_18e330ab",
       "revId": "24c46a40f113b527480e34e78e8bf3480b14b4a4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
