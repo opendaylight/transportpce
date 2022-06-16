@@ -126,18 +126,22 @@ def post_request(url, data):
 
 def start_sims(sims_list):
     for sim in sims_list:
-        print('starting simulator ' + sim[0] + ' in OpenROADM device version ' + sim[1] + '...')
-        log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
-        process = start_honeynode(log_file, sim)
-        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
-            print('simulator for ' + sim[0] + ' started')
+        if 'host' in SIMS[sim]:   # Assume node is a physical device if 'host' is specified in SIMs dict
+            print("skipping  simulator for physical device " +
+                  sim[0] + " in OpenROADM device version " + sim[1] + "...")
         else:
-            print('simulator for ' + sim[0] + ' failed to start')
-            shutdown_process(process)
-            for pid in process_list:
-                shutdown_process(pid)
-            sys.exit(3)
-        process_list.append(process)
+            print("starting simulator " + sim[0] + " in OpenROADM device version " + sim[1] + "...")
+            log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
+            process = start_honeynode(log_file, sim)
+            if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+                print("simulator for " + sim[0] + " started")
+            else:
+                print("simulator for " + sim[0] + " failed to start")
+                shutdown_process(process)
+                for pid in process_list:
+                    shutdown_process(pid)
+                sys.exit(3)
+            process_list.append(process)
     return process_list
 
 
@@ -273,14 +277,14 @@ class TimeOut:
 def mount_device(node: str, sim: str):
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}',
            'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}'}
-    body = {'node': [{
-        'node-id': node,
-        'netconf-node-topology:username': NODES_LOGIN,
-        'netconf-node-topology:password': NODES_PWD,
-        'netconf-node-topology:host': '127.0.0.1',
-        'netconf-node-topology:port': SIMS[sim]['port'],
-        'netconf-node-topology:tcp-only': 'false',
-        'netconf-node-topology:pass-through': {}}]}
+    body = {"node": [{
+        "node-id": node_id,
+        "netconf-node-topology:username": SIMS[sim]['username'] if 'username' in SIMS[sim] else NODES_LOGIN,
+        "netconf-node-topology:password": SIMS[sim]['password'] if 'username' in SIMS[sim] else NODES_PWD,
+        "netconf-node-topology:host": SIMS[sim]['host'] if 'host' in SIMS[sim] else "127.0.0.1",
+        "netconf-node-topology:port": SIMS[sim]['port'],
+        "netconf-node-topology:tcp-only": "false",
+        "netconf-node-topology:pass-through": {}}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
     if wait_until_log_contains(TPCE_LOG, re.escape('Triggering notification stream NETCONF for node ' + node), 180):
         print('Node ' + node + ' correctly added to tpce topology', end='... ', flush=True)
