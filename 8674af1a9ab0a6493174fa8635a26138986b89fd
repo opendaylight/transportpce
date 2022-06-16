@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3377f7a6_83e1d1c5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-16T07:51:47Z",
+      "side": 1,
+      "message": "this is now more coherent with the commit message title.\nPlease use a new change to address refactoring issues.",
+      "revId": "8674af1a9ab0a6493174fa8635a26138986b89fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
