@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
+import static org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes.Tpdr;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,7 +30,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder;
@@ -144,36 +145,42 @@ public final class OpenRoadmTopology {
                             .collect(Collectors.toList());
             List<Integer> tpdrList = new ArrayList<>();
             for (Mapping mapping : networkMappings) {
-                List<Mapping> extractedMappings = null;
                 Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
                 if (!tpdrList.contains(xpdrNb)) {
                     tpdrList.add(xpdrNb);
-                    extractedMappings = mappingNode.nonnullMapping().values().stream()
+                    List<Mapping> extractedMappings = mappingNode.nonnullMapping().values().stream()
                             .filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
                             .collect(Collectors.toList());
-                    NodeBuilder ietfNode;
-                    if (mapping.getXponderType() == null
-                            || XpdrNodeTypes.Tpdr.getIntValue() == mapping.getXponderType().getIntValue()) {
-                        LOG.info("creating xpdr node {} of type Tpdr in openroadm-topology",
-                                mappingNode.getNodeId() + "-XPDR" + xpdrNb);
-                        ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                                extractedMappings, false);
-                        nodes.add(ietfNode.build());
-                    } else if (XpdrNodeTypes.Mpdr.getIntValue() == mapping.getXponderType().getIntValue()
-                            || XpdrNodeTypes.Switch.getIntValue() == mapping.getXponderType().getIntValue()) {
-                        LOG.info("creating xpdr node {} of type {} in openroadm-topology",
-                                mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
-                        ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                                extractedMappings, true);
-                        nodes.add(ietfNode.build());
+                    Boolean lastArg;
+                    String xpdrType;
+                    switch (mapping.getXponderType() == null ? Tpdr : mapping.getXponderType()) {
+                        case Tpdr :
+                            lastArg = false;
+                            xpdrType = "Tpdr";
+                            break;
+                        case Mpdr :
+                        case Switch :
+                            lastArg = true;
+                            xpdrType = mapping.getXponderType().getName();
+                            break;
+                        default :
+                            LOG.warn("cannot create xpdr node {} in openroadm-topology: type {} not supported",
+                                 mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
+                            continue;
                     }
+                    LOG.info("creating xpdr node {} of type {} in openroadm-topology",
+                            mappingNode.getNodeId() + "-XPDR" + xpdrNb, xpdrType);
+                    NodeBuilder ietfNode = createXpdr(
+                            mappingNode.getNodeId(),
+                            mappingNode.getNodeInfo().getNodeClli(),
+                            xpdrNb,
+                            extractedMappings,
+                            lastArg);
+                    nodes.add(ietfNode.build());
+
                 }
             }
-            if (nodes.isEmpty()) {
-                return null;
-            } else {
-                return new TopologyShard(nodes, links);
-            }
+            return nodes.isEmpty() ? null : new TopologyShard(nodes, links);
         }
         LOG.error("Device node Type not managed yet");
         return null;
@@ -181,21 +188,19 @@ public final class OpenRoadmTopology {
 
     private static NodeBuilder createXpdr(String nodeId, String clli, Integer xpdrNb, List<Mapping> mappings,
                                           boolean isOtn) {
-        // Create openroadm-network-topo augmentation to set node type to Xponder
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 ocnNode1 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
-                        .setNodeType(OpenroadmNodeType.XPONDER)
-                        .setAdministrativeState(AdminStates.InService)
-                        .setOperationalState(State.InService)
-                        .build();
         // Create ietf node setting supporting-node data
         NodeBuilder ietfNodeBldr = createTopoLayerNode(nodeId, clli);
         // set node-id
         String nodeIdtopo = new StringBuilder().append(nodeId).append("-XPDR").append(xpdrNb).toString();
         ietfNodeBldr.setNodeId(new NodeId(nodeIdtopo))
                 .withKey((new NodeKey(new NodeId(nodeIdtopo))))
-                .addAugmentation(ocnNode1);
-
+                .addAugmentation(
+                    new org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.common.network.rev211210.Node1Builder()
+                        .setNodeType(OpenroadmNodeType.XPONDER)
+                        .setAdministrativeState(AdminStates.InService)
+                        .setOperationalState(State.InService)
+                        .build());
         // Create tp-map
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
         TerminationPointBuilder ietfTpBldr;
@@ -234,15 +239,14 @@ public final class OpenRoadmTopology {
                 }
             } else {
                 if (m.getPortQual().equals("xpdr-network") || m.getPortQual().equals("switch-network")) {
-                    ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint());
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder
-                        ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
-                            .org.openroadm.common.network.rev211210.TerminationPoint1Builder()
-                                    .setTpType(OpenroadmTpType.XPONDERNETWORK)
-                                    .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
-                                    .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
-                    ietfTpBldr
-                            .addAugmentation(ocnTp1Bldr.build());
+                    ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint())
+                        .addAugmentation(
+                            new org.opendaylight.yang.gen.v1.http
+                                    .org.openroadm.common.network.rev211210.TerminationPoint1Builder()
+                                .setTpType(OpenroadmTpType.XPONDERNETWORK)
+                                .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                                .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()))
+                                .build());
                     TerminationPoint ietfTp = ietfTpBldr.build();
                     tpMap.put(ietfTp.key(),ietfTp);
                 }
