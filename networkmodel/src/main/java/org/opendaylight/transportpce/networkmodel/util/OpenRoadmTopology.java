@@ -181,6 +181,8 @@ public final class OpenRoadmTopology {
                                     extractedMappings, true);
                             nodes.add(ietfNode.build());
                             break;
+                        default :
+                            break;
                     }
                 }
             }
