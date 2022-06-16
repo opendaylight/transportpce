@@ -53,6 +53,11 @@ module transportpce-pce {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+
+  revision 2022-06-15 {
+    description
+      "change fraction digits from 2 to 6 for accumulative-value leaf, from 2 to 6 to be compliant with Gnpy";
+  }
   revision 2022-01-18 {
     description
       "Add in path-computation-request input the pce-routing-metric.
@@ -140,7 +145,7 @@ module transportpce-pce {
         }
         leaf accumulative-value {
           type decimal64 {
-            fraction-digits 2;
+            fraction-digits 6;
           }
         }
       }
