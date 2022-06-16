@@ -144,11 +144,10 @@ public final class OpenRoadmTopology {
                             .collect(Collectors.toList());
             List<Integer> tpdrList = new ArrayList<>();
             for (Mapping mapping : networkMappings) {
-                List<Mapping> extractedMappings = null;
                 Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
                 if (!tpdrList.contains(xpdrNb)) {
                     tpdrList.add(xpdrNb);
-                    extractedMappings = mappingNode.nonnullMapping().values().stream()
+                    List<Mapping> extractedMappings = mappingNode.nonnullMapping().values().stream()
                             .filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
                             .collect(Collectors.toList());
                     NodeBuilder ietfNode;
