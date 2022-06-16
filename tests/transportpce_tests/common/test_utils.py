@@ -94,18 +94,22 @@ else:
 
 def start_sims(sims_list):
     for sim in sims_list:
-        print("starting simulator " + sim[0] + " in OpenROADM device version " + sim[1] + "...")
-        log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
-        process = start_honeynode(log_file, sim)
-        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
-            print("simulator for " + sim[0] + " started")
+        if 'host' in SIMS[sim]:   # Assume node is a physical device if 'host' is specified in SIMs dict
+            print("skipping  simulator for physical device " +
+                  sim[0] + " in OpenROADM device version " + sim[1] + "...")
         else:
-            print("simulator for " + sim[0] + " failed to start")
-            shutdown_process(process)
-            for pid in process_list:
-                shutdown_process(pid)
-            sys.exit(3)
-        process_list.append(process)
+            print("starting simulator " + sim[0] + " in OpenROADM device version " + sim[1] + "...")
+            log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
+            process = start_honeynode(log_file, sim)
+            if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+                print("simulator for " + sim[0] + " started")
+            else:
+                print("simulator for " + sim[0] + " failed to start")
+                shutdown_process(process)
+                for pid in process_list:
+                    shutdown_process(pid)
+                sys.exit(3)
+            process_list.append(process)
     return process_list
 
 
@@ -242,11 +246,12 @@ def delete_request(url):
 
 def mount_device(node_id, sim):
     url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
+    # Use username, password, host from SIMs dict, if present, otherwise use defaults
     body = {"node": [{
         "node-id": node_id,
-        "netconf-node-topology:username": NODES_LOGIN,
-        "netconf-node-topology:password": NODES_PWD,
-        "netconf-node-topology:host": "127.0.0.1",
+        "netconf-node-topology:username": SIMS[sim]['username'] if 'username' in SIMS[sim] else NODES_LOGIN,
+        "netconf-node-topology:password": SIMS[sim]['password'] if 'username' in SIMS[sim] else NODES_PWD,
+        "netconf-node-topology:host": SIMS[sim]['host'] if 'host' in SIMS[sim] else "127.0.0.1",
         "netconf-node-topology:port": SIMS[sim]['port'],
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
@@ -263,11 +268,12 @@ def mount_device(node_id, sim):
 
 def mount_tapi_device(node_id, sim):
     url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
+    # Use username, password, host from SIMs dict, if present, otherwise use defaults
     body = {"node": [{
         "node-id": node_id,
-        "netconf-node-topology:username": NODES_LOGIN,
-        "netconf-node-topology:password": NODES_PWD,
-        "netconf-node-topology:host": "127.0.0.1",
+        "netconf-node-topology:username": SIMS[sim]['username'] if 'username' in SIMS[sim] else NODES_LOGIN,
+        "netconf-node-topology:password": SIMS[sim]['password'] if 'username' in SIMS[sim] else NODES_PWD,
+        "netconf-node-topology:host": SIMS[sim]['host'] if 'host' in SIMS[sim] else "127.0.0.1",
         "netconf-node-topology:port": SIMS[sim]['port'],
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
