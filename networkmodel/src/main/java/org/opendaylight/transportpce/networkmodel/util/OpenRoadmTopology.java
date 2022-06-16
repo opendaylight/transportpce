@@ -144,28 +144,36 @@ public final class OpenRoadmTopology {
                             .collect(Collectors.toList());
             List<Integer> tpdrList = new ArrayList<>();
             for (Mapping mapping : networkMappings) {
-                List<Mapping> extractedMappings = null;
                 Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
                 if (!tpdrList.contains(xpdrNb)) {
                     tpdrList.add(xpdrNb);
-                    extractedMappings = mappingNode.nonnullMapping().values().stream()
+                    List<Mapping> extractedMappings = mappingNode.nonnullMapping().values().stream()
                             .filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
                             .collect(Collectors.toList());
                     NodeBuilder ietfNode;
-                    if (mapping.getXponderType() == null
-                            || XpdrNodeTypes.Tpdr.getIntValue() == mapping.getXponderType().getIntValue()) {
-                        LOG.info("creating xpdr node {} of type Tpdr in openroadm-topology",
-                                mappingNode.getNodeId() + "-XPDR" + xpdrNb);
-                        ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                                extractedMappings, false);
-                        nodes.add(ietfNode.build());
-                    } else if (XpdrNodeTypes.Mpdr.getIntValue() == mapping.getXponderType().getIntValue()
-                            || XpdrNodeTypes.Switch.getIntValue() == mapping.getXponderType().getIntValue()) {
-                        LOG.info("creating xpdr node {} of type {} in openroadm-topology",
-                                mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
-                        ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                                extractedMappings, true);
-                        nodes.add(ietfNode.build());
+                    switch (mapping.getXponderType()) {
+                        case null :
+                        case XpdrNodeTypes.Tpdr :
+                            LOG.info("creating xpdr node {} of type Tpdr in openroadm-topology",
+                                    mappingNode.getNodeId() + "-XPDR" + xpdrNb);
+                            ietfNode = createXpdr(mappingNode.getNodeId(),
+                                    mappingNode.getNodeInfo().getNodeClli(),
+                                    xpdrNb,
+                                    extractedMappings, false);
+                            nodes.add(ietfNode.build());
+                            break;
+                        case XpdrNodeTypes.Mpdr :
+                        case XpdrNodeTypes.Switch :
+                            LOG.info("creating xpdr node {} of type {} in openroadm-topology",
+                                    mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
+                            ietfNode = createXpdr(mappingNode.getNodeId(),
+                                    mappingNode.getNodeInfo().getNodeClli(),
+                                    xpdrNb,
+                                    extractedMappings, true);
+                            nodes.add(ietfNode.build());
+                            break;
+                        default :
+                            break;
                     }
                 }
             }
