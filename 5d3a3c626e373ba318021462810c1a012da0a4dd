@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf6a028_f131103d",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-16T08:58:24Z",
+      "side": 1,
+      "message": "node_id is not defined, you mean probably node\n\nyou can use tox -e pylint to detect\n\nMore details about tox at\nhttps://docs.opendaylight.org/projects/transportpce/en/latest/tox-guide.html\n\nThis is also performed in the CI\nCf logs below\n\n10:51:43 pylint run-test: commands[0] | find transportpce_tests/ -name \u0027*.py\u0027 -exec pylint --fail-under\u003d10 --max-line-length\u003d120 --disable\u003dmissing-docstring --disable\u003dfixme --disable\u003dduplicate-code \u0027--module-rgx\u003d([a-z0-9_]+$)|([0-9.]{1,30}$)\u0027 \u0027--method-rgx\u003d(([a-z_][a-zA-Z0-9_]{2,})|(_[a-z0-9_]*)|(__[a-zA-Z][a-zA-Z0-9_]+__))$\u0027 \u0027--variable-rgx\u003d[a-zA-Z_][a-zA-Z0-9_]{1,30}$\u0027 \u0027{}\u0027 +\n10:52:11 ************* Module common.test_utils_rfc8040\n10:52:11 transportpce_tests/common/test_utils_rfc8040.py:281:19: E0602: Undefined variable \u0027node_id\u0027 (undefined-variable)",
+      "revId": "5d3a3c626e373ba318021462810c1a012da0a4dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
