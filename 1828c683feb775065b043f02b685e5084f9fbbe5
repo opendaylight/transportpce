@@ -16,6 +16,24 @@
       "message": "There seems to be an issue with the tapi tests, when it fails on one test it restarts performing all the tests again (see log obtained locally), hence the timeout error:\n.....................F.....................F\n^C\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_22_delete_connectivity_service_DSR (test02_full_topology.TransportPCEtesting)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/erreamor/transportpce/tests/transportpce_tests/tapi/test02_full_topology.py\", line 454, in test_22_delete_connectivity_service_DSR\n    self.assertEqual(response.status_code, requests.codes.no_content)\nAssertionError: 500 !\u003d 204\n-------------------- \u003e\u003e begin captured stdout \u003c\u003c ---------------------\n{\"input\": {\"service-id-or-name\": \"0f30c62e-94f4-4d8d-bb13-12f521f98fe9\"}}\n\n--------------------- \u003e\u003e end captured stdout \u003c\u003c ----------------------\n-------------------- \u003e\u003e begin captured logging \u003c\u003c --------------------\nurllib3.connectionpool: DEBUG: Starting new HTTP connection (1): localhost:8181\nurllib3.connectionpool: DEBUG: http://localhost:8181 \"POST /restconf/operations/tapi-connectivity:delete-connectivity-service HTTP/1.1\" 500 182\n--------------------- \u003e\u003e end captured logging \u003c\u003c ---------------------\n\n----------------------------------------------------------------------\nRan 23 tests in 1410.864s\n\nAlso when connecting the nodes to the controller the response code was 200 and not 201. Therefore I modified assertEquals by assertIn. I dont know if this is a behavior on my OS or overall...",
       "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaad4b5e_4b0b27b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-17T09:34:15Z",
+      "side": 1,
+      "message": "@Gilles @Guillaume",
+      "parentUuid": "c8e7f4b7_a4fa9693",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
