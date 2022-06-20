@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b62faada_e1ac9ab6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "you can use directly StandardCharsets.UTF_8 instead",
+      "range": {
+        "startLine": 122,
+        "startChar": 18,
+        "endLine": 122,
+        "endChar": 42
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f59fe46_8cd53b7b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "idem, etc",
+      "range": {
+        "startLine": 310,
+        "startChar": 87,
+        "endLine": 310,
+        "endChar": 111
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e1ac009_a54f7cfa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 65,
+        "startChar": 22,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e20cd218_d39d9029",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "should not be necessary",
+      "range": {
+        "startLine": 115,
+        "startChar": 65,
+        "endLine": 115,
+        "endChar": 76
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7dc194f_19ed0fa7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "since this message appears several times, it could be put as a constant",
+      "range": {
+        "startLine": 202,
+        "startChar": 27,
+        "endLine": 202,
+        "endChar": 60
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e9d03a8_1b59ebc9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T10:59:45Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 234,
+        "startChar": 35,
+        "endLine": 234,
+        "endChar": 70
+      },
+      "revId": "d72b6390ecbf893cfa49c3e1527c4ce4ada43a69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
