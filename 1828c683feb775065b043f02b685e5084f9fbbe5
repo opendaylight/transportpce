@@ -52,6 +52,41 @@
       "parentUuid": "eaad4b5e_4b0b27b0",
       "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4878c7c_e6473665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-20T08:11:16Z",
+      "side": 1,
+      "message": "good point Javier. Maybe an exit well placed in the python script in case of failure can solve this issue.",
+      "parentUuid": "7c26503f_7dfa3aad",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "730cd791_b6b7b945",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-20T08:11:16Z",
+      "side": 1,
+      "message": "LGTM\nthere are a bunch of tests that must support both 200 and 201 return codes.\nPlease can you propose a separate change for this at the bottom of the stack ?\nWe need to repercute this modification where needed.",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
