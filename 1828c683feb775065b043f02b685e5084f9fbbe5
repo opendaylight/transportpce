@@ -34,6 +34,24 @@
       "parentUuid": "c8e7f4b7_a4fa9693",
       "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c26503f_7dfa3aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T07:55:26Z",
+      "side": 1,
+      "message": "Hi Javier,\nIt must have a bug in the connection deletion. It seems that the deletion of the DSR service fails, and TransportPCE seems entering in a kind of infinite loop to find the connection to delete, without any success.\nBut, since there is no check in the test_22 to wait deletion process is correctly done, it directly passes to test_23 before TransportPCE ends its failure, and blocks immediatly in that latter. After that, nothing new happens and I suppose this is maybe nosetest or tox timeout that tries to relaunch once the test suite.",
+      "parentUuid": "eaad4b5e_4b0b27b0",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
