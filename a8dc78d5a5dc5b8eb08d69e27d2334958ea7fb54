@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0168057_9f2d22d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T09:47:04Z",
+      "side": 1,
+      "message": "All the relation chain needs to be rebased now.",
+      "revId": "a8dc78d5a5dc5b8eb08d69e27d2334958ea7fb54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ea736c_d6a47c12",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T09:47:04Z",
+      "side": 1,
+      "message": "I think this is unnecessary. If the collection is empty, the foreach loop will exit.",
+      "range": {
+        "startLine": 256,
+        "startChar": 29,
+        "endLine": 256,
+        "endChar": 58
+      },
+      "revId": "a8dc78d5a5dc5b8eb08d69e27d2334958ea7fb54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0513cc7_26d823f4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T09:47:04Z",
+      "side": 1,
+      "message": "if this value is used several times, it could be put as a constant",
+      "range": {
+        "startLine": 585,
+        "startChar": 27,
+        "endLine": 585,
+        "endChar": 35
+      },
+      "revId": "a8dc78d5a5dc5b8eb08d69e27d2334958ea7fb54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0301c2_fd5d2be1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T09:47:04Z",
+      "side": 1,
+      "message": "seems not being used. If so, remove them.",
+      "range": {
+        "startLine": 985,
+        "startChar": 99,
+        "endLine": 986,
+        "endChar": 76
+      },
+      "revId": "a8dc78d5a5dc5b8eb08d69e27d2334958ea7fb54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
