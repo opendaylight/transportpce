@@ -87,6 +87,24 @@
       "message": "LGTM\nthere are a bunch of tests that must support both 200 and 201 return codes.\nPlease can you propose a separate change for this at the bottom of the stack ?\nWe need to repercute this modification where needed.",
       "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "551c00be_d584a7c6",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-20T08:17:40Z",
+      "side": 1,
+      "message": "The normal return code must be 200. Adding 201 here is a bad work-around. 201 is probably due to the fact that the test suite restarts after not being completely correctly finished, and with an initial state where devices have not been correctly disconnected from the controller.",
+      "parentUuid": "730cd791_b6b7b945",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
