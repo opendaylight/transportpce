@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dda6d7b2_c8d4e4c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-21T09:18:54Z",
+      "side": 1,
+      "message": "LGTM apart open remarks",
+      "revId": "61be3b91b711cc39c169900fd21f150d65686b29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77c3901b_248a502b",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImplTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-21T09:18:54Z",
+      "side": 1,
+      "message": "misleading indentation\nLF placements should be reviewed in the whole file IMO",
+      "revId": "61be3b91b711cc39c169900fd21f150d65686b29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
