@@ -16,6 +16,24 @@
       "message": "please use whitespaces instead of tabs \u003d\u003e this is detected in the CI by the tox pre-commit profile",
       "revId": "eefce11efc0db9b88b62d665703a18ba4c5a905d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "241fe3dd_5137785f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-21T05:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43a3553a_58d48368",
+      "revId": "eefce11efc0db9b88b62d665703a18ba4c5a905d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
