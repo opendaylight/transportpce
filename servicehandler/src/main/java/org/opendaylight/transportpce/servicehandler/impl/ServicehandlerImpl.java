@@ -177,6 +177,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             ABORT_VALID_FAILED = "Aborting: validation of service create request failed";
         }
 
+        public static String serviceInDS(String serviceName) {
+            return "Service '" + serviceName + "' already exists in datastore";
+        }
+
         public static String serviceNotInDS(String serviceName) {
             return "Service '" + serviceName + "' does not exist in datastore";
         }
@@ -195,11 +199,18 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.ServiceCreate);
-        if (! validationResult.isSuccess()) {
+        if (!validationResult.isSuccess()) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_VALID_FAILED);
             return ModelMappingUtils.createCreateServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+        //Check any presence of services with the same name
+        String serviceName = input.getServiceName();
+        if (this.serviceDataStoreOperations.getService(serviceName).isPresent()) {
+            LOG.warn(SERVICE_CREATE_MSG, LogMessages.serviceInDS(serviceName));
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.serviceInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -212,7 +223,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         if (output == null) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);
             sendNbiNotification(new PublishNotificationProcessServiceBuilder()
-                    .setServiceName(input.getServiceName())
+                    .setServiceName(serviceName)
                     .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                     .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
                     .setCommonId(input.getCommonId())
