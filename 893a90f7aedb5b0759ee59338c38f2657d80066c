@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9349c351_80d4068b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-22T06:11:49Z",
+      "side": 1,
+      "message": "regression on indentation already fixed\netc",
+      "revId": "893a90f7aedb5b0759ee59338c38f2657d80066c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
