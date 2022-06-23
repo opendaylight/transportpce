@@ -33,6 +33,24 @@
       "message": "misleading indentation\nLF placements should be reviewed in the whole file IMO",
       "revId": "61be3b91b711cc39c169900fd21f150d65686b29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27bb239_36d08a95",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImplTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-23T13:40:17Z",
+      "side": 1,
+      "message": "\u003e misleading indentation\n\u003e LF placements should be reviewed in the whole file IMO\n\nWith Patch set 5, should be good",
+      "parentUuid": "77c3901b_248a502b",
+      "revId": "61be3b91b711cc39c169900fd21f150d65686b29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
