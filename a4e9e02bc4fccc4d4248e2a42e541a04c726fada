@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "631bc8c5_b85f92d3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-24T14:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d63b86f_08178529",
+      "revId": "a4e9e02bc4fccc4d4248e2a42e541a04c726fada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d56081b4_5d790599",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-21T06:40:17Z",
       "side": 1,
       "message": "there is no difference with the previous case.\nThus both blocks can be cascaded.\n\ncase Mpdr :\ncase Switch :\n    LOG.info(\"creating xpdr node {} of type {} in openroadm-topology\",\n    ...\n\nAlso, apart a difference in the LOG.info message and in the boolean at the end argument of  createXpdr function, there is no difference in any of these case blocks here. This is also true for the mapping.getXponderType() \u003d\u003d null if-block just above.\nThus I think that this common block can be outsourced of these switch/case blocks + the if block above. This will ease the code maintenance. An intermediate boolean variable is only needed inside here.",
+      "revId": "a4e9e02bc4fccc4d4248e2a42e541a04c726fada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7ccc4b_8170603f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-24T14:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d56081b4_5d790599",
       "revId": "a4e9e02bc4fccc4d4248e2a42e541a04c726fada",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
