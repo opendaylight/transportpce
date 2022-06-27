@@ -45,6 +45,7 @@ URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
 URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network/"
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
 URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
+URL_OPER_SERV_PATH_LIST = "{}/operational/transportpce-service-path:service-path-list/"
 URL_GET_NBINOTIFICATIONS_PROCESS_SERV = "{}/operations/nbi-notifications:get-notifications-process-service/"
 URL_GET_NBINOTIFICATIONS_ALARM_SERV = "{}/operations/nbi-notifications:get-notifications-alarm-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
@@ -408,8 +409,11 @@ def get_notifications_alarm_service_request(attr):
 
 
 def get_service_list_request(suffix: str):
-    url = URL_OPER_SERV_LIST + suffix
-    return get_request(url)
+    return get_request(URL_OPER_SERV_LIST + suffix)
+
+
+def get_service_path_list_request(suffix: str):
+    return get_request(URL_OPER_SERV_PATH_LIST + suffix)
 
 
 def service_create_request(attr):
