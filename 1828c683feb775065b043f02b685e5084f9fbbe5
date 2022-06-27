@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73f9746c_4c51b344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-27T15:59:43Z",
+      "side": 1,
+      "message": "I think I have fix it. Lets see if it will pass the gate or not",
+      "parentUuid": "e4878c7c_e6473665",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "730cd791_b6b7b945",
         "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
         "patchSetId": 9
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "fair enough but in that case, I think we must modify the mount_tapi_device() function that lets think that this is not the normal behavior and that is not very efficient in that case. cf below\nWe must also consider the move towards RFC8040. It modified some return codes.\n\n    if wait_until_log_contains(TPCE_LOG, re.escape(f\"TAPI node for or node {node_id} successfully merged\"), 200):\n        print(\"Node \" + node_id + \" correctly added to tpce topology\", end\u003d\u0027... \u0027, flush\u003dTrue)\n    else:\n        print(\"Node \" + node_id + \" still not added to tpce topology\", end\u003d\u0027... \u0027, flush\u003dTrue)\n        if response.status_code \u003d\u003d requests.codes.ok:\n            print(\"It was probably loaded at start-up\", end\u003d\u0027... \u0027, flush\u003dTrue)\n        # TODO an else-clause to abort test would probably be nice here\n    return response",
       "parentUuid": "551c00be_d584a7c6",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2bcea4a_df425aa4",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-27T15:59:43Z",
+      "side": 1,
+      "message": "I have removed it for now. But I will create a separate change addressing this. Maybe we can discuss it next Thursday",
+      "parentUuid": "c24c7b58_55562f29",
       "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
