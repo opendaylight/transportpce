@@ -45,6 +45,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev21092
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OTUflex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OduRateIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OtuRateIdentity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddSpecificOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddSpecificOperationalModesToCatalogOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddSpecificOperationalModesToCatalogOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutputBuilder;
@@ -629,4 +635,43 @@ public final class ModelMappingUtils {
         }
         return new int[] { endPos - maxLen, endPos };
     }
+
+    public static ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>>
+        addOpenroadmServiceReply(AddOpenroadmOperationalModesToCatalogInput input, String finalAck,
+                                 String responseCode) {
+        return RpcResultBuilder
+            .success(
+                new AddOpenroadmOperationalModesToCatalogOutputBuilder()
+                    .setConfigurationResponseCommon(
+                        new ConfigurationResponseCommonBuilder()
+                                .setAckFinalIndicator(finalAck)
+                            .setResponseCode(responseCode)
+                                .setRequestId(
+                                        input.getSdncRequestHeader() == null
+                                                ? null
+                                                : input.getSdncRequestHeader().getRequestId())
+                            .build())
+                    .build())
+            .buildFuture();
+    }
+
+    public static ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>>
+        addSpecificOpenroadmServiceReply(AddSpecificOperationalModesToCatalogInput input, String finalAck,
+                                         String responseCode) {
+        return RpcResultBuilder
+                .success(
+                        new AddSpecificOperationalModesToCatalogOutputBuilder()
+                                .setConfigurationResponseCommon(
+                                        new ConfigurationResponseCommonBuilder()
+                                                .setAckFinalIndicator(finalAck)
+                                                .setResponseCode(responseCode)
+                                                .setRequestId(
+                                                        input.getSdncRequestHeader() == null
+                                                                ? null
+                                                                : input.getSdncRequestHeader().getRequestId())
+                                                .build())
+                                .build())
+                .buildFuture();
+    }
+
 }
