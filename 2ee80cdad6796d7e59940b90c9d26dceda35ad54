@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "018ad4c8_fdb9a502",
+        "filename": "tox.ini",
+        "patchSetId": 16
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-28T10:47:05Z",
+      "side": 1,
+      "message": "@Guillaume, let me know if this is enough for the nbi notification test environment",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 21
+      },
+      "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
