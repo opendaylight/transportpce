@@ -46,6 +46,30 @@
       },
       "revId": "2e3b804dd8efb874f67eab7041a468c8d8f05457",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b50c1cd0_534cffef",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-28T09:13:30Z",
+      "side": 1,
+      "message": "I dont know whether it is possible to do it when the tests are run at the gate. Otherwise, we may need to think of a different approach",
+      "parentUuid": "c2de6279_c6082799",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "2e3b804dd8efb874f67eab7041a468c8d8f05457",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
