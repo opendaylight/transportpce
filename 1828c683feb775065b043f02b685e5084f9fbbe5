@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bfe72200_c657b1b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-28T08:14:21Z",
+      "side": 1,
+      "message": "Locally the tapi tests are passing correctly...\n\ntest_01_connect_spdrA (test02_full_topology.TransportPCEtesting) ... ok\ntest_02_connect_spdrC (test02_full_topology.TransportPCEtesting) ... ok\ntest_03_connect_rdmA (test02_full_topology.TransportPCEtesting) ... ok\ntest_04_connect_rdmC (test02_full_topology.TransportPCEtesting) ... ok\ntest_05_connect_sprdA_1_N1_to_roadmA_PP1 (test02_full_topology.TransportPCEtesting) ... ok\ntest_06_connect_roadmA_PP1_to_spdrA_1_N1 (test02_full_topology.TransportPCEtesting) ... ok\ntest_07_connect_sprdC_1_N1_to_roadmC_PP1 (test02_full_topology.TransportPCEtesting) ... ok\ntest_08_connect_roadmC_PP1_to_spdrC_1_N1 (test02_full_topology.TransportPCEtesting) ... ok\ntest_09_add_omsAttributes_ROADMA_ROADMC (test02_full_topology.TransportPCEtesting) ... ok\ntest_10_add_omsAttributes_ROADMC_ROADMA (test02_full_topology.TransportPCEtesting) ... ok\ntest_11_check_otn_topology (test02_full_topology.TransportPCEtesting) ... ok\ntest_12_check_openroadm_topology (test02_full_topology.TransportPCEtesting) ... ok\ntest_13_get_tapi_topology_details (test02_full_topology.TransportPCEtesting) ... ok\ntest_14_check_sip_details (test02_full_topology.TransportPCEtesting) ... ok\ntest_15_create_connectivity_service_PhotonicMedia (test02_full_topology.TransportPCEtesting) ... ok\ntest_16_get_service_PhotonicMedia (test02_full_topology.TransportPCEtesting) ... ok\ntest_17_create_connectivity_service_ODU (test02_full_topology.TransportPCEtesting) ... ok\ntest_18_get_service_ODU (test02_full_topology.TransportPCEtesting) ... ok\ntest_19_create_connectivity_service_DSR (test02_full_topology.TransportPCEtesting) ... ok\ntest_20_get_service_DSR (test02_full_topology.TransportPCEtesting) ... ok\ntest_21_get_connectivity_service_list (test02_full_topology.TransportPCEtesting) ... ok\ntest_22_delete_connectivity_service_DSR (test02_full_topology.TransportPCEtesting) ... ok\ntest_23_delete_connectivity_service_ODU (test02_full_topology.TransportPCEtesting) ... ok\ntest_24_delete_connectivity_service_PhotonicMedia (test02_full_topology.TransportPCEtesting) ... ok\ntest_25_get_no_tapi_services (test02_full_topology.TransportPCEtesting) ... ok\ntest_26_get_no_openroadm_services (test02_full_topology.TransportPCEtesting) ... ok\ntest_27_disconnect_spdrA (test02_full_topology.TransportPCEtesting) ... ok\ntest_28_disconnect_spdrC (test02_full_topology.TransportPCEtesting) ... ok\ntest_29_disconnect_roadmA (test02_full_topology.TransportPCEtesting) ... ok\ntest_30_disconnect_roadmC (test02_full_topology.TransportPCEtesting) ... ok",
+      "parentUuid": "73f9746c_4c51b344",
+      "revId": "1828c683feb775065b043f02b685e5084f9fbbe5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "730cd791_b6b7b945",
         "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
         "patchSetId": 9
