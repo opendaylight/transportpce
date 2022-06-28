@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20122cc5_868c7397",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T09:14:35Z",
+      "side": 1,
+      "message": "indentation NOK\n\nalso the fall-through is not explicitly declared and probably does not work here",
+      "revId": "6b118123ada5ae1f476706302811f16600c837f5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

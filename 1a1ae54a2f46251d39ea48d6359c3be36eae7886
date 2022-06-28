@@ -16,6 +16,24 @@
       "message": "Simply \"Refactor networkmodel OpenRoadmTopology\" is OK",
       "revId": "1a1ae54a2f46251d39ea48d6359c3be36eae7886",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a928420d_24b8f04a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T09:14:35Z",
+      "side": 1,
+      "message": "still NOK",
+      "parentUuid": "5a6d9c57_d4418bd4",
+      "revId": "1a1ae54a2f46251d39ea48d6359c3be36eae7886",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

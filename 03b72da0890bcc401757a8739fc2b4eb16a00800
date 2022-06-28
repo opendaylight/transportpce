@@ -16,6 +16,24 @@
       "message": "I think the intermediate variable ietfNode is not required",
       "revId": "03b72da0890bcc401757a8739fc2b4eb16a00800",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fab55cd9_95535b02",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T09:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d486262_8f007cbe",
+      "revId": "03b72da0890bcc401757a8739fc2b4eb16a00800",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
