@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88dd2aa0_1367a0a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "commit title shoud be \u003c 50 char \u003d\u003e verified -1 in Jenkins\nThis is checked by gitlint job in the CI.\n\nThe recommendation is to use the present tense imperative style\nall details of these best practices in documentation contributor guidelines section\nhttps://docs.opendaylight.org/en/stable-sulfur/contributor-guides/newcomers-guide.html#commit-message\n\nFor contribution on behalf of another company, you can  also add a comment directly in the code with the author and mentioned it is done on behalf of someone else.\ncf code done by GFI on behalf of Orange for example at\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/56585/14/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererImpl.java#39",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba81db58_0f18ef03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "missing sign-off footer",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c20d33_9478a243",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "Thanks Roshan for this contribution\nHere are a few pointers.\n\nHope this helps\nGuillaume",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b573717_e87fa68f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperations.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be copyright 2022 NTT or Fujitsu rather ?",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7117ccfb_356e10a9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperations.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "revision date should preferably not be split from name space body to ease migration",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "005cf1a1_9205b332",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94ab8dc_fad30151",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18096085_9a4ab6d6",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-28T10:10:04Z",
+      "side": 1,
+      "message": "rev date split from NS",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
