@@ -28,7 +28,7 @@ equipment\_ and Optical Line Management (OLM) is associated with a generic block
 relying on open models, each of them communicating through published APIs.
 
 
-.. figure:: ./images/TransportPCE-Diagram-Phosphorus.jpg
+.. figure:: ./images/TransportPCE-Diagram-Sulfur.jpg
    :alt: TransportPCE architecture
 
    TransportPCE architecture
@@ -1510,16 +1510,19 @@ odl-transportpce-tapi
 
 This feature allows TransportPCE application to expose at its northbound interface other APIs than
 those defined by the OpenROADM MSA. With this feature, TransportPCE provides part of the Transport-API
-specified by the Open Networking Foundation. More specifically, the Topology Service and Connectivity
-Service components are implemented, allowing to expose to higher level applications an abstraction of
-its OpenROADM topologies in the form of topologies respecting the T-API modelling, as well as
-creating/deleting connectivity services between the Service Interface Points (SIPs) exposed by the
-T-API topology. The current version of TransportPCE implements the *tapi-topology.yang* and
-*tapi-connectivity.yang* models in the revision 2018-12-10 (T-API v2.1.2).
+specified by the Open Networking Foundation. More specifically, the Topology Service, Connectivity and Notification
+Service components are implemented, allowing to:
 
-Additionally, support for the Notification Service component will be added in future releases, which
-will allow higher level applications to create/delete a Notification Subscription Service to receive
-several T-API notifications as defined in the *tapi-notification.yang* model.
+1. Expose to higher level applications an abstraction of its OpenROADM topologies in the form of topologies respecting the T-API modelling.
+2. Create/delete connectivity services between the Service Interface Points (SIPs) exposed by the T-API topology.
+3. Create/Delete Notification Subscription Service to expose to higher level applications T-API notifications through a Kafka server.
+
+The current version of TransportPCE implements the *tapi-topology.yang*,
+*tapi-connectivity.yang* and *tapi-notification.yang* models in the revision
+2018-12-10 (T-API v2.1.2).
+
+Additionally, support for the Path Computation Service will be added in future releases, which will allow T-PCE
+to compute a path over the T-API topology.
 
 T-API Topology Service
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1907,10 +1910,141 @@ connectivity service.
 T-API Notification Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In future releases, the T-API notification service will be implemented. The objective will be to write and read
-T-API notifications stored in topics of a Kafka server as explained later in the odl-transportpce-nbinotifications
-section, but T-API based.
+-  RPC calls implemented:
 
+   -  create-notification-subscription-service
+
+   -  get-supported-notification-types
+
+   -  delete-notification-subscription-service
+
+   -  get-notification-subscription-service-details
+
+   -  get-notification-subscription-service-list
+
+   -  get-notification-list
+
+Sulfur SR1 extends the T-API interface support by implementing the T-API notification service. This feature
+allows TransportPCE to write and read tapi-notifications stored in topics of a Kafka server. It also upgrades
+the nbinotifications module to support the serialization and deserialization of tapi-notifications into JSON
+format and vice-versa. Current implementation of the notification service creates a Kafka topic and stores
+tapi-notification on reception of a create-notification-subscription-service request. Only connectivity-service
+related notifications are stored in the Kafka server.
+
+In comparison with openroadm notifications, in which several pre-defined kafka topics are created on nbinotification
+module instantiation, tapi-related kafka topics are created on-demand. Upon reception of a
+*create-notification-subscription-service request*, a new topic will be created in the Kafka server.
+This topic is named after the connectivity-service UUID.
+
+.. note::
+    Creating a Notification Subscription Service could include a list of T-API object UUIDs, therefore 1 topic per UUID
+    is created in the Kafka server.
+
+In the current implementation, only Connectivity Service related notification are supported.
+
+**REST API** : *POST /restconf/operations/tapi-notification:get-supported-notification-types*
+
+The response body will include the type of notifications supported and the object types
+
+Use the following RPC to create a Notification Subscription Service.
+
+**REST API** : *POST /restconf/operations/tapi-notification:create-notification-subscription-service*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "tapi-notification:input": {
+            "tapi-notification:subscription-filter": {
+                "tapi-notification:requested-notification-types": [
+                    "ALARM_EVENT"
+                ],
+                "tapi-notification:requested-object-types": [
+                    "CONNECTIVITY_SERVICE"
+                ],
+                "tapi-notification:requested-layer-protocols": [
+                    "<LAYER_PROTOCOL_NAME>"
+                ],
+                "tapi-notification:requested-object-identifier": [
+                    "<Service_UUID>"
+                ],
+                "tapi-notification:include-content": true,
+                "tapi-notification:local-id": "localId",
+                "tapi-notification:name": [
+                    {
+                        "tapi-notification:value-name": "Subscription name",
+                        "tapi-notification:value": "<notification_service_name>"
+                    }
+                ]
+            },
+            "tapi-notification:subscription-state": "ACTIVE"
+        }
+    }
+
+This call will return the *UUID* of the Notification Subscription service, which can later be used to retrieve the
+details of the created subscription, to delete the subscription (and all the related kafka topics) or to retrieve
+all the tapi notifications related to that subscription service.
+
+The figure below shows an example of the application of tapi and nbinotifications in order to notify when there is
+a connectivity service creation process. Depending on the status of the process a tapi-notification with the
+corresponding updated state of the connectivity service is sent to the topic "Service_UUID".
+
+.. figure:: ./images/TransportPCE-tapi-nbinotifications-service-example.jpg
+   :alt: Example of tapi connectivity service notifications using the feature nbinotifications in TransportPCE
+
+Additionally, when a connectivity service breaks down or is restored a tapi notification alarming the new status
+will be sent to a Kafka Server. Below an example of a tapi notification is shown.
+
+**Sample JSON T-API notification**
+
+.. code:: json
+
+    {
+      "nbi-notifications:notification-tapi-service": {
+        "layer-protocol-name": "<LAYER_PROTOCOL_NAME>",
+        "notification-type": "ATTRIBUTE_VALUE_CHANGE",
+        "changed-attributes": [
+          {
+            "value-name": "administrativeState",
+            "old-value": "<LOCKED_OR_UNLOCKED>",
+            "new-value": "<UNLOCKED_OR_LOCKED>"
+          },
+          {
+            "value-name": "operationalState",
+            "old-value": "DISABLED_OR_ENABLED",
+            "new-value": "ENABLED_OR_DISABLED"
+          }
+        ],
+        "target-object-name": [
+          {
+            "value-name": "Connectivity Service Name",
+            "value": "<SERVICE_UUID>"
+          }
+        ],
+        "uuid": "<NOTIFICATION_UUID>",
+        "target-object-type": "CONNECTIVITY_SERVICE",
+        "event-time-stamp": "2022-04-06T09:06:01+00:00",
+        "target-object-identifier": "<SERVICE_UUID>"
+      }
+    }
+
+To retrieve these tapi connectivity service notifications stored in the kafka server:
+
+**REST API** : *POST /restconf/operations/tapi-notification:get-notification-list*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "tapi-notification:input": {
+            "tapi-notification:subscription-id-or-name": "<SUBSCRIPTION_UUID_OR_NAME>",
+            "tapi-notification:time-period": "time-period"
+        }
+    }
+
+Further development will support more types of T-API objects, i.e., node, link, topology, connection...
 
 odl-transportpce-dmaap-client
 -----------------------------
