@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -31,6 +32,9 @@ public class ServicehandlerProviderTest  extends AbstractTest {
 
     @Mock
     ServiceDataStoreOperations serviceDataStoreOperations;
+
+    @Mock
+    CatalogDataStoreOperations catalogDataStoreOperations;
 
     @Mock
     PceListenerImpl pceListenerImpl;
@@ -60,7 +64,7 @@ public class ServicehandlerProviderTest  extends AbstractTest {
         ServicehandlerProvider provider =  new ServicehandlerProvider(
                 getDataBroker(), rpcProviderRegistry,
                 getNotificationService() , serviceDataStoreOperations, pceListenerImpl, serviceListener,
-                rendererListenerImpl, networkModelListenerImpl, servicehandler);
+                rendererListenerImpl, networkModelListenerImpl, servicehandler, catalogDataStoreOperations);
 
         provider.init();
 

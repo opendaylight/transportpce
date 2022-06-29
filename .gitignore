@@ -20,8 +20,11 @@ classes
 .DS_STORE
 .metadata
 ordmodels/src/main/java
+ordmodels/common/src/main/java
+ordmodels/device/src/main/java
 tests/config.xml
 tests/models
+stale_outputs_checked
 <<<<<<< HEAD
 *.log
 *.log.*

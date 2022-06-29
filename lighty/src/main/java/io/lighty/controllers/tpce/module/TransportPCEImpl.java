@@ -12,6 +12,8 @@ import io.lighty.core.controller.api.LightyServices;
 import java.util.Arrays;
 import java.util.List;
 import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -201,13 +203,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService());
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
+        CatalogDataStoreOperations catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(
+                lightyServices.getBindingDataBroker());
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
             pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
-                networkModelListenerImpl, servicehandler);
+                networkModelListenerImpl, servicehandler, catalogDataStoreOperations);
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
             TapiLink tapiLink = new TapiLink(networkTransaction);

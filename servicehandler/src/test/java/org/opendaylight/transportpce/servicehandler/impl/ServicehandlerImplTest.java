@@ -28,6 +28,8 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -83,6 +85,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
     private NetworkModelListenerImpl networkModelListenerImpl;
 
     private ServiceDataStoreOperations serviceDataStoreOperations;
+    private CatalogDataStoreOperations catalogDataStoreOperations;
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
@@ -93,6 +96,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         endSignal = new CountDownLatch(1);
         MockitoAnnotations.openMocks(this);
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getNewDataBroker());
+        this.catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(getNewDataBroker());
     }
 
     @Test
@@ -100,7 +104,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                serviceDataStoreOperations);
+                serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceCreateOutput>> result =
             servicehandlerImpl.serviceCreate(new ServiceCreateInputBuilder().build());
         result.addListener(new Runnable() {
@@ -125,7 +129,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                serviceDataStoreOperations);
+                serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceCreateOutput>> result =  servicehandlerImpl.serviceCreate(input);
         result.addListener(new Runnable() {
             @Override
@@ -146,7 +150,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                serviceDataStoreOperations);
+                serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result =
             servicehandlerImpl.serviceDelete(new ServiceDeleteInputBuilder()
                 .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("").build()).build());
@@ -170,7 +174,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                serviceDataStoreOperations);
+                serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result = servicehandlerImpl.serviceDelete(input);
         result.addListener(new Runnable() {
             @Override
@@ -193,7 +197,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                serviceDataStoreOperations);
+                serviceDataStoreOperations,catalogDataStoreOperations);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
         ServiceDeleteInput input = ServiceDataUtils.buildServiceDeleteInput();
@@ -218,7 +222,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
                 servicehandlerImpl.serviceFeasibilityCheck(new ServiceFeasibilityCheckInputBuilder().build());
         result.addListener(new Runnable() {
@@ -243,7 +247,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
             servicehandlerImpl.serviceFeasibilityCheck(input);
         result.addListener(new Runnable() {
@@ -265,7 +269,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result =
                 servicehandlerImpl.serviceReconfigure(new ServiceReconfigureInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -287,7 +291,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result = servicehandlerImpl.serviceReconfigure(input);
 
         result.addListener(new Runnable() {
@@ -311,7 +315,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
 
@@ -334,7 +338,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result =
                 servicehandlerImpl.serviceRestoration(new ServiceRestorationInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -356,7 +360,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result = servicehandlerImpl.serviceRestoration(input);
 
         result.addListener(new Runnable() {
@@ -380,7 +384,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
 
@@ -403,7 +407,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceRerouteOutput>> result =
                 servicehandlerImpl.serviceReroute(new ServiceRerouteInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -424,7 +428,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(input);
 
         result.addListener(new Runnable() {
@@ -448,7 +452,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
 
@@ -471,7 +475,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<TempServiceDeleteOutput>> result =
                 servicehandlerImpl.tempServiceDelete(new TempServiceDeleteInputBuilder()
                         .setCommonId("").build());
@@ -498,7 +502,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<TempServiceDeleteOutput>> result = servicehandlerImpl.tempServiceDelete(input);
         result.addListener(new Runnable() {
             @Override
@@ -523,7 +527,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
         serviceDataStoreOperations.createTempService(createInput);
 
@@ -549,7 +553,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
         ListenableFuture<RpcResult<TempServiceCreateOutput>> result =
                 servicehandlerImpl.tempServiceCreate(new TempServiceCreateInputBuilder().build());
         result.addListener(new Runnable() {
@@ -576,7 +580,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+                        serviceDataStoreOperations,catalogDataStoreOperations);
 
         ListenableFuture<RpcResult<TempServiceCreateOutput>> result =  servicehandlerImpl.tempServiceCreate(input);
         result.addListener(new Runnable() {

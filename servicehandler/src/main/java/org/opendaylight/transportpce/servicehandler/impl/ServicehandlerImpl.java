@@ -21,6 +21,8 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogMapper;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -36,6 +38,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.catalog.SpecificOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogInput;
@@ -137,14 +141,17 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererListenerImpl rendererListenerImpl;
     private NetworkModelListenerImpl networkModelListenerImpl;
     private NotificationPublishService notificationPublishService;
+    private CatalogDataStoreOperations catalogDataStoreOperations;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations) {
+            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations,
+                              CatalogDataStoreOperations catalogDataStoreOperations) {
         this.db = databroker;
+        this.catalogDataStoreOperations = catalogDataStoreOperations;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
@@ -758,17 +765,47 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
+    /**
+     * Implementation of the RPC to set OR operational modes in the catalog of the controller.
+     * Semantics of the RPC is such that the information in the input replaces the full content
+     * of the OR operational modes catalog in the config data store. Incremental changes to the
+     * catalog, if required, must be done via individual PUT/POST/DELETE RESTconf APIs.
+     */
     public ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>>
-            addOpenroadmOperationalModesToCatalog(AddOpenroadmOperationalModesToCatalogInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        addOpenroadmOperationalModesToCatalog(AddOpenroadmOperationalModesToCatalogInput input) {
+
+        LOG.info("RPC addOpenroadmOperationalModesToCatalog in progress");
+        LOG.debug(" Input openRoadm {}", input);
+        LOG.info(" Request System Id {} " ,input.getSdncRequestHeader().getRequestSystemId());
+        LOG.info(" Rpc Action {} " ,input.getSdncRequestHeader().getRpcAction());
+
+        OpenroadmOperationalModes objToSave = CatalogMapper.createORModesToSave(input);
+        catalogDataStoreOperations.addOpenroadmOperationalModesToCatalog(objToSave);
+        LOG.info("RPC addOpenroadmOperationalModesToCatalog Completed");
+        return ModelMappingUtils.addOpenroadmServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                ResponseCodes.RESPONSE_OK);
     }
 
     @Override
+    /**
+     * Implementation of the RPC to set specific operational modes in the catalog of the controller.
+     * Semantics of the RPC is such that the information in the input replaces the full content
+     * of the specific operational modes catalog in the config data store. Incremental changes to the
+     * catalog, if required, must be done via individual PUT/POST/DELETE RESTconf APIs.
+     */
     public ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>> addSpecificOperationalModesToCatalog(
             AddSpecificOperationalModesToCatalogInput input) {
-        // TODO Auto-generated method stub
-        return null;
+
+        LOG.info("RPC addSpecificOperationalModesToCatalog in progress");
+        LOG.debug(" Input openSpecificRoadm {}", input);
+        LOG.info(" Request System Id {} " ,input.getSdncRequestHeader().getRequestSystemId());
+        LOG.info(" Rpc Action {} " ,input.getSdncRequestHeader().getRpcAction());
+
+        SpecificOperationalModes objToSave = CatalogMapper.createSpecificModesToSave(input);
+        catalogDataStoreOperations.addSpecificOperationalModesToCatalog(objToSave);
+        LOG.info("RPC addSpecificOperationalModesToCatalog Completed");
+        return ModelMappingUtils.addSpecificOpenroadmServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                ResponseCodes.RESPONSE_OK);
     }
 
     @Override
