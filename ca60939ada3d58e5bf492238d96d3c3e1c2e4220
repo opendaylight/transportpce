@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "548a7e26_a826ef9b",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/TopicManager.java",
+        "patchSetId": 37
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-29T11:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "093be26b_ee326622",
+      "range": {
+        "startLine": 77,
+        "startChar": 25,
+        "endLine": 77,
+        "endChar": 32
+      },
+      "revId": "ca60939ada3d58e5bf492238d96d3c3e1c2e4220",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d843ae3_0c147f7c",
@@ -64,6 +88,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d626b353_ba5ce0e4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 37
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-29T11:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d843ae3_0c147f7c",
+      "range": {
+        "startLine": 116,
+        "startChar": 57,
+        "endLine": 116,
+        "endChar": 77
+      },
+      "revId": "ca60939ada3d58e5bf492238d96d3c3e1c2e4220",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abad9b2d_1ea45101",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-06-29T10:58:21Z",
       "side": 1,
       "message": "you could use StandardCharsets.UTF_8 directly",
+      "range": {
+        "startLine": 144,
+        "startChar": 74,
+        "endLine": 144,
+        "endChar": 98
+      },
+      "revId": "ca60939ada3d58e5bf492238d96d3c3e1c2e4220",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa56032e_e5c79435",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiRendererListenerImpl.java",
+        "patchSetId": 37
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-29T11:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abad9b2d_1ea45101",
       "range": {
         "startLine": 144,
         "startChar": 74,
