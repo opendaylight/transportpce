@@ -52,6 +52,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0568781_adfbef77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2022-06-29T02:27:31Z",
+      "side": 1,
+      "message": "Thank you Guillaume for your review comments. Very helpful.\nI am incorporating these comments as well as some Java refactoring.\nI will submit that as a separate request and abandon this one.\n\nThanks,\nRoshan",
+      "revId": "bf5c166327b2f61279d872d0e389645537e0e890",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b573717_e87fa68f",
