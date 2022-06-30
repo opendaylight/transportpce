@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6646907_8f071876",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T07:08:53Z",
+      "side": 1,
+      "message": "shouldn\u0027t the portmapping test be updated accordingly ?",
+      "revId": "67db961d5bfd5d852fe849eb68687d2b5e677087",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
