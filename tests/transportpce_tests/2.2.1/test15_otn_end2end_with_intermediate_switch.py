@@ -424,7 +424,7 @@ class TransportPCEtesting(unittest.TestCase):
         for link in res['network'][0]['ietf-network-topology:link']:
             self.assertIn(link['link-id'], listLinkId)
             self.assertEqual(
-                link['transportpce-topology:otn-link-type'], 'OTU4')
+                link['transportpce-networkutils:otn-link-type'], 'OTU4')
             self.assertEqual(
                 link['org-openroadm-common-network:link-type'], 'OTN-LINK')
             self.assertEqual(
@@ -486,7 +486,7 @@ class TransportPCEtesting(unittest.TestCase):
         for link in res['network'][0]['ietf-network-topology:link']:
             self.assertIn(link['link-id'], listLinkId)
             self.assertEqual(
-                link['transportpce-topology:otn-link-type'], 'OTU4')
+                link['transportpce-networkutils:otn-link-type'], 'OTU4')
             self.assertEqual(
                 link['org-openroadm-common-network:link-type'], 'OTN-LINK')
             self.assertEqual(
@@ -695,7 +695,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
                 self.assertEqual(
-                    link['transportpce-topology:otn-link-type'], 'ODTU4')
+                    link['transportpce-networkutils:otn-link-type'], 'ODTU4')
                 self.assertEqual(
                     link['org-openroadm-common-network:link-type'], 'OTN-LINK')
                 self.assertIn(link['org-openroadm-common-network:opposite-link'],
