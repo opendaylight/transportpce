@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -207,28 +208,16 @@ public final class OpenRoadmTopology {
                         ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
                             .org.openroadm.common.network.rev211210.TerminationPoint1Builder()
                                 .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                                .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()))
                                 .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
                 if (m.getPortQual().equals("xpdr-network")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1 tpceTp1 =
-                            new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123
-                                    .TerminationPoint1Builder()
-                                    .setAssociatedConnectionMapPort(m.getConnectionMapLcp()).build();
-                    ietfTpBldr
-                            .addAugmentation(ocnTp1Bldr.build())
-                            .addAugmentation(tpceTp1);
+                    ietfTpBldr.addAugmentation(ocnTp1Bldr.build());
                     TerminationPoint ietfTp = ietfTpBldr.build();
                     tpMap.put(ietfTp.key(),ietfTp);
                 } else if (m.getPortQual().equals("xpdr-client")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1 tpceTp1 =
-                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123
-                            .TerminationPoint1Builder()
-                                .setAssociatedConnectionMapPort(m.getConnectionMapLcp())
-                                .build();
-                    ietfTpBldr
-                            .addAugmentation(ocnTp1Bldr.build())
-                            .addAugmentation(tpceTp1);
+                    ietfTpBldr.addAugmentation(ocnTp1Bldr.build());
                     TerminationPoint ietfTp = ietfTpBldr.build();
                     tpMap.put(ietfTp.key(),ietfTp);
                 }
