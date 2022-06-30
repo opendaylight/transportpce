@@ -118,6 +118,30 @@
       },
       "revId": "2e3b804dd8efb874f67eab7041a468c8d8f05457",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6cb0a5_48183948",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-30T10:08:07Z",
+      "side": 1,
+      "message": "Your two JUnit tests onPublishTapiNotificationServiceTestWrongPublisherTest and onPublishTapiNotificationServiceTest are not possible as they are implemented, because you are instanciating kafka objects. You need to mock also TopicManager and above all NbiNotificationsImpl.",
+      "parentUuid": "275da175_d8a2439e",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "2e3b804dd8efb874f67eab7041a468c8d8f05457",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
