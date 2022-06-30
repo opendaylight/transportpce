@@ -24,7 +24,9 @@
                                     }
                                 ]
                             },
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-NETWORK1"
+                            ],
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
@@ -45,7 +47,9 @@
                                     }
                                 ]
                             },
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-CLIENT1"
+                            ],
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
@@ -84,7 +88,9 @@
                                     }
                                 ]
                             },
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-NETWORK1"
+                            ],
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
@@ -105,7 +111,9 @@
                                     }
                                 ]
                             },
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-CLIENT1"
+                            ],
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
@@ -555,7 +563,7 @@
                     "org-openroadm-otn-network-topology:available-bandwidth": "0",
                     "org-openroadm-otn-network-topology:used-bandwidth": "400000",
                     "org-openroadm-common-network:link-type": "OTN-LINK",
-                    "transportpce-topology:otn-link-type": "OTUC4",
+                    "transportpce-networkutils:otn-link-type": "OTUC4",
                     "org-openroadm-common-network:operational-state": "inService",
                     "org-openroadm-common-network:administrative-state": "inService",
                     "org-openroadm-common-network:opposite-link": "OTUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1"
@@ -575,7 +583,7 @@
                     "org-openroadm-common-network:link-type": "OTN-LINK",
                     "org-openroadm-common-network:operational-state": "inService",
                     "org-openroadm-common-network:administrative-state": "inService",
-                    "transportpce-topology:otn-link-type": "OTUC4",
+                    "transportpce-networkutils:otn-link-type": "OTUC4",
                     "org-openroadm-common-network:opposite-link": "OTUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1"
                 },
                 {
@@ -591,7 +599,7 @@
                     "org-openroadm-otn-network-topology:available-bandwidth": "400000",
                     "org-openroadm-otn-network-topology:used-bandwidth": "0",
                     "org-openroadm-common-network:link-type": "OTN-LINK",
-                    "transportpce-topology:otn-link-type": "ODUC4",
+                    "transportpce-networkutils:otn-link-type": "ODUC4",
                     "org-openroadm-common-network:operational-state": "inService",
                     "org-openroadm-common-network:administrative-state": "inService",
                     "org-openroadm-common-network:opposite-link": "ODUC4-XPDR-C2-XPDR2-XPDR2-NETWORK1toXPDR-A2-XPDR2-XPDR2-NETWORK1"
@@ -611,7 +619,7 @@
                     "org-openroadm-common-network:link-type": "OTN-LINK",
                     "org-openroadm-common-network:operational-state": "inService",
                     "org-openroadm-common-network:administrative-state": "inService",
-                    "transportpce-topology:otn-link-type": "ODUC4",
+                    "transportpce-networkutils:otn-link-type": "ODUC4",
                     "org-openroadm-common-network:opposite-link": "ODUC4-XPDR-A2-XPDR2-XPDR2-NETWORK1toXPDR-C2-XPDR2-XPDR2-NETWORK1"
                 }
             ]
