@@ -18,7 +18,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-aggregator</artifactId>
-  <version>5.0.0-SNAPSHOT</version>
+  <version>6.0.0-SNPASHOT</version>
   <name>transportpce</name>
   <packaging>pom</packaging>
 
