@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 public class PceCalculation {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
-    private NetworkTransactionService networkTransactionService = null;
+    private NetworkTransactionService networkTransactionService;
 
     ///////////// data parsed from Input/////////////////
     private PathComputationRequestInput input;
@@ -127,7 +127,6 @@ public class PceCalculation {
         printNodesInfo(allPceNodes);
 
         returnStructure.setRC(ResponseCodes.RESPONSE_OK);
-        return;
     }
 
     private boolean parseInput() {
@@ -474,7 +473,7 @@ public class PceCalculation {
                 List<Link> links = this.allLinks.stream()
                     .filter(x -> x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
                     .collect(Collectors.toList());
-                if (links.size() > 0) {
+                if (!links.isEmpty()) {
                     this.aendPceNode = pceNode;
                 }
             }
@@ -483,7 +482,7 @@ public class PceCalculation {
                 List<Link> links = this.allLinks.stream()
                     .filter(x -> x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
                     .collect(Collectors.toList());
-                if (links.size() > 0) {
+                if (!links.isEmpty()) {
                     this.zendPceNode = pceNode;
                 }
             }
@@ -491,7 +490,6 @@ public class PceCalculation {
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
         LOG.debug("validateNode: node is saved {}", pceNode.getNodeId().getValue());
-        return;
     }
 
     @SuppressWarnings("fallthrough")
@@ -569,7 +567,6 @@ public class PceCalculation {
         }
         allPceNodes.put(pceOtnNode.getNodeId(), pceOtnNode);
         LOG.info("validateOtnNode: node {} is saved", node.getNodeId().getValue());
-        return;
     }
 
     private ConstraintTypes validateNodeConstraints(PceNode pcenode) {

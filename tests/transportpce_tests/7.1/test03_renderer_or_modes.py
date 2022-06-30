@@ -33,6 +33,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                                "org-openroadm-port-types:if-otsi-otsigroup"
                            ],
                            "port-direction": "bidirectional",
+                           "connection-map-lcp": "XPDR3-CLIENT1",
                            "port-qual": "xpdr-network",
                            "supporting-circuit-pack-name": "1/1/4-PLUG-NET",
                            "xponder-type": "tpdr",
