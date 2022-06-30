@@ -94,6 +94,30 @@
       },
       "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "138415bf_b340f0d7",
+        "filename": "tox.ini",
+        "patchSetId": 16
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-06-30T10:12:00Z",
+      "side": 1,
+      "message": "I think that for this case it is enough to just install tapi at the same time as the nbinotifications when we want to perform the functional tests. Otherwise, tapi module can still work without the nbinotifications module and the nbinotifications module can work without the tapi module.\n\nWhat are your thoughts here?",
+      "parentUuid": "6e025052_85153b8e",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 21
+      },
+      "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
