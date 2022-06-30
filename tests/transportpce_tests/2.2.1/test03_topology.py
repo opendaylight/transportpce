@@ -233,9 +233,9 @@ class TransportPCEtesting(unittest.TestCase):
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                     if tpId == 'XPDR1-NETWORK2':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT2')
+                        self.assertEqual(tp['org-openroadm-common-network:associated-connection-map-tp'], 'XPDR1-CLIENT2')
                     if tpId == 'XPDR1-CLIENT2':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK2')
+                        self.assertEqual(tp['org-openroadm-common-network:associated-connection-map-tp'], 'XPDR1-NETWORK2')
                 self.assertEqual(client, 2)
                 self.assertEqual(network, 2)
                 listNode.remove(nodeId)

@@ -222,8 +222,8 @@ public final class TopologyUtils {
         String networkLcp;
         if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
             networkLcp = tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1.class)
-                    .getAssociatedConnectionMapPort();
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1.class)
+                    .getAssociatedConnectionMapTp().iterator().next().getValue();
         } else {
             networkLcp = tp.getTpId().getValue();
         }

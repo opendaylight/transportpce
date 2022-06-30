@@ -2691,70 +2691,90 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
@@ -2809,70 +2829,90 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
@@ -2927,70 +2967,90 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
@@ -3045,70 +3105,90 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
@@ -3163,70 +3243,90 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-1"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-2"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-5"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-3"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "Client-4"
+                            ],
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "administrative-state": "inService",
                             "operational-state": "inService"
