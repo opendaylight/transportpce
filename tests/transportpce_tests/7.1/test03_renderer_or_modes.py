@@ -166,6 +166,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK2_CHECK_DICT["lcp-hash-val"] = "FDvaQIf2Z08="
+        self.NETWORK2_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
         self.assertIn(
             self.NETWORK2_CHECK_DICT,
             response["mapping"])
@@ -175,6 +176,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK2_CHECK_DICT["lcp-hash-val"] = "AJpkaVmZKJk5"
+        self.NETWORK2_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
         self.assertIn(
             self.NETWORK2_CHECK_DICT,
             response["mapping"])

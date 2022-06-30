@@ -186,12 +186,8 @@ public class PceOpticalNode implements PceNode {
                 }
                 return false;
             case "100GE":
-                if (mapping.getSupportedInterfaceCapability().contains(IfOCH.class)
-                        || mapping.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return mapping.getSupportedInterfaceCapability().contains(IfOCH.class)
+                        || mapping.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class);
             default:
                 return true;
         }
@@ -242,7 +238,6 @@ public class PceOpticalNode implements PceNode {
                 if (!State.InService.equals(node11.getOperationalState())) {
                     this.valid = false;
                     LOG.error("initWLlist: XPDR node {} is OOS/degraded", this);
-                    return;
                 }
                 break;
             default:
@@ -256,17 +251,16 @@ public class PceOpticalNode implements PceNode {
         if (!isValid()) {
             return;
         }
+        this.valid = false;
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp =
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint> allTps = new ArrayList<>(nodeTp.nonnullTerminationPoint().values());
         if (allTps.isEmpty()) {
-            this.valid = false;
             LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
         }
-        this.valid = false;
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint tp : allTps) {
             TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
@@ -280,7 +274,6 @@ public class PceOpticalNode implements PceNode {
             }
             if (!State.InService.equals(cntp1.getOperationalState())) {
                 LOG.warn("initXndrTps: XPONDER tp = {} is OOS/degraded", tp.getTpId().getValue());
-                this.valid = false;
                 continue;
             }
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1 nttp1 = tp
@@ -289,22 +282,22 @@ public class PceOpticalNode implements PceNode {
             if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                 this.usedXpndrNWTps.add(tp.getTpId().getValue());
                 LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
-            } else {
-                this.valid = true;
+                continue;
             }
             // find Client of this network TP
-            String client;
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1 tpceTp1 =
                     tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123
                             .TerminationPoint1.class);
             if (tpceTp1 != null) {
-                client = tpceTp1.getAssociatedConnectionMapPort();
+                String client = tpceTp1.getAssociatedConnectionMapPort();
                 if (client != null) {
                     this.clientPerNwTp.put(tp.getTpId().getValue(), client);
                     this.valid = true;
                 } else {
                     LOG.error("Service Format {} not managed yet", serviceFormat.getName());
                 }
+            } else {
+                this.valid = true;
             }
         }
         if (!isValid()) {
@@ -347,32 +340,25 @@ public class PceOpticalNode implements PceNode {
                 break;
         }
         LOG.debug("getRdmSrgClient:  Getting client PP for CP '{}'", tp);
-        if (!this.availableSrgPp.isEmpty()) {
-            Optional<String> client = null;
-            final OpenroadmTpType openType = srgType;
-            client = this.availableSrgPp.entrySet()
-                    .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
-                    .map(Map.Entry::getKey)
-                    .sorted(new SortPortsByName())
-                    .findFirst();
-            if (!client.isPresent()) {
-                LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this, tp);
-                return null;
-            }
-            LOG.debug("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
-            return client.get();
-        } else {
+        if (this.availableSrgPp.isEmpty()) {
             LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this);
             return null;
         }
+        final OpenroadmTpType openType = srgType;
+        Optional<String> client = this.availableSrgPp.entrySet()
+                .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
+                .map(Map.Entry::getKey).min(new SortPortsByName());
+        if (client.isEmpty()) {
+            LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this, tp);
+            return null;
+        }
+        LOG.debug("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
+        return client.get();
     }
 
 
     public void validateAZxponder(String anodeId, String znodeId, ServiceFormat serviceFormat) {
-        if (!isValid()) {
-            return;
-        }
-        if (this.nodeType != OpenroadmNodeType.XPONDER) {
+        if (!isValid() || this.nodeType != OpenroadmNodeType.XPONDER) {
             return;
         }
         // Detect A and Z
