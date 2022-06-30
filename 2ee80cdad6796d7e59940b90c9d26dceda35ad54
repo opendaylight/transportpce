@@ -22,6 +22,30 @@
       },
       "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3495488_14c7e4a6",
+        "filename": "tox.ini",
+        "patchSetId": 16
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T09:12:05Z",
+      "side": 1,
+      "message": "I don\u0027t think so but I don\u0027t remember well.\nIf this is something you made up yourself, there is probably more logics to implement behind in lighty Main.",
+      "parentUuid": "018ad4c8_fdb9a502",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 21
+      },
+      "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
