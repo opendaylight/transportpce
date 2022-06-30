@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "575ba866_646a9958",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T11:17:07Z",
+      "side": 1,
+      "message": "it is no more a builder but a supporting node",
+      "revId": "73f4d152d55bf7e8988a39e03529b90f14d53964",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0addfb67_7e51dd73",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T11:17:07Z",
+      "side": 1,
+      "message": "build() ?",
+      "revId": "73f4d152d55bf7e8988a39e03529b90f14d53964",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b6f942d_2f6a5e27",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
         "patchSetId": 21
