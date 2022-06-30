@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.JsonUtil;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingBuilder;
@@ -43,6 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
@@ -62,8 +64,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -149,7 +149,12 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals("XPDR1-CLIENT1", tps.get(0).getTpId().getValue());
         assertEquals(
             "XPDR1-NETWORK1",
-            tps.get(0).augmentation(TerminationPoint1.class).getAssociatedConnectionMapPort());
+            tps.get(0)
+                    .augmentation(TerminationPoint1.class)
+                    .getAssociatedConnectionMapTp()
+                    .iterator()
+                    .next()
+                    .getValue());
         assertEquals(
             "only If100GE interface capabitily expected",
             1,
@@ -170,15 +175,16 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             "first TP must be of type client",
             OpenroadmTpType.XPONDERCLIENT,
-            tps.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                        .TerminationPoint1.class)
-                .getTpType());
+            tps.get(0).augmentation(TerminationPoint1.class).getTpType());
         //tests network tp
         assertEquals("XPDR1-NETWORK1", tps.get(2).getTpId().getValue());
         assertEquals(
             "XPDR1-CLIENT1",
-            tps.get(2).augmentation(TerminationPoint1.class).getAssociatedConnectionMapPort());
+            tps.get(2).augmentation(TerminationPoint1.class)
+                    .getAssociatedConnectionMapTp()
+                    .iterator()
+                    .next()
+                    .getValue());
         assertEquals(
             "only IfOCH interface capabitily expected",
             1,
@@ -209,9 +215,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             "third TP must be of type network",
             OpenroadmTpType.XPONDERNETWORK,
-            tps.get(2).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1.class)
-                .getTpType());
+            tps.get(2).augmentation(TerminationPoint1.class).getTpType());
     }
 
     @Test
@@ -275,7 +279,7 @@ public class OpenRoadmOtnTopologyTest {
             "otn link type should be OTU4",
             OtnLinkType.OTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1.class)
                 .getOtnLinkType());
     }
 
@@ -349,8 +353,8 @@ public class OpenRoadmOtnTopologyTest {
             "otn link type should be ODTU4",
             OtnLinkType.ODTU4,
             sortedLinks.get(0)
-                .augmentation(
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.Link1.class)
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630
+                        .Link1.class)
                 .getOtnLinkType());
 
         assertEquals("list of TPs should contain 2 updated TPs", 2, topoShard.getTps().size());
@@ -977,19 +981,11 @@ public class OpenRoadmOtnTopologyTest {
             assertEquals(
                 "TP should be of type client",
                 OpenroadmTpType.XPONDERCLIENT,
-                tpList.get(2)
-                    .augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                            .TerminationPoint1.class)
-                    .getTpType());
+                tpList.get(2).augmentation(TerminationPoint1.class).getTpType());
             assertEquals(
                 "TP should be of type network",
                 OpenroadmTpType.XPONDERNETWORK,
-                tpList.get(4)
-                    .augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                            .TerminationPoint1.class)
-                    .getTpType());
+                tpList.get(4).augmentation(TerminationPoint1.class).getTpType());
         } else if (xpdrNb.equals(Uint16.valueOf(2))) {
             assertEquals("should contain 8 TPs", 8, tpList.size());
             assertEquals("XPDR2-CLIENT1", tpList.get(0).getTpId().getValue());
@@ -1030,18 +1026,10 @@ public class OpenRoadmOtnTopologyTest {
             }
             assertEquals(
                 "TP should be of type client", OpenroadmTpType.XPONDERCLIENT,
-                tpList.get(2)
-                    .augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                            .TerminationPoint1.class)
-                    .getTpType());
+                tpList.get(2).augmentation(TerminationPoint1.class).getTpType());
             assertEquals(
                 "TP should be of type network", OpenroadmTpType.XPONDERNETWORK,
-                tpList.get(6)
-                    .augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                            .TerminationPoint1.class)
-                    .getTpType());
+                tpList.get(6).augmentation(TerminationPoint1.class).getTpType());
         }
     }
 }

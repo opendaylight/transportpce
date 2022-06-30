@@ -157,56 +157,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -368,56 +368,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -579,56 +579,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -790,56 +790,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -1001,56 +1001,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -1212,56 +1212,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -1423,56 +1423,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -1634,56 +1634,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -1845,56 +1845,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -2056,56 +2056,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -2267,56 +2267,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -2478,56 +2478,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -2689,56 +2689,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -2900,56 +2900,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -3111,56 +3111,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -3322,56 +3322,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -3533,56 +3533,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -3744,56 +3744,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -3955,56 +3955,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
@@ -4166,56 +4166,56 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW1-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-1</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-1</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW2-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-2</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-2</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW3-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-3</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-3</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-RX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <tp-id>XPDR-NW4-TX</tp-id>
         <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-        <associated-connection-map-port xmlns="http://transportpce/topology">Client-4</associated-connection-map-port>
+        <associated-connection-map-tp xmlns="http://org/openroadm/common/network">Client-4</associated-connection-map-tp>
         <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
         <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
     </termination-point>
