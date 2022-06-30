@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f249517e_cda7a4d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T12:30:26Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f6f0d534657ded753d7d12451ddb173b184b7c48",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90663a47_4e09e401",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T12:30:26Z",
+      "side": 1,
+      "message": "previous style with oneliner method+arg call was more readable IMO",
+      "revId": "f6f0d534657ded753d7d12451ddb173b184b7c48",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
