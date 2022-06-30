@@ -293,12 +293,8 @@ public class PceOpticalNode implements PceNode {
                 this.valid = true;
             }
             // find Client of this network TP
-            String client;
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1 tpceTp1 =
-                    tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123
-                            .TerminationPoint1.class);
-            if (tpceTp1 != null) {
-                client = tpceTp1.getAssociatedConnectionMapPort();
+            if (cntp1.getAssociatedConnectionMapTp() != null) {
+                String client = cntp1.getAssociatedConnectionMapTp().iterator().next().getValue();
                 if (client != null) {
                     this.clientPerNwTp.put(tp.getTpId().getValue(), client);
                     this.valid = true;

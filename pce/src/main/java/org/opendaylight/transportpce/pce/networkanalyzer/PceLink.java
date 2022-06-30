@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -22,7 +23,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev21121
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.link.concatenation.LinkConcatenationKey;
-import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -319,7 +319,8 @@ public class PceLink implements Serializable {
         }
 
         OtnLinkType otnLinkType = link
-            .augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.Link1.class)
+            .augmentation(org.opendaylight.yang.gen.v1
+                    .http.org.opendaylight.transportpce.networkutils.rev220630.Link1.class)
             .getOtnLinkType();
         if (this.availableBandwidth == 0L) {
             LOG.error("PceLink: No bandwidth available for OTN Link, link {}  is ignored ", linkId);
