@@ -12,7 +12,7 @@
     <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>XPDR1-CLIENT1</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-NETWORK1</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
@@ -25,7 +25,7 @@
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>XPDR1-CLIENT2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-NETWORK2</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
@@ -43,7 +43,7 @@
         <node-ref>XPDR-C1-XPDR1</node-ref>
         <tp-ref>XPDR1-NETWORK2</tp-ref>
       </supporting-termination-point>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-CLIENT2</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH</if-cap-type>
@@ -61,7 +61,7 @@
         <node-ref>XPDR-C1-XPDR1</node-ref>
         <tp-ref>XPDR1-NETWORK1</tp-ref>
       </supporting-termination-point>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-CLIENT1</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH</if-cap-type>
@@ -403,7 +403,7 @@
     <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>XPDR1-CLIENT1</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-NETWORK1</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
@@ -416,7 +416,7 @@
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>XPDR1-CLIENT2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-NETWORK2</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE</if-cap-type>
@@ -434,7 +434,7 @@
         <node-ref>XPDR-A1-XPDR1</node-ref>
         <tp-ref>XPDR1-NETWORK2</tp-ref>
       </supporting-termination-point>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-CLIENT2</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH</if-cap-type>
@@ -452,7 +452,7 @@
         <node-ref>XPDR-A1-XPDR1</node-ref>
         <tp-ref>XPDR1-NETWORK1</tp-ref>
       </supporting-termination-point>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
+      <associated-connection-map-tp xmlns="http://org/openroadm/common/network">XPDR1-CLIENT1</associated-connection-map-tp>
       <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
         <supported-interface-capability>
           <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH</if-cap-type>
@@ -1431,7 +1431,7 @@
       <dest-tp>XPDR1-NETWORK1</dest-tp>
       <dest-node>SPDR-SA1-XPDR1</dest-node>
     </destination>
-    <otn-link-type xmlns="http://transportpce/topology">OTU4</otn-link-type>
+    <otn-link-type xmlns="http://org/opendaylight/transportpce/networkutils">OTU4</otn-link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</link-id>
@@ -1449,7 +1449,7 @@
       <dest-tp>XPDR1-NETWORK1</dest-tp>
       <dest-node>SPDR-SC1-XPDR1</dest-node>
     </destination>
-    <otn-link-type xmlns="http://transportpce/topology">OTU4</otn-link-type>
+    <otn-link-type xmlns="http://org/opendaylight/transportpce/networkutils">OTU4</otn-link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1</link-id>
@@ -1467,7 +1467,7 @@
       <dest-tp>XPDR1-NETWORK1</dest-tp>
       <dest-node>SPDR-SA1-XPDR1</dest-node>
     </destination>
-    <otn-link-type xmlns="http://transportpce/topology">ODTU4</otn-link-type>
+    <otn-link-type xmlns="http://org/opendaylight/transportpce/networkutils">ODTU4</otn-link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1</link-id>
@@ -1485,7 +1485,7 @@
       <dest-tp>XPDR1-NETWORK1</dest-tp>
       <dest-node>SPDR-SC1-XPDR1</dest-node>
     </destination>
-    <otn-link-type xmlns="http://transportpce/topology">ODTU4</otn-link-type>
+    <otn-link-type xmlns="http://org/opendaylight/transportpce/networkutils">ODTU4</otn-link-type>
   </link>
 </network>
 </networks>

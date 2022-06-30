@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -224,22 +225,19 @@ public final class OpenRoadmTopology {
             if (isOtn && m.getPortQual().equals("xpdr-client")) {
                 continue;
             }
-            TerminationPointBuilder ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint())
-                .addAugmentation(
-                    // Add openroadm-network-topology tp augmentations
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-                            .TerminationPoint1Builder()
-                        .setTpType(PORTQUAL_ORD_TYPE_MAP.get(m.getPortQual()))
-                        .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
-                        .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()))
-                        .build());
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder
+                    ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.network.rev211210.TerminationPoint1Builder()
+                    .setTpType(PORTQUAL_ORD_TYPE_MAP.get(m.getPortQual()))
+                    .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
+                    .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()));
             if (!isOtn) {
-                ietfTpBldr.addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123
-                            .TerminationPoint1Builder()
-                        .setAssociatedConnectionMapPort(m.getConnectionMapLcp())
-                        .build());
+                ocnTp1Bldr.setAssociatedConnectionMapTp(Set.of(new TpId(m.getConnectionMapLcp())));
             }
+            TerminationPointBuilder ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint())
+                    .addAugmentation(
+                            // Add openroadm-network-topology tp augmentations
+                            ocnTp1Bldr.build());
             TerminationPoint ietfTp = ietfTpBldr.build();
             tpMap.put(ietfTp.key(),ietfTp);
         }
