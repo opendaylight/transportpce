@@ -76,7 +76,9 @@
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1"
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-NETWORK1"
+                            ]
                         },
                         {
                             "tp-id": "XPDR1-NETWORK1",
@@ -86,7 +88,9 @@
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1"
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-CLIENT1"
+                            ]
                         }
                     ],
                     "supporting-node": [
@@ -111,7 +115,9 @@
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-NETWORK1"
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-NETWORK1"
+                            ]
                         },
                         {
                             "tp-id": "XPDR1-NETWORK1",
@@ -121,7 +127,9 @@
                             "org-openroadm-common-network:operational-state": "inService",
                             "org-openroadm-common-network:administrative-state": "inService",
                             "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "transportpce-topology:associated-connection-map-port": "XPDR1-CLIENT1"
+                            "org-openroadm-common-network:associated-connection-map-tp": [
+                                "XPDR1-CLIENT1"
+                            ]
                         }
                     ],
                     "supporting-node": [

@@ -230,9 +230,11 @@ class TransportPCETopologyTesting(unittest.TestCase):
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                     if tpId == 'XPDR1-NETWORK2':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-CLIENT3')
+                        self.assertEqual(
+                            tp['org-openroadm-common-network:associated-connection-map-tp'], ['XPDR1-CLIENT3'])
                     elif tpId == 'XPDR1-CLIENT3':
-                        self.assertEqual(tp['transportpce-topology:associated-connection-map-port'], 'XPDR1-NETWORK2')
+                        self.assertEqual(
+                            tp['org-openroadm-common-network:associated-connection-map-tp'], ['XPDR1-NETWORK2'])
                 self.assertTrue(client == 4)
                 self.assertTrue(network == 2)
                 listNode.remove(nodeId)

@@ -1,11 +1,67 @@
 module transportpce-networkutils {
-  yang-version 1;
+  yang-version 1.1;
   namespace "http://org/opendaylight/transportpce/networkutils";
   prefix org-opendaylight-transportpce-networkutils;
+
+  import ietf-network {
+    prefix nd;
+    revision-date 2018-02-26;
+  }
+  import ietf-network-topology {
+    prefix nwt;
+    revision-date 2018-02-26;
+  }
+  import org-openroadm-common-network {
+    prefix cnet;
+    revision-date 2021-12-10;
+  }
+
+  revision 2022-06-30 {
+    description
+      "Add transportpce augmentation to manage otn-link-type in otn-topology";
+  }
 
   revision 2017-08-18 {
     description
       "Initial revision of networkutils model";
+  }
+
+  typedef otn-link-type {
+    type enumeration {
+      enum "OTU4" {
+        value 0;
+      }
+      enum "ODU4" {
+        value 1;
+      }
+      enum "ODTU4" {
+        value 2;
+      }
+      enum "ODU2e" {
+        value 3;
+      }
+      enum "ODU0" {
+        value 4;
+      }
+      enum "OTUC4" {
+        value 5;
+      }
+      enum "ODUC4" {
+        value 6;
+      }
+      enum "OTUC3" {
+        value 7;
+      }
+      enum "ODUC3" {
+        value 8;
+      }
+      enum "OTUC2" {
+        value 9;
+      }
+      enum "ODUC2" {
+        value 10;
+      }
+    }
   }
 
   grouping links-input-grouping {
@@ -101,6 +157,19 @@ module transportpce-networkutils {
       leaf result {
         type string;
       }
+    }
+  }
+
+  augment "/nd:networks/nd:network/nwt:link" {
+    when "../nd:network-types/cnet:openroadm-common-network/otn-topology";
+    description
+      "Defines more accurate otn link types to differentiate otn links in otn-topology";
+    leaf otn-link-type {
+      when
+        "../cnet:link-type = 'OTN-LINK'";
+      type otn-link-type;
+      description
+        "type of otn link, to help link management inside transportpce";
     }
   }
 }
