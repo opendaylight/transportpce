@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74dee84d_a572ddd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-06-30T07:15:30Z",
+      "side": 1,
+      "message": "ready to merge IMO\n\nI rebase on top of Thierry\u0027s relation chain",
+      "revId": "b63779bf940703a29f7b1a0874f9ab2cacc085b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
