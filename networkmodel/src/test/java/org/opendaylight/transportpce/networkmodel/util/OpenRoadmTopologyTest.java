@@ -363,14 +363,19 @@ public class OpenRoadmTopologyTest {
         assertEquals(4, tps.size());
         assertEquals("XPDR1-CLIENT1", tps.get(0).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERCLIENT, tps.get(0).augmentation(TerminationPoint1.class).getTpType());
-        assertEquals("XPDR1-NETWORK1", tps.get(0).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1.class)
-            .getAssociatedConnectionMapPort());
+        assertEquals("XPDR1-NETWORK1", tps.get(0).augmentation(TerminationPoint1.class)
+                .getAssociatedConnectionMapTp()
+                .iterator()
+                .next()
+                .getValue());
         assertEquals("XPDR1-NETWORK1", tps.get(2).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERNETWORK, tps.get(2).augmentation(TerminationPoint1.class).getTpType());
         assertEquals("XPDR1-CLIENT1", tps.get(2).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev220123.TerminationPoint1.class)
-            .getAssociatedConnectionMapPort());
+                TerminationPoint1.class)
+                .getAssociatedConnectionMapTp()
+                .iterator()
+                .next()
+                .getValue());
     }
 
     private void checkOtnXpdrNode(Node node) {
