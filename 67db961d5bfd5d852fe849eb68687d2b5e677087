@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbfca7f3_75353dd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-06-30T09:48:02Z",
+      "side": 1,
+      "message": "Reminder : The functional tests will always fail until TPCE loads the new version of Honeynode simulators (that implements \u0027pm-handling\u0027).",
+      "revId": "67db961d5bfd5d852fe849eb68687d2b5e677087",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6646907_8f071876",
