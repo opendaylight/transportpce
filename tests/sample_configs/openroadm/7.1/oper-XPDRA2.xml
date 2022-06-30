@@ -68,6 +68,28 @@
         <port-name>C1</port-name>
       </destination>
     </connection-map>
+    <connection-map>
+      <connection-map-number>3</connection-map-number>
+      <source>
+        <port-name>C1</port-name>
+        <circuit-pack-name>1/1/3-PLUG-CLIENT</circuit-pack-name>
+      </source>
+      <destination>
+        <circuit-pack-name>1/1/4-PLUG-NET</circuit-pack-name>
+        <port-name>L1</port-name>
+      </destination>
+    </connection-map>
+    <connection-map>
+      <connection-map-number>4</connection-map-number>
+      <source>
+        <port-name>L1</port-name>
+        <circuit-pack-name>1/1/4-PLUG-NET</circuit-pack-name>
+      </source>
+      <destination>
+        <circuit-pack-name>1/1/3-PLUG-CLIENT</circuit-pack-name>
+        <port-name>C1</port-name>
+      </destination>
+    </connection-map>
     <odu-switching-pools>
       <switching-pool-number>1</switching-pool-number>
       <switching-pool-type>blocking</switching-pool-type>

@@ -27,7 +27,7 @@ import test_utils_rfc8040  # nopep8
 class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     processes = None
-    NETWORK2_CHECK_DICT = {"logical-connection-point": "XPDR3-NETWORK1",
+    NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR3-NETWORK1",
                            "supporting-port": "L1",
                            "supported-interface-capability": [
                                "org-openroadm-port-types:if-otsi-otsigroup"
@@ -164,19 +164,21 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_05_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR3-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
-        self.NETWORK2_CHECK_DICT["lcp-hash-val"] = "FDvaQIf2Z08="
+        self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
+        self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "FDvaQIf2Z08="
+        self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
         self.assertIn(
-            self.NETWORK2_CHECK_DICT,
+            self.NETWORK1_CHECK_DICT,
             response["mapping"])
 
     def test_06_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-C2", "XPDR3-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
-        self.NETWORK2_CHECK_DICT["lcp-hash-val"] = "AJpkaVmZKJk5"
+        self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
+        self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "AJpkaVmZKJk5"
+        self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
         self.assertIn(
-            self.NETWORK2_CHECK_DICT,
+            self.NETWORK1_CHECK_DICT,
             response["mapping"])
 
     def test_07_check_interface_otsi(self):
@@ -596,18 +598,19 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              ]},
             response["output"]["node-interface"][1])
         # Update the network dict variable for mpdr
-        self.NETWORK2_CHECK_DICT["logical-connection-point"] = "XPDR2-NETWORK1"
-        self.NETWORK2_CHECK_DICT["supporting-circuit-pack-name"] = "1/2/2-PLUG-NET"
-        self.NETWORK2_CHECK_DICT["port-qual"] = "switch-network"
-        self.NETWORK2_CHECK_DICT["xponder-type"] = "mpdr"
-        self.NETWORK2_CHECK_DICT["lcp-hash-val"] = "LY9PxYJqUbw="
+        self.NETWORK1_CHECK_DICT["logical-connection-point"] = "XPDR2-NETWORK1"
+        self.NETWORK1_CHECK_DICT["supporting-circuit-pack-name"] = "1/2/2-PLUG-NET"
+        self.NETWORK1_CHECK_DICT["port-qual"] = "switch-network"
+        self.NETWORK1_CHECK_DICT["xponder-type"] = "mpdr"
+        self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "LY9PxYJqUbw="
 
     def test_33_get_portmapping_network1(self):
         response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
+        self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
+        del self.NETWORK1_CHECK_DICT["connection-map-lcp"]
         self.assertIn(
-            self.NETWORK2_CHECK_DICT,
+            self.NETWORK1_CHECK_DICT,
             response["mapping"])
 
     def test_34_check_interface_otsi(self):
@@ -706,7 +709,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             })
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.assertIn("Request processed", response["output"]["result"])
-        del self.NETWORK2_CHECK_DICT["supporting-otucn"]
+        del self.NETWORK1_CHECK_DICT["supporting-otucn"]
 
     def test_38_check_no_interface_otuc2(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-OTUC2")
