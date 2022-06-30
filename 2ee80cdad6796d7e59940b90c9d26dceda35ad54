@@ -70,6 +70,30 @@
       },
       "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e025052_85153b8e",
+        "filename": "tox.ini",
+        "patchSetId": 16
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-06-30T09:33:30Z",
+      "side": 1,
+      "message": "Yes Javier, you need to set this environment variable if you need to install TAPI feature with lighty.\nSee change 100979: Adapt lighty to run with optional karaf features | https://git.opendaylight.org/gerrit/c/transportpce/+/100979",
+      "parentUuid": "b9cd1512_5125c5e8",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 21
+      },
+      "revId": "2ee80cdad6796d7e59940b90c9d26dceda35ad54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
