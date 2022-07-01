@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0379e93_faf369a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-01T07:07:30Z",
+      "side": 1,
+      "message": "build OK bust most KO\nlet\u0027s unenforce it in the CI",
+      "revId": "cfd1b943a81846c3d4c0b8121ec4747ecf8ab170",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
