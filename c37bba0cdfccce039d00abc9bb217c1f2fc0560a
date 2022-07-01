@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cefcf5db_aaf59b4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-01T14:48:31Z",
+      "side": 1,
+      "message": "nosetests --with-xunit transportpce_tests/7.1/test03_renderer_or_modes.py\n................................................\n----------------------------------------------------------------------\nRan 48 tests in 546.505s\n\nOK\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  build_karaf_tests71: commands succeeded\n  tests71: commands succeeded\n  congratulations :)",
+      "revId": "c37bba0cdfccce039d00abc9bb217c1f2fc0560a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
