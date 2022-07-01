@@ -50,6 +50,24 @@
       "message": "since we are doing some refactoring here, I think a guard clause would make more sense\n\n\n\n        if (this.availableSrgPp.isEmpty()) {\n            LOG.error(\"getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}\", this);\n            return null;\n        }\n        final OpenroadmTpType openType \u003d srgType;\n        Optional\u003cString\u003e client \u003d this.availableSrgPp.entrySet()\n                .stream().filter(pp -\u003e pp.getValue().getName().equals(openType.getName()))\n                .map(Map.Entry::getKey).min(new SortPortsByName());\n        if (client.isEmpty()) {\n            LOG.error(\"getRdmSrgClient: ROADM {} doesn\u0027t have PP Client for CP {}\", this, tp);\n            return null;\n        }\n        LOG.debug(\"getRdmSrgClient: client PP {} for CP {} found !\", client, tp);\n        return client.get();",
       "revId": "f9199cf709c4d88bae21ff551df4ac7cac4d691c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b08fb4b_d694c759",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-01T08:04:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e8cae32_6a663b85",
+      "revId": "f9199cf709c4d88bae21ff551df4ac7cac4d691c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
