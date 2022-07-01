@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac634153_ae62354d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-01T08:07:29Z",
+      "side": 1,
+      "message": "The models update breaks many tests - cf CI logs.\nI fixed them easily in the previous change in the relation and I rebased it by the way.\nBut there are too many places to fix here for me.\n\nHope this helps\nGuillaume\n\n17:12:31 ___________________________________ summary ____________________________________\n17:12:31   buildcontroller: commands succeeded\n17:12:31   testsPCE: commands succeeded\n17:12:31   sims121: commands succeeded\n17:12:31   build_karaf_tests121: commands succeeded\n17:12:31   tests121: commands succeeded\n17:12:31   sims221: commands succeeded\n17:12:31   build_karaf_tests221: commands succeeded\n17:12:31 ERROR:   tests_tapi: parallel child exit code 1\n17:12:31   sims71: commands succeeded\n17:12:31   build_karaf_tests71: commands succeeded\n17:12:31 ERROR:   tests71: parallel child exit code 1\n17:12:31 ERROR:   tests221: parallel child exit code 1\n17:12:31   build_karaf_tests_hybrid: commands succeeded\n17:12:31 ERROR:   tests_hybrid: parallel child exit code 1\n17:12:31   docs: commands succeeded\n17:12:31   docs-linkcheck: commands succeeded\n17:12:31   checkbashisms: commands succeeded\n17:12:31   pre-commit: commands succeeded\n17:12:31   gitlint: commands succeeded\n17:12:31   pylint: commands succeeded",
+      "revId": "8f908536d46777322c4043cd7b9683e9fae984bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
