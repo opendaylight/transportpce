@@ -29,7 +29,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder;
@@ -97,108 +96,109 @@ public final class OpenRoadmTopology {
     }
 
     public static TopologyShard createTopologyShard(Nodes mappingNode, boolean firstMount) {
-        int numOfDegrees;
-        int numOfSrgs;
-        List<Node> nodes = new ArrayList<>();
-        List<Link> links = new ArrayList<>();
-
-        // Check if node is ROADM
-        if (NodeTypes.Rdm.getIntValue() == mappingNode.getNodeInfo().getNodeType().getIntValue()) {
-            LOG.info("creating rdm node in openroadmtopology for node {}",
-                    mappingNode.getNodeId());
-            // transform flat mapping list to per degree and per srg mapping lists
-            Map<String, List<Mapping>> mapDeg = new HashMap<>();
-            Map<String, List<Mapping>> mapSrg = new HashMap<>();
-            List<Mapping> mappingList = new ArrayList<>(mappingNode.nonnullMapping().values());
-            mappingList.sort(Comparator.comparing(Mapping::getLogicalConnectionPoint));
-            List<String> nodeShardList = new ArrayList<>();
-            for (Mapping mapping : mappingList) {
-                String str = mapping.getLogicalConnectionPoint().split("-")[0];
-                if (!nodeShardList.contains(str)) {
-                    nodeShardList.add(str);
-                }
-            }
-            for (String str : nodeShardList) {
-                List<Mapping> interList =
-                        mappingList.stream()
-                                .filter(x -> x.getLogicalConnectionPoint().split("-")[0].equals(str))
-                                .collect(Collectors.toList());
-                if (str.contains("DEG")) {
-                    mapDeg.put(str, interList);
-                } else if (str.contains("SRG")) {
-                    mapSrg.put(str, interList);
-                } else {
-                    LOG.error("unknow element");
-                }
-            }
-            // create degree nodes
-            for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
-                NodeBuilder ietfNode =
-                        createDegree(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
-                                mappingNode.getNodeInfo().getNodeClli(), firstMount);
-                nodes.add(ietfNode.build());
-            }
-            // create srg nodes
-            for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
-                NodeBuilder ietfNode =
-                        createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
-                                mappingNode.getNodeInfo().getNodeClli(), firstMount);
-                nodes.add(ietfNode.build());
-            }
-
-            numOfDegrees = mapDeg.size();
-            numOfSrgs = mapSrg.size();
-
-            LOG.info("adding links numOfDegrees={} numOfSrgs={}", numOfDegrees, numOfSrgs);
-            links.addAll(createNewLinks(nodes));
-            LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
-            return new TopologyShard(nodes, links);
-        } else if (NodeTypes.Xpdr.getIntValue() ==  mappingNode.getNodeInfo().getNodeType().getIntValue()) {
-            // Check if node is Xpdr is a Transponder
-            List<Mapping> networkMappings =
-                    mappingNode.nonnullMapping().values()
-                            .stream().filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
-                            .collect(Collectors.toList());
-            List<Integer> tpdrList = new ArrayList<>();
-            for (Mapping mapping : networkMappings) {
-                Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
-                if (!tpdrList.contains(xpdrNb)) {
-                    tpdrList.add(xpdrNb);
-                    List<Mapping> extractedMappings = mappingNode.nonnullMapping().values().stream()
-                            .filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
-                            .collect(Collectors.toList());
-                    Boolean lastArg;
-                    String xpdrType;
-                    switch (mapping.getXponderType() == null ? Tpdr : mapping.getXponderType()) {
-                        case Tpdr :
-                            lastArg = false;
-                            xpdrType = "Tpdr";
-                            break;
-                        case Mpdr :
-                        case Switch :
-                            lastArg = true;
-                            xpdrType = mapping.getXponderType().getName();
-                            break;
-                        default :
-                            LOG.warn("cannot create xpdr node {} in openroadm-topology: type {} not supported",
-                                 mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
-                            continue;
-                    }
-                    LOG.info("creating xpdr node {} of type {} in openroadm-topology",
-                            mappingNode.getNodeId() + "-XPDR" + xpdrNb, xpdrType);
-                    nodes.add(createXpdr(
-                                    mappingNode.getNodeId(),
-                                    mappingNode.getNodeInfo().getNodeClli(),
-                                    xpdrNb,
-                                    extractedMappings,
-                                    lastArg)
-                              .build());
-                }
-            }
-            return nodes.isEmpty() ? null : new TopologyShard(nodes, links);
+        switch (mappingNode.getNodeInfo().getNodeType()) {
+            case Rdm :
+                return createRdmTopologyShard(mappingNode, firstMount);
+            case Xpdr :
+                return createXpdrTopologyShard(mappingNode);
+            default :
+                LOG.error("Device node Type not managed yet");
+                return null;
         }
-        LOG.error("Device node Type not managed yet");
-        return null;
+    }
+
+    public static TopologyShard createRdmTopologyShard(Nodes mappingNode, boolean firstMount) {
+        List<Node> nodes = new ArrayList<>();
+        LOG.info("creating rdm node in openroadmtopology for node {}",
+                mappingNode.getNodeId());
+        // transform flat mapping list to per degree and per srg mapping lists
+        Map<String, List<Mapping>> mapDeg = new HashMap<>();
+        Map<String, List<Mapping>> mapSrg = new HashMap<>();
+        List<Mapping> mappingList = new ArrayList<>(mappingNode.nonnullMapping().values());
+        mappingList.sort(Comparator.comparing(Mapping::getLogicalConnectionPoint));
+        List<String> nodeShardList = new ArrayList<>();
+        for (Mapping mapping : mappingList) {
+            String str = mapping.getLogicalConnectionPoint().split("-")[0];
+            if (!nodeShardList.contains(str)) {
+                nodeShardList.add(str);
+            }
+        }
+        for (String str : nodeShardList) {
+            List<Mapping> interList =
+                    mappingList.stream()
+                            .filter(x -> x.getLogicalConnectionPoint().split("-")[0].equals(str))
+                            .collect(Collectors.toList());
+            if (str.contains("DEG")) {
+                mapDeg.put(str, interList);
+            } else if (str.contains("SRG")) {
+                mapSrg.put(str, interList);
+            } else {
+                LOG.error("unknow element");
+            }
+        }
+        // create degree nodes
+        for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
+            nodes.add(
+                createDegree(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
+                        mappingNode.getNodeInfo().getNodeClli(), firstMount)
+                    .build());
+        }
+        // create srg nodes
+        for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
+            nodes.add(
+                createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
+                        mappingNode.getNodeInfo().getNodeClli(), firstMount)
+                    .build());
+        }
+        LOG.info("adding links numOfDegrees={} numOfSrgs={}", mapDeg.size(), mapSrg.size());
+        List<Link> links = createNewLinks(nodes);
+        LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
+        return new TopologyShard(nodes, links);
+    }
+
+    public static TopologyShard createXpdrTopologyShard(Nodes mappingNode) {
+        List<Node> nodes = new ArrayList<>();
+        List<Mapping> networkMappings =
+                mappingNode.nonnullMapping().values()
+                        .stream().filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
+                        .collect(Collectors.toList());
+        List<Integer> tpdrList = new ArrayList<>();
+        for (Mapping mapping : networkMappings) {
+            Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+            if (!tpdrList.contains(xpdrNb)) {
+                tpdrList.add(xpdrNb);
+                List<Mapping> extractedMappings = mappingNode.nonnullMapping().values()
+                        .stream().filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
+                        .collect(Collectors.toList());
+                Boolean lastArg;
+                String xpdrType;
+                switch (mapping.getXponderType() == null ? Tpdr : mapping.getXponderType()) {
+                    case Tpdr :
+                        lastArg = false;
+                        xpdrType = "Tpdr";
+                        break;
+                    case Mpdr :
+                    case Switch :
+                        lastArg = true;
+                        xpdrType = mapping.getXponderType().getName();
+                        break;
+                    default :
+                        LOG.warn("cannot create xpdr node {} in openroadm-topology: type {} not supported",
+                             mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
+                        continue;
+                }
+                LOG.info("creating xpdr node {} of type {} in openroadm-topology",
+                        mappingNode.getNodeId() + "-XPDR" + xpdrNb, xpdrType);
+                nodes.add(createXpdr(
+                                mappingNode.getNodeId(),
+                                mappingNode.getNodeInfo().getNodeClli(),
+                                xpdrNb,
+                                extractedMappings,
+                                lastArg)
+                          .build());
+            }
+        }
+        return nodes.isEmpty() ? null : new TopologyShard(nodes, new ArrayList<Link>());
     }
 
     private static NodeBuilder createXpdr(String nodeId, String clli, Integer xpdrNb, List<Mapping> mappings,
@@ -215,7 +215,6 @@ public final class OpenRoadmTopology {
                         .setAdministrativeState(AdminStates.InService)
                         .setOperationalState(State.InService)
                         .build());
-
         // Create tp-map
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
         for (Mapping m : mappings) {
