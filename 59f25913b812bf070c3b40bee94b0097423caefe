@@ -104,6 +104,24 @@
       "parentUuid": "fd04c364_21bf8783",
       "revId": "59f25913b812bf070c3b40bee94b0097423caefe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "965c4299_67177154",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-04T07:57:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ba49c77_250f8039",
+      "revId": "59f25913b812bf070c3b40bee94b0097423caefe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
