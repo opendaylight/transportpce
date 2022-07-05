@@ -20,9 +20,9 @@ do
     case "$VERSION" in
         "1.2.1") PLUGIN_VERSION=1.0.9
         ;;
-        "2.2.1") PLUGIN_VERSION=2.0.9
+        "2.2.1") PLUGIN_VERSION=2.0.10
         ;;
-        "7.1") PLUGIN_VERSION=7.1.6
+        "7.1") PLUGIN_VERSION=7.1.7
         ;;
         *) echo "unsupported device version" >&2
         continue
