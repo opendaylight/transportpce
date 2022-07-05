@@ -23,6 +23,7 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -127,77 +128,69 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION),
-                                               ('roadma', cls.NODE_VERSION),
-                                               ('roadmc', cls.NODE_VERSION),
-                                               ('spdrc', cls.NODE_VERSION)])
+        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils_rfc8040.start_sims([('spdra', cls.NODE_VERSION),
+                                                       ('roadma', cls.NODE_VERSION),
+                                                       ('roadmc', cls.NODE_VERSION),
+                                                       ('spdrc', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
 
     def test_01_connect_spdrA(self):
-        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+                         requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_02_connect_spdrC(self):
-        response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+                         requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
-        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
         self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+                         requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_04_connect_rdmC(self):
-        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
+        response = test_utils_rfc8040.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code,
-                         requests.codes.created, test_utils.CODE_SHOULD_BE_201)
+                         requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_05_connect_sprdA_1_N1_to_roadmA_PP1(self):
-        response = test_utils.connect_xpdr_to_rdm_request("SPDR-SA1", "1", "1",
-                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Xponder Roadm Link created successfully',
-                      res["output"]["result"])
-        time.sleep(2)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-xpdr-rdm-links',
+            {'links-input': {'xpdr-node': 'SPDR-SA1', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_06_connect_roadmA_PP1_to_spdrA_1_N1(self):
-        response = test_utils.connect_rdm_to_xpdr_request("SPDR-SA1", "1", "1",
-                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm Xponder links created successfully',
-                      res["output"]["result"])
-        time.sleep(2)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-rdm-xpdr-links',
+            {'links-input': {'xpdr-node': 'SPDR-SA1', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_07_connect_sprdC_1_N1_to_roadmC_PP1(self):
-        response = test_utils.connect_xpdr_to_rdm_request("SPDR-SC1", "1", "1",
-                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Xponder Roadm Link created successfully',
-                      res["output"]["result"])
-        time.sleep(2)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-xpdr-rdm-links',
+            {'links-input': {'xpdr-node': 'SPDR-SC1', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_08_connect_roadmC_PP1_to_spdrC_1_N1(self):
-        response = test_utils.connect_rdm_to_xpdr_request("SPDR-SC1", "1", "1",
-                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn('Roadm Xponder links created successfully',
-                      res["output"]["result"])
-        time.sleep(2)
+        response = test_utils_rfc8040.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-rdm-xpdr-links',
+            {'links-input': {'xpdr-node': 'SPDR-SC1', 'xpdr-num': '1', 'network-num': '1',
+                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
 
     def test_09_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
@@ -1489,24 +1482,20 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(18, len(links), 'Topology should contain 18 links')
 
     def test_94_disconnect_spdrA(self):
-        response = test_utils.unmount_device("SPDR-SA1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("SPDR-SA1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_95_disconnect_spdrC(self):
-        response = test_utils.unmount_device("SPDR-SC1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("SPDR-SC1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_96_disconnect_roadmA(self):
-        response = test_utils.unmount_device("ROADM-A1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADM-A1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_97_disconnect_roadmC(self):
-        response = test_utils.unmount_device("ROADM-C1")
-        self.assertEqual(response.status_code, requests.codes.ok,
-                         test_utils.CODE_SHOULD_BE_200)
+        response = test_utils_rfc8040.unmount_device("ROADM-C1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
 if __name__ == "__main__":
