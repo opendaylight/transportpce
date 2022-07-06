@@ -45,6 +45,30 @@
       },
       "revId": "d59274c31b7cb272ce36ef3d19f8b3ba9b348e35",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd0ef95_181d4028",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-06T07:31:04Z",
+      "side": 1,
+      "message": "Both 4 and 8 are correct IMO.\nThis line was previously indented 16, which, and I am sure you would agree with that, is a bit overkill.\nI put 8 because there were none at 4 and lines 411 and 412 were already indented at 8.",
+      "parentUuid": "548fbeb0_35532863",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 16
+      },
+      "revId": "d59274c31b7cb272ce36ef3d19f8b3ba9b348e35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
