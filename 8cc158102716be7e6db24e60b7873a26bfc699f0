@@ -46,6 +46,30 @@
       },
       "revId": "8cc158102716be7e6db24e60b7873a26bfc699f0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de4c559a_f3fa91f3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-06T08:13:45Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/101751/1",
+      "parentUuid": "eea47332_fe6577c6",
+      "range": {
+        "startLine": 154,
+        "startChar": 28,
+        "endLine": 154,
+        "endChar": 35
+      },
+      "revId": "8cc158102716be7e6db24e60b7873a26bfc699f0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
