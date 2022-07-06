@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac45b0a1_0aab9e24",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-06T07:34:32Z",
+      "side": 1,
+      "message": "Why not. I\u0027ll try to propose another change for it.\nIf this is used elsewhere in the package(and that\u0027s likely the case), it would probably make even more sense to have a dedicated util class for these maps.",
+      "parentUuid": "d6ecb46a_a1f5fb58",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "d59274c31b7cb272ce36ef3d19f8b3ba9b348e35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "548fbeb0_35532863",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
         "patchSetId": 6
