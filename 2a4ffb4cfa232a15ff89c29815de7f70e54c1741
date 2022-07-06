@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50623062_cf882b24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-06T08:36:03Z",
+      "side": 1,
+      "message": "A specific change dedicated to this is not really justified. Why not amending current changes under review?",
+      "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a3c37e9_6bedf655",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-06T08:36:03Z",
+      "side": 1,
+      "message": "List as a value of Map is not exactly what I had in mind. Use com.google.common.collect.Table instead of Map would be better here.",
+      "range": {
+        "startLine": 80,
+        "startChar": 18,
+        "endLine": 80,
+        "endChar": 83
+      },
+      "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
