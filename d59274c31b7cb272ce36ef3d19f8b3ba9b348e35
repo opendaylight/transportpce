@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6ecb46a_a1f5fb58",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-06T06:57:23Z",
+      "side": 1,
+      "message": "instead of using 2 Maps with same keys, may be you should use Table (2 values for the same key)",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "d59274c31b7cb272ce36ef3d19f8b3ba9b348e35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548fbeb0_35532863",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-06T06:57:23Z",
+      "side": 1,
+      "message": "why indent 8 spaces instead of 4 here?",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 16
+      },
+      "revId": "d59274c31b7cb272ce36ef3d19f8b3ba9b348e35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
