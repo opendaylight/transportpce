@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c71e831_7286c567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-06T09:38:18Z",
+      "side": 1,
+      "message": "Gate is already OK and if I am not against merging these 2 maps, I don\u0027t see a straight benefit to rerun every changes CI for such a small modification.\nMoreover if it appears we disagree about the best path to follow for it ( cf comments at https://git.opendaylight.org/gerrit/c/transportpce/+/101751/comment/7a3c37e9_6bedf655/ )",
+      "parentUuid": "50623062_cf882b24",
+      "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a3c37e9_6bedf655",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-07-06T08:36:03Z",
       "side": 1,
       "message": "List as a value of Map is not exactly what I had in mind. Use com.google.common.collect.Table instead of Map would be better here.",
+      "range": {
+        "startLine": 80,
+        "startChar": 18,
+        "endLine": 80,
+        "endChar": 83
+      },
+      "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f797b9_58e91b41",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-06T09:38:18Z",
+      "side": 1,
+      "message": "I am not convinced there is a benefit to use Guava Table here.\nAnd I am not very fond of adding more dependencies for one small optimization, especially when these dependencies are not part of the bare original JDK (such as Guava).\n\nAnyway, I\u0027ve noticed that outside this class we already have other guava dependencies in this package. So if you think it is really the right path to follow, feel free to amend this change or propose another one.",
+      "parentUuid": "7a3c37e9_6bedf655",
       "range": {
         "startLine": 80,
         "startChar": 18,
