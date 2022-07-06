@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba7aa88_91122093",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-06T06:41:06Z",
+      "side": 1,
+      "message": "\"isOTN\" would be a much more explicit name",
+      "range": {
+        "startLine": 154,
+        "startChar": 28,
+        "endLine": 154,
+        "endChar": 35
+      },
+      "revId": "8cc158102716be7e6db24e60b7873a26bfc699f0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
