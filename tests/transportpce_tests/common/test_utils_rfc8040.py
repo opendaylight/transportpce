@@ -494,6 +494,25 @@ def del_oms_attr_request(link: str,):
     return response
 
 
+def get_ietf_network_node_request(network: str, node: str, content: str):
+    url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
+           'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', network, node, content)
+    elif content == 'config':
+        format_args = ('{}', content, network, node)
+    else:
+        format_args = ('{}', 'operational', network, node)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    print(res)
+    return_key = {'rfc8040': 'ietf-network:node',
+                  'draft-bierman02': 'ietf-network:node'}
+    node = res[return_key[RESTCONF_VERSION]][0]
+    return {'status_code': response.status_code,
+            'node': node}
+
+
 def del_ietf_network_node_request(network: str, node: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
