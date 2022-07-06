@@ -351,10 +351,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_19_check_openroadm_topo_spdra(self):
-        response = test_utils.get_ordm_topo_request("node/SPDR-SA1-XPDR1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        ele = res['node'][0]['ietf-network-topology:termination-point'][0]
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'SPDR-SA1-XPDR1', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        ele = response['node'][0]['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR1-NETWORK1', ele['tp-id'])
         self.assertEqual({'frequency': 196.1,
                           'width': 40},
@@ -362,14 +361,13 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_20_check_openroadm_topo_ROADMA_SRG(self):
-        response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADM-A1-SRG1', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
-            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+            response['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
         self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-        liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        liste_tp = response['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
@@ -381,14 +379,13 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_21_check_openroadm_topo_ROADMA_DEG(self):
-        response = test_utils.get_ordm_topo_request("node/ROADM-A1-DEG2")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADM-A1-DEG2', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
-            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+            response['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
         self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-        liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        liste_tp = response['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
@@ -943,24 +940,21 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_59_check_openroadm_topo_spdra(self):
-        response = test_utils.get_ordm_topo_request("node/SPDR-SA1-XPDR1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        tp = res['node'][0]['ietf-network-topology:termination-point'][0]
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'SPDR-SA1-XPDR1', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        tp = response['node'][0]['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR1-NETWORK1', tp['tp-id'])
         self.assertNotIn('wavelength', dict.keys(
             tp['org-openroadm-network-topology:xpdr-network-attributes']))
-        time.sleep(3)
 
     def test_60_check_openroadm_topo_ROADMA_SRG(self):
-        response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADM-A1-SRG1', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
-            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+            response['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
         self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
-        liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        liste_tp = response['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
@@ -970,14 +964,13 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_61_check_openroadm_topo_ROADMA_DEG(self):
-        response = test_utils.get_ordm_topo_request("node/ROADM-A1-DEG2")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADM-A1-DEG2', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
-            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+            response['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
         self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
-        liste_tp = res['node'][0]['ietf-network-topology:termination-point']
+        liste_tp = response['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
@@ -1421,10 +1414,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_92_disconnect_xponders_from_roadm(self):
         url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        links = res['network'][0]['ietf-network-topology:link']
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        links = response['network'][0]['ietf-network-topology:link']
         for link in links:
             if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT'):
                 link_name = link["link-id"]
@@ -1432,11 +1424,11 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_93_check_openroadm_topology(self):
-        response = test_utils.get_ordm_topo_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        links = res['network'][0]['ietf-network-topology:link']
-        self.assertEqual(18, len(links), 'Topology should contain 18 links')
+        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(18,
+                         len(response['network'][0]['ietf-network-topology:link']),
+                         'Topology should contain 18 links')
 
     def test_94_disconnect_spdrA(self):
         response = test_utils_rfc8040.unmount_device("SPDR-SA1")
