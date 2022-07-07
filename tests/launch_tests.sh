@@ -31,7 +31,7 @@ else
     done
 fi
 if [ -z "$LAUNCHER" ]; then
-    LAUNCHER="nosetests --with-xunit";
+    LAUNCHER="pytest-3 --no-header";
 fi
 
 for script in $scriptlist; do
