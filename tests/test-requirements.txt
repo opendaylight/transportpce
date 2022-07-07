@@ -1,1 +1,1 @@
-nose # LGPL v2 or later
+pytest # MIT License
