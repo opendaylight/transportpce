@@ -65,6 +65,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcc96e96_50d032b2",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-08T13:11:43Z",
+      "side": 1,
+      "message": "nbinotifications module need a rather important refactor. We\u0027ll try to improve that later.",
+      "parentUuid": "102db1d7_63f9c461",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 82,
+        "endChar": 81
+      },
+      "revId": "9767ee94dd7ab8343bdf4a10dce4c9165746087e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "110618a8_e39b8a0a",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "idem, how could this be done if the variable belongs to this class",
       "parentUuid": "110618a8_e39b8a0a",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 87,
+        "endChar": 99
+      },
+      "revId": "9767ee94dd7ab8343bdf4a10dce4c9165746087e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b4dec47_c5c7fe99",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-07-08T13:11:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9cf8109_0b26794e",
       "range": {
         "startLine": 85,
         "startChar": 8,
