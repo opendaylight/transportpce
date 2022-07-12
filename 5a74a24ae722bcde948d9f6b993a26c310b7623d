@@ -50,6 +50,23 @@
       "message": "P SR3 bum ready but the branch is currently locked",
       "revId": "5a74a24ae722bcde948d9f6b993a26c310b7623d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84ae9e5d_b969e477",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2022-07-12T22:43:35Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "5a74a24ae722bcde948d9f6b993a26c310b7623d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
