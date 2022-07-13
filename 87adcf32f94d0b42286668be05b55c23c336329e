@@ -58,6 +58,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a9ef068_02afcb7b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-07-13T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f822f9f2_96a1dab8",
+      "range": {
+        "startLine": 748,
+        "startChar": 16,
+        "endLine": 748,
+        "endChar": 50
+      },
+      "revId": "87adcf32f94d0b42286668be05b55c23c336329e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "724d5b1d_8a05596e",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-06T07:23:58Z",
       "side": 1,
       "message": "could be on the same line?",
+      "range": {
+        "startLine": 178,
+        "startChar": 12,
+        "endLine": 180,
+        "endChar": 34
+      },
+      "revId": "87adcf32f94d0b42286668be05b55c23c336329e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f56ff415_55d8a544",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-07-13T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "724d5b1d_8a05596e",
       "range": {
         "startLine": 178,
         "startChar": 12,
@@ -104,6 +152,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98a291c9_0bf15ccc",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-07-13T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "792bf3f6_6fb59e80",
+      "range": {
+        "startLine": 987,
+        "startChar": 16,
+        "endLine": 989,
+        "endChar": 38
+      },
+      "revId": "87adcf32f94d0b42286668be05b55c23c336329e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac05d746_cae39474",
@@ -127,6 +199,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f10f52c_63f6e0e6",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-07-13T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac05d746_cae39474",
+      "range": {
+        "startLine": 993,
+        "startChar": 16,
+        "endLine": 995,
+        "endChar": 38
+      },
+      "revId": "87adcf32f94d0b42286668be05b55c23c336329e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a15019b7_d5f50144",
@@ -140,6 +236,30 @@
       "writtenOn": "2022-07-06T07:23:58Z",
       "side": 1,
       "message": "Possible to split the line behind the revision?",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 117,
+        "endChar": 97
+      },
+      "revId": "87adcf32f94d0b42286668be05b55c23c336329e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd247e03_89ff63b4",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/test/NetworkmodelTestUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-07-13T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a15019b7_d5f50144",
       "range": {
         "startLine": 116,
         "startChar": 16,
