@@ -1669,7 +1669,7 @@ The user can provide, either the Uuid associated to the attribute or its name.
     {
       "tapi-topology:input": {
         "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology",
-        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONINC_MEDIA"
+        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONIC_MEDIA"
       }
     }
 
@@ -1685,8 +1685,8 @@ The user can provide, either the Uuid associated to the attribute or its name.
     {
       "tapi-topology:input": {
         "tapi-topology:topology-id-or-name": "T0 - Full Multi-layer topology",
-        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONINC_MEDIA",
-        "tapi-topology:ep-id-or-name": "ROADM-A1+PHOTONINC_MEDIA+DEG1-TTP-TXRX"
+        "tapi-topology:node-id-or-name": "ROADM-A1+PHOTONIC_MEDIA",
+        "tapi-topology:ep-id-or-name": "ROADM-A1+PHOTONIC_MEDIA+DEG1-TTP-TXRX"
       }
     }
 
