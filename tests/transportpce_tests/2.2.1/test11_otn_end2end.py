@@ -812,11 +812,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_42_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 2)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_43_check_no_ODU2e_connection_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "")
@@ -875,11 +873,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_50_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 1)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 1)
 
     def test_51_check_no_interface_ODU4_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -911,14 +907,8 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_55_get_no_service(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.conflict)
-        res = response.json()
-        self.assertIn(
-            {"error-type": "application", "error-tag": "data-missing",
-             "error-message": "Request could not be completed because the relevant data model content does not exist"},
-            res['errors']['error'])
-        time.sleep(1)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_56_check_no_interface_OTU4_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -1330,11 +1320,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_83_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 2)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_84_check_no_ODU0_connection_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "")
