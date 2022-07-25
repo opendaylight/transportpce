@@ -249,19 +249,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_13_get_OCH_OTU4_service1(self):
-        response = test_utils.get_service_list_request(
-            "services/service1-OCH-OTU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service1-OCH-OTU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service1-OCH-OTU4')
+            response['services'][0]['service-name'], 'service1-OCH-OTU4')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'infrastructure')
+            response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     # Check correct configuration of devices
     def test_14_check_interface_och_spdra(self):
@@ -442,19 +440,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_24_get_ODU4_service1(self):
-        response = test_utils.get_service_list_request(
-            "services/service1-ODU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service1-ODU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service1-ODU4')
+            response['services'][0]['service-name'], 'service1-ODU4')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'infrastructure')
+            response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     def test_25_check_interface_ODU4_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -584,19 +580,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_30_get_10GE_service1(self):
-        response = test_utils.get_service_list_request(
-            "services/service1-10GE")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service1-10GE")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service1-10GE')
+            response['services'][0]['service-name'], 'service1-10GE')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'service')
+            response['services'][0]['connection-type'], 'service')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     def test_31_check_interface_10GE_CLIENT_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -812,11 +806,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_42_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 2)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_43_check_no_ODU2e_connection_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "")
@@ -875,11 +867,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_50_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 1)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 1)
 
     def test_51_check_no_interface_ODU4_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -911,14 +901,8 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_55_get_no_service(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.conflict)
-        res = response.json()
-        self.assertIn(
-            {"error-type": "application", "error-tag": "data-missing",
-             "error-message": "Request could not be completed because the relevant data model content does not exist"},
-            res['errors']['error'])
-        time.sleep(1)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_56_check_no_interface_OTU4_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -1033,19 +1017,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_67_get_OCH_OTU4_service2(self):
-        response = test_utils.get_service_list_request(
-            "services/service2-OCH-OTU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service2-OCH-OTU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service2-OCH-OTU4')
+            response['services'][0]['service-name'], 'service2-OCH-OTU4')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'infrastructure')
+            response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     def test_68_create_ODU4_service_2(self):
         # pylint: disable=line-too-long
@@ -1071,19 +1053,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_69_get_ODU4_service2(self):
-        response = test_utils.get_service_list_request(
-            "services/service2-ODU4")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service2-ODU4")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service2-ODU4')
+            response['services'][0]['service-name'], 'service2-ODU4')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'infrastructure')
+            response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     def test_70_create_1GE_service(self):
         # pylint: disable=line-too-long
@@ -1110,18 +1090,17 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_71_get_1GE_service1(self):
-        response = test_utils.get_service_list_request("services/service1-1GE")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.get_ordm_serv_list_attr_request(
+            "services", "service1-1GE")
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
-            res['services'][0]['administrative-state'], 'inService')
+            response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(
-            res['services'][0]['service-name'], 'service1-1GE')
+            response['services'][0]['service-name'], 'service1-1GE')
         self.assertEqual(
-            res['services'][0]['connection-type'], 'service')
+            response['services'][0]['connection-type'], 'service')
         self.assertEqual(
-            res['services'][0]['lifecycle-state'], 'planned')
-        time.sleep(2)
+            response['services'][0]['lifecycle-state'], 'planned')
 
     def test_72_check_interface_1GE_CLIENT_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -1330,11 +1309,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_83_check_service_list(self):
-        response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(len(res['service-list']['services']), 2)
-        time.sleep(2)
+        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_84_check_no_ODU0_connection_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "")
