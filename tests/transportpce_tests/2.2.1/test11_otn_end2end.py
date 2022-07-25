@@ -226,12 +226,10 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for OCH-OTU4 service from spdr to spdr
     def test_11_check_otn_topology(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 6, 'There should be 6 nodes')
-        self.assertNotIn('ietf-network-topology:link', res['network'][0])
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 6)
+        self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_12_create_OCH_OTU4_service(self):
         response = test_utils.service_create_request(self.cr_serv_sample_data)
@@ -400,14 +398,12 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
 
     def test_22_check_otn_topo_otu4_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 2)
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 2)
         listLinkId = ['OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
                       'OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1']
-        for link in res['network'][0]['ietf-network-topology:link']:
+        for link in response['network'][0]['ietf-network-topology:link']:
             self.assertIn(link['link-id'], listLinkId)
             self.assertEqual(
                 link['transportpce-networkutils:otn-link-type'], 'OTU4')
@@ -515,12 +511,10 @@ class TransportPCEtesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_27_check_otn_topo_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 4)
-        for link in res['network'][0]['ietf-network-topology:link']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 4)
+        for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             if (linkId in ('OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
                            'OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
@@ -545,9 +539,9 @@ class TransportPCEtesting(unittest.TestCase):
                 self.fail("this link should not exist")
 
     def test_28_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR1', 'SPDR-SC1-XPDR1'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
@@ -772,12 +766,10 @@ class TransportPCEtesting(unittest.TestCase):
                              response['odu-connection'][0]['source'])
 
     def test_39_check_otn_topo_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 4)
-        for link in res['network'][0]['ietf-network-topology:link']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 4)
+        for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             if (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
                            'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
@@ -787,9 +779,9 @@ class TransportPCEtesting(unittest.TestCase):
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 10000)
 
     def test_40_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR1', 'SPDR-SC1-XPDR1'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
@@ -842,12 +834,10 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_47_check_otn_topo_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 4)
-        for link in res['network'][0]['ietf-network-topology:link']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 4)
+        for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             if (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
                            'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
@@ -857,9 +847,9 @@ class TransportPCEtesting(unittest.TestCase):
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
 
     def test_48_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR1', 'SPDR-SC1-XPDR1'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
@@ -893,9 +883,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.test_22_check_otn_topo_otu4_links()
 
     def test_53_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR1', 'SPDR-SC1-XPDR1'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
@@ -934,10 +924,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_58_getLinks_OtnTopology(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertNotIn('ietf-network-topology:link', res['network'][0])
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_59_check_openroadm_topo_spdra(self):
         response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'SPDR-SA1-XPDR1', 'config')
@@ -1299,12 +1288,10 @@ class TransportPCEtesting(unittest.TestCase):
                              response['odu-connection'][0]['source'])
 
     def test_80_check_otn_topo_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 4)
-        for link in res['network'][0]['ietf-network-topology:link']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 4)
+        for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             if (linkId in ('ODU4-SPDR-SA1-XPDR3-XPDR3-NETWORK1toSPDR-SC1-XPDR3-XPDR3-NETWORK1',
                            'ODU4-SPDR-SC1-XPDR3-XPDR3-NETWORK1toSPDR-SA1-XPDR3-XPDR3-NETWORK1')):
@@ -1314,9 +1301,9 @@ class TransportPCEtesting(unittest.TestCase):
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 1000)
 
     def test_81_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR3', 'SPDR-SC1-XPDR3'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
@@ -1369,12 +1356,10 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_88_check_otn_topo_links(self):
-        response = test_utils.get_otn_topo_request()
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        nb_links = len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nb_links, 4)
-        for link in res['network'][0]['ietf-network-topology:link']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 4)
+        for link in response['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
             if (linkId in ('ODU4-SPDR-SA1-XPDR3-XPDR3-NETWORK1toSPDR-SC1-XPDR3-XPDR3-NETWORK1',
                            'ODU4-SPDR-SC1-XPDR3-XPDR3-NETWORK1toSPDR-SA1-XPDR3-XPDR3-NETWORK1')):
@@ -1384,9 +1369,9 @@ class TransportPCEtesting(unittest.TestCase):
                     link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
 
     def test_89_check_otn_topo_tp(self):
-        response = test_utils.get_otn_topo_request()
-        res = response.json()
-        for node in res['network'][0]['node']:
+        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for node in response['network'][0]['node']:
             if node['node-id'] in ('SPDR-SA1-XPDR3', 'SPDR-SC1-XPDR3'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
