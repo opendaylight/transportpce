@@ -524,6 +524,47 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
     response = delete_request(url[RESTCONF_VERSION].format(*format_args))
     return response
 
+
+#
+# Service list operations
+#
+
+
+def get_ordm_serv_list_request():
+    url = {'rfc8040': '{}/data/org-openroadm-service:service-list?content=nonconfig',
+           'draft-bierman02': '{}/operational/org-openroadm-service:service-list/'}
+    response = get_request(url[RESTCONF_VERSION])
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-service:service-list',
+                  'draft-bierman02': 'service-list'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'service-list': response_attribute}
+
+
+
+def get_ordm_serv_list_attr_request(attribute: str, value: str):
+    url = {'rfc8040': '{}/data/org-openroadm-service:service-list/{}={}?content=nonconfig',
+           'draft-bierman02': '{}/operational/org-openroadm-service:service-list/{}/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', attribute, value)
+    else:
+        format_args = ('{}', attribute, value)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-service' + attribute,
+                  'draft-bierman02': attribute}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute: response_attribute}
+
+
 #
 # TransportPCE internal API RPCs
 #
