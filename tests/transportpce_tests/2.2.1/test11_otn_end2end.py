@@ -22,7 +22,6 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils  # nopep8
 import test_utils_rfc8040  # nopep8
 
 
@@ -811,11 +810,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_43_check_no_ODU2e_connection_spdra(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertNotIn(['odu-connection'][0], res['org-openroadm-device'])
-        time.sleep(1)
+        response = test_utils_rfc8040.check_node_request("SPDR-SA1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn(['odu-connection'][0], response['org-openroadm-device'])
 
     def test_44_check_no_interface_ODU2E_NETWORK_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -1314,11 +1311,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(response['service-list']['services']), 2)
 
     def test_84_check_no_ODU0_connection_spdra(self):
-        response = test_utils.check_netconf_node_request("SPDR-SA1", "")
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertNotIn(['odu-connection'][0], res['org-openroadm-device'])
-        time.sleep(1)
+        response = test_utils_rfc8040.check_node_request("SPDR-SA1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn(['odu-connection'][0], response['org-openroadm-device'])
 
     def test_85_check_no_interface_ODU0_NETWORK_spdra(self):
         response = test_utils_rfc8040.check_node_attribute_request(
@@ -1378,15 +1373,14 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_92_disconnect_xponders_from_roadm(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         links = response['network'][0]['ietf-network-topology:link']
         for link in links:
             if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT'):
-                link_name = link["link-id"]
-                response = test_utils.delete_request(url+link_name)
-                self.assertEqual(response.status_code, requests.codes.ok)
+                response = test_utils_rfc8040.del_ietf_network_link_request(
+                    'openroadm-topology', link['link-id'], 'config')
+                self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_93_check_openroadm_topology(self):
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
