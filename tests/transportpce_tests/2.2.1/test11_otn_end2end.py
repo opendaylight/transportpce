@@ -1378,15 +1378,14 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_92_disconnect_xponders_from_roadm(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         links = response['network'][0]['ietf-network-topology:link']
         for link in links:
             if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT'):
-                link_name = link["link-id"]
-                response = test_utils.delete_request(url+link_name)
-                self.assertEqual(response.status_code, requests.codes.ok)
+                response = test_utils_rfc8040.del_ietf_network_link_request(
+                    'openroadm-topology', link['link-id'], 'config')
+                self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_93_check_openroadm_topology(self):
         response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
