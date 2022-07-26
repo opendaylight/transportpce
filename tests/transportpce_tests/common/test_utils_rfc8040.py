@@ -317,6 +317,20 @@ def check_device_connection(node: str):
     return {'status_code': response.status_code,
             'connection-status': connection_status}
 
+def check_node_request(node: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device?content=config',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device'}  # nopep8
+    response = get_request(url[RESTCONF_VERSION].format('{}', node))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-device:org-openroadm-device',
+                  'draft-bierman02': 'org-openroadm-device'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'org-openroadm-device': response_attribute}
 
 def check_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
