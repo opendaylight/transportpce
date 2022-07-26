@@ -146,6 +146,30 @@
       },
       "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b429c5_55088b6b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-07-26T12:44:50Z",
+      "side": 1,
+      "message": "I propose to merge this as it is and to address this shift to Guava Table separately.",
+      "parentUuid": "3d4b3472_0dcb87f3",
+      "range": {
+        "startLine": 80,
+        "startChar": 18,
+        "endLine": 80,
+        "endChar": 83
+      },
+      "revId": "2a4ffb4cfa232a15ff89c29815de7f70e54c1741",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
