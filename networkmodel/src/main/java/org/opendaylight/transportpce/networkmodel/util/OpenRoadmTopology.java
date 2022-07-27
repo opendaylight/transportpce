@@ -78,15 +78,10 @@ public final class OpenRoadmTopology {
         "switch-network", OpenroadmTpType.XPONDERNETWORK,
         "xpdr-client", OpenroadmTpType.XPONDERCLIENT
     );
-    private static Map<String, OpenroadmTpType> PORTDIR_ORD_DEG_TYPE_MAP = Map.of(
-        "bidirectional", OpenroadmTpType.DEGREETXRXTTP,
-        "tx", OpenroadmTpType.DEGREETXTTP,
-        "rx", OpenroadmTpType.DEGREERXTTP
-    );
-    private static Map<String, OpenroadmTpType> PORTDIR_ORD_SRG_TYPE_MAP = Map.of(
-        "bidirectional", OpenroadmTpType.SRGTXRXPP,
-        "tx", OpenroadmTpType.SRGTXPP,
-        "rx", OpenroadmTpType.SRGRXPP
+    private static Map<String, List<OpenroadmTpType>> PORTDIR_ORD_TYPE_MAP = Map.of(
+        "bidirectional", List.of(OpenroadmTpType.DEGREETXRXTTP, OpenroadmTpType.SRGTXRXPP),
+        "tx", List.of(OpenroadmTpType.DEGREETXTTP, OpenroadmTpType.SRGTXPP),
+        "rx", List.of(OpenroadmTpType.DEGREERXTTP, OpenroadmTpType.SRGRXPP)
     );
 
     private OpenRoadmTopology() {
@@ -171,16 +166,16 @@ public final class OpenRoadmTopology {
                 List<Mapping> extractedMappings = mappingNode.nonnullMapping().values()
                         .stream().filter(lcp -> lcp.getLogicalConnectionPoint().contains("XPDR" + xpdrNb))
                         .collect(Collectors.toList());
-                Boolean lastArg;
+                Boolean isOtn;
                 String xpdrType;
                 switch (mapping.getXponderType() == null ? Tpdr : mapping.getXponderType()) {
                     case Tpdr :
-                        lastArg = false;
+                        isOtn = false;
                         xpdrType = "Tpdr";
                         break;
                     case Mpdr :
                     case Switch :
-                        lastArg = true;
+                        isOtn = true;
                         xpdrType = mapping.getXponderType().getName();
                         break;
                     default :
@@ -195,7 +190,7 @@ public final class OpenRoadmTopology {
                                 mappingNode.getNodeInfo().getNodeClli(),
                                 xpdrNb,
                                 extractedMappings,
-                                lastArg)
+                                isOtn)
                           .build());
             }
         }
@@ -255,14 +250,14 @@ public final class OpenRoadmTopology {
         for (Mapping m : degListMap) {
             // Add openroadm-common-network tp type augmentations
             // Added states to degree port. TODO: add to mapping relation between abstracted and physical node states
-            if (!PORTDIR_ORD_DEG_TYPE_MAP.containsKey(m.getPortDirection())) {
+            if (!PORTDIR_ORD_TYPE_MAP.containsKey(m.getPortDirection())) {
                 LOG.error("impossible to set tp-type to {}", m.getLogicalConnectionPoint());
             }
             TerminationPoint ietfTp =  createTpBldr(m.getLogicalConnectionPoint())
                 .addAugmentation(
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
                             .TerminationPoint1Builder()
-                        .setTpType(PORTDIR_ORD_DEG_TYPE_MAP.get(m.getPortDirection()))
+                        .setTpType(PORTDIR_ORD_TYPE_MAP.get(m.getPortDirection()).get(0))
                         .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
                         .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()))
                         .build())
@@ -313,7 +308,7 @@ public final class OpenRoadmTopology {
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         for (Mapping m : srgListMap) {
             // Added states to srg port. TODO: add to mapping relation between abstracted and physical node states
-            if (!PORTDIR_ORD_SRG_TYPE_MAP.containsKey(m.getPortDirection())) {
+            if (!PORTDIR_ORD_TYPE_MAP.containsKey(m.getPortDirection())) {
                 LOG.error("impossible to set tp-type to {}", m.getLogicalConnectionPoint());
             }
             TerminationPoint ietfTp = createTpBldr(m.getLogicalConnectionPoint())
@@ -321,7 +316,7 @@ public final class OpenRoadmTopology {
                     // Add openroadm-common-network tp type augmentations
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
                             .TerminationPoint1Builder()
-                        .setTpType(PORTDIR_ORD_SRG_TYPE_MAP.get(m.getPortDirection()))
+                        .setTpType(PORTDIR_ORD_TYPE_MAP.get(m.getPortDirection()).get(1))
                         .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
                         .setOperationalState(TopologyUtils.setNetworkOperState(m.getPortOperState()))
                         .build())
