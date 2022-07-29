@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b614931e_6dd59bcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-07-29T15:43:20Z",
+      "side": 1,
+      "message": "Hi Roshan, For your information since I saw you started working on the catalog, just so that we avoid duplicating work: I started working on primitives to retrieve parameters from the catalog. I have also modified the json file to populate the catalog, which I did not have the chance to test because we experienced issues with the API doc at the time I built it. There were wrong parameters that made it fail.\nThanks",
+      "revId": "364e8df9d9ec3348072fa3adb38d9bb9b66a8552",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
