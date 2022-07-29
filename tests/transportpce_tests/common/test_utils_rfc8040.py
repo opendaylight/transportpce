@@ -318,6 +318,22 @@ def check_device_connection(node: str):
             'connection-status': connection_status}
 
 
+def check_node_request(node: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device?content=config',  # nopep8
+           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device'}  # nopep8
+    response = get_request(url[RESTCONF_VERSION].format('{}', node))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-device:org-openroadm-device',
+                  'draft-bierman02': 'org-openroadm-device'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'org-openroadm-device': response_attribute}
+
+
 def check_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}?content=nonconfig',  # nopep8
@@ -494,6 +510,24 @@ def del_oms_attr_request(link: str,):
     return response
 
 
+def get_ietf_network_node_request(network: str, node: str, content: str):
+    url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
+           'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', network, node, content)
+    elif content == 'config':
+        format_args = ('{}', content, network, node)
+    else:
+        format_args = ('{}', 'operational', network, node)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    return_key = {'rfc8040': 'ietf-network:node',
+                  'draft-bierman02': 'node'}
+    node = res[return_key[RESTCONF_VERSION]][0]
+    return {'status_code': response.status_code,
+            'node': node}
+
+
 def del_ietf_network_node_request(network: str, node: str, content: str):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/node={}?content={}',
            'draft-bierman02': '{}/{}/ietf-network:networks/network/{}/node/{}'}
@@ -505,6 +539,46 @@ def del_ietf_network_node_request(network: str, node: str, content: str):
         format_args = ('{}', 'operational', network, node)
     response = delete_request(url[RESTCONF_VERSION].format(*format_args))
     return response
+
+
+#
+# Service list operations
+#
+
+
+def get_ordm_serv_list_request():
+    url = {'rfc8040': '{}/data/org-openroadm-service:service-list?content=nonconfig',
+           'draft-bierman02': '{}/operational/org-openroadm-service:service-list/'}
+    response = get_request(url[RESTCONF_VERSION])
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-service:service-list',
+                  'draft-bierman02': 'service-list'}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            'service-list': response_attribute}
+
+
+def get_ordm_serv_list_attr_request(attribute: str, value: str):
+    url = {'rfc8040': '{}/data/org-openroadm-service:service-list/{}={}?content=nonconfig',
+           'draft-bierman02': '{}/operational/org-openroadm-service:service-list/{}/{}'}
+    if RESTCONF_VERSION == 'rfc8040':
+        format_args = ('{}', attribute, value)
+    else:
+        format_args = ('{}', attribute, value)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    res = response.json()
+    return_key = {'rfc8040': 'org-openroadm-service:' + attribute,
+                  'draft-bierman02': attribute}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute: response_attribute}
+
 
 #
 # TransportPCE internal API RPCs
