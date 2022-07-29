@@ -44,12 +44,22 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
       <artifactId>transportpce-ordmodels-network</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
