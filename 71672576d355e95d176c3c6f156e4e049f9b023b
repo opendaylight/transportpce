@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c378399a_b6643508",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T12:05:14Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"to retrieve\" rather than \"retrieving\" ?",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a5d5ea9a_8f7cfbf5",
