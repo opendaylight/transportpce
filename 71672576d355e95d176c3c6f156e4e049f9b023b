@@ -16,6 +16,244 @@
       "message": "Hi Guys, for review, after correction of wrong dependency on the Pom; Shall pass Jenkins verification. Thanks",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae15e01_1378ff01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "Hi Olivier\n\nthanks for this contribution. Here are a few remarks and pointers.\n\nHope this helps\nGuillaume",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aa2f4d6_9f26d90e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogConstant.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "I think \"Util class for Catalog constants\" would be more appropriate\nas the term \"constant class\" might be confused with \"static class\" in a different context\n\ncf https://www.tutorialspoint.com/static-class-in-java",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2661cffd_7eeb8d01",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "Do you mean // TODO ?\n//TODO is a convention widely supported in IDE.",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecbb218b_8e9f79f7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "indent +4 this line to separate clearly if-conditions from code block",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "726dcbeb_9d5e49d3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19087aab_19be7e29",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "I think maps (and maybe guava table) would be more appropriate here.",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "283cf2bc_a7f572da",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "method singular",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72214ad2_32f77fff",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "// TODO ?",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc8da011_7c44c0ba",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "method",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18e647ee_86f3a090",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "What about a ternary operator here?\n\nreturn penalty \u003d\u003d null\n        // out of specification: a boundary \u003e calculatedParameter can be found\n        ? 9999.9\n        // in spec: return penalty associated with calculatedParameter\n        : penalty.getPenaltyValue().getValue().doubleValue();",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf4d2d7c_34133094",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "method etc",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ee315cd_7903b7a4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "method arguments are not described in the javadoc format.",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a33392d_ddb36496",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "\u0027else if\u0027 instead of only \u0027if\u0027 would avoid the second condition (spacing \u003c\u003d 162.5) here.",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "017d7398_b6aec53e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-01T10:11:46Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
