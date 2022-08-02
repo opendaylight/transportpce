@@ -123,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a02d29b0_3fe03614",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogConstant.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:54:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ec6418_16260211",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2661cffd_7eeb8d01",
@@ -313,6 +331,24 @@
       "side": 1,
       "message": "Sorry, but I don\u0027t get your point. The purpose of this function is just to return an operational-mode-Id when this last is not advertised by the equipment (this is the case for device 1.2.1 and 2.2.1 and potentialy 7.1 if they do follow explicit provisioning). So the method is not supposed to return a map or a gava table. It just returns the operational-mode-Id so that the regular primitives, can scan the catalog and retrieve the parameters corresponding to this last",
       "parentUuid": "19087aab_19be7e29",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b87a1f3_a1e0c1c1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:54:45Z",
+      "side": 1,
+      "message": "I\u0027ll take care of this if you don\u0027t see my point.\nThe idea is to replace the switch/case structure (that does a lot of conditions evaluations quite expensive from a performance standpoint) by a Map that will be browsed until the expected value of operational-mode-Id is found and returned (, which is less expensive from a performance standpoint).",
+      "parentUuid": "cb9221b7_cd9647e8",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
