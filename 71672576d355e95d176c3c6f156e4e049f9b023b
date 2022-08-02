@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94ec6418_16260211",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogConstant.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "OK, done!",
+      "parentUuid": "4aa2f4d6_9f26d90e",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2661cffd_7eeb8d01",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 2
@@ -142,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dce46b4_f0bdf9b9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "In fact this has been adressed through another method, forgot to remove this statement and the associated method. This is done : method removed.",
+      "parentUuid": "2661cffd_7eeb8d01",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ecbb218b_8e9f79f7",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 2
@@ -168,6 +204,24 @@
         "id": 6731
       },
       "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecbb218b_8e9f79f7",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0271be2_3b247dfe",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "ecbb218b_8e9f79f7",
@@ -210,6 +264,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41ed80a_44bdb904",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "726dcbeb_9d5e49d3",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19087aab_19be7e29",
@@ -223,6 +295,24 @@
       "writtenOn": "2022-08-01T10:11:46Z",
       "side": 1,
       "message": "I think maps (and maybe guava table) would be more appropriate here.",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb9221b7_cd9647e8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Sorry, but I don\u0027t get your point. The purpose of this function is just to return an operational-mode-Id when this last is not advertised by the equipment (this is the case for device 1.2.1 and 2.2.1 and potentialy 7.1 if they do follow explicit provisioning). So the method is not supposed to return a map or a gava table. It just returns the operational-mode-Id so that the regular primitives, can scan the catalog and retrieve the parameters corresponding to this last",
+      "parentUuid": "19087aab_19be7e29",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -255,6 +345,24 @@
         "id": 6731
       },
       "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "283cf2bc_a7f572da",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9539beab_05bcb07d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "283cf2bc_a7f572da",
@@ -299,6 +407,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2cbd5ced_a0caaf10",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "In fact this was a function to be developed, and I changed my approach. Forgot to remove the function. Now rather than calling this method we first call another method to retreive the default operational-mode-Id when the device does not advertise it and then call the function that follows.\n--\u003e DONE",
+      "parentUuid": "72214ad2_32f77fff",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc8da011_7c44c0ba",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 2
@@ -332,6 +458,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "363f93c2_d65cf4fc",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc8da011_7c44c0ba",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18e647ee_86f3a090",
@@ -345,6 +489,24 @@
       "writtenOn": "2022-08-01T10:11:46Z",
       "side": 1,
       "message": "What about a ternary operator here?\n\nreturn penalty \u003d\u003d null\n        // out of specification: a boundary \u003e calculatedParameter can be found\n        ? 9999.9\n        // in spec: return penalty associated with calculatedParameter\n        : penalty.getPenaltyValue().getValue().doubleValue();",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda115c8_9c25e3b0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Yes this would work, but at the same time, it doesn\u0027t allow saving lines, and to me is less readable. I modified the comments that was wrong (can\u0027t be find rather than can be)",
+      "parentUuid": "18e647ee_86f3a090",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -377,6 +539,24 @@
         "id": 6731
       },
       "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf4d2d7c_34133094",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d137d86_ef88a99f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "bf4d2d7c_34133094",
@@ -419,6 +599,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e18e8df_e79f5807",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ee315cd_7903b7a4",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a33392d_ddb36496",
@@ -454,6 +652,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae95273_6db7cce9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a33392d_ddb36496",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "017d7398_b6aec53e",
@@ -482,6 +698,24 @@
         "id": 6731
       },
       "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "017d7398_b6aec53e",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1334db25_b6c461b9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-02T08:30:04Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "017d7398_b6aec53e",
