@@ -51,11 +51,24 @@ import org.slf4j.LoggerFactory;
 public class CatalogUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CatalogUtils.class);
+
+    private static final Map<CatalogConstant.CatalogNodeType, String> CATALOGNODETYPE_OPERATIONMODEID_MAP = Map.of(
+        CatalogConstant.CatalogNodeType.ADD, CatalogConstant.MWWRCORE,
+        CatalogConstant.CatalogNodeType.DROP, CatalogConstant.MWWRCORE,
+        CatalogConstant.CatalogNodeType.EXPRESS, CatalogConstant.MWMWCORE,
+        CatalogConstant.CatalogNodeType.AMP, CatalogConstant.MWISTANDARD);
+    private static final Map<String, String> TSP_OPERATIONMODEID_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_100GE_T, CatalogConstant.ORW100GSC,
+        StringConstants.SERVICE_TYPE_OTU4, CatalogConstant.ORW100GSC,
+        StringConstants.SERVICE_TYPE_OTUC2,  CatalogConstant.ORW200GOFEC316GBD,
+        StringConstants.SERVICE_TYPE_OTUC3, CatalogConstant.ORW300GOFEC631GBD,
+        StringConstants.SERVICE_TYPE_OTUC4, CatalogConstant.ORW400GOFEC631GBD,
+        StringConstants.SERVICE_TYPE_400GE, CatalogConstant.ORW400GOFEC631GBD);
+
     private final PenaltiesComparator penaltiesComparator = new PenaltiesComparator();
     private NetworkTransactionService networkTransactionService;
 
     public CatalogUtils(NetworkTransactionService networkTransactionService) {
-
         this.networkTransactionService = networkTransactionService;
     }
 
@@ -71,43 +84,20 @@ public class CatalogUtils {
      *
      */
     public String getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType catalogNodeType,
-        String serviceType) {
-        String operationalModeId = "";
+            String serviceType) {
 
-        switch (catalogNodeType) {
-            case ADD:
-                operationalModeId = CatalogConstant.MWWRCORE;
-                break;
-            case DROP:
-                operationalModeId = CatalogConstant.MWWRCORE;
-                break;
-            case EXPRESS:
-                operationalModeId = CatalogConstant.MWMWCORE;
-                break;
-            case AMP:
-                operationalModeId = CatalogConstant.MWISTANDARD;
-                break;
-            case TSP:
-                if (StringConstants.SERVICE_TYPE_100GE_T.contentEquals(serviceType)
-                        || StringConstants.SERVICE_TYPE_OTU4.contentEquals(serviceType)) {
-                    operationalModeId = CatalogConstant.ORW100GSC;
-                }
-                if (StringConstants.SERVICE_TYPE_OTUC2.contentEquals(serviceType)) {
-                    operationalModeId = CatalogConstant.ORW200GOFEC316GBD;
-                }
-                if (StringConstants.SERVICE_TYPE_OTUC3.contentEquals(serviceType)) {
-                    operationalModeId = CatalogConstant.ORW300GOFEC631GBD;
-                }
-                if ((StringConstants.SERVICE_TYPE_OTUC4.contentEquals(serviceType))
-                        || (StringConstants.SERVICE_TYPE_400GE.contentEquals(serviceType))) {
-                    operationalModeId = CatalogConstant.ORW400GOFEC631GBD;
-                }
-                break;
-            default:
-                LOG.warn("Unsupported catalogNodeType {}", catalogNodeType);
-                break;
+        if (CATALOGNODETYPE_OPERATIONMODEID_MAP.containsKey(catalogNodeType)) {
+            return CATALOGNODETYPE_OPERATIONMODEID_MAP.get(catalogNodeType);
         }
-        return operationalModeId;
+        if (!catalogNodeType.equals(CatalogConstant.CatalogNodeType.TSP)) {
+            LOG.warn("Unsupported catalogNodeType {}", catalogNodeType);
+            return "";
+        }
+        if (!TSP_OPERATIONMODEID_MAP.containsKey(serviceType)) {
+            LOG.warn("Unsupported serviceType {} for TSP catalogNodeType", serviceType);
+            return "";
+        }
+        return TSP_OPERATIONMODEID_MAP.get(serviceType);
     }
 
     /**
@@ -123,9 +113,8 @@ public class CatalogUtils {
      */
 
     public double getPceTxTspChannelSpacing(String operationalModeId) {
-        double spacing = 50.0;
-        XponderPluggableOpenroadmOperationalMode orTspOM = null;
-        SpecificOperationalMode speTspOM = null;
+        double baudRate;
+        double maxRollOff;
 
         if (operationalModeId.startsWith("OR")) {
             InstanceIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = InstanceIdentifier
@@ -136,36 +125,26 @@ public class CatalogUtils {
                     new XponderPluggableOpenroadmOperationalModeKey(operationalModeId))
                 .build();
             try {
-                Optional<XponderPluggableOpenroadmOperationalMode> omOptional = networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
-                if (omOptional.isPresent()) {
-                    orTspOM = omOptional.get();
-                    if (!(orTspOM.getMaxRollOff() == null || (orTspOM.getMaxRollOff().doubleValue() == 0))) {
-                        spacing = (Math.ceil(
-                            orTspOM.getBaudRate().doubleValue() * (1 + orTspOM.getMaxRollOff().doubleValue()) / 12.5))
-                            * 12.5;
-                        LOG.info("Operational Mode {} associated channel spacing is {}",
-                            operationalModeId, spacing);
-                    } else {
-                        if (CatalogConstant.ORW100GSC.contentEquals(operationalModeId)) {
-                            LOG.info("Operational Mode {} associated channel spacing is {}",
-                                operationalModeId, spacing);
-
-                        } else {
-                            LOG.info("Did not succeed in retrieving chanel spacing from Operational Mode {}",
-                                operationalModeId);
-                        }
-                    }
+                Optional<XponderPluggableOpenroadmOperationalMode> omOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (omOptional.isEmpty()) {
+                    return 50.0;
                 }
+                XponderPluggableOpenroadmOperationalMode orTspOM = omOptional.get();
+                maxRollOff = orTspOM.getMaxRollOff() == null ? 0 : orTspOM.getMaxRollOff().doubleValue();
+                //TODO check if this particular case should not be removed
+                if (maxRollOff == 0 && CatalogConstant.ORW100GSC.contentEquals(operationalModeId)) {
+                    LOG.info("Operational Mode {} associated channel spacing is 50.0", operationalModeId);
+                    return 50.0;
+                }
+                baudRate = orTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
-                    "Operational mode not populated in Catalog : "
-                        + omCatalogIid + " :" + e);
+                    "Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
             } finally {
                 networkTransactionService.close();
             }
-
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
             InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
@@ -174,31 +153,30 @@ public class CatalogUtils {
                 .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
                 .build();
             try {
-                var somOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid)
-                    .get();
-                if (somOptional.isPresent()) {
-                    speTspOM = somOptional.get();
-                    if (!(speTspOM.getMaxRollOff() == null) || (speTspOM.getMaxRollOff().doubleValue() == 0)) {
-                        spacing = (Math.ceil(
-                            speTspOM.getBaudRate().doubleValue() * (1 + speTspOM.getMaxRollOff().doubleValue()) / 12.5))
-                            * 12.5;
-                        LOG.info("Operational Mode {} associated channel spacing is {}",
-                            operationalModeId, spacing);
-                    } else {
-                        LOG.info("Did not succeed in retrieving chanel spacing from Operational Mode {}",
-                            operationalModeId);
-                    }
+                var somOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (somOptional.isEmpty()) {
+                    return 50.0;
                 }
+                SpecificOperationalMode speTspOM = somOptional.get();
+                maxRollOff = speTspOM.getMaxRollOff() == null ? 0 : speTspOM.getMaxRollOff().doubleValue();
+                baudRate = speTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
-                    "Operational mode not populated in Catalog : "
-                        + omCatalogIid + " :" + e);
+                    "Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
             } finally {
                 networkTransactionService.close();
             }
         }
+        if (maxRollOff == 0) {
+            LOG.info("Did not succeed in retrieving channel spacing from Operational Mode {}", operationalModeId);
+            return 50.0;
+        }
+        double spacing = 12.5 * Math.ceil(baudRate * (1 + maxRollOff) / 12.5);
+        LOG.info("Operational Mode {} associated channel spacing is {}", operationalModeId, spacing);
         return spacing;
+
     }
 
     /**
@@ -228,8 +206,8 @@ public class CatalogUtils {
                     new XponderPluggableOpenroadmOperationalModeKey(operationalModeId))
                 .build();
             try {
-                Optional<XponderPluggableOpenroadmOperationalMode> omOptional = networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                Optional<XponderPluggableOpenroadmOperationalMode> omOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
                 if (omOptional.isPresent()) {
                     orTspOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orTspOM);
@@ -238,13 +216,13 @@ public class CatalogUtils {
                         txOnsrLin = 1.0 / (Math.pow(10.0, (orTspOM.getMinTXOsnr().getValue().doubleValue() / 10.0)));
                     }
                     if (orTspOM.nonnullTXOOBOsnr().get(key) != null
-                        && orTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrSingleChannelValue() != null) {
+                            && orTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrSingleChannelValue() != null) {
                         // To 1/(Xponder Min TX OSNR lin) Add 1/(Xponder TX OOB OSNR Single channel lin)
                         txOnsrLin = txOnsrLin + 1.0 / (Math.pow(10.0, (orTspOM.nonnullTXOOBOsnr().get(key)
                             .getMinOOBOsnrSingleChannelValue().getValue().doubleValue() / 10.0)));
                     }
-                    if (orTspOM.getTXOOBOsnr() != null && orTspOM.nonnullTXOOBOsnr().get(key)
-                        .getMinOOBOsnrMultiChannelValue() != null) {
+                    if (orTspOM.getTXOOBOsnr() != null
+                            && orTspOM.nonnullTXOOBOsnr().get(key).getMinOOBOsnrMultiChannelValue() != null) {
                         // To resulting 1/(OSNR lin) Add 1/(Xponder TX OOB OSNR Multi channel lin)
                         // contribution
                         txOnsrLin = txOnsrLin + 1.0 / (Math.pow(10.0, (orTspOM.nonnullTXOOBOsnr().get(key)
@@ -254,8 +232,8 @@ public class CatalogUtils {
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException(
-                    "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
-                        + e);
+                    "readMdSal: Error reading from operational store, Operational Mode Catalog : "
+                        + omCatalogIid + " :" + e);
             } finally {
                 networkTransactionService.close();
             }
@@ -268,8 +246,8 @@ public class CatalogUtils {
                 .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
                 .build();
             try {
-                var somOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid)
-                    .get();
+                var somOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
                 if (somOptional.isPresent()) {
                     speTspOM = somOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", speTspOM);
@@ -327,12 +305,8 @@ public class CatalogUtils {
      *             if operationalModeId is not described in the catalog
      */
     public double getPceRxTspParameters(String operationalModeId, double calcCd, double calcPmd,
-        double calcPdl, double calcOsnrdB) {
-        HashMap<String, Double> impairments = new HashMap<>();
-        double totalPenalty = 0.0;
-        double penalty = 0.0;
+            double calcPdl, double calcOsnrdB) {
         double rxOsnrdB = 0.0;
-        double margin = -9999.9;
         XponderPluggableOpenroadmOperationalMode orTspOM = null;
         SpecificOperationalMode speTspOM = null;
         Map<PenaltiesKey, Penalties> penaltiesMap = null;
@@ -394,38 +368,36 @@ public class CatalogUtils {
             }
 
         }
-        if (!(penaltiesMap == null)) {
-            penalty = getRxTspPenalty(calcCd, ImpairmentType.CDPsNm, penaltiesMap);
-            impairments.put("CDpenalty", penalty);
-            totalPenalty = totalPenalty + penalty;
-            penalty = getRxTspPenalty(calcPmd, ImpairmentType.PMDPs, penaltiesMap);
-            impairments.put("PMD Penalty", penalty);
-            totalPenalty = totalPenalty + penalty;
-            penalty = getRxTspPenalty(calcPdl, ImpairmentType.PDLDB, penaltiesMap);
-            impairments.put("PDL penalty", penalty);
-            totalPenalty = totalPenalty + penalty;
-            // For Future work since at that time we have no way to calculate the following
-            // parameters,even if penalties are defined in the OpenROADM specifications
-            //
-            // impairments.put("Colorless Drop Adjacent Xtalk Penalty", getRxTspPenalty(TBD,
-            // ImpairmentType.ColorlessDropAdjacentChannelCrosstalkGHz, penalitiesMap));
-            // impairments.put("XTalk total Power Penalty", getRxTspPenalty(TBD,
-            // ImpairmentType.CrossTalkTotalPowerDB, penalitiesMap));
-            // impairments.put("Power penalty", getRxTspPenalty(TBD,
-            // ImpairmentType.PowerDBm, penalitiesMap));
-            LOG.info("Penalty resulting from CD, PMD and PDL is {} dB with following contributions {}",
-                totalPenalty, impairments);
-            margin = calcOsnrdB - totalPenalty - rxOsnrdB;
-            LOG.info("According to RX TSP Specification and calculated impairments Margin is {} dB ", margin);
-            if (margin < 0) {
-                LOG.info("Negative margin shall result in PCE rejecting the analyzed path");
-            }
-
-        } else {
+        if (penaltiesMap == null) {
             LOG.info("Unable to calculate margin as penaltyMap can not be retrieved : Operational mode not populated");
-
+            return -9999.9;
         }
-
+        HashMap<String, Double> impairments = new HashMap<>();
+        double penalty = getRxTspPenalty(calcCd, ImpairmentType.CDPsNm, penaltiesMap);
+        impairments.put("CDpenalty", penalty);
+        double totalPenalty = penalty;
+        penalty = getRxTspPenalty(calcPmd, ImpairmentType.PMDPs, penaltiesMap);
+        impairments.put("PMD Penalty", penalty);
+        totalPenalty += penalty;
+        penalty = getRxTspPenalty(calcPdl, ImpairmentType.PDLDB, penaltiesMap);
+        impairments.put("PDL penalty", penalty);
+        totalPenalty += penalty;
+        // For Future work since at that time we have no way to calculate the following
+        // parameters,even if penalties are defined in the OpenROADM specifications
+        //
+        // impairments.put("Colorless Drop Adjacent Xtalk Penalty", getRxTspPenalty(TBD,
+        // ImpairmentType.ColorlessDropAdjacentChannelCrosstalkGHz, penalitiesMap));
+        // impairments.put("XTalk total Power Penalty", getRxTspPenalty(TBD,
+        // ImpairmentType.CrossTalkTotalPowerDB, penalitiesMap));
+        // impairments.put("Power penalty", getRxTspPenalty(TBD,
+        // ImpairmentType.PowerDBm, penalitiesMap));
+        LOG.info("Penalty resulting from CD, PMD and PDL is {} dB with following contributions {}",
+            totalPenalty, impairments);
+        double margin = calcOsnrdB - totalPenalty - rxOsnrdB;
+        LOG.info("According to RX TSP Specification and calculated impairments Margin is {} dB ", margin);
+        if (margin < 0) {
+            LOG.info("Negative margin shall result in PCE rejecting the analyzed path");
+        }
         return margin;
     }
 
@@ -450,7 +422,8 @@ public class CatalogUtils {
     // private generic method called to calculate Penalties associated with CD, PMD
     // and DGD for Xponder
     private double getRxTspPenalty(double calculatedParameter, ImpairmentType impairmentType,
-        Map<PenaltiesKey, Penalties> penalitiesMap) {
+            Map<PenaltiesKey, Penalties> penalitiesMap) {
+
         Penalties penalty = penalitiesMap.values().stream()
             // We only keep penalties corresponding to the calculated Parameter
             .filter(val -> val.getParameterAndUnit().getName().equals(impairmentType.getName()))
@@ -461,13 +434,12 @@ public class CatalogUtils {
             // takes the immediate greater or equal value
             .findFirst().orElse(null);
 
-        if (penalty == null) {
+        return penalty == null
             //means a boundary that is greater than calculatedParameter couldn't be found
             // Out of specification!
-            return 9999.9;
-        }
-        // In spec, return penalty associated with calculatedParameter
-        return penalty.getPenaltyValue().getValue().doubleValue();
+                ? 9999.9
+            // In spec, return penalty associated with calculatedParameter
+                : penalty.getPenaltyValue().getValue().doubleValue();
     }
 
     /**
@@ -504,10 +476,9 @@ public class CatalogUtils {
      */
 
     public Map<String, Double> getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType catalogNodeType,
-        String operationalModeId, double pwrIn, double calcCd, double calcDgd2, double calcPdl2,
-        double calcOnsrLin, double spacing) {
+            String operationalModeId, double pwrIn, double calcCd, double calcDgd2, double calcPdl2,
+            double calcOnsrLin, double spacing) {
 
-        Map<String, Double> impairments = new HashMap<>();
         double pdl2 = calcPdl2;
         double dgd2 = calcDgd2;
         double cd = calcCd;
@@ -686,15 +657,14 @@ public class CatalogUtils {
                 break;
         }
 
+        Map<String, Double> impairments = new HashMap<>();
         if (supportedMode) {
             impairments.put("CD", cd);
             impairments.put("DGD2", dgd2);
             impairments.put("PDL2", pdl2);
             impairments.put("ONSRLIN", onsrLin);
-
             LOG.info("Accumulated CD is {} ps, DGD2 is {} ps and PDL2 is {} dB", cd, Math.sqrt(dgd2), Math.sqrt(pdl2));
             LOG.info("Resulting OSNR is {} dB", 10 * Math.log10(1 / onsrLin));
-
         } else {
             LOG.error("Operational Mode {} passed to getPceRoadmAmpParameters does not correspond to an OpenROADM mode"
                 + "Parameters for amplifier and/or ROADMs can not be derived from specific-operational-modes.",
