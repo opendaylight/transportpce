@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a485e41_572e657c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "only \u0027else\u0027 is more appropriate here IMO",
+      "revId": "68b5de01b5c0a01b702189331d841f8cd03cdf43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1477aab2_44c9bc8f",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:04:04Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "68b5de01b5c0a01b702189331d841f8cd03cdf43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
