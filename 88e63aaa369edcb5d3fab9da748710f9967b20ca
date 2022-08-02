@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0ac290_56b45da8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "Please find additional comments.",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8fd08fe_19108372",
@@ -140,6 +157,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be5e145b_0fde595c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "would prefer:\nspeTspOM.getMaxRollOff() !\u003d null",
+      "range": {
+        "startLine": 181,
+        "startChar": 24,
+        "endLine": 181,
+        "endChar": 59
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becf33f8_09d037bb",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
@@ -186,6 +226,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b669a8d0_717bfbef",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem:\nif (speTspOM.getMinTXOsnr() !\u003d null) {",
+      "range": {
+        "startLine": 277,
+        "startChar": 20,
+        "endLine": 277,
+        "endChar": 61
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "90b02547_4ddcb5ad",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
@@ -209,6 +272,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a9a9054_412b9dc6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "this is a useless assignment. Just declare the local variable.",
+      "range": {
+        "startLine": 333,
+        "startChar": 22,
+        "endLine": 333,
+        "endChar": 28
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad2ae7f6_14c44aed",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 355,
+        "startChar": 24,
+        "endLine": 355,
+        "endChar": 66
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d63c3131_13d275ca",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 382,
+        "startChar": 24,
+        "endLine": 382,
+        "endChar": 67
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8433ca29_37785a7f",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
@@ -220,6 +352,29 @@
       "writtenOn": "2022-08-02T14:17:50Z",
       "side": 1,
       "message": "useless blank line",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cb69ec9_9b06aa86",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem\nif (penaltiesMap !\u003d null) {",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 38
+      },
       "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -271,6 +426,144 @@
       "writtenOn": "2022-08-02T14:17:50Z",
       "side": 1,
       "message": "idem",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b55421f1_112f6672",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "you can remove this property which is not used as it is, and declare netTransServ as a local variable in the catalogPrimitivesTest() method.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 58
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9733010e_a9857102",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "remove this declaration since it is not thrown by the method body.",
+      "range": {
+        "startLine": 54,
+        "startChar": 28,
+        "endLine": 54,
+        "endChar": 49
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40399fcc_0d2cad42",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem, remove this declaration",
+      "range": {
+        "startLine": 78,
+        "startChar": 40,
+        "endLine": 78,
+        "endChar": 59
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b509f2_afaecfbf",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "no need to convert an already String to a String. Remove this useless method call.",
+      "range": {
+        "startLine": 85,
+        "startChar": 52,
+        "endLine": 85,
+        "endChar": 63
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee0751f_d005e302",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 89,
+        "startChar": 52,
+        "endLine": 89,
+        "endChar": 63
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa59fbe2_1a1e00da",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-02T16:21:59Z",
+      "side": 1,
+      "message": "idem, etc...",
+      "range": {
+        "startLine": 93,
+        "startChar": 52,
+        "endLine": 93,
+        "endChar": 63
+      },
       "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
