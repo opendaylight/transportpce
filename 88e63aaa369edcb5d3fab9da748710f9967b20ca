@@ -123,6 +123,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3634acda_73e3049b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T15:03:04Z",
+      "side": 1,
+      "message": "spacing will always be equal to default value 50.0 in this block.\nAlso, is it really worth a specific condition and LOG message ?",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becf33f8_09d037bb",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
