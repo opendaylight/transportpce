@@ -71,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57af50eb_c7a0c26d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T13:42:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9313c27e_f4a617f3",
+      "revId": "68b5de01b5c0a01b702189331d841f8cd03cdf43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1477aab2_44c9bc8f",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "In fact, I just realize that the specific operational mode catalog is something Private that can not be publically released by OR MSA, meaning we can not build corresponding tests.. Will remove this statement in Patch 4.",
       "parentUuid": "1477aab2_44c9bc8f",
+      "revId": "68b5de01b5c0a01b702189331d841f8cd03cdf43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896e888a_6ef862dd",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/catalog/CatalogUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T13:42:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7551e7c5_55b05c57",
       "revId": "68b5de01b5c0a01b702189331d841f8cd03cdf43",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
