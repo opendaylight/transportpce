@@ -194,6 +194,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "617e862c_3e228130",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dce46b4_f0bdf9b9",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecbb218b_8e9f79f7",
@@ -455,6 +473,24 @@
       "side": 1,
       "message": "In fact this was a function to be developed, and I changed my approach. Forgot to remove the function. Now rather than calling this method we first call another method to retreive the default operational-mode-Id when the device does not advertise it and then call the function that follows.\n--\u003e DONE",
       "parentUuid": "72214ad2_32f77fff",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500f0d21_2be7fd0c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-02T08:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cbd5ced_a0caaf10",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
