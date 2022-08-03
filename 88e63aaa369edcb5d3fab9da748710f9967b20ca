@@ -198,6 +198,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd3ae10d_b7c31c46",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T08:38:51Z",
+      "side": 1,
+      "message": "caution: the ! is before (\n\nThis means the it should also be \"\u0026\u0026 speTspOM.getMaxRollOff().doubleValue() !\u003d 0\" in that case...\nplease see next PS in WIP where I proposed a deeper refactoring for this part of the code for more details.",
+      "parentUuid": "be5e145b_0fde595c",
+      "range": {
+        "startLine": 181,
+        "startChar": 24,
+        "endLine": 181,
+        "endChar": 59
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becf33f8_09d037bb",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
