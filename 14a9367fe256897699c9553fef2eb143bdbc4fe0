@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9312862_b171b483",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-03T10:16:15Z",
+      "side": 1,
+      "message": "Thanks to both of you! Gilles, I guess I solved all your comments. Thanks\n",
+      "revId": "14a9367fe256897699c9553fef2eb143bdbc4fe0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

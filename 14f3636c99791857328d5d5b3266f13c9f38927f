@@ -16,6 +16,24 @@
       "message": "fallthrough comment is misplaced to be interpreted by checkstyle.\nAnd I think what was expecting Gilles is more something like this.\n\n            case ADD:\n            case DROP:\n            case EXPRESS:\n                operationalModeId \u003d CatalogConstant.MWWRCORE;\n                break;\n            case AMP:\n                operationalModeId \u003d CatalogConstant.MWISTANDARD;\n                break;\n\nfallthrough refers here to the fact of cascading ADD and DROP and EXPRESS cases without a break statement.\nThis is well detected by compilers and linters and it does not deserve an explicit comment.\nThus the comment \"//fallthrough\" is not needed at all here, as well as the FBSuppressWarning decorator.\nSuch comment is required by checkstyle only if a command is inserted between case statements without any break; statement. This avoids confusion between the commmon programming errors of forgetting break; and real intentional fallthroughs.",
       "revId": "14f3636c99791857328d5d5b3266f13c9f38927f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97b2f476_64a4d4f7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-03T10:16:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9ff9b489_e49a904d",
+      "revId": "14f3636c99791857328d5d5b3266f13c9f38927f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
