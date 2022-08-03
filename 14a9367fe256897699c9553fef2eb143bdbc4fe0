@@ -16,6 +16,23 @@
       "message": "Thanks to both of you! Gilles, I guess I solved all your comments. Thanks\n",
       "revId": "14a9367fe256897699c9553fef2eb143bdbc4fe0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6162e8_6d4bea36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T11:51:49Z",
+      "side": 1,
+      "message": "cf next change in relation chain",
+      "revId": "14a9367fe256897699c9553fef2eb143bdbc4fe0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

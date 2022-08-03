@@ -371,6 +371,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "591b512a_3b91e782",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T11:51:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b87a1f3_a1e0c1c1",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "283cf2bc_a7f572da",
@@ -579,6 +597,24 @@
       "side": 1,
       "message": "Yes this would work, but at the same time, it doesn\u0027t allow saving lines, and to me is less readable. I modified the comments that was wrong (can\u0027t be find rather than can be)",
       "parentUuid": "18e647ee_86f3a090",
+      "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "623d70f2_e58bb98e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T11:51:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bda115c8_9c25e3b0",
       "revId": "71672576d355e95d176c3c6f156e4e049f9b023b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
