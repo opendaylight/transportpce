@@ -373,6 +373,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ac4734c_f20a998d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T12:10:35Z",
+      "side": 1,
+      "message": "OK\nIf so, a different message with a debug log level would be more appropriated IMO and it would also make more sense to get rid of the spacing variable in that block.\n\nI have also another concern.\nAs it is, this specific part of the code prevents from further factorization in the next PS for very little gain. cf lines 136 and 172\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/101944/1/common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java#136\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/101944/1/common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java#172\n\ncould this specific treatment for 100GSCFEC be also applied to non OpenROADM specific Operational Mode (\u003d else condition of the first parent if-block) ?\nOr at least can we find any solution to have an identical treatment of both cases ?",
+      "parentUuid": "d081bb87_501dc49b",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be5e145b_0fde595c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
