@@ -222,6 +222,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25eeb7a4_dd6e9b76",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-03T08:52:08Z",
+      "side": 1,
+      "message": "To be completely clear, this is not due to the parenthesis itself but to a tricky right-to-left and left-to-right nested precendence cases here.\n\nhttps://introcs.cs.princeton.edu/java/11precedence/",
+      "parentUuid": "fd3ae10d_b7c31c46",
+      "range": {
+        "startLine": 181,
+        "startChar": 24,
+        "endLine": 181,
+        "endChar": 59
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becf33f8_09d037bb",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
