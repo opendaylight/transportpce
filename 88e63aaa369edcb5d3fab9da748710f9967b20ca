@@ -391,6 +391,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1db89f7_c5b4e6b4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-04T08:00:07Z",
+      "side": 1,
+      "message": "Looking back at this method, and investigating a bit on OR side, I think I need to make some adjustments.\n1 : the method shall not return 50 GHz when it doesn\u0027t find the rolloff, because this parameter is mandatory (except for 100GSCFEC where it is not present) for all OR mode, and is also mandatory for the specific operational mode.\n2 : to handle the absence of the parameter or a zero value, I should better set Rolloff to 0.2 than returning a 50GHz value that may lead to optical issues. I prefer to keep LOG at info level rather than debug. It is not really a question of debugging. Catalog filling is an operation that will happen often. Thus we must inform an operational guy that may not activate debug level, that there is something wrong with the parameter entered in the catalog.\n_I have looked at your proposal that may be fine, but will probably need to be revised according to this new rules. Will push the modification in next patch and we can discuss it.",
+      "parentUuid": "5ac4734c_f20a998d",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be5e145b_0fde595c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4

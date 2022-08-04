@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dad1bcc_9baa5249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-04T08:00:07Z",
+      "side": 1,
+      "message": "Hi, \nBased on further investigation on OR specs, made a few adjustments on the method to handle spacing....",
+      "revId": "af045752902ee2be174f86a994b1ac1abd69b39b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
