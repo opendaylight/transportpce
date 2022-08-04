@@ -409,6 +409,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00816f10_5ca11e70",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-04T10:52:29Z",
+      "side": 1,
+      "message": "OK Thanks for the feedback.\nIf you need several default values to return than 50.0, the refactoring proposed in next change allows more control about default values returned, feel free to reuse and adapt it here in this change.\nFor anything that goes wrong, I think warn or error are more appropriate log levels.\n\nHope this helps\nGuillaume",
+      "parentUuid": "e1db89f7_c5b4e6b4",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be5e145b_0fde595c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
