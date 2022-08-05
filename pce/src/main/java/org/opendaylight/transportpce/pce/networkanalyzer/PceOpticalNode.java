@@ -179,15 +179,15 @@ public class PceOpticalNode implements PceNode {
         }
         switch (this.serviceType) {
             case "400GE":
-                for (Class<? extends SupportedIfCapability> ifCap : mapping.getSupportedInterfaceCapability()) {
-                    if (ifCap.equals(IfOtsiOtsigroup.class)) {
+                for (SupportedIfCapability ifCap : mapping.getSupportedInterfaceCapability()) {
+                    if (ifCap.equals(IfOtsiOtsigroup.VALUE)) {
                         return true;
                     }
                 }
                 return false;
             case "100GE":
-                return mapping.getSupportedInterfaceCapability().contains(IfOCH.class)
-                        || mapping.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class);
+                return mapping.getSupportedInterfaceCapability().contains(IfOCH.VALUE)
+                        || mapping.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE);
             default:
                 return true;
         }

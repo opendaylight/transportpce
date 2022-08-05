@@ -7,10 +7,9 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -27,20 +26,16 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2EODU2E;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU2ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class MappingUtilsImpl implements MappingUtils {
 
@@ -48,25 +43,29 @@ public class MappingUtilsImpl implements MappingUtils {
 
     private final DataBroker dataBroker;
 
-    private static Map<String, Class<? extends SupportedIfCapability>> capTypeClassMap = new HashMap<>() {
-        {
-            put("IfOtsiOtsigroup", IfOtsiOtsigroup.class);
-            put("IfOTUCnODUCn", IfOTUCnODUCn.class);
-            put("IfOCHOTU4ODU4", IfOCHOTU4ODU4.class);
-            put("IfOTU4ODU4", IfOTU4ODU4.class);
-            put("IfOCH", IfOCH.class);
-            put("If100GEODU4", If100GEODU4.class);
-            put("If10GEODU2e", If10GEODU2e.class);
-            put("If10GEODU2", If10GEODU2.class);
-            put("If1GEODU0", If1GEODU0.class);
-            put("If400GE", If400GE.class);
-            put("If100GE", If100GE.class);
-            put("If10GE", If10GE.class);
-            put("If1GE", If1GE.class);
-            put("IfOCHOTU2EODU2E", IfOCHOTU2EODU2E.class);
-            put("IfOCHOTU2ODU2", IfOCHOTU2ODU2.class);
-        }
-    };
+    private static final ImmutableMap<String, SupportedIfCapability> CAP_TYPE_MAP =
+        ImmutableMap.<String, SupportedIfCapability>builder()
+            .put("If400GE{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-400GE}", If400GE.VALUE)
+            .put("IfOtsiOtsigroup{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-otsi-otsigroup}",
+                IfOtsiOtsigroup.VALUE)
+            .put("IfOCH{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-OCH}", IfOCH.VALUE)
+            .put("IfOCHOTU4ODU4{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-OCH-OTU4-ODU4}",
+                IfOCHOTU4ODU4.VALUE)
+            .put("IfOCHOTU4ODU4{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-OCH-OTU4-ODU4}",
+                IfOCHOTU4ODU4.VALUE)
+            .put("If1GEODU0{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-1GE-ODU0}", If1GEODU0.VALUE)
+            .put("If10GE{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-10GE}", If10GE.VALUE)
+            .put("If10GEODU2{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-10GE-ODU2}",
+                If10GEODU2.VALUE)
+            .put("If10GEODU2e{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-10GE-ODU2e}",
+                If10GEODU2e.VALUE)
+            .put("If100GE{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-100GE}", If100GE.VALUE)
+            .put("If100GE{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-100GE}", If100GE.VALUE)
+            .put("If100GEODU4{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-100GE-ODU4}",
+                If100GEODU4.VALUE)
+            .put("If100GEODU4{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-100GE-ODU4}",
+                If100GEODU4.VALUE)
+            .build();
 
     public MappingUtilsImpl(DataBroker dataBroker) {
 
@@ -132,11 +131,11 @@ public class MappingUtilsImpl implements MappingUtils {
         return mcCapabilities;
     }
 
-    public static Class<? extends SupportedIfCapability> convertSupIfCapa(String ifCapType) {
-        if (!capTypeClassMap.containsKey(ifCapType)) {
+    public static SupportedIfCapability convertSupIfCapa(String ifCapType) {
+        if (!CAP_TYPE_MAP.containsKey(ifCapType)) {
             LOG.error("supported-if-capability {} not supported", ifCapType);
             return null;
         }
-        return capTypeClassMap.get(ifCapType);
+        return CAP_TYPE_MAP.get(ifCapType);
     }
 }
