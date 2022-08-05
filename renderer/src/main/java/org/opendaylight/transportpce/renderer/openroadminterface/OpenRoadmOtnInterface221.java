@@ -68,8 +68,7 @@ public class OpenRoadmOtnInterface221 {
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
                 .setSpeed(Uint32.valueOf(1000));
-        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(
-                portMap, EthernetCsmacd.class,
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE,
                 logicalConnPoint + "-ETHERNET1G");
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new Interface1Builder();
@@ -92,8 +91,7 @@ public class OpenRoadmOtnInterface221 {
                 nodeId, logicalConnPoint));
     }
 
-    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap,
-            Class<? extends InterfaceType> type, String key) {
+    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, InterfaceType type, String key) {
         return new InterfaceBuilder()
                 // .setDescription(" TBD ")
                 // .setCircuitId(" TBD ")
@@ -118,7 +116,7 @@ public class OpenRoadmOtnInterface221 {
                 .setSpeed(Uint32.valueOf(10000));
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new Interface1Builder();
-        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE,
                 logicalConnPoint + "-ETHERNET10G").addAugmentation(ethIf1Builder.setEthernet(ethIfBuilder.build())
                         .build());
         // Post interface on the device
@@ -141,7 +139,7 @@ public class OpenRoadmOtnInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2e");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
@@ -150,12 +148,12 @@ public class OpenRoadmOtnInterface221 {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
         }
 
-        Class<? extends OduFunctionIdentity> oduFunction;
+        OduFunctionIdentity oduFunction;
         MonitoringMode monitoringMode;
         Opu opu = null;
         ParentOduAllocation parentOduAllocation = null;
         if (isCTP) {
-            oduFunction = ODUCTP.class;
+            oduFunction = ODUCTP.VALUE;
             monitoringMode = MonitoringMode.Monitored;
             Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
@@ -167,7 +165,7 @@ public class OpenRoadmOtnInterface221 {
                     .setTribSlots(tribSlots)
                     .build();
         } else {
-            oduFunction = ODUTTPCTP.class;
+            oduFunction = ODUTTPCTP.VALUE;
             monitoringMode = MonitoringMode.Terminated;
             opu = new OpuBuilder()
                 .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
@@ -175,7 +173,7 @@ public class OpenRoadmOtnInterface221 {
                 .build();
         }
         OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU2e.class)
+            .setRate(ODU2e.VALUE)
             .setOduFunction(oduFunction)
             .setMonitoringMode(monitoringMode)
             .setOpu(opu)
@@ -217,7 +215,7 @@ public class OpenRoadmOtnInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU0");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
@@ -226,12 +224,12 @@ public class OpenRoadmOtnInterface221 {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
         }
 
-        Class<? extends OduFunctionIdentity> oduFunction;
+        OduFunctionIdentity oduFunction;
         MonitoringMode monitoringMode;
         Opu opu = null;
         ParentOduAllocation parentOduAllocation = null;
         if (isCTP) {
-            oduFunction = ODUCTP.class;
+            oduFunction = ODUCTP.VALUE;
             monitoringMode = MonitoringMode.Monitored;
             Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
@@ -243,7 +241,7 @@ public class OpenRoadmOtnInterface221 {
                     .setTribSlots(tribSlots)
                     .build();
         } else {
-            oduFunction = ODUTTPCTP.class;
+            oduFunction = ODUTTPCTP.VALUE;
             monitoringMode = MonitoringMode.Terminated;
             opu = new OpuBuilder()
                 .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
@@ -251,7 +249,7 @@ public class OpenRoadmOtnInterface221 {
                 .build();
         }
         OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU0.class)
+            .setRate(ODU0.VALUE)
             .setOduFunction(oduFunction)
             .setMonitoringMode(monitoringMode)
             .setOpu(opu)
@@ -293,7 +291,7 @@ public class OpenRoadmOtnInterface221 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2");
         if (mapping.getSupportingOdu4() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
@@ -302,12 +300,12 @@ public class OpenRoadmOtnInterface221 {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
         }
 
-        Class<? extends OduFunctionIdentity> oduFunction;
+        OduFunctionIdentity oduFunction;
         MonitoringMode monitoringMode;
         Opu opu = null;
         ParentOduAllocation parentOduAllocation = null;
         if (isCTP) {
-            oduFunction = ODUCTP.class;
+            oduFunction = ODUCTP.VALUE;
             monitoringMode = MonitoringMode.Monitored;
             Set<Uint16> tribSlots = new HashSet<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
@@ -319,7 +317,7 @@ public class OpenRoadmOtnInterface221 {
                     .setTribSlots(tribSlots)
                     .build();
         } else {
-            oduFunction = ODUTTPCTP.class;
+            oduFunction = ODUTTPCTP.VALUE;
             monitoringMode = MonitoringMode.Terminated;
             opu = new OpuBuilder()
                 .setPayloadType(PayloadTypeDef.getDefaultInstance(payloadType))
@@ -327,7 +325,7 @@ public class OpenRoadmOtnInterface221 {
                 .build();
         }
         OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU2.class)
+            .setRate(ODU2.VALUE)
             .setOduFunction(oduFunction)
             .setMonitoringMode(monitoringMode)
             .setOpu(opu)

@@ -317,8 +317,8 @@ public class PceOtnNode implements PceNode {
         for (SupportedInterfaceCapability sic :
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
-            if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.class)
-                    || sic.getIfCapType().equals(IfOtsiOtsigroup.class))
+            if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.VALUE)
+                    || sic.getIfCapType().equals(IfOtsiOtsigroup.VALUE))
                     && (ontTp1.getXpdrTpPortConnectionAttributes() == null
                         || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
                 return true;
@@ -339,8 +339,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkFirstOdtuTpn(OdtuTpnPool otPool) {
-        return (otPool.getOdtuType().getSimpleName().equals(ODTU4TsAllocated.class.getSimpleName())
-                || otPool.getOdtuType().getSimpleName().equals(ODTUCnTs.class.getSimpleName()))
+        return (otPool.getOdtuType().toString().equals(ODTU4TsAllocated.VALUE.toString()))
+                || otPool.getOdtuType().toString().equals(ODTUCnTs.VALUE.toString())
             && !otPool.getTpnPool().isEmpty();
     }
 
@@ -350,7 +350,7 @@ public class PceOtnNode implements PceNode {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             // we could also check the administrative status of the tp
             if (SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).getSimpleName()
-                    .equals(sic.getIfCapType().getSimpleName())) {
+                    .equals(sic.getIfCapType().toString())) {
                 return true;
             }
         }

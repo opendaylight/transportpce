@@ -301,17 +301,17 @@ public final class NodeUtils {
             .TerminationPoint1Builder createOTNTerminationPoint(OpenroadmTpType openroadmTpType) {
 
         SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                .setIfCapType(IfOCHOTU4ODU4.class)
+                .setIfCapType(IfOCHOTU4ODU4.VALUE)
                 .build();
 
         SupportedInterfaceCapability supIfCapa1 = new SupportedInterfaceCapabilityBuilder()
-                .setIfCapType(If100GEODU4.class)
+                .setIfCapType(If100GEODU4.VALUE)
                 .build();
         SupportedInterfaceCapability supIfCapa2 = new SupportedInterfaceCapabilityBuilder()
-                .setIfCapType(If10GEODU2e.class)
+                .setIfCapType(If10GEODU2e.VALUE)
                 .build();
         SupportedInterfaceCapability supIfCapa3 = new SupportedInterfaceCapabilityBuilder()
-                .setIfCapType(If1GEODU0.class)
+                .setIfCapType(If1GEODU0.VALUE)
                 .build();
 
         Map<SupportedInterfaceCapabilityKey,SupportedInterfaceCapability> supIfCapaList = new HashMap<>();
