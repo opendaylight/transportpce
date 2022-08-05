@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.common.catalog;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -442,20 +443,23 @@ public class CatalogUtils {
      *            crossed node path type (ADD/DROP/EXPRESS/AMP)
      * @param operationalModeId
      *            operational-mode-Id of the Node (OpenROADM only)
-     * @param calcCd
+     * @param cd
      *            accumulated chromatic dispersion across the line
-     * @param calcDgd2
+     * @param dgd2
      *            Square of accumulated Group velocity dispersion across the line
-     * @param calcPdl2
+     * @param pdl2
      *            Square of the accumulated Polarization Dependant Loss across the
      *            line
      * @param pwrIn
      *            Input power required to calculate OSNR contribution of the node =
      *            f(pwrIn)
-     * @param calcOnsrLin
+     * @param onsrLin
      *            Linear Optical Noise to Signal Ratio resulting from the
      *            transmission on the line, that shall include the Non Linear
      *            contribution
+     * @param spacing
+     *            Spacing correction used in Linear Optical Noise to Signal Ratio
+     *            compuation
      *
      * @return Impairment, a map that provides corrected values for all calculated
      *         parameters which includes the contribution of the node
@@ -465,13 +469,12 @@ public class CatalogUtils {
      */
 
     public Map<String, Double> getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType catalogNodeType,
-            String operationalModeId, double pwrIn, double calcCd, double calcDgd2, double calcPdl2,
-            double calcOnsrLin, double spacing) {
-        //TODO more refactoring need here
-        double pdl2 = calcPdl2;
-        double dgd2 = calcDgd2;
-        double cd = calcCd;
-        double onsrLin = calcOnsrLin;
+            String operationalModeId, double pwrIn, double cd, double dgd2, double pdl2,
+            double onsrLin, double spacing) {
+        double maxIntroducedCd;
+        double maxIntroducedPdl;
+        double maxIntroducedDgd;
+        List<Double> osnrPolynomialFits;
         switch (catalogNodeType) {
             case ADD:
                 var omCatalogIid = InstanceIdentifier
@@ -491,12 +494,10 @@ public class CatalogUtils {
                     var orAddOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
                     networkTransactionService.close();
-                    onsrLin +=
-                        + Math.pow(10, (-orAddOM.getIncrementalOsnr().getValue().doubleValue()
-                        - Math.log10(spacing / 50.0)) / 10.0);
-                    cd += orAddOM.getMaxIntroducedCd().doubleValue();
-                    pdl2 += Math.pow(orAddOM.getMaxIntroducedPdl().getValue().doubleValue(), 2.0);
-                    dgd2 += Math.pow(orAddOM.getMaxIntroducedDgd().doubleValue(), 2.0);
+                    maxIntroducedCd = orAddOM.getMaxIntroducedCd().doubleValue();
+                    maxIntroducedPdl = orAddOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    maxIntroducedDgd = orAddOM.getMaxIntroducedDgd().doubleValue();
+                    osnrPolynomialFits = List.of(orAddOM.getIncrementalOsnr().getValue().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
                     onsrLin = 1;
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
@@ -527,15 +528,14 @@ public class CatalogUtils {
                     var orDropOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orDropOM);
                     networkTransactionService.close();
-                    cd += orDropOM.getMaxIntroducedCd().doubleValue();
-                    pdl2 += Math.pow(orDropOM.getMaxIntroducedPdl().getValue().doubleValue(), 2.0);
-                    dgd2 += Math.pow(orDropOM.getMaxIntroducedDgd().doubleValue(), 2);
-                    onsrLin += Math.pow(10,
-                        -(orDropOM.getOsnrPolynomialFit().getA().doubleValue() * Math.pow(pwrIn, 3)
-                            + orDropOM.getOsnrPolynomialFit().getB().doubleValue() * Math.pow(pwrIn, 2)
-                            + orDropOM.getOsnrPolynomialFit().getC().doubleValue() * pwrIn
-                            + orDropOM.getOsnrPolynomialFit().getD().doubleValue()
-                            + 10 * Math.log10(spacing / 50.0)) / 10);
+                    maxIntroducedCd = orDropOM.getMaxIntroducedCd().doubleValue();
+                    maxIntroducedPdl = orDropOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    maxIntroducedDgd = orDropOM.getMaxIntroducedDgd().doubleValue();
+                    osnrPolynomialFits = List.of(
+                        orDropOM.getOsnrPolynomialFit().getD().doubleValue(),
+                        orDropOM.getOsnrPolynomialFit().getC().doubleValue(),
+                        orDropOM.getOsnrPolynomialFit().getB().doubleValue(),
+                        orDropOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid1);
@@ -572,15 +572,14 @@ public class CatalogUtils {
                     }
                     var orExpressOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orExpressOM);
-                    cd += orExpressOM.getMaxIntroducedCd().doubleValue();
-                    pdl2 += Math.pow(orExpressOM.getMaxIntroducedPdl().getValue().doubleValue(), 2.0);
-                    dgd2 += Math.pow(orExpressOM.getMaxIntroducedDgd().doubleValue(), 2.0);
-                    onsrLin += Math.pow(10,
-                        -(orExpressOM.getOsnrPolynomialFit().getA().doubleValue() * Math.pow(pwrIn, 3)
-                            + orExpressOM.getOsnrPolynomialFit().getB().doubleValue() * Math.pow(pwrIn, 2)
-                            + orExpressOM.getOsnrPolynomialFit().getC().doubleValue() * pwrIn
-                            + orExpressOM.getOsnrPolynomialFit().getD().doubleValue()
-                            + 10 * Math.log10(spacing / 50.0)) / 10);
+                    maxIntroducedCd = orExpressOM.getMaxIntroducedCd().doubleValue();
+                    maxIntroducedPdl = orExpressOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    maxIntroducedDgd = orExpressOM.getMaxIntroducedDgd().doubleValue();
+                    osnrPolynomialFits = List.of(
+                        orExpressOM.getOsnrPolynomialFit().getD().doubleValue(),
+                        orExpressOM.getOsnrPolynomialFit().getC().doubleValue(),
+                        orExpressOM.getOsnrPolynomialFit().getB().doubleValue(),
+                        orExpressOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid2);
@@ -611,15 +610,14 @@ public class CatalogUtils {
                     var orAmpOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAmpOM);
                     networkTransactionService.close();
-                    cd += orAmpOM.getMaxIntroducedCd().doubleValue();
-                    pdl2 += Math.pow(orAmpOM.getMaxIntroducedPdl().getValue().doubleValue(), 2.0);
-                    dgd2 += Math.pow(orAmpOM.getMaxIntroducedDgd().doubleValue(), 2.0);
-                    onsrLin += Math.pow(10,
-                        -(orAmpOM.getOsnrPolynomialFit().getA().doubleValue() * Math.pow(pwrIn, 3)
-                            + orAmpOM.getOsnrPolynomialFit().getB().doubleValue() * Math.pow(pwrIn, 2)
-                            + orAmpOM.getOsnrPolynomialFit().getC().doubleValue() * pwrIn
-                            + orAmpOM.getOsnrPolynomialFit().getD().doubleValue()
-                            + 10 * Math.log10(spacing / 50.0)) / 10);
+                    maxIntroducedCd = orAmpOM.getMaxIntroducedCd().doubleValue();
+                    maxIntroducedPdl = orAmpOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    maxIntroducedDgd = orAmpOM.getMaxIntroducedDgd().doubleValue();
+                    osnrPolynomialFits = List.of(
+                        orAmpOM.getOsnrPolynomialFit().getD().doubleValue(),
+                        orAmpOM.getOsnrPolynomialFit().getC().doubleValue(),
+                        orAmpOM.getOsnrPolynomialFit().getB().doubleValue(),
+                        orAmpOM.getOsnrPolynomialFit().getA().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
                         omCatalogIid3);
@@ -631,9 +629,37 @@ public class CatalogUtils {
                 }
                 break;
             default:
-                LOG.warn("Unsupported catalogNodeType {}", catalogNodeType);
-                break;
+                LOG.error("Unsupported catalogNodeType {}", catalogNodeType);
+                return new HashMap<>();
         }
+        cd += maxIntroducedCd;
+        pdl2 += Math.pow(maxIntroducedPdl, 2.0);
+        dgd2 += Math.pow(maxIntroducedDgd, 2.0);
+        double pwrFact = 1;
+        double contrib = 10 * Math.log10(spacing / 50.0);
+        //TODO 10 factor was not present in ADD case initially... check if this was volunteer
+        for (double fit : osnrPolynomialFits) {
+            contrib += pwrFact * fit;
+            pwrFact *= pwrIn;
+            // Using a for loop with multiplication instead of Math.pow optimizes the computation.
+        }
+        // Double is not strictly spoken a Mathematics commutative group because of computer bits limited size.
+        // The order of operation matters.
+        // Smallest numbers should be introduced first in a sum for a maximum of precision.
+        // In other words, the sum
+        //            + 10 * Math.log10(spacing / 50.0)
+        //            + osnrPolynomialFits.get(0)
+        //            + osnrPolynomialFits.get(1) * pwrIn
+        //            + osnrPolynomialFits.get(2) * Math.pow(pwrIn, 2)
+        //            + osnrPolynomialFits.get(3) * Math.pow(pwrIn, 3)
+        // is not equal to its reverse form
+        //            + osnrPolynomialFits.get(3) * Math.pow(pwrIn, 3)
+        //            + osnrPolynomialFits.get(2) * Math.pow(pwrIn, 2)
+        //            + osnrPolynomialFits.get(1) * pwrIn
+        //            + osnrPolynomialFits.get(0)
+        //            + 10 * Math.log10(spacing / 50.0)
+        // This more precise first form should be preferred.
+        onsrLin += Math.pow(10, -contrib / 10);
         Map<String, Double> impairments = new HashMap<>();
         impairments.put("CD", cd);
         impairments.put("DGD2", dgd2);

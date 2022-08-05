@@ -214,12 +214,12 @@ public class CatalogUtilsTest extends AbstractTest {
         outputImpairments.put("CD", 1025.0);
         outputImpairments.put("DGD2", 18.0);
         outputImpairments.put("PDL2", 6.25);
-        outputImpairments.put("ONSRLIN", 0.0016307685044580744);
+        outputImpairments.put("ONSRLIN", 0.0016307685044580757);
         // check how to add Delta on an object<String, Double>
         assertEquals("Checking ROADM Express path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.EXPRESS,
             CatalogConstant.MWMWCORE,-15.0, 1000.0, 9.0, 4.0, 0.001000, 50.0));
-        outputImpairments.put("ONSRLIN", 0.0013604391454046139);
+        outputImpairments.put("ONSRLIN", 0.0013604391454046147);
         assertEquals("Checking ROADM Express path contribution to impairments with 87.5 GHz spacing ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.EXPRESS,
             CatalogConstant.MWMWCORE,-15.0, 1000.0, 9.0, 4.0, 0.001000, 87.5));
@@ -227,11 +227,11 @@ public class CatalogUtilsTest extends AbstractTest {
         assertEquals("Checking ROADM Add path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.ADD,
             CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.0, 0.001, 50.0));
-        outputImpairments.put("ONSRLIN", 0.0016307685044580744);
+        outputImpairments.put("ONSRLIN", 0.0016307685044580757);
         assertEquals("Checking ROADM Drop path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.DROP,
             CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.0, 0.001, 50.0));
-        outputImpairments.put("ONSRLIN", 0.0015010372326658573);
+        outputImpairments.put("ONSRLIN", 0.0015010372326658581);
         assertEquals("Checking Amp path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.AMP,
             CatalogConstant.MWISTANDARD, -15.0, 1025.0, 9.0, 5.76, 0.001, 50.0));
