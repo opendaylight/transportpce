@@ -156,12 +156,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>mdsal-binding-runtime-spi</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>ietf-netconf</artifactId>
+      <groupId>org.opendaylight.netconf.model</groupId>
+      <artifactId>rfc6241</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>ietf-netconf-notifications</artifactId>
+      <groupId>org.opendaylight.netconf.model</groupId>
+      <artifactId>rfc6470</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
