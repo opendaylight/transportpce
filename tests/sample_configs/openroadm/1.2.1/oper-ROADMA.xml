@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <netconf xmlns="urn:ietf:params:xml:ns:netmod:notification">
+    <streams>
+      <stream>
+        <name>NETCONF</name>
+      </stream>
+    </streams>
+  </netconf>
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
       <node-id>ROADMA01</node-id>

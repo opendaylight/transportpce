@@ -151,7 +151,7 @@ public final class NetworkmodelTestUtil {
 
     public static List<TerminationPoint> createTpList(boolean withTpnTsPool) {
         SupportedInterfaceCapability supCapa = new SupportedInterfaceCapabilityBuilder()
-            .setIfCapType(IfOCHOTU4ODU4.class)
+            .setIfCapType(IfOCHOTU4ODU4.VALUE)
             .build();
         Map<SupportedInterfaceCapabilityKey,SupportedInterfaceCapability> supInterCapaList =
                 new HashMap<>();
@@ -160,7 +160,7 @@ public final class NetworkmodelTestUtil {
             .setSupportedInterfaceCapability(supInterCapaList)
             .build();
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder()
-            .setRate(ODU4.class);
+            .setRate(ODU4.VALUE);
         if (withTpnTsPool) {
             Set<Uint16> tsPool = new HashSet<>();
             for (int i = 0; i < 80; i++) {
@@ -172,7 +172,7 @@ public final class NetworkmodelTestUtil {
                 tpnPool.add(Uint16.valueOf(i));
             }
             OdtuTpnPool odtuTpn = new OdtuTpnPoolBuilder()
-                    .setOdtuType(ODTU4TsAllocated.class)
+                    .setOdtuType(ODTU4TsAllocated.VALUE)
                     .setTpnPool(tpnPool).build();
             xtpcaBldr.setOdtuTpnPool(ImmutableMap.of(odtuTpn.key(),odtuTpn));
         }
@@ -251,8 +251,8 @@ public final class NetworkmodelTestUtil {
             int networkPortNb, int clientPortNb,
         XpdrNodeTypes xpdrNodeType) {
         for (int i = 1; i <= networkPortNb; i++) {
-            Set<Class<? extends SupportedIfCapability>> supportedIntf = new HashSet<>();
-            supportedIntf.add(IfOCH.class);
+            Set<SupportedIfCapability> supportedIntf = new HashSet<>();
+            supportedIntf.add(IfOCH.VALUE);
             MappingBuilder mappingBldr = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-NETWORK" + i)
                 .setPortDirection("bidirectional")
@@ -268,8 +268,8 @@ public final class NetworkmodelTestUtil {
             mappingMap.put(mapping.key(),mapping);
         }
         for (int i = 1; i <= clientPortNb; i++) {
-            Set<Class<? extends SupportedIfCapability>> supportedIntf = new HashSet<>();
-            supportedIntf.add(If100GE.class);
+            Set<SupportedIfCapability> supportedIntf = new HashSet<>();
+            supportedIntf.add(If100GE.VALUE);
             Mapping mapping = new MappingBuilder()
                 .setLogicalConnectionPoint("XPDR1-CLIENT" + i)
                 .setPortDirection("bidirectional")
