@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb2bbad8_6f5fe690",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-05T15:54:18Z",
+      "side": 1,
+      "message": "Hi Guillaume,\nThanks for your proposal. I am fine with the modification up to getPceTxTspChannelSpacing, including it. For the function you modified after line 196, I did not have time to review them. As you changed all the structure and approach, it is almost impossible to see what it leads to from the dif view. This means it will imply to read all the codes to figure out what will be the outcome, which I don\u0027t have time to do before leaving on PTO. Suggest we discuss this after I come back at the en of August. Thanks!",
+      "revId": "7a1ebb57ee8ac71c5733ec9591d25231b19d81d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13394a08_be076a37",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-05T15:54:18Z",
+      "side": 1,
+      "message": "Would make \"DEFAULT\"  appear in the name of the MAP, to avoid anyone think that this is a unique correspondance : TSP_DEFAULT_OM ?",
+      "revId": "7a1ebb57ee8ac71c5733ec9591d25231b19d81d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
