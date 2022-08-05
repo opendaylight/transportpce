@@ -425,6 +425,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b457823_43efba60",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-05T13:37:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00816f10_5ca11e70",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be5e145b_0fde595c",
@@ -534,6 +552,30 @@
       "side": 1,
       "message": "OK\nwhat about simply reverting code blocks to have a straight equality in that case ?\n\nif (speTspOM.getMaxRollOff() \u003d\u003d null || speTspOM.getMaxRollOff().doubleValue() \u003d\u003d 0) {\n    LOG.info(\"Did not succeed in retrieving chanel spacing from Operational Mode {}\",\n        operationalModeId);\n} else {\n   spacing \u003d...\n}\n\nidem line 140",
       "parentUuid": "8da5d4c9_6a72f50b",
+      "range": {
+        "startLine": 181,
+        "startChar": 24,
+        "endLine": 181,
+        "endChar": 59
+      },
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32942f03_6dc68729",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-05T13:37:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "93e131c1_ce64ad53",
       "range": {
         "startLine": 181,
         "startChar": 24,
