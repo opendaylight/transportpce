@@ -928,7 +928,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             3, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 3 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(ODUTYPEODU2.class, ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
+            hasItems(ODUTYPEODU2.VALUE, ODUTYPEODU2E.VALUE, DIGITALSIGNALTYPE10GigELAN.VALUE));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
         checkSIP(nep, portName, nodeId, extension);
@@ -947,7 +947,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("network nep should support 1 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItem(ODUTYPEODU4.class));
+            hasItem(ODUTYPEODU4.VALUE));
         assertEquals("network nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
         checkSIP(nep, portName, nodeId, extension);
@@ -1146,7 +1146,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             2, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(ODUTYPEODU4.class, DIGITALSIGNALTYPE100GigE.class));
+            hasItems(ODUTYPEODU4.VALUE, DIGITALSIGNALTYPE100GigE.VALUE));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
         checkSIP(nep, portName, nodeId, extension);
@@ -1164,7 +1164,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(DIGITALSIGNALTYPE100GigE.class));
+            hasItems(DIGITALSIGNALTYPE100GigE.VALUE));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
         checkSIP(nep, portName, nodeId, extension);
@@ -1182,7 +1182,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             2, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("OTSi nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(PHOTONICLAYERQUALIFIEROMS.class, PHOTONICLAYERQUALIFIEROTSi.class));
+            hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE, PHOTONICLAYERQUALIFIEROTSi.VALUE));
         assertEquals("OTSi nep should be of PHOTONIC_MEDIA protocol type",
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
         assertEquals("OTSi nep should support one SIP", 1, nep.getMappedServiceInterfacePoint().size());
@@ -1209,7 +1209,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("OTSi nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(PHOTONICLAYERQUALIFIEROMS.class));
+            hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE));
         assertEquals("OTSi nep should be of PHOTONIC_MEDIA protocol type",
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
         assertEquals("OTSi nep of RDM infra should support no SIP", 0, nep.nonnullMappedServiceInterfacePoint().size());

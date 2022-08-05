@@ -79,7 +79,7 @@ public class GnpyResult {
                             .getPathProperties().nonnullPathMetric().values();
                     LOG.info("GNPy : path is not feasible : {}", noPathType);
                     for (PathMetric pathMetric : pathMetricList) {
-                        String metricType = pathMetric.getMetricType().getSimpleName();
+                        String metricType = pathMetric.getMetricType().toString();
                         Decimal64 accumulativeValue = pathMetric.getAccumulativeValue();
                         LOG.info("Metric type {} // AccumulatriveValue {}", metricType, accumulativeValue);
                     }
@@ -91,7 +91,7 @@ public class GnpyResult {
                         .getPathProperties().nonnullPathMetric().values();
                 // Path metrics
                 for (PathMetric pathMetric : pathMetricList) {
-                    String metricType = pathMetric.getMetricType().getSimpleName();
+                    String metricType = pathMetric.getMetricType().toString();
                     Decimal64 accumulativeValue = pathMetric.getAccumulativeValue();
                     LOG.info("Metric type {} // AccumulatriveValue {}", metricType, accumulativeValue);
                 }

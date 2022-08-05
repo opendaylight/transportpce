@@ -795,7 +795,7 @@ public class ConvertORTopoToTapiFullTopo {
                     .getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
@@ -818,7 +818,7 @@ public class ConvertORTopoToTapiFullTopo {
                     TapiStringConstants.MC, tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName1.key(), nepName1))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
@@ -848,7 +848,7 @@ public class ConvertORTopoToTapiFullTopo {
                     .toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName2.key(), nepName2))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
@@ -945,9 +945,9 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
     }
 
-    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedLayerProtocolQualifier(TerminationPoint tp,
-                                                                                                LayerProtocolName lpn) {
-        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
+    private Set<LAYERPROTOCOLQUALIFIER> createSupportedLayerProtocolQualifier(TerminationPoint tp,
+                                                                              LayerProtocolName lpn) {
+        Set<LAYERPROTOCOLQUALIFIER> sclpqSet = new HashSet<>();
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1 tp1 =
             tp.augmentation(org.opendaylight.yang.gen.v1.http
                 .org.openroadm.otn.network.topology.rev211210.TerminationPoint1.class);
@@ -961,36 +961,37 @@ public class ConvertORTopoToTapiFullTopo {
         Collection<SupportedInterfaceCapability> sicList = tp1.getTpSupportedInterfaces()
             .getSupportedInterfaceCapability().values();
         for (SupportedInterfaceCapability sic : sicList) {
+            String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
             switch (lpn.getName()) {
                 case "DSR":
-                    switch (sic.getIfCapType().getSimpleName()) {
+                    switch (ifCapType) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqSet.add(ODUTYPEODU0.class);
-                            sclpqSet.add(DIGITALSIGNALTYPEGigE.class);
+                            sclpqSet.add(ODUTYPEODU0.VALUE);
+                            sclpqSet.add(DIGITALSIGNALTYPEGigE.VALUE);
                             break;
                         case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(ODUTYPEODU2E.VALUE);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GEODU2":
-                            sclpqSet.add(ODUTYPEODU2.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(ODUTYPEODU2.VALUE);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If100GEODU4":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
-                            sclpqSet.add(ODUTYPEODU4.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                            sclpqSet.add(ODUTYPEODU4.VALUE);
                             break;
                         case "If100GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
                             break;
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.class);
+                            sclpqSet.add(ODUTYPEODU4.VALUE);
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -998,24 +999,24 @@ public class ConvertORTopoToTapiFullTopo {
                     }
                     break;
                 case "ODU":
-                    switch (sic.getIfCapType().getSimpleName()) {
+                    switch (ifCapType) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqSet.add(ODUTYPEODU0.class);
+                            sclpqSet.add(ODUTYPEODU0.VALUE);
                             break;
                         case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.class);
+                            sclpqSet.add(ODUTYPEODU2E.VALUE);
                             break;
                         case "If10GEODU2":
                         case "If10GE":
-                            sclpqSet.add(ODUTYPEODU2.class);
+                            sclpqSet.add(ODUTYPEODU2.VALUE);
                             break;
                         case "If100GEODU4":
                         case "If100GE":
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.class);
+                            sclpqSet.add(ODUTYPEODU4.VALUE);
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -1023,10 +1024,9 @@ public class ConvertORTopoToTapiFullTopo {
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (ifCapType.equals("IfOCHOTU4ODU4") || ifCapType.equals("IfOCH")) {
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.VALUE);
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.VALUE);
                     }
                     break;
                 default:
