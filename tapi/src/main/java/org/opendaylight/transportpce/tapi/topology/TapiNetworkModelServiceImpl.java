@@ -687,7 +687,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+            List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid1, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
@@ -708,8 +708,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
-                new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
+            List<SupportedIfCapability> newSupIfCapList =
+                    new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid2, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
@@ -729,7 +729,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+            List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid3, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
@@ -762,7 +762,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 name = nameBldr.setValueName("NodeEdgePoint_C").build();
             }
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+            List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrClMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
@@ -785,7 +785,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrNetMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+            List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
@@ -809,7 +809,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     xpdrClMaps.get(i).getLogicalConnectionPoint()))
                 .build();
 
-            List<Class<? extends SupportedIfCapability>> newSupIfCapList =
+            List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrClMaps.get(i).getSupportedInterfaceCapability());
 
             OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
@@ -837,7 +837,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private OwnedNodeEdgePoint createNep(Uuid nepUuid, String tpid, Map<NameKey, Name> nepNames,
                                          LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip,
                                          String keyword,
-                                         List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                                         List<SupportedIfCapability> supportedInterfaceCapability,
                                          OperationalState operState, AdministrativeState adminState) {
         OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
                 .setUuid(nepUuid)
@@ -872,7 +872,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setUuid(nepUuid)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName.key(), nepName))
-            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -891,7 +891,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setUuid(nepUuid1)
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName1.key(), nepName1))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -916,7 +916,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setUuid(nepUuid2)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName2.key(), nepName2))
-            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+            .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
             .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -928,7 +928,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint>
             createMSIP(int nb, LayerProtocolName layerProtocol, String tpid, String nodeid,
-                   List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                   List<SupportedIfCapability> supportedInterfaceCapability,
                    OperationalState operState, AdministrativeState adminState) {
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
         for (int i = 0; i < nb; i++) {
@@ -947,7 +947,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private ServiceInterfacePoint createSIP(Uuid sipUuid, LayerProtocolName layerProtocol, String tpid, String nodeid,
-                                            List<Class<? extends SupportedIfCapability>> supportedInterfaceCapability,
+                                            List<SupportedIfCapability> supportedInterfaceCapability,
                                             OperationalState operState, AdministrativeState adminState) {
         // TODO: what value should be set in total capacity and available capacity
         LOG.info("SIP name = {}", String.join("+", nodeid, tpid));
@@ -1266,52 +1266,53 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return nodeRuleGroupMap;
     }
 
-    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedLayerProtocolQualifier(
-            List<Class<? extends SupportedIfCapability>> sicList, LayerProtocolName lpn) {
+    private Set<LAYERPROTOCOLQUALIFIER> createSupportedLayerProtocolQualifier(
+            List<SupportedIfCapability> sicList, LayerProtocolName lpn) {
         if (sicList == null) {
-            return Set.of(PHOTONICLAYERQUALIFIEROMS.class);
+            return Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE);
         }
         Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supIfMap = new HashMap<>();
         LOG.info("SIC list = {}", sicList);
-        for (Class<? extends SupportedIfCapability> supInterCapa : sicList) {
+        for (SupportedIfCapability supInterCapa : sicList) {
             SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
                     .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
                     .setIfCapType(supInterCapa)
                     .build();
             supIfMap.put(supIfCapa.key(), supIfCapa);
         }
-        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new HashSet<>();
+        Set<LAYERPROTOCOLQUALIFIER> sclpqList = new HashSet<>();
         for (SupportedInterfaceCapability sic : supIfMap.values()) {
+            String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
             switch (lpn.getName()) {
                 case "DSR":
-                    switch (sic.getIfCapType().getSimpleName()) {
+                    switch (ifCapType) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqList.add(ODUTYPEODU0.class);
-                            sclpqList.add(DIGITALSIGNALTYPEGigE.class);
+                            sclpqList.add(ODUTYPEODU0.VALUE);
+                            sclpqList.add(DIGITALSIGNALTYPEGigE.VALUE);
                             break;
                         case "If10GEODU2e":
-                            sclpqList.add(ODUTYPEODU2E.class);
-                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqList.add(ODUTYPEODU2E.VALUE);
+                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GEODU2":
-                            sclpqList.add(ODUTYPEODU2.class);
-                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqList.add(ODUTYPEODU2.VALUE);
+                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GE":
-                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqList.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If100GEODU4":
-                            sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
-                            sclpqList.add(ODUTYPEODU4.class);
+                            sclpqList.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                            sclpqList.add(ODUTYPEODU4.VALUE);
                             break;
                         case "If100GE":
-                            sclpqList.add(DIGITALSIGNALTYPE100GigE.class);
+                            sclpqList.add(DIGITALSIGNALTYPE100GigE.VALUE);
                             break;
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqList.add(ODUTYPEODU4.class);
+                            sclpqList.add(ODUTYPEODU4.VALUE);
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -1319,24 +1320,24 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     }
                     break;
                 case "ODU":
-                    switch (sic.getIfCapType().getSimpleName()) {
+                    switch (ifCapType) {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqList.add(ODUTYPEODU0.class);
+                            sclpqList.add(ODUTYPEODU0.VALUE);
                             break;
                         case "If10GEODU2e":
-                            sclpqList.add(ODUTYPEODU2E.class);
+                            sclpqList.add(ODUTYPEODU2E.VALUE);
                             break;
                         case "If10GEODU2":
                         case "If10GE":
-                            sclpqList.add(ODUTYPEODU2.class);
+                            sclpqList.add(ODUTYPEODU2.VALUE);
                             break;
                         case "If100GEODU4":
                         case "If100GE":
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqList.add(ODUTYPEODU4.class);
+                            sclpqList.add(ODUTYPEODU4.VALUE);
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -1344,10 +1345,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqList.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (ifCapType.equals("IfOCHOTU4ODU4") || ifCapType.equals("IfOCH")) {
+                        sclpqList.add(PHOTONICLAYERQUALIFIEROTSi.VALUE);
+                        sclpqList.add(PHOTONICLAYERQUALIFIEROMS.VALUE);
                     }
                     break;
                 default:

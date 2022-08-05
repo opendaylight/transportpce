@@ -588,7 +588,7 @@ public class ConvertORTopoToTapiTopo {
                 .setUuid(nepUuid)
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -645,38 +645,39 @@ public class ConvertORTopoToTapiTopo {
         return msipl;
     }
 
-    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>>
+    private Set<LAYERPROTOCOLQUALIFIER>
             createSupportedCepLayerProtocolQualifier(TerminationPoint tp, LayerProtocolName lpn) {
-        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
+        Set<LAYERPROTOCOLQUALIFIER> sclpqSet = new HashSet<>();
         Collection<SupportedInterfaceCapability> sicList = tp.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1.class)
             .getTpSupportedInterfaces()
             .getSupportedInterfaceCapability().values();
         for (SupportedInterfaceCapability sic : sicList) {
+            String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
             switch (lpn.getName()) {
                 case "DSR":
-                    switch (sic.getIfCapType().getSimpleName()) {
+                    switch (ifCapType) {
                         case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(ODUTYPEODU2E.VALUE);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GEODU2":
-                            sclpqSet.add(ODUTYPEODU2.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(ODUTYPEODU2.VALUE);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If10GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
                             break;
                         case "If100GEODU4":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
-                            sclpqSet.add(ODUTYPEODU4.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                            sclpqSet.add(ODUTYPEODU4.VALUE);
                             break;
                         case "If100GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
+                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
                             break;
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.class);
+                            sclpqSet.add(ODUTYPEODU4.VALUE);
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -684,10 +685,9 @@ public class ConvertORTopoToTapiTopo {
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (ifCapType.equals("IfOCHOTU4ODU4") || ifCapType.equals("IfOCH")) {
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.VALUE);
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.VALUE);
                     }
                     break;
                 default:

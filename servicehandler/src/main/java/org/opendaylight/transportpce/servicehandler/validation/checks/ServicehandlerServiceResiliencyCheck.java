@@ -32,20 +32,17 @@ public final class ServicehandlerServiceResiliencyCheck {
      */
     public static ComplianceCheckResult check(ServiceResiliency serviceResiliency) {
         if (serviceResiliency.getResiliency() != null) {
-            switch (serviceResiliency.getResiliency().getSimpleName()) {
+            String serviceResiliencyType = serviceResiliency.getResiliency().toString().split("\\{")[0];
+            switch (serviceResiliencyType) {
                 case "Unprotected":
                     return checkUnprotectedResiliency(serviceResiliency);
-
                 case "UnprotectedDiverselyRouted":
                     return checkUnprotectedDiverselyRoutedResiliency(serviceResiliency);
-
                 case "Protected":
                     return checkProtectedResiliency(serviceResiliency);
-
                 case "Restorable":
                 case "ExternalTriggerRestorable":
                     return checkRestorableAndExternalTriggerRestorableResiliency(serviceResiliency);
-
                 default:
                     LOG.warn(LOG_RESILIENCY_TYPE_UNMANAGED);
                     return new ComplianceCheckResult(false, LOG_RESILIENCY_TYPE_UNMANAGED);

@@ -269,8 +269,8 @@ public class PceCalculation {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
             networkTransactionService.close();
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
-            throw new RuntimeException(
-                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
+//            throw new RuntimeException(
+//                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
         }
         return nw;
     }

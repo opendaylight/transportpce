@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -170,15 +169,14 @@ public final class ModelMappingUtils {
                     scale));
         }
         if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
-            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-                    .forName(atoZDirection.getModulationFormat());
-            if (optionalModulationFormat.isPresent()
+            ModulationFormat modulationFormat = ModulationFormat.forName(atoZDirection.getModulationFormat());
+            if (modulationFormat != null
                     && GridConstant.FREQUENCY_WIDTH_TABLE
-                    .contains(atoZDirection.getRate(), optionalModulationFormat.get())) {
+                    .contains(atoZDirection.getRate(), modulationFormat)) {
                 servicePathInputBuilder
                     .setNmcWidth(FrequencyGHz
                         .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),
-                        optionalModulationFormat.get())));
+                        modulationFormat)));
             }
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
@@ -228,14 +226,13 @@ public final class ModelMappingUtils {
                     scale));
         }
         if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
-            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-                    .forName(ztoADirection.getModulationFormat());
-            if (optionalModulationFormat.isPresent()
+            ModulationFormat modulationFormat = ModulationFormat.forName(ztoADirection.getModulationFormat());
+            if (modulationFormat != null
                     && GridConstant.FREQUENCY_WIDTH_TABLE
-                    .contains(ztoADirection.getRate(), optionalModulationFormat.get())) {
+                    .contains(ztoADirection.getRate(), modulationFormat)) {
                 servicePathInputBuilder.setNmcWidth(FrequencyGHz
                         .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),
-                                optionalModulationFormat.get())));
+                                modulationFormat)));
             }
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())

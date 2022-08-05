@@ -168,7 +168,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(intf['rate'], 'org-openroadm-optical-channel-interfaces:R100G')
         self.assertEqual(intf['modulation-format'], 'dp-qpsk')
         self.assertEqual(intf['wavelength-number'], 7)
-        self.assertEqual(float(intf['transmit-power']), -5)
+        self.assertEqual(float(intf['transmit-power']), -5.00)
 
     def test_10_service_path_create_xpdr_check(self):
         response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-OTU")

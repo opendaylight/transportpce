@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -113,18 +112,18 @@ public class OpenRoadmInterface710 {
         }
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
-            .setFec(Rsfec.class)
+            .setFec(Rsfec.VALUE)
             // Default set to 400G
             .setSpeed(Uint32.valueOf(400000));
         // We have to differentiate if-100GE vs if-400GE
-        if (portMap.getSupportedInterfaceCapability().contains(If100GE.class)) {
+        if (portMap.getSupportedInterfaceCapability().contains(If100GE.VALUE)) {
             ethIfBuilder
                 // There could be different client pluggables on either side QSFP28-LR4 or QSFP28-FR4
                 // LR4-requires FEC to off, while FR4 can accept even when FEC is off
-                .setFec(Off.class) // For 100G OFec mode, the fec is off
+                .setFec(Off.VALUE) // For 100G OFec mode, the fec is off
                 .setSpeed(Uint32.valueOf(100000));
         }
-        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE,
             logicalConnPoint + "-ETHERNET");
 
         // Create Interface1 type object required for adding as augmentation
@@ -144,16 +143,14 @@ public class OpenRoadmInterface710 {
         SpectrumInformation spectrumInformation)
         throws OpenRoadmInterfaceException {
 
-        ModulationFormat   modulationFormat = ModulationFormat.DpQpsk;
-        Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-            .forName(spectrumInformation.getModulationFormat());
-        if (optionalModulationFormat.isPresent()) {
-            modulationFormat =  optionalModulationFormat.get();
+        ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
+        if (modulationFormat == null) {
+            modulationFormat =  ModulationFormat.DpQpsk;
         }
         // OCH interface specific data
         OchBuilder ocIfBuilder = new OchBuilder()
             .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
-            .setRate(R100G.class)
+            .setRate(R100G.VALUE)
             .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
             .setModulationFormat(modulationFormat);
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -164,7 +161,7 @@ public class OpenRoadmInterface710 {
         }
         // Create generic interface
         InterfaceBuilder
-            ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
+            ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.VALUE,
             spectrumInformation.getIdentifierFromParams(logicalConnPoint));
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -188,14 +185,9 @@ public class OpenRoadmInterface710 {
             SpectrumInformation spectrumInformation)
             throws OpenRoadmInterfaceException {
 
-        ModulationFormat modulationFormat;
-        Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-            .forName(spectrumInformation.getModulationFormat());
-        if (optionalModulationFormat.isPresent()) {
-            modulationFormat =  optionalModulationFormat.get();
-        } else {
-            throw new OpenRoadmInterfaceException(
-                String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
+        ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
+        if (modulationFormat == null) {
+            throw new OpenRoadmInterfaceException(String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
         }
 
         // OTSI interface specific data
@@ -203,7 +195,7 @@ public class OpenRoadmInterface710 {
             .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
             .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
             .setProvisionMode(ProvisionModeType.Explicit)
-            .setFec(Ofec.class)
+            .setFec(Ofec.VALUE)
             .setModulationFormat(modulationFormat);
 
         // Set the Flexo values
@@ -216,9 +208,9 @@ public class OpenRoadmInterface710 {
                 LOG.info("Given modulation format and spectral width 50GHz {} and thus rate is 100G",
                     modulationFormat);
                 LOG.info("FOIC is 1.4 for 31.6 Gbaud and rate is 100");
-                flexoBuilder.setFoicType(Foic14.class)
+                flexoBuilder.setFoicType(Foic14.VALUE)
                     .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1))));
-                otsiBuilder.setOtsiRate(R100GOtsi.class)
+                otsiBuilder.setOtsiRate(R100GOtsi.VALUE)
                     .setFlexo(flexoBuilder.build());
                 break;
             case 200:
@@ -226,32 +218,32 @@ public class OpenRoadmInterface710 {
                 if (modulationFormat == ModulationFormat.DpQam16) {
                     LOG.info("FOIC is 2.8 for 31.6 Gbaud and rate is 200");
                     // FOIC rate is different
-                    flexoBuilder.setFoicType(Foic28.class)
+                    flexoBuilder.setFoicType(Foic28.VALUE)
                         .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
                 } else {
                     // default is dp-qpsk for 200G under 63.1 GBaud
-                    flexoBuilder.setFoicType(Foic24.class)
+                    flexoBuilder.setFoicType(Foic24.VALUE)
                         .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2))));
                 }
-                otsiBuilder.setOtsiRate(R200GOtsi.class)
+                otsiBuilder.setOtsiRate(R200GOtsi.VALUE)
                     .setFlexo(flexoBuilder.build());
                 break;
             case 300:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
-                flexoBuilder.setFoicType(Foic36.class)
+                flexoBuilder.setFoicType(Foic36.VALUE)
                     .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
                         Uint8.valueOf(3))));
-                otsiBuilder.setOtsiRate(R300GOtsi.class)
+                otsiBuilder.setOtsiRate(R300GOtsi.VALUE)
                     .setFlexo(flexoBuilder.build());
                 break;
             case 400:
                 // Default baud-rate is 63.1 Gbaud
                 LOG.info("Given modulation format is {} and thus rate is 400G", modulationFormat);
-                flexoBuilder.setFoicType(Foic48.class)
+                flexoBuilder.setFoicType(Foic48.VALUE)
                     .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1), Uint8.valueOf(2),
                         Uint8.valueOf(3), Uint8.valueOf(4))));
                 otsiBuilder.setModulationFormat(modulationFormat)
-                    .setOtsiRate(R400GOtsi.class)
+                    .setOtsiRate(R400GOtsi.VALUE)
                     .setFlexo(flexoBuilder.build());
                 break;
             default:
@@ -271,7 +263,7 @@ public class OpenRoadmInterface710 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         // Create generic interface
-        InterfaceBuilder otsiInterfaceBldr = createGenericInterfaceBuilder(portMap, Otsi.class,
+        InterfaceBuilder otsiInterfaceBldr = createGenericInterfaceBuilder(portMap, Otsi.VALUE,
             spectrumInformation.getIdentifierFromParams(logicalConnPoint));
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http
@@ -304,14 +296,9 @@ public class OpenRoadmInterface710 {
                     nodeId, logicalConnPoint));
         }
         // Check the modulation format
-        ModulationFormat modulationFormat;
-        Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-            .forName(spectrumInformation.getModulationFormat());
-        if (optionalModulationFormat.isPresent()) {
-            modulationFormat =  optionalModulationFormat.get();
-        } else {
-            throw new OpenRoadmInterfaceException(
-                String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
+        ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
+        if (modulationFormat == null) {
+            throw new OpenRoadmInterfaceException(String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
         }
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         // Create an OTSI group object
@@ -320,16 +307,16 @@ public class OpenRoadmInterface710 {
         boolean rateNotFound = false;
         switch (serviceRate) {
             case 100:
-                otsiGroupBuilder.setGroupRate(R100GOtsi.class);
+                otsiGroupBuilder.setGroupRate(R100GOtsi.VALUE);
                 break;
             case 200:
-                otsiGroupBuilder.setGroupRate(R200GOtsi.class);
+                otsiGroupBuilder.setGroupRate(R200GOtsi.VALUE);
                 break;
             case 300:
-                otsiGroupBuilder.setGroupRate(R300GOtsi.class);
+                otsiGroupBuilder.setGroupRate(R300GOtsi.VALUE);
                 break;
             case 400:
-                otsiGroupBuilder.setGroupRate(R400GOtsi.class);
+                otsiGroupBuilder.setGroupRate(R400GOtsi.VALUE);
                 break;
             default:
                 LOG.error("Rate {} is not supported", serviceRate);
@@ -342,7 +329,7 @@ public class OpenRoadmInterface710 {
         }
 
         // Create generic interface
-        InterfaceBuilder otsiGroupInterfaceBldr = createGenericInterfaceBuilder(portMap, OtsiGroup.class,
+        InterfaceBuilder otsiGroupInterfaceBldr = createGenericInterfaceBuilder(portMap, OtsiGroup.VALUE,
             logicalConnPoint + String.join("-", "", "OTSIGROUP", serviceRate + "G"));
 
         // Create a list
@@ -375,10 +362,10 @@ public class OpenRoadmInterface710 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         String interfaceOchOtsiOtsigroup = null;
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
+        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OCH interface
             interfaceOchOtsiOtsigroup = createOpenRoadmOchInterface(nodeId, logicalConnPoint, spectrumInformation);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
+        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create OTSi and OTSi-group and concat the names of the interface
             String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);
             // Concat the two names for this interface
@@ -399,7 +386,7 @@ public class OpenRoadmInterface710 {
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
         InterfaceBuilder
-            otuInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOtu.class,
+            otuInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOtu.VALUE,
             logicalConnPoint + "-OTU4");
         // Supporting interface list
         Set<String> listSupportingOChInterface = new HashSet<>();
@@ -410,8 +397,8 @@ public class OpenRoadmInterface710 {
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.otu.container.OtuBuilder
             otuIfBuilder = new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu
             .interfaces.rev200529.otu.container.OtuBuilder()
-            .setFec(Scfec.class)
-            .setRate(OTU4.class);
+            .setFec(Scfec.VALUE)
+            .setRate(OTU4.VALUE);
         if (apiInfoA != null) {
             otuIfBuilder.setTxSapi(apiInfoA.getSapi())
                 .setTxDapi(apiInfoA.getDapi())
@@ -449,7 +436,7 @@ public class OpenRoadmInterface710 {
         }
         // Create an OTUCn object
         OtuBuilder otuBuilder = new OtuBuilder()
-            .setRate(OTUCn.class)
+            .setRate(OTUCn.VALUE)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
             .setDegmIntervals(Uint8.valueOf(2))
@@ -499,7 +486,7 @@ public class OpenRoadmInterface710 {
                 String.format(RATE_EXCEPTION_MESSAGE));
         }
 
-        InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOtu.class,
+        InterfaceBuilder otuInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOtu.VALUE,
             logicalConnPoint + "-OTUC" + otucnrate);
 
         // Create a list
@@ -533,11 +520,11 @@ public class OpenRoadmInterface710 {
         // Depending on OCH-OTU4-ODU4 interface or OTSi-OTSi-group, supporting interface should
         // reflect that
         String interfaceOtu4Otucn = null;
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
+        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OTU4 interface
             interfaceOtu4Otucn = createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportingInterface,
                 apiInfoA, apiInfoZ);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
+        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create OTUCn
             interfaceOtu4Otucn = createOpenRoadmOtucnInterface(nodeId, logicalConnPoint, supportingInterface,
                 apiInfoA, apiInfoZ);
@@ -554,7 +541,7 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
         }
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU4");
         Set<String> listSupportingOtu4Interface = new HashSet<>();
         if (mapping.getSupportingOtu4() != null) {
@@ -569,8 +556,8 @@ public class OpenRoadmInterface710 {
 
         // Create an ODU4 object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODU4.class)
-            .setOduFunction(ODUTTP.class)
+            .setRate(ODU4.VALUE)
+            .setOduFunction(ODUTTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setOpu(opuBuilder.build());
 
@@ -618,8 +605,8 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUCn object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUCn.class)
-            .setOduFunction(ODUTTP.class)
+            .setRate(ODUCn.VALUE)
+            .setOduFunction(ODUTTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -649,7 +636,7 @@ public class OpenRoadmInterface710 {
 
         oduBuilder.setOducnNRate(Uint16.valueOf(oducnrate));
 
-        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODUC" + oducnrate);
 
         oduInterfaceBuilder.setSupportingInterfaceList(listSupportingOtucnInterface);
@@ -697,8 +684,8 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUCn.class)
-            .setOduFunction(ODUTTP.class)
+            .setRate(ODUCn.VALUE)
+            .setOduFunction(ODUTTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -721,7 +708,7 @@ public class OpenRoadmInterface710 {
 
         oduBuilder.setOducnNRate(Uint16.valueOf(oducnrate));
 
-        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE,
             alogicalConnPoint + ODUC + oducnrate);
 
         // Create a list
@@ -775,7 +762,7 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUFlex object
         OduBuilder oduBuilder = new OduBuilder()
-            .setOduFunction(ODUTTPCTP.class)
+            .setOduFunction(ODUTTPCTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -786,19 +773,19 @@ public class OpenRoadmInterface710 {
         if (rate.equals("1")) {
             opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
                 .setPayloadType(PayloadTypeDef.getDefaultInstance("07"));
-            oduBuilder.setRate(ODU4.class);
+            oduBuilder.setRate(ODU4.VALUE);
             logicalConnPoint += "-ODU4";
         } else if (rate.equals("4")) {
             opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
                 .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
-            oduBuilder.setRate(ODUflexCbr.class).setOduflexCbrService(ODUflexCbr400G.class);
+            oduBuilder.setRate(ODUflexCbr.VALUE).setOduflexCbrService(ODUflexCbr400G.VALUE);
             logicalConnPoint += "-ODUFLEX";
         }
 
         // Build the OPU container to the ODU builder
         oduBuilder.setOpu(opuBuilder.build());
 
-        InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
+        InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.VALUE,
             logicalConnPoint);
 
         Set<String> listSupportingOtucnInterface = new HashSet<>();
@@ -860,7 +847,7 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUFlex object
         OduBuilder oduBuilder = new OduBuilder()
-            .setOduFunction(ODUTTPCTP.class)
+            .setOduFunction(ODUTTPCTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -872,16 +859,16 @@ public class OpenRoadmInterface710 {
         if (rate.equals("1")) {
             opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
                 .setPayloadType(PayloadTypeDef.getDefaultInstance("07"));
-            oduBuilder.setRate(ODU4.class);
+            oduBuilder.setRate(ODU4.VALUE);
             alogicalConnPoint += "-ODU4";
         } else if (rate.equals("4")) {
             opuBuilder.setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
                 .setPayloadType(PayloadTypeDef.getDefaultInstance("32"));
-            oduBuilder.setRate(ODUflexCbr.class).setOduflexCbrService(ODUflexCbr400G.class);
+            oduBuilder.setRate(ODUflexCbr.VALUE).setOduflexCbrService(ODUflexCbr400G.VALUE);
             alogicalConnPoint += "-ODUFLEX";
         }
 
-        InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
+        InterfaceBuilder oduflexInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE,
             alogicalConnPoint);
 
 
@@ -920,10 +907,10 @@ public class OpenRoadmInterface710 {
         // reflect that
         String interfaceOdu4OducnOduflex = null;
         // Depending on OTU4 or OTUCn, supporting interface should reflect that
-        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.class)) {
+        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OTU4 interface
             interfaceOdu4OducnOduflex = createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.class)) {
+        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
             interfaceOdu4OducnOduflex  = interfaceOducn + "#"
@@ -950,8 +937,8 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUC4 object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUCn.class)
-            .setOduFunction(ODUTTP.class)
+            .setRate(ODUCn.VALUE)
+            .setOduFunction(ODUTTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -970,7 +957,7 @@ public class OpenRoadmInterface710 {
 
         oduBuilder.setOducnNRate(Uint16.valueOf(oducnrate));
 
-        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.VALUE,
             logicalConnPoint + ODUC + oducnrate);
 
         // Create a list
@@ -1022,8 +1009,8 @@ public class OpenRoadmInterface710 {
 
         // Create an ODUCn object
         OduBuilder oduBuilder = new OduBuilder()
-            .setRate(ODUCn.class)
-            .setOduFunction(ODUTTP.class)
+            .setRate(ODUCn.VALUE)
+            .setOduFunction(ODUTTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
@@ -1046,7 +1033,7 @@ public class OpenRoadmInterface710 {
 
         oduBuilder.setOducnNRate(Uint16.valueOf(oducnrate));
 
-        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
+        InterfaceBuilder oduInterfaceBuilder = createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE,
             alogicalConnPoint + ODUC + oducnrate);
 
         // Create a list
@@ -1075,7 +1062,7 @@ public class OpenRoadmInterface710 {
         return String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, logicalConnectionPoint, spectralSlotName);
     }
 
-    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, Class<? extends InterfaceType> type,
+    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, InterfaceType type,
             String key) {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder()
             .setDescription("  TBD   ")

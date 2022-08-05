@@ -60,10 +60,9 @@ public class OpenRoadmOtnInterface710 {
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
-            .setFec(Off.class)
+            .setFec(Off.VALUE)
             .setSpeed(Uint32.valueOf(100000));
-        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(
-            portMap, EthernetCsmacd.class,
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE,
             logicalConnPoint + "-ETHERNET-100G");
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new Interface1Builder();
@@ -112,12 +111,11 @@ public class OpenRoadmOtnInterface710 {
         // Supporting interface is a list for B100G (7.1) device models
         supportingInterfaceList.add(supportingInterface);
 
-        InterfaceBuilder oduIfBuilder = createGenericInterfaceBuilder(
-            portMap, OtnOdu.class, logicalConnPoint + "-ODU4")
+        InterfaceBuilder oduIfBuilder = createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODU4")
             .setSupportingInterfaceList(supportingInterfaceList);
         // Agument ODU4 specific interface data
-        OduBuilder oduBuilder = new OduBuilder().setRate(ODU4.class)
-            .setOduFunction(ODUTTPCTP.class)
+        OduBuilder oduBuilder = new OduBuilder().setRate(ODU4.VALUE)
+            .setOduFunction(ODUTTPCTP.VALUE)
             .setMonitoringMode(MonitoringMode.Terminated);
         LOG.debug("Inside the ODU4 creation {} {} {}", isNetworkPort, minTribSlotNumber.getValue(),
             maxTribSlotNumber.getValue());
@@ -139,7 +137,7 @@ public class OpenRoadmOtnInterface710 {
                 .setTribPortNumber(tribPortNumber)
                 .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(opucnTribSlotDefList).build());
             // reset the ODU function as ODUCTP and the monitoring moode
-            oduBuilder.setOduFunction(ODUCTP.class)
+            oduBuilder.setOduFunction(ODUCTP.VALUE)
                 .setMonitoringMode(MonitoringMode.NotTerminated)
                 .setParentOduAllocation(parentOduAllocationBuilder.build());
         }
@@ -162,8 +160,7 @@ public class OpenRoadmOtnInterface710 {
         return oduIfBuilder.getName();
     }
 
-    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap,
-        Class<? extends InterfaceType> type, String key) {
+    private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, InterfaceType type, String key) {
         return new InterfaceBuilder()
             // .setDescription(" TBD ")
             // .setCircuitId(" TBD ")

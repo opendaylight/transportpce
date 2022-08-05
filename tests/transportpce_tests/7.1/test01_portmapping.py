@@ -153,8 +153,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         res = test_utils.get_portmapping_node_attr("XPDR-A2", "mc-capabilities", "XPDR-mcprofile")
         self.assertEqual(res['status_code'], requests.codes.ok)
         self.assertEqual(res['mc-capabilities'][0]['mc-node-name'], 'XPDR-mcprofile')
-        self.assertEqual(str(res['mc-capabilities'][0]['center-freq-granularity']), '3.125')
-        self.assertEqual(str(res['mc-capabilities'][0]['slot-width-granularity']), '6.25')
+        self.assertEqual(str(res['mc-capabilities'][0]['center-freq-granularity']), '3.12500')
+        self.assertEqual(str(res['mc-capabilities'][0]['slot-width-granularity']), '6.25000')
 
     def test_09_mpdr_switching_pool(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "switching-pool-lcp", "1")
