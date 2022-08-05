@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb103295_c601caae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-05T09:39:59Z",
+      "side": 1,
+      "message": "linelength\u003e72 char \u003d\u003e verified -1 (gitlint tox profile)",
+      "revId": "152fd9bfaf04d02fba9ff9c43ed78022ce125fda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bf8602c5_cd56ee73",
