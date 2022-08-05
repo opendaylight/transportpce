@@ -985,32 +985,31 @@ public class PortMappingVersion710 {
             }
             LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
                 nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
-            Class<? extends InterfaceType> interfaceType
-                = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
+            InterfaceType interfaceType = openRoadmInterface.get().getType();
             // Check if interface type is OMS or OTS
-            if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+            if (interfaceType.equals(OpenROADMOpticalMultiplex.VALUE)) {
                 mpBldr.setSupportingOms(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(OpticalTransport.class)) {
+            if (interfaceType.equals(OpticalTransport.VALUE)) {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
             }
             String interfaceName = interfaces.getInterfaceName();
-            if (interfaceType.equals(OtnOtu.class)
+            if (interfaceType.equals(OtnOtu.VALUE)
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
                 .equals("OTU4"))) {
                 mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
             }
-            if ((interfaceType.equals(OtnOtu.class))
+            if ((interfaceType.equals(OtnOtu.VALUE))
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
                 .contains("OTUC"))) {
                 mpBldr.setSupportingOtucn(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(OtnOdu.class)
+            if (interfaceType.equals(OtnOdu.VALUE)
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
                 .equals("ODU4"))) {
                 mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
             }
-            if ((interfaceType.equals(OtnOdu.class))
+            if ((interfaceType.equals(OtnOdu.VALUE))
                 && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
                 .contains("ODUC"))) {
                 mpBldr.setSupportingOducn(interfaces.getInterfaceName());
@@ -1051,11 +1050,11 @@ public class PortMappingVersion710 {
         }
         Collection<SupportedInterfaceCapability> supIntfCapaList = getSupIntfCapaList(port);
         if (supIntfCapaList != null) {
-            Set<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211
-                .SupportedIfCapability>> supportedIntf = new HashSet<>();
+            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability>
+                    supportedIntf = new HashSet<>();
             SupportedInterfaceCapability sic1 = null;
             for (SupportedInterfaceCapability sic : supIntfCapaList) {
-                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().getSimpleName()));
+                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
                 sic1 = sic;
             }
             mpBldr.setSupportedInterfaceCapability(supportedIntf);

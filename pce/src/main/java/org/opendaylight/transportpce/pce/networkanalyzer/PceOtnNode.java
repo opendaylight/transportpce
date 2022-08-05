@@ -26,8 +26,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTU4TsAllocated;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTUCnTs;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODTUCnTs;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.networks.network.node.termination.point.XpdrTpPortConnectionAttributes;
@@ -62,11 +62,11 @@ public class PceOtnNode implements PceNode {
         OpenroadmNodeType.MUXPDR,
         OpenroadmNodeType.SWITCH,
         OpenroadmNodeType.TPDR);
-    private static final Map<String, Class<? extends SupportedIfCapability>> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
-        StringConstants.SERVICE_TYPE_1GE, If1GEODU0.class,
-        StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.class,
-        StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.class,
-        StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.class);
+    private static final Map<String, SupportedIfCapability> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, If1GEODU0.VALUE,
+        StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.VALUE,
+        StringConstants.SERVICE_TYPE_100GE_M, If100GEODU4.VALUE,
+        StringConstants.SERVICE_TYPE_100GE_S, If100GEODU4.VALUE);
     private static final Map<String, Integer> SERVICE_TYPE_ETH_TS_NB_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, 1,
         StringConstants.SERVICE_TYPE_10GE, 10,
@@ -317,8 +317,8 @@ public class PceOtnNode implements PceNode {
         for (SupportedInterfaceCapability sic :
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
-            if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.class)
-                    || sic.getIfCapType().equals(IfOtsiOtsigroup.class))
+            if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.VALUE)
+                    || sic.getIfCapType().equals(IfOtsiOtsigroup.VALUE))
                     && (ontTp1.getXpdrTpPortConnectionAttributes() == null
                         || ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null)) {
                 return true;
@@ -339,8 +339,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkFirstOdtuTpn(OdtuTpnPool otPool) {
-        return (otPool.getOdtuType().getSimpleName().equals(ODTU4TsAllocated.class.getSimpleName())
-                || otPool.getOdtuType().getSimpleName().equals(ODTUCnTs.class.getSimpleName()))
+        return (otPool.getOdtuType().equals(ODTU4TsAllocated.VALUE))
+                || otPool.getOdtuType().equals(ODTUCnTs.VALUE)
             && !otPool.getTpnPool().isEmpty();
     }
 
@@ -349,8 +349,7 @@ public class PceOtnNode implements PceNode {
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             // we could also check the administrative status of the tp
-            if (SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).getSimpleName()
-                    .equals(sic.getIfCapType().getSimpleName())) {
+            if (SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).equals(sic.getIfCapType())) {
                 return true;
             }
         }

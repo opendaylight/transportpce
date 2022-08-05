@@ -1187,7 +1187,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                     return null;
                 }
                 OpenroadmNodeType openroadmNodeType = OpenroadmNodeType.forName(optNode.get().getName().get(
-                    new NameKey("Node Type")).getValue()).get();
+                    new NameKey("Node Type")).getValue());
                 if (!openroadmNodeTypeList.contains(openroadmNodeType)) {
                     openroadmNodeTypeList.add(openroadmNodeType);
                 }

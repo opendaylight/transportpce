@@ -730,7 +730,7 @@ public class INode121 {
 
         String name = deviceInterface.getName();
         String description = deviceInterface.getDescription();
-        String type = deviceInterface.getType().getTypeName();
+        String type = deviceInterface.getType().toString();
         String administrativeStateEnu = deviceInterface.getAdministrativeState().getName();
         int operationalState = deviceInterface.getOperationalState().getIntValue();
         String circuitId = deviceInterface.getCircuitId();
@@ -759,7 +759,7 @@ public class INode121 {
                     org.opendaylight.yang.gen.v1
                         .http.org.openroadm.optical.channel.interfaces.rev161014.Interface1.class)
                     .getOch());
-                ochRate = ochIfBuilder.getRate().getName();
+                ochRate = ochIfBuilder.getRate().toString();
                 ochWavelengthNumber = ochIfBuilder.getWavelengthNumber().toString();
                 ochModulationFormat = ochIfBuilder.getModulationFormat().getName();
                 ochTransmitPower = ochIfBuilder.getTransmitPower().toString();
@@ -810,7 +810,7 @@ public class INode121 {
                     new OtuBuilder(deviceInterface.augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class)
                     .getOtu());
-                otuRate = otuIfBuilder.getRate().getName();
+                otuRate = otuIfBuilder.getRate().toString();
                 otuFecEnu = otuIfBuilder.getFec().getName();
                 otuMaintLoopbackEnabled = otuIfBuilder.getMaintLoopback().getEnabled().toString();
                 otuMaintTypeEnu = otuIfBuilder.getMaintLoopback().getType().getName();
@@ -970,7 +970,7 @@ public class INode121 {
     private static Object[] prepareDevInterfaceOtnOduTxMsiParameters(String nodeId, String interfaceName, TxMsi txMsi) {
 
         String tribSlot = txMsi.getTribSlot().toString();
-        String odtuType = txMsi.getOdtuType().getTypeName();
+        String odtuType = txMsi.getOdtuType().toString();
         String tribPort = txMsi.getTribPort().toString();
         String tribPortPayload = txMsi.getTribPortPayload();
 
@@ -991,7 +991,7 @@ public class INode121 {
     private static Object[] prepareDevInterfaceOtnOduRxMsiParameters(String nodeId, String interfaceName, RxMsi rxMsi) {
 
         String tribSlot = rxMsi.getTribSlot().toString();
-        String odtuType = rxMsi.getOdtuType().getTypeName();
+        String odtuType = rxMsi.getOdtuType().toString();
         String tribPort = rxMsi.getTribPort().toString();
         String tribPortPayload = rxMsi.getTribPortPayload();
 
@@ -1014,7 +1014,7 @@ public class INode121 {
         ExpMsi expMsi) {
 
         String tribSlot = expMsi.getTribSlot().toString();
-        String odtuType = expMsi.getOdtuType().getTypeName();
+        String odtuType = expMsi.getOdtuType().toString();
         String tribPort = expMsi.getTribPort().toString();
         String tribPortPayload = expMsi.getTribPortPayload();
 

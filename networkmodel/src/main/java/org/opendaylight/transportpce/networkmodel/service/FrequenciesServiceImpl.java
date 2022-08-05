@@ -100,17 +100,15 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
             Decimal64 atozMinFrequency = atoZDirection.getAToZMinFrequency().getValue();
             Decimal64 atozMaxFrequency = atoZDirection.getAToZMaxFrequency().getValue();
-            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-                    .forName(atoZDirection.getModulationFormat());
-            if (!optionalModulationFormat.isPresent()) {
+            ModulationFormat modulationFormat = ModulationFormat.forName(atoZDirection.getModulationFormat());
+            if (modulationFormat == null) {
                 LOG.error("Unknown modulation format {} for a to z direction, frequencies not updated",
                         atoZDirection.getModulationFormat());
                 return;
             }
-            setFrequencies4Tps(atozMinFrequency, atozMaxFrequency, atoZDirection.getRate(),
-                    optionalModulationFormat.get(), atozTpIds, used);
-            setFrequencies4Nodes(atozMinFrequency,
-                    atozMaxFrequency,
+            setFrequencies4Tps(atozMinFrequency, atozMaxFrequency, atoZDirection.getRate(), modulationFormat, atozTpIds,
+                    used);
+            setFrequencies4Nodes(atozMinFrequency, atozMaxFrequency,
                     atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                     used);
         }
@@ -119,15 +117,14 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
             Decimal64 ztoaMinFrequency = ztoADirection.getZToAMinFrequency().getValue();
             Decimal64 ztoaMaxFrequency = ztoADirection.getZToAMaxFrequency().getValue();
-            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat
-                    .forName(ztoADirection.getModulationFormat());
-            if (!optionalModulationFormat.isPresent()) {
+            ModulationFormat modulationFormat = ModulationFormat.forName(ztoADirection.getModulationFormat());
+            if (modulationFormat == null) {
                 LOG.error("Unknown modulation format {} for z to a direction, frequencies not updated",
                         ztoADirection.getModulationFormat());
                 return;
             }
-            setFrequencies4Tps(ztoaMinFrequency, ztoaMaxFrequency, ztoADirection.getRate(),
-                    optionalModulationFormat.get(), ztoaTpIds, used);
+            setFrequencies4Tps(ztoaMinFrequency, ztoaMaxFrequency, ztoADirection.getRate(), modulationFormat, ztoaTpIds,
+                    used);
             setFrequencies4Nodes(ztoaMinFrequency,
                     ztoaMaxFrequency,
                     ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),

@@ -160,7 +160,7 @@ public class ServiceListenerTest {
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        ServiceResiliency serviceResiliency = new ServiceResiliencyBuilder().setResiliency(Restorable.class).build();
+        ServiceResiliency serviceResiliency = new ServiceResiliencyBuilder().setResiliency(Restorable.VALUE).build();
         Services serviceAfter = new ServicesBuilder(buildService(State.OutOfService, AdminStates.InService))
                 .setServiceResiliency(serviceResiliency)
                 .build();
