@@ -294,8 +294,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         }
         String serviceName =
             ServiceFormat.OTU.getName().equals(input.getServiceAEnd().getServiceFormat().getName())
-                ? input.getServiceAEnd().getOtuServiceRate().getSimpleName()
-                : input.getServiceAEnd().getOduServiceRate().getSimpleName();
+                ? input.getServiceAEnd().getOtuServiceRate().toString().split("\\{")[0]
+                : input.getServiceAEnd().getOduServiceRate().toString().split("\\{")[0];
         if (!formatRateMap.get(input.getServiceAEnd().getServiceFormat()).containsKey(serviceName)) {
             LOG.warn("Unable to get service-rate for service {} - unsupported service name {}",
                 input.getServiceName(), serviceName);

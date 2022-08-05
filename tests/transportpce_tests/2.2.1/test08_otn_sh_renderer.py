@@ -48,7 +48,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
-        time.sleep(10)
+        time.sleep(5)
 
         response = test_utils.check_device_connection("SPDR-SA1")
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -58,7 +58,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.mount_device("SPDR-SC1", ('spdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
-        time.sleep(10)
+        time.sleep(5)
 
         response = test_utils.check_device_connection("SPDR-SC1")
         self.assertEqual(response['status_code'], requests.codes.ok)

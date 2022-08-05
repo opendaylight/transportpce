@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220615.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220615.path.computation.request.input.ServiceAEnd;
@@ -89,6 +90,33 @@ import org.slf4j.LoggerFactory;
 public final class ModelMappingUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ModelMappingUtils.class);
 
+    private static final ImmutableMap<String, OduRateIdentity> ODU_RATE_MAP =
+        ImmutableMap.<String, OduRateIdentity>builder()
+            .put("ODU0", ODU0.VALUE)
+            .put("ODU1", ODU1.VALUE)
+            .put("ODU2", ODU2.VALUE)
+            .put("ODU2e", ODU2e.VALUE)
+            .put("ODU3", ODU3.VALUE)
+            .put("ODU4", ODU4.VALUE)
+            .put("ODUCn", ODUCn.VALUE)
+            .put("ODUflexCbr", ODUflexCbr.VALUE)
+            .put("ODUflexFlexe", ODUflexFlexe.VALUE)
+            .put("ODUflexGfp", ODUflexGfp.VALUE)
+            .put("ODUflexImp", ODUflexImp.VALUE)
+            .build();
+
+    private static final ImmutableMap<String, OtuRateIdentity> OTU_RATE_MAP =
+        ImmutableMap.<String, OtuRateIdentity>builder()
+            .put("OTU0", OTU0.VALUE)
+            .put("OTU1", OTU1.VALUE)
+            .put("OTU2", OTU2.VALUE)
+            .put("OTU2e", OTU2e.VALUE)
+            .put("OTU3", OTU3.VALUE)
+            .put("OTU4", OTU4.VALUE)
+            .put("OTUCn", OTUCn.VALUE)
+            .put("OTUflex", OTUflex.VALUE)
+            .build();
+
     private ModelMappingUtils() {
     }
 
@@ -157,74 +185,20 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    private static Class<? extends OduRateIdentity> getOduServiceRate(
-            Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OduRateIdentity>
-                oduServiceRate) {
-        if (oduServiceRate == null) {
+    private static OduRateIdentity getOduServiceRate(OduRateIdentity oduServiceRate) {
+        if (oduServiceRate == null || !ODU_RATE_MAP.containsKey(oduServiceRate.toString())) {
+            LOG.error("ODU rate {} not recognized", oduServiceRate);
             return null;
         }
-        String oduRate = oduServiceRate.getSimpleName();
-        LOG.info("ODU rate = {}", oduRate);
-        //TODO a Map would probably be more indicated here
-        switch (oduRate) {
-            case "ODU0":
-                return ODU0.class;
-            case "ODU1":
-                return ODU1.class;
-            case "ODU2":
-                return ODU2.class;
-            case "ODU2e":
-                return ODU2e.class;
-            case "ODU3":
-                return ODU3.class;
-            case "ODU4":
-                return ODU4.class;
-            case "ODUCn":
-                return ODUCn.class;
-            case "ODUflexCbr":
-                return ODUflexCbr.class;
-            case "ODUflexFlexe":
-                return ODUflexFlexe.class;
-            case "ODUflexGfp":
-                return ODUflexGfp.class;
-            case "ODUflexImp":
-                return ODUflexImp.class;
-            default:
-                LOG.error("OTU rate {} not recognized", oduRate);
-        }
-        return null;
+        return ODU_RATE_MAP.get(oduServiceRate.toString());
     }
 
-    private static Class<? extends OtuRateIdentity> getOtuServiceRate(
-            Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OtuRateIdentity>
-                otuServiceRate) {
-        if (otuServiceRate == null) {
+    private static OtuRateIdentity getOtuServiceRate(OtuRateIdentity otuServiceRate) {
+        if (otuServiceRate == null || !OTU_RATE_MAP.containsKey(otuServiceRate.toString())) {
+            LOG.error("OTU rate {} not recognized", otuServiceRate);
             return null;
         }
-        String otuRate = otuServiceRate.getSimpleName();
-        LOG.info("OTU rate = {}", otuRate);
-        //TODO a Map would probably be more indicated here
-        switch (otuRate) {
-            case "OTU0":
-                return OTU0.class;
-            case "OTU1":
-                return OTU1.class;
-            case "OTU2":
-                return OTU2.class;
-            case "OTU2e":
-                return OTU2e.class;
-            case "OTU3":
-                return OTU3.class;
-            case "OTU4":
-                return OTU4.class;
-            case "OTUCn":
-                return OTUCn.class;
-            case "OTUflex":
-                return OTUflex.class;
-            default:
-                LOG.error("OTU rate {} not recognized", otuRate);
-        }
-        return null;
+        return OTU_RATE_MAP.get(otuServiceRate.toString());
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915

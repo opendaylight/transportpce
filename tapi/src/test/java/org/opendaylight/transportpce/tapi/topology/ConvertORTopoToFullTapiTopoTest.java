@@ -915,7 +915,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             3, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 3 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(ODUTYPEODU2.class, ODUTYPEODU2E.class, DIGITALSIGNALTYPE10GigELAN.class));
+            hasItems(ODUTYPEODU2.VALUE, ODUTYPEODU2E.VALUE, DIGITALSIGNALTYPE10GigELAN.VALUE));
         assertEquals("client nep should be of DSR protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
@@ -933,9 +933,9 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertThat("eODU nep should support 1, 2 or 3 kind of cep, depending on client port",
             nep.getSupportedCepLayerProtocolQualifier().size(), anyOf(is(1), is(2), is(3)));
         assertTrue("eODU nep should support 1 kind of cep",
-            nep.getSupportedCepLayerProtocolQualifier().stream().anyMatch(splc -> splc.equals(ODUTYPEODU0.class)
-                || splc.equals(ODUTYPEODU2.class) || splc.equals(ODUTYPEODU2E.class)
-                || splc.equals(ODUTYPEODU4.class)));
+            nep.getSupportedCepLayerProtocolQualifier().stream().anyMatch(splc -> splc.equals(ODUTYPEODU0.VALUE)
+                || splc.equals(ODUTYPEODU2.VALUE) || splc.equals(ODUTYPEODU2E.VALUE)
+                || splc.equals(ODUTYPEODU4.VALUE)));
         assertEquals("eODU nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, withSip);
     }
@@ -953,7 +953,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("network nep should support 1 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItem(ODUTYPEODU4.class));
+            hasItem(ODUTYPEODU4.VALUE));
         assertEquals("network nep should be of ODU protocol type", LayerProtocolName.ODU, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, withSip);
     }
@@ -1150,7 +1150,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             2, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(ODUTYPEODU4.class, DIGITALSIGNALTYPE100GigE.class));
+            hasItems(ODUTYPEODU4.VALUE, DIGITALSIGNALTYPE100GigE.VALUE));
         assertEquals("client nep should be of DSR protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
@@ -1166,7 +1166,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(DIGITALSIGNALTYPE100GigE.class));
+            hasItems(DIGITALSIGNALTYPE100GigE.VALUE));
         assertEquals("client nep should be of DSR protocol type", LayerProtocolName.DSR, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
@@ -1183,7 +1183,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             2, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("OTSi nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(PHOTONICLAYERQUALIFIEROMS.class, PHOTONICLAYERQUALIFIEROTSi.class));
+            hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE, PHOTONICLAYERQUALIFIEROTSi.VALUE));
         assertEquals("OTSi nep should be of PHOTONIC_MEDIA protocol type",
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, withSip);
@@ -1201,7 +1201,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             1, nep.getSupportedCepLayerProtocolQualifier().size());
         assertThat("OTSi nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
-            hasItems(PHOTONICLAYERQUALIFIEROMS.class));
+            hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE));
         assertEquals("OTSi nep should be of PHOTONIC_MEDIA protocol type",
             LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, withSip);

@@ -96,7 +96,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                         if (inputAfter.getAdministrativeState() == AdminStates.InService
                                 && inputAfter.getServiceResiliency() != null
                                 && inputAfter.getServiceResiliency().getResiliency() != null
-                                && inputAfter.getServiceResiliency().getResiliency().equals(Restorable.class)) {
+                                && inputAfter.getServiceResiliency().getResiliency().equals(Restorable.VALUE)) {
                             LOG.info("Attempting to reroute the service '{}'...", serviceInputName);
                             // It is used for hold off time purposes
                             mapServiceInputReroute.put(serviceInputName, null);

@@ -347,7 +347,7 @@ public final class ConnectivityUtils {
             = this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
         if (tapiNode != null) {
             return OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type"))
-                .getValue()).get();
+                .getValue());
         }
         return null;
     }
@@ -1540,10 +1540,10 @@ public final class ConnectivityUtils {
                 .setIndex(Uint8.ZERO)
                 .build()));
         if (serviceFormat.equals(ServiceFormat.ODU)) {
-            serviceZEndBuilder.setOduServiceRate(ODU4.class);
+            serviceZEndBuilder.setOduServiceRate(ODU4.VALUE);
         }
         if (serviceFormat.equals(ServiceFormat.OTU)) {
-            serviceZEndBuilder.setOtuServiceRate(OTU4.class);
+            serviceZEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
         if (!serviceLayer.equals(LayerProtocolName.ETH)) {
             serviceZEndBuilder
@@ -1647,10 +1647,10 @@ public final class ConnectivityUtils {
                 .setIndex(Uint8.ZERO)
                 .build()));
         if (serviceFormat.equals(ServiceFormat.ODU)) {
-            serviceAEndBuilder.setOduServiceRate(ODU4.class);
+            serviceAEndBuilder.setOduServiceRate(ODU4.VALUE);
         }
         if (serviceFormat.equals(ServiceFormat.OTU)) {
-            serviceAEndBuilder.setOtuServiceRate(OTU4.class);
+            serviceAEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
         if (!serviceLayer.equals(LayerProtocolName.ETH)) {
             serviceAEndBuilder
@@ -1757,7 +1757,7 @@ public final class ConnectivityUtils {
                     return null;
                 }
                 OpenroadmNodeType openroadmNodeType = OpenroadmNodeType.forName(optNode.get().getName().get(
-                    new NameKey("Node Type")).getValue()).get();
+                    new NameKey("Node Type")).getValue());
                 if (!openroadmNodeTypeList.contains(openroadmNodeType)) {
                     openroadmNodeTypeList.add(openroadmNodeType);
                 }

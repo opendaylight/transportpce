@@ -841,22 +841,21 @@ public class PortMappingVersion221 {
             }
             LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
                 nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
-            Class<? extends InterfaceType> interfaceType
-                = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
+            InterfaceType interfaceType = openRoadmInterface.get().getType();
             // Check if interface type is OMS or OTS
-            if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+            if (interfaceType.equals(OpenROADMOpticalMultiplex.VALUE)) {
                 mpBldr.setSupportingOms(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(OpticalTransport.class)) {
+            if (interfaceType.equals(OpticalTransport.VALUE)) {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(OtnOtu.class)) {
+            if (interfaceType.equals(OtnOtu.VALUE)) {
                 mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(OtnOdu.class)) {
+            if (interfaceType.equals(OtnOdu.VALUE)) {
                 mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
             }
-            if (interfaceType.equals(EthernetCsmacd.class)) {
+            if (interfaceType.equals(EthernetCsmacd.VALUE)) {
                 mpBldr.setSupportingEthernet(interfaces.getInterfaceName());
             }
         }
@@ -875,8 +874,8 @@ public class PortMappingVersion221 {
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
-        Set<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211
-            .SupportedIfCapability>> supportedIntf = new HashSet<>();
+        Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability> supportedIntf =
+            new HashSet<>();
         for (String sup: getSupIfCapList(port)) {
             if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
                 supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
@@ -911,16 +910,16 @@ public class PortMappingVersion221 {
     }
 
     private List<String> getSupIfCapList(Ports port) {
-        Set<Class<? extends SupportedIfCapability>> supIfCapClassList = port.getSupportedInterfaceCapability();
+        Set<SupportedIfCapability> supIfCapClassList = port.getSupportedInterfaceCapability();
         if (supIfCapClassList != null) {
             return supIfCapClassList
-                    .stream().map(e -> e.getSimpleName())
+                    .stream().map(e -> e.toString())
                     .collect(Collectors.toList());
         }
         Ports1 ports1 = port.augmentation(Ports1.class);
         if (ports1 != null && ports1.getPortCapabilities() != null) {
             return ports1.getPortCapabilities().getSupportedInterfaceCapability()
-                    .values().stream().map(e -> e.getIfCapType().getSimpleName())
+                    .values().stream().map(e -> e.getIfCapType().toString())
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
