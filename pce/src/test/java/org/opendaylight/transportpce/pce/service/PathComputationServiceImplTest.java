@@ -66,7 +66,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
     public void testPathComputationRequestPathCase() {
         PathMetric pathMetric = new PathMetricBuilder()
                 .setAccumulativeValue(Decimal64.valueOf("21"))
-                .setMetricType(PathBandwidth.class).build();
+                .setMetricType(PathBandwidth.VALUE).build();
         Response response = new ResponseBuilder()
                 .withKey(new ResponseKey("responseId")).setResponseType(new PathCaseBuilder()
                 .setPathProperties(new PathPropertiesBuilder().setPathMetric(Map.of(pathMetric.key(),pathMetric))

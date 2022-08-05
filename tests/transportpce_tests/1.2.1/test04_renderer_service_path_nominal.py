@@ -167,11 +167,11 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn(
             response['interface'][0]['org-openroadm-optical-channel-interfaces:och'],
             [{'rate': 'org-openroadm-optical-channel-interfaces:R100G',
-              'transmit-power': '-5',
+              'transmit-power': '-5.0',
               'wavelength-number': 7,
               'modulation-format': 'dp-qpsk'},
              {'rate': 'org-openroadm-optical-channel-interfaces:R100G',
-              'transmit-power': -5,
+              'transmit-power': -5.00,
               'wavelength-number': 7,
               'modulation-format': 'dp-qpsk'}])
 

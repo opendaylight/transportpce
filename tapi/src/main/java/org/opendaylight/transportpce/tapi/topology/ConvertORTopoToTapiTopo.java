@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
@@ -54,6 +55,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
@@ -588,7 +591,7 @@ public class ConvertORTopoToTapiTopo {
                 .setUuid(nepUuid)
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.class))
+                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
                 .setLifecycleState(LifecycleState.INSTALLED).setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
@@ -645,49 +648,52 @@ public class ConvertORTopoToTapiTopo {
         return msipl;
     }
 
-    private Set<Class<? extends LAYERPROTOCOLQUALIFIER>>
+    private Set<LAYERPROTOCOLQUALIFIER>
             createSupportedCepLayerProtocolQualifier(TerminationPoint tp, LayerProtocolName lpn) {
-        Set<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqSet = new HashSet<>();
+        Set<LAYERPROTOCOLQUALIFIER> sclpqSet = new HashSet<>();
         Collection<SupportedInterfaceCapability> sicList = tp.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1.class)
             .getTpSupportedInterfaces()
             .getSupportedInterfaceCapability().values();
         for (SupportedInterfaceCapability sic : sicList) {
+            SupportedIfCapability ifCapType = sic.getIfCapType();
             switch (lpn.getName()) {
                 case "DSR":
-                    switch (sic.getIfCapType().getSimpleName()) {
-                        case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
-                            break;
-                        case "If10GEODU2":
-                            sclpqSet.add(ODUTYPEODU2.class);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
-                            break;
-                        case "If10GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.class);
-                            break;
-                        case "If100GEODU4":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
-                            sclpqSet.add(ODUTYPEODU4.class);
-                            break;
-                        case "If100GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.class);
-                            break;
-                        case "IfOCHOTU4ODU4":
-                        case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.class);
-                            break;
-                        default:
-                            LOG.error("IfCapability type not managed");
-                            break;
+                    if (ifCapType.getClass().getTypeName().contains("If10GEODU2e")) {
+                        sclpqSet.add(ODUTYPEODU2E.VALUE);
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("If10GEODU2")) {
+                        sclpqSet.add(ODUTYPEODU2.VALUE);
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("If1GEODU0")) {
+                        sclpqSet.add(ODUTYPEODU0.VALUE);
+                        sclpqSet.add(DIGITALSIGNALTYPEGigE.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("IfOCHOTU4ODU4")
+                            || ifCapType.getClass().getTypeName().contains("IfOCH")) {
+                        sclpqSet.add(ODUTYPEODU4.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("If10GE")) {
+                        sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("If100GEODU4")) {
+                        sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                        sclpqSet.add(ODUTYPEODU4.VALUE);
+                    }
+                    else if (ifCapType.getClass().getTypeName().contains("If100GE")) {
+                        sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                    }
+                    else {
+                        LOG.error("IfCapability type not managed");
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    if (sic.getIfCapType().getSimpleName().equals("IfOCHOTU4ODU4")
-                            || sic.getIfCapType().getSimpleName().equals("IfOCH")) {
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.class);
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.class);
+                    if (ifCapType.getClass().getTypeName().contains("IfOCHOTU4ODU4")
+                            || ifCapType.getClass().getTypeName().contains("IfOCH")) {
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.VALUE);
+                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.VALUE);
                     }
                     break;
                 default:

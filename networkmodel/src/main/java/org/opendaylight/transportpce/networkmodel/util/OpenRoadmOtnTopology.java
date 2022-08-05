@@ -92,12 +92,12 @@ public final class OpenRoadmOtnTopology {
     private static final int NB_TRIB_PORTS = 80;
     private static final int NB_TRIB_SLOTS = 80;
 
-    private static final Map<String, Class<? extends OduRateIdentity>> RATE_MAP = Map.of(
-        "If100GEODU4", ODU4.class,
-        "IfOCHOTU4ODU4", ODU4.class,
-        "If1GEODU0", ODU0.class,
-        "If10GEODU2", ODU2.class,
-        "If10GEODU2e", ODU2e.class);
+    private static final Map<String, OduRateIdentity> RATE_MAP = Map.of(
+        "If100GEODU4", ODU4.VALUE,
+        "IfOCHOTU4ODU4", ODU4.VALUE,
+        "If1GEODU0", ODU0.VALUE,
+        "If10GEODU2", ODU2.VALUE,
+        "If10GEODU2e", ODU2e.VALUE);
     private static final Map<OtnLinkType, Long> OTNLINKTYPE_BW_MAP = Map.of(
         OtnLinkType.ODTU4, 100000L,
         OtnLinkType.ODUC4, 400000L,
@@ -110,10 +110,10 @@ public final class OpenRoadmOtnTopology {
         Uint32.valueOf(1), 1000L,
         Uint32.valueOf(10), 10000L,
         Uint32.valueOf(100), 100000L);
-    private static final Map<Uint32, Class<? extends OdtuTypeIdentity>> SERVICERATE_ODTUTYPECLASS_MAP = Map.of(
-        Uint32.valueOf(1), ODTU4TsAllocated.class,
-        Uint32.valueOf(10), ODTU4TsAllocated.class,
-        Uint32.valueOf(100), ODTUCnTs.class);
+    private static final Map<Uint32, OdtuTypeIdentity> SERVICERATE_ODTUTYPECLASS_MAP = Map.of(
+        Uint32.valueOf(1), ODTU4TsAllocated.VALUE,
+        Uint32.valueOf(10), ODTU4TsAllocated.VALUE,
+        Uint32.valueOf(100), ODTUCnTs.VALUE);
 
     private OpenRoadmOtnTopology() {
     }
@@ -427,7 +427,7 @@ public final class OpenRoadmOtnTopology {
                 tpnPool.add(Uint16.valueOf(i));
             }
             OdtuTpnPool oduTpnPool = new OdtuTpnPoolBuilder()
-                .setOdtuType(ODTU4TsAllocated.class)
+                .setOdtuType(ODTU4TsAllocated.VALUE)
                 .setTpnPool(tpnPool)
                 .build();
             xtpcaBldr.setOdtuTpnPool(ImmutableMap.of(oduTpnPool.key(),oduTpnPool));
@@ -470,7 +470,7 @@ public final class OpenRoadmOtnTopology {
                 tpnPool.remove(Uint16.valueOf(tribPortNb));
             }
         }
-        Class<? extends OdtuTypeIdentity> odtuType;
+        OdtuTypeIdentity odtuType;
         if (SERVICERATE_ODTUTYPECLASS_MAP.containsKey(serviceRate)) {
             odtuType = SERVICERATE_ODTUTYPECLASS_MAP.get(serviceRate);
         } else {
@@ -713,7 +713,7 @@ public final class OpenRoadmOtnTopology {
                     mapping.getLogicalConnectionPoint(), node.getNodeId());
             } else {
                 XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder();
-                for (Class<? extends SupportedIfCapability> supInterCapa : mapping.getSupportedInterfaceCapability()) {
+                for (SupportedIfCapability supInterCapa : mapping.getSupportedInterfaceCapability()) {
                     SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
                         .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
                         .setIfCapType(supInterCapa)
@@ -777,12 +777,22 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
-    private static Class<? extends OduRateIdentity> fixRate(Set<Class<? extends SupportedIfCapability>> list) {
-
-        for (Class<? extends  SupportedIfCapability> class1 : list) {
-            if (RATE_MAP.containsKey(class1.getSimpleName())) {
-                return RATE_MAP.get(class1.getSimpleName());
+    private static OduRateIdentity fixRate(Set<SupportedIfCapability> list) {
+        for (SupportedIfCapability supIfCap : list) {
+            if (supIfCap.getClass().getTypeName().contains("If100GEODU4")
+                    || supIfCap.getClass().getTypeName().contains("IfOCHOTU4ODU4")) {
+                return ODU4.VALUE;
             }
+            if (supIfCap.getClass().getTypeName().contains("If1GEODU0")) {
+                return ODU0.VALUE;
+            }
+            if (supIfCap.getClass().getTypeName().contains("If10GEODU2")) {
+                return ODU2.VALUE;
+            }
+            if (supIfCap.getClass().getTypeName().contains("If10GEODU2e")) {
+                return ODU2e.VALUE;
+            }
+            return null;
         }
         return null;
     }
@@ -846,4 +856,5 @@ public final class OpenRoadmOtnTopology {
                 ? nodeName
                 : new StringBuilder(nodeName).append("-").append(tpName.split("-")[0]).toString();
     }
+
 }

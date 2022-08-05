@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -339,7 +338,7 @@ public class GnpyServiceImpl {
         Type type1 = new NumUnnumHopBuilder().setNumUnnumHop(numUnnumHop).build();
         // Create routeObjectIncludeExclude element
         return new RouteObjectIncludeExcludeBuilder()
-            .setIndex(Uint32.valueOf(index)).setExplicitRouteUsage(RouteIncludeEro.class).setType(type1).build();
+            .setIndex(Uint32.valueOf(index)).setExplicitRouteUsage(RouteIncludeEro.VALUE).setType(type1).build();
     }
 
     //Create the path constraints
@@ -351,10 +350,9 @@ public class GnpyServiceImpl {
         if (minFrequency != null && maxFrequency != null && modulationFormat != null) {
             LOG.info("Creating path constraints for rate {}, modulationFormat {}, min freq {}, max freq {}", rate,
                     modulationFormat, minFrequency, maxFrequency);
-            ModulationFormat mformat = ModulationFormat.DpQpsk;
-            Optional<ModulationFormat> optionalModulationFormat = ModulationFormat.forName(modulationFormat);
-            if (optionalModulationFormat.isPresent()) {
-                mformat = optionalModulationFormat.get();
+            ModulationFormat mformat = ModulationFormat.forName(modulationFormat);
+            if (mformat == null) {
+                mformat = ModulationFormat.DpQpsk;
             }
             spacing = GridConstant.FREQUENCY_SLOT_WIDTH_TABLE.get(Uint32.valueOf(rate), mformat);
             FrequencyTHz centralFrequency = GridUtils.getCentralFrequency(

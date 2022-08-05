@@ -35,7 +35,7 @@ public class CheckCoherencyServiceResiliencyTest {
 
     @Test
     public void testCheckWhenUnprotectedResiliencyWithWrongAttributes() {
-        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Unprotected.class);
+        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Unprotected.VALUE);
 
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
@@ -52,14 +52,14 @@ public class CheckCoherencyServiceResiliencyTest {
     public void testCheckWhenUnprotectedResiliencyWithCorrectAttributes() {
         Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
                 new ServiceResiliencyBuilder()
-                        .setResiliency(Unprotected.class)
+                        .setResiliency(Unprotected.VALUE)
                         .build())
                 .hasPassed());
     }
 
     @Test
     public void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithWrongAttributes() {
-        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.class);
+        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.VALUE);
 
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
@@ -73,13 +73,13 @@ public class CheckCoherencyServiceResiliencyTest {
     @Test
     public void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithCorrectAttributes() {
         Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.class)
+                new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.VALUE)
                         .setCoupledService(new CoupledServiceBuilder().build()).build()).hasPassed());
     }
 
     @Test
     public void testCheckWhenProtectedResiliencyWithWrongAttributes() {
-        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Protected.class);
+        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Protected.VALUE);
 
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
                 input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build()).hasPassed());
@@ -93,7 +93,7 @@ public class CheckCoherencyServiceResiliencyTest {
     public void testCheckWhenProtectedResiliencyWithCorrectAttributes() {
         Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
                 new ServiceResiliencyBuilder()
-                        .setResiliency(Protected.class)
+                        .setResiliency(Protected.VALUE)
                         .setRevertive(true)
                         .setWaitToRestore(Uint64.valueOf(1))
                         .setHoldoffTime(Uint64.valueOf(1))
@@ -103,7 +103,7 @@ public class CheckCoherencyServiceResiliencyTest {
 
     @Test
     public void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithWrongAttributes() {
-        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Restorable.class);
+        ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Restorable.VALUE);
 
         Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
                 input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build()).hasPassed());
@@ -115,7 +115,7 @@ public class CheckCoherencyServiceResiliencyTest {
     public void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithCorrectAttributes() {
         Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
                 new ServiceResiliencyBuilder()
-                        .setResiliency(Restorable.class)
+                        .setResiliency(Restorable.VALUE)
                         .setRevertive(true)
                         .setWaitToRestore(Uint64.valueOf(1))
                         .setHoldoffTime(Uint64.valueOf(1))

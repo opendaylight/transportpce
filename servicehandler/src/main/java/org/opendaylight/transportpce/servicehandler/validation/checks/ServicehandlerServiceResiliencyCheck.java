@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceResiliencyTypeIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.resiliency.ServiceResiliency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,25 +32,23 @@ public final class ServicehandlerServiceResiliencyCheck {
      *         <code> false </code> otherwise
      */
     public static ComplianceCheckResult check(ServiceResiliency serviceResiliency) {
-        if (serviceResiliency.getResiliency() != null) {
-            switch (serviceResiliency.getResiliency().getSimpleName()) {
-                case "Unprotected":
-                    return checkUnprotectedResiliency(serviceResiliency);
-
-                case "UnprotectedDiverselyRouted":
-                    return checkUnprotectedDiverselyRoutedResiliency(serviceResiliency);
-
-                case "Protected":
-                    return checkProtectedResiliency(serviceResiliency);
-
-                case "Restorable":
-                case "ExternalTriggerRestorable":
-                    return checkRestorableAndExternalTriggerRestorableResiliency(serviceResiliency);
-
-                default:
-                    LOG.warn(LOG_RESILIENCY_TYPE_UNMANAGED);
-                    return new ComplianceCheckResult(false, LOG_RESILIENCY_TYPE_UNMANAGED);
+        ServiceResiliencyTypeIdentity serviceResiliencyType = serviceResiliency.getResiliency();
+        if (serviceResiliencyType != null) {
+            if (serviceResiliencyType.getClass().getTypeName().contains("UnprotectedDiverselyRouted")) {
+                return checkUnprotectedDiverselyRoutedResiliency(serviceResiliency);
             }
+            if (serviceResiliencyType.getClass().getTypeName().contains("Unprotected")) {
+                return checkUnprotectedResiliency(serviceResiliency);
+            }
+            if (serviceResiliencyType.getClass().getTypeName().contains("Protected")) {
+                return checkProtectedResiliency(serviceResiliency);
+            }
+            if (serviceResiliencyType.getClass().getTypeName().contains("Restorable")
+                    || serviceResiliencyType.getClass().getTypeName().contains("ExternalTriggerRestorable")) {
+                return checkRestorableAndExternalTriggerRestorableResiliency(serviceResiliency);
+            }
+            LOG.warn(LOG_RESILIENCY_TYPE_UNMANAGED);
+            return new ComplianceCheckResult(false, LOG_RESILIENCY_TYPE_UNMANAGED);
         } else {
             LOG.warn(LOG_RESILIENCY_NULL);
             return new ComplianceCheckResult(false, LOG_RESILIENCY_NULL);

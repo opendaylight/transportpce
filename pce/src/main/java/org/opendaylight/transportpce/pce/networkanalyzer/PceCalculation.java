@@ -269,8 +269,8 @@ public class PceCalculation {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
             networkTransactionService.close();
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
-            throw new RuntimeException(
-                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
+//            throw new RuntimeException(
+//                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
         }
         return nw;
     }
@@ -327,7 +327,7 @@ public class PceCalculation {
                 if (aendPceNode == null || zendPceNode == null) {
                     LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
                     return false;
-                }
+                }validateOtnNode:
                 for (Link link : allLinks) {
                     validateLink(link);
                 }
