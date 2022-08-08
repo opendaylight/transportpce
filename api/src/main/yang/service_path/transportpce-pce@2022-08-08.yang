@@ -54,6 +54,11 @@ module transportpce-pce {
       POSSIBILITY OF SUCH DAMAGE";
 
 
+  revision 2022-08-08 {
+    description
+      "Implement the RPC path-computation-reroute-request (only for reroute purposes) that computes a service path of
+      an existing service in order to reroute it";
+  }
   revision 2022-06-15 {
     description
       "change fraction digits from 2 to 6 for accumulative-value leaf, from 2 to 6 to be compliant with Gnpy";
@@ -186,6 +191,38 @@ module transportpce-pce {
       uses org-openroadm-common-service-types:configuration-response-common;
       uses transportpce-common-service-path-types:response-parameters-sp;
       uses gnpy;
+    }
+  }
+
+  rpc path-computation-reroute-request {
+    input {
+      container endpoints {
+        description
+          "Indicates the endpoints termination-point of the service to reroute";
+        leaf a-end-tp {
+          mandatory true;
+          type string;
+        }
+        leaf z-end-tp {
+          mandatory true;
+          type string;
+        }
+      }
+      leaf pce-routing-metric {
+        type transportpce-common-service-path-types:pce-metric;
+      }
+      uses transportpce-common-service-path-types:service-handler-header;
+      container service-a-end {
+        uses transportpce-common-service-path-types:service-endpoint-sp;
+      }
+      container service-z-end {
+        uses transportpce-common-service-path-types:service-endpoint-sp;
+      }
+      uses org-openroadm-routing-constraints:routing-constraints;
+      uses org-openroadm-common-service-types:routing-metric;
+    }
+    output {
+       uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
 
