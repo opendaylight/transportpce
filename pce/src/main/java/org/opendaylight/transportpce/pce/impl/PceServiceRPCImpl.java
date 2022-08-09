@@ -63,10 +63,16 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>>
-           pathComputationRerouteRequest(PathComputationRerouteRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>> pathComputationRerouteRequest(
+            PathComputationRerouteRequestInput input) {
         LOG.info("RPC path computation reroute request received");
         LOG.debug("input parameters are : input = {}", input.toString());
-        return null;
+        PathComputationRerouteRequestOutput output = null;
+        try {
+            output = this.pathComputationService.pathComputationRerouteRequest(input).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC path computation request failed !", e);
+        }
+        return RpcResultBuilder.success(output).buildFuture();
     }
 }

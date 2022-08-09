@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -63,6 +64,7 @@ public class PceOpticalNode implements PceNode {
     private String version;
     private BigDecimal slotWidthGranularity;
     private BigDecimal centralFreqGranularity;
+    private Endpoints endpoints;
 
     public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
         OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity,
@@ -279,7 +281,12 @@ public class PceOpticalNode implements PceNode {
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1 nttp1 = tp
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210
                 .TerminationPoint1.class);
-            if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
+            boolean rerouteMode = false;
+            if (endpoints != null) {
+                rerouteMode = endpoints.getAEndTp().equals(tp.getTpId().getValue())
+                        || endpoints.getZEndTp().equals(tp.getTpId().getValue());
+            }
+            if ((nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) && !rerouteMode) {
                 this.usedXpndrNWTps.add(tp.getTpId().getValue());
                 LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
                 continue;
@@ -481,6 +488,10 @@ public class PceOpticalNode implements PceNode {
     @Override
     public BigDecimal getCentralFreqGranularity() {
         return centralFreqGranularity;
+    }
+
+    public void setEndpoints(Endpoints endpoints) {
+        this.endpoints = endpoints;
     }
 
 }

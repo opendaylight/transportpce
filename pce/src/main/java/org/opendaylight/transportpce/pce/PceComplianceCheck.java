@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.pce;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,23 @@ public final class PceComplianceCheck {
                     message = "ServiceHandlerHeader Request-ID  is not set";
                     LOG.debug(message);
                 }
+            }
+        } else {
+            result = false;
+        }
+        return new PceComplianceCheckResult(result, message);
+    }
+
+    public static PceComplianceCheckResult check(PathComputationRerouteRequestInput input) {
+        String message = "";
+        Boolean result = true;
+        if (input != null) {
+            if (input.getEndpoints() == null
+                    || input.getEndpoints().getAEndTp() == null
+                    || input.getEndpoints().getZEndTp() == null) {
+                result = false;
+                message = "At least one of the termination points is missing";
+                LOG.debug(message);
             }
         } else {
             result = false;
