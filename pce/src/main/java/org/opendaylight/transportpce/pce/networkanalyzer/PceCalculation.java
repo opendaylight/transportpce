@@ -30,6 +30,7 @@ import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
@@ -86,6 +87,8 @@ public class PceCalculation {
     private List<LinkId> linksToExclude = new ArrayList<>();
     private PceResult returnStructure;
     private PortMapping portMapping;
+    // Define the termination points whose reserved status is not taken into account during the pruning process
+    private Endpoints endpoints;
 
     private enum ConstraintTypes {
         NONE, HARD_EXCLUDE, HARD_INCLUDE, HARD_DIVERSITY, SOFT_EXCLUDE, SOFT_INCLUDE, SOFT_DIVERSITY;
@@ -94,15 +97,28 @@ public class PceCalculation {
     private MappingUtils mappingUtils;
 
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
-            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
-            PortMapping portMapping) {
+                          PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
+                          PortMapping portMapping) {
         this.input = input;
         this.networkTransactionService = networkTransactionService;
         this.returnStructure = rc;
-
         this.pceHardConstraints = pceHardConstraints;
         this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
         this.portMapping = portMapping;
+        this.endpoints = null;
+        parseInput();
+    }
+
+    public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
+                          PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
+                          PortMapping portMapping, Endpoints endpoints) {
+        this.input = input;
+        this.networkTransactionService = networkTransactionService;
+        this.returnStructure = rc;
+        this.pceHardConstraints = pceHardConstraints;
+        this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
+        this.portMapping = portMapping;
+        this.endpoints = endpoints;
         parseInput();
     }
 
@@ -450,6 +466,9 @@ public class PceCalculation {
         PceOpticalNode pceNode = new PceOpticalNode(deviceNodeId, this.serviceType, portMapping, node, nodeType,
             mappingUtils.getOpenRoadmVersion(deviceNodeId), getSlotWidthGranularity(deviceNodeId, node.getNodeId()),
             getCentralFreqGranularity(deviceNodeId, node.getNodeId()));
+        if (endpoints != null) {
+            pceNode.setEndpoints(endpoints);
+        }
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initFrequenciesBitSet();
 

@@ -259,6 +259,19 @@ public final class ModelMappingUtils {
             .build();
     }
 
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
+            .path.computation.reroute.request.input.ServiceAEnd createServiceAEndReroute(ServiceEndpoint serviceAEnd) {
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
+                .path.computation.reroute.request.input.ServiceAEndBuilder()
+                .setClli(serviceAEnd.getClli())
+                .setNodeId(serviceAEnd.getNodeId().getValue())
+                .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().get()))
+                .setServiceFormat(serviceAEnd.getServiceFormat())
+                .setServiceRate(serviceAEnd.getServiceRate())
+                .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().get()))
+                .build();
+    }
+
     public static ServiceZEnd createServiceZEnd(ServiceEndpoint serviceZEnd) {
         return new ServiceZEndBuilder()
             .setClli(serviceZEnd.getClli())
@@ -268,6 +281,19 @@ public final class ModelMappingUtils {
             .setServiceRate(serviceZEnd.getServiceRate())
             .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().get()))
             .build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
+            .path.computation.reroute.request.input.ServiceZEnd createServiceZEndReroute(ServiceEndpoint serviceZEnd) {
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
+                .path.computation.reroute.request.input.ServiceZEndBuilder()
+                .setClli(serviceZEnd.getClli())
+                .setNodeId(serviceZEnd.getNodeId().getValue())
+                .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().get()))
+                .setServiceFormat(serviceZEnd.getServiceFormat())
+                .setServiceRate(serviceZEnd.getServiceRate())
+                .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().get()))
+                .build();
     }
 
     public static RxDirection createRxDirection(

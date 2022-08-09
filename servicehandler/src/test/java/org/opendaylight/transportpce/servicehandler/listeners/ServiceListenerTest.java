@@ -24,11 +24,13 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
@@ -72,6 +74,8 @@ public class ServiceListenerTest {
     private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
     private NotificationPublishService notificationPublishService;
+    @Mock
+    private PathComputationService pathComputationService;
 
     @Test
     public void testOnDataTreeChangedWhenDeleteService() {
@@ -85,7 +89,7 @@ public class ServiceListenerTest {
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService);
+                notificationPublishService, pathComputationService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -112,7 +116,7 @@ public class ServiceListenerTest {
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.getDataAfter()).thenReturn(serviceDown);
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService);
+                notificationPublishService, pathComputationService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -138,7 +142,7 @@ public class ServiceListenerTest {
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService);
+                notificationPublishService, pathComputationService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(2)).getModificationType();
@@ -189,8 +193,10 @@ public class ServiceListenerTest {
                                                 .build())
                                 .build())
                         .buildFuture());
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService);
+        ServiceListener listener = Mockito.spy(new ServiceListener(servicehandler, serviceDataStoreOperations,
+                notificationPublishService, pathComputationService));
+        Mockito.doReturn(true).when(listener).serviceRerouteCheck(any());
+
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -217,7 +223,7 @@ public class ServiceListenerTest {
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.getDataAfter()).thenReturn(serviceAfter);
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService);
+                notificationPublishService, pathComputationService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
