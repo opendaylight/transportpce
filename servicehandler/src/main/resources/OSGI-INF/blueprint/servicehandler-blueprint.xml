@@ -47,7 +47,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="serviceHandlerImpl" />
         <argument ref="serviceDatastoreOperation" />
         <argument ref="notificationPublishService" />
-        <argument ref="pathComputationService" />
     </bean>
 
     <bean id="rendererListener" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
