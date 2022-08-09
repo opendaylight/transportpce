@@ -443,14 +443,16 @@ public final class ModelMappingUtils {
     }
 
     public static ListenableFuture<RpcResult<ServiceRerouteOutput>> createRerouteServiceReply(
-            ServiceRerouteInput input, String finalAckYes, String message) {
+            ServiceRerouteInput input, String finalAckYes, String message, String responseCode) {
         return RpcResultBuilder
             .success(
                 new ServiceRerouteOutputBuilder()
                     .setConfigurationResponseCommon(
                         new ConfigurationResponseCommonBuilder()
-                            .setResponseMessage(message)
-                            .build())
+                             .setAckFinalIndicator(finalAckYes)
+                             .setResponseCode(responseCode)
+                             .setResponseMessage(message)
+                             .build())
                     .setHardConstraints(null)
                     .setSoftConstraints(null)
                     .build())

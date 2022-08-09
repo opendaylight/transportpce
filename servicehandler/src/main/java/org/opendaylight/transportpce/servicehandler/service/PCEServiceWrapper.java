@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -25,6 +26,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.Endpoints;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.EndpointsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
@@ -138,6 +145,31 @@ public class PCEServiceWrapper {
                 .build();
     }
 
+    public PathComputationRerouteRequestOutput performPCEReroute(HardConstraints hardConstraints,
+           SoftConstraints softConstraints, SdncRequestHeader serviceHandler, ServiceEndpoint serviceAEnd,
+           ServiceEndpoint serviceZEnd,
+           Endpoints endpoints) {
+        // TODO: Make it asynchronous
+        LOG.info("Calling path computation reroute");
+        PathComputationRerouteRequestInput inputPCE = createPceRerouteRequestInput(hardConstraints, softConstraints,
+                serviceHandler, serviceAEnd, serviceZEnd, endpoints);
+        ListenableFuture<PathComputationRerouteRequestOutput> res =
+                pathComputationService.pathComputationRerouteRequest(inputPCE);
+        try {
+            return res.get();
+        } catch (ExecutionException | InterruptedException e) {
+            LOG.warn("PerformPCEReroute FAILED ! ", e);
+            return new PathComputationRerouteRequestOutputBuilder()
+                    .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
+                            .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
+                            .setRequestId("None")
+                            .setResponseCode(ResponseCodes.RESPONSE_OK)
+                            .setResponseMessage("PCE calculation FAILED")
+                            .build())
+                    .build();
+        }
+    }
+
     private PathComputationRequestInput createPceRequestInput(String serviceName,
             SdncRequestHeader serviceHandler, HardConstraints hardConstraints,
             SoftConstraints softConstraints, Boolean reserveResource, ServiceEndpoint serviceAEnd,
@@ -158,6 +190,28 @@ public class PCEServiceWrapper {
             .setServiceAEnd(ModelMappingUtils.createServiceAEnd(serviceAEnd))
             .setServiceZEnd(ModelMappingUtils.createServiceZEnd(serviceZEnd))
             .build();
+    }
+
+    private PathComputationRerouteRequestInput createPceRerouteRequestInput(HardConstraints hardConstraints,
+            SoftConstraints softConstraints, SdncRequestHeader serviceHandler, ServiceEndpoint serviceAEnd,
+            ServiceEndpoint serviceZEnd, Endpoints endpoints) {
+        LOG.info("Mapping Service-reroute to PCE requests");
+        return new PathComputationRerouteRequestInputBuilder()
+                .setServiceHandlerHeader(serviceHandler == null
+                        ? new ServiceHandlerHeaderBuilder().build()
+                        : new ServiceHandlerHeaderBuilder()
+                        .setRequestId(serviceHandler.getRequestId())
+                        .build())
+                .setHardConstraints(hardConstraints)
+                .setSoftConstraints(softConstraints)
+                .setPceRoutingMetric(PceMetric.TEMetric)
+                .setEndpoints(new EndpointsBuilder()
+                        .setAEndTp(endpoints.getAEndTp())
+                        .setZEndTp(endpoints.getZEndTp())
+                        .build())
+                .setServiceAEnd(ModelMappingUtils.createServiceAEndReroute(serviceAEnd))
+                .setServiceZEnd(ModelMappingUtils.createServiceZEndReroute(serviceZEnd))
+                .build();
     }
 
     private CancelResourceReserveInput mappingCancelResourceReserve(String serviceName,
