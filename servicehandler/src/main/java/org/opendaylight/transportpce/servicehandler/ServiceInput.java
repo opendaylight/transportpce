@@ -20,6 +20,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceDeleteInput;
@@ -30,7 +31,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
  * Super class of {@link ServiceCreateInput} and {@link TempServiceCreateInput}.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
- *
  */
 public class ServiceInput {
     private String serviceName;
@@ -121,6 +121,13 @@ public class ServiceInput {
         setServiceName(comId);
         setCommonId(comId);
         setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId(comId).build());
+        setServiceReconfigure(false);
+    }
+
+    public ServiceInput(ServiceRerouteInput serviceRerouteInput) {
+        setServiceName(serviceRerouteInput.getServiceName());
+        setSdncRequestHeader(serviceRerouteInput.getSdncRequestHeader());
+        setServiceResiliency(serviceRerouteInput.getServiceResiliency());
         setServiceReconfigure(false);
     }
 

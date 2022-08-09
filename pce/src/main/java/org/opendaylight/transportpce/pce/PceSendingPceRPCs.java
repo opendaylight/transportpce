@@ -63,7 +63,7 @@ public class PceSendingPceRPCs {
     private String responseCode;
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
-    // Define the termination points whose reserved status is not taken into account during the pruning process
+    // Define the termination points whose reservation status is not taken into account during the pruning process
     private Endpoints endpoints;
 
     public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {

@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -31,6 +32,8 @@ import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateVali
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.EndpointsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
@@ -105,6 +108,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
@@ -183,6 +190,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         public static String serviceNotInDS(String serviceName) {
             return "Service '" + serviceName + "' does not exist in datastore";
+        }
+
+        public static String servicePathNotInDS(String serviceName) {
+            return "Service Path from '" + serviceName + "' does not exist in datastore";
         }
 
         public static String serviceInService(String serviceName) {
@@ -490,50 +501,57 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         if (servicesObject.isEmpty()) {
             LOG.warn("serviceReroute: {}", LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createRerouteServiceReply(
-                    input, ResponseCodes.FINAL_ACK_NO,
-                    LogMessages.serviceNotInDS(serviceName));
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.serviceNotInDS(serviceName),
+                    ResponseCodes.RESPONSE_FAILED);
         }
         Services service = servicesObject.get();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
-        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
-                .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
-                .setRequestId(service.getSdncRequestHeader().getRequestId())
-                .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
-                .setRpcAction(RpcActions.ServiceDelete);
-        ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder()
-                .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                    .setServiceName(serviceName).setDueDate(datetime)
-                    .setTailRetention(TailRetention.No).build())
-                .setSdncRequestHeader(sdncBuilder.build());
-        ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
+        Optional<ServicePaths> servicePathsObject = this.serviceDataStoreOperations.getServicePath(serviceName);
+        if (servicePathsObject.isEmpty()) {
+            LOG.warn("serviceReroute: {}", LogMessages.servicePathNotInDS(serviceName));
+            return ModelMappingUtils.createRerouteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.servicePathNotInDS(serviceName),
+                    ResponseCodes.RESPONSE_FAILED);
+        }
+        ServicePaths servicePaths = servicePathsObject.get();
+        // serviceInput for later use maybe...
+        ServiceInput serviceInput = new ServiceInput(input);
         serviceInput.setServiceAEnd(service.getServiceAEnd());
         serviceInput.setServiceZEnd(service.getServiceZEnd());
         serviceInput.setConnectionType(service.getConnectionType());
-        this.pceListenerImpl.setInput(serviceInput);
-        this.pceListenerImpl.setServiceReconfigure(true);
-        this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.rendererListenerImpl.setServiceInput(serviceInput);
-        this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
-            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                    new ServiceInput(deleteInputBldr.build()));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
-            .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                ServiceNotificationTypes.ServiceDeleteResult, null);
+        serviceInput.setCommonId(service.getCommonId());
+        serviceInput.setHardConstraints(service.getHardConstraints());
+        serviceInput.setSoftConstraints(service.getSoftConstraints());
+        serviceInput.setCustomer(service.getCustomer());
+        serviceInput.setCustomerContact(service.getCustomerContact());
+
+        // Get the network xpdr termination points
+        Map<AToZKey, AToZ> mapaToz = servicePaths.getPathDescription().getAToZDirection().getAToZ();
+        String aendtp = ((TerminationPoint) mapaToz.get(new AToZKey(String.valueOf(mapaToz.size() - 3)))
+                .getResource()
+                .getResource())
+                .getTpId();
+        String zendtp = ((TerminationPoint) mapaToz.get(new AToZKey("2"))
+                .getResource()
+                .getResource())
+                .getTpId();
+
+        PathComputationRerouteRequestOutput output = this.pceServiceWrapper.performPCEReroute(
+                service.getHardConstraints(), service.getSoftConstraints(), input.getSdncRequestHeader(),
+                service.getServiceAEnd(), service.getServiceZEnd(),
+                new EndpointsBuilder().setAEndTp(aendtp).setZEndTp(zendtp).build());
+
         if (output == null) {
-            LOG.error("serviceReroute: {}", LogMessages.RENDERER_DELETE_FAILED);
+            LOG.error("serviceReroute: {}", LogMessages.PCE_FAILED);
             return ModelMappingUtils.createRerouteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
-                    LogMessages.RENDERER_DELETE_FAILED);
+                    LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
-        LOG.info("RPC ServiceReroute in progress...");
+        LOG.info("RPC ServiceReroute is done");
         ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-        return ModelMappingUtils.createRerouteServiceReply(
-                input, common.getAckFinalIndicator(),
-                common.getResponseMessage());
+        return ModelMappingUtils.createRerouteServiceReply(input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
