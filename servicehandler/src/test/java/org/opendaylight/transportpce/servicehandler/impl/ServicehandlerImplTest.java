@@ -357,8 +357,6 @@ public class ServicehandlerImplTest extends AbstractTest {
 
     @Test
     public void serviceRerouteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        // serviceReroute is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to be rerouted later
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
