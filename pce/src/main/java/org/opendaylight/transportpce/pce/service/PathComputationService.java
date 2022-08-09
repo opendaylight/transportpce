@@ -12,6 +12,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
 
 /**
  * Path Computation Service.
@@ -33,5 +35,14 @@ public interface PathComputationService {
      * @return output PathComputationRequestOutput data
      */
     ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input);
+
+    /**
+     * Requests a path computation in order to reroute a service.
+     *
+     * @param input PathComputationRerouteRequestInput data
+     * @return output PathComputationRerouteRequestOutput data
+     */
+    ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
+            PathComputationRerouteRequestInput input);
 
 }

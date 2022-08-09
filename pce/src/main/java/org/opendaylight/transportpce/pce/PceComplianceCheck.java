@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.pce;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,20 @@ public final class PceComplianceCheck {
             result = false;
         }
         return new PceComplianceCheckResult(result, message);
+    }
+
+    public static PceComplianceCheckResult check(PathComputationRerouteRequestInput input) {
+        if (input == null) {
+            return new PceComplianceCheckResult(false, "");
+        }
+        if (input.getEndpoints() == null
+                || input.getEndpoints().getAEndTp() == null
+                || input.getEndpoints().getZEndTp() == null) {
+            String message = "At least one of the termination points is missing";
+            LOG.debug(message);
+            return new PceComplianceCheckResult(false, message);
+        }
+        return new PceComplianceCheckResult(true, "");
     }
 
 }
