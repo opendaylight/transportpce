@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
@@ -57,6 +56,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRerouteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
@@ -89,7 +89,7 @@ public class ServiceListenerTest {
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService, pathComputationService);
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -116,7 +116,7 @@ public class ServiceListenerTest {
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.getDataAfter()).thenReturn(serviceDown);
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService, pathComputationService);
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -142,7 +142,7 @@ public class ServiceListenerTest {
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService, pathComputationService);
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(2)).getModificationType();
@@ -184,6 +184,15 @@ public class ServiceListenerTest {
                                                 .build())
                                 .build())
                         .buildFuture());
+        when(servicehandler.serviceReroute(any())).thenReturn(
+                RpcResultBuilder.success(
+                        new ServiceRerouteOutputBuilder()
+                                .setConfigurationResponseCommon(
+                                        new ConfigurationResponseCommonBuilder()
+                                                .setResponseCode(ResponseCodes.RESPONSE_OK)
+                                                .build())
+                                .build())
+                        .buildFuture());
         when(servicehandler.serviceCreate(any())).thenReturn(
                 RpcResultBuilder.success(
                         new ServiceCreateOutputBuilder()
@@ -193,10 +202,8 @@ public class ServiceListenerTest {
                                                 .build())
                                 .build())
                         .buildFuture());
-        ServiceListener listener = Mockito.spy(new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService, pathComputationService));
-        Mockito.doReturn(true).when(listener).serviceRerouteCheck(any());
-
+        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();
@@ -223,7 +230,7 @@ public class ServiceListenerTest {
         when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.getDataAfter()).thenReturn(serviceAfter);
         ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                notificationPublishService, pathComputationService);
+                notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(service, times(1)).getModificationType();

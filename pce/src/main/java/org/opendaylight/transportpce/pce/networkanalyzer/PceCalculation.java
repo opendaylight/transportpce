@@ -87,7 +87,7 @@ public class PceCalculation {
     private List<LinkId> linksToExclude = new ArrayList<>();
     private PceResult returnStructure;
     private PortMapping portMapping;
-    // Define the termination points whose reserved status is not taken into account during the pruning process
+    // Define the termination points whose reservation status is not taken into account during the pruning process
     private Endpoints endpoints;
 
     private enum ConstraintTypes {

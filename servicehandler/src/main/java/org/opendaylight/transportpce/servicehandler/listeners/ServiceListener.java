@@ -7,9 +7,6 @@
  */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
-import static org.opendaylight.transportpce.servicehandler.ModelMappingUtils.createServiceAEndReroute;
-import static org.opendaylight.transportpce.servicehandler.ModelMappingUtils.createServiceZEndReroute;
-
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.util.Collection;
@@ -29,29 +26,25 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.EndpointsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Restorable;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.routing.metric.RoutingMetric;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.resiliency.ServiceResiliency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRerouteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.create.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.create.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.delete.input.ServiceDeleteReqInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmServiceBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -70,12 +63,10 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
     private final ScheduledExecutorService executor;
 
     public ServiceListener(ServicehandlerImpl servicehandlerImpl, ServiceDataStoreOperations serviceDataStoreOperations,
-                           NotificationPublishService notificationPublishService,
-                           PathComputationService pathComputationService) {
+                           NotificationPublishService notificationPublishService) {
         this.servicehandlerImpl = servicehandlerImpl;
         this.notificationPublishService = notificationPublishService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
-        this.pathComputationService = pathComputationService;
         this.executor = MoreExecutors.getExitingScheduledExecutorService(new ScheduledThreadPoolExecutor(4));
         mapServiceInputReroute = new HashMap<>();
     }
@@ -114,7 +105,8 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                                 && inputAfter.getServiceResiliency().getResiliency() != null
                                 && inputAfter.getServiceResiliency().getResiliency().equals(Restorable.VALUE)) {
                             LOG.info("Attempting to reroute the service '{}'...", serviceInputName);
-                            if (!serviceRerouteCheck(inputBefore)) {
+                            if (!serviceRerouteCheck(serviceInputName, inputAfter.getServiceResiliency(),
+                                    inputAfter.getRoutingMetric())) {
                                 LOG.info("No other path available, cancelling reroute process of service '{}'...",
                                         serviceInputName);
                                 continue;
@@ -237,37 +229,27 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
     }
 
     /**
-     * Call the PCE RPC path-computation-reroute-request to check if any other path exists.
+     * Prior to the reroute steps: check that an alternative route of the service is possible.
      *
-     * @param input Service to be rerouted
+     * @param serviceNameToReroute Name of the service
+     * @param serviceResiliency Resiliency of the service
+     * @param routingMetric Metric of the routing
      */
-    protected boolean serviceRerouteCheck(Services input) {
-        Optional<ServicePaths> servicePaths = serviceDataStoreOperations.getServicePath(input.getServiceName());
-        if (servicePaths.isEmpty()) {
-            LOG.warn("Service path of '{}' does not exist in datastore", input.getServiceName());
-            return false;
-        }
-        // Get the network xpdr termination points
-        Map<AToZKey, AToZ> mapaToz = servicePaths.get().getPathDescription().getAToZDirection().getAToZ();
-        String aendtp = ((TerminationPoint) mapaToz.get(new AToZKey(String.valueOf(mapaToz.size() - 3)))
-                .getResource().getResource()).getTpId();
-        String zendtp = ((TerminationPoint) mapaToz.get(new AToZKey("2")).getResource()
-                .getResource()).getTpId();
-        PathComputationRerouteRequestInput inputPC = new PathComputationRerouteRequestInputBuilder()
-                .setHardConstraints(input.getHardConstraints())
-                .setSoftConstraints(input.getSoftConstraints())
-                .setServiceAEnd(createServiceAEndReroute(input.getServiceAEnd()))
-                .setServiceZEnd(createServiceZEndReroute(input.getServiceZEnd()))
-                .setPceRoutingMetric(PceMetric.TEMetric)
-                .setEndpoints(new EndpointsBuilder()
-                        .setAEndTp(aendtp)
-                        .setZEndTp(zendtp)
+    private boolean serviceRerouteCheck(String serviceNameToReroute, ServiceResiliency serviceResiliency,
+                                        RoutingMetric routingMetric) {
+        ServiceRerouteInput serviceRerouteInput = new ServiceRerouteInputBuilder()
+                .setServiceName(serviceNameToReroute)
+                .setServiceResiliency(serviceResiliency)
+                .setRoutingMetric(routingMetric)
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                        .setRpcAction(RpcActions.ServiceReroute)
                         .build())
                 .build();
-        ListenableFuture<PathComputationRerouteRequestOutput> res =
-                pathComputationService.pathComputationRerouteRequest(inputPC);
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> res = this.servicehandlerImpl.serviceReroute(
+                serviceRerouteInput);
         try {
-            return res.get().getConfigurationResponseCommon().getResponseCode().equals(ResponseCodes.RESPONSE_OK);
+            return res.get().getResult().getConfigurationResponseCommon().getResponseCode()
+                    .equals(ResponseCodes.RESPONSE_OK);
         } catch (ExecutionException | InterruptedException e) {
             LOG.warn("ServiceRerouteCheck FAILED ! ", e);
             return false;
