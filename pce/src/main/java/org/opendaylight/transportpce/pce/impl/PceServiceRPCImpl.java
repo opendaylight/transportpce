@@ -39,13 +39,15 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
             cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve request received");
-        CancelResourceReserveOutput output = null;
         try {
-            output = this.pathComputationService.cancelResourceReserve(input).get();
+            return RpcResultBuilder
+                    .success(
+                            this.pathComputationService.cancelResourceReserve(input).get())
+                    .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC cancelResourceReserve failed !", e);
+            return RpcResultBuilder.success((CancelResourceReserveOutput) null).buildFuture();
         }
-        return RpcResultBuilder.success(output).buildFuture();
     }
 
     @Override
@@ -53,20 +55,30 @@ public class PceServiceRPCImpl implements TransportpcePceService {
             pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC path computation request received");
         LOG.debug("input parameters are : input = {}", input);
-        PathComputationRequestOutput output = null;
         try {
-            output = this.pathComputationService.pathComputationRequest(input).get();
+            return RpcResultBuilder
+                    .success(
+                            this.pathComputationService.pathComputationRequest(input).get())
+                    .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC path computation request failed !", e);
         }
-        return RpcResultBuilder.success(output).buildFuture();
+        return RpcResultBuilder.success((PathComputationRequestOutput) null).buildFuture();
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>>
-           pathComputationRerouteRequest(PathComputationRerouteRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>> pathComputationRerouteRequest(
+            PathComputationRerouteRequestInput input) {
         LOG.info("RPC path computation reroute request received");
         LOG.debug("input parameters are : input = {}", input);
-        return null;
+        try {
+            return RpcResultBuilder
+                    .success(
+                            this.pathComputationService.pathComputationRerouteRequest(input).get())
+                    .buildFuture();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC path computation request failed !", e);
+            return RpcResultBuilder.success((PathComputationRerouteRequestOutput) null).buildFuture();
+        }
     }
 }

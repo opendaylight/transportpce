@@ -29,14 +29,20 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.gnpy.GnpyResponse;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.gnpy.GnpyResponseBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.gnpy.gnpy.response.response.type.NoPathCaseBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.gnpy.gnpy.response.response.type.PathCaseBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.performance.PathPropertiesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.performance.path.properties.PathMetric;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.performance.path.properties.PathMetricBuilder;
@@ -48,6 +54,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -269,6 +276,52 @@ public class PathComputationServiceImpl implements PathComputationService {
                 }
                 return output.build();
             }
+        });
+    }
+
+    @Override
+    public ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
+            PathComputationRerouteRequestInput input) {
+        return executor.submit(() -> {
+            PathComputationRerouteRequestOutputBuilder output = new PathComputationRerouteRequestOutputBuilder();
+            ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                    .setRequestId("none");
+            PceComplianceCheckResult check = PceComplianceCheck.check(input);
+            if (!check.hasPassed()) {
+                LOG.error("Path not calculated, path computation reroute request not compliant : {}",
+                        check.getMessage());
+                configurationResponseCommon
+                        .setAckFinalIndicator("Yes")
+                        .setResponseCode("Path not calculated")
+                        .setResponseMessage(check.getMessage());
+                return output
+                        .setConfigurationResponseCommon(configurationResponseCommon.build())
+                        .build();
+            }
+            PathComputationRequestInput pathComputationInput = new PathComputationRequestInputBuilder()
+                    .setServiceName("no_name")
+                    .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("none").build())
+                    .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                    .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                    .setHardConstraints(input.getHardConstraints())
+                    .setPceRoutingMetric(input.getPceRoutingMetric())
+                    .setResourceReserve(false)
+                    .setSoftConstraints(input.getSoftConstraints())
+                    .setRoutingMetric(input.getRoutingMetric())
+                    .build();
+            PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
+                    gnpyConsumer, portMapping, input.getEndpoints());
+            sendingPCE.pathComputation();
+            String message = sendingPCE.getMessage();
+            String responseCode = sendingPCE.getResponseCode();
+            LOG.info("PCE response: {} {}", message, responseCode);
+            return output.setConfigurationResponseCommon(
+                    configurationResponseCommon
+                            .setAckFinalIndicator("Yes")
+                            .setResponseCode(responseCode)
+                            .setResponseMessage(message)
+                            .build())
+                    .build();
         });
     }
 
