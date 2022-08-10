@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0fbc908_7b3d167a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "exists",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81538b53_b645826f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "LGTM apart minor issues but the complexity is starting to be quite high on these class and IMO some refactoring would be welcome.",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d74b5625_daa831ed",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceComplianceCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "What about simply this ?\n\n    public static PceComplianceCheckResult check(PathComputationRerouteRequestInput input) {\n\n        if (input \u003d\u003d null) {\n            return new PceComplianceCheckResult(false, \"\");\n        }\n        if (input.getEndpoints() \u003d\u003d null\n                || input.getEndpoints().getAEndTp() \u003d\u003d null\n                || input.getEndpoints().getZEndTp() \u003d\u003d null) {\n            String message \u003d \"At least one of the termination points is missing\";\n            LOG.debug(message);\n            return new PceComplianceCheckResult(false, message);\n        }\n        return new PceComplianceCheckResult(true, \"\");\n    }",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b91a4ca_f0384721",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/impl/PceServiceRPCImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "What about simply this ?\n\n\n    @Override\n    public ListenableFuture\u003cRpcResult\u003cPathComputationRerouteRequestOutput\u003e\u003e pathComputationRerouteRequest(\n            PathComputationRerouteRequestInput input) {\n        LOG.info(\"RPC path computation reroute request received\");\n        LOG.debug(\"input parameters are : input \u003d {}\", input.toString());\n        try {\n            return RpcResultBuilder\n                .success(\n                    this.pathComputationService.pathComputationRerouteRequest(input).get())              \n                .buildFuture();\n\n        } catch (InterruptedException | ExecutionException e) {\n            LOG.error(\"RPC path computation request failed !\", e);\n            return RpcResultBuilder.success(null).buildFuture();\n        }\n     }\n\nIt should probably be done in a separate refactoring change on this whole class.",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec472b69_47ad8724",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "reroute intermediate variable is used only once thus is useless IMO\n\nThat said, there is a huge cyclomatic complexity here and there is probably room for more refactoring...",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e91e7051_69427bea",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:29:48Z",
+      "side": 1,
+      "message": "can be cascaded with previous line",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
