@@ -78,6 +78,14 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     }
 
+    @Test
+    public void pathComputationRerouteRequestTest() {
+        pathComputationServiceImpl.generateGnpyResponse(null,"path");
+        Assert.assertNotNull(pathComputationServiceImpl
+                .pathComputationRerouteRequest(PceTestData.getPCEReroute()));
+
+    }
+
     @After
     public void destroy() {
         pathComputationServiceImpl.close();
