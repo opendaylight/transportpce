@@ -61,6 +61,11 @@ public class PceServiceRPCImplTest extends AbstractTest {
     }
 
     @Test
+    public void testPathComputationRerouteRequest() {
+        assertNotNull(pceServiceRPC.pathComputationRerouteRequest(PceTestData.getPCERerouteRequest()));
+    }
+
+    @Test
     public void testPathComputationRequestCoRoutingOrGeneral2() {
         assertNotNull(pceServiceRPC.pathComputationRequest(
                 PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
