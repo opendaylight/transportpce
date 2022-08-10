@@ -15,6 +15,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +31,7 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -36,6 +39,10 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutput;
@@ -61,7 +68,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class ServicehandlerImplTest extends AbstractTest {
 
@@ -339,6 +356,9 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
+
+        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
@@ -353,23 +373,81 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
+
+        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
     public void serviceRerouteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        //create service to be rerouted later
+        Mockito.when(pathComputationService.pathComputationRerouteRequest(any()))
+                .thenReturn(Futures.immediateFuture(new PathComputationRerouteRequestOutputBuilder()
+                        .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
+                                .setResponseCode(ResponseCodes.RESPONSE_OK)
+                                .build())
+                        .build()));
+        Map<AToZKey, AToZ> atoz = Map.of(
+                new AToZKey("0"),
+                new AToZBuilder()
+                        .setId("0")
+                        .setResource(new ResourceBuilder()
+                                .setResource(new TerminationPointBuilder()
+                                        .setTpNodeId("tpNodeIdC")
+                                        .setTpId("TpIdC1")
+                                        .build())
+                                .setState(State.InService)
+                                .build())
+                        .build(),
+                new AToZKey("1"),
+                new AToZBuilder()
+                        .setId("1")
+                        .setResource(new ResourceBuilder()
+                                .setResource(new TerminationPointBuilder()
+                                        .setTpNodeId("tpNodeIdD")
+                                        .setTpId("TpIdCD")
+                                        .build())
+                                .setState(State.InService)
+                                .build())
+                        .build(), new AToZKey("2"),
+                new AToZBuilder()
+                        .setId("2")
+                        .setResource(new ResourceBuilder()
+                                .setResource(new TerminationPointBuilder()
+                                        .setTpNodeId("tpNodeIdA")
+                                        .setTpId("TpIdA1")
+                                        .build())
+                                .setState(State.InService)
+                                .build())
+                        .build()
+
+        );
+        serviceDataStoreOperations.createServicePath(new ServiceInput(serviceCreateInput),
+                new PathComputationRequestOutputBuilder()
+                        .setResponseParameters(new ResponseParametersBuilder()
+                                .setPathDescription(new PathDescriptionBuilder()
+                                        .setAToZDirection(new AToZDirectionBuilder()
+                                                .setAToZ(atoz)
+                                                .setRate(Uint32.valueOf(1))
+                                                .build())
+                                        .setZToADirection(new ZToADirectionBuilder()
+                                                .setRate(Uint32.valueOf(1))
+                                                .build())
+                                        .build())
+                                .build())
+                        .build());
+
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
         serviceDataStoreOperations.createService(serviceCreateInput);
-
-        //service reroute test action
-        //ServiceRerouteInput is created with the same service information that is created before
         ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(
                 serviceRerouteInput);
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
+
+        Assert.assertEquals(
+                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
