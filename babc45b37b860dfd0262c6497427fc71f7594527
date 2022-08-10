@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8df6f84_ee956ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:13:16Z",
+      "side": 1,
+      "message": "LGTM apart cosmetic issues",
+      "revId": "babc45b37b860dfd0262c6497427fc71f7594527",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "396e8041_7f0ecd67",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/impl/PceServiceRPCImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:13:16Z",
+      "side": 1,
+      "message": "AFAIK toString() is not needed and discouraged in LOG format messages.",
+      "revId": "babc45b37b860dfd0262c6497427fc71f7594527",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae59980_308ebd39",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculationTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:13:16Z",
+      "side": 1,
+      "message": "since we are in the area I suggest we remove this useless commented line (identical to the uncommented line above)",
+      "revId": "babc45b37b860dfd0262c6497427fc71f7594527",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
