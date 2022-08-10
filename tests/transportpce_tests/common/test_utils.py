@@ -50,6 +50,7 @@ URL_GET_NBINOTIFICATIONS_PROCESS_SERV = "{}/operations/nbi-notifications:get-not
 URL_GET_NBINOTIFICATIONS_ALARM_SERV = "{}/operations/nbi-notifications:get-notifications-alarm-service/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
 URL_SERV_DELETE = "{}/operations/org-openroadm-service:service-delete"
+URL_SERV_REROUTE = "{}/operations/org-openroadm-service:service-reroute"
 URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_TAPI_CREATE_CONNECTIVITY = "{}/operations/tapi-connectivity:create-connectivity-service"
@@ -437,6 +438,10 @@ def service_delete_request(servicename: str,
             "service-name": servicename,
             "tail-retention": "no"}}}
     return post_request(URL_SERV_DELETE, attr)
+
+
+def service_reroute_request(attr):
+    return post_request(URL_SERV_REROUTE, attr)
 
 
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes, centerfreq: str,
