@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8d8467_494963b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:36:19Z",
+      "side": 1,
+      "message": "checks whether",
+      "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0a1c8a2d_b7f91559",
@@ -14,6 +31,57 @@
       "writtenOn": "2022-08-10T06:42:26Z",
       "side": 1,
       "message": "recheck",
+      "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d03ca4_0a83d2fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:36:19Z",
+      "side": 1,
+      "message": "LGTM apart mostly cosmetic issues",
+      "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e49a9b_1056afc3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:36:19Z",
+      "side": 1,
+      "message": "LF misplaced from a readability standpoint\nprefer oneliner allocation if possible here",
+      "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "217bf456_3b68cafc",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/PCEServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T08:36:19Z",
+      "side": 1,
+      "message": "serviceHandlerHeader intermidate variable above can be removed by using a ternary operator here\n\n    .setServiceHandlerHeader(\n        serviceHandler \u003d\u003d null\n            ? new ServiceHandlerHeaderBuilder().build()\n            : new ServiceHandlerHeaderBuilder()\n                 .setRequestId(serviceHandler.getRequestId())\n                 .build())",
       "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
