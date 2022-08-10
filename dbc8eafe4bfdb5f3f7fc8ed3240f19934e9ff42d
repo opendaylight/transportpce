@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8f2c1cc_914fce64",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-10T13:07:37Z",
+      "side": 1,
+      "message": "I can\u0027t see any reason of using a mutable instance.\nSo IMO Map.of() is more indicated here.",
+      "revId": "dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
