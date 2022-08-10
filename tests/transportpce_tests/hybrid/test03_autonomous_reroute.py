@@ -758,39 +758,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
-    def test_10_connect_xprda2_3_N1_to_roadma_PP2(self):
-        response = test_utils.transportpce_api_rpc_request(
-            'transportpce-networkutils', 'init-xpdr-rdm-links',
-            {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '3', 'network-num': '1',
-                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
-
-    def test_11_connect_roadma_PP2_to_xpdra2_3_N1(self):
-        response = test_utils.transportpce_api_rpc_request(
-            'transportpce-networkutils', 'init-rdm-xpdr-links',
-            {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '3', 'network-num': '1',
-                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
-
-    def test_12_connect_xprdc2_3_N1_to_roadmc_PP2(self):
-        response = test_utils.transportpce_api_rpc_request(
-            'transportpce-networkutils', 'init-xpdr-rdm-links',
-            {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '3', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
-
-    def test_13_connect_roadmc_PP2_to_xpdrc2_3_N1(self):
-        response = test_utils.transportpce_api_rpc_request(
-            'transportpce-networkutils', 'init-rdm-xpdr-links',
-            {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '3', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
-
-    def test_14_add_omsAttributes_roadma_roadmc(self):
+    def test_10_add_omsAttributes_roadma_roadmc(self):
         # Config ROADMA-ROADMC oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -802,11 +770,10 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_15_add_omsAttributes_roadmc_roadma(self):
+    def test_11_add_omsAttributes_roadmc_roadma(self):
         # Config ROADMC-ROADMA oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -818,11 +785,184 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_16_add_omsAttributes_roadma_roadmb(self):
+    # test service-create for Eth service from xpdr to xpdr with service-resiliency
+    def test_12_create_eth_service1_with_service_resiliency_restorable(self):
+        self.cr_serv_input_data["service-name"] = "service1"
+        response = test_utils.transportpce_api_rpc_request('org-openroadm-service', 'service-create',
+                                                           self.cr_serv_input_data)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('PCE calculation in progress',
+                      response['output']['configuration-response-common']['response-message'])
+        time.sleep(self.WAITING)
+
+    def test_13_get_eth_service1(self):
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
+        self.assertEqual(response['services'][0]['service-name'], 'service1')
+        self.assertEqual(response['services'][0]['connection-type'], 'service')
+        self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
+        self.assertEqual(response['services'][0]['service-resiliency']['resiliency'],
+                         'org-openroadm-common-service-types:restorable')
+        time.sleep(1)
+
+    # Degrade ROADM-A1-ROADM-C1 link
+    def test_14_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
+        url = "{}/operations/pm-handling:pm-interact"
+        body = {
+            "input": {
+                "rpc-action": "set",
+                "pm-to-be-set-or-created": {
+                    "current-pm-entry": [
+                        {
+                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+                            "pm-resource-type": "interface",
+                            "pm-resource-type-extension": "",
+                            "current-pm": [
+                                {
+                                    "type": "opticalPowerInput",
+                                    "extension": "",
+                                    "location": "nearEnd",
+                                    "direction": "rx",
+                                    "measurement": [
+                                        {
+                                            "granularity": "15min",
+                                            "pmParameterValue": -30,
+                                            "pmParameterUnit": "dBm",
+                                            "validity": "complete"
+                                        },
+                                        {
+                                            "granularity": "24Hour",
+                                            "pmParameterValue": -21.3,
+                                            "pmParameterUnit": "dBm",
+                                            "validity": "complete"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+                                    timeout=test_utils.REQUEST_TIMEOUT)
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+        time.sleep(2)
+
+    def test_15_get_eth_service1(self):
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['services'][0]['operational-state'], 'outOfService')
+        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
+        self.assertEqual(response['services'][0]['service-name'], 'service1')
+        self.assertEqual(response['services'][0]['connection-type'], 'service')
+        self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
+        self.assertEqual(response['services'][0]['service-resiliency']['resiliency'],
+                         'org-openroadm-common-service-types:restorable')
+        time.sleep(1)
+
+    def test_16_service_reroute_service1(self):
+        response = test_utils.transportpce_api_rpc_request(
+            'org-openroadm-service', 'service-reroute',
+            {
+                "sdnc-request-header": {
+                    "request-id": "request-1",
+                    "rpc-action": "service-reroute",
+                    "request-system-id": "appname"
+                },
+                "service-name": "service1",
+                "service-resiliency": {
+                    "resiliency": "org-openroadm-common-service-types:restorable"
+                }
+            })
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('500', response['output']['configuration-response-common']['response-code'])
+        self.assertIn('No path available by PCE',
+                      response['output']['configuration-response-common']['response-message'])
+        time.sleep(2)
+
+    # Restore ROADM-A1-ROADM-C1 link
+    def test_17_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
+        url = "{}/operations/pm-handling:pm-interact"
+        body = {
+            "input": {
+                "rpc-action": "clear",
+                "pm-to-get-clear-or-delete": {
+                    "current-pm-entry": [
+                        {
+                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+                            "pm-resource-type": "interface",
+                            "pm-resource-type-extension": "",
+                            "current-pm": [
+                                {
+                                    "type": "opticalPowerInput",
+                                    "extension": "",
+                                    "location": "nearEnd",
+                                    "direction": "rx"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+                                    timeout=test_utils.REQUEST_TIMEOUT)
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+        time.sleep(2)
+
+    def test_18_get_eth_service1(self):
+        self.test_13_get_eth_service1()
+
+    def test_19_connect_xprda2_3_N1_to_roadma_PP2(self):
+        response = test_utils.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-xpdr-rdm-links',
+            {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '3', 'network-num': '1',
+                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
+        time.sleep(2)
+
+    def test_20_connect_roadma_PP2_to_xpdra2_3_N1(self):
+        response = test_utils.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-rdm-xpdr-links',
+            {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '3', 'network-num': '1',
+                             'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
+        time.sleep(2)
+
+    def test_21_connect_xprdc2_3_N1_to_roadmc_PP2(self):
+        response = test_utils.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-xpdr-rdm-links',
+            {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '3', 'network-num': '1',
+                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
+        time.sleep(2)
+
+    def test_22_connect_roadmc_PP2_to_xpdrc2_3_N1(self):
+        response = test_utils.transportpce_api_rpc_request(
+            'transportpce-networkutils', 'init-rdm-xpdr-links',
+            {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '3', 'network-num': '1',
+                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
+        time.sleep(2)
+
+    def test_23_add_omsAttributes_roadma_roadmb(self):
         # Config ROADMA-ROADMB oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -834,11 +974,10 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-B1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-B1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_17_add_omsAttributes_roadmb_roadma(self):
+    def test_24_add_omsAttributes_roadmb_roadma(self):
         # Config ROADMB-ROADMA oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -850,11 +989,10 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-B1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-B1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_18_add_omsAttributes_roadmb_roadmc(self):
+    def test_25_add_omsAttributes_roadmb_roadmc(self):
         # Config ROADMB-ROADMC oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -866,11 +1004,10 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-B1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-B1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_19_add_omsAttributes_roadmc_roadmb(self):
+    def test_26_add_omsAttributes_roadmc_roadmb(self):
         # Config ROADMC-ROADMB oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -882,11 +1019,10 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.add_oms_attr_request(
-            "ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-B1-DEG2-DEG2-TTP-TXRX", data)
+        response = test_utils.add_oms_attr_request("ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-B1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
-    def test_20_create_OTS_ROADMA_DEG1(self):
+    def test_27_create_OTS_ROADMA_DEG1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'create-ots-oms',
             {
@@ -897,7 +1033,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADM-A1',
                       response["output"]["result"])
 
-    def test_21_create_OTS_ROADMC_DEG2(self):
+    def test_28_create_OTS_ROADMC_DEG2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'create-ots-oms',
             {
@@ -908,7 +1044,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADM-C1',
                       response["output"]["result"])
 
-    def test_22_create_OTS_ROADMB_DEG1(self):
+    def test_29_create_OTS_ROADMB_DEG1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'create-ots-oms',
             {
@@ -919,7 +1055,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADM-B1',
                       response["output"]["result"])
 
-    def test_23_create_OTS_ROADMB_DEG2(self):
+    def test_30_create_OTS_ROADMB_DEG2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'create-ots-oms',
             {
@@ -930,7 +1066,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADM-B1',
                       response["output"]["result"])
 
-    def test_24_calculate_span_loss_base_all(self):
+    def test_31_calculate_span_loss_base_all(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-olm', 'calculate-spanloss-base',
             {
@@ -964,50 +1100,27 @@ class TransportPCEtesting(unittest.TestCase):
         }, response["output"]["spans"])
         time.sleep(1)
 
-    # test service-create for Eth service from xpdr to xpdr with service-resiliency
-    def test_25_create_eth_service1_with_service_resiliency_restorable(self):
-        response = test_utils.transportpce_api_rpc_request(
-            'org-openroadm-service', 'service-create',
-            self.cr_serv_input_data)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('PCE calculation in progress',
-                      response['output']['configuration-response-common']['response-message'])
-        time.sleep(self.WAITING)
-
-    def test_26_get_eth_service1(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], 'service1')
-        self.assertEqual(response['services'][0]['connection-type'], 'service')
-        self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
-        self.assertEqual(
-            response['services'][0]['service-resiliency']['resiliency'],
-            'org-openroadm-common-service-types:restorable')
-        time.sleep(1)
-
-    def test_27_get_service_path_service_1(self):
+    def test_32_get_service_path_service_1(self):
         response = test_utils.get_serv_path_list_attr("service-paths", "service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertCountEqual(
-            self.service_path_service_1_AtoZ,
-            response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
+        self.assertCountEqual(self.service_path_service_1_AtoZ,
+                              response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
 
     # test service-create for Eth service from xpdr to xpdr without service-resiliency
-    def test_28_create_eth_service2_without_service_resiliency(self):
+    def test_33_create_eth_service2_without_service_resiliency(self):
         self.cr_serv_input_data["service-name"] = "service2"
         del self.cr_serv_input_data["service-resiliency"]
-        response = test_utils.transportpce_api_rpc_request(
-            'org-openroadm-service', 'service-create',
-            self.cr_serv_input_data)
+        response = test_utils.transportpce_api_rpc_request('org-openroadm-service', 'service-create',
+                                                           self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('PCE calculation in progress',
                       response['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
-    def test_29_get_eth_service2(self):
+    def test_34_get_eth_service2(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['services'][0]['operational-state'], 'inService')
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(response['services'][0]['service-name'], 'service2')
         self.assertEqual(response['services'][0]['connection-type'], 'service')
@@ -1015,7 +1128,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('service-resiliency', response['services'][0])
         time.sleep(1)
 
-    def test_30_get_service_path_service_2(self):
+    def test_35_get_service_path_service_2(self):
         response = test_utils.get_serv_path_list_attr("service-paths", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertCountEqual(
@@ -1023,7 +1136,7 @@ class TransportPCEtesting(unittest.TestCase):
             response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
 
     # Degrade ROADM-A1-ROADM-C1 link
-    def test_31_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
+    def test_36_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
         url = "{}/operations/pm-handling:pm-interact"
         body = {
             "input": {
@@ -1070,17 +1183,17 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
         time.sleep(self.WAITING * 2)
 
-    def test_32_get_eth_service1(self):
-        self.test_26_get_eth_service1()
+    def test_37_get_eth_service1(self):
+        self.test_13_get_eth_service1()
 
-    def test_33_get_service_path_service_1(self):
+    def test_38_get_service_path_service_1(self):
         response = test_utils.get_serv_path_list_attr("service-paths", "service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertCountEqual(
             self.service_path_service_1_rerouted_AtoZ,
             response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
 
-    def test_34_get_eth_service2(self):
+    def test_39_get_eth_service2(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", "service2")
         self.assertEqual(response['services'][0]['operational-state'], 'outOfService')
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -1090,7 +1203,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('service-resiliency', response['services'])
         time.sleep(1)
 
-    def test_35_get_service_path_service_2(self):
+    def test_40_get_service_path_service_2(self):
         response = test_utils.get_serv_path_list_attr("service-paths", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         index = self.service_path_service_2_AtoZ.index(
@@ -1115,7 +1228,7 @@ class TransportPCEtesting(unittest.TestCase):
                               response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
 
     # Restore ROADM-A1-ROADM-C1 link
-    def test_36_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
+    def test_41_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
         url = "{}/operations/pm-handling:pm-interact"
         body = {
             "input": {
@@ -1148,19 +1261,19 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
         time.sleep(2)
 
-    def test_37_get_eth_service1(self):
-        self.test_26_get_eth_service1()
+    def test_42_get_eth_service1(self):
+        self.test_13_get_eth_service1()
 
-    def test_38_get_service_path_service_1(self):
-        self.test_33_get_service_path_service_1()
+    def test_43_get_service_path_service_1(self):
+        self.test_38_get_service_path_service_1()
 
-    def test_39_get_eth_service2(self):
-        self.test_29_get_eth_service2()
+    def test_44_get_eth_service2(self):
+        self.test_34_get_eth_service2()
 
-    def test_40_get_service_path_service_2(self):
-        self.test_30_get_service_path_service_2()
+    def test_45_get_service_path_service_2(self):
+        self.test_35_get_service_path_service_2()
 
-    def test_41_delete_eth_service2(self):
+    def test_46_delete_eth_service2(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service2"
         response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
@@ -1170,7 +1283,7 @@ class TransportPCEtesting(unittest.TestCase):
                       response['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
-    def test_42_delete_eth_service1(self):
+    def test_47_delete_eth_service1(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service1"
         response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
@@ -1180,7 +1293,7 @@ class TransportPCEtesting(unittest.TestCase):
                       response['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
-    def test_43_disconnect_xponders_from_roadm(self):
+    def test_48_disconnect_xponders_from_roadm(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         links = response['network'][0]['ietf-network-topology:link']
@@ -1190,23 +1303,23 @@ class TransportPCEtesting(unittest.TestCase):
                     'openroadm-topology', link['link-id'], 'config')
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_44_disconnect_xpdra2(self):
+    def test_49_disconnect_xpdra2(self):
         response = test_utils.unmount_device("XPDR-A2")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_45_disconnect_xpdrc2(self):
+    def test_50_disconnect_xpdrc2(self):
         response = test_utils.unmount_device("XPDR-C2")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_46_disconnect_roadmA(self):
+    def test_51_disconnect_roadmA(self):
         response = test_utils.unmount_device("ROADM-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_47_disconnect_roadmB(self):
+    def test_52_disconnect_roadmB(self):
         response = test_utils.unmount_device("ROADM-B1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_48_disconnect_roadmC(self):
+    def test_53_disconnect_roadmC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
