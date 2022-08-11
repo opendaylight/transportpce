@@ -16,6 +16,24 @@
       "message": "it is apparently only used once in line 443.\nSo this intermediate variable is not needed IMO",
       "revId": "3f44ebced700626fa90f249e823ebe801ea1a6f1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ce111f_d87bec9e",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T10:50:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0fb11633_0b094c39",
+      "revId": "3f44ebced700626fa90f249e823ebe801ea1a6f1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
