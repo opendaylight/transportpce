@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f44de80d_026bc2a5",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:33:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f42ed2d5_a9a00ae7",
+      "revId": "dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8f2c1cc_914fce64",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2f41cd_44db92a3",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:33:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c8f2c1cc_914fce64",
+      "revId": "dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1698064c_45551ed6",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-08-10T13:11:20Z",
       "side": 1,
       "message": "pylint warning here \u003d\u003e tox CI failure\n\n11:48:37 pylint installed: astroid\u003d\u003d2.11.7,certifi\u003d\u003d2022.6.15,charset-normalizer\u003d\u003d2.0.12,dill\u003d\u003d0.3.4,idna\u003d\u003d3.3,isort\u003d\u003d5.10.1,lazy-object-proxy\u003d\u003d1.7.1,mccabe\u003d\u003d0.7.0,platformdirs\u003d\u003d2.4.0,psutil\u003d\u003d5.9.1,pylint\u003d\u003d2.13.9,requests\u003d\u003d2.27.1,tomli\u003d\u003d1.2.3,-e git+git://devvexx.opendaylight.org/mirror/transportpce@dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d#egg\u003dtransportpce_tests\u0026subdirectory\u003dtests,typed-ast\u003d\u003d1.5.4,typing_extensions\u003d\u003d4.1.1,urllib3\u003d\u003d1.26.11,wrapt\u003d\u003d1.14.1\n11:48:37 pylint run-test-pre: PYTHONHASHSEED\u003d\u0027409229612\u0027\n11:48:37 pylint run-test: commands[0] | find transportpce_tests/ -name \u0027*.py\u0027 -exec pylint --fail-under\u003d10 --max-line-length\u003d120 --disable\u003dmissing-docstring --disable\u003dfixme --disable\u003dduplicate-code \u0027--module-rgx\u003d([a-z0-9_]+$)|([0-9.]{1,30}$)\u0027 \u0027--method-rgx\u003d(([a-z_][a-zA-Z0-9_]{2,})|(_[a-z0-9_]*)|(__[a-zA-Z][a-zA-Z0-9_]+__))$\u0027 \u0027--variable-rgx\u003d[a-zA-Z_][a-zA-Z0-9_]{1,30}$\u0027 \u0027{}\u0027 +\n11:49:07 ************* Module hybrid.test03_autonomous_reroute\n11:49:07 transportpce_tests/hybrid/test03_autonomous_reroute.py:1275:8: W0104: Statement seems to have no effect (pointless-statement)",
+      "revId": "dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4daef5c0_15c4ad5a",
+        "filename": "tests/transportpce_tests/hybrid/test03_autonomous_reroute.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:33:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1698064c_45551ed6",
       "revId": "dbc8eafe4bfdb5f3f7fc8ed3240f19934e9ff42d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
