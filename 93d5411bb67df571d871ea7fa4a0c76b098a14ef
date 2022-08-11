@@ -34,6 +34,24 @@
       "parentUuid": "e70bc536_3e35e89f",
       "revId": "93d5411bb67df571d871ea7fa4a0c76b098a14ef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aefe087_1dd2442d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-11T10:38:45Z",
+      "side": 1,
+      "message": "Correct - It illustrates my point about readability :)\n\nMays I suggest to indent it like this to ease the parenthesis hell readability ?\nif (endpoints \u003d\u003d null\n        || (!endpoints.getAEndTp().equals(tp.getTpId().getValue())\n             \u0026\u0026 !endpoints.getZEndTp().equals(tp.getTpId().getValue()))){",
+      "parentUuid": "50c168a6_ea2c9f4e",
+      "revId": "93d5411bb67df571d871ea7fa4a0c76b098a14ef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
