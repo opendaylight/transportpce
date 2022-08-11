@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1370ebb7_79479943",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:32:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c0fbc908_7b3d167a",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "81538b53_b645826f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07815538_8d3e10c5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceComplianceCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:32:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d74b5625_daa831ed",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b91a4ca_f0384721",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-08-10T08:29:48Z",
       "side": 1,
       "message": "What about simply this ?\n\n\n    @Override\n    public ListenableFuture\u003cRpcResult\u003cPathComputationRerouteRequestOutput\u003e\u003e pathComputationRerouteRequest(\n            PathComputationRerouteRequestInput input) {\n        LOG.info(\"RPC path computation reroute request received\");\n        LOG.debug(\"input parameters are : input \u003d {}\", input.toString());\n        try {\n            return RpcResultBuilder\n                .success(\n                    this.pathComputationService.pathComputationRerouteRequest(input).get())              \n                .buildFuture();\n\n        } catch (InterruptedException | ExecutionException e) {\n            LOG.error(\"RPC path computation request failed !\", e);\n            return RpcResultBuilder.success(null).buildFuture();\n        }\n     }\n\nIt should probably be done in a separate refactoring change on this whole class.",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1570e7a6_649ebedc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/impl/PceServiceRPCImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:32:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b91a4ca_f0384721",
       "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +140,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb2e05e_fddd45c0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:32:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ec472b69_47ad8724",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e91e7051_69427bea",
@@ -99,6 +171,24 @@
       "writtenOn": "2022-08-10T08:29:48Z",
       "side": 1,
       "message": "can be cascaded with previous line",
+      "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebe53c5_dd733ec0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:32:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e91e7051_69427bea",
       "revId": "933b435fecdd60f3eda1f3ee0a920b508c3f75b2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
