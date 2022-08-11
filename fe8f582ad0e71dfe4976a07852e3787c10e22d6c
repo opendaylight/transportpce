@@ -138,6 +138,24 @@
       "message": "serviceHandlerHeader intermidate variable above can be removed by using a ternary operator here\n\n    .setServiceHandlerHeader(\n        serviceHandler \u003d\u003d null\n            ? new ServiceHandlerHeaderBuilder().build()\n            : new ServiceHandlerHeaderBuilder()\n                 .setRequestId(serviceHandler.getRequestId())\n                 .build())",
       "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ffd90c2_964a8478",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/PCEServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T07:33:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "217bf456_3b68cafc",
+      "revId": "fe8f582ad0e71dfe4976a07852e3787c10e22d6c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
