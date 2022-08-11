@@ -16,6 +16,24 @@
       "message": "nttp1 seems only used in this block.\nAlso !(endpoints !\u003d null \u0026\u0026 ..)) is a double negation with a lot of AND operators, not very readable IMO.\nSo what about simply this ?\n\nif (endpoints \u003d\u003d null\n        || !endpoints.getAEndTp().equals(tp.getTpId().getValue())\n        || !endpoints.getZEndTp().equals(tp.getTpId().getValue())){\n    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210\n            .TerminationPoint1 nttp1 \u003d\n        tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210\n            .TerminationPoint1.class);\n    if (nttp1 !\u003d null \u0026\u0026 nttp1.getXpdrNetworkAttributes().getWavelength() !\u003d null) {\n        this.usedXpndrNWTps.add(tp.getTpId().getValue());\n        LOG.debug(\"initXndrTps: XPONDER tp \u003d {} is used\", tp.getTpId().getValue());\n        continue;\n    }\n}",
       "revId": "93d5411bb67df571d871ea7fa4a0c76b098a14ef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50c168a6_ea2c9f4e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 8932
+      },
+      "writtenOn": "2022-08-11T10:28:46Z",
+      "side": 1,
+      "message": "What you are suggesting sounds good to me.\nI just noticed a minor error in the boolean condition you proposed.\n\nif (endpoints \u003d\u003d null\n        || (!endpoints.getAEndTp().equals(tp.getTpId().getValue())\n        \u0026\u0026 !endpoints.getZEndTp().equals(tp.getTpId().getValue()))){\n    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210\n            .TerminationPoint1 nttp1 \u003d\n    tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210\n            .TerminationPoint1.class);\n    if (nttp1 !\u003d null \u0026\u0026 nttp1.getXpdrNetworkAttributes().getWavelength() !\u003d null) {\n        this.usedXpndrNWTps.add(tp.getTpId().getValue());\n        LOG.debug(\"initXndrTps: XPONDER tp \u003d {} is used\", tp.getTpId().getValue());\n        continue;\n    }\n}",
+      "parentUuid": "e70bc536_3e35e89f",
+      "revId": "93d5411bb67df571d871ea7fa4a0c76b098a14ef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
