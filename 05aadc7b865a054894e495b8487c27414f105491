@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99dbf30a_9744a1ff",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/PCEServiceWrapper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-11T09:12:23Z",
+      "side": 1,
+      "message": "indent +4 on lines 203 and 204 or an oneliner on line 202 would be more readable IMO",
+      "revId": "05aadc7b865a054894e495b8487c27414f105491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
