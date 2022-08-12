@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "186d6b9e_2877201b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-12T08:02:47Z",
+      "side": 1,
+      "message": "computes + computation is redundant.\n\nthe service-reroute RPC allows to check whether any route is possible for an existing service during path computation.",
+      "revId": "dd66bdd01c42c3425fd01929ae2520aae3586fcc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09aed0c9_79c96918",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-12T08:02:47Z",
+      "side": 1,
+      "message": "an existing",
+      "revId": "dd66bdd01c42c3425fd01929ae2520aae3586fcc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
