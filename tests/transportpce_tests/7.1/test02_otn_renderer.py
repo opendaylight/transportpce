@@ -238,9 +238,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn('XPDR2-CLIENT1-ODU4-x-XPDR2-NETWORK1-ODU4',
                       response['output']['node-interface'][0]['connection-id'])
         self.assertIn('XPDR2-CLIENT1-ETHERNET-100G', response['output']['node-interface'][0]['eth-interface-id'])
-        self.assertIn('XPDR2-NETWORK1-ODU4',
+        self.assertIn('XPDR2-NETWORK1-ODU4-service_Ethernet',
                       response['output']['node-interface'][0]['odu-interface-id'])
-        self.assertIn('XPDR2-CLIENT1-ODU4',
+        self.assertIn('XPDR2-CLIENT1-ODU4-service_Ethernet',
                       response['output']['node-interface'][0]['odu-interface-id'])
 
     def test_11_check_interface_100ge_client(self):
@@ -262,9 +262,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     def test_12_check_interface_odu4_client(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "XPDR-A2", "interface", "XPDR2-CLIENT1-ODU4")
+            "XPDR-A2", "interface", "XPDR2-CLIENT1-ODU4-service_Ethernet")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4',
+        input_dict_1 = {'name': 'XPDR2-CLIENT1-ODU4-service_Ethernet',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/1/1-PLUG-CLIENT',
                         'supporting-interface-list': 'XPDR2-CLIENT1-ETHERNET-100G',
@@ -286,9 +286,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     def test_13_check_interface_odu4_network(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "XPDR-A2", "interface", "XPDR2-NETWORK1-ODU4")
+            "XPDR-A2", "interface", "XPDR2-NETWORK1-ODU4-service_Ethernet)
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4',
+        input_dict_1 = {'name': 'XPDR2-NETWORK1-ODU4-service_Ethernet',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                         'supporting-interface-list': 'XPDR2-NETWORK1-ODUC2',
@@ -327,9 +327,9 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
         self.assertDictEqual(dict(input_dict_1, **response['odu-connection'][0]),
                              response['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4'},
+        self.assertDictEqual({'dst-if': 'XPDR2-NETWORK1-ODU4-service_Ethernet'},
                              response['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4'},
+        self.assertDictEqual({'src-if': 'XPDR2-CLIENT1-ODU4-service_Ethernet'},
                              response['odu-connection'][0]['source'])
 
     # 1d) Delete Ethernet device interfaces
@@ -357,12 +357,12 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     def test_17_check_no_interface_odu_network(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "XPDR-A2", "interface", "XPDR2-NETWORK1-ODU4")
+            "XPDR-A2", "interface", "XPDR2-NETWORK1-ODU4-service_Ethernet")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_18_check_no_interface_odu_client(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "XPDR-A2", "interface", "XPDR2-CLIENT1-ODU4")
+            "XPDR-A2", "interface", "XPDR2-CLIENT1-ODU4-service_Ethernet")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_19_check_no_interface_100ge_client(self):
