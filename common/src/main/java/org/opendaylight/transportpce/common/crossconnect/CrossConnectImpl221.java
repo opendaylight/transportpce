@@ -297,8 +297,10 @@ public class CrossConnectImpl221 {
         sortedCreatedOduInterfaces.sort((s1,s2) -> s1.compareTo(s2));
         String srcTp = sortedCreatedOduInterfaces.get(0);
         String dstTp = sortedCreatedOduInterfaces.get(1);
+        // Strip the service name from the src and dst
+        String oduXConnectionName = srcTp.split(":")[0] + "-x-" + dstTp.split(":")[0];
         OduConnectionBuilder oduConnectionBuilder = new OduConnectionBuilder()
-                .setConnectionName(srcTp + "-x-" + dstTp)
+                .setConnectionName(oduXConnectionName)
                 .setDestination(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
                         .DestinationBuilder().setDstIf(dstTp).build())
                 .setSource(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
@@ -331,8 +333,8 @@ public class CrossConnectImpl221 {
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Otn-connection successfully created: {}-{}", srcTp, dstTp);
-            return Optional.of(srcTp + "-x-" + dstTp);
+            LOG.info("Otn-connection successfully created: {}", oduXConnectionName);
+            return Optional.of(oduXConnectionName);
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}.", oduConnectionBuilder.build(), e);
         }
