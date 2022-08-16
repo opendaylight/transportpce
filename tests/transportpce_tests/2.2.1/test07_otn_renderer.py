@@ -226,8 +226,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('XPDR1-CLIENT4-ODU2e-x-XPDR1-NETWORK1-ODU2e',
                       response['output']['node-interface'][0]['connection-id'])
         self.assertIn('XPDR1-CLIENT4-ETHERNET10G', response['output']['node-interface'][0]['eth-interface-id'])
-        self.assertIn('XPDR1-NETWORK1-ODU2e', response['output']['node-interface'][0]['odu-interface-id'])
-        self.assertIn('XPDR1-CLIENT4-ODU2e', response['output']['node-interface'][0]['odu-interface-id'])
+        self.assertIn('XPDR1-NETWORK1-ODU2e:service1', response['output']['node-interface'][0]['odu-interface-id'])
+        self.assertIn('XPDR1-CLIENT4-ODU2e:service1', response['output']['node-interface'][0]['odu-interface-id'])
 
     def test_12_check_interface_10GE_CLIENT(self):
         response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-CLIENT4-ETHERNET10G")
@@ -244,10 +244,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_13_check_interface_ODU2E_CLIENT(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-CLIENT4-ODU2e")
+            "SPDR-SA1", "interface", "XPDR1-CLIENT4-ODU2e:service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
 
-        input_dict_1 = {'name': 'XPDR1-CLIENT4-ODU2e',
+        input_dict_1 = {'name': 'XPDR1-CLIENT4-ODU2e:service1',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-SFP4',
                         'supporting-interface': 'XPDR1-CLIENT4-ETHERNET10G',
@@ -269,9 +269,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_14_check_interface_ODU2E_NETWORK(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e")
+            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e:service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e', 'administrative-state': 'inService',
+        input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e:service1', 'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP1-CFP0',
                         'supporting-interface': 'XPDR1-NETWORK1-ODU4',
                         'type': 'org-openroadm-interfaces:otnOdu',
@@ -310,9 +310,9 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(dict(response['odu-connection'][0], **input_dict_1),
                              response['odu-connection'][0])
-        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e'},
+        self.assertDictEqual({'dst-if': 'XPDR1-NETWORK1-ODU2e:service1'},
                              response['odu-connection'][0]['destination'])
-        self.assertDictEqual({'src-if': 'XPDR1-CLIENT4-ODU2e'},
+        self.assertDictEqual({'src-if': 'XPDR1-CLIENT4-ODU2e:service1'},
                              response['odu-connection'][0]['source'])
 
     def test_16_otn_service_path_delete_10GE(self):
@@ -339,12 +339,12 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_check_no_interface_ODU2E_NETWORK(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e")
+            "SPDR-SA1", "interface", "XPDR1-NETWORK1-ODU2e:service1")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_19_check_no_interface_ODU2E_CLIENT(self):
         response = test_utils_rfc8040.check_node_attribute_request(
-            "SPDR-SA1", "interface", "XPDR1-CLIENT4-ODU2e")
+            "SPDR-SA1", "interface", "XPDR1-CLIENT4-ODU2e:service1")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_20_check_no_interface_10GE_CLIENT(self):

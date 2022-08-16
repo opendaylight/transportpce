@@ -57,9 +57,20 @@ public class CrossConnectImpl710 {
         String deviceId = node.getNodeId();
         String srcTp = createdOduInterfaces.get(0);
         String dstTp = createdOduInterfaces.get(1);
-
+        LOG.debug("Client TP: {}, Network TP: {}, Network2TP: {}", node.getClientTp(), node.getNetworkTp(),
+                node.getNetwork2Tp());
+        if (!srcTp.contains(node.getClientTp())) {
+            // If the src-tp does not contain client port, then we swap src-tp & dest-tp
+            String tmp;
+            tmp = dstTp;
+            dstTp = srcTp;
+            srcTp = tmp;
+            LOG.debug("After swap, SrcTP: {}, DstTP: {}", srcTp, dstTp);
+        }
+        // Strip the service name from the src and dst
+        String oduXConnectionName = srcTp.split(":")[0] + "-x-" + dstTp.split(":")[0];
         OduConnectionBuilder oduConnectionBuilder = new OduConnectionBuilder()
-            .setConnectionName(srcTp + "-x-" + dstTp)
+            .setConnectionName(oduXConnectionName)
             .setDestination(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.odu.connection
                 .DestinationBuilder().setDstIf(dstTp).build())
             .setSource(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.odu.connection
@@ -92,8 +103,8 @@ public class CrossConnectImpl710 {
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Otn-connection successfully created: {}-{}", srcTp, dstTp);
-            return Optional.of(srcTp + "-x-" + dstTp);
+            LOG.info("Otn-connection successfully created: {}", oduXConnectionName);
+            return Optional.of(oduXConnectionName);
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}.", oduConnectionBuilder.build(), e);
         }
