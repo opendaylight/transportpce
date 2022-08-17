@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733b3da8_76e2559b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-17T08:22:28Z",
+      "side": 1,
+      "message": "LF needed to avoid linelength\u003e72 char\n\n21:40:57 8: B1 Line exceeds max length (80\u003e72): \"- Refer to the patch https://git.opendaylight.org/gerrit/c/transportpce/+/100830\"",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59507160_bc871bb4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-17T08:22:28Z",
+      "side": 1,
+      "message": "previous indentation was better IMO",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad294b8_b252703b",
+        "filename": "tests/transportpce_tests/7.1/test02_otn_renderer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-17T08:22:28Z",
+      "side": 1,
+      "message": "missing double-quote reported by pylint\n\n************* Module 7.1.test02_otn_renderer\n21:41:27 transportpce_tests/7.1/test02_otn_renderer.py:289:75: E0001: EOL while scanning string literal (\u003cunknown\u003e, line 289) (syntax-error)",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
