@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd5ab2f_9afe4d47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-19T18:18:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "733b3da8_76e2559b",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59507160_bc871bb4",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef186c06_97725ba5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-19T18:18:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59507160_bc871bb4",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aad294b8_b252703b",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-08-17T08:22:28Z",
       "side": 1,
       "message": "missing double-quote reported by pylint\n\n************* Module 7.1.test02_otn_renderer\n21:41:27 transportpce_tests/7.1/test02_otn_renderer.py:289:75: E0001: EOL while scanning string literal (\u003cunknown\u003e, line 289) (syntax-error)",
+      "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d659bf_2ef0cbab",
+        "filename": "tests/transportpce_tests/7.1/test02_otn_renderer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-19T18:18:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aad294b8_b252703b",
       "revId": "5dc2fda679363219d48219bd90b9f35db4a91a33",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
