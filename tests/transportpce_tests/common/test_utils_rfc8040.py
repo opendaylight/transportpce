@@ -375,7 +375,7 @@ def del_node_attribute_request(node: str, attribute: str, attribute_value: str):
 #
 
 
-def get_portmapping(node: str):
+def get_portmapping_node(node: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node))
@@ -387,7 +387,7 @@ def get_portmapping(node: str):
             'nodes': nodes}
 
 
-def get_portmapping_node_info(node: str):
+def get_portmapping_node_node_info(node: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/node-info',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/node-info'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node))
@@ -402,7 +402,7 @@ def get_portmapping_node_info(node: str):
             'node-info': node_info}
 
 
-def portmapping_request(node: str, mapping: str):
+def get_portmapping_node_mapping(node: str, mapping: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/mapping={}',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/mapping/{}'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node, mapping))
@@ -414,7 +414,7 @@ def portmapping_request(node: str, mapping: str):
             'mapping': mapping}
 
 
-def portmapping_switching_pool_request(node: str, switching_pool: str):
+def get_portmapping_node_switching_pool(node: str, switching_pool: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/switching-pool-lcp={}',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/switching-pool-lcp/{}'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node, switching_pool))
@@ -426,7 +426,7 @@ def portmapping_switching_pool_request(node: str, switching_pool: str):
             'switching_pool': switching_pool}
 
 
-def portmapping_mc_capa_request(node: str, mc_capa: str):
+def get_portmapping_node_mc_capa(node: str, mc_capa: str):
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}/mc-capabilities={}',
            'draft-bierman02': '{}/config/transportpce-portmapping:network/nodes/{}/mc-capabilities/{}'}
     response = get_request(url[RESTCONF_VERSION].format('{}', node, mc_capa))
