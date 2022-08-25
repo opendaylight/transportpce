@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f567af_76316d55",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T09:37:39Z",
+      "side": 1,
+      "message": "there is probably room for refactoring with switch/case here now.",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
