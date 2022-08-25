@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae26e0d_a4e4a083",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-25T13:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5be7e6a7_45825e6c",
+      "revId": "d055eac3e192d0989f3431d0d1b3f34025c7d5ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d02dc6d_e838095b",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "805fafd5_bbb730a4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-25T13:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d02dc6d_e838095b",
+      "revId": "d055eac3e192d0989f3431d0d1b3f34025c7d5ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daee568d_aa43f66b",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-08-23T07:09:43Z",
       "side": 1,
       "message": "shouldn\u0027t this LOG.debug be in the if-block above ?",
+      "revId": "d055eac3e192d0989f3431d0d1b3f34025c7d5ac",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2017e009_137e2b64",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2022-08-25T13:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "daee568d_aa43f66b",
       "revId": "d055eac3e192d0989f3431d0d1b3f34025c7d5ac",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
