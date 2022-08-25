@@ -21,10 +21,30 @@ import requests
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils  # nopep8
+import test_utils_rfc8040  # nopep8
 
 
 class TransportPCE400Gtesting(unittest.TestCase):
+    path_computation_input_data = {
+        "service-name": "service-1",
+        "resource-reserve": "true",
+        "service-handler-header": {
+            "request-id": "request1"
+        },
+        "service-a-end": {
+            "service-rate": "400",
+            "clli": "nodeA",
+            "service-format": "Ethernet",
+            "node-id": "XPDR-A2"
+        },
+        "service-z-end": {
+            "service-rate": "400",
+            "clli": "nodeC",
+            "service-format": "Ethernet",
+            "node-id": "XPDR-C2"
+        },
+        "pce-routing-metric": "hop-count"
+    }
 
     simple_topo_bi_dir_data = None
     port_mapping_data = None
@@ -77,13 +97,17 @@ class TransportPCE400Gtesting(unittest.TestCase):
         finally:
             if sample_files_parsed:
                 print("sample files content loaded")
-        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils_rfc8040.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
+        # clean datastores
+        test_utils_rfc8040.del_portmapping()
+        test_utils_rfc8040.del_ietf_network('openroadm-topology')
+        test_utils_rfc8040.del_ietf_network('otn-topology')
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils.shutdown_process(process)
+            test_utils_rfc8040.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -93,182 +117,171 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     # Load port mapping
     def test_01_load_port_mapping(self):
-        response = test_utils.put_jsonrequest(test_utils.URL_FULL_PORTMAPPING, self.port_mapping_data)
-        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.created))
-        time.sleep(2)
+        response = test_utils_rfc8040.post_portmapping(self.port_mapping_data)
+        self.assertEqual(response['status_code'], requests.codes.created)
+        time.sleep(1)
 
     # Load openroadm topology
     def test_02_load_openroadm_topology_bi(self):
-        response = test_utils.put_jsonrequest(test_utils.URL_CONFIG_ORDM_TOPO, self.topo_bi_dir_data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.topo_bi_dir_data)
+        self.assertEqual(response['status_code'], requests.codes.no_content)
+        time.sleep(1)
 
     # Path Computation success
     def test_03_path_computation_400G_xpdr_bi(self):
-        response = test_utils.path_computation_request("request-1", "service-1",
-                                                       {"node-id": "XPDR-A2", "service-rate": "400",
-                                                           "service-format": "Ethernet", "clli": "nodeA"},
-                                                       {"node-id": "XPDR-C2", "service-rate": "400",
-                                                           "service-format": "Ethernet", "clli": "nodeC"})
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
+                                                                   'path-computation-request',
+                                                                   self.path_computation_input_data)
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
-                      res['output']['configuration-response-common']['response-message'])
+                      response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
+        self.assertEqual(1, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual(196.0375, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-min-frequency'])
-        self.assertEqual(196.12500, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-max-frequency'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-min-frequency']))
+        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-max-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
+        self.assertEqual(1, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual(196.0375, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-min-frequency'])
-        self.assertEqual(196.12500, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-max-frequency'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-min-frequency']))
+        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-max-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
-        time.sleep(5)
+        time.sleep(2)
 
     # Load otn topology
     def test_04_load_otn_topology_bi(self):
-        response = test_utils.put_jsonrequest(test_utils.URL_CONFIG_OTN_TOPO, self.otn_topo_bi_dir_data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.otn_topo_bi_dir_data)
+        self.assertEqual(response['status_code'], requests.codes.no_content)
+        time.sleep(1)
 
     # Path Computation success
     def test_05_path_computation_OTUC4_xpdr_bi(self):
-        response = test_utils.path_computation_request("request-1", "service-OTUC4",
-                                                       {"service-rate": "400",
-                                                        "clli": "NodeA",
-                                                        "service-format": "OTU",
-                                                        "node-id": "XPDR-A2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
-                                                        },
-                                                       {"service-rate": "400",
-                                                        "clli": "NodeC",
-                                                        "service-format": "OTU",
-                                                        "node-id": "XPDR-C2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-                                                        })
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        self.path_computation_input_data["service-name"] = "service-OTUC4"
+        self.path_computation_input_data["service-a-end"]["service-format"] = "OTU"
+        self.path_computation_input_data["service-a-end"]["tx-direction"] =\
+            {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
+        self.path_computation_input_data["service-z-end"]["service-format"] = "OTU"
+        self.path_computation_input_data["service-z-end"]["tx-direction"] =\
+            {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
+        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
+                                                                   'path-computation-request',
+                                                                   self.path_computation_input_data)
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
-                      res['output']['configuration-response-common']['response-message'])
+                      response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
+        self.assertEqual(1, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual(196.0375, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-min-frequency'])
-        self.assertEqual(196.12500, res['output']['response-parameters']['path-description']
-                         ['aToZ-direction']['aToZ-max-frequency'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-min-frequency']))
+        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-max-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(1, res['output']['response-parameters']['path-description']
+        self.assertEqual(1, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual(196.0375, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-min-frequency'])
-        self.assertEqual(196.12500, res['output']['response-parameters']['path-description']
-                         ['zToA-direction']['zToA-max-frequency'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-min-frequency']))
+        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-max-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
-        time.sleep(5)
+        time.sleep(2)
 
     # Load otn topology with OTUC4 links
     def test_06_load_otuc4_otn_topology_bi(self):
-        response = test_utils.put_jsonrequest(test_utils.URL_CONFIG_OTN_TOPO, self.otuc4_otn_topo_bi_dir_data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.otuc4_otn_topo_bi_dir_data)
+        self.assertEqual(response['status_code'], requests.codes.no_content)
+        time.sleep(1)
 
     # Path Computation success
     def test_07_path_computation_ODUC4_xpdr_bi(self):
-        response = test_utils.path_computation_request("request-1", "service-ODUC4",
-                                                       {"service-rate": "400",
-                                                        "clli": "NodeA",
-                                                        "service-format": "ODU",
-                                                        "node-id": "XPDR-A2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
-                                                        },
-                                                       {"service-rate": "400",
-                                                        "clli": "NodeC",
-                                                        "service-format": "ODU",
-                                                        "node-id": "XPDR-C2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-                                                        })
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        self.path_computation_input_data["service-name"] = "service-ODUC4"
+        self.path_computation_input_data["service-a-end"]["service-format"] = "ODU"
+        self.path_computation_input_data["service-a-end"]["tx-direction"] = \
+            {"port": {"port-device-name": "XPDR-A2-XPDR2"}}
+        self.path_computation_input_data["service-z-end"]["service-format"] = "ODU"
+        self.path_computation_input_data["service-z-end"]["tx-direction"] = \
+            {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
+        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
+                                                                   'path-computation-request',
+                                                                   self.path_computation_input_data)
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
-                      res['output']['configuration-response-common']['response-message'])
+                      response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(400, res['output']['response-parameters']['path-description']
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual('dp-qam16', res['output']['response-parameters']['path-description']
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
-        time.sleep(5)
+        time.sleep(2)
 
     # Load otn topology with OTUC4 links
     def test_08_load_oduc4_otn_topology_bi(self):
-        response = test_utils.put_jsonrequest(test_utils.URL_CONFIG_OTN_TOPO, self.oduc4_otn_topo_bi_dir_data)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.oduc4_otn_topo_bi_dir_data)
+        self.assertEqual(response['status_code'], requests.codes.no_content)
+        time.sleep(1)
 
     # Path Computation success
     def test_09_path_computation_100G_xpdr_bi(self):
-        response = test_utils.path_computation_request("request-1", "service-100GE",
-                                                       {"service-rate": "100",
-                                                        "clli": "NodeA",
-                                                        "service-format": "Ethernet",
-                                                        "node-id": "XPDR-A2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-A2-XPDR2",
-                                                                                  "port-name": "XPDR2-CLIENT1"}}},
-                                                       {"service-rate": "100",
-                                                        "clli": "NodeC",
-                                                        "service-format": "Ethernet",
-                                                        "node-id": "XPDR-C2",
-                                                        "tx-direction": {"port": {"port-device-name": "XPDR-C2-XPDR2",
-                                                                                  "port-name": "XPDR2-CLIENT1"}}})
-
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
+        self.path_computation_input_data["service-name"] = "service-100GE"
+        self.path_computation_input_data["service-a-end"]["service-rate"] = "100"
+        self.path_computation_input_data["service-a-end"]["service-format"] = "Ethernet"
+        self.path_computation_input_data["service-a-end"]["tx-direction"] = \
+            {"port": {"port-device-name": "XPDR-A2-XPDR2",
+                      "port-name": "XPDR2-CLIENT1"}}
+        self.path_computation_input_data["service-z-end"]["service-rate"] = "100"
+        self.path_computation_input_data["service-z-end"]["service-format"] = "Ethernet"
+        self.path_computation_input_data["service-z-end"]["tx-direction"] = \
+            {"port": {"port-device-name": "XPDR-C2-XPDR2",
+                      "port-name": "XPDR2-CLIENT1"}}
+        self.path_computation_input_data["service-z-end"]["service-format"] = "ODU"
+        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
+                                                                   'path-computation-request',
+                                                                   self.path_computation_input_data)
+        self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
-                      res['output']['configuration-response-common']['response-message'])
+                      response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(100, res['output']['response-parameters']['path-description']
+        self.assertEqual(100, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual('1.1', res['output']['response-parameters']['path-description']
+        self.assertEqual('1.1', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['min-trib-slot'])
-        self.assertEqual('1.20', res['output']['response-parameters']['path-description']
+        self.assertEqual('1.20', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['max-trib-slot'])
-        self.assertEqual('dp-qpsk', res['output']['response-parameters']['path-description']
+        self.assertEqual('dp-qpsk', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(100, res['output']['response-parameters']['path-description']
+        self.assertEqual(100, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual('1.1', res['output']['response-parameters']['path-description']
+        self.assertEqual('1.1', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['min-trib-slot'])
-        self.assertEqual('1.20', res['output']['response-parameters']['path-description']
+        self.assertEqual('1.20', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['max-trib-slot'])
-        self.assertEqual('dp-qpsk', res['output']['response-parameters']['path-description']
+        self.assertEqual('dp-qpsk', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
-        time.sleep(5)
+        time.sleep(2)
 
 
 if __name__ == "__main__":
