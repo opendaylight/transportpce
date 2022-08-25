@@ -626,9 +626,13 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
     else:
         data = {'input': payload}
     response = post_request(url, data)
-    res = response.json()
-    return_key = {'rfc8040': api_module + ':output',
-                  'draft-bierman02': 'output'}
-    return_output = res[return_key[RESTCONF_VERSION]]
+    
+    if response.status_code == requests.codes.no_content:
+        return_output = None
+    else:
+        res = response.json()
+        return_key = {'rfc8040': api_module + ':output',
+                      'draft-bierman02': 'output'}
+        return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'output': return_output}
