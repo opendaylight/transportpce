@@ -21,7 +21,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -31,14 +31,14 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -46,33 +46,33 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Connect the ROADMA
     def test_01_connect_rdm(self):
-        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     # Verify the termination points of the ROADMA
     def test_02_compare_Openroadm_topology_portmapping_rdm(self):
-        resTopo = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        resTopo = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(resTopo['status_code'], requests.codes.ok)
         for node in resTopo['network'][0]['node']:
             nodeId = node['node-id']
             nodeMapId = nodeId.split("-")[0]
-            response = test_utils_rfc8040.get_portmapping_node_attr(nodeMapId, "node-info", None)
+            response = test_utils.get_portmapping_node_attr(nodeMapId, "node-info", None)
             self.assertEqual(response['status_code'], requests.codes.ok)
             for tp in node['ietf-network-topology:termination-point']:
                 tpId = tp['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
-                    response2 = test_utils_rfc8040.get_portmapping_node_attr(nodeMapId, "mapping", tpId)
+                    response2 = test_utils.get_portmapping_node_attr(nodeMapId, "mapping", tpId)
                     self.assertEqual(response2['status_code'], requests.codes.ok)
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
-        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        response = test_utils.unmount_device("ROADMA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 #     #Connect the XPDRA
     def test_04_connect_xpdr(self):
-        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
 #     #Verify the termination points related to XPDR
     def test_05_compare_Openroadm_topology_portmapping_xpdr(self):
@@ -80,7 +80,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Disconnect the XPDRA
     def test_06_disconnect_device(self):
-        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        response = test_utils.unmount_device("XPDRA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 

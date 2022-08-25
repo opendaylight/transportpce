@@ -22,7 +22,7 @@ import requests
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportGNPYtesting(unittest.TestCase):
@@ -93,20 +93,20 @@ class TransportGNPYtesting(unittest.TestCase):
         with open('gnpy.log', 'w', encoding='utf-8') as outfile:
             print('starting GNPy REST server...')
             # pylint: disable=consider-using-with
-            test_utils_rfc8040.process_list.append(subprocess.Popen(
+            test_utils.process_list.append(subprocess.Popen(
                 ['gnpy-rest'], stdout=outfile, stderr=outfile, stdin=None))
-        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
         # clean datastores
-        test_utils_rfc8040.del_portmapping()
-        test_utils_rfc8040.del_ietf_network('openroadm-topology')
-        test_utils_rfc8040.del_ietf_network('openroadm-network')
-        test_utils_rfc8040.del_ietf_network('clli-network')
+        test_utils.del_portmapping()
+        test_utils.del_ietf_network('openroadm-topology')
+        test_utils.del_ietf_network('openroadm-network')
+        test_utils.del_ietf_network('clli-network')
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -114,31 +114,31 @@ class TransportGNPYtesting(unittest.TestCase):
 
      # Load port mapping
     def test_00_load_port_mapping(self):
-        response = test_utils_rfc8040.post_portmapping(self.port_mapping_data)
+        response = test_utils.post_portmapping(self.port_mapping_data)
         self.assertIn(response['status_code'], (requests.codes.created, requests.codes.no_content))
         time.sleep(1)
 
     # Mount the different topologies
     def test_01_connect_clliNetwork(self):
-        response = test_utils_rfc8040.put_ietf_network('clli-network', self.topo_cllinet_data)
+        response = test_utils.put_ietf_network('clli-network', self.topo_cllinet_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     def test_02_connect_openroadmNetwork(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-network', self.topo_ordnet_data)
+        response = test_utils.put_ietf_network('openroadm-network', self.topo_ordnet_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     def test_03_connect_openroadmTopology(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.topo_ordtopo_data)
+        response = test_utils.put_ietf_network('openroadm-topology', self.topo_ordtopo_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     # Path computed by PCE is feasible according to Gnpy
     def test_04_path_computation_FeasibleWithPCE(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['configuration-response-common']['response-code'], '200')
         self.assertEqual(response['output']['configuration-response-common']['response-message'],
@@ -160,9 +160,9 @@ class TransportGNPYtesting(unittest.TestCase):
         self.path_computation_input_data["service-handler-header"]["request-id"] = "request-2"
         self.path_computation_input_data["hard-constraints"] =\
             {"include": {"node-id": ["OpenROADM-2", "OpenROADM-3", "OpenROADM-4"]}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['configuration-response-common'][
             'response-code'], '500')
@@ -188,9 +188,9 @@ class TransportGNPYtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["node-id"] = "XPONDER-4"
         self.path_computation_input_data["hard-constraints"] =\
             {"include": {"node-id": ["OpenROADM-2", "OpenROADM-3"]}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['configuration-response-common'][
             'response-code'], '200')
@@ -216,9 +216,9 @@ class TransportGNPYtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["clli"] = "Node4"
         self.path_computation_input_data["hard-constraints"] =\
             {"include": {"node-id": ["OpenROADM-3", "OpenROADM-2", "OpenROADM-5"]}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['configuration-response-common'][
             'response-code'], '500')
