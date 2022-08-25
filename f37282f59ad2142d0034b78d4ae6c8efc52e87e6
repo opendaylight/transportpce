@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef1ff8be_a174bcd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T19:15:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f8378ce_c206526c",
+      "revId": "f37282f59ad2142d0034b78d4ae6c8efc52e87e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43ac3414_3c97e961",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-25T14:25:01Z",
       "side": 1,
       "message": "The return code was OK in the previous REST API version so it should be\n\nself.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))",
+      "revId": "f37282f59ad2142d0034b78d4ae6c8efc52e87e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f81021c7_fcb0710f",
+        "filename": "tests/transportpce_tests/2.2.1/test14_otn_switch_end2end.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T19:15:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43ac3414_3c97e961",
       "revId": "f37282f59ad2142d0034b78d4ae6c8efc52e87e6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
