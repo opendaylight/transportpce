@@ -60,15 +60,15 @@ class TransportPCEtesting(unittest.TestCase):
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
             print("nodeMapId={}".format(nodeMapId))
-            response = test_utils_rfc8040.get_portmapping_node_info(nodeMapId)
+            response = test_utils_rfc8040.get_portmapping_node_node_info(nodeMapId)
             self.assertEqual(response['status_code'], requests.codes.ok)
-            responseMapList = test_utils_rfc8040.get_portmapping(nodeMapId)
+            responseMapList = test_utils_rfc8040.get_portmapping_node(nodeMapId)
             nbMappings = len(responseMapList['nodes'][0]['mapping']) - nbMapCumul
             nbMapCurrent = 0
             for tp in node['ietf-network-topology:termination-point']:
                 tpId = tp['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
-                    responseMap = test_utils_rfc8040.portmapping_request(nodeMapId, tpId)
+                    responseMap = test_utils_rfc8040.get_portmapping_node_attr(nodeMapId, "mapping",  tpId)
                     self.assertEqual(responseMap['status_code'], requests.codes.ok)
                     if responseMap['status_code'] == requests.codes.ok:
                         nbMapCurrent += 1
