@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b253143_7403903b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:00:41Z",
+      "side": 1,
+      "message": "no longer existing \u003d\u003e outdated or obsolete",
+      "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c4d65dd_7d02c007",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:00:41Z",
+      "side": 1,
+      "message": "migrate",
+      "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09fff3ca_2efb9913",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:00:41Z",
+      "side": 1,
+      "message": "I think you can simply remove it rather commenting it out.",
+      "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eadb9319_5c213d4f",
+        "filename": "pce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:00:41Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
