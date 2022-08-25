@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54179c7_c194ceac",
+        "filename": "tests/transportpce_tests/hybrid/test01_device_change_notifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T09:34:23Z",
+      "side": 1,
+      "message": "In order to support draft-bierman return code too, it should be \n\n        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))",
+      "revId": "a4c6b7155871986d58da659b1ee37195bfc3ffed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
