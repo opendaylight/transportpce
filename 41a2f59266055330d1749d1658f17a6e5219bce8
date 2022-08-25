@@ -20,6 +20,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f0bb871_d1e70ffb",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "switch/case is more indicated here IMO",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff63137_ccb09b09",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b04184e0_993512b6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2f567af_76316d55",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 3
@@ -31,6 +82,159 @@
       "writtenOn": "2022-08-25T09:37:39Z",
       "side": 1,
       "message": "there is probably room for refactoring with switch/case here now.",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "556f78a1_668c4205",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "\"else if\" and a \"else return null \"would be more a more readable equivalent IMO\n\nthe 2nd element of the list is never reached since the for block ends with a return null\nThus, there is no point to have a for loop here IMO",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3b23ab1_db2155f9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be simply removed rather than commented out ?",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38eb4688_035bb83a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "?",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a6c293a_494d06ed",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "There is probably room for refactoring and a few intermediate variables removal here",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dcd674e_981d5e5f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "a Map is more indicated here IMO",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83038d7e_6bc97dbc",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462a4ac5_0527600d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerServiceResiliencyCheck.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "this guard clause should preferably be evaluated first to ease indentation IMO",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9912cf99_8f774b6f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "else if would avoid a useless check here",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "068a4a23_e30a4a42",
+        "filename": "tests/transportpce_tests/7.1/test01_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-25T13:29:01Z",
+      "side": 1,
+      "message": "a cast to float instead of str is more indicated here IMO",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
