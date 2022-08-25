@@ -44,6 +44,9 @@ REQUEST_TIMEOUT = 10
 
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
+T100GE = 'Transponder 100GE'
+T0_MULTILAYER_TOPO = 'T0 - Multi-layer topology'
+T0_FULL_MULTILAYER_TOPO = 'T0 - Full Multi-layer topology'
 
 SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'log')
 
@@ -632,6 +635,9 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
         res = response.json()
         return_key = {'rfc8040': api_module + ':output',
                       'draft-bierman02': 'output'}
-        return_output = res[return_key[RESTCONF_VERSION]]
+        if response.status_code == requests.codes.internal_server_error:
+            return_output = res
+        else:
+            return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'output': return_output}
