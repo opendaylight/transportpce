@@ -108,7 +108,6 @@ def delete_request(url):
 
 def post_request(url, data):
     if data:
-        print(json.dumps(data))
         return requests.request(
             "POST", url.format(RESTCONF_BASE_URL),
             data=json.dumps(data),
@@ -282,7 +281,7 @@ def mount_device(node: str, sim: str):
         'netconf-node-topology:tcp-only': 'false',
         'netconf-node-topology:pass-through': {}}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
-    if wait_until_log_contains(TPCE_LOG, re.escape('Triggering notification stream NETCONF for node ' + node), 180):
+    if wait_until_log_contains(TPCE_LOG, 'Triggering notification stream NETCONF for node ' + node, 180):
         print('Node ' + node + ' correctly added to tpce topology', end='... ', flush=True)
     else:
         print('Node ' + node + ' still not added to tpce topology', end='... ', flush=True)
