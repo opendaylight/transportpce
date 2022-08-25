@@ -49,7 +49,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
 
     def test_03_rdm_portmapping(self):
-        response = test_utils_rfc8040.get_portmapping("ROADM-A1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '1/0',
@@ -63,7 +63,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
-        response = test_utils_rfc8040.get_portmapping("XPDR-A1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
