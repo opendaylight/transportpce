@@ -57,12 +57,12 @@ class TransportPCEtesting(unittest.TestCase):
         for node in resTopo['network'][0]['node']:
             nodeId = node['node-id']
             nodeMapId = nodeId.split("-")[0]
-            response = test_utils_rfc8040.get_portmapping_node_info(nodeMapId)
+            response = test_utils_rfc8040.get_portmapping_node_node_info(nodeMapId)
             self.assertEqual(response['status_code'], requests.codes.ok)
             for tp in node['ietf-network-topology:termination-point']:
                 tpId = tp['tp-id']
                 if (not "CP" in tpId) and (not "CTP" in tpId):
-                    response2 = test_utils_rfc8040.portmapping_request(nodeMapId, tpId)
+                    response2 = test_utils_rfc8040.get_portmapping_node_attr(nodeMapId, "mapping",  tpId)
                     self.assertEqual(response2['status_code'], requests.codes.ok)
 
     # Disconnect the ROADMA

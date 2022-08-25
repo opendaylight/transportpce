@@ -65,7 +65,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_02_get_portmapping_CLIENT4(self):
-        response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-CLIENT4")
+        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping",  "XPDR1-CLIENT4")
         self.assertEqual(response['status_code'], requests.codes.ok)
         res_mapping = response['mapping'][0]
         self.assertEqual('CP1-SFP4-P1', res_mapping['supporting-port'])
@@ -81,7 +81,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('org-openroadm-port-types:if-10GE', res_mapping['supported-interface-capability'])
 
     def test_03_get_portmapping_NETWORK1(self):
-        response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping",  "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             self.NETWORK1_CHECK_DICT,
@@ -112,7 +112,7 @@ class TransportPCEtesting(unittest.TestCase):
              'och-interface-id': ['XPDR1-NETWORK1-761:768']}, response['output']['node-interface'])
 
     def test_05_get_portmapping_NETWORK1(self):
-        response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping",  "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otu4"] = "XPDR1-NETWORK1-OTU"
         self.assertIn(
@@ -177,7 +177,7 @@ class TransportPCEtesting(unittest.TestCase):
              'odu-interface-id': ['XPDR1-NETWORK1-ODU4']}, response['output']['node-interface'])
 
     def test_09_get_portmapping_NETWORK1(self):
-        response = test_utils_rfc8040.portmapping_request("SPDR-SA1", "XPDR1-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping",  "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-odu4"] = "XPDR1-NETWORK1-ODU4"
         self.NETWORK1_CHECK_DICT["supporting-otu4"] = "XPDR1-NETWORK1-OTU"
