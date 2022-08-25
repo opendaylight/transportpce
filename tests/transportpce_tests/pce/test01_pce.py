@@ -20,7 +20,7 @@ import requests
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -89,16 +89,16 @@ class TransportPCEtesting(unittest.TestCase):
             if sample_files_parsed:
                 print("sample files content loaded")
 
-        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
         # clean datastores
-        test_utils_rfc8040.del_portmapping()
-        test_utils_rfc8040.del_ietf_network('openroadm-topology')
+        test_utils.del_portmapping()
+        test_utils.del_ietf_network('openroadm-topology')
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -106,26 +106,26 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load port mapping
     def test_01_load_port_mapping(self):
-        response = test_utils_rfc8040.post_portmapping(self.port_mapping_data)
+        response = test_utils.post_portmapping(self.port_mapping_data)
         self.assertIn(response['status_code'], (requests.codes.created, requests.codes.no_content))
         time.sleep(1)
 
     # Load simple bidirectional topology
     def test_02_load_simple_topology_bi(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.simple_topo_bi_dir_data)
+        response = test_utils.put_ietf_network('openroadm-topology', self.simple_topo_bi_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     # Get existing nodeId
     def test_03_get_nodeId(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['node']['node-id'], 'ROADMA01-SRG1')
         time.sleep(1)
 
     # Get existing linkId
     def test_04_get_linkId(self):
-        response = test_utils_rfc8040.get_ietf_network_link_request(
+        response = test_utils.get_ietf_network_link_request(
             'openroadm-topology', 'XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link']['link-id'], 'XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX')
@@ -133,9 +133,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Path Computation success
     def test_05_path_computation_xpdr_bi(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -145,9 +145,9 @@ class TransportPCEtesting(unittest.TestCase):
     def test_06_path_computation_rdm_bi(self):
         self.path_computation_input_data["service-a-end"]["node-id"] = "ROADMA01"
         self.path_computation_input_data["service-z-end"]["node-id"] = "ROADMC01"
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -155,20 +155,20 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load simple bidirectional topology
     def test_07_load_simple_topology_uni(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.simple_topo_uni_dir_data)
+        response = test_utils.put_ietf_network('openroadm-topology', self.simple_topo_uni_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     # Get existing nodeId
     def test_08_get_nodeId(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'XPONDER-1-2', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'XPONDER-1-2', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['node']['node-id'], 'XPONDER-1-2')
         time.sleep(1)
 
     # Get existing linkId
     def test_09_get_linkId(self):
-        response = test_utils_rfc8040.get_ietf_network_link_request(
+        response = test_utils.get_ietf_network_link_request(
             'openroadm-topology', 'XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['link']['link-id'], 'XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX')
@@ -180,9 +180,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.path_computation_input_data["service-a-end"]["clli"] = "ORANGE1"
         self.path_computation_input_data["service-z-end"]["node-id"] = "XPONDER-3-2"
         self.path_computation_input_data["service-z-end"]["clli"] = "ORANGE3"
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -194,9 +194,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.path_computation_input_data["service-a-end"]["clli"] = "cll21"
         self.path_computation_input_data["service-z-end"]["node-id"] = "OpenROADM-2-2"
         self.path_computation_input_data["service-z-end"]["clli"] = "ncli22"
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -216,13 +216,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load complex topology
     def test_12_load_complex_topology(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.complex_topo_uni_dir_data)
+        response = test_utils.put_ietf_network('openroadm-topology', self.complex_topo_uni_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     # Get existing nodeId
     def test_13_get_nodeId(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'XPONDER-3-2', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'XPONDER-3-2', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['node']['node-id'], 'XPONDER-3-2')
         time.sleep(1)
@@ -232,9 +232,9 @@ class TransportPCEtesting(unittest.TestCase):
         del self.path_computation_input_data["service-name"]
         del self.path_computation_input_data["service-a-end"]
         del self.path_computation_input_data["service-z-end"]
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Service Name is not set',
                       response['output']['configuration-response-common']['response-message'])
@@ -257,9 +257,9 @@ class TransportPCEtesting(unittest.TestCase):
                                                                     "service-identifier-list": [{
                                                                         "service-identifier": "Some existing-service"}]
         }}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -274,9 +274,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["clli"] = "ORANGE3"
         del self.path_computation_input_data["hard-constraints"]
         del self.path_computation_input_data["soft-constraints"]
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -290,9 +290,9 @@ class TransportPCEtesting(unittest.TestCase):
     def test_17_success3_path_computation(self):
         self.path_computation_input_data["hard-constraints"] = {"exclude":
                                                                 {"node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -309,9 +309,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["node-id"] = "XPONDER-1-2"
         self.path_computation_input_data["service-z-end"]["clli"] = "ORANGE1"
         del self.path_computation_input_data["hard-constraints"]
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -330,15 +330,15 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete oms-attribute in the link :openroadm1-3 to openroadm1-2
     def test_19_delete_oms_attribute_in_openroadm13toopenroadm12_link(self):
-        response = test_utils_rfc8040.del_oms_attr_request("OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2")
+        response = test_utils.del_oms_attr_request("OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(2)
 
     # Path computation after deleting oms-attribute of the link :openroadm1-3 to openroadm1-2
     def test_20_path_computation_after_oms_attribute_deletion(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])

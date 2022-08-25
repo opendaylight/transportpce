@@ -20,7 +20,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
@@ -30,15 +30,15 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
-                                                       ('spdra', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION),
+                                               ('spdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -47,16 +47,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(1)
 
     def test_01_rdm_device_connection(self):
-        response = test_utils_rfc8040.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
-        response = test_utils_rfc8040.check_device_connection("ROADM-A1")
+        response = test_utils.check_device_connection("ROADM-A1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_03_rdm_portmapping_info(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             {'node-type': 'rdm',
@@ -68,7 +68,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['node-info'])
 
     def test_04_rdm_portmapping_DEG1_TTP_TXRX(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "mapping", "DEG1-TTP-TXRX")
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "mapping", "DEG1-TTP-TXRX")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '1/0',
@@ -77,7 +77,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_05_rdm_portmapping_DEG2_TTP_TXRX_with_ots_oms(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "mapping", "DEG2-TTP-TXRX")
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "mapping", "DEG2-TTP-TXRX")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '2/0',
@@ -88,7 +88,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_06_rdm_portmapping_SRG1_PP3_TXRX(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "mapping", "SRG1-PP3-TXRX")
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "mapping", "SRG1-PP3-TXRX")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'C3', 'supporting-circuit-pack-name': '3/0',
@@ -97,7 +97,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "mapping", "SRG3-PP1-TXRX")
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "mapping", "SRG3-PP1-TXRX")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'C1', 'supporting-circuit-pack-name': '5/0',
@@ -106,16 +106,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_08_xpdr_device_connection(self):
-        response = test_utils_rfc8040.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_09_xpdr_device_connected(self):
-        response = test_utils_rfc8040.check_device_connection("XPDR-A1")
+        response = test_utils.check_device_connection("XPDR-A1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_10_xpdr_portmapping_info(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             {'node-type': 'xpdr',
@@ -127,7 +127,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['node-info'])
 
     def test_11_xpdr_portmapping_NETWORK1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK1")
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
@@ -139,7 +139,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_12_xpdr_portmapping_XPDR2_NETWORK1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK2")
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
@@ -151,7 +151,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_13_xpdr_portmapping_XPDR1_CLIENT1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT1")
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
@@ -164,7 +164,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_14_xpdr_portmapping_XPDR1_CLIENT2(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT2")
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
@@ -177,16 +177,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_15_spdr_device_connection(self):
-        response = test_utils_rfc8040.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_16_spdr_device_connected(self):
-        response = test_utils_rfc8040.check_device_connection("SPDR-SA1")
+        response = test_utils.check_device_connection("SPDR-SA1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_17_spdr_portmapping_info(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             {'node-type': 'xpdr',
@@ -198,7 +198,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['node-info'])
 
     def test_18_spdr_switching_pool_1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "1")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("blocking",
                          response['switching-pool-lcp'][0]['switching-pool-type'])
@@ -212,7 +212,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_19_spdr_switching_pool_2(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "2")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("non-blocking",
                          response['switching-pool-lcp'][0]['switching-pool-type'])
@@ -228,7 +228,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_20_spdr_switching_pool_3(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "3")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "3")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("blocking",
                          response['switching-pool-lcp'][0]['switching-pool-type'])
@@ -242,12 +242,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_21_spdr_portmapping_mappings(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", None, None)
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(18, len(response['nodes'][0]['mapping']))
 
     def test_22_spdr_portmapping_XPDR1_CLIENT1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-CLIENT1")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         expected_subset_response = {
             "logical-connection-point": "XPDR1-CLIENT1",
@@ -266,7 +266,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(sorted(response['mapping'][0]['supported-interface-capability']), expected_sorted_list)
 
     def test_23_spdr_portmapping_XPDR1_NETWORK1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-NETWORK1")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {"logical-connection-point": "XPDR1-NETWORK1",
@@ -282,7 +282,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_24_spdr_portmapping_XPDR2_CLIENT2(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR2-CLIENT2")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR2-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         expected_subset_response = {
             'logical-connection-point': 'XPDR2-CLIENT2',
@@ -301,7 +301,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(sorted(response['mapping'][0]['supported-interface-capability']), expected_sorted_list)
 
     def test_25_spdr_portmapping_XPDR2_NETWORK2(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR2-NETWORK2")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR2-NETWORK2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {"logical-connection-point": "XPDR2-NETWORK2",
@@ -317,7 +317,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_26_spdr_portmapping_XPDR3_CLIENT3(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-CLIENT3")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-CLIENT3")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {"logical-connection-point": "XPDR3-CLIENT3",
@@ -333,7 +333,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_27_spdr_portmapping_XPDR3_NETWORK1(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-NETWORK1")
+        response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {"logical-connection-point": "XPDR3-NETWORK1",
@@ -349,11 +349,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             response['mapping'])
 
     def test_28_spdr_device_disconnection(self):
-        response = test_utils_rfc8040.unmount_device("SPDR-SA1")
+        response = test_utils.unmount_device("SPDR-SA1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_29_xpdr_device_disconnected(self):
-        response = test_utils_rfc8040.check_device_connection("SPDR-SA1")
+        response = test_utils.check_device_connection("SPDR-SA1")
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['connection-status']['error-type'], ('protocol', 'application'))
         self.assertEqual(response['connection-status']['error-tag'], 'data-missing')
@@ -361,11 +361,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          'Request could not be completed because the relevant data model content does not exist')
 
     def test_30_xpdr_device_disconnection(self):
-        response = test_utils_rfc8040.unmount_device("XPDR-A1")
+        response = test_utils.unmount_device("XPDR-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_31_xpdr_device_disconnected(self):
-        response = test_utils_rfc8040.check_device_connection("XPDR-A1")
+        response = test_utils.check_device_connection("XPDR-A1")
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['connection-status']['error-type'], ('protocol', 'application'))
         self.assertEqual(response['connection-status']['error-tag'], 'data-missing')
@@ -373,7 +373,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          'Request could not be completed because the relevant data model content does not exist')
 
     def test_32_xpdr_device_not_connected(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("XPDR-A1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['node-info']['error-type'], ('protocol', 'application'))
         self.assertEqual(response['node-info']['error-tag'], 'data-missing')
@@ -381,11 +381,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          'Request could not be completed because the relevant data model content does not exist')
 
     def test_33_rdm_device_disconnection(self):
-        response = test_utils_rfc8040.unmount_device("ROADM-A1")
+        response = test_utils.unmount_device("ROADM-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_34_rdm_device_disconnected(self):
-        response = test_utils_rfc8040.check_device_connection("ROADM-A1")
+        response = test_utils.check_device_connection("ROADM-A1")
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['connection-status']['error-type'], ('protocol', 'application'))
         self.assertEqual(response['connection-status']['error-tag'], 'data-missing')
@@ -393,7 +393,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          'Request could not be completed because the relevant data model content does not exist')
 
     def test_35_rdm_device_not_connected(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-A1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("ROADM-A1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['node-info']['error-type'], ('protocol', 'application'))
         self.assertEqual(response['node-info']['error-tag'], 'data-missing')
