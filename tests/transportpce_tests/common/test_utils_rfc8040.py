@@ -575,6 +575,21 @@ def get_ordm_serv_list_attr_request(attribute: str, value: str):
             attribute: response_attribute}
 
 
+def get_serv_path_list_attr(attribute: str, value: str):
+    url = {'rfc8040': '{}/data/transportpce-service-path:service-path-list/{}={}?content=nonconfig',
+           'draft-bierman02': '{}/operational/transportpce-service-path:service-path-list/{}/{}'}
+    response = get_request(url[RESTCONF_VERSION].format('{}', attribute, value))
+    res = response.json()
+    return_key = {'rfc8040': 'transportpce-service-path:' + attribute,
+                  'draft-bierman02': attribute}
+    if return_key[RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[RESTCONF_VERSION]]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute: response_attribute}
+
+
 #
 # TransportPCE internal API RPCs
 #
