@@ -21,7 +21,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -31,37 +31,37 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('spdra', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('spdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
 
     def test_01_connect_SPDR_SA1(self):
-        response = test_utils_rfc8040.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        response = test_utils_rfc8040.check_device_connection("SPDR-SA1")
+        response = test_utils.check_device_connection("SPDR-SA1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
 
     def test_02_getClliNetwork(self):
-        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         logging.info(response)
         self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeSA')
         self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_03_getOpenRoadmNetwork(self):
-        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
         self.assertEqual(response['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
@@ -72,13 +72,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['network'][0]['node'][0]['org-openroadm-network:ip'], '1.2.3.4')
 
     def test_04_getLinks_OpenroadmTopology(self):
-        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_05_getNodes_OpenRoadmTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('node', response['network'][0])
         self.assertEqual(len(response['network'][0]['node']), 3)
@@ -110,13 +110,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_06_getLinks_OtnTopology(self):
-        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_07_getNodes_OtnTopology(self):
         # pylint: disable=redundant-unittest-assert
-        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['network'][0]['node']), 3)
         listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3']
@@ -203,26 +203,26 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_08_disconnect_SPDR_SA1(self):
-        response = test_utils_rfc8040.unmount_device("SPDR-SA1")
+        response = test_utils.unmount_device("SPDR-SA1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_09_getClliNetwork(self):
-        response = test_utils_rfc8040.get_ietf_network_request('clli-network', 'config')
+        response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['network'][0]['node']), 1)
         self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_10_getOpenRoadmNetwork(self):
-        response = test_utils_rfc8040.get_ietf_network_request('openroadm-network', 'config')
+        response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
 
     def test_11_getNodes_OpenRoadmTopology(self):
-        response = test_utils_rfc8040.get_ietf_network_request('openroadm-topology', 'config')
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertNotIn('node', response['network'][0])
 
     def test_12_getNodes_OtnTopology(self):
-        response = test_utils_rfc8040.get_ietf_network_request('otn-topology', 'config')
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertNotIn('node', response['network'][0])
 
 

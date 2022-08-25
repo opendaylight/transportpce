@@ -20,7 +20,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCERendererTesting(unittest.TestCase):
@@ -30,14 +30,14 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION), ('roadma', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -46,15 +46,15 @@ class TransportPCERendererTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_01_rdm_device_connected(self):
-        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_xpdr_device_connected(self):
-        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_rdm_portmapping(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADMA01", None, None)
+        response = test_utils.get_portmapping_node_attr("ROADMA01", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '2/0',
@@ -68,7 +68,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("XPDRA01", None, None)
+        response = test_utils.get_portmapping_node_attr("XPDRA01", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
@@ -87,7 +87,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
@@ -107,7 +107,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('Interfaces created successfully for nodes: ROADMA01', response['output']['result'])
 
     def test_06_service_path_create_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")
+        response = test_utils.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -123,7 +123,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_07_service_path_create_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "SRG1-PP7-TXRX-713:720")
+        response = test_utils.check_node_attribute_request("ROADMA01", "interface", "SRG1-PP7-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -139,7 +139,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_08_service_path_create_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "SRG1-PP7-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -153,7 +153,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-713:720'}, response['roadm-connections'][0]['destination'])
 
     def test_09_service_path_create_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-713:720")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-713:720")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -171,7 +171,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(float(intf['transmit-power']), -5)
 
     def test_10_service_path_create_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-OTU")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-OTU")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -188,7 +188,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_11_service_path_create_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-ODU")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-ODU")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the 2 following statements replace self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -211,7 +211,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                              response['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_12_service_path_create_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-CLIENT1-ETHERNET")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
@@ -231,13 +231,13 @@ class TransportPCERendererTesting(unittest.TestCase):
             response['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_13_service_path_create_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
+        response = test_utils.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
         # FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-591
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('not-reserved-inuse', response['circuit-packs'][0]["equipment-state"])
 
     def test_14_service_path_delete(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'service-path',
             {
                 'service-name': 'service_test',
@@ -257,45 +257,45 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(response['output'], {'result': 'Request processed', 'success': True})
 
     def test_15_service_path_delete_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")
+        response = test_utils.check_node_attribute_request("ROADMA01", "interface", "DEG1-TTP-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_16_service_path_delete_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADMA01", "interface", "SRG1-PP7-TXRX-713:720")
+        response = test_utils.check_node_attribute_request("ROADMA01", "interface", "SRG1-PP7-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_17_service_path_delete_rdm_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "SRG1-PP7-TXRX-DEG1-TTP-TXRX-713:720")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_18_service_path_delete_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-713:720")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-713:720")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_19_service_path_delete_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-OTU")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-OTU")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_20_service_path_delete_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-ODU")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-NETWORK1-ODU")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_21_service_path_delete_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "interface", "XPDR1-CLIENT1-ETHERNET")
+        response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_22_service_path_delete_xpdr_check(self):
-        response = test_utils_rfc8040.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
+        response = test_utils.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual('not-reserved-available', response["circuit-packs"][0]['equipment-state'])
 
     def test_23_rdm_device_disconnected(self):
-        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        response = test_utils.unmount_device("ROADMA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_24_xpdr_device_disconnected(self):
-        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        response = test_utils.unmount_device("XPDRA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 

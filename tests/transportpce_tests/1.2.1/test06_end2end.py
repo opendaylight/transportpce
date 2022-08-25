@@ -20,7 +20,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEFulltesting(unittest.TestCase):
@@ -72,8 +72,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('xpdra', cls.NODE_VERSION),
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION),
                                                        ('roadma-full', cls.NODE_VERSION),
                                                        ('roadmc-full', cls.NODE_VERSION),
                                                        ('xpdrc', cls.NODE_VERSION)])
@@ -82,7 +82,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -91,23 +91,23 @@ class TransportPCEFulltesting(unittest.TestCase):
 
      # connect netconf devices
     def test_01_connect_xpdrA(self):
-        response = test_utils_rfc8040.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("XPDRA01", ('xpdra', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_connect_xpdrC(self):
-        response = test_utils_rfc8040.mount_device("XPDRC01", ('xpdrc', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("XPDRC01", ('xpdrc', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_connect_rdmA(self):
-        response = test_utils_rfc8040.mount_device("ROADMA01", ('roadma-full', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADMA01", ('roadma-full', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_connect_rdmC(self):
-        response = test_utils_rfc8040.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_05_connect_xprdA_N1_to_roadmA_PP1(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
@@ -116,7 +116,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_06_connect_roadmA_PP1_to_xpdrA_N1(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
@@ -125,7 +125,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_07_connect_xprdC_N1_to_roadmC_PP1(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
@@ -134,7 +134,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_08_connect_roadmC_PP1_to_xpdrC_N1(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '1',
                              'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
@@ -154,7 +154,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils_rfc8040.add_oms_attr_request("ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX",
+        response = test_utils.add_oms_attr_request("ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX",
                                                            data)
         self.assertEqual(response.status_code, requests.codes.created)
 
@@ -170,7 +170,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils_rfc8040.add_oms_attr_request("ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX",
+        response = test_utils.add_oms_attr_request("ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX",
                                                            data)
         self.assertEqual(response.status_code, requests.codes.created)
 
@@ -178,7 +178,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_11_create_eth_service1(self):
         self.cr_serv_input_data["service-name"] = "service1"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-create',
             self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -187,7 +187,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_12_get_eth_service1(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_attr_request("services", "service1")
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(response['services'][0]['service-name'], 'service1')
@@ -196,7 +196,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_13_check_xc1_ROADMA(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -211,7 +211,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_14_check_xc1_ROADMC(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -226,7 +226,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_15_check_topo_XPDRA(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
@@ -244,7 +244,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_16_check_topo_ROADMA_SRG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -262,7 +262,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_17_check_topo_ROADMA_DEG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -283,7 +283,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_18_connect_xprdA_N2_to_roadmA_PP2(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '2',
                              'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
@@ -292,7 +292,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_19_connect_roadmA_PP2_to_xpdrA_N2(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '2',
                              'rdm-node': 'ROADMA01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
@@ -301,7 +301,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_20_connect_xprdC_N2_to_roadmC_PP2(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '2',
                              'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
@@ -310,7 +310,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_21_connect_roadmC_PP2_to_xpdrC_N2(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '2',
                              'rdm-node': 'ROADMC01', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
@@ -320,7 +320,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_22_create_eth_service2(self):
         self.cr_serv_input_data["service-name"] = "service2"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-create',
             self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -329,7 +329,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_23_get_eth_service2(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_attr_request("services", "service2")
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(response['services'][0]['service-name'], 'service2')
@@ -338,7 +338,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_check_xc2_ROADMA(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "DEG1-TTP-TXRX-SRG1-PP2-TXRX-753:760")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -353,7 +353,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_25_check_topo_XPDRA(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
@@ -376,7 +376,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_26_check_topo_ROADMA_SRG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -402,7 +402,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_27_check_topo_ROADMA_DEG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -428,7 +428,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     #     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
         self.cr_serv_input_data["service-name"] = "service3"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-create',
             self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -442,7 +442,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_29_delete_eth_service3(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service3"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
             self.del_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -453,7 +453,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_30_delete_eth_service1(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service1"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
             self.del_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -463,7 +463,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_31_delete_eth_service2(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service2"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
             self.del_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -472,14 +472,14 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_32_check_no_xc_ROADMA(self):
-        response = test_utils_rfc8040.check_node_request("ROADMA01")
+        response = test_utils.check_node_request("ROADMA01")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('roadm-connections',
                          dict.keys(response['org-openroadm-device']))
         time.sleep(2)
 
     def test_33_check_topo_XPDRA(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'XPDRA01-XPDR1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
@@ -498,7 +498,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_34_check_topo_ROADMA_SRG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-SRG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -524,7 +524,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_35_check_topo_ROADMA_DEG1(self):
-        response = test_utils_rfc8040.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
+        response = test_utils.get_ietf_network_node_request('openroadm-topology', 'ROADMA01-DEG1', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
@@ -556,7 +556,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.cr_serv_input_data["service-a-end"]["service-format"] = "OC"
         self.cr_serv_input_data["service-z-end"]["node-id"] = "ROADMC01"
         self.cr_serv_input_data["service-z-end"]["service-format"] = "OC"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-create',
             self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -565,7 +565,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_37_get_oc_service1(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_attr_request("services", "service1")
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(response['services'][0]['service-name'], 'service1')
@@ -574,7 +574,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_check_xc1_ROADMA(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -590,7 +590,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_39_check_xc1_ROADMC(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -612,7 +612,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.cr_serv_input_data["service-a-end"]["service-format"] = "OC"
         self.cr_serv_input_data["service-z-end"]["node-id"] = "ROADMC01"
         self.cr_serv_input_data["service-z-end"]["service-format"] = "OC"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-create',
             self.cr_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -621,7 +621,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_41_get_oc_service2(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_attr_request("services", "service2")
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
         self.assertEqual(response['services'][0]['service-name'], 'service2')
@@ -630,7 +630,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_42_check_xc2_ROADMA(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADMA01", "roadm-connections", "SRG1-PP2-TXRX-DEG1-TTP-TXRX-753:760")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -652,7 +652,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_44_delete_oc_service1(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service1"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
             self.del_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -662,7 +662,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_45_delete_oc_service2(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service2"
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'org-openroadm-service', 'service-delete',
             self.del_serv_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -671,7 +671,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_46_get_no_oc_services(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_request()
+        response = test_utils.get_ordm_serv_list_request()
         self.assertEqual(response['status_code'], requests.codes.conflict)
         self.assertIn(response['service-list'], (
             {
@@ -690,7 +690,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_47_get_no_xc_ROADMA(self):
-        response = test_utils_rfc8040.check_node_request("ROADMA01")
+        response = test_utils.check_node_request("ROADMA01")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('roadm-connections', dict.keys(response['org-openroadm-device']))
         time.sleep(1)
@@ -713,10 +713,10 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_30_delete_eth_service1()
 
     def test_50_loop_create_oc_service(self):
-        response = test_utils_rfc8040.get_ordm_serv_list_attr_request("services", "service1")
+        response = test_utils.get_ordm_serv_list_attr_request("services", "service1")
         if response['status_code'] != 404:
             self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service1"
-            response = test_utils_rfc8040.transportpce_api_rpc_request(
+            response = test_utils.transportpce_api_rpc_request(
                 'org-openroadm-service', 'service-delete',
                 self.del_serv_input_data)
             time.sleep(5)
@@ -734,19 +734,19 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_44_delete_oc_service1()
 
     def test_51_disconnect_XPDRA(self):
-        response = test_utils_rfc8040.unmount_device("XPDRA01")
+        response = test_utils.unmount_device("XPDRA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_52_disconnect_XPDRC(self):
-        response = test_utils_rfc8040.unmount_device("XPDRC01")
+        response = test_utils.unmount_device("XPDRC01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_53_disconnect_ROADMA(self):
-        response = test_utils_rfc8040.unmount_device("ROADMA01")
+        response = test_utils.unmount_device("ROADMA01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_54_disconnect_ROADMC(self):
-        response = test_utils_rfc8040.unmount_device("ROADMC01")
+        response = test_utils.unmount_device("ROADMC01")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
