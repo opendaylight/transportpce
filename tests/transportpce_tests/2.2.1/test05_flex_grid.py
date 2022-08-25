@@ -19,7 +19,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
@@ -29,14 +29,14 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.processes = test_utils_rfc8040.start_tpce()
-        cls.processes = test_utils_rfc8040.start_sims([('roadmd', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims([('roadmd', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):
@@ -45,17 +45,17 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_01_rdm_device_connection(self):
-        response = test_utils_rfc8040.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))
-        self.assertEqual(response.status_code, requests.codes.created, test_utils_rfc8040.CODE_SHOULD_BE_201)
+        response = test_utils.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
-        response = test_utils_rfc8040.check_device_connection("ROADM-D1")
+        response = test_utils.check_device_connection("ROADM-D1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
         time.sleep(10)
 
     def test_03_rdm_portmapping_info(self):
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "node-info", None)
+        response = test_utils.get_portmapping_node_attr("ROADM-D1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             {'node-type': 'rdm',
@@ -69,7 +69,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_04_rdm_deg1_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG1-TTP")
+        response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG1-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'DEG1-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
@@ -78,7 +78,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_05_rdm_deg2_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG2-TTP")
+        response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG2-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'DEG2-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
@@ -87,7 +87,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_06_rdm_srg1_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "SRG1-PP")
+        response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "SRG1-PP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'SRG1-PP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
@@ -96,7 +96,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # Renderer interface creations
     def test_07_device_renderer(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request(
+        response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'service-path',
             {
                 'modulation-format': 'dp-qpsk',
@@ -123,7 +123,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # Get Degree MC interface and check
     def test_08_degree_mc_interface(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-mc-749:763")
+        response = test_utils.check_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-mc-749:763")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             dict({"name": "DEG1-TTP-TXRX-mc-749:763",
@@ -142,7 +142,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # get DEG-NMC interface and check
     def test_09_degree_nmc_interface(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-nmc-749:763")
+        response = test_utils.check_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-nmc-749:763")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             dict({"name": "DEG1-TTP-TXRX-nmc-749:763",
@@ -160,7 +160,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # get SRG-NMC interface
     def test_10_srg_nmc_interface(self):
-        response = test_utils_rfc8040.check_node_attribute_request("ROADM-D1", "interface", "SRG1-PP1-TXRX-nmc-749:763")
+        response = test_utils.check_node_attribute_request("ROADM-D1", "interface", "SRG1-PP1-TXRX-nmc-749:763")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             dict({"name": "SRG1-PP1-TXRX-nmc-749:763",
@@ -177,7 +177,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # Create ROADM-connection
     def test_11_roadm_connection(self):
-        response = test_utils_rfc8040.check_node_attribute_request(
+        response = test_utils.check_node_attribute_request(
             "ROADM-D1", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763",
@@ -192,31 +192,31 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     # delete ROADM connection
     def test_12_delete_roadm_connection(self):
-        response = test_utils_rfc8040.del_node_attribute_request(
+        response = test_utils.del_node_attribute_request(
             "ROADM-D1", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-749:763")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(3)
 
     # Delete NMC SRG interface
     def test_13_delete_srg_interface(self):
-        response = test_utils_rfc8040.del_node_attribute_request("ROADM-D1", "interface", "SRG1-PP1-TXRX-nmc-749:763")
+        response = test_utils.del_node_attribute_request("ROADM-D1", "interface", "SRG1-PP1-TXRX-nmc-749:763")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(3)
 
     # Delete NMC Degree interface
     def test_14_delete_degree_interface(self):
-        response = test_utils_rfc8040.del_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-nmc-749:763")
+        response = test_utils.del_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-nmc-749:763")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(3)
 
     # Delete MC Degree interface
     def test_15_delete_degree_interface(self):
-        response = test_utils_rfc8040.del_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-mc-749:763")
+        response = test_utils.del_node_attribute_request("ROADM-D1", "interface", "DEG1-TTP-TXRX-mc-749:763")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(3)
 
     def test_16_disconnect_ROADM_D1(self):
-        response = test_utils_rfc8040.unmount_device("ROADM-D1")
+        response = test_utils.unmount_device("ROADM-D1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 

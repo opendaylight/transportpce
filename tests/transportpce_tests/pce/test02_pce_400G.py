@@ -21,7 +21,7 @@ import requests
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
-import test_utils_rfc8040  # nopep8
+import test_utils  # nopep8
 
 
 class TransportPCE400Gtesting(unittest.TestCase):
@@ -97,17 +97,17 @@ class TransportPCE400Gtesting(unittest.TestCase):
         finally:
             if sample_files_parsed:
                 print("sample files content loaded")
-        cls.processes = test_utils_rfc8040.start_tpce()
+        cls.processes = test_utils.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
         # clean datastores
-        test_utils_rfc8040.del_portmapping()
-        test_utils_rfc8040.del_ietf_network('openroadm-topology')
-        test_utils_rfc8040.del_ietf_network('otn-topology')
+        test_utils.del_portmapping()
+        test_utils.del_ietf_network('openroadm-topology')
+        test_utils.del_ietf_network('otn-topology')
         # pylint: disable=not-an-iterable
         for process in cls.processes:
-            test_utils_rfc8040.shutdown_process(process)
+            test_utils.shutdown_process(process)
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -117,21 +117,21 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     # Load port mapping
     def test_01_load_port_mapping(self):
-        response = test_utils_rfc8040.post_portmapping(self.port_mapping_data)
+        response = test_utils.post_portmapping(self.port_mapping_data)
         self.assertIn(response['status_code'], (requests.codes.created, requests.codes.no_content))
         time.sleep(1)
 
     # Load openroadm topology
     def test_02_load_openroadm_topology_bi(self):
-        response = test_utils_rfc8040.put_ietf_network('openroadm-topology', self.topo_bi_dir_data)
+        response = test_utils.put_ietf_network('openroadm-topology', self.topo_bi_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
     # Path Computation success
     def test_03_path_computation_400G_xpdr_bi(self):
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -161,7 +161,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     # Load otn topology
     def test_04_load_otn_topology_bi(self):
-        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.otn_topo_bi_dir_data)
+        response = test_utils.put_ietf_network('otn-topology', self.otn_topo_bi_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
@@ -174,9 +174,9 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["service-format"] = "OTU"
         self.path_computation_input_data["service-z-end"]["tx-direction"] =\
             {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -206,7 +206,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     # Load otn topology with OTUC4 links
     def test_06_load_otuc4_otn_topology_bi(self):
-        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.otuc4_otn_topo_bi_dir_data)
+        response = test_utils.put_ietf_network('otn-topology', self.otuc4_otn_topo_bi_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
@@ -219,9 +219,9 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.path_computation_input_data["service-z-end"]["service-format"] = "ODU"
         self.path_computation_input_data["service-z-end"]["tx-direction"] = \
             {"port": {"port-device-name": "XPDR-C2-XPDR2"}}
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -239,7 +239,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
 
     # Load otn topology with OTUC4 links
     def test_08_load_oduc4_otn_topology_bi(self):
-        response = test_utils_rfc8040.put_ietf_network('otn-topology', self.oduc4_otn_topo_bi_dir_data)
+        response = test_utils.put_ietf_network('otn-topology', self.oduc4_otn_topo_bi_dir_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(1)
 
@@ -257,9 +257,9 @@ class TransportPCE400Gtesting(unittest.TestCase):
             {"port": {"port-device-name": "XPDR-C2-XPDR2",
                       "port-name": "XPDR2-CLIENT1"}}
         self.path_computation_input_data["service-z-end"]["service-format"] = "ODU"
-        response = test_utils_rfc8040.transportpce_api_rpc_request('transportpce-pce',
-                                                                   'path-computation-request',
-                                                                   self.path_computation_input_data)
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           self.path_computation_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
