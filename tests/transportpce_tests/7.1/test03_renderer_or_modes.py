@@ -75,14 +75,14 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     # Check the correct capabilities for the client ports (if-100GE, if-100GE-ODU4,
     # if-OCH-OTU4-ODU4)
     def test_02_check_client_capabilities(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR3-CLIENT1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR3-CLIENT1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.assertEqual(
             self.CLIENT_CAPABILITIES,
             sorted(response["mapping"][0]["supported-interface-capability"]))
 
     def test_03_check_client_capabilities(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-C2", "XPDR3-CLIENT1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-C2", "mapping", "XPDR3-CLIENT1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.assertEqual(
             self.CLIENT_CAPABILITIES,
@@ -162,7 +162,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              for x in response["output"]["node-interface"][1].keys()})
 
     def test_05_get_portmapping_network1(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR3-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR3-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "FDvaQIf2Z08="
@@ -172,7 +172,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
             response["mapping"])
 
     def test_06_get_portmapping_network1(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-C2", "XPDR3-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-C2", "mapping", "XPDR3-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "AJpkaVmZKJk5"
@@ -519,11 +519,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     # Check if port-mapping data is updated, where the supporting-otucn is deleted
     def test_26_check_no_otuc1(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR3-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR3-NETWORK1")
         self.assertRaises(KeyError, lambda: response["supporting-otucn"])
 
     def test_27_check_no_otuc1(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-C2", "XPDR3-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-C2", "mapping", "XPDR3-NETWORK1")
         self.assertRaises(KeyError, lambda: response["supporting-otucn"])
 
     def test_28_check_no_interface_otsig(self):
@@ -605,7 +605,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "LY9PxYJqUbw="
 
     def test_33_get_portmapping_network1(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
         del self.NETWORK1_CHECK_DICT["connection-map-lcp"]
@@ -725,7 +725,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response["status_code"], requests.codes.conflict)
 
     def test_41_check_no_otuc2(self):
-        response = test_utils_rfc8040.portmapping_request("XPDR-A2", "XPDR2-NETWORK1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertRaises(KeyError, lambda: response["supporting-otucn"])
 
     # Disconnect the XPDR
@@ -742,7 +742,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                          "Request could not be completed because the relevant data model content does not exist")
 
     def test_44_xpdr_device_not_connected(self):
-        response = test_utils_rfc8040.get_portmapping_node_info("XPDR-A2")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "node-info", None)
         self.assertEqual(response["status_code"], requests.codes.conflict)
         self.assertIn(response["node-info"]["error-type"], ("protocol", "application"))
         self.assertEqual(response["node-info"]["error-tag"], "data-missing")
@@ -762,7 +762,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                          "Request could not be completed because the relevant data model content does not exist")
 
     def test_47_xpdr_device_not_connected(self):
-        response = test_utils_rfc8040.get_portmapping_node_info("XPDR-C2")
+        response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-C2", "node-info", None)
         self.assertEqual(response["status_code"], requests.codes.conflict)
         self.assertIn(response["node-info"]["error-type"], ("protocol", "application"))
         self.assertEqual(response["node-info"]["error-tag"], "data-missing")

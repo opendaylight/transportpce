@@ -55,7 +55,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_03_rdm_portmapping_info(self):
-        response = test_utils_rfc8040.get_portmapping_node_info("ROADM-D1")
+        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "node-info", None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(
             {'node-type': 'rdm',
@@ -69,7 +69,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_04_rdm_deg1_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.portmapping_mc_capa_request("ROADM-D1", "DEG1-TTP")
+        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG1-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'DEG1-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
@@ -78,7 +78,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_05_rdm_deg2_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.portmapping_mc_capa_request("ROADM-D1", "DEG2-TTP")
+        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG2-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'DEG2-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
@@ -87,7 +87,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_06_rdm_srg1_lcp(self):
         # pylint: disable=line-too-long
-        response = test_utils_rfc8040.portmapping_mc_capa_request("ROADM-D1", "SRG1-PP")
+        response = test_utils_rfc8040.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "SRG1-PP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
                       [[{'mc-node-name': 'SRG1-PP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
