@@ -1,704 +1,704 @@
 {
-  "nodes": [
-    {
-      "node-id": "OpenROADM-1-1",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "XPONDER-1-1",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
+    "nodes": [
         {
-      "node-id": "OpenROADM-1-2",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
+            "node-id": "OpenROADM-1-1",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
         {
-      "node-id": "XPONDER-1-2",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [
+            "node-id": "XPONDER-1-1",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
         {
-          "logical-connection-point": "XPDR1-CLIENT1",
-          "port-qual": "xpdr-client"
+            "node-id": "OpenROADM-1-2",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-1-2",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [
+                {
+                    "logical-connection-point": "XPDR1-CLIENT1",
+                    "port-qual": "xpdr-client"
+                }
+            ],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-1-3",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-1-3",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-1-4",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-1-4",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-2-1",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-2-1",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-2-2",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-2-2",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [
+                {
+                    "logical-connection-point": "XPDR1-CLIENT1",
+                    "port-qual": "xpdr-client"
+                }
+            ],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-2-3",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-2-3",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-2-4",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-2-4",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-3-1",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-3-1",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-3-2",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-3-2",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [
+                {
+                    "logical-connection-point": "XPDR1-CLIENT1",
+                    "port-qual": "xpdr-client"
+                }
+            ],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-3-3",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-3-3",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-3-4",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-3-4",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-4-1",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-4-1",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-4-2",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-4-2",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-4-3",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-4-3",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-4-4",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-4-4",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-5-1",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-5-1",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-5-2",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-5-2",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-5-3",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-5-3",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "OpenROADM-5-4",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER-5-4",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPDRC01",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [
+                {
+                    "logical-connection-point": "XPDR1-CLIENT1",
+                    "port-qual": "xpdr-client"
+                }
+            ],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "ROADMA01",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "ROADMC01",
+            "node-info": {
+                "node-type": "rdm",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPDRA01",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [
+                {
+                    "logical-connection-point": "XPDR1-CLIENT1",
+                    "port-qual": "xpdr-client"
+                }
+            ],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
+        },
+        {
+            "node-id": "XPONDER",
+            "node-info": {
+                "node-type": "xpdr",
+                "openroadm-version": "1.2.1",
+                "node-clli": "NodeX",
+                "node-vendor": "vendorA",
+                "node-model": "model1",
+                "node-ip-address": "1.2.3.4"
+            },
+            "mapping": [],
+            "mc-capabilities": [],
+            "cp-to-degree": [],
+            "switching-pool-lcp": []
         }
-      ],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-1-3",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-1-3",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-1-4",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-1-4",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-2-1",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-2-1",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-2-2",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-2-2",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [
-        {
-          "logical-connection-point": "XPDR1-CLIENT1",
-          "port-qual": "xpdr-client"
-        }
-      ],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-2-3",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-2-3",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-2-4",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-2-4",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-3-1",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-3-1",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-3-2",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-3-2",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [
-        {
-          "logical-connection-point": "XPDR1-CLIENT1",
-          "port-qual": "xpdr-client"
-        }
-      ],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-3-3",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-3-3",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-3-4",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-3-4",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-4-1",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-4-1",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-4-2",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-4-2",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-4-3",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-4-3",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-4-4",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-4-4",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-5-1",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-5-1",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-5-2",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-5-2",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "OpenROADM-5-3",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-        {
-      "node-id": "XPONDER-5-3",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "OpenROADM-5-4",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "XPONDER-5-4",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "XPDRC01",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [
-        {
-          "logical-connection-point": "XPDR1-CLIENT1",
-          "port-qual": "xpdr-client"
-        }
-      ],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "ROADMA01",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "ROADMC01",
-      "node-info": {
-        "node-type": "rdm",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "XPDRA01",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [
-        {
-          "logical-connection-point": "XPDR1-CLIENT1",
-          "port-qual": "xpdr-client"
-        }
-      ],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    },
-    {
-      "node-id": "XPONDER",
-      "node-info": {
-        "node-type": "xpdr",
-        "openroadm-version": "1.2.1",
-        "node-clli": "NodeX",
-        "node-vendor": "vendorA",
-        "node-model": "model1",
-        "node-ip-address": "1.2.3.4"
-      },
-      "mapping": [],
-      "mc-capabilities": [],
-      "cp-to-degree": [],
-      "switching-pool-lcp": []
-    }
-  ]
+    ]
 }
