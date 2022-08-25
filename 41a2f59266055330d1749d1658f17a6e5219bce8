@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba4c5ae_d9dc6404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-25T12:51:34Z",
+      "side": 1,
+      "message": "The gate is still running JDK 11??\n\n[INFO] --- maven-enforcer-plugin:3.1.0:enforce (enforce-maven) @ transportpce-ordmodels-common ---\n[ERROR] Rule 0: org.apache.maven.plugins.enforcer.RequireJavaVersion failed with message:\nDetected JDK Version: 11.0.16 is not in the allowed range 17.",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2f567af_76316d55",
