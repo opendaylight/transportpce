@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ceb9142_7635e27e",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-26T06:43:09Z",
+      "side": 1,
+      "message": "all these methods have the same pattern.\n\nI think it would make more sense to do something similar to  transportpce_api_rpc_request\nand pass node_info \u0026 mapping \u0026 switching_pool \u0026 mc-capabilities into an argument rather than having separate methods.",
+      "revId": "a35f84c3065d4b2a5dd6db86f0ffb8d62c84c318",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
