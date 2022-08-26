@@ -34,6 +34,24 @@
       "parentUuid": "5ceb9142_7635e27e",
       "revId": "a35f84c3065d4b2a5dd6db86f0ffb8d62c84c318",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd8e4483_0969c137",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-26T19:45:23Z",
+      "side": 1,
+      "message": "Yep. I didn\u0027t have too much time for such refactoring at that time 😊",
+      "parentUuid": "9df17187_eba1cf42",
+      "revId": "a35f84c3065d4b2a5dd6db86f0ffb8d62c84c318",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
