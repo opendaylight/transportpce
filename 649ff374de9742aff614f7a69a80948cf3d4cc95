@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f26b1b8d_9fb976f4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-26T09:06:49Z",
+      "side": 1,
+      "message": "useless",
+      "range": {
+        "startLine": 225,
+        "startChar": 24,
+        "endLine": 226,
+        "endChar": 53
+      },
+      "revId": "649ff374de9742aff614f7a69a80948cf3d4cc95",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
