@@ -16,6 +16,24 @@
       "message": "apart these 2 lines w/o \"input:\", not much difference with transportpce_api_request.\nAnd it seems the prefix input is reintroduced in the test themselves.\nSo I am not convinced  we need this new function.",
       "revId": "7766469492948982b10a6fa4c206f4958717302f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b495211_06c2a6fc",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-08-26T21:38:52Z",
+      "side": 1,
+      "message": "Yes indeed. Now that I have a complete view of the inputs of the tapi rpc used, it can actually be shared with the previous generic method.",
+      "parentUuid": "c966e3ca_7f69bdd8",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
