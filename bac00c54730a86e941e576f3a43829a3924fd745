@@ -16,6 +16,24 @@
       "message": "I think this condition was added by error.\nself.service_path_service_1_AtoZ and self.service_path_service_1_rerouted_AtoZ have not the same size. So this test will always fail.",
       "revId": "bac00c54730a86e941e576f3a43829a3924fd745",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aad8393_16ee235f",
+        "filename": "tests/transportpce_tests/hybrid/test03_autonomous_reroute.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-27T19:24:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8f841d0_7a77ade8",
+      "revId": "bac00c54730a86e941e576f3a43829a3924fd745",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
