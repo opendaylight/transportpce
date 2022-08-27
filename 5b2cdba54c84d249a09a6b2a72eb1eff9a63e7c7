@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd5e6a99_7249b99d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-27T07:24:38Z",
+      "side": 1,
+      "message": "22:56:19 self \u003d \u003ctest04_renderer_service_path_nominal.TransportPCERendererTesting testMethod\u003dtest_09_service_path_create_xpdr_check\u003e\n22:56:19 \n22:56:19     def test_09_service_path_create_xpdr_check(self):\n22:56:19         response \u003d test_utils_rfc8040.check_node_attribute_request(\"XPDRA01\", \"interface\", \"XPDR1-NETWORK1-713:720\")\n22:56:19         self.assertEqual(response[\u0027status_code\u0027], requests.codes.ok)\n22:56:19         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2\n22:56:19         self.assertDictEqual(\n22:56:19             dict({\n22:56:19                 \u0027name\u0027: \u0027XPDR1-NETWORK1-713:720\u0027,\n22:56:19                 \u0027administrative-state\u0027: \u0027inService\u0027,\n22:56:19                 \u0027supporting-circuit-pack-name\u0027: \u00271/0/1-PLUG-NET\u0027,\n22:56:19                 \u0027type\u0027: \u0027org-openroadm-interfaces:opticalChannel\u0027,\n22:56:19                 \u0027supporting-port\u0027: \u00271\u0027\n22:56:19             }, **response[\u0027interface\u0027][0]), response[\u0027interface\u0027][0])\n22:56:19         self.assertIn(\n22:56:19             response[\u0027interface\u0027][0][\u0027org-openroadm-optical-channel-interfaces:och\u0027],\n22:56:19             [{\u0027rate\u0027: \u0027org-openroadm-optical-channel-interfaces:R100G\u0027,\n22:56:19               \u0027transmit-power\u0027: \u0027-5\u0027,\n22:56:19               \u0027wavelength-number\u0027: 7,\n22:56:19               \u0027modulation-format\u0027: \u0027dp-qpsk\u0027},\n22:56:19              {\u0027rate\u0027: \u0027org-openroadm-optical-channel-interfaces:R100G\u0027,\n22:56:19               \u0027transmit-power\u0027: -5,\n22:56:19               \u0027wavelength-number\u0027: 7,\n22:56:19 \u003e             \u0027modulation-format\u0027: \u0027dp-qpsk\u0027}])\n22:56:19 E       AssertionError: {\u0027wavelength-number\u0027: 7, \u0027modulation-format\u0027: \u0027dp-qpsk\u0027, \u0027rate\u0027: \u0027org-openroadm-optical-channel-interfaces:R100G\u0027, \u0027transmit-power\u0027: \u0027-5.0\u0027} not found in [{\u0027rate\u0027: \u0027org-openroadm-optical-channel-interfaces:R100G\u0027, \u0027transmit-power\u0027: \u0027-5\u0027, \u0027wavelength-number\u0027: 7, \u0027modulation-format\u0027: \u0027dp-qpsk\u0027}, {\u0027rate\u0027: \u0027org-openroadm-optical-channel-interfaces:R100G\u0027, \u0027transmit-power\u0027: -5, \u0027wavelength-number\u0027: 7, \u0027modulation-format\u0027: \u0027dp-qpsk\u0027}]",
+      "revId": "5b2cdba54c84d249a09a6b2a72eb1eff9a63e7c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
