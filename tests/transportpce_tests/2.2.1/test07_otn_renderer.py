@@ -130,13 +130,11 @@ class TransportPCEtesting(unittest.TestCase):
                                                                'supporting-port': 'CP1-CFP0-P1'
                                                                }),
                              response['interface'][0])
-
-        self.assertIn(
-            response['interface'][0]['org-openroadm-optical-channel-interfaces:och'],
-            [{'frequency': '196.1000', 'rate': 'org-openroadm-common-types:R100G',
-              'transmit-power': '-5', 'modulation-format': 'dp-qpsk'},
-             {'frequency': 196.1, 'rate': 'org-openroadm-common-types:R100G',
-              'transmit-power': -5, 'modulation-format': 'dp-qpsk'}])
+        intf = response['interface'][0]['org-openroadm-optical-channel-interfaces:och']
+        self.assertEqual(intf['rate'], 'org-openroadm-common-types:R100G')
+        self.assertEqual(intf['modulation-format'], 'dp-qpsk')
+        self.assertEqual(flaot(intf['frequency']), 196.1)
+        self.assertEqual(float(intf['transmit-power']), -5)
 
     def test_07_check_interface_OTU(self):
         response = test_utils_rfc8040.check_node_attribute_request("SPDR-SA1", "interface", "XPDR1-NETWORK1-OTU")

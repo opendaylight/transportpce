@@ -116,9 +116,9 @@ class TransportPCERendererTesting(unittest.TestCase):
                  'supporting-port': 'L1'
                  }, **response['interface'][0]), response['interface'][0]
         )
-        self.assertIn(response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'],
-                      [{'frequency': '195.8000', 'width': '40'},
-                       {'frequency': 195.8, 'width': 40}])
+        nmcctp = response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp']
+        self.assertEqual(float(nmcctp['frequency']), 195.8)
+        self.assertEqual(float(nmcctp['width']), 40)
 
     def test_07_service_path_create_rdm_check(self):
         response = test_utils_rfc8040.check_node_attribute_request("ROADM-A1", "interface", "DEG1-TTP-TXRX-mc-713:720")
@@ -133,9 +133,9 @@ class TransportPCERendererTesting(unittest.TestCase):
                  'supporting-port': 'L1'
                  }, **response['interface'][0]), response['interface'][0]
         )
-        self.assertIn(response['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'],
-                      [{'min-freq': '195.7750', 'max-freq': '195.8250'},
-                       {'min-freq': 195.775, 'max-freq': 195.825}])
+        mcttp = response['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp']
+        self.assertEqual(float(mcttp['min-freq']), 195.775)
+        self.assertEqual(float(mcttp['max-freq']), 195.825)
 
     def test_08_service_path_create_rdm_check(self):
         response = test_utils_rfc8040.check_node_attribute_request("ROADM-A1", "interface", "SRG1-PP3-TXRX-nmc-713:720")
@@ -150,9 +150,9 @@ class TransportPCERendererTesting(unittest.TestCase):
                  'supporting-port': 'C3'
                  }, **response['interface'][0]), response['interface'][0]
         )
-        self.assertIn(response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'],
-                      [{'frequency': '195.8000', 'width': '40'},
-                       {'frequency': 195.8, 'width': 40}])
+        nmcctp = response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp']
+        self.assertEqual(float(nmcctp['frequency']), 195.8)
+        self.assertEqual(float(nmcctp['width']), 40)
 
     # -mc supporting interfaces must not be created for SRG, only degrees
     def test_09_service_path_create_rdm_check(self):
@@ -185,12 +185,11 @@ class TransportPCERendererTesting(unittest.TestCase):
                  'supporting-port': '1'
                  }, **response['interface'][0]), response['interface'][0]
         )
-        self.assertIn(
-            response['interface'][0]['org-openroadm-optical-channel-interfaces:och'],
-            [{'rate': 'org-openroadm-common-types:R100G', 'transmit-power': '-5',
-              'modulation-format': 'dp-qpsk', 'frequency': '195.8000'},
-             {'rate': 'org-openroadm-common-types:R100G', 'transmit-power': -5,
-              'modulation-format': 'dp-qpsk', 'frequency': 195.8}])
+        intf = response['interface'][0]['org-openroadm-optical-channel-interfaces:och']
+        self.assertEqual(intf['rate'], 'org-openroadm-common-types:R100G')
+        self.assertEqual(intf['modulation-format'], 'dp-qpsk')
+        self.assertEqual(float(intf['frequency']), 195.8)
+        self.assertEqual(float(intf['transmit-power']), -5)
 
     def test_12_service_path_create_xpdr_check(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR1-NETWORK1-OTU")
