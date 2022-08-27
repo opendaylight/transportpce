@@ -134,11 +134,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                   "supporting-port": "L1",
                   "type": "org-openroadm-interfaces:mediaChannelTrailTerminationPoint"},
                  **response['interface'][0]), response['interface'][0])
-
         # Check the mc-ttp max and min-freq
-        self.assertIn(response['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'],
-                      [{'min-freq': '196.00625', 'max-freq': '196.09375'},
-                       {'min-freq': 196.00625, 'max-freq': 196.09375}])
+        mcttp = response['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp']
+        self.assertEqual(float(mcttp['min-freq']), 196.00625)
+        self.assertEqual(float(mcttp['max-freq']), 196.09375)
         time.sleep(3)
 
     # get DEG-NMC interface and check
@@ -154,11 +153,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                   "supporting-port": "L1",
                   "type": "org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint"},
                  **response['interface'][0]), response['interface'][0])
-
-        # Check the mc-ttp max and min-freq
-        self.assertIn(response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'],
-                      [{'frequency': '196.05000', 'width': '80'},
-                       {'frequency': 196.05, 'width': 80}])
+        nmcctp = response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp']
+        self.assertEqual(float(nmcctp['frequency']), 196.05)
+        self.assertEqual(float(nmcctp['width']), 80)
         time.sleep(3)
 
     # get SRG-NMC interface
@@ -173,9 +170,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                   "supporting-port": "C1",
                   "type": "org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint"},
                  **response['interface'][0]), response['interface'][0])
-        self.assertIn(response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'],
-                      [{'frequency': '196.05000', 'width': '80'},
-                       {'frequency': 196.05, 'width': 80}])
+        nmcctp = response['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp']
+        self.assertEqual(float(nmcctp['frequency']), 196.05)
+        self.assertEqual(float(nmcctp['width']), 80)
         time.sleep(3)
 
     # Create ROADM-connection
