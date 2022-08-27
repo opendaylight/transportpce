@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff17975f_7b29e3d7",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-27T12:24:46Z",
+      "side": 1,
+      "message": "distinction not needed\nif and else blocks are similar",
+      "revId": "a4c6b7155871986d58da659b1ee37195bfc3ffed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a54179c7_c194ceac",
         "filename": "tests/transportpce_tests/hybrid/test01_device_change_notifications.py",
         "patchSetId": 2
