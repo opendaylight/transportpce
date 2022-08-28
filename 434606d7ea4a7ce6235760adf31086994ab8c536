@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f4566bd_2efd6471",
+        "filename": "tests/transportpce_tests/with_docker/test02_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T18:55:14Z",
+      "side": 1,
+      "message": "there are a few hardcoded URLs in old format in this file...",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
