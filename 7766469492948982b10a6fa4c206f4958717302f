@@ -68,6 +68,23 @@
       "message": "self.uuid_services.dsr value might reseted because of def function limitations in tests frameworks \u003d\u003e vote -1",
       "revId": "7766469492948982b10a6fa4c206f4958717302f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0441d2d3_841b0761",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T08:30:46Z",
+      "side": 1,
+      "message": "del_serv_input_data was not declared in this class",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
