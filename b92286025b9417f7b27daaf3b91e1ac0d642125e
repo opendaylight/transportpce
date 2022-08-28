@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d53b89b_4821166a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T07:08:42Z",
+      "side": 1,
+      "message": "Infra issue:\n- test in WIP above on the relation chain did pass.\n- only tests221 not modified here failed\n\n23:09:20 ___________________________________ summary ____________________________________\n23:09:20   buildcontroller: commands succeeded\n23:09:20   testsPCE: commands succeeded\n23:09:20   sims121: commands succeeded\n23:09:20   build_karaf_tests121: commands succeeded\n23:09:20   tests121: commands succeeded\n23:09:20   sims221: commands succeeded\n23:09:20   build_karaf_tests221: commands succeeded\n23:09:20   tests_tapi: commands succeeded\n23:09:20   sims71: commands succeeded\n23:09:20   build_karaf_tests71: commands succeeded\n23:09:20   tests71: commands succeeded\n23:09:20 ERROR:   tests221: parallel child exit code 1\n23:09:20   build_karaf_tests_hybrid: commands succeeded\n23:09:20   tests_hybrid: commands succeeded\n23:09:20   docs: commands succeeded\n23:09:20   docs-linkcheck: commands succeeded\n23:09:20   checkbashisms: commands succeeded\n23:09:20   pre-commit: commands succeeded\n23:09:20   gitlint: commands succeeded\n23:09:20   pylint: commands succeeded\n23:09:20 + tox_status\u003d1",
+      "revId": "b92286025b9417f7b27daaf3b91e1ac0d642125e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
