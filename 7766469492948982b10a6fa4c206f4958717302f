@@ -51,6 +51,23 @@
       "parentUuid": "c966e3ca_7f69bdd8",
       "revId": "7766469492948982b10a6fa4c206f4958717302f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a5f94b6_87473dd4",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T08:07:16Z",
+      "side": 1,
+      "message": "self.uuid_services.dsr value might reseted because of def function limitations in tests frameworks \u003d\u003e vote -1",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
