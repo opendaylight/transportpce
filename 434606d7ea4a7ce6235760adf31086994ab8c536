@@ -16,6 +16,57 @@
       "message": "there are a few hardcoded URLs in old format in this file...",
       "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac543049_a938bab0",
+        "filename": "tests/transportpce_tests/with_docker/test02_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T19:37:45Z",
+      "side": 1,
+      "message": "this URL is at the old format",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bddc5b8_9a52d4a4",
+        "filename": "tests/transportpce_tests/with_docker/test03_tapi_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T19:37:45Z",
+      "side": 1,
+      "message": "this URL is at the old format",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14efe4ab_583a737d",
+        "filename": "tests/transportpce_tests/with_docker/test03_tapi_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T19:37:45Z",
+      "side": 1,
+      "message": "this URL is at the old format",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
