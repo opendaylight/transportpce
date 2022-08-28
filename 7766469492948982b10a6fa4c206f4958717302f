@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c871457_3f5c01d2",
+        "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-28T07:18:46Z",
+      "side": 1,
+      "message": "Will it be useful anywhere else than in TAPI tests ?",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c966e3ca_7f69bdd8",
         "filename": "tests/transportpce_tests/common/test_utils_rfc8040.py",
         "patchSetId": 2
