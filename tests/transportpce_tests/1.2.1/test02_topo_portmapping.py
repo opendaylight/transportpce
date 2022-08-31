@@ -12,7 +12,6 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 # a pylint false positive due to unittest
-# pylint: disable=no-self-use
 
 import time
 import unittest
