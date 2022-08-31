@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ef44c91_cbb7197d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T14:05:40Z",
+      "side": 1,
+      "message": "You\u0027re welcome.\nThanks for the review Olivier.",
+      "parentUuid": "e6f12e88_c19e4246",
+      "revId": "7a1ebb57ee8ac71c5733ec9591d25231b19d81d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13394a08_be076a37",
