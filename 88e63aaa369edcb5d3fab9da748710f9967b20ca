@@ -445,6 +445,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dfd5475c_2a15e927",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-31T15:16:12Z",
+      "side": 1,
+      "message": "OK. Modified LOG level and madde a few changes to stick to latest version of OR specifications to be published in the coming weeks in latest patch (12)\nLooked at your 2 proposals for refactoring which look good to me. If you are OK I guess this can be set as resolved.",
+      "parentUuid": "00816f10_5ca11e70",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be5e145b_0fde595c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
         "patchSetId": 4
