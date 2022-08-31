@@ -40,3 +40,5 @@ docs/_build/
 honeynode-simulator/
 pce/data
 pce/some-output
+tests/allure-report/*
+!tests/allure-report/.gitkeep 

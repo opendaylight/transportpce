@@ -31,7 +31,7 @@ else
     done
 fi
 if [ -z "$LAUNCHER" ]; then
-    LAUNCHER="python3 -m pytest -q";
+    LAUNCHER="python3 -m pytest --alluredir=allure-report/ -q";
 fi
 
 for script in $scriptlist; do
