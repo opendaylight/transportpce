@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6f12e88_c19e4246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-31T13:39:55Z",
+      "side": 1,
+      "message": "OK, after deeper analysis of the refactored functions which I did not have time to look at, looks fine to me. Thanks Guillaume!",
+      "parentUuid": "cb2bbad8_6f5fe690",
+      "revId": "7a1ebb57ee8ac71c5733ec9591d25231b19d81d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13394a08_be076a37",
