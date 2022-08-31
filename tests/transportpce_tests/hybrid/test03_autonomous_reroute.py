@@ -1043,7 +1043,8 @@ class TransportPCEtesting(unittest.TestCase):
         }
         response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+                                    timeout=test_utils.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
         time.sleep(self.WAITING * 2)
@@ -1127,7 +1128,8 @@ class TransportPCEtesting(unittest.TestCase):
         }
         response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+                                    timeout=test_utils.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
         time.sleep(2)
