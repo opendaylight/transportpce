@@ -40,6 +40,8 @@ NODES_PWD = 'admin'
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
 
+REQUEST_TIMEOUT = 10
+
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
 
@@ -87,7 +89,8 @@ def get_request(url):
     return requests.request(
         'GET', url.format(RESTCONF_BASE_URL),
         headers=TYPE_APPLICATION_JSON,
-        auth=(ODL_LOGIN, ODL_PWD))
+        auth=(ODL_LOGIN, ODL_PWD),
+        timeout=REQUEST_TIMEOUT)
 
 
 def put_request(url, data):
@@ -95,14 +98,16 @@ def put_request(url, data):
         'PUT', url.format(RESTCONF_BASE_URL),
         data=json.dumps(data),
         headers=TYPE_APPLICATION_JSON,
-        auth=(ODL_LOGIN, ODL_PWD))
+        auth=(ODL_LOGIN, ODL_PWD),
+        timeout=REQUEST_TIMEOUT)
 
 
 def delete_request(url):
     return requests.request(
         'DELETE', url.format(RESTCONF_BASE_URL),
         headers=TYPE_APPLICATION_JSON,
-        auth=(ODL_LOGIN, ODL_PWD))
+        auth=(ODL_LOGIN, ODL_PWD),
+        timeout=REQUEST_TIMEOUT)
 
 
 def post_request(url, data):
@@ -111,11 +116,13 @@ def post_request(url, data):
             "POST", url.format(RESTCONF_BASE_URL),
             data=json.dumps(data),
             headers=TYPE_APPLICATION_JSON,
-            auth=(ODL_LOGIN, ODL_PWD))
+            auth=(ODL_LOGIN, ODL_PWD),
+            timeout=REQUEST_TIMEOUT)
     return requests.request(
         "POST", url.format(RESTCONF_BASE_URL),
         headers=TYPE_APPLICATION_JSON,
-        auth=(ODL_LOGIN, ODL_PWD))
+        auth=(ODL_LOGIN, ODL_PWD),
+        timeout=REQUEST_TIMEOUT)
 
 #
 # Process management

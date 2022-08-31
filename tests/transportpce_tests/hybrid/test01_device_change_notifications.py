@@ -208,7 +208,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -281,7 +282,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -328,7 +330,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -394,7 +397,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -418,7 +422,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -484,7 +489,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -506,7 +512,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -570,7 +577,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "xpdr-network"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -594,7 +602,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             "port-qual": "roadm-external"}]}
         response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
                                     data=json.dumps(body), headers=test_utils_rfc8040.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD))
+                                    auth=(test_utils_rfc8040.ODL_LOGIN, test_utils_rfc8040.ODL_PWD),
+                                    timeout=test_utils_rfc8040.REQUEST_TIMEOUT)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
