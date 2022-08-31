@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e953a059_f7f02a06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-31T15:10:41Z",
+      "side": 1,
+      "message": "Looks fine to me. Thanks Guillaume!",
+      "revId": "39661531e7b39e598d08372e744477a92b466add",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abbe2f50_f1a48fb1",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-08-09T10:06:34Z",
       "side": 1,
       "message": "10 factor was not present in ADD case initially.\nI assume it was forgotten as stated in the commit message.\nBut I might be wrong and I need the help of somebody else to check this\nsince I am not a specialist in this area.",
+      "revId": "39661531e7b39e598d08372e744477a92b466add",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90992787_b36057ef",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-08-31T15:10:41Z",
+      "side": 1,
+      "message": "You are right. This is a mistake. 10 shall be there!",
+      "parentUuid": "abbe2f50_f1a48fb1",
       "revId": "39661531e7b39e598d08372e744477a92b466add",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
