@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f2568e_afd9cbdf",
+        "filename": "tests/transportpce_tests/with_docker/test02_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T15:14:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f4566bd_2efd6471",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac543049_a938bab0",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-28T19:37:45Z",
       "side": 1,
       "message": "this URL is at the old format",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2fe6f6_551f224d",
+        "filename": "tests/transportpce_tests/with_docker/test02_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T15:14:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac543049_a938bab0",
       "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db592e32_91244a8e",
+        "filename": "tests/transportpce_tests/with_docker/test03_tapi_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T15:14:26Z",
+      "side": 1,
+      "message": "these URLs are for honeynode simulators and cannot be upgraded apparently",
+      "parentUuid": "7bddc5b8_9a52d4a4",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14efe4ab_583a737d",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-08-28T19:37:45Z",
       "side": 1,
       "message": "this URL is at the old format",
+      "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "413d1c5e_bef4cb65",
+        "filename": "tests/transportpce_tests/with_docker/test03_tapi_nbinotifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T15:14:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "14efe4ab_583a737d",
       "revId": "434606d7ea4a7ce6235760adf31086994ab8c536",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

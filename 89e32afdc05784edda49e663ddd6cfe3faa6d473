@@ -16,6 +16,24 @@
       "message": "with_docker",
       "revId": "89e32afdc05784edda49e663ddd6cfe3faa6d473",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "673e88d8_ef80d75c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-08-31T15:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d457800_73feaff3",
+      "revId": "89e32afdc05784edda49e663ddd6cfe3faa6d473",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
