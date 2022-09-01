@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c80961_7e48ff84",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:41:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3a580214_d7fe1680",
+      "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba3cac23_eedcb2f8",
@@ -49,6 +67,24 @@
       "writtenOn": "2022-08-28T19:36:37Z",
       "side": 1,
       "message": "this URL is at the old format",
+      "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e5c7b9b_9dea52f3",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:41:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba3cac23_eedcb2f8",
       "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -70,6 +106,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b64117b_a24a9c2b",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:41:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "28ae151d_d8c793e2",
+      "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5229857_f61000b4",
@@ -87,6 +141,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b4d4f8_ed32fc63",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:41:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c5229857_f61000b4",
+      "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79358bab_1f91c376",
@@ -100,6 +172,24 @@
       "writtenOn": "2022-08-28T19:36:37Z",
       "side": 1,
       "message": "this URL is at the old format",
+      "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0688b06_44673d70",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:41:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "79358bab_1f91c376",
       "revId": "a6ac3810173d5d1a21d102741294ba08f808e1af",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
