@@ -33,6 +33,24 @@
       "message": "comments after # are intended to state the license of this dependencies and not its description",
       "revId": "1e7441be06f2baed2bd45bce4595b133991a4504",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5572efa7_8bdd70f4",
+        "filename": "tests/requirements.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T17:53:48Z",
+      "side": 1,
+      "message": "according to this page https://github.com/allure-framework/allure-python/blob/master/LICENSE\nit is Apache License 2.0",
+      "parentUuid": "947899b9_6002059c",
+      "revId": "1e7441be06f2baed2bd45bce4595b133991a4504",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
