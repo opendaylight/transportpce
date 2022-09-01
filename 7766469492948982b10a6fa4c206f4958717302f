@@ -124,6 +124,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "348cd50d_7e739b83",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T20:04:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8a5f94b6_87473dd4",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "831f3e64_9b5b3165",
