@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9dd9e35_fa13d334",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T07:51:45Z",
+      "side": 1,
+      "message": "Thanks for the confirmation Olivier ! 😊",
+      "revId": "39661531e7b39e598d08372e744477a92b466add",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abbe2f50_f1a48fb1",
@@ -66,6 +83,24 @@
       "side": 1,
       "message": "You are right. This is a mistake. 10 shall be there!",
       "parentUuid": "abbe2f50_f1a48fb1",
+      "revId": "39661531e7b39e598d08372e744477a92b466add",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da66251_ba8800f2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T07:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90992787_b36057ef",
       "revId": "39661531e7b39e598d08372e744477a92b466add",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
