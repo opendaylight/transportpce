@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f515ea7c_b8ae10aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T16:02:39Z",
+      "side": 1,
+      "message": "17:40:08 Installed:\n17:40:08   devscripts-checkbashisms-2.19.6-2.fc31.x86_64                                 \n17:40:08 \n17:40:08 Complete!\n17:40:08 checkbashisms run-test: commands[1] | find . -not -path \u0027*/\\.*\u0027 -name \u0027*.sh\u0027 -exec checkbashisms -f \u0027{}\u0027 +\n17:40:09 script ./reflectwarn.sh does not appear to have a #! interpreter line;\n17:40:09 you may get strange results\n17:40:09 ✔ OK checkbashisms in 48.828 seconds",
+      "revId": "1c3280d91f346b4336d23b117279f62d69fc149a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
