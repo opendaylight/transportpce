@@ -461,6 +461,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2caf011_69d7276f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T07:54:24Z",
+      "side": 1,
+      "message": "Agreed. Thanks for your review Olivier 👍",
+      "parentUuid": "dfd5475c_2a15e927",
+      "revId": "88e63aaa369edcb5d3fab9da748710f9967b20ca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be5e145b_0fde595c",
