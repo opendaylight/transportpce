@@ -141,6 +141,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "393345c3_a76cdb04",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "831f3e64_9b5b3165",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0441d2d3_841b0761",
@@ -154,6 +172,24 @@
       "writtenOn": "2022-08-28T08:30:46Z",
       "side": 1,
       "message": "del_serv_input_data was not declared in this class",
+      "revId": "7766469492948982b10a6fa4c206f4958717302f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb2239a8_71dfecd3",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T19:42:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0441d2d3_841b0761",
       "revId": "7766469492948982b10a6fa4c206f4958717302f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
