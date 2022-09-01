@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ad3abe_645cdfd7",
+        "filename": ".gitignore",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 9073
+      },
+      "writtenOn": "2022-09-01T18:04:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c178251_288dff27",
+      "revId": "1e7441be06f2baed2bd45bce4595b133991a4504",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "947899b9_6002059c",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "according to this page https://github.com/allure-framework/allure-python/blob/master/LICENSE\nit is Apache License 2.0",
       "parentUuid": "947899b9_6002059c",
+      "revId": "1e7441be06f2baed2bd45bce4595b133991a4504",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c596dee_387fd398",
+        "filename": "tests/requirements.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 9073
+      },
+      "writtenOn": "2022-09-01T18:04:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5572efa7_8bdd70f4",
       "revId": "1e7441be06f2baed2bd45bce4595b133991a4504",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
