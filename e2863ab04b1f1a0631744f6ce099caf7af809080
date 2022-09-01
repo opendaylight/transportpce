@@ -50,6 +50,23 @@
       "message": "from previous build, it should be OK now.\ncf https://jenkins.opendaylight.org/releng/job/transportpce-tox-verify-sulfur/1352/consoleFull\n\nverified -1 was only due to a docs-linkcheck false positive.\npython3.6 is installed on CEntOS jenkins minions by default\nBut is upgraded to 3.9 by LF tools.\n\n\n\n17:09:00 ---\u003e Setting up pyenv\n17:09:00   system\n17:09:00 * 3.8.13 (set by /opt/pyenv/version)\n17:09:00 * 3.9.13 (set by /opt/pyenv/version)\n17:09:12 lf-activate-venv(): INFO: Installing: lftools \n17:09:37 lf-activate-venv(): INFO: Adding /tmp/venv-E5DC/bin to PATH\n17:09:37 Generating Requirements File\n17:10:05 Python 3.9.13\n17:10:05 pip 22.2.2 from /tmp/venv-E5DC/lib/python3.9/site-packages/pip (python 3.9)\n[..]\n19:30:27 ___________________________________ summary ____________________________________\n19:30:27   buildcontroller: commands succeeded\n19:30:27   testsPCE: commands succeeded\n19:30:27   sims121: commands succeeded\n19:30:27   build_karaf_tests121: commands succeeded\n19:30:27   tests121: commands succeeded\n19:30:27   sims221: commands succeeded\n19:30:27   build_karaf_tests221: commands succeeded\n19:30:27   tests_tapi: commands succeeded\n19:30:27   sims71: commands succeeded\n19:30:27   build_karaf_tests71: commands succeeded\n19:30:27   tests71: commands succeeded\n19:30:27   tests221: commands succeeded\n19:30:27   build_karaf_tests_hybrid: commands succeeded\n19:30:27   tests_hybrid: commands succeeded\n19:30:27   docs: commands succeeded\n19:30:27 ERROR:   docs-linkcheck: parallel child exit code 1\n19:30:27   checkbashisms: commands succeeded\n19:30:27   pre-commit: commands succeeded\n19:30:27   gitlint: commands succeeded\n19:30:27   pylint: commands succeeded\n\n",
       "revId": "e2863ab04b1f1a0631744f6ce099caf7af809080",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425896ac_6182433b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-01T09:23:56Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "e2863ab04b1f1a0631744f6ce099caf7af809080",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
