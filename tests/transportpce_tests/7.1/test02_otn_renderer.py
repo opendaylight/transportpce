@@ -643,16 +643,16 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     def test_37_check_no_interface_otuc3(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC3")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_38_check_no_interface_otsig(self):
         response = test_utils_rfc8040.check_node_attribute_request(
             "XPDR-A1", "interface", "XPDR2-NETWORK1-OTSIGROUP-300G")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_39_check_no_interface_otsi(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_39a_check_no_otuc3(self):
         response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
@@ -867,16 +867,16 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     def test_51_check_no_interface_otuc4(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-OTUC4")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_52_check_no_interface_otsig(self):
         response = test_utils_rfc8040.check_node_attribute_request(
             "XPDR-A1", "interface", "XPDR2-NETWORK1-OTSIGROUP-400G")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_53_check_no_interface_otsi(self):
         response = test_utils_rfc8040.check_node_attribute_request("XPDR-A1", "interface", "XPDR2-NETWORK1-755:768")
-        self.assertEqual(response['status_code'], requests.codes.conflict)
+        self.assertIn(response['status_code'], (requests.codes.conflict, requests.codes.service_unavailable))
 
     def test_53a_check_no_otuc4(self):
         response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
