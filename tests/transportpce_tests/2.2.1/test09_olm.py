@@ -123,18 +123,16 @@ class TransportOlmTesting(unittest.TestCase):
 
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn({
-            'pmparameter-name': 'OpticalPowerOutput',
-            'pmparameter-value': '2.50'
-        }, response['output']['measurements'])
-        self.assertIn({
-            'pmparameter-name': 'OpticalReturnLoss',
-            'pmparameter-value': '40'
-        }, response['output']['measurements'])
-        self.assertIn({
-            'pmparameter-name': 'OpticalPowerInput',
-            'pmparameter-value': '-21.10'
-        }, response['output']['measurements'])
+        measures = {}
+        for measure in response['output']['measurements']:
+            if bool(measure['pmparameter-name']) and bool(measure['pmparameter-value']):
+                measures[measure['pmparameter-name']] = float(measure['pmparameter-value'])
+        self.assertIn('OpticalPowerOutput', list(measures.keys()))
+        self.assertIn('OpticalReturnLoss', list(measures.keys()))
+        self.assertIn('OpticalPowerInput', list(measures.keys()))
+        self.assertEqual(measures['OpticalPowerOutput'], 2.5)
+        self.assertEqual(measures['OpticalReturnLoss'], 40)
+        self.assertEqual(measures['OpticalPowerInput'], -21.1)
 
     def test_12_get_PM_ROADMC(self):
         response = test_utils.transportpce_api_rpc_request(
@@ -148,18 +146,16 @@ class TransportOlmTesting(unittest.TestCase):
                 }
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn({
-            'pmparameter-name': 'OpticalPowerOutput',
-            'pmparameter-value': '4.60'
-        }, response['output']['measurements'])
-        self.assertIn({
-            'pmparameter-name': 'OpticalReturnLoss',
-            'pmparameter-value': '49.10'
-        }, response['output']['measurements'])
-        self.assertIn({
-            'pmparameter-name': 'OpticalPowerInput',
-            'pmparameter-value': '-15.10'
-        }, response['output']['measurements'])
+        measures = {}
+        for measure in response['output']['measurements']:
+            if bool(measure['pmparameter-name']) and bool(measure['pmparameter-value']):
+                measures[measure['pmparameter-name']] = float(measure['pmparameter-value'])
+        self.assertIn('OpticalPowerOutput', list(measures.keys()))
+        self.assertIn('OpticalReturnLoss', list(measures.keys()))
+        self.assertIn('OpticalPowerInput', list(measures.keys()))
+        self.assertEqual(measures['OpticalPowerOutput'], 4.6)
+        self.assertEqual(measures['OpticalReturnLoss'], 49.1)
+        self.assertEqual(measures['OpticalPowerInput'], -15.1)
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
         response = test_utils.transportpce_api_rpc_request(
