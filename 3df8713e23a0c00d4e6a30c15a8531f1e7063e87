@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a57da149_34e9cef4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T16:25:29Z",
+      "side": 1,
+      "message": "ordm device models are also using them and were not migrated",
+      "revId": "3df8713e23a0c00d4e6a30c15a8531f1e7063e87",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
