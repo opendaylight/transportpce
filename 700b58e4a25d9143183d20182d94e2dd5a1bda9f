@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcb4f539_d95696f7",
+        "filename": "tests/sample_configs/openroadm/1.2.1/oper-ROADMA.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T20:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97ec6092_fb85cabb",
+      "revId": "700b58e4a25d9143183d20182d94e2dd5a1bda9f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df365862_2b6fdf91",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "778d8610_d8ec6cfe",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T20:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df365862_2b6fdf91",
+      "revId": "700b58e4a25d9143183d20182d94e2dd5a1bda9f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "006e6d65_803611e7",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-09-02T18:31:50Z",
       "side": 1,
       "message": "I don\u0027t think we need to touch this file.",
+      "revId": "700b58e4a25d9143183d20182d94e2dd5a1bda9f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b2641d_b98016cf",
+        "filename": "tests/transportpce_tests/1.2.1/test04_renderer_service_path_nominal.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T20:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "006e6d65_803611e7",
       "revId": "700b58e4a25d9143183d20182d94e2dd5a1bda9f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
