@@ -16,6 +16,24 @@
       "message": "there is a lot of places where this kind of switch/case structures is replaced by \"else if contains\".\nI wonder if it wouldn\u0027t it be easier to rewrite an equivalent of getSimpleName to retrieve the related part of the TypeName",
       "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d30b318_1fbe25bf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-02T09:22:50Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "fe850a92_5a5ebdef",
+      "revId": "6aa40002ce6197ccacbc19a9b0cd653a5ab1a7f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
