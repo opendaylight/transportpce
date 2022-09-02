@@ -297,6 +297,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2691aa7b_8cd580a8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerServiceResiliencyCheck.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T10:19:26Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "873671f4_e5e18125",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9912cf99_8f774b6f",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 3
@@ -326,6 +344,24 @@
       "side": 1,
       "message": "I don\u0027t think so, serviceFormat could have several other values than ODU and OTU.",
       "parentUuid": "9912cf99_8f774b6f",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52641236_a5aae341",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T10:19:26Z",
+      "side": 1,
+      "message": "can it be both simultaneously ODU and OTU?",
+      "parentUuid": "abe797e5_15ab59ba",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
