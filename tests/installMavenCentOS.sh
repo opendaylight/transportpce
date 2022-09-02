@@ -14,7 +14,7 @@ echo $JAVAC_VER
 if [ "$JAVA_VER" -ge 110 -a "$JAVAC_VER" -ge 110 ];then
         echo "ok, java is 17 or newer"
 else
-    #java 11 installation for CentOS (releng OS image target)
+    #java installation for CentOS (releng OS image target)
         echo "install java 17"
         sudo yum install -y java-17-openjdk java-17-openjdk-devel
         last_installed_jdk17=$(ls -tr1 /usr/lib/jvm/ | grep java-17-openjdk-17 | tail -1)
