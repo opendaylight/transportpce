@@ -143,18 +143,16 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
         self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
         self.assertEqual('mpdr', res['mapping'][0]['xponder-type'])
-        self.assertEqual({
-            "min-trib-slot": "1.1",
-            "max-trib-slot": "1.20"
-        }, res['mapping'][0]['mpdr-restrictions'])
+        self.assertEqual(1.1, float(res['mapping'][0]['mpdr-restrictions']['min-trib-slot']))
+        self.assertEqual(1.2, float(res['mapping'][0]['mpdr-restrictions']['max-trib-slot']))
 
     # Added test to check mc-capability-profile for a transponder
     def test_08_check_mccapprofile(self):
         res = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mc-capabilities", "XPDR-mcprofile")
         self.assertEqual(res['status_code'], requests.codes.ok)
         self.assertEqual(res['mc-capabilities'][0]['mc-node-name'], 'XPDR-mcprofile')
-        self.assertEqual(str(res['mc-capabilities'][0]['center-freq-granularity']), '3.125')
-        self.assertEqual(str(res['mc-capabilities'][0]['slot-width-granularity']), '6.25')
+        self.assertEqual(float(res['mc-capabilities'][0]['center-freq-granularity']), 3.125)
+        self.assertEqual(float(res['mc-capabilities'][0]['slot-width-granularity']), 6.25)
 
     def test_09_mpdr_switching_pool(self):
         response = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "switching-pool-lcp", "1")
