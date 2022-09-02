@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed24f423_67aed161",
+        "filename": "dmaap-client/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-02T18:52:09Z",
+      "side": 1,
+      "message": "should be removed",
+      "revId": "200da829bb6637a8b7d528496067a863c637117b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
