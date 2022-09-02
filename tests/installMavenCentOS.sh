@@ -12,17 +12,17 @@ JAVAC_CMD="javac"
 JAVAC_VER=$("$JAVAC_CMD" -version 2>&1 |  sed -n ';s/javac \(.*\)\.\(.*\)\..*.*$/\1\2/p;')
 echo $JAVAC_VER
 if [ "$JAVA_VER" -ge 110 -a "$JAVAC_VER" -ge 110 ];then
-        echo "ok, java is 11 or newer"
+        echo "ok, java is 17 or newer"
 else
     #java 11 installation for CentOS (releng OS image target)
-        echo "install java 11"
-        sudo yum install -y java-11-openjdk java-11-openjdk-devel
-        last_installed_jdk11=$(ls -tr1 /usr/lib/jvm/ | grep java-11-openjdk-11 | tail -1)
-        if [ -n "$last_installed_jdk11" ];then
-            sudo alternatives --set java /usr/lib/jvm/$last_installed_jdk11/bin/java
-            sudo alternatives --set javac /usr/lib/jvm/$last_installed_jdk11/bin/javac
+        echo "install java 17"
+        sudo yum install -y java-17-openjdk java-17-openjdk-devel
+        last_installed_jdk17=$(ls -tr1 /usr/lib/jvm/ | grep java-17-openjdk-17 | tail -1)
+        if [ -n "$last_installed_jdk17" ];then
+            sudo alternatives --set java /usr/lib/jvm/$last_installed_jdk17/bin/java
+            sudo alternatives --set javac /usr/lib/jvm/$last_installed_jdk17/bin/javac
         else
-           echo "No java11 available"
+           echo "No java17 available"
            exit 1
         fi
 fi
