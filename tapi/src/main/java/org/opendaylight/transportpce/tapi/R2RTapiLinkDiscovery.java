@@ -79,6 +79,10 @@ public class R2RTapiLinkDiscovery {
                 }
                 // get neighbor list
                 NbrList nbr121List = protocol121Object.get().augmentation(Protocols1.class).getLldp().getNbrList();
+                if (nbr121List == null) {
+                    LOG.warn("LLDP subtree is present but nbr-list is missing : isolated openroadm device");
+                    return new HashMap<>();
+                }
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr121List.getIfName().size());
                 // try to create rdm2rdm link
                 return rdm2rdmLinkCreatev121(nodeId, tapiTopoUuid, nbr121List);
@@ -105,6 +109,10 @@ public class R2RTapiLinkDiscovery {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.@Nullable NbrList
                     nbr221List = protocol221Object.get().augmentation(org.opendaylight.yang.gen.v1.http
                         .org.openroadm.lldp.rev181019.Protocols1.class).getLldp().getNbrList();
+                if (nbr221List == null) {
+                    LOG.warn("LLDP subtree is present but nbr-list is missing : isolated openroadm device");
+                    return new HashMap<>();
+                }
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr221List.getIfName().size());
                 return rdm2rdmLinkCreatev221(nodeId, tapiTopoUuid, nbr221List);
             case 3:
