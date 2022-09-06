@@ -16,7 +16,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
@@ -69,8 +68,7 @@ public class R2RLinkDiscovery {
                 Optional<Protocols> protocol121Object = this.deviceTransactionManager.getDataFromDevice(
                     nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID, Timeouts.DEVICE_READ_TIMEOUT,
                     Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                if (!protocol121Object.isPresent()
-                        || (protocol121Object.get().augmentation(Protocols1.class) == null)) {
+                if (hasNeighbor121(protocol121Object)) {
                     LOG.warn("LLDP subtree is missing : isolated openroadm device");
                     return false;
                 }
@@ -90,18 +88,16 @@ public class R2RLinkDiscovery {
                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
                             .org.openroadm.device.Protocols.class)
                     .build();
-                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                    .container.org.openroadm.device.Protocols> protocol221Object = this.deviceTransactionManager
+                var protocol221Object = this.deviceTransactionManager
                     .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols221IID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                if (!protocol221Object.isPresent() || (protocol221Object.get().augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class) == null)) {
+                if (hasNeighbor221(protocol221Object)) {
                     LOG.warn("LLDP subtree is missing : isolated openroadm device");
                     return false;
                 }
-                org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.@Nullable NbrList
-                    nbr221List = protocol221Object.get().augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.lldp.rev181019.Protocols1.class).getLldp().getNbrList();
+                var nbr221List = protocol221Object.get().augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
+                    .getLldp().getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr221List.getIfName().size());
                 return rdm2rdmLinkCreatedv221(nodeId, nbr221List);
             case OPENROADM_DEVICE_VERSION_7_1:
@@ -111,6 +107,27 @@ public class R2RLinkDiscovery {
                 LOG.error("Unable to read LLDP data for unmanaged openroadm device version");
                 return false;
         }
+    }
+
+    private boolean hasNeighbor121(Optional<Protocols> protocol121Object) {
+        return protocol121Object.isEmpty()
+                || protocol121Object.get().augmentation(Protocols1.class) == null
+                || protocol121Object.get().augmentation(Protocols1.class).getLldp() == null
+                || protocol121Object.get().augmentation(Protocols1.class).getLldp().getNbrList() == null;
+    }
+
+    private boolean hasNeighbor221(Optional<
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
+                    .openroadm.device.Protocols> protocol221Object) {
+        return protocol221Object.isEmpty()
+                || protocol221Object.get().augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class) == null
+                || protocol221Object.get().augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
+                    .getLldp() == null
+                || protocol221Object.get().augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
+                    .getLldp().getNbrList() == null;
     }
 
     private boolean rdm2rdmLinkCreatedv221(NodeId nodeId,
