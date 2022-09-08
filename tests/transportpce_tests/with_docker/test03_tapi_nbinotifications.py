@@ -156,12 +156,6 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             result = test_utils.install_karaf_feature("odl-transportpce-tapi")
             if result.returncode != 0:
                 cls.init_failed_tapi = True
-            print("Restarting OpenDaylight...")
-            test_utils.shutdown_process(cls.processes[0])
-            cls.processes[0] = test_utils.start_karaf()
-            test_utils.process_list[0] = cls.processes[0]
-            cls.init_failed = not test_utils.wait_until_log_contains(
-                test_utils.KARAF_LOG, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
         if cls.init_failed_nbi:
             print("NBI notification installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
