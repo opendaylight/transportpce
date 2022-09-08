@@ -22,6 +22,30 @@
       },
       "revId": "6754735286a790433abf4359df4338cccd16e6e7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ff3336e_91226c87",
+        "filename": "tests/installMavenCentOS.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-08T06:46:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8288378_a737a8e0",
+      "range": {
+        "startLine": 17,
+        "startChar": 10,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "6754735286a790433abf4359df4338cccd16e6e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
