@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a3eb9e7_75e153c5",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:24:02Z",
+      "side": 1,
+      "message": "I need some confirmation about this point.",
+      "revId": "68ed3dc906f9138ec655b4e393953f4d1bc1a461",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
