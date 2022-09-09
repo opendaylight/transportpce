@@ -77,28 +77,25 @@ public class OpenRoadmInterface121 {
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
         }
-
-        // Ethernet interface specific data
-        EthernetBuilder ethIfBuilder = new EthernetBuilder()
-                .setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled)
-                .setDuplex(EthAttributes.Duplex.Full)
-                .setFec(EthAttributes.Fec.Off)
-                .setSpeed(Uint32.valueOf(100000))
-                .setMtu(Uint32.valueOf(9000));
-
-        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE,
-                                                                          logicalConnPoint + "-ETHERNET");
-
-        // Create Interface1 type object required for adding as augmentation
-        Interface1Builder ethIf1Builder = new Interface1Builder();
-        ethInterfaceBldr.addAugmentation(ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
-
+        InterfaceBuilder ethInterfaceBldr =
+            createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE, logicalConnPoint + "-ETHERNET")
+                .addAugmentation(
+                    // Create Interface1 type object required for adding as augmentation
+                    new Interface1Builder()
+                        .setEthernet(
+                            // Ethernet interface specific data
+                            new EthernetBuilder()
+                                .setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled)
+                                .setDuplex(EthAttributes.Duplex.Full)
+                                .setFec(EthAttributes.Fec.Off)
+                                .setSpeed(Uint32.valueOf(100000))
+                                .setMtu(Uint32.valueOf(9000))
+                                .build())
+                        .build());
         // Post interface on the device
         this.openRoadmInterfaces.postInterface(nodeId, ethInterfaceBldr);
-
         // Post the equipment-state change on the device circuit-pack
         this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
-
         return ethInterfaceBldr.getName();
     }
 
@@ -132,21 +129,19 @@ public class OpenRoadmInterface121 {
             throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
         }
         // Create generic interface
-        InterfaceBuilder otuInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOtu.VALUE, logicalConnPoint
-                + "-OTU");
-        otuInterfaceBldr.setSupportingInterface(supportOchInterface);
-
-        // OTU interface specific data
-        OtuBuilder otuIfBuilder = new OtuBuilder()
-                .setFec(OtuAttributes.Fec.Scfec)
-                .setRate(OTU4.VALUE);
-
-        // Create Interface1 type object required for adding as augmentation
-        // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder otuIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder();
-        otuInterfaceBldr.addAugmentation(otuIf1Builder.setOtu(otuIfBuilder.build()).build());
-
+        InterfaceBuilder otuInterfaceBldr =
+            createGenericInterfaceBuilder(portMap, OtnOtu.VALUE, logicalConnPoint + "-OTU")
+                .setSupportingInterface(supportOchInterface)
+                .addAugmentation(
+                // TODO look at imports of different versions of class
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder()
+                        .setOtu(
+                            // OTU interface specific data
+                            new OtuBuilder()
+                                .setFec(OtuAttributes.Fec.Scfec)
+                                .setRate(OTU4.VALUE)
+                                .build())
+                        .build());
         // Post interface on the device
         this.openRoadmInterfaces.postInterface(nodeId, otuInterfaceBldr);
         this.portMapping.updateMapping(nodeId, portMap);
@@ -169,28 +164,28 @@ public class OpenRoadmInterface121 {
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
         }
-        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint
-                + "-ODU");
+        InterfaceBuilder oduInterfaceBldr =
+            createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODU");
         if (portMap.getSupportingOtu4() != null) {
             oduInterfaceBldr.setSupportingInterface(portMap.getSupportingOtu4());
         }
-
-        // ODU interface specific data
-        // Set Opu attributes
-        OpuBuilder opuBldr = new OpuBuilder()
-                .setPayloadType("07")
-                .setExpPayloadType("07");
-        OduBuilder oduIfBuilder = new OduBuilder()
-                .setRate(ODU4.VALUE)
-                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
-                .setOpu(opuBldr.build());
-
-        // Create Interface1 type object required for adding as augmentation
-        // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1Builder oduIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1Builder();
-        oduInterfaceBldr.addAugmentation(oduIf1Builder.setOdu(oduIfBuilder.build()).build());
-
+        oduInterfaceBldr.addAugmentation(
+            // Create Interface1 type object required for adding as augmentation
+            // TODO look at imports of different versions of class
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1Builder()
+                .setOdu(
+                    // ODU interface specific data
+                    new OduBuilder()
+                        .setRate(ODU4.VALUE)
+                        .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+                        .setOpu(
+                            // Set Opu attributes
+                            new OpuBuilder()
+                                .setPayloadType("07")
+                                .setExpPayloadType("07")
+                                .build())
+                        .build())
+                .build());
         // Post interface on the device
         this.openRoadmInterfaces.postInterface(nodeId, oduInterfaceBldr);
         return oduInterfaceBldr.getName();
@@ -209,7 +204,7 @@ public class OpenRoadmInterface121 {
 
     public List<String> createOpenRoadmOchInterfaces(String nodeId, String logicalConnPoint,
             SpectrumInformation spectrumInformation)
-        throws OpenRoadmInterfaceException {
+            throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
@@ -217,28 +212,25 @@ public class OpenRoadmInterface121 {
                     nodeId, logicalConnPoint));
         }
         // Create generic interface
-        InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.VALUE,
+        InterfaceBuilder ochInterfaceBldr =
+            createGenericInterfaceBuilder(
+                portMap, OpticalChannel.VALUE,
                 spectrumInformation.getIdentifierFromParams(logicalConnPoint));
-
-        // OCH interface specific data
-        OchBuilder ocIfBuilder = new OchBuilder().setWavelengthNumber(spectrumInformation.getWaveLength());
-
         // Add supporting OMS interface
         if (portMap.getSupportingOms() != null) {
             ochInterfaceBldr.setSupportingInterface(portMap.getSupportingOms());
         }
-        // Create Interface1 type object required for adding as augmentation
-        // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder
-                ochIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces
-                .rev161014.Interface1Builder();
-        ochInterfaceBldr.addAugmentation(ochIf1Builder.setOch(ocIfBuilder.build()).build());
-
-        List<String> interfacesCreated = new ArrayList<>();
+        ochInterfaceBldr.addAugmentation(
+            // Create Interface1 type object required for adding as augmentation
+            // TODO look at imports of different versions of class
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder()
+                .setOch(
+                    // OCH interface specific data
+                    new OchBuilder().setWavelengthNumber(spectrumInformation.getWaveLength()).build())
+                .build());
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, ochInterfaceBldr);
-        interfacesCreated.add(ochInterfaceBldr.getName());
-        return interfacesCreated;
+        return new ArrayList<String>(List.of(ochInterfaceBldr.getName()));
     }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
@@ -249,31 +241,32 @@ public class OpenRoadmInterface121 {
                 "Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
-        ModulationFormat modulationFormat = OchAttributes.ModulationFormat
-                .forName(spectrumInformation.getModulationFormat());
+        ModulationFormat modulationFormat =
+            OchAttributes.ModulationFormat.forName(spectrumInformation.getModulationFormat());
         if (modulationFormat == null) {
             modulationFormat = OchAttributes.ModulationFormat.DpQpsk;
         }
-        // OCH interface specific data
-        OchBuilder ocIfBuilder = new OchBuilder()
-                .setWavelengthNumber(spectrumInformation.getWaveLength())
-                .setModulationFormat(modulationFormat)
-                .setRate(R100G.VALUE)
-                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")));
-
-        // Create Interface1 type object required for adding as augmentation
-        // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
-                .Interface1Builder ochIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel
-                .interfaces.rev161014.Interface1Builder();
         // Create generic interface
-        InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.VALUE,
-                spectrumInformation.getIdentifierFromParams(logicalConnPoint));
-        ochInterfaceBldr.addAugmentation(ochIf1Builder.setOch(ocIfBuilder.build()).build());
-
+        InterfaceBuilder ochInterfaceBldr =
+            createGenericInterfaceBuilder(
+                    portMap, OpticalChannel.VALUE,
+                    spectrumInformation.getIdentifierFromParams(logicalConnPoint))
+                .addAugmentation(
+                    // Create Interface1 type object required for adding as augmentation
+                    // TODO look at imports of different versions of class
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
+                            .Interface1Builder()
+                        .setOch(
+                            // OCH interface specific data
+                            new OchBuilder()
+                                .setWavelengthNumber(spectrumInformation.getWaveLength())
+                                .setModulationFormat(modulationFormat)
+                                .setRate(R100G.VALUE)
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
+                                .build())
+                        .build());
         // Post interface on the device
         this.openRoadmInterfaces.postInterface(nodeId, ochInterfaceBldr);
-
         // Post the equipment-state change on the device circuit-pack if xpdr node
         if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
             this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
@@ -286,66 +279,66 @@ public class OpenRoadmInterface121 {
     }
 
     public String createOpenRoadmOmsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
-        if (mapping.getSupportingOms() == null) {
-            // Create generic interface
-            InterfaceBuilder omsInterfaceBldr = createGenericInterfaceBuilder(mapping, OpenROADMOpticalMultiplex.VALUE,
-                "OMS-" + mapping.getLogicalConnectionPoint());
-            if (mapping.getSupportingOts() != null) {
-                omsInterfaceBldr.setSupportingInterface(mapping.getSupportingOts());
-            } else {
-                LOG.error("Unable to get ots interface from mapping {} - {}", nodeId,
-                          mapping.getLogicalConnectionPoint());
-                return null;
-            }
-            this.openRoadmInterfaces.postInterface(nodeId, omsInterfaceBldr);
-            this.portMapping.updateMapping(nodeId, mapping);
-            return omsInterfaceBldr.build().getName();
-        } else {
+        if (mapping.getSupportingOms() != null) {
             return mapping.getSupportingOms();
         }
+        if (mapping.getSupportingOts() == null) {
+            LOG.error("Unable to get ots interface from mapping {} - {}", nodeId, mapping.getLogicalConnectionPoint());
+            return null;
+        }
+        // Create generic interface
+        InterfaceBuilder omsInterfaceBldr =
+            createGenericInterfaceBuilder(
+                     mapping, OpenROADMOpticalMultiplex.VALUE,
+                    "OMS-" + mapping.getLogicalConnectionPoint())
+                .setSupportingInterface(mapping.getSupportingOts());
+        this.openRoadmInterfaces.postInterface(nodeId, omsInterfaceBldr);
+        this.portMapping.updateMapping(nodeId, mapping);
+        return omsInterfaceBldr.build().getName();
     }
 
     public String createOpenRoadmOtsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
-        if (mapping.getSupportingOts() == null) {
-            // Create generic interface
-            InterfaceBuilder otsInterfaceBldr = createGenericInterfaceBuilder(mapping, OpticalTransport.VALUE, "OTS-"
-                    + mapping.getLogicalConnectionPoint());
-            // OTS interface augmentation specific data
-            OtsBuilder otsIfBuilder = new OtsBuilder();
-            otsIfBuilder.setFiberType(OtsAttributes.FiberType.Smf);
-
-            // Create Interface1 type object required for adding as
-            // augmentation
-            org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
-                    .Interface1Builder otsIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm
-                    .optical.transport.interfaces.rev161014.Interface1Builder();
-            otsInterfaceBldr.addAugmentation(otsIf1Builder.setOts(otsIfBuilder.build()).build());
-            this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);
-            this.portMapping.updateMapping(nodeId, mapping);
-            return otsInterfaceBldr.build().getName();
-        } else {
+        if (mapping.getSupportingOts() != null) {
             return mapping.getSupportingOts();
         }
+        // Create generic interface
+        InterfaceBuilder otsInterfaceBldr =
+            createGenericInterfaceBuilder(mapping, OpticalTransport.VALUE, "OTS-" + mapping.getLogicalConnectionPoint())
+                .addAugmentation(
+                    // Create Interface1 type object required for adding as
+                    // augmentation
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                            .Interface1Builder()
+                        .setOts(
+                            // OTS interface augmentation specific data
+                            new OtsBuilder().setFiberType(OtsAttributes.FiberType.Smf).build())
+                        .build());
+        this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);
+        this.portMapping.updateMapping(nodeId, mapping);
+        return otsInterfaceBldr.build().getName();
     }
 
     public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
-        DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
-            .build();
+            DeviceTransactionManager deviceTransactionManager) {
         LOG.info("reading xc {} in node {}", xc, nodeId);
-        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (crossconnection.isPresent()) {
-            RoadmConnections rc = crossconnection.get();
-            LOG.info("xd {} found", xc);
-            if (rc.getSource().getSrcIf().equals(interfaceName)
-                || rc.getDestination().getDstIf().equals(interfaceName)) {
-                return true;
-            }
-        } else {
+        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(
+            nodeId,
+            LogicalDatastoreType.CONFIGURATION,
+            InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
+                .build(),
+            Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (crossconnection.isEmpty()) {
             LOG.info("xd {} not found !", xc);
+            return false;
+        }
+        RoadmConnections rc = crossconnection.get();
+        LOG.info("xd {} found", xc);
+        if (rc.getSource().getSrcIf().equals(interfaceName)
+                || rc.getDestination().getDstIf().equals(interfaceName)) {
+            return true;
         }
         return false;
     }
