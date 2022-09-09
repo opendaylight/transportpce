@@ -33,14 +33,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -269,8 +265,6 @@ public class PceCalculation {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
             networkTransactionService.close();
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
-//            throw new RuntimeException(
-//                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
         }
         return nw;
     }

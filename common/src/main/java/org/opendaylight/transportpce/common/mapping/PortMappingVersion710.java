@@ -983,36 +983,33 @@ public class PortMappingVersion710 {
                     nodeId, interfaces.getInterfaceName() + "- empty interface");
                 continue;
             }
-            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
-                nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
             InterfaceType interfaceType = openRoadmInterface.get().getType();
+            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG, nodeId, openRoadmInterface.get().getName(), interfaceType);
             // Check if interface type is OMS or OTS
+            // Switch/Case might be more indicated here but is not possible in jdk17 w/o enable-preview
             if (interfaceType.equals(OpenROADMOpticalMultiplex.VALUE)) {
                 mpBldr.setSupportingOms(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(OpticalTransport.VALUE)) {
+            } else if (interfaceType.equals(OpticalTransport.VALUE)) {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
-            }
-            String interfaceName = interfaces.getInterfaceName();
-            if (interfaceType.equals(OtnOtu.VALUE)
-                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("OTU4"))) {
-                mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
-            }
-            if ((interfaceType.equals(OtnOtu.VALUE))
-                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .contains("OTUC"))) {
-                mpBldr.setSupportingOtucn(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(OtnOdu.VALUE)
-                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .equals("ODU4"))) {
-                mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
-            }
-            if ((interfaceType.equals(OtnOdu.VALUE))
-                && (interfaceName.substring(interfaceName.lastIndexOf("-") + 1)
-                .contains("ODUC"))) {
-                mpBldr.setSupportingOducn(interfaces.getInterfaceName());
+            //TODO check if the following lines for Eth CSMACD present in 1.2.1 and 2.2.1 were not forgotten in 7.1
+            //} else if(interfaceType.equals(EthernetCsmacd.VALUE)) {
+            //    mpBldr.setSupportingEthernet(interfaces.getInterfaceName());
+            } else if (interfaceType.equals(OtnOtu.VALUE)) {
+                String interfaceName = interfaces.getInterfaceName();
+                String suffix = interfaceName.substring(interfaceName.lastIndexOf("-") + 1);
+                if (suffix.equals("OTU4")) {
+                    mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
+                } else if (suffix.contains("OTUC")) {
+                    mpBldr.setSupportingOtucn(interfaces.getInterfaceName());
+                }
+            } else if (interfaceType.equals(OtnOdu.VALUE)) {
+                String interfaceName = interfaces.getInterfaceName();
+                String suffix = interfaceName.substring(interfaceName.lastIndexOf("-") + 1);
+                if (suffix.equals("ODU4")) {
+                    mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+                } else if (suffix.contains("ODUC")) {
+                    mpBldr.setSupportingOducn(interfaces.getInterfaceName());
+                }
             }
         }
         return mpBldr;

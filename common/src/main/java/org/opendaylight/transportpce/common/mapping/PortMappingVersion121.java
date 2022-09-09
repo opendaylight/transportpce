@@ -102,6 +102,7 @@ public class PortMappingVersion121 {
             Direction.Bidirectional, "TXRX");
     }
 
+
     public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
@@ -610,8 +611,7 @@ public class PortMappingVersion121 {
     }
 
     private MappingBuilder updateMappingInterfaces(String nodeId, MappingBuilder mpBldr, Ports port) {
-        mpBldr.setSupportingOtu4(null)
-            .setSupportingOdu4(null);
+        mpBldr.setSupportingOtu4(null).setSupportingOdu4(null);
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId, interfaces.getInterfaceName());
             if (openRoadmInterface.isEmpty()) {
@@ -619,23 +619,18 @@ public class PortMappingVersion121 {
                     nodeId, interfaces.getInterfaceName() + "- empty interface");
                 continue;
             }
-            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG,
-                nodeId, openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
             InterfaceType interfaceType = openRoadmInterface.get().getType();
-            // Check if interface type is OMS or OTS
+            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG, nodeId, openRoadmInterface.get().getName(), interfaceType);
+            // Switch/Case might be more indicated here but is not possible in jdk17 w/o enable-preview
             if (interfaceType.equals(OpenROADMOpticalMultiplex.VALUE)) {
                 mpBldr.setSupportingOms(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(OpticalTransport.VALUE)) {
+            } else if (interfaceType.equals(OpticalTransport.VALUE)) {
                 mpBldr.setSupportingOts(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(OtnOtu.VALUE)) {
+            } else if (interfaceType.equals(OtnOtu.VALUE)) {
                 mpBldr.setSupportingOtu4(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(OtnOdu.VALUE)) {
+            } else if (interfaceType.equals(OtnOdu.VALUE)) {
                 mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
-            }
-            if (interfaceType.equals(EthernetCsmacd.VALUE)) {
+            } else if (interfaceType.equals(EthernetCsmacd.VALUE)) {
                 mpBldr.setSupportingEthernet(interfaces.getInterfaceName());
             }
         }
