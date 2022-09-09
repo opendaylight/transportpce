@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1ff2df_02498aa0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0f0bb871_d1e70ffb",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff63137_ccb09b09",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-25T13:29:01Z",
       "side": 1,
       "message": "idem",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c648b31e_01ff4447",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aff63137_ccb09b09",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -69,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb02eba9_354025b3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b04184e0_993512b6",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2f567af_76316d55",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-08-25T09:37:39Z",
       "side": 1,
       "message": "there is probably room for refactoring with switch/case here now.",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e83084_8f8e6647",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e2f567af_76316d55",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -134,6 +206,24 @@
       "writtenOn": "2022-08-25T13:29:01Z",
       "side": 1,
       "message": "shouldn\u0027t this be simply removed rather than commented out ?",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26317ae_c0c57f64",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3b23ab1_db2155f9",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -416,6 +506,24 @@
       "side": 1,
       "message": "so if serviceFormat equals ODU, what\u0027s the point to test that it equals OTU ?",
       "parentUuid": "00f2a627_80d2d1ee",
+      "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb406d8_41af76f8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-09T12:22:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31c107cf_c366e86e",
       "revId": "41a2f59266055330d1749d1658f17a6e5219bce8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
