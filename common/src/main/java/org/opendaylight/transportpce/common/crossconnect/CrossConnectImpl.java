@@ -46,38 +46,36 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
     public Optional<?> getCrossConnect(String nodeId, String connectionNumber) {
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl121.getCrossConnect(nodeId,connectionNumber);
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                return crossConnectImpl121.getCrossConnect(nodeId,connectionNumber);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
+            default:
+                return Optional.empty();
         }
-        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
-        }
-        return Optional.empty();
     }
 
 
     public Optional<String> postCrossConnect(String nodeId, String srcTp, String destTp,
             SpectrumInformation spectrumInformation) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        LOG.info("Cross Connect post request received for node {} with version {}",nodeId,openRoadmVersion);
-        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            LOG.info("Device Version is 1.2.1");
-            return crossConnectImpl121.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
+        LOG.info("Cross Connect post request received for node {} with version {}", nodeId, openRoadmVersion);
+        switch (openRoadmVersion) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                LOG.info("Device Version is 1.2.1");
+                return crossConnectImpl121.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                LOG.info("Device Version is 2.2.1");
+                return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
+            default:
+                LOG.info("Device Version not found");
+                return Optional.empty();
         }
-        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            LOG.info("Device Version is 2.2");
-            return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp,
-                    spectrumInformation);
-        }
-        LOG.info("Device Version not found");
-        return Optional.empty();
-
     }
 
 
     public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
-
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case OPENROADM_DEVICE_VERSION_1_2_1:
                 return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
@@ -93,46 +91,52 @@ public class CrossConnectImpl implements CrossConnect {
     public List<?> getConnectionPortTrail(String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber,
             int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl121.getConnectionPortTrail(nodeId, srcTp, destTp,
-                    lowerSpectralSlotNumber, higherSpectralSlotNumber);
-        }
-        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                return crossConnectImpl121
                     .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                return crossConnectImpl221
+                    .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
+            default:
+                return null;
         }
-        return null;
     }
 
     @Override
     public boolean setPowerLevel(String nodeId, String mode, Decimal64 powerValue, String connectionNumber) {
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion) && OpticalControlMode.forName(mode) != null) {
-            return crossConnectImpl121.setPowerLevel(nodeId,OpticalControlMode.forName(mode), powerValue,
-                connectionNumber);
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                if (OpticalControlMode.forName(mode) == null) {
+                    return false;
+                }
+                return crossConnectImpl121.setPowerLevel(nodeId,
+                    OpticalControlMode.forName(mode),
+                    powerValue, connectionNumber);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
+                        .forName(mode) == null) {
+                    return false;
+                }
+                return crossConnectImpl221.setPowerLevel(nodeId,
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
+                        .forName(mode),
+                    powerValue, connectionNumber);
+            default:
+                return false;
         }
-        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)
-                && org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
-                    .forName(mode) != null) {
-            return crossConnectImpl221.setPowerLevel(nodeId,
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode.forName(mode),
-                powerValue, connectionNumber);
-        }
-        return false;
     }
 
     @Override
     public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node)
             throws OpenRoadmInterfaceException {
-        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(node.getNodeId());
-
-        if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);
+        switch (mappingUtils.getOpenRoadmVersion(node.getNodeId())) {
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                return crossConnectImpl710.postOtnCrossConnect(createdOduInterfaces, node);
+            default:
+                return Optional.empty();
         }
-        else if (OPENROADM_DEVICE_VERSION_7_1.equals(openRoadmVersion)) {
-            return crossConnectImpl710.postOtnCrossConnect(createdOduInterfaces, node);
-        }
-        return Optional.empty();
     }
 }

@@ -1648,8 +1648,7 @@ public final class ConnectivityUtils {
                 .build()));
         if (serviceFormat.equals(ServiceFormat.ODU)) {
             serviceAEndBuilder.setOduServiceRate(ODU4.VALUE);
-        }
-        if (serviceFormat.equals(ServiceFormat.OTU)) {
+        } else if (serviceFormat.equals(ServiceFormat.OTU)) {
             serviceAEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
         if (!serviceLayer.equals(LayerProtocolName.ETH)) {
