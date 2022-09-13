@@ -146,8 +146,8 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             xmlStreamWriter.writeStartElement(XMLConstants.DEFAULT_NS_PREFIX,
                     rpcOutputQName.getLocalName(), rpcOutputQName.getNamespace().toString());
             xmlStreamWriter.writeDefaultNamespace(rpcOutputQName.getNamespace().toString());
-            NormalizedNode rpcOutputNormalizedNode = convertType.toNormalizedNodes(dataObjectClass.cast(object),
-                    dataObjectClass).get();
+            NormalizedNode rpcOutputNormalizedNode =
+                convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).get();
             for (final NormalizedNode child : ((ContainerNode)rpcOutputNormalizedNode).body()) {
                 normalizedNodeWriter.write(child);
             }

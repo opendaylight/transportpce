@@ -260,6 +260,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.info("Updated TAPI topology successfully.");
     }
 
+    @SuppressWarnings("rawtypes")
     private void sendNotification(List<Uuid> changedOneps, Mapping mapping) {
         Notification notification = new NotificationBuilder()
             .setNotificationType(NotificationType.ATTRIBUTEVALUECHANGE)

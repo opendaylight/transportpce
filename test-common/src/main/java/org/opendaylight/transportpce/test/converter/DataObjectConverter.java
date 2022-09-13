@@ -43,8 +43,8 @@ public interface DataObjectConverter {
     <T extends DataObject> Writer writerFromRpcDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName);
 
-    <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
-            Class dataObjectClass);
+    @SuppressWarnings("rawtypes")
+    <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object, Class dataObjectClass);
 
     interface ConvertType<T> {
         Optional<NormalizedNode> toNormalizedNodes(T object, Class<T> clazz);
@@ -73,6 +73,7 @@ public interface DataObjectConverter {
      *
      * @return {@link ConvertType} converter for {@link Notification}
      */
+    @SuppressWarnings("rawtypes")
     <T extends Notification> ConvertType<T> notification();
 
 }
