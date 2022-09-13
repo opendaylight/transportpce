@@ -111,7 +111,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes","unchecked"})
     public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
             Class dataObjectClass) {
         Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =

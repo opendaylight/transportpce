@@ -112,6 +112,7 @@ public class JsonStringConverter<T extends DataObject> {
      * @param supplier RFC7951 or DRAFT_LHOTKA_NETMOD_YANG_JSON_02
      * @return the created object.
      */
+    @SuppressWarnings("unchecked")
     private T createDataObjectFromReader(YangInstanceIdentifier path, Reader inputReader,
                                          JSONCodecFactorySupplier supplier) {
 
