@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "623448d2_2c2267a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-13T08:01:46Z",
+      "side": 1,
+      "message": "You should explicit a litle bit your commit message with what you are changing, because \"step 1\" forces to deep into the code.",
+      "revId": "5638738bf5dfb08f19c3d7cdd5478c39f79871c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
