@@ -954,7 +954,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
      * Send renderer notification.
      * @param notification Notification
      */
-    private void send(Notification notification) {
+    private void send(Notification<?> notification) {
         try {
             LOG.info("Sending notification {}", notification);
             notificationPublishService.putNotification(notification);

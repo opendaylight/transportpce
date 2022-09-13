@@ -111,6 +111,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
             Class dataObjectClass) {
         Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =
@@ -137,6 +138,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public <T extends Notification> ConvertType<T> notification() {
         return (object, objectClass) -> {
             ContainerNode normalizedNodeNotification = getCodecRegistry().toNormalizedNodeNotification(object);
