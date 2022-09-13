@@ -16,6 +16,24 @@
       "message": "Should be integrated in change https://git.opendaylight.org/gerrit/c/transportpce/+/101975\n",
       "revId": "8f40b77529ca9a1dcd19128992986f3e7b8fa4fc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83a01ebe_7d2fa775",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-13T09:12:05Z",
+      "side": 1,
+      "message": "thus we should vote -2 to change 101975, shouldn\u0027t we ?",
+      "parentUuid": "b6120ebc_c57de31e",
+      "revId": "8f40b77529ca9a1dcd19128992986f3e7b8fa4fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
