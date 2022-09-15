@@ -20,9 +20,10 @@ classes
 .DS_STORE
 .metadata
 ordmodels/src/main/java
+tests/allure-report/
 tests/config.xml
 tests/models
-<<<<<<< HEAD
+tests/test-requirements.txt
 *.log
 *.log.*
 __pycache__
