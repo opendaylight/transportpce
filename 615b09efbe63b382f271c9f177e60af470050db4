@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b3afba_da9be7b0",
+        "filename": "tests/transportpce_tests/hybrid/test03_autonomous_reroute.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-16T15:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "236edf02_06247745",
+      "range": {
+        "startLine": 932,
+        "startChar": 0,
+        "endLine": 937,
+        "endChar": 32
+      },
+      "revId": "615b09efbe63b382f271c9f177e60af470050db4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b708f329_50d93ee7",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-16T15:00:33Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 1095,
+        "startChar": 0,
+        "endLine": 1100,
+        "endChar": 39
+      },
+      "revId": "615b09efbe63b382f271c9f177e60af470050db4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "820e1ff6_b9cb9ce7",
+        "filename": "tests/transportpce_tests/hybrid/test03_autonomous_reroute.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-16T15:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b708f329_50d93ee7",
       "range": {
         "startLine": 1095,
         "startChar": 0,
