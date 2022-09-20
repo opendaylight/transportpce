@@ -16,6 +16,24 @@
       "message": "this line is not accepted by autopep8 -cf gate result\n\n17:13:30 autopep8.................................................................Failed\n17:13:33 - hook id: autopep8\n17:13:33 - files were modified by this hook\n17:13:33 pre-commit hook(s) made changes.\n17:13:33 If you are seeing this message in CI, reproduce locally with: `pre-commit run --all-files`.\n17:13:33 To run `pre-commit` as part of git workflow, use `pre-commit install`.\n17:13:33 All changes made by hooks:\n17:13:33 diff --git a/tests/transportpce_tests/hybrid/test02_B100G_end2end.py b/tests/transportpce_tests/hybrid/test02_B100G_end2end.py\n17:13:33 index 7b545636..01fbd36b 100644\n17:13:33 --- a/tests/transportpce_tests/hybrid/test02_B100G_end2end.py\n17:13:33 +++ b/tests/transportpce_tests/hybrid/test02_B100G_end2end.py\n17:13:33 @@ -909,7 +909,6 @@ class TransportPCEtesting(unittest.TestCase):\n17:13:33              \u0027XPDR-A2\u0027, \u0027interface\u0027, \u0027XPDR2-CLIENT1-ODU4:service-100GE\u0027)\n17:13:33          self.assertEqual(response[\u0027status_code\u0027], requests.codes.conflict)\n17:13:33  \n17:13:33 -\n17:13:33      def test_52_check_no_interface_100GE_CLIENT_xpdra2(self):\n17:13:33          response \u003d test_utils.check_node_attribute_request(\n17:13:33              \u0027XPDR-A2\u0027, \u0027interface\u0027, \u0027XPDR2-CLIENT1-ETHERNET-100G\u0027)\n17:13:33 ERROR: InvocationError for command /w/workspace/transportpce-tox-verify-chlorine/.tox/pre-commit/bin/pre-commit run --all-files --show-diff-on-failure (exited with code 1)\n17:13:33 ERROR: invocation failed (exit code 1)\n17:13:33 ✖ FAIL pre-commit in 26.033 seconds",
       "revId": "42e167b2606c689fd3dccf4ab7e81c69151a6071",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c96819_b9544e58",
+        "filename": "tests/transportpce_tests/hybrid/test02_B100G_end2end.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-20T10:02:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72dc262c_ecffe603",
+      "revId": "42e167b2606c689fd3dccf4ab7e81c69151a6071",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
