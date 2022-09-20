@@ -16,6 +16,23 @@
       "message": "stage-release",
       "revId": "5ccc2828ec4ac1168e049d803fc22d364bb87405",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c391bb1_d6a50c55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-20T06:43:23Z",
+      "side": 1,
+      "message": "+ Daniel\n@Gilles The stage job did pass. Sulfur SR2 approval is under vote, once officially approved, I guess we can merge the release",
+      "revId": "5ccc2828ec4ac1168e049d803fc22d364bb87405",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
