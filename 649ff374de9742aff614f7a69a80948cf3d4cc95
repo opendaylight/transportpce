@@ -22,6 +22,30 @@
       },
       "revId": "649ff374de9742aff614f7a69a80948cf3d4cc95",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9cbe1f_0ded786e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-21T08:50:22Z",
+      "side": 1,
+      "message": "I can\u0027t see any fix in the last PS.\nWas this comment addressed anywhere else in the relation chain ?",
+      "parentUuid": "f26b1b8d_9fb976f4",
+      "range": {
+        "startLine": 225,
+        "startChar": 24,
+        "endLine": 226,
+        "endChar": 53
+      },
+      "revId": "649ff374de9742aff614f7a69a80948cf3d4cc95",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
