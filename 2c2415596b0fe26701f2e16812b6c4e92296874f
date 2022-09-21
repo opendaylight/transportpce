@@ -33,6 +33,23 @@
       "message": "LGTM",
       "revId": "2c2415596b0fe26701f2e16812b6c4e92296874f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbae7aa_4afe4be2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-21T07:31:07Z",
+      "side": 1,
+      "message": "LGTM too, but I prefer merging the restoration relation chain before, because it was ready first, and it will be easier to rebase a single change if necessary.",
+      "revId": "2c2415596b0fe26701f2e16812b6c4e92296874f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
