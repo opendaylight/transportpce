@@ -16,6 +16,23 @@
       "message": "This is ready to submitted. I have rebased the code and removed the merge conflicts",
       "revId": "2c2415596b0fe26701f2e16812b6c4e92296874f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63cb6988_dfbc8ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-21T07:14:36Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2c2415596b0fe26701f2e16812b6c4e92296874f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
