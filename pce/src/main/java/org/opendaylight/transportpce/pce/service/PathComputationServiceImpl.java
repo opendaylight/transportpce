@@ -229,8 +229,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 }
                 // Path calculator returned Success
                 PathDescription pathDescription =
-                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
-                            .service.path.rpc.result.PathDescriptionBuilder()
+                    new PathDescriptionBuilder()
                         .setAToZDirection(path.getAToZDirection())
                         .setZToADirection(path.getZToADirection())
                         .build();
