@@ -25,8 +25,8 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -168,7 +168,7 @@ public final class OpenRoadmTopology {
                         .collect(Collectors.toList());
                 Boolean isOtn;
                 String xpdrType;
-                switch (mapping.getXponderType() == null ? Tpdr : mapping.getXponderType()) {
+                switch (mapping.getXpdrType() == null ? Tpdr : mapping.getXpdrType()) {
                     case Tpdr :
                         isOtn = false;
                         xpdrType = "Tpdr";
@@ -176,11 +176,11 @@ public final class OpenRoadmTopology {
                     case Mpdr :
                     case Switch :
                         isOtn = true;
-                        xpdrType = mapping.getXponderType().getName();
+                        xpdrType = mapping.getXpdrType().getName();
                         break;
                     default :
                         LOG.warn("cannot create xpdr node {} in openroadm-topology: type {} not supported",
-                             mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
+                             mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXpdrType().getName());
                         continue;
                 }
                 LOG.info("creating xpdr node {} of type {} in openroadm-topology",
