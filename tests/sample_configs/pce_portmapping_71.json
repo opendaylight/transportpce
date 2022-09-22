@@ -63,7 +63,7 @@
                     "port-oper-state": "InService",
                     "connection-map-lcp": "XPDR1-CLIENT1",
                     "port-direction": "bidirectional",
-                    "xponder-type": "tpdr",
+                    "xpdr-type": "tpdr",
                     "lcp-hash-val": "AIGiVAQ4gDil",
                     "supporting-port": "L1",
                     "port-qual": "xpdr-network"
@@ -109,7 +109,7 @@
                     ],
                     "port-oper-state": "InService",
                     "port-direction": "bidirectional",
-                    "xponder-type": "mpdr",
+                    "xpdr-type": "mpdr",
                     "lcp-hash-val": "LY9PxYJqUbw=",
                     "supporting-port": "L1",
                     "port-qual": "switch-network"
@@ -288,7 +288,7 @@
                     "port-oper-state": "InService",
                     "connection-map-lcp": "XPDR1-CLIENT1",
                     "port-direction": "bidirectional",
-                    "xponder-type": "tpdr",
+                    "xpdr-type": "tpdr",
                     "lcp-hash-val": "ZbICgmaBrJM=",
                     "supporting-port": "L1",
                     "port-qual": "xpdr-network"
@@ -334,7 +334,7 @@
                     ],
                     "port-oper-state": "InService",
                     "port-direction": "bidirectional",
-                    "xponder-type": "mpdr",
+                    "xpdr-type": "mpdr",
                     "lcp-hash-val": "Nmbu2MNHvc4=",
                     "supporting-port": "L1",
                     "port-qual": "switch-network"

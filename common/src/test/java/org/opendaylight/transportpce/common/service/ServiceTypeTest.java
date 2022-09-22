@@ -12,8 +12,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -61,7 +61,7 @@ public class ServiceTypeTest {
         mapping = new MappingBuilder()
             .setLogicalConnectionPoint("logicalConnectionPoint")
             .setPortQual(PortQual.SwitchClient.getName())
-            .setXponderType(XpdrNodeTypes.Switch)
+            .setXpdrType(XpdrNodeTypes.Switch)
             .build();
         serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.valueOf(100), mapping);
         assertEquals("service-type should be 100GEs", "100GEs", serviceType);
