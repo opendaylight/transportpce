@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2022-09-22 {
+    description
+       "Add initial support to regenerators functionality; Modify the attribute
+       xponder-type to xpdr-type";
+  }
   revision 2022-03-16 {
     description
       "Align org-openroadm-port-types model version to the latest one,
@@ -249,7 +254,8 @@ module transportpce-portmapping {
         }
       }
       uses mpdr-restrictions-grp;
-      leaf xponder-type {
+      uses regen-profiles-grp;
+      leaf xpdr-type {
         type org-openroadm-device-types:xpdr-node-types;
       }
       leaf connection-map-lcp {
@@ -269,6 +275,19 @@ module transportpce-portmapping {
         description
           "Hash value generated from node-id and lcp. This value will be used to map-
            back SAPI and DAPI resource";
+      }
+    }
+  }
+
+  grouping regen-profiles-grp {
+    container regen-profiles {
+      when "../xpdr-type = 'regen'";
+      description
+        "This container is only populated when the xpdr-type is regen";
+      leaf-list regen-profiles {
+        description
+          "Supported regen profiles, these are otsi-group-capabilities profile";
+          type string;
       }
     }
   }

@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -271,7 +271,7 @@ public class OpenRoadmInterface221 {
             oduFunction =
                 // For TPDR it can be both CTP and TTP
                 // For switch-ponder we still use TTP
-                mapping.getXponderType() == XpdrNodeTypes.Tpdr
+                mapping.getXpdrType() == XpdrNodeTypes.Tpdr
                     ? ODUTTPCTP.VALUE
                     : ODUTTP.VALUE;
             monitoringMode = MonitoringMode.Terminated;

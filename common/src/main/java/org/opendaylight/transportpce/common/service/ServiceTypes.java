@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.service;
 
 import java.util.Map;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -41,7 +41,7 @@ public final class ServiceTypes {
                     if (mapping == null || !PortQual.SwitchClient.getName().equals(mapping.getPortQual())) {
                         return StringConstants.SERVICE_TYPE_100GE_T;
                     }
-                    if (XpdrNodeTypes.Switch.equals(mapping.getXponderType())) {
+                    if (XpdrNodeTypes.Switch.equals(mapping.getXpdrType())) {
                         return StringConstants.SERVICE_TYPE_100GE_S;
                     }
                 }
