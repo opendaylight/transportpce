@@ -85,7 +85,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'lcp-hash-val': 'AIGiVAQ4gDil',
              'port-admin-state': 'InService',
              'port-oper-state': 'InService',
-             'xponder-type': 'tpdr'
+             'xpdr-type': 'tpdr'
              },
             response['mapping'])
 
@@ -103,7 +103,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'lcp-hash-val': 'AODABTVSOHH0',
              'port-admin-state': 'InService',
              'port-oper-state': 'InService',
-             'xponder-type': 'tpdr'
+             'xpdr-type': 'tpdr'
              },
             response['mapping']
         )
@@ -123,7 +123,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
              'lcp-hash-val': 'LY9PxYJqUbw=',
              'port-admin-state': 'InService',
              'port-oper-state': 'InService',
-             'xponder-type': 'mpdr'
+             'xpdr-type': 'mpdr'
              },
             response['mapping'])
 
@@ -142,7 +142,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual('AK+Cna4EclRH', res['mapping'][0]['lcp-hash-val'])
         self.assertEqual('InService', res['mapping'][0]['port-admin-state'])
         self.assertEqual('InService', res['mapping'][0]['port-oper-state'])
-        self.assertEqual('mpdr', res['mapping'][0]['xponder-type'])
+        self.assertEqual('mpdr', res['mapping'][0]['xpdr-type'])
         self.assertEqual(1.1, float(res['mapping'][0]['mpdr-restrictions']['min-trib-slot']))
         self.assertEqual(1.2, float(res['mapping'][0]['mpdr-restrictions']['max-trib-slot']))
 

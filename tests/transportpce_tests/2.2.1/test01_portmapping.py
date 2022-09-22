@@ -134,7 +134,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AMkDwQ7xTmRI', 'xponder-type': 'tpdr',
+             'lcp-hash-val': 'AMkDwQ7xTmRI', 'xpdr-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -146,7 +146,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'AMkDwQ7xTmRL', 'xponder-type': 'tpdr',
+             'lcp-hash-val': 'AMkDwQ7xTmRL', 'xpdr-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -159,7 +159,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALj', 'xponder-type': 'tpdr',
+             'lcp-hash-val': 'AJUUr6I5fALj', 'xpdr-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -172,7 +172,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALg', 'xponder-type': 'tpdr',
+             'lcp-hash-val': 'AJUUr6I5fALg', 'xpdr-type': 'tpdr',
              'port-admin-state': 'InService', 'port-oper-state': 'InService'},
             response['mapping'])
 
@@ -256,7 +256,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "lcp-hash-val": "FqlcrxV7p30=",
             "port-direction": "bidirectional",
             "port-admin-state": "InService",
-            "xponder-type": "mpdr",
+            "xpdr-type": "mpdr",
             "port-qual": "xpdr-client",
             "port-oper-state": "InService"}
         expected_sorted_list = ["org-openroadm-port-types:if-10GE-ODU2",
@@ -276,7 +276,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              "lcp-hash-val": "Swfw02qXGyI=",
              "port-direction": "bidirectional",
              "port-admin-state": "InService",
-             "xponder-type": "mpdr",
+             "xpdr-type": "mpdr",
              "port-qual": "xpdr-network",
              "port-oper-state": "InService"},
             response['mapping'])
@@ -289,7 +289,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             'supporting-port': 'CP2-QSFP2-P1',
             'lcp-hash-val': 'AN/WSSRXne3t',
             'port-direction': 'bidirectional',
-            'xponder-type': 'switch',
+            'xpdr-type': 'switch',
             'port-qual': 'switch-client',
             'supporting-circuit-pack-name': 'CP2-QSFP2',
             'port-admin-state': 'InService',
@@ -311,7 +311,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              "lcp-hash-val": "exT821pFtOQ=",
              "port-direction": "bidirectional",
              "port-admin-state": "InService",
-             "xponder-type": "switch",
+             "xpdr-type": "switch",
              "port-qual": "switch-network",
              "port-oper-state": "InService"},
             response['mapping'])
@@ -327,7 +327,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              "lcp-hash-val": "AKsQ/HRQdtdN",
              "port-direction": "bidirectional",
              "port-admin-state": "InService",
-             "xponder-type": "mpdr",
+             "xpdr-type": "mpdr",
              "port-qual": "xpdr-client",
              "port-oper-state": "InService"},
             response['mapping'])
@@ -343,7 +343,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              "lcp-hash-val": "ANnxoi7K8q30",
              "port-direction": "bidirectional",
              "port-admin-state": "InService",
-             "xponder-type": "mpdr",
+             "xpdr-type": "mpdr",
              "port-qual": "xpdr-network",
              "port-oper-state": "InService"},
             response['mapping'])

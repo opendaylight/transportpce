@@ -35,7 +35,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            "port-direction": "bidirectional",
                            "port-qual": "xpdr-network",
                            "supporting-circuit-pack-name": "1/1/4-PLUG-NET",
-                           "xponder-type": "tpdr",
+                           "xpdr-type": "tpdr",
                            "port-admin-state": "InService",
                            "port-oper-state": "InService"}
     CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-100GE",
@@ -601,7 +601,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.NETWORK1_CHECK_DICT["logical-connection-point"] = "XPDR2-NETWORK1"
         self.NETWORK1_CHECK_DICT["supporting-circuit-pack-name"] = "1/2/2-PLUG-NET"
         self.NETWORK1_CHECK_DICT["port-qual"] = "switch-network"
-        self.NETWORK1_CHECK_DICT["xponder-type"] = "mpdr"
+        self.NETWORK1_CHECK_DICT["xpdr-type"] = "mpdr"
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "LY9PxYJqUbw="
 
     def test_33_get_portmapping_network1(self):

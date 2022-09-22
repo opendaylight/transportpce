@@ -322,7 +322,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>FBhfaeWn4kY=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>mpdr</xponder-type>
+      <xpdr-type>mpdr</xpdr-type>
       <supporting-port>CP3-CFP0-P1</supporting-port>
       <port-qual>xpdr-network</port-qual>
     </mapping>
@@ -384,7 +384,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTx</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP6-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -394,7 +394,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTy</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP7-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -404,7 +404,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTz</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP8-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -414,7 +414,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGT0</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP5-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -424,7 +424,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>fuYZwEO660g=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>mpdr</xponder-type>
+      <xpdr-type>mpdr</xpdr-type>
       <supporting-port>CP1-CFP0-P1</supporting-port>
       <port-qual>xpdr-network</port-qual>
     </mapping>
@@ -592,7 +592,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ANnxoi7K8q30</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>mpdr</xponder-type>
+      <xpdr-type>mpdr</xpdr-type>
       <supporting-port>CP3-CFP0-P1</supporting-port>
       <port-qual>xpdr-network</port-qual>
     </mapping>
@@ -654,7 +654,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOc=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP6-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -664,7 +664,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOQ=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP7-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -674,7 +674,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOU=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP8-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -684,7 +684,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOI=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>switch</xponder-type>
+      <xpdr-type>switch</xpdr-type>
       <supporting-port>CP5-CFP-P1</supporting-port>
       <port-qual>switch-network</port-qual>
     </mapping>
@@ -694,7 +694,7 @@
       <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>Swfw02qXGyI=</lcp-hash-val>
       <port-direction>bidirectional</port-direction>
-      <xponder-type>mpdr</xponder-type>
+      <xpdr-type>mpdr</xpdr-type>
       <supporting-port>CP1-CFP0-P1</supporting-port>
       <port-qual>xpdr-network</port-qual>
     </mapping>
