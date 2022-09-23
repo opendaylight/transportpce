@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a5c7e49_632138a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9073
+      },
+      "writtenOn": "2022-09-23T03:59:49Z",
+      "side": 1,
+      "message": "Tested working.\nInclude allure-report-init and allure-report-serve when run \"tox -e \u003ctestenv\u003e\".\nNeed local machine has allure installed.\nAllure package can be found here:\nhttps://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/\nNote: apt-get install allure, will take version 0.5, which is too old to run.",
+      "revId": "1738b9acf35017603fdc53e4e3b65578c0a4b8e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
