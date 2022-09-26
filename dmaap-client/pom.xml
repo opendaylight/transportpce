@@ -20,19 +20,20 @@
   <description>client to send message to Dmaap message router</description>
 
   <properties>
+    <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-10.1.0</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-service</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-service-10.1.0</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

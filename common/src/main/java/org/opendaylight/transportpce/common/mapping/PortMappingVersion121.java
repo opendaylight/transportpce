@@ -76,7 +76,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev170929.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev161014.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;

@@ -24,6 +24,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <properties>
     <netconf.version>4.0.2</netconf.version>
+    <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
@@ -41,24 +42,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-device</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-network</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-service</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>odl-openroadm-models</artifactId>
+      <version>${transportpce.models.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
