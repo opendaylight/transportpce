@@ -48,10 +48,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.l
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.Measurement;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.Direction;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.Location;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.PmNamesEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmNamesEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
@@ -167,7 +168,7 @@ final class OlmUtils221 {
     }
 
     private static List<Measurements> extractWantedMeasurements(List<CurrentPm> currentPmList,
-        org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity wantedGranularity) {
+        PmGranularity wantedGranularity) {
         List<Measurements> olmMeasurements = new ArrayList<>();
         for (CurrentPm pm : currentPmList) {
             for (Measurement measurements: pm.nonnullMeasurement().values()) {

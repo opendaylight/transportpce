@@ -6,15 +6,15 @@ module transportpce-common-types {
     prefix org-openroadm-resource-types;
     revision-date 2016-10-14;
   }
-  import org-openroadm-pm-types {
-    prefix org-openroadm-pm-types;
-    revision-date 2016-10-14;
-  }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2018-10-19;
   }
 
+  revision 2022-09-26 {
+    description
+      "add pm-granularity from org-openroadm-pm-types";
+  }
   revision 2021-09-30 {
     description
       "Replace leaf width in optical-renderer-input by mc-width and nmc-width";
@@ -424,6 +424,25 @@ module transportpce-common-types {
     }
   }
 
+  typedef pm-granularity {
+      description
+        "Granularity of PM bin";
+      type enumeration {
+        enum "notApplicable" {
+          description
+            "This is for total statistic counters on devices that support
+                them.";
+          value 1;
+        }
+        enum "15min" {
+          value 2;
+        }
+        enum "24Hour" {
+          value 3;
+        }
+      }
+    }
+
   grouping link-tp {
     list link-tp {
       leaf node-id {
@@ -564,7 +583,7 @@ module transportpce-common-types {
       }
     }
     leaf granularity {
-      type org-openroadm-pm-types:pm-granularity;
+      type pm-granularity;
       mandatory true;
       description
         "Granularity of PM bin can be

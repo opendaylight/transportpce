@@ -46,9 +46,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.MeasurementsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class RendererServiceOperationsImplTest extends AbstractTest {

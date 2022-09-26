@@ -22,11 +22,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.olm.get.pm.input.ResourceIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
