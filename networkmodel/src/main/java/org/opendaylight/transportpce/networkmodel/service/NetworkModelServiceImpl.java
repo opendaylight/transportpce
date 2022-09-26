@@ -45,8 +45,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;

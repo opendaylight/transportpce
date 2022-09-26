@@ -35,12 +35,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.link.tp.LinkTpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.node.interfaces.NodeInterface;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.node.interfaces.NodeInterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.node.interfaces.NodeInterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev210930.otn.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
