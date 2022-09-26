@@ -22,28 +22,29 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
     <kafka.version>3.0.0</kafka.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-10.1.0</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-service</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-service-10.1.0</artifactId>
+      <version>${transportpce.models.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>tapi-2.1.1</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-tapimodels</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

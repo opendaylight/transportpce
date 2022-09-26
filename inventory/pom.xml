@@ -19,12 +19,16 @@
   <version>6.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
+  <properties>
+    <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>2.0.13</version>
+        <version>4.0.1</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -33,14 +37,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-1.2.1</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-device</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-device-1.2.1</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
