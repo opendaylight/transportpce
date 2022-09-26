@@ -12,7 +12,7 @@ module transportpce-pathDescription {
   }
   import org-openroadm-otn-common-types {
     prefix org-openroadm-otn-common-types;
-    revision-date 2018-11-30;
+//    revision-date 2018-11-30;
   }
 
   organization

@@ -30,8 +30,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </scm>
 
   <modules>
-    <module>ordmodels</module>
-    <module>tapimodels</module>
     <module>api</module>
     <module>common</module>
     <module>test-common</module>
@@ -74,7 +72,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </plugin>
     </plugins>
   </build>
-
 </project>
 
 

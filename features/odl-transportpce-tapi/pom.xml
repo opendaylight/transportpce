@@ -22,11 +22,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <packaging>feature</packaging>
   <name>OpenDaylight :: transportpce :: tapi</name>
 
+  <properties>
+    <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
+  </properties>
+
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-tapimodels</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>tapi-2.1.1</artifactId>
+      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
