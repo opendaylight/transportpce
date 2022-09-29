@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc413646_beb69d90",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-29T10:47:08Z",
+      "side": 1,
+      "message": "PortMappingVersion121.java:[79,76] package org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev161014 does not exist",
+      "revId": "7012048007f6a7f5c1db724ee6d036c4068d0a10",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
