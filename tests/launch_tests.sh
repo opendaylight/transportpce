@@ -31,7 +31,11 @@ else
     done
 fi
 if [ -z "$LAUNCHER" ]; then
-    LAUNCHER="python3 -m pytest -q";
+    if [ -d "allure-report" ]; then
+        LAUNCHER="python3 -m pytest --alluredir=allure-report/ -q"
+    else
+        LAUNCHER="python3 -m pytest -q"
+    fi
 fi
 
 for script in $scriptlist; do
