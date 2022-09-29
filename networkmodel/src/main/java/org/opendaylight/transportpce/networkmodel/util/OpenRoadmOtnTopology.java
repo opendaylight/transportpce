@@ -133,6 +133,11 @@ public final class OpenRoadmOtnTopology {
                 case Switch:
                     nodes.add(createSwitch(node));
                     break;
+                case Regen:
+                case RegenUni:
+                    // TODO: Need to revisit this method
+                    nodes.add(createRegen(node));
+                    break;
                 default:
                     LOG.error("unknown otn node type {}", node.getNodeType().getName());
                     return null;
@@ -569,6 +574,38 @@ public final class OpenRoadmOtnTopology {
                         .setTerminationPoint(tpMap)
                         .build())
             .build();
+    }
+
+    // TODO: This is same as createTpdr. After Open ROADM network models are updated,
+    //    we will revisit this method to include regen based data.
+    private static Node createRegen(OtnTopoNode node) {
+        Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
+        createTP(tpMap, node, OpenroadmTpType.XPONDERCLIENT, false);
+        createTP(tpMap, node, OpenroadmTpType.XPONDERNETWORK, true);
+        // return ietfNode
+        return new NodeBuilder()
+                .setNodeId(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
+                .withKey(new NodeKey(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
+                .setSupportingNode(createSupportingNodes(node))
+                .addAugmentation(
+                        new Node1Builder()
+                                .setXpdrAttributes(
+                                        new XpdrAttributesBuilder()
+                                                .setXpdrNumber(Uint16.valueOf(node.getXpdrNb()))
+                                                .build())
+                                .build())
+                .addAugmentation(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
+                                .setNodeType(OpenroadmNodeType.TPDR)
+                                .setOperationalState(State.InService)
+                                .setAdministrativeState(AdminStates.InService)
+                                .build())
+                .addAugmentation(
+                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                .Node1Builder()
+                                .setTerminationPoint(tpMap)
+                                .build())
+                .build();
     }
 
     private static Node createMuxpdr(OtnTopoNode node) {
