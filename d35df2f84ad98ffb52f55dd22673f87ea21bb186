@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1412d152_46c444f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-09-29T09:51:22Z",
+      "side": 1,
+      "message": "Looks fine to me, especially if this workaround allows solving the recurrent issues with this specific part of the models. Thanks!",
+      "revId": "d35df2f84ad98ffb52f55dd22673f87ea21bb186",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
