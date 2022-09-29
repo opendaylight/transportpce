@@ -177,6 +177,13 @@ public final class OpenRoadmTopology {
                         isOtn = true;
                         xpdrType = mapping.getXpdrType().getName();
                         break;
+                    // Both regen and regen-uni are added here, though initial support is
+                    // only for regen xpdr-type
+                    case Regen:
+                    case RegenUni:
+                        isOtn = false;
+                        xpdrType = mapping.getXpdrType().getName();
+                        break;
                     default :
                         LOG.warn("cannot create xpdr node {} in openroadm-topology: type {} not supported",
                              mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXpdrType().getName());

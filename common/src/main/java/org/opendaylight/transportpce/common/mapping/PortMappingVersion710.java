@@ -50,6 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.regen.profiles.grp.RegenProfilesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.switching.pool.lcp.SwitchingPoolLcp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.switching.pool.lcp.SwitchingPoolLcpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.switching.pool.lcp.SwitchingPoolLcpKey;
@@ -1049,12 +1050,24 @@ public class PortMappingVersion710 {
         if (supIntfCapaList != null) {
             Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability>
                     supportedIntf = new HashSet<>();
+            Set<String> regenProfiles = new HashSet<>();
             SupportedInterfaceCapability sic1 = null;
             for (SupportedInterfaceCapability sic : supIntfCapaList) {
                 supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
+                LOG.debug("This the xpdr-type {}", xpdrNodeType.getName());
+                // Here we use both types of Regen (bi/uni). Though initial support is only for bi-directional regen
+                if (xpdrNodeType == XpdrNodeTypes.Regen || xpdrNodeType == XpdrNodeTypes.RegenUni) {
+                    if (sic.getOtsigroupCapabilityProfileName().isEmpty()) {
+                        LOG.error("Otsigroup-capability-profile-name is not found for regen port {}",
+                                port.getPortName());
+                    }
+                    LOG.info("Regen-profiles {}", sic.getOtsigroupCapabilityProfileName());
+                    regenProfiles.addAll(sic.getOtsigroupCapabilityProfileName());
+                }
                 sic1 = sic;
             }
-            mpBldr.setSupportedInterfaceCapability(supportedIntf);
+            mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build())
+                    .setSupportedInterfaceCapability(supportedIntf);
             if (port.getPortQual() == PortQual.SwitchClient
                 && !sic1.getOtnCapability().getMpdrClientRestriction().isEmpty()) {
                 // Here we assume all the supported-interfaces has the support same rates, and the
