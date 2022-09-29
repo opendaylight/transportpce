@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b34763b_e5edbbeb",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-29T14:11:25Z",
+      "side": 1,
+      "message": "since regenProfiles is declared before the for-block,\nshouldn\u0027t this line be after the for-block?",
+      "revId": "ce48daf1d7eba2776d4f4173273366df4e48eadf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
