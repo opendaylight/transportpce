@@ -16,6 +16,29 @@
       "message": "I think bad imports should be fixed in a separate change",
       "revId": "e166481ca3170d95f6ebd63fa6946d39e9f47579",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1301b5b2_c8a282ab",
+        "filename": "api/src/main/yang/service_path/transportpce-pathDescription@2021-07-05.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-09-29T07:40:27Z",
+      "side": 1,
+      "message": "remove the line",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 15,
+        "endChar": 31
+      },
+      "revId": "e166481ca3170d95f6ebd63fa6946d39e9f47579",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
