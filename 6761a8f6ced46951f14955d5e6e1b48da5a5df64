@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793ba307_210a1160",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-09-30T09:14:18Z",
+      "side": 1,
+      "message": "importing \u003d\u003e or maybe simply \"the tapi models import from upstream\" \n\nreactived",
+      "revId": "6761a8f6ced46951f14955d5e6e1b48da5a5df64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
