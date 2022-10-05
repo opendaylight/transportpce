@@ -701,6 +701,7 @@ class TransportPCEtesting(unittest.TestCase):
     def setUp(self):
         time.sleep(1)
 
+
     def test_01_connect_xpdra2(self):
         response = test_utils.mount_device("XPDR-A2", ('xpdra2', self.NODE_VERSION_71))
         self.assertEqual(response.status_code,
@@ -1203,10 +1204,11 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('service-resiliency', response['services'])
         time.sleep(1)
 
+
     def test_40_get_service_path_service_2(self):
         response = test_utils.get_serv_path_list_attr("service-paths", "service2")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        index = self.service_path_service_2_AtoZ.index(
+        index1 = self.service_path_service_2_AtoZ.index(
             {
                 'id': '10',
                 'resource': {
@@ -1216,14 +1218,29 @@ class TransportPCEtesting(unittest.TestCase):
                 }
             }
         )
-        service_path_expected = self.service_path_service_2_AtoZ[:index] + [{
+        index2 = self.service_path_service_2_AtoZ.index(
+            {
+                'id': '11',
+                'resource': {
+                    'state': 'inService',
+                    'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+                }
+            }
+        )
+        service_path_expected = self.service_path_service_2_AtoZ[:index1] + [{
             'id': '10',
             'resource': {
                 'state': 'outOfService',
                 'tp-id': 'DEG2-TTP-TXRX',
                 'tp-node-id': 'ROADM-A1-DEG2'
             }
-        }] + self.service_path_service_2_AtoZ[index + 1:]
+        }] + self.service_path_service_2_AtoZ[index1 + 1:index2] + [{
+            'id': '11',
+            'resource': {
+                'state': 'outOfService',
+                'link-id': 'ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX'
+            }
+        }]+ self.service_path_service_2_AtoZ[index2 + 1:]
         self.assertCountEqual(service_path_expected,
                               response['service-paths'][0]['path-description']['aToZ-direction']['aToZ'])
 
