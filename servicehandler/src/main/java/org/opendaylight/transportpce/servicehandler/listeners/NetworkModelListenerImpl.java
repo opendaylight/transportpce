@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.path.PathDescriptionBuilder;
@@ -147,6 +148,9 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         List<ZToA> tpResources = pathDescription.getZToADirection().getZToA().values().stream()
                 .filter(ele -> ele.getResource().getResource() instanceof TerminationPoint)
                 .collect(Collectors.toList());
+        List<ZToA> linkResources = pathDescription.getZToADirection().getZToA().values().stream()
+            .filter(ele -> ele.getResource().getResource() instanceof Link)
+            .collect(Collectors.toList());
         for (ZToA ztoA : tpResources) {
             String ztoAid = ztoA.getId();
             State ztoAState = ztoA.getResource().getState();
@@ -166,6 +170,22 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                     .setResource(updatedResource)
                     .build();
                 newztoaMap.put(updatedZToA.key(), updatedZToA);
+                for (ZToA ztoALink : linkResources) {
+                    Link link =(Link)ztoALink.getResource().getResource();
+                    if (link.getLinkId().contains(tp.getTpNodeId())
+                            && link.getLinkId().contains(tp.getTpId())
+                            && ztoALink.getResource().getState() != updatedState) {
+                        Resource updatedLinkResource = new ResourceBuilder()
+                            .setResource(link)
+                            .setState(updatedState)
+                            .build();
+                        ZToA updatedZToAlink = new ZToABuilder(ztoALink)
+                            .setId(ztoAid)
+                            .setResource(updatedLinkResource)
+                            .build();
+                        newztoaMap.put(updatedZToAlink.key(), updatedZToAlink);
+                    }
+                }
             }
         }
         return newztoaMap;
@@ -177,6 +197,9 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         Map<AToZKey, AToZ> newatozMap = new HashMap<>(pathDescription.getAToZDirection().getAToZ());
         List<AToZ> tpResources = pathDescription.getAToZDirection().getAToZ().values().stream()
             .filter(ele -> ele.getResource().getResource() instanceof TerminationPoint)
+            .collect(Collectors.toList());
+        List<AToZ> linkResources = pathDescription.getAToZDirection().getAToZ().values().stream()
+            .filter(ele -> ele.getResource().getResource() instanceof Link)
             .collect(Collectors.toList());
         for (AToZ atoZ : tpResources) {
             String atoZid = atoZ.getId();
@@ -197,6 +220,22 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                     .setResource(updatedResource)
                     .build();
                 newatozMap.put(updatedAToZ.key(), updatedAToZ);
+                for (AToZ atozLink : linkResources) {
+                    Link link =(Link)atozLink.getResource().getResource();
+                    if (link.getLinkId().contains(tp.getTpNodeId())
+                            && link.getLinkId().contains(tp.getTpId())
+                            && atozLink.getResource().getState() != updatedState) {
+                        Resource updatedLinkResource = new ResourceBuilder()
+                            .setResource(link)
+                            .setState(updatedState)
+                            .build();
+                        AToZ updatedAToZlink = new AToZBuilder(atozLink)
+                            .setId(atoZid)
+                            .setResource(updatedLinkResource)
+                            .build();
+                        newatozMap.put(updatedAToZlink.key(), updatedAToZlink);
+                    }
+                }
             }
         }
         return newatozMap;
