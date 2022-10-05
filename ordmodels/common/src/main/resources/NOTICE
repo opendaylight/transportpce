@@ -1,9 +1,0 @@
-This work includes a modified version of the YANG model org-openroadm-port-types
-developed by the Open ROADM MSA.
-
-It contains an additional regen identity 'if-OTUCn-ODUCn-regen' found in some
-non-compliant devices.
-Though this identity should have been advertised through a YANG deviation,
-this does not raise any compatibility problem with compliant devices.
-This is an ideally temporary work-around until a compliant solution is found.
-cf https://jira.opendaylight.org/browse/TRNSPRTPCE-532

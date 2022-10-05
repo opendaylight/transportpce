@@ -1,119 +1,51 @@
-module org-openroadm-pm-types {
-  namespace "http://org/openroadm/pm-types";
-  prefix org-openroadm-pm-types;
+module transportpce-common-types {
+  namespace "http://org/transportpce/common-types";
+  prefix org-transportpce-common-types;
 
-  organization
-    "Open ROADM MSA";
-  contact
-    "OpenROADM.org";
-  description
-    "YANG definitions of performance management types.
-
-      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      All other rights reserved.
-
-      Redistribution and use in source and binary forms, with or without modification,
-      are permitted provided that the following conditions are met:
-
-      * Redistributions of source code must retain the above copyright notice, this
-        list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice,
-        this list of conditions and the following disclaimer in the documentation and/or
-        other materials provided with the distribution.
-      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
-        contributors may be used to endorse or promote products derived from this software
-        without specific prior written permission.
-
-      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
-      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
-      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
-      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-      POSSIBILITY OF SUCH DAMAGE";
-
-  revision 2020-03-27 {
-    description
-      "Version 7.0.0";
+  import org-openroadm-resource-types {
+    prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
   }
-  revision 2019-11-29 {
-    description
-      "Version 6.1.0";
-  }
-  revision 2019-03-29 {
-    description
-      "Version 5.0.0";
-  }
-  revision 2018-11-30 {
-    description
-      "Version 4.1.0";
-  }
-  revision 2017-12-15 {
-    description
-      "Version 2.2";
-  }
-  revision 2017-09-29 {
-    description
-      "Version 2.1";
-  }
-  revision 2017-06-26 {
-    description
-      "Version 2.0";
-  }
-  revision 2016-10-14 {
-    description
-      "Version 1.2";
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+    revision-date 2018-10-19;
   }
 
-  typedef pm-granularity {
-    type enumeration {
-      enum notApplicable {
-        value 1;
-        description
-          "This is for total statistic counters on devices that support
-              them.";
-      }
-      enum 15min {
-        value 2;
-      }
-      enum 24Hour {
-        value 3;
-      }
-    }
+  revision 2022-09-26 {
     description
-      "Granularity of PM bin";
+      "add pm-granularity from org-openroadm-pm-types";
   }
-
-  typedef pm-data-type {
-    type union {
-      type uint64;
-      type int64;
-      type decimal64 {
-        fraction-digits 2;
-      }
-      type decimal64 {
-        fraction-digits 17;
-      }
-    }
-  }
-
-  typedef validity {
-    type enumeration {
-      enum complete {
-        value 1;
-      }
-      enum partial {
-        value 2;
-      }
-      enum suspect {
-        value 3;
-      }
-    }
+  revision 2021-09-30 {
     description
-      "Validity of data";
+      "Replace leaf width in optical-renderer-input by mc-width and nmc-width";
+  }
+  revision 2021-06-18 {
+    description
+      "Replace olm-renderer-input by optical-rendrer-input.
+       Create optical-renderer-nodes and otn-renderer-nodes groupings";
+  }
+  revision 2020-12-11 {
+    description
+      "Update grouping olm-renderer-input, adding min, max frequencies
+       lower spectral slot number and higher spectral slot number
+       fix center-freq unit";
+  }
+  revision 2020-06-15 {
+    description
+      "Updated grouping olm-renderer-input to enable support for flex-grid";
+  }
+  revision 2020-01-28 {
+    description
+      "Add necessary parameters to consolidate OTN and address ONAP
+       MDONS use case, including grouping otn-renderer-input";
+  }
+  revision 2019-12-12 {
+    description
+      "Add grouping otn-renderer-input";
+  }
+  revision 2017-09-07 {
+    description
+      "Initial revision of TransportPCE common-types";
   }
 
   typedef pm-names-enum {
@@ -186,7 +118,7 @@ module org-openroadm-pm-types {
       enum severelyErroredSecondsEthernet {
         value 16;
         description
-          "Severely Errored Seconds, Ethernet (SES-E)";
+          "Severly Errored Seconds, Ethernet (SES-E)";
       }
       enum unavailableSecondsEthernet {
         value 17;
@@ -301,7 +233,7 @@ module org-openroadm-pm-types {
       enum totalOpticalPowerInputMin {
         value 39;
         description
-          "Minimum Total Optical Power Input.";
+          "Minumun Total Optical Power Input.";
       }
       enum totalOpticalPowerInputMax {
         value 40;
@@ -458,252 +390,305 @@ module org-openroadm-pm-types {
         description
           "Delay on TCM6 down direction.";
       }
-      enum partialRateDiscard {
-        value 83;
-        description
-          "Discarded packet as a result of policing or rate limiting for subrate ethernet.";
+    }
+  }
+
+  typedef location {
+    type enumeration {
+      enum notApplicable {
+        value 1;
       }
-      enum erroredSecondsTCM1-up {
-        value 84;
-        description
-          "errored Seconds Count on TCM1 up direction.";
+      enum nearEnd {
+        value 2;
       }
-      enum erroredSecondsTCM2-up {
-        value 85;
-        description
-          "errored Seconds Count on TCM2 up direction.";
-      }
-      enum erroredSecondsTCM3-up {
-        value 86;
-        description
-          "errored Seconds Count on TCM3 up direction.";
-      }
-      enum erroredSecondsTCM4-up {
-        value 87;
-        description
-          "errored Seconds Count on TCM4 up direction.";
-      }
-      enum erroredSecondsTCM5-up {
-        value 88;
-        description
-          "errored Seconds Count on TCM5 up direction.";
-      }
-      enum erroredSecondsTCM6-up {
-        value 89;
-        description
-          "errored Seconds Count on TCM6 up direction.";
-      }
-      enum severelyErroredSecondsTCM1-up {
-        value 90;
-        description
-          "severely Errored Seconds Count on TCM1 up direction.";
-      }
-      enum severelyErroredSecondsTCM2-up {
-        value 91;
-        description
-          "severely Errored Seconds Count on TCM2 up direction.";
-      }
-      enum severelyErroredSecondsTCM3-up {
-        value 92;
-        description
-          "severely Errored Seconds Count on TCM3 up direction.";
-      }
-      enum severelyErroredSecondsTCM4-up {
-        value 93;
-        description
-          "severely Errored Seconds Count on TCM4 up direction.";
-      }
-      enum severelyErroredSecondsTCM5-up {
-        value 94;
-        description
-          "severely Errored Seconds Count on TCM5 up direction.";
-      }
-      enum severelyErroredSecondsTCM6-up {
-        value 95;
-        description
-          "severely Errored Seconds Count on TCM6 up direction.";
-      }
-      enum unavailableSecondsTCM1-up {
-        value 96;
-        description
-          "unavailable Seconds Count on TCM1 up direction.";
-      }
-      enum unavailableSecondsTCM2-up {
-        value 97;
-        description
-          "unavailable Seconds Count on TCM2 up direction.";
-      }
-      enum unavailableSecondsTCM3-up {
-        value 98;
-        description
-          "unavailable Seconds Count on TCM3 up direction.";
-      }
-      enum unavailableSecondsTCM4-up {
-        value 99;
-        description
-          "unavailable Seconds Count on TCM4 up direction.";
-      }
-      enum unavailableSecondsTCM5-up {
-        value 100;
-        description
-          "unavailable Seconds Count on TCM5 up direction.";
-      }
-      enum unavailableSecondsTCM6-up {
-        value 101;
-        description
-          "unavailable Seconds Count on TCM6 up direction.";
-      }
-      enum erroredSecondsTCM1-down {
-        value 102;
-        description
-          "errored Seconds Count on TCM1 down direction.";
-      }
-      enum erroredSecondsTCM2-down {
-        value 103;
-        description
-          "errored Seconds Count on TCM2 down direction.";
-      }
-      enum erroredSecondsTCM3-down {
-        value 104;
-        description
-          "errored Seconds Count on TCM3 down direction.";
-      }
-      enum erroredSecondsTCM4-down {
-        value 105;
-        description
-          "errored Seconds Count on TCM4 down direction.";
-      }
-      enum erroredSecondsTCM5-down {
-        value 106;
-        description
-          "errored Seconds Count on TCM5 down direction.";
-      }
-      enum erroredSecondsTCM6-down {
-        value 107;
-        description
-          "errored Seconds Count on TCM6 down direction.";
-      }
-      enum severelyErroredSecondsTCM1-down {
-        value 108;
-        description
-          "severely Errored Seconds Count on TCM1 down direction.";
-      }
-      enum severelyErroredSecondsTCM2-down {
-        value 109;
-        description
-          "severely Errored Seconds Count on TCM2 down direction.";
-      }
-      enum severelyErroredSecondsTCM3-down {
-        value 110;
-        description
-          "severely Errored Seconds Count on TCM3 down direction.";
-      }
-      enum severelyErroredSecondsTCM4-down {
-        value 111;
-        description
-          "severely Errored Seconds Count on TCM4 down direction.";
-      }
-      enum severelyErroredSecondsTCM5-down {
-        value 112;
-        description
-          "severely Errored Seconds Count on TCM5 down direction.";
-      }
-      enum severelyErroredSecondsTCM6-down {
-        value 113;
-        description
-          "severely Errored Seconds Count on TCM6 down direction.";
-      }
-      enum unavailableSecondsTCM1-down {
-        value 114;
-        description
-          "unavailable Seconds Count on TCM1 down direction.";
-      }
-      enum unavailableSecondsTCM2-down {
-        value 115;
-        description
-          "unavailable Seconds Count on TCM2 down direction.";
-      }
-      enum unavailableSecondsTCM3-down {
-        value 116;
-        description
-          "unavailable Seconds Count on TCM3 down direction.";
-      }
-      enum unavailableSecondsTCM4-down {
-        value 117;
-        description
-          "unavailable Seconds Count on TCM4 down direction.";
-      }
-      enum unavailableSecondsTCM5-down {
-        value 118;
-        description
-          "unavailable Seconds Count on TCM5 down direction.";
-      }
-      enum unavailableSecondsTCM6-down {
-        value 119;
-        description
-          "unavailable Seconds Count on TCM6 down direction.";
-      }
-      enum fecCorrectedCodewords {
-        value 120;
-        description
-          "FEC Corrected Codewords Counter";
-      }
-      enum fecUncorrectedCodewords {
-        value 121;
-        description
-          "FEC Uncorrected Codewords Counter";
-      }
-      enum fecSymbolErrors {
-        value 122;
-        description
-          "FEC Symbol Error Counter";
-      }
-      enum localFaultSeconds {
-        value 123;
-        description
-          "Local Fault Seconds";
-      }
-      enum remoteFaultSeconds {
-        value 124;
-        description
-          "Remote Fault Seconds";
+      enum farEnd {
+        value 3;
       }
     }
   }
 
-  grouping pm-measurement {
-    description
-      "Set of parameters related to a PM Measurement";
-    leaf pmParameterValue {
-      type pm-data-type;
-      config false;
-      mandatory true;
+  typedef direction {
+    type enumeration {
+      enum tx {
+        value 1;
+      }
+      enum rx {
+        value 2;
+      }
+      enum bidirectional {
+        value 3;
+      }
+      enum notApplicable {
+        value 4;
+      }
     }
-    leaf pmParameterUnit {
-      type string;
-      mandatory false;
+  }
+
+  typedef pm-granularity {
       description
-        "Unit PM parameter has been measured - frames, packets, u, etc";
+        "Granularity of PM bin";
+      type enumeration {
+        enum "notApplicable" {
+          description
+            "This is for total statistic counters on devices that support
+                them.";
+          value 1;
+        }
+        enum "15min" {
+          value 2;
+        }
+        enum "24Hour" {
+          value 3;
+        }
+      }
     }
-    leaf validity {
-      type validity;
-      mandatory false;
+
+  grouping link-tp {
+    list link-tp {
+      leaf node-id {
+        type string;
+      }
+      leaf tp-id {
+        type string;
+      }
     }
   }
 
-  grouping pm-names {
+  grouping optical-renderer-nodes {
+    list nodes {
+      key "node-id";
+      ordered-by user;
+      leaf node-id {
+        type string;
+        description
+          "Gloabally unique identifier for the node";
+      }
+      leaf src-tp {
+        type string;
+        mandatory true;
+        description
+          "Source termination point ";
+      }
+      leaf dest-tp {
+        type string;
+        mandatory true;
+        description
+          "Destination termination point ";
+      }
+    }
+  }
+
+  grouping otn-renderer-nodes {
+    list nodes {
+      key "node-id";
+      ordered-by user;
+      leaf node-id {
+        type string;
+        description
+          "Globally unique identifier for the node";
+      }
+      leaf network-tp {
+        type string;
+        description
+          "Source termination point ";
+      }
+      leaf client-tp {
+        type string;
+        description
+          "Destination termination point for end nodes";
+      }
+      leaf network2-tp {
+        type string;
+        description
+          "Destination termination point for intermediate switch";
+      }
+    }
+  }
+
+  grouping optical-renderer-input {
     description
-      "Name of PM parameter. Consists of a set list of parameters,
-       plus an extension field to support addition parameters.";
-    leaf type {
+      "Type to be used by OLM and Renderer RPCs";
+    leaf service-name {
+      type string;
+    }
+    leaf wave-number {
+      type uint32;
+    }
+    leaf center-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf nmc-width {
+      description
+       " Width of network media channel nmc";
+      type org-openroadm-common-types:frequency-GHz;
+    }
+    leaf mc-width {
+      description
+       " Width of media channel (mc)";
+      type org-openroadm-common-types:frequency-GHz;
+    }
+    leaf min-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf max-freq {
+      type org-openroadm-common-types:frequency-THz;
+    }
+    leaf lower-spectral-slot-number {
+      type uint32;
+    }
+    leaf higher-spectral-slot-number {
+      type uint32;
+    }
+    uses optical-renderer-nodes;
+    uses node-interfaces;
+  }
+
+  grouping otn-renderer-input {
+    description
+      "Type to be used by OLM and Renderer RPCs for OTN";
+    leaf service-name {
+      type string;
+    }
+    uses otn-renderer-nodes;
+  }
+
+  grouping olm-get-pm-input {
+    leaf node-id {
+      type string;
+      mandatory true;
+      description
+        "Gloabally unique identifier
+         for the node";
+    }
+    leaf resource-type {
+      type org-openroadm-resource-types:resource-type-enum;
+      mandatory true;
+      description
+        "Type of the PM resource";
+    }
+    container resource-identifier {
+      leaf resource-name {
+        type string;
+        mandatory true;
+        description
+          "Identifier of particular resource of given type";
+      }
+      leaf circuit-pack-name {
+        when "../../resource-type = 'port'";
+        type string;
+        mandatory true;
+        description
+          "In case resource type is port, then particular resource is identified by port-name
+           (resource-name) and circuit-pack-name (this leaf).";
+      }
+    }
+    leaf granularity {
+      type pm-granularity;
+      mandatory true;
+      description
+        "Granularity of PM bin can be
+         notApplicable,15min,24Hour";
+    }
+    leaf pm-name-type {
       type pm-names-enum;
-      mandatory true;
     }
-    leaf extension {
+    leaf pm-extension {
+      type string;
+    }
+    leaf location {
+      type location;
+    }
+    leaf direction {
+      type direction;
+    }
+  }
+
+  grouping node-interfaces {
+    list node-interface {
+      key "node-id";
+      leaf node-id {
+        type string;
+      }
+      leaf-list och-interface-id {
+        type string;
+      }
+      leaf-list otu-interface-id {
+        type string;
+      }
+      leaf-list odu-interface-id {
+        type string;
+      }
+      leaf-list eth-interface-id {
+        type string;
+      }
+      leaf-list connection-id {
+        type string;
+      }
+    }
+  }
+
+  grouping otn-constraint {
+    container otn-constraints {
+      leaf trib-port-number {
+        type uint16;
+        description
+          "defines a trib-port that must be used at A or Z end";
+      }
+      leaf-list opu-trib-slots {
+        type uint16;
+        description
+          "defines a list of trib-slots that must be used at A or Z end";
+      }
+      leaf-list opucn-trib-slots {
+        type string;
+        description
+          "defines a list of opucn-trib-slots that must be used at A or
+           Z end";
+      }
+      container imposed-api {
+        description
+          "defines constraints on access point identifier to be used by
+           local device when one end point of the path (service) is located
+           in a remote domain not handled by the controller. These parameters
+           are passed to the local controller (transportpce) for interoperability
+           purposes.
+           SAPI : The source api (local domain) to be used by A
+           or Z end as expected by remote controller.
+           DAPI: defines the destination api (remote domain) to be used by A
+           or Z end as exposed in the remote domain. Used when the end of the path
+           is in an external domain, handled by a remote controller.
+           EXPECTED-SAPI : The api of the remote end of the path (in an external
+           domain) as expected to be received by A or Z end.
+           EXPECTED-DAPI : defines the destination api to be used by remote end
+           as exposed in the local domain. Used when the end of the path is in an
+           external domain, handled by a remote controller";
+        uses api-info;
+      }
+    }
+  }
+
+  grouping api-info {
+    leaf sapi {
       type string;
       description
-        "name of parameter, when enum value set to vendorExtension because
-         name not found in pm-names-enum";
+        "The source api used by the node";
+    }
+    leaf dapi {
+      type string;
+      description
+        "the destination api of the other end of the path";
+    }
+    leaf expected-sapi {
+      type string;
+      description
+        "The api of the remote end of the path as expected to be received
+         by the node";
+    }
+    leaf expected-dapi {
+      type string;
+      description
+        "api of the node itself, supposed to be used by remote end as
+         the destination";
     }
   }
 }
