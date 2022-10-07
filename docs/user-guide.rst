@@ -48,7 +48,7 @@ TransportPCE User-Facing Features
 
 -  **feature odl-transportpce-tapi**
 
-   -  This feature provides transportPCE a limited support of TAPI version 2.1.2 Northbound interface.
+   -  This feature provides transportPCE a limited support of TAPI version 2.1.1 Northbound interface.
 
 -  **feature odl-transportpce-inventory**
 
@@ -71,7 +71,7 @@ How To Start
 Preparing for Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Devices must support the standard OpenROADM Models more precisely versions 1.2.1 and 2.2.1.
+1. Devices must support the standard OpenROADM Models more precisely versions 1.2.1, 2.2.1 or 7.1.0.
    Since Magnesium SR0, an OTN experimental support is provided for OpenROADM devices 2.2.1.
    Magnesium SR2 is the first release managing end-to-end OTN services, as OCH-OTU4,
    structured ODU4 or again 10GE-ODU2e services.
@@ -94,7 +94,7 @@ For example::
 
     export OLM_TIMER1=3000 OLM_TIMER2=2000
 
-To come back with per default values for these timers, just logout from OpenDaylight controller, and unset your
+To come back with per default values for these timers, just logout from OpenDaylight controller, unset your
 environment variables, and start again the controller::
 
     unset OLM_TIMER1 OLM_TIMER2
@@ -114,17 +114,19 @@ For example by modifying the environment variables JAVA_MIN_MEM and JAVA_MAX_MEM
 
    export JAVA_MIN_MEM=1024M
    export JAVA_MAX_MEM=4069M
+In Chlorine, installation of odl-transportpce-tapi feature may cause some other transportpce OSGi bundle to be
+in failure. To restore the situation, just log out and log back in.
 
-if you need the inventory external connector support limited to 1.2.1 OpenROADM devices, then run::
+If you need the inventory external connector support limited to 1.2.1 OpenROADM devices, then run::
 
    feature:install odl-transportpce-inventory
 
-if you need the Dmaap connector support, before running Opendaylight, set DMAAP_BASE_URL as environment variable.
+If you need the Dmaap connector support, before running Opendaylight, set DMAAP_BASE_URL as environment variable.
 For example, if the base url of your Dmaap server is "https://dmaap-mr:30226", then::
 
     export DMAAP_BASE_URL=https://dmaap-mr:30226
 
-if your Dmaap server provides https connection through a self-signed certificate, do not forget to add the certificate
+If your Dmaap server provides https connection through a self-signed certificate, do not forget to add the certificate
 to the JAVA truststore::
 
     echo -n | openssl s_client -showcerts -connect dmaap-mr:30226 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/dmaap.crt
@@ -151,5 +153,10 @@ modify the file *'transportpce/features/odl-transportpce-nbinotifications
 After that, run in karaf::
 
    feature:install odl-transportpce-nbinotifications
+
+.. note::
+
+    In Chlorine release, the odl-transportpce-swagger feature is no longer functional. Issue still under investigation.
+
 
 For a more detailed overview of the TransportPCE, see the :ref:`transportpce-dev-guide`.
