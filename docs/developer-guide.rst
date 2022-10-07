@@ -74,6 +74,15 @@ and service context are maintained in the MDSAL. Service state is managed,
 monitoring device port state changes. Associated notifications are handled through
 Kafka and  DMaaP clients.
 
+The chlorine release brings structural changes to the project. indeed, all the official
+yang models of the OpenROADM and ONF-TAPI communities are no longer managed directly
+in the TransportPCE project but in a dedicated sub-project: transportpce/models.
+Also, the implementation of these models which is made in TransportPCE now imports
+the models already compiled by maven dependency.
+From a functional point of view, Chlorine supports the autonomous reroute of WDM services
+terminated on 100G or 400G Transponders, as well as the beginning of developments around
+the OpenROAM catalog management that will allow to support Alien Wavelength use cases.
+
 
 Module description
 ~~~~~~~~~~~~~~~~~~
@@ -303,7 +312,7 @@ External API
 
 North API, interconnecting the Service Handler to higher level applications
 relies on the Service Model defined in the MSA. The Renderer and the OLM are
-developed to allow configuring Open ROADM devices through a southbound
+developed to allow configuring OpenROADM devices through a southbound
 Netconf/Yang interface and rely on the MSA’s device model.
 
 ServiceHandler Service
@@ -467,6 +476,9 @@ through the NETCONF connector.
 
     In the current version, only optical equipment compliant with open ROADM datamodels are managed
     by transportPCE.
+
+    Since Chlorine release, the bierman implementation of RESTCONF is no longer supported for the benefit of the RFC8040.
+    Thus REST API must be compliant to the RFC8040 format.
 
 
 Connecting nodes
@@ -671,7 +683,7 @@ Use the following REST RPC to invoke *service handler* module in order to create
 end-to-end optical connectivity service between two xpdr over an optical network composed of rdm
 nodes.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -692,7 +704,7 @@ nodes.
                 "node-id": "<xpdr-node-id>",
                 "service-format": "Ethernet",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -705,9 +717,10 @@ nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -720,8 +733,9 @@ nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -729,7 +743,7 @@ nodes.
                 "node-id": "<xpdr-node-id>",
                 "service-format": "Ethernet",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -742,9 +756,10 @@ nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -757,8 +772,9 @@ nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -778,7 +794,7 @@ Use the following REST RPC to invoke *service handler* module in order to create
 end-to end Optical Channel (OC) connectivity service between two add/drop ports (PP port of SRG
 node) over an optical network only composed of rdm nodes.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -799,7 +815,7 @@ node) over an optical network only composed of rdm nodes.
                 "node-id": "<xpdr-node-id>",
                 "service-format": "OC",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -812,9 +828,10 @@ node) over an optical network only composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -827,8 +844,9 @@ node) over an optical network only composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -836,7 +854,7 @@ node) over an optical network only composed of rdm nodes.
                 "node-id": "<xpdr-node-id>",
                 "service-format": "OC",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -849,9 +867,10 @@ node) over an optical network only composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-client-port>",
                         "port-type": "fixed",
@@ -864,8 +883,9 @@ node) over an optical network only composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -885,7 +905,7 @@ infrastructure a bidirectional end-to-end OTU4 over an optical wavelength connec
 between two optical network ports of OTN Xponder (MUXPDR or SWITCH). Such service configure the
 optical network infrastructure composed of rdm nodes.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -907,7 +927,7 @@ optical network infrastructure composed of rdm nodes.
                 "service-format": "OTU",
                 "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -920,9 +940,10 @@ optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -935,8 +956,9 @@ optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -945,7 +967,7 @@ optical network infrastructure composed of rdm nodes.
                 "service-format": "OTU",
                 "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -958,9 +980,10 @@ optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -973,8 +996,9 @@ optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -994,7 +1018,7 @@ infrastructure a bidirectional end-to-end OTUC4 over an optical Optical Tributar
 connectivity service between two optical network ports of OTN Xponder (MUXPDR or SWITCH). Such
 service configure the optical network infrastructure composed of rdm nodes.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -1016,7 +1040,7 @@ service configure the optical network infrastructure composed of rdm nodes.
                 "service-format": "OTU",
                 "otu-service-rate": "org-openroadm-otn-common-types:OTUCn",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1029,9 +1053,10 @@ service configure the optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1044,8 +1069,9 @@ service configure the optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -1054,7 +1080,7 @@ service configure the optical network infrastructure composed of rdm nodes.
                 "service-format": "OTU",
                 "otu-service-rate": "org-openroadm-otn-common-types:OTUCn",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1067,9 +1093,10 @@ service configure the optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1082,8 +1109,9 @@ service configure the optical network infrastructure composed of rdm nodes.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -1119,7 +1147,7 @@ infrastructure a bidirectional end-to-end ODU4 OTN service over an OTU4 and stru
 low-order OTN services (ODU2e, ODU0). As for OTU4, such a service must be created between two network
 ports of OTN Xponder (MUXPDR or SWITCH).
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -1141,7 +1169,7 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                 "service-format": "ODU",
                 "otu-service-rate": "org-openroadm-otn-common-types:ODU4",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1154,9 +1182,10 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1169,8 +1198,9 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -1179,7 +1209,7 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                 "service-format": "ODU",
                 "otu-service-rate": "org-openroadm-otn-common-types:ODU4",
                 "clli": "<ccli-name>",
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1192,9 +1222,10 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1207,8 +1238,9 @@ ports of OTN Xponder (MUXPDR or SWITCH).
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -1228,7 +1260,7 @@ infrastructure a bidirectional end-to-end 10GE-ODU2e OTN service over an ODU4.
 Such a service must be created between two client ports of OTN Xponder (MUXPDR or SWITCH)
 configured to support 10GE interfaces.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
@@ -1255,7 +1287,7 @@ configured to support 10GE interfaces.
                         "committed-burst-size": "64"
                     }
                 },
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1268,9 +1300,10 @@ configured to support 10GE interfaces.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1283,8 +1316,9 @@ configured to support 10GE interfaces.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "service-z-end": {
@@ -1298,7 +1332,7 @@ configured to support 10GE interfaces.
                         "committed-burst-size": "64"
                     }
                 },
-                "tx-direction": {
+                "tx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1311,9 +1345,10 @@ configured to support 10GE interfaces.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
-                "rx-direction": {
+                    },
+                    "index": 0
+                }],
+                "rx-direction": [{
                     "port": {
                         "port-device-name": "<xpdr-node-id-in-otn-topology>",
                         "port-type": "fixed",
@@ -1326,8 +1361,9 @@ configured to support 10GE interfaces.
                         "lgx-port-name": "Some lgx-port-name",
                         "lgx-port-rack": "000000.00",
                         "lgx-port-shelf": "00"
-                    }
-                },
+                    },
+                    "index": 0
+                }],
                 "optic-type": "gray"
             },
             "due-date": "yyyy-mm-ddT00:00:01Z",
@@ -1360,7 +1396,7 @@ Deleting any kind of service
 Use the following REST RPC to invoke *service handler* module in order to delete a given optical
 connectivity service.
 
-**REST API** : *POST /restconf/operations/org-openroadm-service:service-delete*
+**REST API** : *POST /rests/operations/org-openroadm-service:service-delete*
 
 **Sample JSON Data**
 
@@ -1401,7 +1437,7 @@ nodes.
 Checking OTU4 service connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/transportpce-pce:path-computation-request*
+**REST API** : *POST /rests/operations/transportpce-pce:path-computation-request*
 
 **Sample JSON Data**
 
@@ -1426,7 +1462,7 @@ Checking OTU4 service connectivity
              "service-format": "OTU",
              "node-id": "<otn-node-id>"
              },
-           "pce-metric": "hop-count"
+           "pce-routing-metric": "hop-count"
        }
    }
 
@@ -1437,7 +1473,7 @@ Checking OTU4 service connectivity
 Checking ODU4 service connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/transportpce-pce:path-computation-request*
+**REST API** : *POST /rests/operations/transportpce-pce:path-computation-request*
 
 **Sample JSON Data**
 
@@ -1462,7 +1498,7 @@ Checking ODU4 service connectivity
              "service-format": "ODU",
              "node-id": "<otn-node-id>"
              },
-           "pce-metric": "hop-count"
+           "pce-routing-metric": "hop-count"
        }
    }
 
@@ -1472,7 +1508,7 @@ Checking ODU4 service connectivity
 Checking 10GE/ODU2e service connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/transportpce-pce:path-computation-request*
+**REST API** : *POST /rests/operations/transportpce-pce:path-computation-request*
 
 **Sample JSON Data**
 
@@ -1497,7 +1533,7 @@ Checking 10GE/ODU2e service connectivity
              "service-format": "Ethernet",
              "node-id": "<otn-node-id>"
              },
-           "pce-metric": "hop-count"
+           "pce-routing-metric": "hop-count"
        }
    }
 
@@ -1611,7 +1647,7 @@ single layer DSR node with only the two Owned Node Edge Ports representing the t
 of respectively XPDR-A1-XPDR1 and XPDR-C1-XPDR1...
 
 
-**REST API** : *POST /restconf/operations/tapi-topology:get-topology-details*
+**REST API** : *POST /rests/operations/tapi-topology:get-topology-details*
 
 This request builds the TAPI *T0 - Multi-layer topology* abstraction with regard to the current
 state of *openroadm-topology* and *otn-topology* topologies stored in OpenDaylight datastores.
@@ -1657,7 +1693,7 @@ the T-API topology context stored in OpenDaylight datastores.
         }
     }
 
-**REST API** : *POST /restconf/operations/tapi-topology:get-node-details*
+**REST API** : *POST /rests/operations/tapi-topology:get-node-details*
 
 This request returns the information, stored in the Topology Context, of the corresponding T-API node.
 The user can provide, either the Uuid associated to the attribute or its name.
@@ -1673,7 +1709,7 @@ The user can provide, either the Uuid associated to the attribute or its name.
       }
     }
 
-**REST API** : *POST /restconf/operations/tapi-topology:get-node-edge-point-details*
+**REST API** : *POST /rests/operations/tapi-topology:get-node-edge-point-details*
 
 This request returns the information, stored in the Topology Context, of the corresponding T-API NEP.
 The user can provide, either the Uuid associated to the attribute or its name.
@@ -1690,7 +1726,7 @@ The user can provide, either the Uuid associated to the attribute or its name.
       }
     }
 
-**REST API** : *POST /restconf/operations/tapi-topology:get-link-details*
+**REST API** : *POST /rests/operations/tapi-topology:get-link-details*
 
 This request returns the information, stored in the Topology Context, of the corresponding T-API link.
 The user can provide, either the Uuid associated to the attribute or its name.
@@ -1790,7 +1826,7 @@ following REST RPCs:
 From xpdr <--> rdm:
 ^^^^^^^^^^^^^^^^^^^
 
-**REST API** : *POST /restconf/operations/transportpce-tapinetworkutils:init-xpdr-rdm-tapi-link*
+**REST API** : *POST /rests/operations/transportpce-tapinetworkutils:init-xpdr-rdm-tapi-link*
 
 **Sample JSON Data**
 
@@ -1808,7 +1844,7 @@ From xpdr <--> rdm:
 Use the following REST RPC to invoke T-API module in order to create a bidirectional connectivity
 service between two devices. The network should be composed of two ROADMs and two Xponders (SWITCH or MUX)
 
-**REST API** : *POST /restconf/operations/tapi-connectivity:create-connectivity-service*
+**REST API** : *POST /rests/operations/tapi-connectivity:create-connectivity-service*
 
 **Sample JSON Data**
 
@@ -1888,7 +1924,7 @@ Deleting a connectivity service
 Use the following REST RPC to invoke *TAPI* module in order to delete a given optical
 connectivity service.
 
-**REST API** : *POST /restconf/operations/tapi-connectivity:delete-connectivity-service*
+**REST API** : *POST /rests/operations/tapi-connectivity:delete-connectivity-service*
 
 **Sample JSON Data**
 
@@ -1942,13 +1978,13 @@ This topic is named after the connectivity-service UUID.
 
 In the current implementation, only Connectivity Service related notification are supported.
 
-**REST API** : *POST /restconf/operations/tapi-notification:get-supported-notification-types*
+**REST API** : *POST /rests/operations/tapi-notification:get-supported-notification-types*
 
 The response body will include the type of notifications supported and the object types
 
 Use the following RPC to create a Notification Subscription Service.
 
-**REST API** : *POST /restconf/operations/tapi-notification:create-notification-subscription-service*
+**REST API** : *POST /rests/operations/tapi-notification:create-notification-subscription-service*
 
 **Sample JSON Data**
 
@@ -2031,7 +2067,7 @@ will be sent to a Kafka Server. Below an example of a tapi notification is shown
 
 To retrieve these tapi connectivity service notifications stored in the kafka server:
 
-**REST API** : *POST /restconf/operations/tapi-notification:get-notification-list*
+**REST API** : *POST /rests/operations/tapi-notification:get-notification-list*
 
 **Sample JSON Data**
 
@@ -2101,7 +2137,7 @@ Otherwise, this notification will be published :
 
 To retrieve these service notifications stored in the Kafka server :
 
-**REST API** : *POST /restconf/operations/nbi-notifications:get-notifications-process-service*
+**REST API** : *POST /rests/operations/nbi-notifications:get-notifications-process-service*
 
 **Sample JSON Data**
 
@@ -2125,7 +2161,7 @@ The topics that store these notifications in the Kafka server are also named aft
 
 To retrieve these alarm notifications stored in the Kafka server :
 
-**REST API** : *POST /restconf/operations/nbi-notifications:get-notifications-alarm-service*
+**REST API** : *POST /rests/operations/nbi-notifications:get-notifications-alarm-service*
 
 **Sample JSON Data**
 
