@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd965ae_3b0c821a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-10T07:29:10Z",
+      "side": 1,
+      "message": "I don\u0027t think this intermediate variable is needed",
+      "revId": "c9ed89fcf3e87f91156b426df5ee077681aa2b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1226222e_d1d8e8ac",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-10T07:29:10Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c9ed89fcf3e87f91156b426df5ee077681aa2b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
