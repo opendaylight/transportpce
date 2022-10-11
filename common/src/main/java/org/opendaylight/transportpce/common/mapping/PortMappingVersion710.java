@@ -1066,8 +1066,8 @@ public class PortMappingVersion710 {
                 }
                 sic1 = sic;
             }
-            mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build());
-            mpBldr.setSupportedInterfaceCapability(supportedIntf);
+            mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build())
+                    .setSupportedInterfaceCapability(supportedIntf);
             if (port.getPortQual() == PortQual.SwitchClient
                 && !sic1.getOtnCapability().getMpdrClientRestriction().isEmpty()) {
                 // Here we assume all the supported-interfaces has the support same rates, and the
