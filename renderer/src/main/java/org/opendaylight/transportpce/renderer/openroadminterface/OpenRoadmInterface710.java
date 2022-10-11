@@ -47,6 +47,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Rs
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Scfec;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev200529.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev200529.ethernet.container.EthernetBuilder;
@@ -61,6 +62,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interface
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.attributes.FlexoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUTTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUTTPCTP;
@@ -521,50 +523,64 @@ public class OpenRoadmInterface710 {
 
     public String createOpenRoadmOducnInterface(String nodeId, String logicalConnPoint)
             throws OpenRoadmInterfaceException {
-        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
-        if (mapping == null) {
+        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (portMap == null) {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
-        if (mapping.getSupportingOtucn() == null) {
+        // Used to find if the port is regen-type
+        if (portMap.getXpdrType() == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_xpdrtype_err(nodeId, logicalConnPoint));
+        }
+        if (portMap.getSupportingOtucn() == null) {
             throw new OpenRoadmInterfaceException("Missing supporting OTUCn interface on port-mapping");
         }
-        String supportingOtucn = mapping.getSupportingOtucn();
+        String supportingOtucn = portMap.getSupportingOtucn();
         // Set the ODUCn rate from OTUCn interface naming convention
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
             throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
+        // set the common parameters
+        OduBuilder oduBuilder = new OduBuilder()
+                                    .setRate(ODUCn.VALUE)
+                                    .setOducnNRate(Uint16.valueOf(oducnrate));
+
+        if (portMap.getXpdrType() == XpdrNodeTypes.Regen) {
+            LOG.info("Regen mode only supports not-terminated or monitored");
+            oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
+                    .setOduFunction(ODUCTP.VALUE);
+        } else {
+            // if it is other than regen mode
+            oduBuilder.setMonitoringMode(MonitoringMode.Terminated)
+                    .setTimActEnabled(false)
+                    .setOduFunction(ODUTTP.VALUE)
+                    .setTimDetectMode(TimDetectMode.Disabled)
+                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegthrPercentage(Uint16.valueOf(100))
+                    .setOducnNRate(Uint16.valueOf(oducnrate))
+                    .setOpu(
+                            // OPU payload
+                            new OpuBuilder()
+                                    .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .build());
+        }
+
         InterfaceBuilder oduInterfaceBuilder =
-            createGenericInterfaceBuilder(mapping, OtnOdu.VALUE, logicalConnPoint + "-ODUC" + oducnrate)
+            createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODUC" + oducnrate)
                 .setSupportingInterfaceList(new HashSet<>(Set.of(supportingOtucn)))
                 .addAugmentation(
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder()
-                        .setOdu(
-                            // Create an ODUCn object
-                            new OduBuilder()
-                                .setRate(ODUCn.VALUE)
-                                .setOduFunction(ODUTTP.VALUE)
-                                .setMonitoringMode(MonitoringMode.Terminated)
-                                .setTimActEnabled(false)
-                                .setTimDetectMode(TimDetectMode.Disabled)
-                                .setDegmIntervals(Uint8.valueOf(2))
-                                .setDegthrPercentage(Uint16.valueOf(100))
-                                .setOducnNRate(Uint16.valueOf(oducnrate))
-                                .setOpu(
-                                    // OPU payload
-                                    new OpuBuilder()
-                                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .build())
-                                .build())
-                        .build());
+                        .setOdu(oduBuilder.build())
+                            .build());
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, oduInterfaceBuilder);
         // Post the equipment-state change on the device circuit-pack if xpdr node
-        if (mapping.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
-            this.openRoadmInterfaces.postEquipmentState(nodeId, mapping.getSupportingCircuitPackName(), true);
+        if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
         }
         return oduInterfaceBuilder.getName();
     }
@@ -585,38 +601,53 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
+        if (portMapA.getXpdrType() == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_xpdrtype_err(anodeId, alogicalConnPoint));
+        }
         // On the Zside
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
+        // set the common parameters
+        OduBuilder oduBuilder = new OduBuilder()
+                .setRate(ODUCn.VALUE)
+                .setOducnNRate(Uint16.valueOf(oducnrate));
+
+        if (portMapA.getXpdrType() == XpdrNodeTypes.Regen) {
+            LOG.info("Regen mode only supports not-terminated or monitored");
+            oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
+                    // For regen-mode ODU-function is set to CTP
+                    .setOduFunction(ODUCTP.VALUE);
+        } else {
+            // if it is other than regen mode
+            oduBuilder.setMonitoringMode(MonitoringMode.Terminated)
+                    .setTimActEnabled(false)
+                    .setOduFunction(ODUTTP.VALUE)
+                    .setTimDetectMode(TimDetectMode.Disabled)
+                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegthrPercentage(Uint16.valueOf(100))
+                    .setOducnNRate(Uint16.valueOf(oducnrate))
+                    .setOpu(
+                            // OPU payload
+                            new OpuBuilder()
+                                    .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .build())
+                    .setTxSapi(portMapA.getLcpHashVal())
+                    .setTxDapi(portMapZ.getLcpHashVal())
+                    .setExpectedSapi(portMapZ.getLcpHashVal())
+                    .setExpectedDapi(portMapZ.getLcpHashVal());
+        }
+
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint + ODUC + oducnrate)
                 .setSupportingInterfaceList(new HashSet<>(Set.of(supportingOtucn)))
                 .addAugmentation(
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder()
-                        .setOdu(
-                            new OduBuilder()
-                                .setRate(ODUCn.VALUE)
-                                .setOducnNRate(Uint16.valueOf(oducnrate))
-                                .setOduFunction(ODUTTP.VALUE)
-                                .setMonitoringMode(MonitoringMode.Terminated)
-                                .setTimActEnabled(false)
-                                .setTimDetectMode(TimDetectMode.Disabled)
-                                .setDegmIntervals(Uint8.valueOf(2))
-                                .setDegthrPercentage(Uint16.valueOf(100))
-                                .setOpu(
-                                    // OPU payload
-                                    new OpuBuilder()
-                                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .build())
-                                .setTxSapi(portMapA.getLcpHashVal())
-                                .setTxDapi(portMapZ.getLcpHashVal())
-                                .setExpectedSapi(portMapZ.getLcpHashVal())
-                                .setExpectedDapi(portMapZ.getLcpHashVal())
-                                .build())
+                        .setOdu(oduBuilder.build())
                         .build());
         // Post interface on the device
         openRoadmInterfaces.postInterface(anodeId, oduInterfaceBuilder);
@@ -815,35 +846,49 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
+        // Used to find if the port is regen-type
+        if (portMap.getXpdrType() == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_xpdrtype_err(nodeId, logicalConnPoint));
+        }
         // Set the ODUCn rate from OTUCn interface naming convention
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
             throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
+        // set the common parameters
+        OduBuilder oduBuilder = new OduBuilder()
+                .setRate(ODUCn.VALUE)
+                .setOducnNRate(Uint16.valueOf(oducnrate));
+
+        if (portMap.getXpdrType() == XpdrNodeTypes.Regen) {
+            LOG.info("Regen mode only supports not-terminated or monitored");
+            oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
+                    .setOduFunction(ODUCTP.VALUE);
+        } else {
+            // if it is other than regen mode
+            oduBuilder.setMonitoringMode(MonitoringMode.Terminated)
+                    .setTimActEnabled(false)
+                    .setOduFunction(ODUTTP.VALUE)
+                    .setTimDetectMode(TimDetectMode.Disabled)
+                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegthrPercentage(Uint16.valueOf(100))
+                    .setOducnNRate(Uint16.valueOf(oducnrate))
+                    .setOpu(
+                            // OPU payload
+                            new OpuBuilder()
+                                    .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .build());
+        }
+
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + ODUC + oducnrate)
                 .setSupportingInterfaceList(new HashSet<>(Set.of(supportingOtucn)))
                 .addAugmentation(
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder()
-                        .setOdu(
-                            // Create an ODUC4 object
-                            new OduBuilder()
-                                .setRate(ODUCn.VALUE)
-                                .setOducnNRate(Uint16.valueOf(oducnrate))
-                                .setOduFunction(ODUTTP.VALUE)
-                                .setMonitoringMode(MonitoringMode.Terminated)
-                                .setTimActEnabled(false)
-                                .setTimDetectMode(TimDetectMode.Disabled)
-                                .setDegmIntervals(Uint8.valueOf(2))
-                                .setDegthrPercentage(Uint16.valueOf(100))
-                                .setOpu(
-                                    // OPU payload
-                                    new OpuBuilder()
-                                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                    .build())
-                                .build())
+                        .setOdu(oduBuilder.build())
                         .build());
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, oduInterfaceBuilder);
@@ -866,6 +911,10 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
+        if (portMapA.getXpdrType() == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_xpdrtype_err(anodeId, alogicalConnPoint));
+        }
         // On the Zside
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
@@ -879,33 +928,43 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
 
+        // set the common parameters
+        OduBuilder oduBuilder = new OduBuilder()
+                .setRate(ODUCn.VALUE)
+                .setOducnNRate(Uint16.valueOf(oducnrate));
+
+        if (portMapA.getXpdrType() == XpdrNodeTypes.Regen) {
+            LOG.info("Regen mode only supports not-terminated or monitored");
+            oduBuilder.setMonitoringMode(MonitoringMode.NotTerminated)
+                    // For regen-mode ODU-function is set to CTP
+                    .setOduFunction(ODUCTP.VALUE);
+        } else {
+            // if it is other than regen mode
+            oduBuilder.setMonitoringMode(MonitoringMode.Terminated)
+                    .setTimActEnabled(false)
+                    .setOduFunction(ODUTTP.VALUE)
+                    .setTimDetectMode(TimDetectMode.Disabled)
+                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegthrPercentage(Uint16.valueOf(100))
+                    .setOducnNRate(Uint16.valueOf(oducnrate))
+                    .setOpu(
+                            // OPU payload
+                            new OpuBuilder()
+                                    .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
+                                    .build())
+                    .setTxSapi(portMapA.getLcpHashVal())
+                    .setTxDapi(portMapZ.getLcpHashVal())
+                    .setExpectedSapi(portMapZ.getLcpHashVal())
+                    .setExpectedDapi(portMapZ.getLcpHashVal());
+        }
+
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint + ODUC + oducnrate)
                 .setSupportingInterfaceList(new HashSet<>(Set.of(supportingOtucn)))
                 .addAugmentation(
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev200529.Interface1Builder()
-                        .setOdu(
-                            // Create an ODUCn object
-                            new OduBuilder()
-                                .setRate(ODUCn.VALUE)
-                                .setOducnNRate(Uint16.valueOf(oducnrate))
-                                .setOduFunction(ODUTTP.VALUE)
-                                .setMonitoringMode(MonitoringMode.Terminated)
-                                .setTimActEnabled(false)
-                                .setTimDetectMode(TimDetectMode.Disabled)
-                                .setDegmIntervals(Uint8.valueOf(2))
-                                .setDegthrPercentage(Uint16.valueOf(100))
-                                .setOpu(
-                                    // OPU payload
-                                    new OpuBuilder()
-                                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .setPayloadType(PayloadTypeDef.getDefaultInstance("22"))
-                                        .build())
-                                .setTxSapi(portMapA.getLcpHashVal())
-                                .setTxDapi(portMapZ.getLcpHashVal())
-                                .setExpectedSapi(portMapZ.getLcpHashVal())
-                                .setExpectedDapi(portMapZ.getLcpHashVal())
-                                .build())
+                        .setOdu(oduBuilder.build())
                         .build());
         // Post interface on the device
         openRoadmInterfaces.postInterface(anodeId, oduInterfaceBuilder);
