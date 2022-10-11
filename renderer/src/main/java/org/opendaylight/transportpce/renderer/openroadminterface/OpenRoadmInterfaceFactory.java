@@ -135,6 +135,17 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    public String createOpenRoadmOducn(String nodeId, String logicalConnPoint)
+            throws OpenRoadmInterfaceException {
+
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return openRoadmInterface710.createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
+            default:
+                return null;
+        }
+    }
+
     /**
      * This methods creates an OTU interface on the given termination point.
      *
