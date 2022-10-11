@@ -158,14 +158,25 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         // Split the string based on # pass the last element as the supported Interface
                         // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
                         String[] listOfSuppOchInf = supportingOchInterface.split("#");
-                        createdOchInterfaces = Set.of(listOfSuppOchInf);
+                        List<String> createdOchInf = Arrays.asList(listOfSuppOchInf);
+                        createdOchInterfaces.addAll(createdOchInf);
+                        LOG.info("DEST all otsi interfaces {}", createdOchInterfaces);
                         // Taking the last element
-                        supportingOchInterface = listOfSuppOchInf[createdOchInterfaces.size() - 1];
-                        String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
-                                nodeId, destTp, supportingOchInterface, apiInfoA, apiInfoZ);
+                        supportingOchInterface = listOfSuppOchInf[createdOchInf.size() - 1];
+                        String supportingOtuInterface = this.openRoadmInterfaceFactory
+                                .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface, apiInfoA,
+                                        apiInfoZ);
                         createdOtuInterfaces.add(supportingOtuInterface);
+                        LOG.info("all dest otu interfaces {}", createdOtuInterfaces);
                         if (srcTp == null) {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
+                        } else if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
+                            // If src and dest tp contains the network token, then it is regenerator
+                            LOG.info("Create the ODUCn for regen on the dest-tp");
+                            // Here we first create ODUCn interface for the Regen
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
+                                    .createOpenRoadmOducn(nodeId, destTp));
+                            LOG.info("all dest odu interfaces {}", createdOduInterfaces);
                         } else {
                             // This is needed for 7.1 device models for 400GE, since we have ODUC4 and ODUflex
                             // are combined
@@ -188,7 +199,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, spectrumInformation);
-                        createdOchInterfaces.add(supportingOchInterface);
+                        // createdOchInterfaces.add(supportingOchInterface);
                         // Split the string based on # pass the last element as the supported Interface
                         // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
                         String[] listOfSuppOchInf = supportingOchInterface.split("#");
@@ -201,6 +212,13 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (destTp == null) {
                             otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(srcTp).build());
+                        } else if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
+                            // If the src and dest tp have network-token, then it is a regen
+                            LOG.info("Create the regen-interfaces on the src-tp");
+                            // Here we first create ODUCn interface for the Regen
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOducn(nodeId,
+                                    srcTp));
+                            LOG.info("all src odu interfaces {}", createdOduInterfaces);
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4HOInterface(
                                     nodeId, srcTp, false, apiInfoA, apiInfoZ, PT_07));
@@ -277,7 +295,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
         }
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
-            LOG.error("Alarm suppresion node removal failed!!!!");
+            LOG.error("Alarm suppression node removal failed!!!!");
         }
         return new ServicePathOutputBuilder()
                 .setNodeInterface(nodeInterfaces)
@@ -421,57 +439,57 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         // common GridConstant that states NAME_PARAMETERS_SEPARATOR = "-"
 
         if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
-            try {
-                for (String suffix : suffixListMap.get("ODU")) {
-                    if (this.openRoadmInterfaces.getInterface(
-                            nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix)).isPresent()) {
-                        interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
-                    }
-                }
-            }
-            catch (OpenRoadmInterfaceException e) {
-                LOG.error("impossible to get one of the interfaces {}",
-                    destTp + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
-                        " or " + destTp + GridConstant.NAME_PARAMETERS_SEPARATOR,
-                        suffixListMap.get("ODU")),
-                    e);
-            }
-            try {
-                for (String suffix : suffixListMap.get("other")) {
-                    if (this.openRoadmInterfaces.getInterface(
-                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix)).isPresent()) {
-                        LOG.info("Deleting the interface {}",
-                            String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
-                        interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, suffix));
-                    }
-                }
-            }
-            catch (OpenRoadmInterfaceException e) {
-                LOG.error("impossible to get one of the interfaces {}",
-                    destTp + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
-                        " or " + destTp + GridConstant.NAME_PARAMETERS_SEPARATOR,
-                        suffixListMap.get("ODU")),
-                    e);
-            }
+            interfacesToDelete.addAll(inf2Del(destTp, suffixListMap, nodeId));
         }
         if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
-            interfacesToDelete.add(
-                    String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, suffixListMap.get("ODU").get(0)));
-            for (String suffix : suffixListMap.get("other")) {
-                interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, suffix));
-            }
+            // For a regen case, the srcTp can also contain the network-token
+            interfacesToDelete.addAll(inf2Del(srcTp, suffixListMap, nodeId));
         }
-
         if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, srcTp, "ETHERNET"));
         }
         if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
-
             interfacesToDelete.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, destTp, "ETHERNET"));
         }
         return interfacesToDelete;
     }
 
+    private List<String> inf2Del(String termPoint, Map<String, List<String>> suffixListMap, String nodeId) {
+        List<String> inf2Del = new LinkedList<>();
+        try {
+            for (String suffix : suffixListMap.get("ODU")) {
+                if (this.openRoadmInterfaces.getInterface(
+                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix)).isPresent()) {
+                    inf2Del.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
+                }
+            }
+        }
+        catch (OpenRoadmInterfaceException e) {
+            LOG.error("impossible to get one of the interfaces {}",
+                    termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
+                            " or " + termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR,
+                            suffixListMap.get("ODU")),
+                    e);
+        }
+        try {
+            for (String suffix : suffixListMap.get("other")) {
+                if (this.openRoadmInterfaces.getInterface(
+                        nodeId, String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix)).isPresent()) {
+                    LOG.info("Deleting the interface {}",
+                            String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
+                    inf2Del.add(String.join(GridConstant.NAME_PARAMETERS_SEPARATOR, termPoint, suffix));
+                }
+            }
+        }
+        catch (OpenRoadmInterfaceException e) {
+            LOG.error("impossible to get one of the interfaces {}",
+                    termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR + String.join(
+                            " or " + termPoint + GridConstant.NAME_PARAMETERS_SEPARATOR,
+                            suffixListMap.get("ODU")),
+                    e);
+        }
+        return inf2Del;
+    }
 
 
     @Override
