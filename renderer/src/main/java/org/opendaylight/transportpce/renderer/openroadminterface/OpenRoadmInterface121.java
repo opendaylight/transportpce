@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
 
 public class OpenRoadmInterface121 {
     private static final String MAPPING_MSG_ERROR =
-            "Unable to get mapping from PortMapping for node % and logical connection port %s";
+        "Unable to get mapping from PortMapping for node % and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface121.class);
@@ -207,9 +207,7 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr =
@@ -237,9 +235,7 @@ public class OpenRoadmInterface121 {
             SpectrumInformation spectrumInformation) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
         }
         ModulationFormat modulationFormat =
             OchAttributes.ModulationFormat.forName(spectrumInformation.getModulationFormat());
