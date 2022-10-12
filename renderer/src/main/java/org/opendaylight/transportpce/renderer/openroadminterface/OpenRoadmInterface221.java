@@ -77,8 +77,6 @@ import org.slf4j.LoggerFactory;
 
 
 public class OpenRoadmInterface221 {
-    private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
-            "Unable to get mapping from PortMapping for node % and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface221.class);
@@ -94,7 +92,7 @@ public class OpenRoadmInterface221 {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Post interface on the device
         InterfaceBuilder ethInterfaceBldr =
@@ -121,7 +119,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         List<String> interfacesCreated = new ArrayList<>();
         String mcInterfaceCreated = "";
@@ -139,7 +137,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // TODO : Check this method
         LOG.info("MC interface Freq Start {} and Freq End {} and center-Freq {}",
@@ -176,7 +174,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         //TODO : Check this method
         InterfaceBuilder nmcInterfaceBldr =
@@ -212,8 +210,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr =
@@ -250,7 +247,7 @@ public class OpenRoadmInterface221 {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(mapping, OtnOdu.VALUE, logicalConnPoint + "-ODU4");
@@ -319,7 +316,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODU")
@@ -352,11 +349,11 @@ public class OpenRoadmInterface221 {
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapA == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, anodeId, alogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, znodeId, zlogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint + "-ODU")
@@ -393,7 +390,7 @@ public class OpenRoadmInterface221 {
         Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // OTU interface specific data
         OtuBuilder otuIfBuilder = new OtuBuilder()
@@ -534,7 +531,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                    String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODU4")
@@ -570,12 +567,12 @@ public class OpenRoadmInterface221 {
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         if (portMapA == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, anodeId, alogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, znodeId, zlogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint + "-ODU4")
