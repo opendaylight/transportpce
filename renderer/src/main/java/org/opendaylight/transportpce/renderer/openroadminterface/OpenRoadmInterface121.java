@@ -60,8 +60,6 @@ import org.slf4j.LoggerFactory;
 
 
 public class OpenRoadmInterface121 {
-    private static final String MAPPING_MSG_ERROR =
-            "Unable to get mapping from PortMapping for node % and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface121.class);
@@ -75,7 +73,8 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder ethInterfaceBldr =
             createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE, logicalConnPoint + "-ETHERNET")
@@ -126,14 +125,14 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder otuInterfaceBldr =
             createGenericInterfaceBuilder(portMap, OtnOtu.VALUE, logicalConnPoint + "-OTU")
                 .setSupportingInterface(supportOchInterface)
                 .addAugmentation(
-                // TODO look at imports of different versions of class
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder()
                         .setOtu(
                             // OTU interface specific data
@@ -162,7 +161,8 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(MAPPING_MSG_ERROR, nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + "-ODU");
@@ -171,7 +171,6 @@ public class OpenRoadmInterface121 {
         }
         oduInterfaceBldr.addAugmentation(
             // Create Interface1 type object required for adding as augmentation
-            // TODO look at imports of different versions of class
             new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1Builder()
                 .setOdu(
                     // ODU interface specific data
@@ -207,9 +206,8 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr =
@@ -222,7 +220,6 @@ public class OpenRoadmInterface121 {
         }
         ochInterfaceBldr.addAugmentation(
             // Create Interface1 type object required for adding as augmentation
-            // TODO look at imports of different versions of class
             new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder()
                 .setOch(
                     // OCH interface specific data
@@ -237,9 +234,8 @@ public class OpenRoadmInterface121 {
             SpectrumInformation spectrumInformation) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         ModulationFormat modulationFormat =
             OchAttributes.ModulationFormat.forName(spectrumInformation.getModulationFormat());
@@ -253,7 +249,6 @@ public class OpenRoadmInterface121 {
                     spectrumInformation.getIdentifierFromParams(logicalConnPoint))
                 .addAugmentation(
                     // Create Interface1 type object required for adding as augmentation
-                    // TODO look at imports of different versions of class
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                             .Interface1Builder()
                         .setOch(
