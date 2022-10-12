@@ -21,4 +21,9 @@ public class OpenRoadmInterfaceException extends Exception {
     public OpenRoadmInterfaceException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public static final String mapping_msg_err(String node, String port) {
+        return String.format(
+            "Unable to get mapping from PortMapping for node % and logical connection port %s", node, port);
+    }
 }
