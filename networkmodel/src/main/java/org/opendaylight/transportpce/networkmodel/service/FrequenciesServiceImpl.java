@@ -145,7 +145,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             if (optionalNode.isPresent()) {
                 return optionalNode.get();
             } else {
-                LOG.error("Unable to get network node for node id {} from topology {}", nodeId,
+                LOG.warn("Unable to get network node for node id {} from topology {}", nodeId,
                         NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
