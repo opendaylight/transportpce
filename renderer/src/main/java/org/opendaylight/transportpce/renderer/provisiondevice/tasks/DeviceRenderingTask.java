@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingResult;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutput;
@@ -55,9 +56,21 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} service path failed.", operation);
+            //UTD calling kafka publisher from DeviceRendererServiceImpl
+            if (deviceRenderer instanceof DeviceRendererServiceImpl) {
+                ((DeviceRendererServiceImpl) deviceRenderer).getKafkaPublisher()
+                     .publishNotification("service", this.getClass().getSimpleName(),
+                             "Device rendering failed!");
+            }
             return DeviceRenderingResult.failed("Operation Failed");
         }
         LOG.info("Device rendering {} service path finished successfully.", operation);
+        //UTD calling kafka publisher from DeviceRendererServiceImpl
+        if (deviceRenderer instanceof DeviceRendererServiceImpl) {
+            ((DeviceRendererServiceImpl) deviceRenderer).getKafkaPublisher()
+                    .publishNotification("service",this.getClass().getSimpleName(),
+                            "Device rendering finished successfully.");
+        }
         return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()),
             new ArrayList<>(output.nonnullLinkTp()));
 
