@@ -86,8 +86,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OpenRoadmInterface710 {
-    private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
-        "Unable to get mapping from PortMapping for node % and logical connection port %s";
     private static final String MODULATION_FMT_EXCEPTION_MESSAGE =
         "Unable to get the modulation format";
     private static final String RATE_EXCEPTION_MESSAGE =
@@ -108,7 +106,7 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder ethInterfaceBldr =
             createGenericInterfaceBuilder(portMap, EthernetCsmacd.VALUE, logicalConnPoint + "-ETHERNET")
@@ -142,8 +140,7 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
-                    nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr =
@@ -152,7 +149,6 @@ public class OpenRoadmInterface710 {
                     spectrumInformation.getIdentifierFromParams(logicalConnPoint))
                 .addAugmentation(
                 // Create Interface1 type object required for adding as augmentation
-                // TODO look at imports of different versions of class
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev200529
                             .Interface1Builder()
                         .setOch(
@@ -179,7 +175,7 @@ public class OpenRoadmInterface710 {
             throws OpenRoadmInterfaceException {
         ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
         if (modulationFormat == null) {
-            throw new OpenRoadmInterfaceException(String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(MODULATION_FMT_EXCEPTION_MESSAGE);
         }
         // OTSI interface specific data
         OtsiBuilder otsiBuilder = new OtsiBuilder()
@@ -241,12 +237,12 @@ public class OpenRoadmInterface710 {
                 break;
             default:
                 LOG.error("Rate {} is unsupported", serviceRate);
-                throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+                throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder otsiInterfaceBldr =
@@ -276,12 +272,12 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Check the modulation format
         ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
         if (modulationFormat == null) {
-            throw new OpenRoadmInterfaceException(String.format(MODULATION_FMT_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(MODULATION_FMT_EXCEPTION_MESSAGE);
         }
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         // Create an OTSI group object
@@ -301,7 +297,7 @@ public class OpenRoadmInterface710 {
                 break;
             default:
                 LOG.error("Rate {} is not supported", serviceRate);
-                throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+                throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         // Create generic interface
         InterfaceBuilder otsiGroupInterfaceBldr =
@@ -329,12 +325,13 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OCH interface
             return createOpenRoadmOchInterface(nodeId, logicalConnPoint, spectrumInformation);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        }
+        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create OTSi and OTSi-group and concat the names of the interface
             String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);
             // And Concat the two names for this interface
@@ -349,7 +346,7 @@ public class OpenRoadmInterface710 {
         Mapping mapping = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // OTU interface specific data
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.otu.container.OtuBuilder
@@ -374,7 +371,6 @@ public class OpenRoadmInterface710 {
                 .setSupportingInterfaceList(new HashSet<>(Set.of(supportOchInterface)))
                 .addAugmentation(
                     // Create Interface1 type object required for adding as augmentation
-                    // TODO look at imports of different versions of class
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev200529.Interface1Builder()
                         .setOtu(otuIfBuilder.build())
                         .build());
@@ -391,8 +387,7 @@ public class OpenRoadmInterface710 {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE,
-                    nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Create an OTUCn object
         OtuBuilder otuBuilder = new OtuBuilder()
@@ -435,7 +430,7 @@ public class OpenRoadmInterface710 {
                 break;
             default:
                 LOG.error("Rate {} is not supported", rate);
-                throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+                throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         InterfaceBuilder otuInterfaceBuilder =
             createGenericInterfaceBuilder(mapping, OtnOtu.VALUE, logicalConnPoint + "-OTUC" + otucnrate)
@@ -460,14 +455,15 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Depending on OCH-OTU4-ODU4 interface or OTSi-OTSi-group, supporting interface should
         // reflect that
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OTU4 interface
             return createOpenRoadmOtu4Interface(nodeId, logicalConnPoint, supportingInterface, apiInfoA, apiInfoZ);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        }
+        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create OTUCn
             return createOpenRoadmOtucnInterface(nodeId, logicalConnPoint, supportingInterface, apiInfoA, apiInfoZ);
         }
@@ -479,7 +475,7 @@ public class OpenRoadmInterface710 {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr =
             createGenericInterfaceBuilder(mapping, OtnOdu.VALUE, logicalConnPoint + "-ODU4");
@@ -528,18 +524,17 @@ public class OpenRoadmInterface710 {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         if (mapping.getSupportingOtucn() == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format("Missing supporting OTUCn interface on port-mapping"));
+            throw new OpenRoadmInterfaceException("Missing supporting OTUCn interface on port-mapping");
         }
         String supportingOtucn = mapping.getSupportingOtucn();
         // Set the ODUCn rate from OTUCn interface naming convention
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
-            throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(mapping, OtnOdu.VALUE, logicalConnPoint + "-ODUC" + oducnrate)
@@ -583,18 +578,18 @@ public class OpenRoadmInterface710 {
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
-            throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         if (portMapA == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, anodeId, alogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
         // On the Zside
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, znodeId, zlogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint + ODUC + oducnrate)
@@ -640,7 +635,7 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Parent Odu-allocation
         // Set the trib-slot array
@@ -665,27 +660,31 @@ public class OpenRoadmInterface710 {
                     .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build())
                     .build());
         // Build the OPU container to the ODU builder
-        if (rate.equals("1")) {
-            oduBuilder
-                .setRate(ODU4.VALUE)
-                .setOpu(
-                    new OpuBuilder()
-                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
-                        .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
-                        .build());
-            logicalConnPoint += "-ODU4";
-        } else if (rate.equals("4")) {
-            oduBuilder
-                .setRate(ODUflexCbr.VALUE)
-                .setOduflexCbrService(ODUflexCbr400G.VALUE)
-                .setOpu(
-                    new OpuBuilder()
-                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-                        .setPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-                        .build());
-            logicalConnPoint += "-ODUFLEX";
-        } else {
-            oduBuilder.setOpu(new OpuBuilder().build());
+        switch (rate) {
+            case "1":
+                oduBuilder
+                    .setRate(ODU4.VALUE)
+                    .setOpu(
+                        new OpuBuilder()
+                            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                            .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                            .build());
+                logicalConnPoint += "-ODU4";
+                break;
+            case "4":
+                oduBuilder
+                    .setRate(ODUflexCbr.VALUE)
+                    .setOduflexCbrService(ODUflexCbr400G.VALUE)
+                    .setOpu(
+                        new OpuBuilder()
+                            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                            .setPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                            .build());
+                logicalConnPoint += "-ODUFLEX";
+                break;
+            default:
+                oduBuilder.setOpu(new OpuBuilder().build());
+                break;
         }
         InterfaceBuilder oduflexInterfaceBuilder =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint)
@@ -711,13 +710,13 @@ public class OpenRoadmInterface710 {
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         if (portMapA == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, anodeId, alogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
         // On the Zside
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, znodeId, zlogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
         // Parent Odu-allocation
         // Set the trib-slot array
@@ -744,27 +743,31 @@ public class OpenRoadmInterface710 {
                     .setTribPortNumber(Uint16.valueOf(1))
                     .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build())
                     .build());
-        if (rate.equals("1")) {
-            oduBuilder
-                .setRate(ODU4.VALUE)
-                .setOpu(
-                    new OpuBuilder()
-                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
-                        .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
-                        .build());
-            alogicalConnPoint += "-ODU4";
-        } else if (rate.equals("4")) {
-            oduBuilder
-                .setRate(ODUflexCbr.VALUE)
-                .setOduflexCbrService(ODUflexCbr400G.VALUE)
-                .setOpu(
-                    new OpuBuilder()
-                        .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-                        .setPayloadType(PayloadTypeDef.getDefaultInstance("32"))
-                        .build());
-            alogicalConnPoint += "-ODUFLEX";
-        } else {
-            oduBuilder.setOpu(new OpuBuilder().build());
+        switch (rate) {
+            case "1":
+                oduBuilder
+                    .setRate(ODU4.VALUE)
+                    .setOpu(
+                        new OpuBuilder()
+                            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                            .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                            .build());
+                alogicalConnPoint += "-ODU4";
+                break;
+            case "4":
+                oduBuilder
+                    .setRate(ODUflexCbr.VALUE)
+                    .setOduflexCbrService(ODUflexCbr400G.VALUE)
+                    .setOpu(
+                        new OpuBuilder()
+                            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                            .setPayloadType(PayloadTypeDef.getDefaultInstance("32"))
+                            .build());
+                alogicalConnPoint += "-ODUFLEX";
+                break;
+            default:
+                oduBuilder.setOpu(new OpuBuilder().build());
+                break;
         }
         InterfaceBuilder oduflexInterfaceBuilder =
             createGenericInterfaceBuilder(portMapA, OtnOdu.VALUE, alogicalConnPoint)
@@ -785,7 +788,7 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Depending on OTU4 or OTUCn, supporting interface should
         // reflect that
@@ -794,7 +797,8 @@ public class OpenRoadmInterface710 {
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OTU4 interface
             return createOpenRoadmOdu4Interface(nodeId, logicalConnPoint, apiInfoA, apiInfoZ);
-        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+        }
+        if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create ODUCn and ODUFlex interface.
             String interfaceOducn = createOpenRoadmOducnInterface(nodeId, logicalConnPoint);
             return interfaceOducn + "#"
@@ -809,13 +813,13 @@ public class OpenRoadmInterface710 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, nodeId, logicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
         // Set the ODUCn rate from OTUCn interface naming convention
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
-            throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
         InterfaceBuilder oduInterfaceBuilder =
             createGenericInterfaceBuilder(portMap, OtnOdu.VALUE, logicalConnPoint + ODUC + oducnrate)
@@ -860,19 +864,19 @@ public class OpenRoadmInterface710 {
         Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
         if (portMapA == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, anodeId, alogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(anodeId, alogicalConnPoint));
         }
         // On the Zside
         Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
         if (portMapZ == null) {
             throw new OpenRoadmInterfaceException(
-                String.format(MAPPING_ERROR_EXCEPTION_MESSAGE, znodeId, zlogicalConnPoint));
+                OpenRoadmInterfaceException.mapping_msg_err(znodeId, zlogicalConnPoint));
         }
         // Set the ODUCn rate from OTUCn interface naming convention
         String oducnrate = supportingOtucn.substring(supportingOtucn.length() - 1);
         // check if the oducnrate is a valid value and if it is invalid, then throw error
         if (!SUPPORTED_ODUCN_RATES.contains(oducnrate)) {
-            throw new OpenRoadmInterfaceException(String.format(RATE_EXCEPTION_MESSAGE));
+            throw new OpenRoadmInterfaceException(RATE_EXCEPTION_MESSAGE);
         }
 
         InterfaceBuilder oduInterfaceBuilder =
@@ -940,21 +944,19 @@ public class OpenRoadmInterface710 {
                 double spectralWidth = (spectrumInformation.getHigherSpectralSlotNumber()
                     - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;
                 LOG.info("The width with guard band {}", spectralWidth);
-                Map<ModulationFormat, Integer> rateMap;
                 if (spectralWidth == 50.0) {
-                    rateMap = Map.of(
-                            ModulationFormat.DpQpsk , 100,
-                            ModulationFormat.DpQam16 , 200);
-                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
-                    return rateMap.get(modulationFormat);
-                } else {
-                    rateMap = Map.of(
-                            ModulationFormat.DpQpsk , 200,
-                            ModulationFormat.DpQam16 , 400);
-                    // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
-                    LOG.info("The baud-rate is 63.1 GBaud");
+                    return Map.of(
+                            ModulationFormat.DpQpsk , 100,
+                            ModulationFormat.DpQam16 , 200)
+                        .get(modulationFormat);
+                    // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                 }
+                LOG.info("The baud-rate is 63.1 GBaud");
+                Map<ModulationFormat, Integer> rateMap = Map.of(
+                        ModulationFormat.DpQpsk , 200,
+                        ModulationFormat.DpQam16 , 400);
+                // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                 int rate = rateMap.get(modulationFormat);
                 LOG.info("Given modulation format {} rate is {}", modulationFormat, rate);
                 return rate;
