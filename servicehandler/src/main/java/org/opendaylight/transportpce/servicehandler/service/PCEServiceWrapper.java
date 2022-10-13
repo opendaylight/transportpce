@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveInput;
@@ -64,6 +66,7 @@ public class PCEServiceWrapper {
     private final NotificationPublishService notificationPublishService;
     private ServiceRpcResultSh notification = null;
     private final ListeningExecutorService executor;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public PCEServiceWrapper(PathComputationService pathComputationService,
             NotificationPublishService notificationPublishService) {
@@ -116,6 +119,9 @@ public class PCEServiceWrapper {
             String serviceName, SdncRequestHeader sdncRequestHeader, ServiceEndpoint serviceAEnd,
             ServiceEndpoint serviceZEnd, ServiceNotificationTypes notifType, boolean reserveResource) {
         LOG.info("Calling path computation.");
+        //UTD kafkaPublisher
+        kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                "Calling path computation...");
         notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
                 .setStatus(RpcStatusEx.Pending)
                 .setStatusMessage("Service compliant, submitting PathComputation Request ...").build();
@@ -387,6 +393,9 @@ public class PCEServiceWrapper {
         @Override
         public void onFailure(Throwable arg0) {
             LOG.error("Path not calculated..");
+            // UTD
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "Path not calculated..");
             notification = new ServiceRpcResultShBuilder().setNotificationType(notifType)
                     .setServiceName(serviceName)
                     .setStatus(RpcStatusEx.Failed).setStatusMessage("PCR Request failed  : " + arg0.getMessage())
