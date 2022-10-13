@@ -21,6 +21,8 @@
 
   <properties>
     <transportpce.models.version>17.0.0-SNAPSHOT</transportpce.models.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <kafka.version>3.0.0</kafka.version>
   </properties>
 
   <dependencyManagement>
@@ -157,6 +159,11 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.version}</version>
     </dependency>
 
     <!-- Testing dependencies -->

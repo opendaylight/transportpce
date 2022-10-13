@@ -5,13 +5,13 @@ set -x
 #check Java version install if any
 JAVA_CMD="java"
 [ -n "$JAVA_HOME" ] && JAVA_CMD="$JAVA_HOME/bin/java"
-JAVA_VER=$("$JAVA_CMD" -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*".*$/\1\2/p;')
+JAVA_VER=$("$JAVA_CMD" -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*".*$/\1/p;')
 echo $JAVA_VER
 JAVAC_CMD="javac"
 [ -n "$JAVA_HOME" ] && JAVAC_CMD="$JAVA_HOME/bin/javac"
-JAVAC_VER=$("$JAVAC_CMD" -version 2>&1 |  sed -n ';s/javac \(.*\)\.\(.*\)\..*.*$/\1\2/p;')
+JAVAC_VER=$("$JAVAC_CMD" -version 2>&1 |  sed -n ';s/javac \(.*\)\.\(.*\)\..*.*$/\1/p;')
 echo $JAVAC_VER
-if [ "$JAVA_VER" -ge 110 -a "$JAVAC_VER" -ge 110 ];then
+if [ "$JAVA_VER" -ge 17 -a "$JAVAC_VER" -ge 17 ];then
         echo "ok, java is 17 or newer"
 else
     #java installation for CentOS (releng OS image target)
