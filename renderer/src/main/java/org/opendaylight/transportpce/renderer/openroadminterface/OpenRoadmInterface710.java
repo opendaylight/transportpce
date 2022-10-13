@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -97,6 +99,7 @@ public class OpenRoadmInterface710 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -957,12 +960,22 @@ public class OpenRoadmInterface710 {
                 }
                 int rate = rateMap.get(modulationFormat);
                 LOG.info("Given modulation format {} rate is {}", modulationFormat, rate);
+                // UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "The width with guard band is " + spectralWidth
+                                + ". Given modulation format  " + modulationFormat + " rate is " + rate + ".");
                 return rate;
             case DpQam8:
                 LOG.info("Given modulation format DpQam8 rate is 300");
+                // UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        "Given modulation format DpQam8 rate is 300");
                 return 300;
             default:
                 LOG.error(RATE_EXCEPTION_MESSAGE + " for modulation format {}", modulationFormat);
+                // UTD
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                        RATE_EXCEPTION_MESSAGE + " for modulation format " + modulationFormat);
                 return 0;
         }
     }
