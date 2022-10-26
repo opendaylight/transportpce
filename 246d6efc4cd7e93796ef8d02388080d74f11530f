@@ -16,6 +16,23 @@
       "message": "LGTM\nThx for this contribution Nathan.",
       "revId": "246d6efc4cd7e93796ef8d02388080d74f11530f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83714782_358168e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-26T09:11:40Z",
+      "side": 1,
+      "message": "here are the issues I fixed in the commit message FYI",
+      "revId": "246d6efc4cd7e93796ef8d02388080d74f11530f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

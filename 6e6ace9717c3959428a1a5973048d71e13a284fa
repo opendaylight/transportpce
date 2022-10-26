@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b27619ae_1cfb2382",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-26T09:11:40Z",
+      "side": 1,
+      "message": "commit msg body lines should be \u003c\u003d 72 char.",
+      "revId": "6e6ace9717c3959428a1a5973048d71e13a284fa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031c5886_dfae77f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-26T09:11:40Z",
+      "side": 1,
+      "message": "Signed-off-by footer is mandatory.",
+      "revId": "6e6ace9717c3959428a1a5973048d71e13a284fa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
