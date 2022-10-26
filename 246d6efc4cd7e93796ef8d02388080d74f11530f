@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6738128d_3c27b5a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-10-26T09:09:57Z",
+      "side": 1,
+      "message": "LGTM\nThx for this contribution Nathan.",
+      "revId": "246d6efc4cd7e93796ef8d02388080d74f11530f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
