@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingResult;
@@ -26,6 +28,7 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
     private final DeviceRendererService deviceRenderer;
     private final ServicePathInputData servicePathInputData;
     private final ServicePathDirection direction;
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public DeviceRenderingTask(DeviceRendererService deviceRenderer, ServicePathInputData servicePathInputData,
             ServicePathDirection direction) {
@@ -55,9 +58,19 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} service path failed.", operation);
+            //UTD
+            if (kafkaPublisher != null) {
+                kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                             "Device rendering failed!");
+            }
             return DeviceRenderingResult.failed("Operation Failed");
         }
         LOG.info("Device rendering {} service path finished successfully.", operation);
+        //UTD
+        if (kafkaPublisher != null) {
+            kafkaPublisher.publishNotification("service",this.getClass().getSimpleName(),
+                            "Device rendering finished successfully.");
+        }
         return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()),
             new ArrayList<>(output.nonnullLinkTp()));
 
