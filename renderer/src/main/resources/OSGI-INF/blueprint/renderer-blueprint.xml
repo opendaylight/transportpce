@@ -21,6 +21,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
   <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils"/>
   <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
+  <reference id="kafkaPublisher" interface="org.opendaylight.transportpce.common.kafka.KafkaPublisher" />
 
   <odl:rpc-service id="olmService"
       interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
