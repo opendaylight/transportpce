@@ -17,6 +17,8 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
@@ -135,6 +137,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final String SERVICE_FEASIBILITY_CHECK_MSG = "serviceFeasibilityCheck: {}";
     private static final String SERVICE_DELETE_MSG = "serviceDelete: {}";
     private static final String SERVICE_CREATE_MSG = "serviceCreate: {}";
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     private DataBroker db;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -207,6 +210,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     @Override
     public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
         LOG.info("RPC serviceCreate received");
+        //UTD kafkaPublsher
+        if (kafkaPublisher != null) {
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "RPC for serviceCreate " + input.getServiceName() + " received!");
+        }
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.ServiceCreate);
@@ -248,6 +256,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
         LOG.info("RPC serviceCreate in progress...");
+        //UTD kafkaPublisher
+        if (kafkaPublisher != null) {
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "RPC for serviceCreate  " + input.getServiceName() + " in progress...");
+        }
         ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
         return ModelMappingUtils.createCreateServiceReply(
                 input, common.getAckFinalIndicator(),
@@ -258,15 +271,20 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceDeleteReqInfo().getServiceName();
         LOG.info("RPC serviceDelete request received for {}", serviceName);
+        //UTD kafkaPublisher
+        if (kafkaPublisher != null) {
+            kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                    "RPC serviceDelete request received for " + serviceName);
+        }
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
          * header compliance are verified.
          */
         ComplianceCheckResult serviceHandlerCheckResult =
-            ServicehandlerComplianceCheck.check(
-                input.getServiceDeleteReqInfo().getServiceName(),
-                input.getSdncRequestHeader(), null, RpcActions.ServiceDelete, false, true);
+                ServicehandlerComplianceCheck.check(
+                        input.getServiceDeleteReqInfo().getServiceName(),
+                        input.getSdncRequestHeader(), null, RpcActions.ServiceDelete, false, true);
         if (!serviceHandlerCheckResult.hasPassed()) {
             LOG.warn(SERVICE_DELETE_MSG, LogMessages.ABORT_SERVICE_NON_COMPLIANT);
             return ModelMappingUtils.createDeleteServiceReply(
@@ -294,8 +312,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
                 serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput output =
-            this.rendererServiceWrapper.performRenderer(
-                serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, service);
+                this.rendererServiceWrapper.performRenderer(
+                        serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, service);
 
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
