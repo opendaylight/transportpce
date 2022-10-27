@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisher;
+import org.opendaylight.transportpce.common.kafka.KafkaPublisherImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -97,6 +99,7 @@ public class OpenRoadmInterface710 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
+    private final KafkaPublisher kafkaPublisher = KafkaPublisherImpl.getPublisher();
 
     public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -938,31 +941,47 @@ public class OpenRoadmInterface710 {
                 // DpQpsk and DpQam16 are possible for both 31.6 or 63.1 GBaud, for which spectral width is different
                 // Here take the difference of highest and lowest spectral numbers and determine the width
                 double spectralWidth = (spectrumInformation.getHigherSpectralSlotNumber()
-                    - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;
+                        - spectrumInformation.getLowerSpectralSlotNumber() + 1) * GridConstant.GRANULARITY;
                 LOG.info("The width with guard band {}", spectralWidth);
                 Map<ModulationFormat, Integer> rateMap;
                 if (spectralWidth == 50.0) {
                     rateMap = Map.of(
-                            ModulationFormat.DpQpsk , 100,
-                            ModulationFormat.DpQam16 , 200);
+                            ModulationFormat.DpQpsk, 100,
+                            ModulationFormat.DpQam16, 200);
                     // Based on roll-of-factor of 0.2, 50 - 12.5 = 37.5GHz translates to 31.6 GBaud
                     LOG.info("The baud-rate is 31.6 GBaud");
                     return rateMap.get(modulationFormat);
                 } else {
                     rateMap = Map.of(
-                            ModulationFormat.DpQpsk , 200,
-                            ModulationFormat.DpQam16 , 400);
+                            ModulationFormat.DpQpsk, 200,
+                            ModulationFormat.DpQam16, 400);
                     // Based on roll-of-factor of 0.2, 87.5 - 12.5 = 75GHz translates to 63.1 GBaud
                     LOG.info("The baud-rate is 63.1 GBaud");
                 }
                 int rate = rateMap.get(modulationFormat);
                 LOG.info("Given modulation format {} rate is {}", modulationFormat, rate);
+                // UTD
+                if (kafkaPublisher != null) {
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                            "The width with guard band is " + spectralWidth
+                                    + ". Given modulation format  " + modulationFormat + " rate is " + rate + ".");
+                }
                 return rate;
             case DpQam8:
                 LOG.info("Given modulation format DpQam8 rate is 300");
+                // UTD
+                if (kafkaPublisher != null) {
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                            "Given modulation format DpQam8 rate is 300");
+                }
                 return 300;
             default:
                 LOG.error(RATE_EXCEPTION_MESSAGE + " for modulation format {}", modulationFormat);
+                // UTD
+                if (kafkaPublisher != null) {
+                    kafkaPublisher.publishNotification("service", this.getClass().getSimpleName(),
+                            RATE_EXCEPTION_MESSAGE + " for modulation format " + modulationFormat);
+                }
                 return 0;
         }
     }
