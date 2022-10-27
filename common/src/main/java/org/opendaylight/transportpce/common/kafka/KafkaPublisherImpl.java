@@ -37,7 +37,7 @@ public class KafkaPublisherImpl implements KafkaPublisher {
         } catch (IOException e) {
             LOG.error("Kafka property file '{}' was not found in the classpath", propertyFileName, e);
         }
-        props.put("bootstrap.servers", "127.0.0.1:9092");
+        props.put("bootstrap.servers", "SKIP");
         props.put("acks", "all");
         props.put("retries", 0);
         props.put("batch.size", 16384);
@@ -49,19 +49,28 @@ public class KafkaPublisherImpl implements KafkaPublisher {
         if (props.getProperty("bootstrap.servers").equals("SKIP")) {
             skipKafka = true;
             producer = null;
-            LOG.info("Bypssing Kafka messages since bootstrap.servers = SKIP");
+            LOG.info("Bypassing Kafka messages since bootstrap.servers = SKIP");
+            sInstance = new NullKafkaPublisherImpl();
         } else {
             producer = new KafkaProducer<>(props);
             LOG.info("Instantiate Kafka publisher with properties {}", props);
+            sInstance = new KafkaPublisherImpl();
         }
     }
 
     //singleton Kafkapublisher for other services usage
     //return null if we are skipping Kafka messaging
     public static KafkaPublisher getPublisher() {
-        if (!skipKafka && sInstance == null) {
-            synchronized (KafkaPublisher.class) {
-                if (sInstance == null) {
+        if (sInstance != null) {
+            return sInstance;
+        }
+        synchronized (KafkaPublisher.class) {
+            if (sInstance == null) {
+                if (skipKafka) {
+                    LOG.info("Null Kafka Publisher set");
+                    sInstance = new NullKafkaPublisherImpl();
+                } else {
+                    LOG.info("Non null Kafka Publisher set");
                     sInstance = new KafkaPublisherImpl();
                 }
             }
