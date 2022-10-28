@@ -191,26 +191,39 @@ public class PortMappingVersion221 {
             LOG.error(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.UPDATE, "a null value");
             return false;
         }
-        InstanceIdentifier<Ports> portId = InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
-            .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
-            .build();
         try {
-            Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-                portId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
-            Interface otsInterface = null;
-            if (oldMapping.getSupportingOts() != null) {
-                InstanceIdentifier<Interface> interfId = InstanceIdentifier
-                    .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-                    .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))
-                    .build();
-                otsInterface = deviceTransactionManager
-                    .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, interfId, Timeouts.DEVICE_READ_TIMEOUT,
-                        Timeouts.DEVICE_READ_TIMEOUT_UNIT)
-                    .get();
-            }
-            Mapping newMapping = updateMappingObject(nodeId, port, oldMapping, otsInterface);
+            Mapping newMapping = updateMappingObject(
+                nodeId,
+                //port
+                deviceTransactionManager
+                    .getDataFromDevice(
+                        nodeId,
+                        LogicalDatastoreType.OPERATIONAL,
+                        // port Identifier
+                        InstanceIdentifier
+                            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                            .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
+                            .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
+                            .build(),
+                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+                    .get(),
+                oldMapping,
+                //otsInterface
+                oldMapping.getSupportingOts() == null
+                    ? null
+                    : deviceTransactionManager
+                        .getDataFromDevice(
+                            nodeId,
+                            LogicalDatastoreType.OPERATIONAL,
+                            //interface Identifier
+                            InstanceIdentifier
+                                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                                .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))
+                                .build(),
+                            Timeouts.DEVICE_READ_TIMEOUT,
+                            Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+                        .get()
+                );
             LOG.debug(PortMappingUtils.UPDATE_MAPPING_LOGMSG,
                 nodeId, oldMapping, oldMapping.getLogicalConnectionPoint(), newMapping);
             final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
