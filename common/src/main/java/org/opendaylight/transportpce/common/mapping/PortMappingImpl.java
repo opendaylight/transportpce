@@ -235,4 +235,27 @@ public class PortMappingImpl implements PortMapping {
         return this.getNode(nodeId) != null;
     }
 
+    @Override
+    public Mapping getMappingFromOtsInterface(String nodeId, String interfName) {
+        KeyedInstanceIdentifier<Nodes, NodesKey> nodePortmappingIID = InstanceIdentifier.create(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId));
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> nodePortmapppingOpt
+                = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortmappingIID).get();
+            if (!nodePortmapppingOpt.isPresent()) {
+                LOG.warn("Could not get portMapping for node {}", nodeId);
+                return null;
+            }
+            Map<MappingKey, Mapping> mappings = nodePortmapppingOpt.get().getMapping();
+            for (Mapping mapping : mappings.values()) {
+                if (interfName.equals(mapping.getSupportingOts())) {
+                    return mapping;
+                }
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to get mapping list for nodeId {}", nodeId, ex);
+        }
+        return null;
+    }
+
 }
