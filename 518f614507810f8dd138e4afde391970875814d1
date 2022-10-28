@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a316b85_3f049bfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-10-28T06:59:51Z",
+      "side": 1,
+      "message": "@Guillaume\nHow is it possible to always have this java version check failure on the CI?",
+      "revId": "518f614507810f8dd138e4afde391970875814d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
