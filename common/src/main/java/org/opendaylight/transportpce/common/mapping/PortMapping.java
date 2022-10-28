@@ -110,6 +110,30 @@ public interface PortMapping {
     Mapping getMapping(String nodeId, String circuitPackName, String portName);
 
     /**
+     * This method for a given node's termination point returns the Mapping object
+     * based on portmapping.yang model stored in the MD-SAL data store which is
+     * created when the node is connected for the first time. The mapping object
+     * basically contains the following attributes of interest:
+     *
+     * <p>
+     * 1. Supporting circuit pack
+     *
+     * <p>
+     * 2. Supporting port
+     *
+     * <p>
+     * 3. Supporting OTS/OMS interface (if port on ROADM)
+     *
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     * @param interfName
+     *            Name of the OTS interface
+     *
+     * @return Result Mapping object if success otherwise null.
+     */
+    Mapping getMappingFromOtsInterface(String nodeId, String interfName);
+
+    /**
      * This method removes a given mapping data from the mapping list
      * stored in the datastore while the Netconf device is already
      * connected to the controller.

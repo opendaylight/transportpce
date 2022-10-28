@@ -18,6 +18,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OtdrScan
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class DeviceListener221 implements OrgOpenroadmDeviceListener {
      */
     @Override
     public void onChangeNotification(ChangeNotification notification) {
+        LOG.info("notification received from device {}: {}", this.nodeId, notification.toString());
         if (notification.getEdit() == null) {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
             return;
@@ -76,6 +78,27 @@ public class DeviceListener221 implements OrgOpenroadmDeviceListener {
                     };
                     Thread thread = new Thread(handleNetconfEvent);
                     thread.start();
+                    break;
+                case "Interface":
+                    LinkedList<PathArgument> pathInter = new LinkedList<>();
+                    edit.getTarget().getPathArguments().forEach(p -> pathInter.add(p));
+                    InstanceIdentifier<Interface> interfIID = InstanceIdentifier.unsafeOf(pathInter);
+                    String interfName = InstanceIdentifier.keyOf(interfIID).getName();
+                    LOG.info("interface {} modified on device {}", interfName, this.nodeId);
+                    Mapping oldMapping2 = portMapping.getMappingFromOtsInterface(nodeId, interfName);
+                    if (oldMapping2 == null) {
+                        return;
+                    }
+                    Runnable handleNetconfEvent2 = new Runnable() {
+                        @Override
+                        public void run() {
+                            portMapping.updateMapping(nodeId, oldMapping2);
+                            LOG.info("{} : mapping data for {} updated", nodeId,
+                                oldMapping2.getLogicalConnectionPoint());
+                        }
+                    };
+                    Thread thread2 = new Thread(handleNetconfEvent2);
+                    thread2.start();
                     break;
                 default:
                     LOG.debug("modification of type {} not managed yet", edit.getTarget().getTargetType());
