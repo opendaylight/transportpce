@@ -199,7 +199,20 @@ public class PortMappingVersion221 {
         try {
             Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
                 portId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
-            Mapping newMapping = updateMappingObject(nodeId, port, oldMapping);
+            Interface otsInterface =
+                oldMapping.getSupportingOts() == null
+                    ? null
+                    : deviceTransactionManager.getDataFromDevice(
+                            nodeId,
+                            LogicalDatastoreType.OPERATIONAL,
+                            InstanceIdentifier
+                                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                                .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))
+                                .build(),
+                            Timeouts.DEVICE_READ_TIMEOUT,
+                            Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+                        .get();
+            Mapping newMapping = updateMappingObject(nodeId, port, oldMapping, otsInterface);
             LOG.debug(PortMappingUtils.UPDATE_MAPPING_LOGMSG,
                 nodeId, oldMapping, oldMapping.getLogicalConnectionPoint(), newMapping);
             final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
@@ -805,9 +818,9 @@ public class PortMappingVersion221 {
         return mpBldr.build();
     }
 
-    private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping) {
+    private Mapping updateMappingObject(String nodeId, Ports port, Mapping oldmapping, Interface otsInterf) {
         MappingBuilder mpBldr = new MappingBuilder(oldmapping);
-        updateMappingStates(mpBldr, port, oldmapping);
+        updateMappingStates(mpBldr, port, oldmapping, otsInterf);
         if (port.getInterfaces() == null) {
             return mpBldr.build();
         }
@@ -816,14 +829,19 @@ public class PortMappingVersion221 {
         return mpBldr.build();
     }
 
-    private MappingBuilder updateMappingStates(MappingBuilder mpBldr, Ports port, Mapping oldmapping) {
+    private MappingBuilder updateMappingStates(MappingBuilder mpBldr, Ports port, Mapping oldmapping,
+            Interface otsInterf) {
         if (port.getAdministrativeState() != null
-            && !port.getAdministrativeState().getName().equals(oldmapping.getPortAdminState())) {
+                && !port.getAdministrativeState().getName().equals(oldmapping.getPortAdminState())) {
             mpBldr.setPortAdminState(port.getAdministrativeState().name());
         }
         if (port.getOperationalState() != null
-            && !port.getOperationalState().getName().equals(oldmapping.getPortOperState())) {
+                && !port.getOperationalState().getName().equals(oldmapping.getPortOperState())) {
             mpBldr.setPortOperState(port.getOperationalState().name());
+        }
+        if (otsInterf != null && otsInterf.getOperationalState() != null
+                && !otsInterf.getOperationalState().name().equals(oldmapping.getPortOperState())) {
+            mpBldr.setPortOperState(otsInterf.getOperationalState().name());
         }
         return mpBldr;
     }
