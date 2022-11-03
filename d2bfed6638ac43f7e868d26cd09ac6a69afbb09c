@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "770c8ca9_0d4560bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-11-03T08:16:20Z",
+      "side": 1,
+      "message": "new patch set to fix part of exceptions in karaf log when receiving a changeNotification on interface. ",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
