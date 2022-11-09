@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "8cd3b0ce455b0601ab5e224c00bb7ae640881c29",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8b8e06_07c52067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-11-09T14:05:29Z",
+      "side": 1,
+      "message": "Our TAPI functional tests are failing due to the fact that in S-SR3 we can no longer launch the karaf client to install the odl-transportpce-tapi feature.\nI wrote the following JIRA ticket to explain: https://jira.opendaylight.org/browse/TRNSPRTPCE-701",
+      "revId": "8cd3b0ce455b0601ab5e224c00bb7ae640881c29",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
