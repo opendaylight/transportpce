@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "7199f9cabc3973b5b1dba701c16849debf41c064",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e0da135_a1b73915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-11-14T14:07:34Z",
+      "side": 1,
+      "message": "pylint issue resolved with change 103219.",
+      "revId": "7199f9cabc3973b5b1dba701c16849debf41c064",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
