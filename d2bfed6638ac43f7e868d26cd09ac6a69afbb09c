@@ -33,6 +33,108 @@
       "message": "___________________________________ summary ____________________________________\n  buildcontroller: commands succeeded\n  testsPCE: commands succeeded\n  sims121: commands succeeded\n  build_karaf_tests121: commands succeeded\n  tests121: commands succeeded\n  sims221: commands succeeded\n  build_karaf_tests221: commands succeeded\n  tests_tapi: commands succeeded\n  sims71: commands succeeded\n  build_karaf_tests71: commands succeeded\n  tests71: commands succeeded\n  tests221: commands succeeded\n  build_karaf_tests_hybrid: commands succeeded\n  tests_hybrid: commands succeeded\n  docs: commands succeeded\nERROR:   docs-linkcheck: parallel child exit code 1\n  checkbashisms: commands succeeded\n  pre-commit: commands succeeded\n  gitlint: commands succeeded\n  pylint: commands succeeded",
       "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b421df6_ee904b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "LGTM\nhere in comments are a few possible improvements",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eea2988_9577faaa",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "if (nodePortmapppingOpt.isEmpty())\nis more indicated IMO",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "914b4360_3db0f845",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "this intermediate variable is not required IMO",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1425078_9722e8de",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "indent +4 here to separate condition from code block",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27533ba4_6a2fd11d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "indent +4 here to separate condition from code block",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c130af9a_7c398822",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-22T09:59:25Z",
+      "side": 1,
+      "message": "indent +4 here to separate condition from code block",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
