@@ -30,7 +30,7 @@ SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
 KARAF_OK_START_MSG = "Blueprint container for bundle org.opendaylight.netconf.restconf.* was successfully created"
-LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
+LIGHTY_OK_START_MSG = "lighty.io and RESTCONF-NETCONF started"
 
 ODL_LOGIN = 'admin'
 ODL_PWD = 'admin'
