@@ -129,7 +129,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
-        cls.processes = test_utils.start_tpce()
         cls.processes = test_utils.start_sims([('xpdra', cls.NODE_VERSION_221),
                                                ('roadma', cls.NODE_VERSION_221),
                                                ('roadmc', cls.NODE_VERSION_221),
