@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41c03671_c0daf1db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-11-24T11:29:51Z",
+      "side": 1,
+      "message": "thanks for your review.",
+      "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e55f7ebd_98bf1c96",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-11-24T10:24:43Z",
       "side": 1,
       "message": "lighty build cannot be enabled in buildcontroller.sh\nwithout breaking other karaf for tests build.\n\u003d\u003e vote -1\n\na working approach might be add the following lines here\n\ncd lighty\n./build.sh\n\nthis means also updating white_externals commands",
+      "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd8bec72_9354c031",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-11-24T11:29:51Z",
+      "side": 1,
+      "message": "Yes, well seen.\nWhy not systematically build both karaf and lighty (lighty building time is very short)?",
+      "parentUuid": "e55f7ebd_98bf1c96",
       "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
