@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05feb97_846fac60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T10:24:43Z",
+      "side": 1,
+      "message": "draft-bierman02",
+      "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e55f7ebd_98bf1c96",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T10:24:43Z",
+      "side": 1,
+      "message": "lighty build cannot be enabled in buildcontroller.sh\nwithout breaking other karaf for tests build.\n\u003d\u003e vote -1\n\na working approach might be add the following lines here\n\ncd lighty\n./build.sh\n\nthis means also updating white_externals commands",
+      "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
