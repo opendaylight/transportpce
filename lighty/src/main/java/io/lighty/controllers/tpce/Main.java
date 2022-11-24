@@ -20,7 +20,6 @@ import io.lighty.core.controller.impl.config.ControllerConfiguration;
 import io.lighty.core.controller.impl.util.ControllerConfigUtils;
 import io.lighty.modules.northbound.restconf.community.impl.CommunityRestConf;
 import io.lighty.modules.northbound.restconf.community.impl.CommunityRestConfBuilder;
-import io.lighty.modules.northbound.restconf.community.impl.config.JsonRestConfServiceType;
 import io.lighty.modules.northbound.restconf.community.impl.config.RestConfConfiguration;
 import io.lighty.modules.northbound.restconf.community.impl.util.RestConfConfigUtils;
 import io.lighty.modules.southbound.netconf.impl.NetconfSBPlugin;
@@ -82,7 +81,6 @@ public class Main {
                 restConfConfig.setHttpPort(8181);
 
             }
-            restConfConfig.setJsonRestconfServiceType(JsonRestConfServiceType.DRAFT_02);
             // 3. NETCONF SBP configuration
             NetconfConfiguration netconfSBPConfig = NetconfConfigUtils.createDefaultNetconfConfiguration();
             startLighty(singleNodeConfiguration, restConfConfig, netconfSBPConfig, registerShutdownHook,
