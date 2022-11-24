@@ -68,6 +68,24 @@
       "parentUuid": "e55f7ebd_98bf1c96",
       "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f24787_438adcd0",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T12:53:46Z",
+      "side": 1,
+      "message": "in the initial design, I assumed lighty/karaf should be used for every tests or nowhere.\nSo I disabled karaf tests instance build when lighty was used.\n\nAlso Lighty release cycle is around one month late after the GA release.\nSo building lighty is not always possible.",
+      "parentUuid": "bd8bec72_9354c031",
+      "revId": "86106b8cfb32ed972bf98a11432280ce0ed4cfda",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
