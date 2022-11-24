@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "a9389dda77291b7f43d02f6a8ce5cebb81a4747c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee235fbb_1bd6fb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T10:17:54Z",
+      "side": 1,
+      "message": "change on top of this one only modified lighty dependency version  and did pass",
+      "revId": "a9389dda77291b7f43d02f6a8ce5cebb81a4747c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
