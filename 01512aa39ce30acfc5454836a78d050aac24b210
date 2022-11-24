@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83ade6bd_e0a4927b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T16:42:59Z",
+      "side": 1,
+      "message": "chlorine",
+      "revId": "01512aa39ce30acfc5454836a78d050aac24b210",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06310c5d_f2fa29bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-11-24T16:42:59Z",
+      "side": 1,
+      "message": "first letter case should be the same for every vullet point",
+      "revId": "01512aa39ce30acfc5454836a78d050aac24b210",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
