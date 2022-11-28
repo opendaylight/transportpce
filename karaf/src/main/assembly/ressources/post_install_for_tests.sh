@@ -8,6 +8,8 @@ sed 's/8181/ODL_RESTCONF_PORT/' ../etc/jetty.xml > jetty_template.xml
 sed 's/8101/ODL_SHELL_PORT/' ../etc/org.apache.karaf.shell.cfg > org.apache.karaf.shell._template.cfg
 sed -e 's/1099/ODL_RMI_REGISTRY_PORT/' -e 's/44444/ODL_RMI_SERVER_PORT/' ../etc/org.apache.karaf.management.cfg > org.apache.karaf.management._template.cfg
 
+sed 's/^#persistent=true/persistent=false/' ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-datastore.cfg > ../etc/org.opendaylight.controller.cluster.datastore.cfg
+
 sed -i'_' -e '1 a\
 \
 . \$(dirname \$0)/\.\./\.\./\.\./\.\./tests/reflectwarn.sh\

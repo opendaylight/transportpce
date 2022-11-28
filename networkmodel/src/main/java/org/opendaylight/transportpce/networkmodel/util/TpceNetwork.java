@@ -49,7 +49,7 @@ public class TpceNetwork {
             Network network = createNetwork(networkId);
             InstanceIdentifier.Builder<Network> nwIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(networkId)));
-            networkTransactionService.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("{} network layer created successfully.", networkId);
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
