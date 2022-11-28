@@ -89,7 +89,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
             InstanceIdentifier<ServiceList> iid = InstanceIdentifier.create(ServiceList.class);
             ServiceList initialRegistry = new ServiceListBuilder().build();
-            transaction.put(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
+            transaction.merge(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -103,7 +103,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
             InstanceIdentifier<TempServiceList> iid = InstanceIdentifier.create(TempServiceList.class);
             TempServiceList initialRegistry = new TempServiceListBuilder().build();
-            transaction.put(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
+            transaction.merge(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
