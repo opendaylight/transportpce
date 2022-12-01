@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4b93cf7_816b0b08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-01T13:48:34Z",
+      "side": 1,
+      "message": "well known false positive issue with one TAPI test",
+      "revId": "899d4a6953e2cf69ce52177c4f4678bd9f1ea1a5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
