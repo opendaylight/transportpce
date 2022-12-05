@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "258bf5c5_b818591c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-05T19:27:00Z",
+      "side": 1,
+      "message": "LGTM apart a few minor things",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a51e8ea_62501497",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-05T19:27:00Z",
+      "side": 1,
+      "message": "LGTM\nbut I think a stream would probably more indicated here and below to avoid the null checks.\nThis can wait for further refactoring.",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e0f97df_b1af80c9",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-05T19:27:00Z",
+      "side": 1,
+      "message": "indent -4 here to separate clearly builder from setter as done line 133",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426cf8f7_2bc9a621",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceDeserializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-05T19:27:00Z",
+      "side": 1,
+      "message": "Orange really ?",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eeead1f_c063144e",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceSerializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-05T19:27:00Z",
+      "side": 1,
+      "message": "Orange really?",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
