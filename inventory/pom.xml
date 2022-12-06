@@ -20,6 +20,10 @@
   <packaging>bundle</packaging>
 
   <properties>
+    <!--
+          FIXME: these versions should be communicated from tpce-models' artifacts pom
+                 and then should be imported just like netconf below
+      -->
     <transportpce.models.version>17.1.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
@@ -28,7 +32,7 @@
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.4</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
