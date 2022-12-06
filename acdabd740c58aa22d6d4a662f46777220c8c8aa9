@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8b27b1f_5696b7e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T09:27:15Z",
+      "side": 1,
+      "message": "in the new files added here.\n\nI think Gilles pushed some adaptations for the mock in the new PS.\nYou can make a diff in Gerrit to see them",
+      "parentUuid": "6397a01e_8519c886",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a51e8ea_62501497",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
         "patchSetId": 22
@@ -106,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67c24a26_ef3a5ba6",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceDeserializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T09:27:15Z",
+      "side": 1,
+      "message": "@javier copyright issue here",
+      "parentUuid": "426cf8f7_2bc9a621",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2eeead1f_c063144e",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceSerializerTest.java",
         "patchSetId": 22
@@ -117,6 +153,24 @@
       "writtenOn": "2022-12-05T19:27:00Z",
       "side": 1,
       "message": "Orange really?",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2599ec5f_2cb178b2",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceSerializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T09:27:15Z",
+      "side": 1,
+      "message": "@javier and here",
+      "parentUuid": "2eeead1f_c063144e",
       "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
