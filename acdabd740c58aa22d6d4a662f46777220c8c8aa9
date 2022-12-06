@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b773065b_9de403f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T08:58:01Z",
+      "side": 1,
+      "message": "verified -1 \u003d\u003e at least copyright issues must be fixed before merging",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a51e8ea_62501497",
