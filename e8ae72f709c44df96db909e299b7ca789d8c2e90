@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd2053c5_87c0f23f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "Locally I could perform the tests and I was getting an error with the lines 121 and 133: PublishTapiNotificationServiceBuilder(NotificationServiceDataUtils.buildReceivedTapiAlarmEvent()) in NbiNotificationsListenerImplTest.java. My IDE couldnt resolve the constructor. I dont know if you had the same issue...",
+      "revId": "e8ae72f709c44df96db909e299b7ca789d8c2e90",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

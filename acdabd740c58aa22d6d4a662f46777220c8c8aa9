@@ -125,6 +125,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56498e89_7aae7d5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ce88492_5e9922fb",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a51e8ea_62501497",
@@ -144,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c60202e_b88ab3e2",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "So basically, instead of null check and for loop, replace by stream?\nA later refacto could be proposed as you mention",
+      "parentUuid": "7a51e8ea_62501497",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e0f97df_b1af80c9",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
         "patchSetId": 22
@@ -155,6 +191,24 @@
       "writtenOn": "2022-12-05T19:27:00Z",
       "side": 1,
       "message": "indent -4 here to separate clearly builder from setter as done line 133",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3e561f0_ab173f25",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e0f97df_b1af80c9",
       "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -194,6 +248,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "950acd15_bc9657d9",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceDeserializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67c24a26_ef3a5ba6",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2eeead1f_c063144e",
@@ -225,6 +297,24 @@
       "side": 1,
       "message": "@javier and here",
       "parentUuid": "2eeead1f_c063144e",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47846c95_9b43382b",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationTapiServiceSerializerTest.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2022-12-06T11:14:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2599ec5f_2cb178b2",
       "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
