@@ -16,6 +16,57 @@
       "message": "Thanks Jonas for your change.\nSee with PS4 an alternative implementation.",
       "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbc117ff_897b3659",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-12-06T20:01:32Z",
+      "side": 1,
+      "message": "Maybe the formulation \"LLDP subtree is missing\" should be changed since it will not always be entirely correct with this implementation.",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1306276_2cf3162a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-12-06T20:01:32Z",
+      "side": 1,
+      "message": "I have not seen var used in TPCE before and why should it be different for 2.2.1 compared to 1.2.1 device?",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d87a92c_9ecccb90",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2022-12-06T20:01:32Z",
+      "side": 1,
+      "message": "The name of this function is confusing since it returns true if there is no neighbor.",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
