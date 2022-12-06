@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd68cf3c_33152d66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T09:42:23Z",
+      "side": 1,
+      "message": "I\u0027ll take care of my remarks in a new PS so that we can go forward\nand only need Gilles\u0027feedback",
+      "parentUuid": "a8b27b1f_5696b7e5",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a51e8ea_62501497",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
         "patchSetId": 22
