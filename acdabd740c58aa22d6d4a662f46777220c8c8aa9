@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccd1ba1f_1084545f",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-06T13:50:24Z",
+      "side": 1,
+      "message": "exactly\nno emergency",
+      "parentUuid": "8c60202e_b88ab3e2",
+      "revId": "acdabd740c58aa22d6d4a662f46777220c8c8aa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e0f97df_b1af80c9",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsListenerImplTest.java",
         "patchSetId": 22
