@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.olm;
 
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
@@ -21,19 +20,19 @@ import org.slf4j.LoggerFactory;
 public class OlmProvider {
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
     private final RpcProviderService rpcProviderService;
-    private final OlmPowerService olmPowerService;
+    private final TransportpceOlmService olmPowerServiceRpc;
     private ObjectRegistration<TransportpceOlmService> olmRPCRegistration;
 
     /**
      * Instantiates a new olm provider.
-     * @param olmPowerService
-     *            implementation of OlmService
+     * @param olmPowerServiceRpc
+     *            implementation of TransportpceOlmService
      * @param rpcProviderService
      *            the rpc provider service
      */
-    public OlmProvider(final RpcProviderService rpcProviderService, final OlmPowerService olmPowerService) {
+    public OlmProvider(final RpcProviderService rpcProviderService, final TransportpceOlmService olmPowerServiceRpc) {
         this.rpcProviderService = rpcProviderService;
-        this.olmPowerService = olmPowerService;
+        this.olmPowerServiceRpc = olmPowerServiceRpc;
     }
 
     /**
@@ -43,7 +42,7 @@ public class OlmProvider {
         LOG.info("OlmProvider Session Initiated");
         // Initializing Notification module
         olmRPCRegistration = rpcProviderService.registerRpcImplementation(TransportpceOlmService.class,
-                new OlmPowerServiceRpcImpl(this.olmPowerService));
+                this.olmPowerServiceRpc);
     }
 
     /**
