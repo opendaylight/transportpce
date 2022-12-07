@@ -37,17 +37,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
   <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
-  <bean id="olmPowerServiceImpl"
-        class="org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl"
-        init-method="init" destroy-method="close">
-    <argument ref="dataBroker" />
-    <argument ref="powerMgmt" />
-    <argument ref="deviceTransactionManager" />
-    <argument ref="portMapping" />
-    <argument ref="mappingUtils" />
-    <argument ref="openRoadmInterfaces" />
-  </bean>
-
   <bean id="powerMgmt" class="org.opendaylight.transportpce.olm.power.PowerMgmtImpl" >
     <argument ref="dataBroker" />
     <argument ref="openRoadmInterfaces" />
@@ -57,13 +46,27 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument value="${timer2}"/>
   </bean>
 
-  <bean id="provider"
-        class="org.opendaylight.transportpce.olm.OlmProvider"
-        init-method="init" destroy-method="close">
-    <argument ref="rpcProviderService" />
+  <bean id="olmPowerServiceImpl" class="org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl">
+    <argument ref="dataBroker" />
+    <argument ref="powerMgmt" />
+    <argument ref="deviceTransactionManager" />
+    <argument ref="portMapping" />
+    <argument ref="mappingUtils" />
+    <argument ref="openRoadmInterfaces" />
+  </bean>
+
+  <bean id="olmPowerServiceRpcImpl" class="org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl">
     <argument ref="olmPowerServiceImpl" />
   </bean>
 
-  <service ref="olmPowerServiceImpl"
-        interface="org.opendaylight.transportpce.olm.service.OlmPowerService"/>
-</blueprint>
+  <bean id="provider" class="org.opendaylight.transportpce.olm.OlmProvider"
+        init-method="init" destroy-method="close">
+    <argument ref="rpcProviderService" />
+    <argument ref="olmPowerServiceRpcImpl" />
+  </bean>
+
+  <!--service ref="olmPowerServiceImpl"
+           interface="org.opendaylight.transportpce.olm.service.OlmPowerService"/-->
+  <service ref="olmPowerServiceRpcImpl"
+           interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
+  </blueprint>
