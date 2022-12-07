@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16519caa_2b5b7e15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-07T17:56:51Z",
+      "side": 1,
+      "message": "SingleFeatureTest of odl-transportpce-tapi is still failing due to a missing dependency in olm module. I don\u0027t see where is the issue...\n\n[ERROR]   Condition with alias \u0027checkBundleDiagInfos\u0027 didn\u0027t complete within 5 minutes because org.opendaylight.odlparent.bundlestest.lib.TestBundleDiag expected system either ready with all bundles Active, or Stopping or Failure (but not still booting in GracePeriod, Waiting, Starting, Unknown;but just Resolved and some exceptional Installed OK) but was \u003cdiag: Booting {Installed\u003d0, Resolved\u003d8, Unknown\u003d0, GracePeriod\u003d3, Waiting\u003d0, Starting\u003d0, Active\u003d297, Stopping\u003d0, Failure\u003d0}\n1. NOK org.opendaylight.transportpce.renderer:6.1.0.SNAPSHOT: OSGi state \u003d Active, Karaf bundleState \u003d GracePeriod, due to: Blueprint\n07/12/2022 18:36\nMissing dependencies: \n(objectClass\u003dorg.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService) \nDeclarative Services\n\n2. NOK org.opendaylight.transportpce.servicehandler:6.1.0.SNAPSHOT: OSGi state \u003d Active, Karaf bundleState \u003d GracePeriod, due to: Blueprint\n07/12/2022 18:36\nMissing dependencies: \n(objectClass\u003dorg.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations) \nDeclarative Services\n\n3. NOK org.opendaylight.transportpce.tapi:6.1.0.SNAPSHOT: OSGi state \u003d Active, Karaf bundleState \u003d GracePeriod, due to: Blueprint\n07/12/2022 18:36\nMissing dependencies: \n(objectClass\u003dorg.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService) (objectClass\u003dorg.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations) \nDeclarative Services\n\u003e.\n\n\nOtherwise, the surefire reports indicates a potential binding issue with SLF4J that I don\u0027t understand either\n:\nLF4J: Class path contains multiple SLF4J bindings.\nSLF4J: Found binding in [jar:file:/home/gilles/.m2/repository/org/apache/karaf/org.apache.karaf.client/4.4.2/org.apache.karaf.client-4.4.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/home/gilles/.m2/repository/org/ops4j/pax/logging/pax-logging-api/2.1.3/pax-logging-api-2.1.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/home/gilles/.m2/repository/org/ops4j/pax/logging/pax-logging-logback/2.1.3/pax-logging-logback-2.1.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/home/gilles/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/home/gilles/.m2/repository/org/slf4j/slf4j-simple/1.7.32/slf4j-simple-1.7.32.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.\nSLF4J: Actual binding is of type [org.slf4j.impl.SimpleLoggerFactory]",
+      "revId": "7272cf721a9befe11da581ae50b47d8cf8ecb457",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
