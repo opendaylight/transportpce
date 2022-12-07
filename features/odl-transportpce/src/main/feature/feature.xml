@@ -6,7 +6,7 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" name="odl-transportpce">
     <feature name="odl-transportpce">
         <configfile finalname="etc/org.opendaylight.transportpce.cfg" override="true">
-            mvn:${project.groupId}/${project.artifactId}/${project.version}/cfg/config
+            mvn:${project.groupId}/transportpce-olm/${project.version}/cfg/config
         </configfile>
     </feature>
 </features>

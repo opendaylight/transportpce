@@ -20,6 +20,9 @@
   <name>OpenDaylight :: transportpce :: Inventory</name>
 
   <properties>
+    <mdsal.version>10.0.5</mdsal.version>
+    <netconf.version>4.0.4</netconf.version>
+    <transportpce.models.version>17.1.0-SNAPSHOT</transportpce.models.version>
     <transportpce.db.host>localhost:3306</transportpce.db.host>
     <transportpce.db.database>transportpce</transportpce.db.database>
     <transportpce.db.username>root</transportpce.db.username>
@@ -28,14 +31,58 @@
     <transporpce.device.backup.prefix></transporpce.device.backup.prefix>
     <transporpce.device.backup.period>600</transporpce.device.backup.period>
     <!-- skipping single feature test because DataSource is not available in Pax4j (H2 possible workaround) -->
-    <skip.karaf.featureTest>true</skip.karaf.featureTest>
+    <skip.karaf.featureTest>false</skip.karaf.featureTest>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.transportpce.models</groupId>
+        <artifactId>transportpce-models-artifacts</artifactId>
+        <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>${mdsal.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.netconf</groupId>
+        <artifactId>netconf-artifacts</artifactId>
+        <version>${netconf.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>odl-transportpce</artifactId>
       <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>odl-mdsal-binding-base</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-netconf-util</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-netconf-mapping-api</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>

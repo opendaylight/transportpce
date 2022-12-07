@@ -6,7 +6,7 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" name="odl-transportpce-dmaap-client">
     <feature name="odl-transportpce-dmaap-client">
         <configfile finalname="etc/org.opendaylight.transportpce.dmaap.cfg" override="false">
-            mvn:${project.groupId}/${project.artifactId}/${project.version}/cfg/config
+            mvn:${project.groupId}/transportpce-dmaap-client/${project.version}/cfg/config
         </configfile>
     </feature>
 </features>
