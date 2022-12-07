@@ -23,7 +23,7 @@
 
   <properties>
     <!-- skipped because we are using config file as artifact and it is not installed before running test -->
-    <skip.karaf.featureTest>true</skip.karaf.featureTest>
+    <skip.karaf.featureTest>false</skip.karaf.featureTest>
   </properties>
 
   <dependencies>
