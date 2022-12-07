@@ -96,4 +96,35 @@
       <artifactId>sal-netconf-connector</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-db-artifact</id>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>target/resources/org.ops4j.datasource-transporpce.cfg</file>
+                  <type>cfg</type>
+                  <classifier>datasource</classifier>
+                </artifact>
+                <artifact>
+                  <file>target/resources/org.opendaylight.transportpce.job.cfg</file>
+                  <type>cfg</type>
+                  <classifier>config</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -5,10 +5,10 @@
         <feature>pax-jdbc-mariadb</feature>
         <feature>pax-jdbc-pool-dbcp2</feature>
         <configfile finalname="etc/org.ops4j.datasource-transportpce.cfg" override="false">
-            mvn:${project.groupId}/${project.artifactId}/${project.version}/cfg/datasource
+            mvn:${project.groupId}/transportpce-inventory/${project.version}/cfg/datasource
         </configfile>
         <configfile finalname="etc/org.opendaylight.transportpce.job.cfg" override="false">
-            mvn:${project.groupId}/${project.artifactId}/${project.version}/cfg/config
+            mvn:${project.groupId}/transportpce-inventory/${project.version}/cfg/config
         </configfile>
     </feature>
 </features>
