@@ -23,14 +23,61 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce :: tapi</name>
 
   <properties>
+    <mdsal.version>10.0.5</mdsal.version>
+    <netconf.version>4.0.4</netconf.version>
     <transportpce.models.version>17.1.0-SNAPSHOT</transportpce.models.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.transportpce.models</groupId>
+        <artifactId>transportpce-models-artifacts</artifactId>
+        <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>10.0.5</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.netconf</groupId>
+        <artifactId>netconf-artifacts</artifactId>
+        <version>${netconf.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>tapi-2.1.1</artifactId>
-      <version>${transportpce.models.version}</version>
+      <artifactId>odl-tapi-models</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>odl-mdsal-model-rfc8345</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-netconf-connector</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-netconf-all</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -40,6 +87,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </dependencies>
 
   <!-- skipping test since this is an umbrella project / folder -->
+<!--
   <build>
     <plugins>
       <plugin>
@@ -51,4 +99,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </plugin>
     </plugins>
   </build>
+-->
 </project>
