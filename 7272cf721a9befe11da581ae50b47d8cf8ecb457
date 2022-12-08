@@ -34,6 +34,24 @@
       "parentUuid": "16519caa_2b5b7e15",
       "revId": "7272cf721a9befe11da581ae50b47d8cf8ecb457",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0518308e_7a7530a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-08T14:50:35Z",
+      "side": 1,
+      "message": "Thank you Robert for your help. Finally, the issue was in the odl-transportpce-tapi declaration that needed odl-tranportpce declared since it depends from it...",
+      "parentUuid": "200aa858_edcdcfd2",
+      "revId": "7272cf721a9befe11da581ae50b47d8cf8ecb457",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
