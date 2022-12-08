@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6127beb_08e9a4ea",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-08T17:01:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc117ff_897b3659",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1306276_2cf3162a",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a513e00b_dad6832a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-08T17:01:47Z",
+      "side": 1,
+      "message": "Local Variable Type Inference is very useful here because it improves the readability of the code. Interfaces are already imported for 1.2.1 object, so declaring the type of 2.2.1 object introduce very long namespace. Keyword var allows reducing at least the type declaration.",
+      "parentUuid": "c1306276_2cf3162a",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d87a92c_9ecccb90",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
         "patchSetId": 4
@@ -65,6 +101,24 @@
       "writtenOn": "2022-12-06T20:01:32Z",
       "side": 1,
       "message": "The name of this function is confusing since it returns true if there is no neighbor.",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c54fd5ee_a81f1797",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-08T17:01:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d87a92c_9ecccb90",
       "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
