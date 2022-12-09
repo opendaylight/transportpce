@@ -295,8 +295,6 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                              response['output']['service']['end-point'][0]['name'][0])
         self.assertDictEqual(dict(input_dict_3, **response['output']['service']['end-point'][1]['name'][0]),
                              response['output']['service']['end-point'][1]['name'][0])
-        # If the gate fails is because of the waiting time not being enough
-        time.sleep(self.WAITING)
 
     def test_12_get_service_Ethernet(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.eth))
@@ -382,10 +380,10 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'tapi-notification', 'get-notification-list', self.cr_get_notif_list_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['output']['notification'][1]['target-object-identifier'], str(self.uuid_services.eth))
-        self.assertEqual(response['output']['notification'][1]['target-object-type'], 'CONNECTIVITY_SERVICE')
-        self.assertEqual(response['output']['notification'][1]['changed-attributes'][0]['new-value'], 'UNLOCKED')
-        self.assertEqual(response['output']['notification'][1]['changed-attributes'][1]['new-value'], 'ENABLED')
+        self.assertEqual(response['output']['notification'][0]['target-object-identifier'], str(self.uuid_services.eth))
+        self.assertEqual(response['output']['notification'][0]['target-object-type'], 'CONNECTIVITY_SERVICE')
+        self.assertEqual(response['output']['notification'][0]['changed-attributes'][0]['new-value'], 'UNLOCKED')
+        self.assertEqual(response['output']['notification'][0]['changed-attributes'][1]['new-value'], 'ENABLED')
         time.sleep(2)
 
     def test_19_delete_connectivity_service_Ethernet(self):
