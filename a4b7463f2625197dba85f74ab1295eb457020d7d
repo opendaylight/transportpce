@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6a109ac_b7a0f7f4",
+        "filename": "artifacts/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-09T10:31:44Z",
+      "side": 1,
+      "message": "I don\u0027t know if I need to declare that.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 19
+      },
+      "revId": "a4b7463f2625197dba85f74ab1295eb457020d7d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
