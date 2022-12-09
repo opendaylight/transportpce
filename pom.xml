@@ -30,6 +30,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </scm>
 
   <modules>
+    <module>artifacts</module>
     <module>api</module>
     <module>common</module>
     <module>test-common</module>
