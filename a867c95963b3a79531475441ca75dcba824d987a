@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8945dbb_97430d6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-11T15:22:26Z",
+      "side": 1,
+      "message": "Thanks a lot it LGTM but I did not manage to fully test it :(\n\nSadly the CI is KO and since lighty builds do not embed nbinotifications, it probably needs to be rebased on top of https://git.opendaylight.org/gerrit/c/transportpce/+/103655 before being tested",
+      "revId": "a867c95963b3a79531475441ca75dcba824d987a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
