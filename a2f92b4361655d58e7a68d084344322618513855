@@ -34,6 +34,24 @@
       "parentUuid": "9002c6eb_8611ff74",
       "revId": "a2f92b4361655d58e7a68d084344322618513855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba70fa1c_37a7e078",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-12T13:31:21Z",
+      "side": 1,
+      "message": "OK, I\u0027ll force the verified +1 and let us double-check this if you don\u0027t mind.",
+      "parentUuid": "c466859e_a278ef93",
+      "revId": "a2f92b4361655d58e7a68d084344322618513855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
