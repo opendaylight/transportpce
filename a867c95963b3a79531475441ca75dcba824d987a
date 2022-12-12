@@ -52,6 +52,24 @@
       "parentUuid": "e8867612_f899ba47",
       "revId": "a867c95963b3a79531475441ca75dcba824d987a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e439d3b_8136d530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-12T13:30:03Z",
+      "side": 1,
+      "message": "Fair enough.\n\nIt may be due to my local settings.",
+      "parentUuid": "3b5165a8_41da4e85",
+      "revId": "a867c95963b3a79531475441ca75dcba824d987a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
