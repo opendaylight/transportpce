@@ -16,6 +16,24 @@
       "message": "weird CI failure",
       "revId": "a2f92b4361655d58e7a68d084344322618513855",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c466859e_a278ef93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2022-12-12T09:59:38Z",
+      "side": 1,
+      "message": "Yes, the gate is out of service since last friday due to an issue with tox. And yet, it seems we use the correct version specified by the following change: (71085: Fix: pin tox version | https://gerrit.linuxfoundation.org/infra/c/releng/global-jjb/+/71085)",
+      "parentUuid": "9002c6eb_8611ff74",
+      "revId": "a2f92b4361655d58e7a68d084344322618513855",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
