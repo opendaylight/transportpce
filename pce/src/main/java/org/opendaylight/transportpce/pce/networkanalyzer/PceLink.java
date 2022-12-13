@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,14 +66,16 @@ public class PceLink implements Serializable {
     private final Long availableBandwidth;
     private final Long usedBandwidth;
     private final List<Long> srlgList;
-    private final double osnr;
+//    private final double osnr;
+    private final Double length;
+    private final Double cd;
+    private final Double pmd2;
+    private final Double spanLoss;
+    private final Double powerCorrection;
     private final transient Span omsAttributesSpan;
     //meter per ms
-    private static final double CELERITY = 2.99792458 * 1e5;
-    private static final double NOISE_MASK_A = 0.571429;
-    private static final double NOISE_MASK_B = 39.285714;
-    private static final double UPPER_BOUND_OSNR = 33;
-    private static final double LOWER_BOUND_OSNR = 0.1;
+    private static final double GLASSCELERITY = 2.99792458 * 1e5 / 1.5;
+    private static final double PMD_CONSTANT = 0.04;
 
     public PceLink(Link link, PceNode source, PceNode dest) {
         LOG.debug("PceLink: : PceLink start ");
@@ -100,26 +103,39 @@ public class PceLink implements Serializable {
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
+            this.length = calcLength(link);
             this.srlgList = MapUtils.getSRLG(link);
             this.latency = calcLatency(link);
-            this.osnr = calcSpanOSNR();
             this.availableBandwidth = 0L;
             this.usedBandwidth = 0L;
+            Map<String, Double> spanLossMap = calcSpanLoss(link);
+            this.spanLoss = spanLossMap.get("SpanLoss");
+            this.powerCorrection = spanLossMap.get("PoutCorrection");
+            Map<String, Double> cdAndPmdMap = calcCDandPMD(link);
+            this.cd = cdAndPmdMap.get("CD");
+            this.pmd2 = cdAndPmdMap.get("PMD2");
         } else if (this.linkType == OpenroadmLinkType.OTNLINK) {
             this.availableBandwidth = MapUtils.getAvailableBandwidth(link);
             this.usedBandwidth = MapUtils.getUsedBandwidth(link);
             this.srlgList = MapUtils.getSRLGfromLink(link);
-            this.osnr = 0.0;
             this.latency = 0L;
+            this.length = 0.0;
             this.omsAttributesSpan = null;
+            this.spanLoss = 0.0;
+            this.powerCorrection = 0.0;
+            this.cd = 0.0;
+            this.pmd2 = 0.0;
         } else {
             this.omsAttributesSpan = null;
             this.srlgList = null;
             this.latency = 0L;
-            //infinite OSNR in DB
-            this.osnr = 100L;
+            this.length = 0.0;
             this.availableBandwidth = 0L;
             this.usedBandwidth = 0L;
+            this.spanLoss = 0.0;
+            this.powerCorrection = 0.0;
+            this.cd = 0.0;
+            this.pmd2 = 0.0;
         }
         LOG.debug("PceLink: created PceLink  {}", linkId);
     }
@@ -134,63 +150,145 @@ public class PceLink implements Serializable {
         return tmpoppositeLink;
     }
 
-    //Compute the link latency : if the latency is not defined, the latency is computed from the omsAttributesSpan
+    //Compute the link latency : if the latency is not defined, the latency is computed from the length
     private Long calcLatency(Link link) {
         Link1 link1 = link.augmentation(Link1.class);
         if (link1.getLinkLatency() != null) {
             return link1.getLinkLatency().toJava();
         }
-        if (this.omsAttributesSpan == null) {
+        Double linkLength = calcLength(link);
+        if (linkLength == null) {
+            LOG.debug("In PceLink: cannot compute the latency for the link {}", link.getLinkId().getValue());
             return 1L;
         }
-        double tmp = 0;
-        Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap = this.omsAttributesSpan
-                .nonnullLinkConcatenation();
-        for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
-            // Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
-            if (entry == null || entry.getValue() == null || entry.getValue().getSRLGLength() == null) {
-                LOG.debug("In PceLink: cannot compute the latency for the link {}", link.getLinkId().getValue());
-                return 1L;
-            }
-            tmp += entry.getValue().getSRLGLength().doubleValue() / CELERITY;
-            LOG.debug("In PceLink: The latency of link {} == {}", link.getLinkId(), tmp);
-        }
-        return (long) Math.ceil(tmp);
+        LOG.debug("In PceLink: The latency of link {} is extrapolated from link length and == {}",
+            link.getLinkId(), linkLength / GLASSCELERITY);
+        return (long) Math.ceil(linkLength / GLASSCELERITY);
     }
 
-    //Compute the OSNR of a span
-    private double calcSpanOSNR() {
+    private Double calcLength(Link link) {
+        Link1 link1 = link.augmentation(Link1.class);
+        if (link1.getLinkLength() != null) {
+            return link1.getLinkLength().doubleValue();
+        }
         if (this.omsAttributesSpan == null) {
-            return 0L;
+            LOG.debug("In PceLink: cannot compute the length for the link {}", link.getLinkId().getValue());
+            return null;
         }
-        Collection<LinkConcatenation> linkConcatenationList =
-            this.omsAttributesSpan.nonnullLinkConcatenation().values();
-        if (linkConcatenationList == null) {
-            LOG.error("in PceLink : Null field in the OmsAttrubtesSpan");
-            return 0L;
+        double linkLength = 0;
+        Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap = this.omsAttributesSpan
+            .nonnullLinkConcatenation();
+        for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
+            // Length is expressed in meter according to OpenROADM MSA
+            if (entry == null || entry.getValue() == null || entry.getValue().getSRLGLength() == null) {
+                LOG.debug("In PceLink: cannot compute the latency for the link {}", link.getLinkId().getValue());
+                return null;
+            }
+            linkLength += entry.getValue().getSRLGLength().doubleValue();
+            LOG.debug("In PceLink: The length of the link {} == {}", link.getLinkId(), linkLength / 1000.0);
         }
-        Iterator<LinkConcatenation> linkConcatenationiterator = linkConcatenationList.iterator();
-        if (!linkConcatenationiterator.hasNext()) {
-            return 0L;
+        return (linkLength / 1000.0);
+    }
+
+    //Calculate CD and PMD of the link from link length
+    private Map<String, Double> calcCDandPMDfromLength() {
+        Map<String, Double> cdAndPmd = new HashMap<>();
+        if (this.length != null) {
+            cdAndPmd.put("CD", 16.5 * this.length);
+            cdAndPmd.put("PMD2", Math.pow(this.length * PMD_CONSTANT, 2));
         }
-        if (this.omsAttributesSpan.getSpanlossCurrent() == null) {
-            LOG.error("in PceLink : Spanloss is null");
-            return 0L;
+        return cdAndPmd;
+    }
+
+    //Calculate CD and PMD of the link
+    private Map<String, Double> calcCDandPMD(Link link) {
+        double linkCd = 0.0;
+        double linkPmd2 = 0.0;
+        if (this.omsAttributesSpan == null) {
+            LOG.debug("In PceLink {} no OMS present, assume G.652 fiber, calculation based on fiber length of {} km",
+                link.getLinkId(), this.length);
+            return calcCDandPMDfromLength();
         }
-        // power on the output of the previous ROADM (dBm)
-        double pout = retrievePower(linkConcatenationiterator.next().augmentation(LinkConcatenation1.class)
-            .getFiberType());
-        // span loss (dB)
-        double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
-        // power on the input of the current ROADM (dBm)
-        double pin = pout - spanLoss;
-        double spanOsnrDb = NOISE_MASK_A * pin + NOISE_MASK_B;
-        if (spanOsnrDb > UPPER_BOUND_OSNR) {
-            spanOsnrDb = UPPER_BOUND_OSNR;
-        } else if (spanOsnrDb < LOWER_BOUND_OSNR) {
-            spanOsnrDb = LOWER_BOUND_OSNR;
+        Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap = this.omsAttributesSpan
+            .nonnullLinkConcatenation();
+        for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
+            // If the link-concatenation list is not populated or partially populated CD &
+            // PMD shall be derived from link-length (expressed in km in OR topology)
+            if (entry == null || entry.getValue() == null || entry.getValue().getSRLGLength() == null
+                || entry.getValue().augmentation(LinkConcatenation1.class).getFiberType() == null) {
+                if (this.length > 0.0) {
+                    LOG.debug("In PceLink: no OMS present; cd and PMD for the link {} extrapolated from link length {}"
+                        + "assuming SMF fiber type", link.getLinkId().getValue(), this.length);
+                    return calcCDandPMDfromLength();
+                }
+                // If Link-length upper attributes not present or incorrectly populated, no way
+                // to calculate CD & PMD
+                LOG.error("In PceLink: no Link length declared and no OMS present for the link {}."
+                    + " No Way to compute CD and PMD", link.getLinkId().getValue());
+                return Map.of();
+            }
+            // SRLG length is expressed in OR topology in meter
+            linkCd += entry.getValue().getSRLGLength().doubleValue() / 1000.0 * retrieveCdFromFiberType(
+                entry.getValue().augmentation(LinkConcatenation1.class).getFiberType());
+            if (entry.getValue().augmentation(LinkConcatenation1.class).getPmd() == null
+                || entry.getValue().augmentation(LinkConcatenation1.class).getPmd().getValue().doubleValue() == 0.0
+                || entry.getValue().augmentation(LinkConcatenation1.class).getPmd().getValue().toString().isEmpty()) {
+                linkPmd2 += Math.pow(entry.getValue().getSRLGLength().doubleValue() / 1000.0
+                    * retrievePmdFromFiberType(entry.getValue().augmentation(LinkConcatenation1.class)
+                    .getFiberType()),2);
+            } else {
+                linkPmd2 += Math
+                    .pow(entry.getValue().augmentation(LinkConcatenation1.class).getPmd().getValue().doubleValue(), 2);
+            }
         }
-        return spanOsnrDb;
+        LOG.debug("In PceLink: The CD and PMD2 of link {} are respectively {} ps and {} ps", link.getLinkId(), linkCd,
+            linkPmd2);
+        return Map.of("CD", linkCd,"PMD2", linkPmd2);
+    }
+
+    // compute default spanLoss and power correction from fiber length
+    // when no OMS attribute defined
+    private Map<String, Double> calcDefaultSpanLoss(Link link) {
+        Map<String, Double> omsExtrapolatedCharac = new HashMap<>();
+        Link1 link1 = link.augmentation(Link1.class);
+        if (link1.getLinkLength() == null || link1.getLinkLength().doubleValue() == 0) {
+            LOG.error("In PceLink, no link length present or length declared = 0,"
+                + " unable to calculate default span Loss ");
+            return omsExtrapolatedCharac;
+        }
+        long linkLength = link1.getLinkLength().longValue();
+        LOG.warn("In PceLink {}, assume G.652 fiber, calculation "
+            + "based on fiber length of {} km and typical loss of 0.25dB per Km ",
+            link.getLinkId(), linkLength);
+        omsExtrapolatedCharac.put("SpanLoss", linkLength * 0.25);
+        omsExtrapolatedCharac.put("PoutCorrection", retrievePower(FiberType.Smf));
+        return omsExtrapolatedCharac;
+    }
+
+    // Compute the attenuation of a span from OMS attribute
+    private Map<String, Double> calcSpanLoss(Link link) {
+        if (this.omsAttributesSpan == null) {
+            return calcDefaultSpanLoss(link);
+        } else {
+            Collection<LinkConcatenation> linkConcatenationList = this.omsAttributesSpan.nonnullLinkConcatenation()
+                .values();
+            if (linkConcatenationList == null) {
+                LOG.error("in PceLink : Null field in the OmsAttrubtesSpan");
+                return calcDefaultSpanLoss(link);
+            }
+            Iterator<LinkConcatenation> linkConcatenationiterator = linkConcatenationList.iterator();
+            if (!linkConcatenationiterator.hasNext()) {
+                return calcDefaultSpanLoss(link);
+            }
+            // Reference of power to be launched at input of ROADM (dBm)
+            Map<String, Double> omsCharacteristics = new HashMap<>();
+            omsCharacteristics.put("PoutCorrection",
+                retrievePower(linkConcatenationiterator.next().augmentation(LinkConcatenation1.class)
+                    .getFiberType()) - 2.0);
+            // span loss of the span
+            omsCharacteristics.put("SpanLoss", this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue());
+            return omsCharacteristics;
+        }
     }
 
     private double retrievePower(FiberType fiberType) {
@@ -215,6 +313,50 @@ public class PceLink implements Serializable {
                 break;
         }
         return power;
+    }
+
+    private double retrievePmdFromFiberType(FiberType fiberType) {
+        double linkPmd;
+        if (fiberType.toString().equalsIgnoreCase("Dsf")) {
+            linkPmd = 0.2;
+        } else {
+            linkPmd = PMD_CONSTANT;
+        }
+        return linkPmd;
+    }
+
+    private double retrieveCdFromFiberType(FiberType fiberType) {
+        double cdPerKm;
+        switch (fiberType) {
+            case Smf:
+                cdPerKm = 16.5;
+                break;
+            case Eleaf:
+                cdPerKm = 4.3;
+                break;
+            case Truewavec:
+                cdPerKm = 3.0;
+                break;
+            case Oleaf:
+                cdPerKm = 4.3;
+                break;
+            case Dsf:
+                cdPerKm = 0.0;
+                break;
+            case Truewave:
+                cdPerKm = 4.4;
+                break;
+            case NzDsf:
+                cdPerKm = 4.3;
+                break;
+            case Ull:
+                cdPerKm = 16.5;
+                break;
+            default:
+                cdPerKm = 16.5;
+                break;
+        }
+        return cdPerKm;
     }
 
     public LinkId getOppositeLink() {
@@ -257,6 +399,10 @@ public class PceLink implements Serializable {
         return client;
     }
 
+    public Double getLength() {
+        return length;
+    }
+
     public void setClient(String client) {
         this.client = client;
     }
@@ -286,9 +432,9 @@ public class PceLink implements Serializable {
         return srlgList;
     }
 
-    public double getosnr() {
-        return osnr;
-    }
+//    public double getosnr() {
+//        return osnr;
+//    }
 
     public String getsourceCLLI() {
         return sourceCLLI;
@@ -298,6 +444,22 @@ public class PceLink implements Serializable {
         return destCLLI;
     }
 
+    public Double getspanLoss() {
+        return spanLoss;
+    }
+
+    public Double getcd() {
+        return cd;
+    }
+
+    public Double getpmd2() {
+        return pmd2;
+    }
+
+    public Double getpowerCorrection() {
+        return powerCorrection;
+    }
+
     public boolean isValid() {
         if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             isValid = false;
@@ -305,12 +467,16 @@ public class PceLink implements Serializable {
         }
         isValid = checkParams();
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
-            if (this.omsAttributesSpan == null) {
+            if ((this.length == 0.0 || this.length == null)
+                    && (this.omsAttributesSpan == null)) {
                 isValid = false;
-                LOG.error("PceLink: Error reading Span for OMS link. Link is ignored {}", linkId);
-            } else if (this.omsAttributesSpan.getSpanlossCurrent() == null) {
+                LOG.error("PceLink: Error reading Span for OMS link, and no available generic link information."
+                    + " Link is ignored {}", linkId);
+            } else if ((this.length == 0.0 || this.length == null)
+                    && (this.omsAttributesSpan.getSpanlossCurrent() == null)) {
                 isValid = false;
-                LOG.error("PceLink: Error reading Spanloss for OMS link. Link is ignored {}", linkId);
+                LOG.error("PceLink: Error reading Span for OMS link, and no available generic link information."
+                    + " Link is ignored {}", linkId);
             }
         }
         if ((this.srlgList != null) && (this.srlgList.isEmpty())) {
@@ -352,7 +518,7 @@ public class PceLink implements Serializable {
                     return false;
                 }
                 neededBW = 300000L;
-                // hange otn-link-type
+                // change otn-link-type
                 neededType = OtnLinkType.OTUC3;
                 break;
             case "ODUC4":
