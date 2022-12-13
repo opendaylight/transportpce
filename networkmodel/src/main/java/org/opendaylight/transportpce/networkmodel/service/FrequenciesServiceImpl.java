@@ -23,6 +23,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.NodeIdPair;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -214,8 +215,8 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = OpenRoadmTopology
-                .createNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
+        InstanceIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
+                .createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
@@ -349,9 +350,9 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     LOG.warn("Termination point type {} not managed", commonNetworkTerminationPoint.getTpType());
                     return;
             }
-            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION, OpenRoadmTopology
-                    .createNetworkTerminationPointIIDBuilder(idPair.getNodeID(),
-                            idPair.getTpID()).build(), networkTerminationPointBuilder.build());
+            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers
+                    .createNetworkTerminationPoint1IIDBuilder(idPair.getNodeID(),
+                            idPair.getTpID()), networkTerminationPointBuilder.build());
         }
         try {
             updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
