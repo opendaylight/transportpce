@@ -36,11 +36,11 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
-import org.opendaylight.transportpce.olm.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.olm.stub.MountPointStub;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.olm.util.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;

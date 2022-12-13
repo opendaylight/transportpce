@@ -114,8 +114,8 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = OpenRoadmTopology
-                .createNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
+        InstanceIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
+                .createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = getDataBroker().newReadOnlyTransaction()) {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
