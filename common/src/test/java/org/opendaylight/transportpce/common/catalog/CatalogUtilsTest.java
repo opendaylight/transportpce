@@ -76,43 +76,43 @@ public class CatalogUtilsTest extends AbstractTest {
         CatalogUtils catalogUtils = new CatalogUtils(netTransServ);
         assertEquals("Checking retrieval of Operational Mode from Node Type ADD",
             CatalogConstant.MWWRCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.ADD,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.ADD,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type DROP",
             CatalogConstant.MWWRCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.DROP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.DROP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type EXPRESS",
             CatalogConstant.MWMWCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.EXPRESS,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.EXPRESS,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type AMP",
             CatalogConstant.MWISTANDARD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.AMP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.AMP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type 100GE",
             CatalogConstant.ORW100GSC,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTU4",
             CatalogConstant.ORW100GSC,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTU4));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC2",
             CatalogConstant.ORW200GOFEC316GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC2));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC3",
             CatalogConstant.ORW300GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC3));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type 400GE",
             CatalogConstant.ORW400GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_400GE));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC4",
             CatalogConstant.ORW400GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC4));
         assertEquals("Checking retrieval of channel spacing from Operational Mode 100G SC FEC",
             50.0,

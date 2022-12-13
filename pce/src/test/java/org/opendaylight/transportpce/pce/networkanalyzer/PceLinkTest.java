@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import static org.junit.Assert.assertEquals;
+
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
@@ -20,6 +23,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder;
@@ -57,12 +61,12 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-
 public class PceLinkTest extends AbstractTest {
 
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
     private PceLink pceLink = null;
     private String deviceNodeId = "device node";
+    private String deviceNodeId2 = "device node 2";
     private String serviceType = "100GE";
     @Mock
     private PortMapping portMapping;
@@ -72,77 +76,175 @@ public class PceLinkTest extends AbstractTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // @Test
+    // public void testBuildPceLinkRoadmToRoadm() {
+    // Link link = createRoadmToRoadm("srcNode",
+    // "destNode",
+    // "srcTp", "destTp").build();
+    // NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+    // Node node = node1Builder.setNodeId(new NodeId("test")).build();
+    // PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType,
+    // portMapping, node,
+    // OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+    // GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+    // pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+    // }
+
     @Test
     public void testBuildPceLinkRoadmToRoadm() {
         Link link = createRoadmToRoadm("srcNode",
-                "destNode",
-                "srcTp", "destTp").build();
+            "destNode",
+            "srcTp", "destTp").build();
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
+    }
+
+    // @Test
+    // public void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
+    // Link link = createRoadmToRoadmWithoutLinkLatency("srcNode",
+    // "destNode",
+    // "srcTp", "destTp").build();
+    //
+    // NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+    // Node node = node1Builder.setNodeId(new NodeId("test")).build();
+    // PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType,
+    // portMapping, node,
+    // OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+    // GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+    // pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+    // }
+
+    @Test
+    public void testBuildPceLinkRoadmToRoadmWithoutPMD() {
+        Link link = createRoadmToRoadmWithoutPMD("srcNode",
+            "destNode",
+            "srcTp", "destTp").build();
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
+        Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
+        Assert.assertEquals(1, pceLink.getsrlgList().size());
+        assertEquals("Checking length loss", 20.0, pceLink.getspanLoss(), 0.005);
+        assertEquals("Checking length loss", 825.0, pceLink.getcd(), 0.005);
+        assertEquals("Checking PMDvalue of link", 4.0, pceLink.getpmd2(), 0.005);
     }
 
     @Test
     public void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
         Link link = createRoadmToRoadmWithoutLinkLatency("srcNode",
-                "destNode",
-                "srcTp", "destTp").build();
+            "destNode",
+            "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
     }
+
+    // @Test
+    // public void testBuildPceLinkOTN() {
+    // Link link = createOTNLink("srcNode",
+    // "destNode",
+    // "srcTp", "destTp").build();
+    //
+    // NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+    // Node node = node1Builder.setNodeId(new NodeId("test")).build();
+    // PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType,
+    // portMapping, node,
+    // OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+    // GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+    // pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+    // }
 
     @Test
     public void testBuildPceLinkOTN() {
+        // TODO: Modify with OTN node not PceO=ticalNode
         Link link = createOTNLink("srcNode",
-                "destNode",
-                "srcTp", "destTp").build();
+            "destNode",
+            "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.SWITCH, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
+            OpenroadmNodeType.SWITCH, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
     }
+
+    // @Test
+    // public void testBuildPceLinkExponder() {
+    // Link link = createXponderLink("srcNode",
+    // "destNode",
+    // "srcTp", "destTp").build();
+    //
+    // NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+    // Node node = node1Builder.setNodeId(new NodeId("test")).build();
+    // PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType,
+    // portMapping, node,
+    // OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+    // GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+    // pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+    // }
 
     @Test
     public void testBuildPceLinkExponder() {
         Link link = createXponderLink("srcNode",
-                "destNode",
-                "srcTp", "destTp").build();
+            "destNode",
+            "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
+            OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
     }
 
     @Test
     public void testCalcSpanOSNR() {
         Link link = createRoadmToRoadm("srcNode",
-                "destNode",
-                "srcTp", "destTp").build();
+            "destNode",
+            "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
-                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
-        Assert.assertNotNull(pceLink.getosnr());
+        // Assert.assertNotNull(pceLink.getosnr());
         Assert.assertEquals(1, pceLink.getsrlgList().size());
-        Assert.assertTrue(7.857119000000001 == pceLink.getosnr());
+        assertEquals("Checking PMDvalue of link", 0.25, pceLink.getpmd2(), 0.005);
+        assertEquals("Checking CDvalue of link", 825, pceLink.getcd(), 0.005);
+        // Assert.assertTrue(7.857119000000001 == pceLink.getosnr());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNotNull(pceLink.getDestTP());
@@ -162,126 +264,198 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getsourceCLLI());
         Assert.assertNotNull(pceLink.getdestCLLI());
         Assert.assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
-                + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
+            + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
+    }
+
+    @Test
+    public void testWrongSpanLoss() {
+        Link link = createInvalidRoadmToRoadm("srcNode",
+            "destNode",
+            "srcTp", "destTp").build();
+
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
+        Assert.assertNull(MapUtils.getOmsAttributesSpan(link));
+        Assert.assertNull(pceLink.getpmd2());
+        Assert.assertNull(pceLink.getpowerCorrection());
+        Assert.assertNull(pceLink.getcd());
+    }
+
+    @Test
+    public void testExtrapolatedPMD() {
+        Link link = createRoadmToRoadmWithoutPMD("srcNode",
+            "destNode",
+            "srcTp", "destTp").build();
+
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
+        PceOpticalNode pceOpticalNode1 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+            OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
+            GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
+        pceLink = new PceLink(link, pceOpticalNode1, pceOpticalNode2);
+        Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
+        Assert.assertEquals(1, pceLink.getsrlgList().size());
+        assertEquals("Checking PMDvalue of link", 4.0, pceLink.getpmd2(), 0.005);
     }
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkType(OpenroadmLinkType.OTNLINK)
-                .setOperationalState(State.InService)
-                .setAdministrativeState(AdminStates.InService);
-        //create source link
-        return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
+            .setLinkType(OpenroadmLinkType.OTNLINK)
+            .setOperationalState(State.InService)
+            .setAdministrativeState(AdminStates.InService);
+        // create source link
+        return createLinkBuilder(false, false, 10000.0, srcNode, destNode, srcTp, destTp, link1Builder);
     }
 
     private static LinkBuilder createXponderLink(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkType(OpenroadmLinkType.XPONDERINPUT)
-                .setAdministrativeState(AdminStates.InService)
-                .setOperationalState(State.InService);
-        //create source link
-        return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
+            .setLinkType(OpenroadmLinkType.XPONDERINPUT)
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService);
+        // create source link
+        return createLinkBuilder(false, false, 10.0, srcNode, destNode, srcTp, destTp, link1Builder);
     }
 
-    private static LinkBuilder createLinkBuilder(
-            String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
-        SourceBuilder ietfSrcLinkBldr =
-                new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(new TpId(srcTp));
-        //create destination link
-        DestinationBuilder ietfDestLinkBldr =
-                new DestinationBuilder().setDestNode(new NodeId(destNode))
-                        .setDestTp(new TpId(destTp));
+    private static LinkBuilder createLinkBuilder(boolean pmdpresent, boolean omspresent, double length,
+        String srcNode, String destNode, String srcTp, String destTp, Link1Builder link1Builder) {
+        SourceBuilder ietfSrcLinkBldr = new SourceBuilder().setSourceNode(new NodeId(srcNode))
+            .setSourceTp(new TpId(srcTp));
+        // create destination link
+        DestinationBuilder ietfDestLinkBldr = new DestinationBuilder().setDestNode(new NodeId(destNode))
+            .setDestTp(new TpId(destTp));
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
-        //For setting up attributes for openRoadm augment
+        // For setting up attributes for openRoadm augment
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
+            .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
+            .setSRLGLength(Decimal64.valueOf(length, RoundingMode.FLOOR))
+            .addAugmentation(new LinkConcatenation1Builder()
+                .setFiberType(FiberType.Smf)
+                .build())
+            .build();
+        if (pmdpresent) {
+            linkConcatenation = new LinkConcatenationBuilder()
                 .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
-                .setSRLGLength(Decimal64.valueOf("20"))
+                .setSRLGLength(Decimal64.valueOf(length, RoundingMode.FLOOR))
                 .addAugmentation(new LinkConcatenation1Builder()
-                    .setFiberType(FiberType.Dsf)
+                    .setFiberType(FiberType.Smf)
+                    .setPmd(FiberPmd.getDefaultInstance("0.500"))
                     .build())
                 .build();
-        OMSAttributesBuilder omsAttributesBuilder =
-                new OMSAttributesBuilder()
-                        .setSpan(new SpanBuilder()
-                                .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("55")))
-                                .setLinkConcatenation(Map.of(linkConcatenation.key(),
-                                        linkConcatenation
-                                )).build());
-
+        }
+        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder()
+            .setSpan(new SpanBuilder()
+                // .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("55")))
+                .setSpanlossCurrent(new RatioDB(Decimal64.valueOf("20")))
+                .setLinkConcatenation(Map.of(linkConcatenation.key(), linkConcatenation))
+                .build());
 
         LinkBuilder linkBuilder = new LinkBuilder()
-                .setSource(ietfSrcLinkBldr.build())
-                .setDestination(ietfDestLinkBldr.build())
-                .setLinkId(linkId)
-                .withKey(new LinkKey(linkId));
+            .setSource(ietfSrcLinkBldr.build())
+            .setDestination(ietfDestLinkBldr.build())
+            .setLinkId(linkId)
+            .withKey(new LinkKey(linkId));
 
         linkBuilder.addAugmentation(link1Builder.build());
+        if (omspresent) {
+            var linkBuilderNetworkLink = new org.opendaylight.yang.gen.v1.http
+                .org.openroadm.network.topology.rev211210.Link1Builder()
+                    .setOMSAttributes(omsAttributesBuilder
+                    .build());
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1Builder linkBuilderNetworkLink
-                = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1Builder()
-                .setOMSAttributes(omsAttributesBuilder
-                        .build());
-
-        linkBuilder.addAugmentation(linkBuilderNetworkLink.build());
+            linkBuilder.addAugmentation(linkBuilderNetworkLink.build());
+        }
         return linkBuilder;
     }
 
     private static LinkBuilder createRoadmToRoadm(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkLatency(Uint32.valueOf(100))
-                .setAdministrativeState(AdminStates.InService)
-                .setOperationalState(State.InService)
-                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
-        return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
+            .setLinkLatency(Uint32.valueOf(100))
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .setLinkType(OpenroadmLinkType.ROADMTOROADM)
+            .setLinkLength(Decimal64.valueOf(50.0, RoundingMode.FLOOR));
+        return createLinkBuilder(true, true, 50000.0, srcNode, destNode, srcTp, destTp, link1Builder);
+    }
+
+    private static LinkBuilder createRoadmToRoadmWithoutPMD(String srcNode, String destNode, String srcTp,
+        String destTp) {
+        Link1Builder link1Builder = new Link1Builder()
+            .setLinkLatency(Uint32.valueOf(100))
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .setLinkType(OpenroadmLinkType.ROADMTOROADM)
+            .setLinkLength(Decimal64.valueOf(50.0, RoundingMode.FLOOR));
+        return createLinkBuilder(false, true, 50000.0, srcNode, destNode, srcTp, destTp, link1Builder);
+    }
+
+    private static LinkBuilder createInvalidRoadmToRoadm(String srcNode, String destNode,
+        String srcTp, String destTp) {
+        Link1Builder link1Builder = new Link1Builder()
+            .setLinkLatency(Uint32.valueOf(100))
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        return createLinkBuilder(false, false, 0.0, srcNode, destNode, srcTp, destTp, link1Builder);
     }
 
     private static LinkBuilder createRoadmToRoadmWithoutLinkLatency(
-            String srcNode, String destNode, String srcTp, String destTp) {
+        String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
-        return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
+            .setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        return createLinkBuilder(true, true, 50000.0, srcNode, destNode, srcTp, destTp, link1Builder);
     }
 
-    private Map<SupportingNodeKey,SupportingNode> geSupportingNodes() {
-        Map<SupportingNodeKey,SupportingNode> supportingNodes1 = new HashMap<>();
+    private Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
+        Map<SupportingNodeKey, SupportingNode> supportingNodes1 = new HashMap<>();
         SupportingNode supportingNode1 = new SupportingNodeBuilder()
-                .setNodeRef(new NodeId("node 1"))
-                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
-                .build();
+            .setNodeRef(new NodeId("node 1"))
+            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+            .build();
         supportingNodes1
-                .put(supportingNode1.key(),supportingNode1);
+            .put(supportingNode1.key(), supportingNode1);
 
         SupportingNode supportingNode2 = new SupportingNodeBuilder()
-                .setNodeRef(new NodeId("node 2"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-                .build();
+            .setNodeRef(new NodeId("node 2"))
+            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .build();
         supportingNodes1
-                .put(supportingNode2.key(),supportingNode2);
+            .put(supportingNode2.key(), supportingNode2);
         return supportingNodes1;
     }
 
-    private NodeBuilder getNodeBuilder(Map<SupportingNodeKey,SupportingNode> supportingNodes1) {
-        //update tp of nodes
+    private NodeBuilder getNodeBuilder(Map<SupportingNodeKey, SupportingNode> supportingNodes1) {
+        // update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder()
-                .withKey(new TerminationPointKey(new TpId("xpdr")));
+            .withKey(new TerminationPointKey(new TpId("xpdr")));
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
 
         tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK).setAdministrativeState(AdminStates.InService)
-                .setOperationalState(State.InService);
+            .setOperationalState(State.InService);
         xpdrTpBldr.addAugmentation(tp1Bldr.build());
         TerminationPoint xpdr = xpdrTpBldr.build();
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
-            new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+            .Node1 node1 = new Node1Builder()
+                .setTerminationPoint(Map.of(xpdr.key(), xpdr)).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1 node11 =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
         return new NodeBuilder()
-                .setNodeId(new NodeId("node 1"))
-                .withKey(new NodeKey(new NodeId("node 1")))
-                .addAugmentation(node1)
-                .addAugmentation(node11)
-                .setSupportingNode(supportingNodes1);
+            .setNodeId(new NodeId("node 1"))
+            .withKey(new NodeKey(new NodeId("node 1")))
+            .addAugmentation(node1)
+            .addAugmentation(node11)
+            .setSupportingNode(supportingNodes1);
     }
 
 }
