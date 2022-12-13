@@ -228,11 +228,10 @@ public final class MapUtils {
             LOG.error("No opposite link augmentation for network link {}", link);
             return null;
         }
-        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite);
         LinkId tmpoppositeLink = linkOpposite.getOppositeLink();
+        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite);
         if (tmpoppositeLink == null) {
             LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
-            return null;
         }
         return tmpoppositeLink;
     }
