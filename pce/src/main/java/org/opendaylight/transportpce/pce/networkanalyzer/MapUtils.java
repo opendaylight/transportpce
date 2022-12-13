@@ -232,7 +232,6 @@ public final class MapUtils {
         LinkId tmpoppositeLink = linkOpposite.getOppositeLink();
         if (tmpoppositeLink == null) {
             LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
-            return null;
         }
         return tmpoppositeLink;
     }
