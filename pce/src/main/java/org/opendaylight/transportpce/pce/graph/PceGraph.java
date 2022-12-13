@@ -23,6 +23,7 @@ import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -30,6 +31,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,17 +41,18 @@ public class PceGraph {
 
     ////////////////////////// for Graph ///////////////////////////
     // how many paths to bring
-    private int kpathsToBring = 10;
+    private int kpathsToBring = 15;
 
     // max #hops
-    private int mhopsPerPath = 50;
+    private int mhopsPerPath = 100;
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
+    private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
     private PceNode apceNode = null;
     private PceNode zpceNode = null;
     private String serviceType = "";
-
+    private Double margin = null;
     PceConstraints pceHardConstraints;
     PceConstraints pceSoftConstraints;
 
@@ -62,17 +65,21 @@ public class PceGraph {
 
     private List<PceLink> pathAtoZ = new ArrayList<>();
 
+    private final NetworkTransactionService networkTransactionService;
+
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
-            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult pceResult,
-            String serviceType) {
+            Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints,
+            PceResult pceResult, String serviceType, NetworkTransactionService networkTransactionService) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
         this.allPceNodes = allPceNodes;
+        this.allPceLinks = allPceLinks;
         this.pceResult = pceResult;
         this.pceHardConstraints = pceHardConstraints;
         this.pceSoftConstraints = pceSoftConstraints;
         this.serviceType = serviceType;
+        this.networkTransactionService = networkTransactionService;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
@@ -96,16 +103,14 @@ public class PceGraph {
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
-            PostAlgoPathValidator papv = new PostAlgoPathValidator();
-            pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints, serviceType);
+            PostAlgoPathValidator papv = new PostAlgoPathValidator(networkTransactionService);
+            pceResult = papv.checkPath(path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType);
+            this.margin = papv.getTpceCalculatedMargin();
             if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
                 LOG.info("Path is validated");
             } else {
-                LOG.warn("Path not validated - cause: {}", pceResult.getLocalCause());
-            }
-
-            if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
-                LOG.warn("In calcPath: post algo validations DROPPED the path {}", path);
+                LOG.warn("In calcPath: post algo validations DROPPED the path {}; for following cause: {}",
+                    path, pceResult.getLocalCause());
                 continue;
             }
 
@@ -283,6 +288,10 @@ public class PceGraph {
 
     public PceResult getReturnStructure() {
         return pceResult;
+    }
+
+    public Double getmargin() {
+        return margin;
     }
 
     public void setConstrains(PceConstraints pceHardConstraintsInput, PceConstraints pceSoftConstraintsInput) {

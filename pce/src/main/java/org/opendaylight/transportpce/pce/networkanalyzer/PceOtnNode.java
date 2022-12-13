@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
@@ -564,6 +565,21 @@ public class PceOtnNode implements PceNode {
     public BitSet getBitSetData() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
+        return null;
+    }
+
+    @Override
+    public String getOperationalMode() {
+        return null;
+    }
+
+    @Override
+    public OpenroadmNodeType getORNodeType() {
+        return this.nodeType;
     }
 
     /*
