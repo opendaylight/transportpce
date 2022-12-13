@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.common;
 
+import java.util.Map;
+import org.opendaylight.yangtools.yang.common.Uint32;
+
 public final class StringConstants {
 
     public static final String OPENROADM_DEVICE_MODEL_NAME = "org-openroadm-device";
@@ -48,6 +51,16 @@ public final class StringConstants {
 
     public static final String SERVICE_DIRECTION_AZ = "aToz";
     public static final String SERVICE_DIRECTION_ZA = "zToa";
+    public static final String UNKNOWN_MODE = "Unknown Mode";
+
+    public static final Map<String, Uint32> SERVICE_TYPE_RATE = Map.of(
+        SERVICE_TYPE_100GE_T, ServiceRateConstant.RATE_100,
+        SERVICE_TYPE_OTU4, ServiceRateConstant.RATE_100,
+        SERVICE_TYPE_ODUC2, ServiceRateConstant.RATE_200,
+        SERVICE_TYPE_ODUC3, ServiceRateConstant.RATE_300,
+        SERVICE_TYPE_ODUC4, ServiceRateConstant.RATE_400,
+        SERVICE_TYPE_400GE, ServiceRateConstant.RATE_400);
+
 
     private StringConstants() {
         // hiding the default constructor

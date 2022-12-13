@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.catalog.CatalogConstant.CatalogNodeType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.ImpairmentType;
@@ -37,6 +38,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.transponder.parameters.Penalties;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.transponder.parameters.PenaltiesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.transponder.parameters.TXOOBOsnrKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.power.mask.MaskPowerVsPin;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.power.mask.MaskPowerVsPinKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OperationalModeCatalog;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -78,7 +81,8 @@ public class CatalogUtils {
     }
 
     /**
-     * Following method returns default OperationalModeId for devices that do not expose them.
+     * Following method returns default OperationalModeId for devices that do not
+     * expose them.
      *
      * @param catalogNodeType
      *            identifies type of nodes in the catalog
@@ -88,17 +92,17 @@ public class CatalogUtils {
      * @return a default operational mode that corresponds to initial specifications
      *
      */
-    public String getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType catalogNodeType,
-            String serviceType) {
+    public String getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType catalogNodeType,
+        String serviceType) {
         if (CATALOGNODETYPE_OPERATIONMODEID_MAP.containsKey(catalogNodeType)) {
             return CATALOGNODETYPE_OPERATIONMODEID_MAP.get(catalogNodeType);
         }
         if (!catalogNodeType.equals(CatalogConstant.CatalogNodeType.TSP)) {
-            LOG.warn("Unsupported catalogNodeType {}", catalogNodeType);
+            LOG.debug("Unsupported catalogNodeType {}", catalogNodeType);
             return "";
         }
         if (!TSP_DEFAULT_OM_MAP.containsKey(serviceType)) {
-            LOG.warn("Unsupported serviceType {} for TSP catalogNodeType", serviceType);
+            LOG.debug("Unsupported serviceType {} for TSP catalogNodeType", serviceType);
             return "";
         }
         return TSP_DEFAULT_OM_MAP.get(serviceType);
@@ -372,7 +376,10 @@ public class CatalogUtils {
         penalty = getRxTspPenalty(calcPmd, ImpairmentType.PMDPs, penaltiesMap);
         impairments.put("PMD Penalty", penalty);
         totalPenalty += penalty;
-        penalty = getRxTspPenalty(calcPdl, ImpairmentType.PDLDB, penaltiesMap);
+        // Calculation according to OpenROADM specification
+        // penalty = getRxTspPenalty(calcPdl, ImpairmentType.PDLDB, penaltiesMap);
+        // Calculation modified according to Julia's Tool
+        penalty = calcPdl / 2;
         impairments.put("PDL penalty", penalty);
         totalPenalty += penalty;
         // TODO for Future work since at that time we have no way to calculate the following
@@ -424,12 +431,14 @@ public class CatalogUtils {
             .filter(val -> val.getUpToBoundary().doubleValue() >= calculatedParameter)
             // takes the immediate greater or equal value
             .findFirst().orElse(null);
-        return penalty == null
+        if (penalty == null) {
             //means a boundary that is greater than calculatedParameter couldn't be found
             // Out of specification!
-                ? 9999.9
-            // In spec, return penalty associated with calculatedParameter
-                : penalty.getPenaltyValue().getValue().doubleValue();
+            return 9999.9;
+        }
+        // In spec, return penalty associated with calculatedParameter
+        LOG.info("Penalty for {} is {} dB", impairmentType, penalty.getPenaltyValue().getValue().doubleValue());
+        return penalty.getPenaltyValue().getValue().doubleValue();
     }
 
     /**
@@ -495,7 +504,10 @@ public class CatalogUtils {
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
                     networkTransactionService.close();
                     maxIntroducedCd = orAddOM.getMaxIntroducedCd().doubleValue();
-                    maxIntroducedPdl = orAddOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // As per current OpenROADM Spec
+                    //maxIntroducedPdl = orAddOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // Applying calculation as provided in Julia's tool
+                    maxIntroducedPdl = Math.sqrt(0.2 * 0.2 + 0.4 * 0.4);
                     maxIntroducedDgd = orAddOM.getMaxIntroducedDgd().doubleValue();
                     osnrPolynomialFits = List.of(orAddOM.getIncrementalOsnr().getValue().doubleValue());
                 } catch (InterruptedException | ExecutionException e) {
@@ -529,7 +541,10 @@ public class CatalogUtils {
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orDropOM);
                     networkTransactionService.close();
                     maxIntroducedCd = orDropOM.getMaxIntroducedCd().doubleValue();
-                    maxIntroducedPdl = orDropOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // As per current OpenROADM Spec
+                    // maxIntroducedPdl = orDropOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // Applying calculation as provided in Julia's tool
+                    maxIntroducedPdl = Math.sqrt(0.2 * 0.2 + 0.4 * 0.4);
                     maxIntroducedDgd = orDropOM.getMaxIntroducedDgd().doubleValue();
                     osnrPolynomialFits = List.of(
                         orDropOM.getOsnrPolynomialFit().getD().doubleValue(),
@@ -573,7 +588,10 @@ public class CatalogUtils {
                     var orExpressOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orExpressOM);
                     maxIntroducedCd = orExpressOM.getMaxIntroducedCd().doubleValue();
-                    maxIntroducedPdl = orExpressOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // As per current OpenROADM Spec
+                    // maxIntroducedPdl = orExpressOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // Applying calculation as provided in Julia's tool
+                    maxIntroducedPdl = Math.sqrt(2 * 0.2 * 0.2 + 2 * 0.4 * 0.4);
                     maxIntroducedDgd = orExpressOM.getMaxIntroducedDgd().doubleValue();
                     osnrPolynomialFits = List.of(
                         orExpressOM.getOsnrPolynomialFit().getD().doubleValue(),
@@ -611,7 +629,10 @@ public class CatalogUtils {
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAmpOM);
                     networkTransactionService.close();
                     maxIntroducedCd = orAmpOM.getMaxIntroducedCd().doubleValue();
-                    maxIntroducedPdl = orAmpOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // As per current OpenROADM Spec
+                    // maxIntroducedPdl = orAmpOM.getMaxIntroducedPdl().getValue().doubleValue();
+                    // Applying calculation as provided in Julia's tool
+                    maxIntroducedPdl = 0.2;
                     maxIntroducedDgd = orAmpOM.getMaxIntroducedDgd().doubleValue();
                     osnrPolynomialFits = List.of(
                         orAmpOM.getOsnrPolynomialFit().getD().doubleValue(),
@@ -636,7 +657,14 @@ public class CatalogUtils {
         pdl2 += Math.pow(maxIntroducedPdl, 2.0);
         dgd2 += Math.pow(maxIntroducedDgd, 2.0);
         double pwrFact = 1;
-        double contrib = 10 * Math.log10(spacing / 50.0);
+        double contrib = 0;
+        // We correct PwrIn to the value corresponding to a 50 GHz Bandwidth, because OpenROADM spec (polynomial fit)
+        // is based on power in 50GHz Bandwidth
+        pwrIn -= 10 * Math.log10(spacing / 50.0);
+        if (catalogNodeType != CatalogNodeType.ADD) {
+            // For add, incremental OSNR is defined for Noiseless input, BW Correction (contrib) does not apply
+            contrib = 10 * Math.log10(spacing / 50.0);
+        }
         for (double fit : osnrPolynomialFits) {
             contrib += pwrFact * fit;
             pwrFact *= pwrIn;
@@ -665,9 +693,128 @@ public class CatalogUtils {
         impairments.put("DGD2", dgd2);
         impairments.put("PDL2", pdl2);
         impairments.put("ONSRLIN", onsrLin);
-        LOG.info("Accumulated CD is {} ps, DGD2 is {} ps and PDL2 is {} dB", cd, Math.sqrt(dgd2), Math.sqrt(pdl2));
+        LOG.info("Accumulated CD is {} ps, DGD is {} ps and PDL is {} dB", cd, Math.sqrt(dgd2), Math.sqrt(pdl2));
         LOG.info("Resulting OSNR is {} dB", 10 * Math.log10(1 / onsrLin));
         return impairments;
+    }
+
+    /**
+     * This method calculates power that shall be applied at the output of ROADMs and
+     * Amplifiers. It retrieves the mask-power-vs-Pin and calculates target output
+     * power from the span loss
+     *
+     * @param catalogNodeType
+     *            crossed node path type (ADD/EXPRESS/AMP)
+     * @param operationalModeId
+     *            operational-mode-Id of the Node (OpenROADM only)
+     * @param spanLoss
+     *            spanLoss at the output of the ROADM
+     * @param powerCorrection
+     *            correction to be applied to the calculated power according to fiber type
+     * @param spacing
+     *            Interchannel spacing used for correction to calculate output power
+     * @return outputPower
+     *         Corrected output power calculated according to channel spacing
+     * @throws RuntimeException
+     *             if operationalModeId is not described in the catalog
+     */
+    public double getPceRoadmAmpOutputPower(CatalogConstant.CatalogNodeType catalogNodeType,
+            String operationalModeId, double spanLoss, double spacing, double powerCorrection) {
+        double pout = 99999.0;
+        switch (catalogNodeType) {
+            case ADD:
+                var omCatalogIid = InstanceIdentifier
+                    .builder(OperationalModeCatalog.class)
+                    .child(OpenroadmOperationalModes.class)
+                    .child(Roadms.class)
+                    .child(Add.class)
+                    .child(AddOpenroadmOperationalMode.class, new AddOpenroadmOperationalModeKey(operationalModeId))
+                    .build();
+                try {
+                    var omOptional =
+                        networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                    if (omOptional.isEmpty()) {
+                        LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
+                        return pout;
+                    }
+                    var orAddOM = omOptional.get();
+                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
+                    networkTransactionService.close();
+                    var mask = orAddOM.getMaskPowerVsPin();
+                    for (Map.Entry<MaskPowerVsPinKey, MaskPowerVsPin> pw : mask.entrySet()) {
+                        if (spanLoss >= pw.getKey().getLowerBoundary().doubleValue()
+                            && spanLoss <= pw.getKey().getUpperBoundary().doubleValue()) {
+                            pout = pw.getValue().getC().doubleValue() * spanLoss + pw.getValue().getD().doubleValue()
+                                + powerCorrection + 10 * Math.log10(spacing / 50.0);
+                            LOG.info("Calculated target Output power is {} dB in {} Bandwidth", pout, spacing);
+                            return pout;
+                        }
+                    }
+                    LOG.info("Did not succeed in calculating target Output power, SpanLoss {}"
+                        + " dB is out of range", spanLoss);
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
+                        omCatalogIid);
+                    throw new RuntimeException(
+                        "readMdSal: Error reading from operational store, Operational Mode Catalog : "
+                            + omCatalogIid + " :" + e);
+                } finally {
+                    networkTransactionService.close();
+                }
+                break;
+
+            case EXPRESS:
+                var omCatalogIid2 = InstanceIdentifier
+                    .builder(OperationalModeCatalog.class)
+                    .child(OpenroadmOperationalModes.class)
+                    .child(Roadms.class)
+                    .child(Express.class)
+                    .child(
+                        org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.operational.mode.catalog.rev211210
+                            .operational.mode.roadm.express.parameters.express.OpenroadmOperationalMode.class,
+                        new org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.operational.mode.catalog.rev211210
+                            .operational.mode.roadm.express.parameters.express.OpenroadmOperationalModeKey(
+                                operationalModeId))
+                    .build();
+                try {
+                    var omOptional = networkTransactionService
+                        .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid2)
+                        .get();
+                    if (omOptional.isEmpty()) {
+                        LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
+                        return pout;
+                    }
+                    var orExpressOM = omOptional.get();
+                    LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orExpressOM);
+                    var mask = orExpressOM.getMaskPowerVsPin();
+                    for (Map.Entry<MaskPowerVsPinKey, MaskPowerVsPin> pw : mask.entrySet()) {
+                        if (spanLoss >= pw.getKey().getLowerBoundary().doubleValue()
+                            && spanLoss <= pw.getKey().getUpperBoundary().doubleValue()) {
+                            pout = pw.getValue().getC().doubleValue() * spanLoss + pw.getValue().getD().doubleValue()
+                                + powerCorrection + 10 * Math.log10(spacing / 50.0);
+                            LOG.info("Calculated target Output power is {} dB in {} Bandwidth", pout, spacing);
+                            return pout;
+                        }
+                    }
+                    LOG.info("Did not succeed in calculating target Output power, SpanLoss {} dB"
+                        + " is out of range", spanLoss);
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist",
+                        omCatalogIid2);
+                    throw new RuntimeException(
+                        "readMdSal: Error reading from operational store, Operational Mode Catalog : "
+                            + omCatalogIid2 + " :" + e);
+                } finally {
+                    networkTransactionService.close();
+                }
+                break;
+
+            default:
+                LOG.error("Unsupported catalogNodeType {}", catalogNodeType);
+        }
+        return pout;
     }
 
     /**
@@ -705,6 +852,32 @@ public class CatalogUtils {
             + constanteC0 + CatalogConstant.NLCONSTANTCE * Math.exp(CatalogConstant.NLCONSTANTEX * spanLength);
         LOG.info(" OSNR Non Linear contribution is {} dB", nonLinearOnsrContributionLinDb);
         return Math.pow(10.0, -nonLinearOnsrContributionLinDb / 10);
+    }
+
+    public boolean isCatalogFilled() {
+        var omCatalogIid = InstanceIdentifier
+            .builder(OperationalModeCatalog.class)
+            .child(OpenroadmOperationalModes.class)
+            .child(Roadms.class)
+            .child(Add.class)
+            .child(AddOpenroadmOperationalMode.class, new AddOpenroadmOperationalModeKey(CatalogConstant.MWWRCORE))
+            .build();
+        try {
+            var omOptional =
+                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+            if (omOptional.isEmpty()) {
+                LOG.error("Operational Mode ctalog is not filled");
+                return false;
+            }
+            networkTransactionService.close();
+            return true;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("readMdSal: Error reading Operational Mode Catalog, catalog not filled");
+            throw new RuntimeException(
+                "readMdSal: Error reading from operational store, Operational Mode Catalog not filled" + e);
+        } finally {
+            networkTransactionService.close();
+        }
     }
 
 }
