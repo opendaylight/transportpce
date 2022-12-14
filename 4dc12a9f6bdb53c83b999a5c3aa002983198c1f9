@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f97860_524ece88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-12-14T19:00:16Z",
+      "side": 1,
+      "message": "Patchset3 : Made a bit of cleanup: \n- removing yang file that is not associated with this change (api/src/main/yang/service_path/transportpce-pce@2022-10-30.yang)\n- adjusting unitary tests associated with common/catalogUtils\n-integrating the changes proposed by Jonas in 103515 (Handle missing spanloss in PCE without crashing) and making some corrections in PceLink",
+      "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
