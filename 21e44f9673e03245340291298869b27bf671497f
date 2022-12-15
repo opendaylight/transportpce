@@ -16,6 +16,23 @@
       "message": "@Olivier we need to go forward with this. Any objection before merging this ?",
       "revId": "21e44f9673e03245340291298869b27bf671497f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b15442b_4d4facc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2022-12-15T09:08:26Z",
+      "side": 1,
+      "message": "Thanks Jonas for your contribution. Appreciate your efforts to improve the code. I am fine with your change. For your information, I have integrated your modification in the 3rd patchset of Autonomous impairment aware path computation, with some adaptations : I had planned when OMS is not present to derive some parameters from what is present at the link level. This is for CD, PMD  which can be extrapolated from typical value as soon as we know the length. I also made it for attenuation (which is more questionable) where I derive attenuation from the length using a typical 0,25dB/km, generating a LOG.warn to mention that real attenuation is not available in OMS (PceLink). Do not hesitate to comment the related change if you feel this is not something we should do. Thanks!",
+      "revId": "21e44f9673e03245340291298869b27bf671497f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
