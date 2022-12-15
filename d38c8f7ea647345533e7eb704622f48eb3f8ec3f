@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94272b6_f9359555",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T15:51:05Z",
+      "side": 1,
+      "message": "LF after, would avoid concatenation here\nidem at line 801",
+      "revId": "d38c8f7ea647345533e7eb704622f48eb3f8ec3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e11195d_cbcb95c6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T15:51:05Z",
+      "side": 1,
+      "message": "misleading indentation here IMO",
+      "revId": "d38c8f7ea647345533e7eb704622f48eb3f8ec3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d455af16_a3439c14",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T15:51:05Z",
+      "side": 1,
+      "message": "misleading indentation here",
+      "revId": "d38c8f7ea647345533e7eb704622f48eb3f8ec3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acc7e8f4_b51a2e4d",
+        "filename": "pce/src/test/resources/topologyData/or-base-topology.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T15:51:05Z",
+      "side": 1,
+      "message": "tabs here and after",
+      "revId": "d38c8f7ea647345533e7eb704622f48eb3f8ec3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8d1028d_29dd6396",
+        "filename": "pce/src/test/resources/topologyData/portMapping2.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T15:51:05Z",
+      "side": 1,
+      "message": "trailing blank",
+      "revId": "d38c8f7ea647345533e7eb704622f48eb3f8ec3f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
