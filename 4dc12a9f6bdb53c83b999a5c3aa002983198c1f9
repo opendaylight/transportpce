@@ -16,6 +16,40 @@
       "message": "Patchset3 : Made a bit of cleanup: \n- removing yang file that is not associated with this change (api/src/main/yang/service_path/transportpce-pce@2022-10-30.yang)\n- adjusting unitary tests associated with common/catalogUtils\n-integrating the changes proposed by Jonas in 103515 (Handle missing spanloss in PCE without crashing) and making some corrections in PceLink",
       "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f9118a_e0248946",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T09:36:48Z",
+      "side": 1,
+      "message": "This change is \u003e 5000 lines, what is really big and will be difficult to review IMO\nIt likely deserves to be split in several pieces.",
+      "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d01aca_528d7e47",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T09:36:48Z",
+      "side": 1,
+      "message": "very similar to line 109 else clause",
+      "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
