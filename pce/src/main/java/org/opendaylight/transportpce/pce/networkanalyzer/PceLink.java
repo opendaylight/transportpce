@@ -173,6 +173,10 @@ public class PceLink implements Serializable {
         if (!linkConcatenationiterator.hasNext()) {
             return 0L;
         }
+        if (this.omsAttributesSpan.getSpanlossCurrent() == null) {
+            LOG.error("in PceLink : Spanloss is null");
+            return 0L;
+        }
         // power on the output of the previous ROADM (dBm)
         double pout = retrievePower(linkConcatenationiterator.next().augmentation(LinkConcatenation1.class)
             .getFiberType());
@@ -300,9 +304,14 @@ public class PceLink implements Serializable {
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
         }
         isValid = checkParams();
-        if ((this.omsAttributesSpan == null) && (this.linkType == OpenroadmLinkType.ROADMTOROADM)) {
-            isValid = false;
-            LOG.error("PceLink: Error reading Span for OMS link. Link is ignored {}", linkId);
+        if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
+            if (this.omsAttributesSpan == null) {
+                isValid = false;
+                LOG.error("PceLink: Error reading Span for OMS link. Link is ignored {}", linkId);
+            } else if (this.omsAttributesSpan.getSpanlossCurrent() == null) {
+                isValid = false;
+                LOG.error("PceLink: Error reading Spanloss for OMS link. Link is ignored {}", linkId);
+            }
         }
         if ((this.srlgList != null) && (this.srlgList.isEmpty())) {
             isValid = false;
