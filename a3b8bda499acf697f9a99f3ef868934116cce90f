@@ -16,6 +16,40 @@
       "message": "recheck",
       "revId": "a3b8bda499acf697f9a99f3ef868934116cce90f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c15d85_4bdf4fa6",
+        "filename": "features/odl-transportpce-dmaap-client/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T12:13:09Z",
+      "side": 1,
+      "message": "this comment is no more relevant.",
+      "revId": "a3b8bda499acf697f9a99f3ef868934116cce90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848dd35a_f3f00599",
+        "filename": "features/odl-transportpce-nbinotifications/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-15T12:13:09Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "a3b8bda499acf697f9a99f3ef868934116cce90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
