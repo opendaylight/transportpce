@@ -88,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "201d8016_74e5ef58",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/R2RLinkDiscovery.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-16T08:05:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a513e00b_dad6832a",
+      "revId": "4f927f68e15ba4032a4c415f7b8fc38e167b868c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d87a92c_9ecccb90",
