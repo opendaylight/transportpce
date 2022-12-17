@@ -89,6 +89,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <!-- transportpce features -->
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>features-transportpce</artifactId>
+        <version>${project.version}</version>
+        <type>xml</type>
+        <classifier>features</classifier>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>odl-transportpce</artifactId>
         <version>${project.version}</version>
         <type>xml</type>
