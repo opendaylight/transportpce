@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d10df7_4f445e72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-17T09:50:42Z",
+      "side": 1,
+      "message": "@Olivier thanks for the great work.\nI can see many interesting things in it.\nBut there are also a few issues to fix so it will put it in WIP.\n\nIf small refactoring pieces w/o strong effects and LOG level modifications were in a separate change, they could be merged quickly IMO and ease further rebase.\n\nHope this helps\nGuillaume",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a9f6730_015b44f6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-17T09:50:42Z",
+      "side": 1,
+      "message": "misleading indentation here",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65d26a6b_2f01deb8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-17T09:50:42Z",
+      "side": 1,
+      "message": "LGTM but this is more refactoring than a functional change linked to this new feature.\nIt better be in a separate change IMO",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14dcea12_ffe2a329",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-17T09:50:42Z",
+      "side": 1,
+      "message": "misleading idnetation here and in conditions afterwards",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "381320c4_3dbc08d3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-17T09:50:42Z",
+      "side": 1,
+      "message": "I do not understand why this must be moved from error to info here and in other places.\nIMO this is not innocucuous and deserves more explanation in the commit message + probably even a separate change.",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
