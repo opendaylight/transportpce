@@ -38,5 +38,12 @@
       <artifactId>transportpce-nbinotifications</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-nbinotifications</artifactId>
+      <version>${project.version}</version>
+      <type>cfg</type>
+      <classifier>config</classifier>
+    </dependency>
   </dependencies>
 </project>
