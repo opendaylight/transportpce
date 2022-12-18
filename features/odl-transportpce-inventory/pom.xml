@@ -91,5 +91,19 @@
       <artifactId>transportpce-inventory</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-inventory</artifactId>
+      <version>${project.version}</version>
+      <type>cfg</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-inventory</artifactId>
+      <version>${project.version}</version>
+      <type>cfg</type>
+      <classifier>datasource</classifier>
+    </dependency>
   </dependencies>
 </project>
