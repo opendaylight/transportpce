@@ -66,7 +66,7 @@ public class PowerMgmtTest {
     public void testSetPowerWhenMappingReturnNull() {
         Mockito.when(this.portMapping.getNode(Mockito.anyString())).thenReturn(null);
         boolean output = this.powerMgmt.setPower(OlmPowerServiceRpcImplUtil.getServicePowerSetupInput());
-        Assert.assertEquals(true, output);
+        Assert.assertEquals(false, output);
     }
 
     @Test

@@ -111,7 +111,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             Nodes inputNode = this.portMapping.getNode(nodeId);
             if (inputNode == null || inputNode.getNodeInfo() == null) {
                 LOG.error("OLM-PowerMgmtImpl : Error retrieving mapping node for {}", nodeId);
-                continue;
+                return false;
             }
             OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
 
