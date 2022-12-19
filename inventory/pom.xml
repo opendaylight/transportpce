@@ -24,7 +24,7 @@
           FIXME: these versions should be communicated from tpce-models' artifacts pom
                  and then should be imported just like netconf below
       -->
-    <transportpce.models.version>17.1.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>17.1.0</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
