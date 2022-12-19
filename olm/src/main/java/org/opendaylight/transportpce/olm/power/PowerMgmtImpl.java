@@ -104,7 +104,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             if (inputNodeOptional.isEmpty()
                     || inputNodeOptional.get().getNodeInfo().getNodeType() == null) {
                 LOG.error("OLM-PowerMgmtImpl : Error node type cannot be retrieved for node {}", nodeId);
-                continue;
+                return false;
             }
             Nodes inputNode = inputNodeOptional.get();
             OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
