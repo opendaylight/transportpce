@@ -25,7 +25,7 @@
     <application.attach.zip>true</application.attach.zip>
     <maven.deploy.skip>true</maven.deploy.skip>
     <transportpce.version>7.0.0-SNAPSHOT</transportpce.version>
-    <transportpce.models.version>17.1.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>17.1.0</transportpce.models.version>
   </properties>
 
   <dependencies>
@@ -84,7 +84,7 @@
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>tapi-2.1.1</artifactId>
-      <version>17.1.0-SNAPSHOT</version>
+      <version>17.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
