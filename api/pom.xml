@@ -25,46 +25,50 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <transportpce.models.version>17.1.0</transportpce.models.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.transportpce.models</groupId>
+        <artifactId>transportpce-models-artifacts</artifactId>
+        <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-1.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-2.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-7.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-device-7.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-network-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>tapi-2.1.1</artifactId>
-      <version>17.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
