@@ -29,6 +29,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.opendaylight.transportpce.models</groupId>
+        <artifactId>transportpce-models-artifacts</artifactId>
+        <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.opendaylight.yangtools</groupId>
         <artifactId>yangtools-artifacts</artifactId>
         <version>9.0.5</version>
@@ -56,47 +63,38 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-1.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-2.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-7.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-device-1.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-device-2.2.1</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-device-7.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-network-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-10.1.0</artifactId>
-      <version>${transportpce.models.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
