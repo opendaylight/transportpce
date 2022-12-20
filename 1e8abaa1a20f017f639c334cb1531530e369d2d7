@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32c54909_7fdb9b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-20T09:38:08Z",
+      "side": 1,
+      "message": "LGTM but this seems to break current tests121 and 71 suites.\nThey probably need to be adapted.\nI\u0027ve rebased on top of master just to be sure it is not due to the CI.",
+      "revId": "1e8abaa1a20f017f639c334cb1531530e369d2d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
