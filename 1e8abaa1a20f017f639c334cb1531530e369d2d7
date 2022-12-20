@@ -34,6 +34,24 @@
       "parentUuid": "32c54909_7fdb9b1b",
       "revId": "1e8abaa1a20f017f639c334cb1531530e369d2d7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "308b727c_26c189d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2022-12-20T13:21:37Z",
+      "side": 1,
+      "message": "tox functional tests passed after rebase.\nThe only issue is in Junit.",
+      "parentUuid": "f8d97d04_d0ec2f71",
+      "revId": "1e8abaa1a20f017f639c334cb1531530e369d2d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
