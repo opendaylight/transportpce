@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b0f502_a91e3c2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "Thanks so much for your review Guillaume!\nI have tried to address all your comments.",
+      "revId": "c45e9ebabab02a6880d961cb0c0dccc1f38b7c08",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

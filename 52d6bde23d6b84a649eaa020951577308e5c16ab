@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "275a6714_fe393d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "Thanks for your review, Guillaume. I fully agree with you for what concerns LOG level, and stepped back to original values. This shall be handled through a separate change. About small refactoring pieces, IMHO, this is not what we can call refactoring, which implies a global approach, affecting the structure of modules and methods with the goal to improve code quality. I guess the little changes you are pointing to can just be considered as bit of cleanup, just when you correct small typos that you see, working on a document",
+      "parentUuid": "a9d10df7_4f445e72",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a9f6730_015b44f6",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-17T09:50:42Z",
       "side": 1,
       "message": "misleading indentation here",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6da72f4_41eccd16",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "Done in Patchset 9",
+      "parentUuid": "7a9f6730_015b44f6",
       "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "beaf2182_7d28fc86",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "You are right, this is not a functional change and, yes, it could be done in another change. However, making changes associated with functional adds does not prevent as we work on a class to provide other improvements when we notice, as in this example, that latest java features allow to make it in a better way. You noticed this one, but there are probably many others that you may not have seen. Making separate change just to handle little improvements does not add value. Why shall I delay something I can do today? \nWe are not talking here of some code refactoring that could be done as a global task, just a bit of clean up. When you add a contribution to a word document, and notice some typos in existing text , do you let them like this, just because this is not the scope of your contribution?",
+      "parentUuid": "65d26a6b_2f01deb8",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14dcea12_ffe2a329",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
         "patchSetId": 6
@@ -65,6 +119,24 @@
       "writtenOn": "2022-12-17T09:50:42Z",
       "side": 1,
       "message": "misleading idnetation here and in conditions afterwards",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66229b1_4b974601",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "Done in Patchset 9",
+      "parentUuid": "14dcea12_ffe2a329",
       "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -82,6 +154,24 @@
       "writtenOn": "2022-12-17T09:50:42Z",
       "side": 1,
       "message": "I do not understand why this must be moved from error to info here and in other places.\nIMO this is not innocucuous and deserves more explanation in the commit message + probably even a separate change.",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a524214a_6931b6eb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "The reason I changed it could be longly discussed, but you are right, changing log level, even if  this could make sense shall not be handled in this change. Stepped back to original implementation in Patchset 9.",
+      "parentUuid": "381320c4_3dbc08d3",
       "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

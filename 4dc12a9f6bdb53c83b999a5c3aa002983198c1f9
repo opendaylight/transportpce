@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee55a3d_7cf525c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "Hello Guillaume. This change is supposed to provide autonomous path computation. Its purpose is not to be simple to review, but to add an important feature which is not simple itself, since at the ends it will provides what does GNPY, in a simpler way, but which fits better with what is specified in OpenROADM. I provided a first part which focuses on primitive to retrieve parameters from catalog. This could be handled separately, and I did it. For this change, I had to handle it globally, because it involves/affects a lot of PCE classes. Splitting it in different parts would just have resulted in much longer time to do it, since tests can not be done until all what\u0027s needed is present. In other terms, a lot of calculations, a lot of method called, to provide one parameter at the end : the OSNR. The only way to make sure it is consistent is to check this final parameter and compare it with what is in OpenROADM specs. This can be done only when every needed module is present.",
+      "parentUuid": "c0f9118a_e0248946",
+      "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67d01aca_528d7e47",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-12-15T09:36:48Z",
       "side": 1,
       "message": "very similar to line 109 else clause",
+      "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7290f1b4_f8b37fe9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PceGraph.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-04T15:31:07Z",
+      "side": 1,
+      "message": "You are absolutely right. I guess this is not code I modified but corrected it in Patchset 9",
+      "parentUuid": "67d01aca_528d7e47",
       "revId": "4dc12a9f6bdb53c83b999a5c3aa002983198c1f9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
