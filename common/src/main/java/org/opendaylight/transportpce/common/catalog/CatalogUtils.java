@@ -424,12 +424,14 @@ public class CatalogUtils {
             .filter(val -> val.getUpToBoundary().doubleValue() >= calculatedParameter)
             // takes the immediate greater or equal value
             .findFirst().orElse(null);
-        return penalty == null
+        if (penalty == null) {
             //means a boundary that is greater than calculatedParameter couldn't be found
             // Out of specification!
-                ? 9999.9
-            // In spec, return penalty associated with calculatedParameter
-                : penalty.getPenaltyValue().getValue().doubleValue();
+            return 9999.9;
+        }
+        // In spec, return penalty associated with calculatedParameter
+        LOG.info("Penalty for {} is {} dB", impairmentType, penalty.getPenaltyValue().getValue().doubleValue());
+        return penalty.getPenaltyValue().getValue().doubleValue();
     }
 
     /**
