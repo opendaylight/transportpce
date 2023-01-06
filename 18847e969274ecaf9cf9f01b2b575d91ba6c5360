@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a5a372e_d30aeb93",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "add a LF or indent +4 here to separate clearly method declaration from its body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e9abd6d_752ac94e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "indent +4 here to separate condition from body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "687a4b43_22980caa",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118f1aae_eabbf8c9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "indent +4 here to clearly separate for loop declaration from its body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27dae3d_019e9abf",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "indent +4 to separate condition from body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af372290_1ffea43d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "LF and + not needed",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75b3e0e_3749e757",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "see comments below",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "808b2ab3_ca462625",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "It is usually a good idea to cascade setters and builders to remove intermediate variables. Swapping lines order is needed here.\n\nPass1\n        TerminationPointBuilder srgPpBldr \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-PP-TXRX\")));\n        TerminationPoint1Builder tp1Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXPP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        srgPpBldr.addAugmentation(tp1Bldr.build());\n        TerminationPoint srgPP \u003d srgPpBldr.build();\n        TerminationPoint1Builder tp2Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXCP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        TerminationPoint srgCP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-CP-TXRX\")))\n            .addAugmentation(tp2Bldr.build())\n            .build();\n\n\nPass2\n\n\n        TerminationPoint1Builder tp1Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXPP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        TerminationPointBuilder srgPpBldr \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-PP-TXRX\")))\n            .addAugmentation(tp1Bldr.build());\n        TerminationPoint srgPP \u003d srgPpBldr.build();\n        TerminationPoint1Builder tp2Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXCP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        TerminationPoint srgCP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-CP-TXRX\")))\n            .addAugmentation(tp2Bldr.build())\n            .build();\n\nPass3\n\n        TerminationPoint1Builder tp1Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXPP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        TerminationPoint srgPP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-PP-TXRX\")))\n            .addAugmentation(tp1Bldr.build())\n            .build();\n        TerminationPoint1Builder tp2Bldr \u003d new TerminationPoint1Builder()\n            .setTpType(OpenroadmTpType.SRGTXRXCP)\n            .setAdministrativeState(AdminStates.InService)\n            .setOperationalState(State.InService);\n        TerminationPoint srgCP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-CP-TXRX\")))\n            .addAugmentation(tp2Bldr.build())\n            .build();\n\n\nand finally\n\n        TerminationPoint srgPP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-PP-TXRX\")))\n            .addAugmentation(\n                new TerminationPoint1Builder()\n                   .setTpType(OpenroadmTpType.SRGTXRXPP)\n                   .setAdministrativeState(AdminStates.InService)\n                   .setOperationalState(State.InService)\n                   .build())\n            .build();\n        TerminationPoint srgCP \u003d new TerminationPointBuilder()\n            .withKey(new TerminationPointKey(new TpId(\"SRG1-CP-TXRX\")))\n            .addAugmentation(\n                 new TerminationPoint1Builder()\n                    .setTpType(OpenroadmTpType.SRGTXRXCP)\n                    .setAdministrativeState(AdminStates.InService)\n                    .setOperationalState(State.InService);\n                    .build())\n            .build();",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "394d59fa_f06e36f7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "node1 and node11 intermediate variables are not needed IMO",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

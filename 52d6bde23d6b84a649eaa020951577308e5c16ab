@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd1945c5_27e1762c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "About \"Making separate change just to handle little improvements does not add value.\"\n\nYes it does. Cherry-picking them on stable branches improve the quality of maintained past releases. Though, incorporating them in a new feature prevents them from being cherry-picked easily.",
+      "parentUuid": "beaf2182_7d28fc86",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14dcea12_ffe2a329",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
         "patchSetId": 6
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "The reason I changed it could be longly discussed, but you are right, changing log level, even if  this could make sense shall not be handled in this change. Stepped back to original implementation in Patchset 9.",
       "parentUuid": "381320c4_3dbc08d3",
+      "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e981727_a886b337",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:34:20Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "a524214a_6931b6eb",
       "revId": "52d6bde23d6b84a649eaa020951577308e5c16ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
