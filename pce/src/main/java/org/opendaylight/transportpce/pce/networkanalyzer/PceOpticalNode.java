@@ -92,7 +92,8 @@ public class PceOpticalNode implements PceNode {
             this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
                 .org.openroadm.common.network.rev211210.Node1.class).getOperationalState();
         } else {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, slot width granularity");
+            LOG.error("PceNode {} : one of parameters is not populated : nodeId, node type, slot width granularity",
+                deviceNodeId);
             this.valid = false;
         }
     }
@@ -264,8 +265,12 @@ public class PceOpticalNode implements PceNode {
             return;
         }
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .node.TerminationPoint tp : allTps) {
+                .node.TerminationPoint tp : allTps) {
             TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
+            if (cntp1 == null) {
+                LOG.error("initXndrTps: {} - {} has no tp type", this.nodeId, tp.getTpId().toString());
+                continue;
+            }
             if (cntp1.getTpType() != OpenroadmTpType.XPONDERNETWORK) {
                 LOG.debug("initXndrTps: {} is not an Xponder network port", cntp1.getTpType().getName());
                 continue;
@@ -381,9 +386,9 @@ public class PceOpticalNode implements PceNode {
 
     public boolean isValid() {
         if (node == null || nodeId == null || nodeType == null || this.getSupNetworkNodeId() == null
-            || this.getSupClliNodeId() == null || adminStates == null || state == null) {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId, "
-                    + "admin state, operational state");
+                || this.getSupClliNodeId() == null || adminStates == null || state == null) {
+            LOG.error("PceNode {},   nodeId {}  NodeType {} : one of parameters is not populated : nodeId, node type,"
+                + " supporting nodeId, admin state, operational state", deviceNodeId, nodeId, nodeType);
             valid = false;
         }
         return valid;
