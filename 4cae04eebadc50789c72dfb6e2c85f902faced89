@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb28024d_d2fc445c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-06T07:38:33Z",
+      "side": 1,
+      "message": "Thanks for your review.",
+      "revId": "4cae04eebadc50789c72dfb6e2c85f902faced89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2844d9f7_0224010a",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-01-05T17:43:13Z",
       "side": 1,
       "message": "3.8.7",
+      "revId": "4cae04eebadc50789c72dfb6e2c85f902faced89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e13308e_ed1a3ce6",
+        "filename": "tests/installMavenCentOS.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-06T07:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2844d9f7_0224010a",
       "revId": "4cae04eebadc50789c72dfb6e2c85f902faced89",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
