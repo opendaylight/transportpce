@@ -101,11 +101,8 @@ public class PceGraph {
             if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
                 LOG.info("Path is validated");
             } else {
-                LOG.warn("Path not validated - cause: {}", pceResult.getLocalCause());
-            }
-
-            if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
-                LOG.warn("In calcPath: post algo validations DROPPED the path {}", path);
+                LOG.warn("In calcPath: post algo validations DROPPED the path {}; for following cause: {}",
+                    path, pceResult.getLocalCause());
                 continue;
             }
 
