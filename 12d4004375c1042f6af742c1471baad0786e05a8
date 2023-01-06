@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1cbdc8c_93a34a32",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T11:55:01Z",
+      "side": 1,
+      "message": "LF not needed",
+      "revId": "12d4004375c1042f6af742c1471baad0786e05a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
