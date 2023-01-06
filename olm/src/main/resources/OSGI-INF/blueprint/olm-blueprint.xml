@@ -42,6 +42,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="openRoadmInterfaces" />
     <argument ref="crossConnect" />
     <argument ref="deviceTransactionManager" />
+    <argument ref="portMapping" />
     <argument value="${timer1}"/>
     <argument value="${timer2}"/>
   </bean>

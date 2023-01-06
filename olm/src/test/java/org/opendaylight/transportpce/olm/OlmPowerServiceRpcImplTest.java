@@ -130,7 +130,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
             this.openRoadmInterfacesImpl710);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
-            this.deviceTransactionManager);
+            this.deviceTransactionManager, this.portMapping);
         this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
             this.deviceTransactionManager, this.portMapping,mappingUtils,openRoadmInterfaces);
         this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService);
