@@ -7,6 +7,7 @@
  */
 
 package org.opendaylight.transportpce.olm.power;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -18,9 +19,9 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.olm.util.OlmUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
@@ -40,6 +41,7 @@ public class PowerMgmtImpl implements PowerMgmt {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final CrossConnect crossConnect;
     private final DeviceTransactionManager deviceTransactionManager;
+    private final PortMapping portMapping;
     private static final BigDecimal DEFAULT_TPDR_PWR_100G = new BigDecimal(-5);
     private static final BigDecimal DEFAULT_TPDR_PWR_400G = new BigDecimal(0);
     private static final String INTERFACE_NOT_PRESENT = "Interface {} on node {} is not present!";
@@ -50,21 +52,23 @@ public class PowerMgmtImpl implements PowerMgmt {
     private long timer2 = 20000;
     // openroadm spec value is 20000, functest value is 2000
 
-    public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
-                         CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager) {
+    public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces, CrossConnect crossConnect,
+            DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
         this.db = db;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
+        this.portMapping = portMapping;
     }
 
     public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
                          CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager,
-                         String timer1, String timer2) {
+            PortMapping portMapping, String timer1, String timer2) {
         this.db = db;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
+        this.portMapping = portMapping;
         try {
             this.timer1 = Long.parseLong(timer1);
         } catch (NumberFormatException e) {
@@ -100,13 +104,11 @@ public class PowerMgmtImpl implements PowerMgmt {
         for (int i = 0; i < input.getNodes().size(); i++) {
             String nodeId = input.getNodes().get(i).getNodeId();
             String destTpId = input.getNodes().get(i).getDestTp();
-            Optional<Nodes> inputNodeOptional = OlmUtils.getNode(nodeId, this.db);
-            if (inputNodeOptional.isEmpty()
-                    || inputNodeOptional.get().getNodeInfo().getNodeType() == null) {
-                LOG.error("OLM-PowerMgmtImpl : Error node type cannot be retrieved for node {}", nodeId);
+            Nodes inputNode = this.portMapping.getNode(nodeId);
+            if (inputNode == null || inputNode.getNodeInfo() == null) {
+                LOG.error("OLM-PowerMgmtImpl : Error retrieving mapping node for {}", nodeId);
                 continue;
             }
-            Nodes inputNode = inputNodeOptional.get();
             OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
 
             switch (inputNode.getNodeInfo().getNodeType()) {
@@ -252,14 +254,11 @@ public class PowerMgmtImpl implements PowerMgmt {
 
     private Map<String, Double> getSRGRxPowerRangeMap(String srgId, String nodeId, Integer openroadmVersion) {
 
-        Optional<Nodes> inputNode = OlmUtils.getNode(nodeId, this.db);
-        int rdmOpenroadmVersion =
-                inputNode.isPresent()
-                    ? inputNode.get().getNodeInfo().getOpenroadmVersion().getIntValue()
-                    : openroadmVersion;
-        Optional<Mapping> mappingObject = inputNode
-                .flatMap(node -> node.nonnullMapping().values().stream()
-                    .filter(o -> o.key().equals(new MappingKey(srgId))).findFirst());
+        Nodes inputNode = this.portMapping.getNode(nodeId);
+        int rdmOpenroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion().getIntValue();
+        Optional<Mapping> mappingObject = inputNode.nonnullMapping().values().stream()
+                .filter(o -> o.key().equals(new MappingKey(srgId)))
+                .findFirst();
 
         if (mappingObject.isEmpty()) {
             return new HashMap<>();

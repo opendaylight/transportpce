@@ -7,21 +7,10 @@
  */
 package org.opendaylight.transportpce.olm.util;
 
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.ReadTransaction;
-import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.NodesKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,26 +19,6 @@ public final class OlmUtils {
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils.class);
     private static long DATABROKER_READ_TIMEOUT_SECONDS = 120;
 
-    /**
-     * This static method returns the port mapping {@link Nodes} for node.
-     *
-     * @param nodeId
-     *            Unique identifier for the mounted netconf node
-     * @param db
-     *            Databroker used to read data from data store.
-     * @return {@link Nodes } from portMapping for given nodeId
-     */
-    public static Optional<Nodes> getNode(String nodeId, DataBroker db) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
-        try (ReadTransaction readTransaction = db.newReadOnlyTransaction()) {
-            return readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
-                .get(DATABROKER_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            LOG.error("Unable to read Portmapping for nodeId {}", nodeId, ex);
-            return Optional.empty();
-        }
-    }
 
     /**
      * This method retrieves list of current PMs for given nodeId,
