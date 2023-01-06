@@ -16,6 +16,24 @@
       "message": "setters can be cascaded here",
       "revId": "51dae8ab5a44ac120f30bbd54612b4e67cf1f833",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18dffaed_d2796aa4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-01-06T15:02:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e8cd0f4_2e3631fc",
+      "revId": "51dae8ab5a44ac120f30bbd54612b4e67cf1f833",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
