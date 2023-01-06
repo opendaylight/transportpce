@@ -94,11 +94,11 @@ public class CatalogUtils {
             return CATALOGNODETYPE_OPERATIONMODEID_MAP.get(catalogNodeType);
         }
         if (!catalogNodeType.equals(CatalogConstant.CatalogNodeType.TSP)) {
-            LOG.warn("Unsupported catalogNodeType {}", catalogNodeType);
+            LOG.debug("Unsupported catalogNodeType {}", catalogNodeType);
             return "";
         }
         if (!TSP_DEFAULT_OM_MAP.containsKey(serviceType)) {
-            LOG.warn("Unsupported serviceType {} for TSP catalogNodeType", serviceType);
+            LOG.debug("Unsupported serviceType {} for TSP catalogNodeType", serviceType);
             return "";
         }
         return TSP_DEFAULT_OM_MAP.get(serviceType);
