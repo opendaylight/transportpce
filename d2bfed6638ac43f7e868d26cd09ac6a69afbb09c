@@ -141,6 +141,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce052933_e8249573",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-06T10:01:29Z",
+      "side": 1,
+      "message": "please can we keep such comments opened when no modification was made ?\nThis eases their tracking.\n\nHere is a link to a different opinion about readability.\nabout the impact on readability of such intermediate variables.\nhttps://techbeacon.com/app-dev-testing/why-unnecessary-variables-are-bad-your-code\n\nAnyway, along readibility there are other concerns IMO.\nIntermediate variables affect the (JIT) performance (especially inlining capacity).\nThis particular case also prevents from using ternary form for otsInterface allocation that would spare an allocation.\nA reasonable level of readability can be achieved with a right combination of LF and indentations IMO.\nWhat about this ?\n            \nInterface otsInterface \u003d \n  oldMapping.getSupportingOts() \u003d\u003d null\n      ? null\n      : deviceTransactionManager\n          .getDataFromDevice(\n              nodeId,\n              LogicalDatastoreType.OPERATIONAL,\n              InstanceIdentifier\n                    .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)\n                    .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))\n                    .build(),\n              Timeouts.DEVICE_READ_TIMEOUT,\n              Timeouts.DEVICE_READ_TIMEOUT_UNIT\n          .get();",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1425078_9722e8de",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 5
