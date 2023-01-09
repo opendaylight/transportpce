@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.common;
 
 import java.util.Map;
-import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.common.Uint64;
 
 public final class StringConstants {
 
@@ -53,14 +53,15 @@ public final class StringConstants {
     public static final String SERVICE_DIRECTION_ZA = "zToa";
     public static final String UNKNOWN_MODE = "Unknown Mode";
 
-    public static final Map<String, Uint32> SERVICE_TYPE_RATE = Map.of(
-        SERVICE_TYPE_100GE_T, ServiceRateConstant.RATE_100,
-        SERVICE_TYPE_OTU4, ServiceRateConstant.RATE_100,
-        SERVICE_TYPE_ODUC2, ServiceRateConstant.RATE_200,
-        SERVICE_TYPE_ODUC3, ServiceRateConstant.RATE_300,
-        SERVICE_TYPE_ODUC4, ServiceRateConstant.RATE_400,
-        SERVICE_TYPE_400GE, ServiceRateConstant.RATE_400);
-
+    public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.of(
+        StringConstants.SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_OTU4, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_400GE, Uint64.valueOf(400),
+        StringConstants.SERVICE_TYPE_OTUC4, Uint64.valueOf(400),
+        StringConstants.SERVICE_TYPE_OTUC3, Uint64.valueOf(300),
+        StringConstants.SERVICE_TYPE_OTUC2, Uint64.valueOf(200));
 
     private StringConstants() {
         // hiding the default constructor
