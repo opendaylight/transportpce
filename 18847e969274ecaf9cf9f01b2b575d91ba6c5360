@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba725c18_26081f7a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a5a372e_d30aeb93",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e9abd6d_752ac94e",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-01-06T10:34:20Z",
       "side": 1,
       "message": "indent +4 here to separate condition from body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5122fd41_1c6732c0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e9abd6d_752ac94e",
       "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -69,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be5555e_479a99c5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "687a4b43_22980caa",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118f1aae_eabbf8c9",
@@ -86,6 +140,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb9662db_dda1b6e8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "118f1aae_eabbf8c9",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e27dae3d_019e9abf",
@@ -99,6 +171,24 @@
       "writtenOn": "2023-01-06T10:34:20Z",
       "side": 1,
       "message": "indent +4 to separate condition from body",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4177d4d3_a1a24bf4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e27dae3d_019e9abf",
       "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -155,6 +245,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9597ff24_948fec15",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f75b3e0e_3749e757",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "808b2ab3_ca462625",
@@ -172,6 +280,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8421db6f_5ce85988",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "808b2ab3_ca462625",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "394d59fa_f06e36f7",
@@ -185,6 +311,24 @@
       "writtenOn": "2023-01-06T10:34:20Z",
       "side": 1,
       "message": "node1 and node11 intermediate variables are not needed IMO",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e8f1985_94f8748b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-09T16:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "394d59fa_f06e36f7",
       "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
