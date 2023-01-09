@@ -41,6 +41,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mo
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -428,6 +431,11 @@ public class PceOpticalNode implements PceNode {
         return StringConstants.UNKNOWN_MODE;
     }
 
+    @Override
+    public String getXpdrOperationalMode(Uuid nepUuid) {
+        return null;
+    }
+
     public void validateAZxponder(String anodeId, String znodeId, ServiceFormat serviceFormat) {
         if (!isValid() || this.nodeType != OpenroadmNodeType.XPONDER) {
             return;
@@ -469,13 +477,28 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
+    public AdministrativeState getAdminState() {
+        return null;
+    }
+
+    @Override
     public State getState() {
         return state;
     }
 
     @Override
+    public OperationalState getOperationalState() {
+        return null;
+    }
+
+    @Override
     public NodeId getNodeId() {
         return nodeId;
+    }
+
+    @Override
+    public Uuid getNodeUuid() {
+        return null;
     }
 
     @Override
@@ -563,8 +586,12 @@ public class PceOpticalNode implements PceNode {
         return centralFreqGranularity;
     }
 
+    @Override
+    public List<BasePceNep> getListOfNep() {
+        return null;
+    }
+
     public void setEndpoints(Endpoints endpoints) {
         this.endpoints = endpoints;
     }
-
 }

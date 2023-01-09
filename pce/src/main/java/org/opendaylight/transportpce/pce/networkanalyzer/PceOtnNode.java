@@ -43,15 +43,19 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceOtnNode implements PceNode {
+
     ////////////////////////// OTN NODES ///////////////////////////
     /*
      * For This Class the node passed shall be at the otn-openroadm Layer
-     */
+    */
 
     private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
     private static final List<String> SERVICE_TYPE_ODU_LIST = List.of(
@@ -599,6 +603,31 @@ public class PceOtnNode implements PceNode {
      */
     @Override
     public BigDecimal getCentralFreqGranularity() {
+        return null;
+    }
+
+    @Override
+    public AdministrativeState getAdminState() {
+        return null;
+    }
+
+    @Override
+    public OperationalState getOperationalState() {
+        return null;
+    }
+
+    @Override
+    public  String getXpdrOperationalMode(Uuid nepUuid) {
+        return null;
+    }
+
+    @Override
+    public Uuid getNodeUuid() {
+        return null;
+    }
+
+    @Override
+    public List<BasePceNep> getListOfNep() {
         return null;
     }
 }
