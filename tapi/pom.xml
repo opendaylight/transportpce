@@ -104,11 +104,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>transportpce-renderer</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-pce</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>${project.groupId}</groupId> -->
+<!--       <artifactId>transportpce-pce</artifactId> -->
+<!--       <version>${project.version}</version> -->
+<!--     </dependency> -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-servicehandler</artifactId>
