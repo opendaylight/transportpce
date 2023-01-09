@@ -8,8 +8,11 @@
 
 package org.opendaylight.transportpce.common;
 
+import static java.util.Map.entry;
+
 import java.util.Map;
-import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev230526.span.attributes.LinkConcatenation1.FiberType;
+import org.opendaylight.yangtools.yang.common.Uint64;
 
 public final class StringConstants {
 
@@ -51,9 +54,7 @@ public final class StringConstants {
     public static final String SERVICE_TYPE_ODUC2 = "ODUC2";
     public static final String SERVICE_TYPE_ODUC3 = "ODUC3";
     public static final String SERVICE_TYPE_ODUC4 = "ODUC4";
-
     public static final String SERVICE_TYPE_OTHER = "other";
-
     public static final String SERVICE_DIRECTION_AZ = "aToz";
     public static final String SERVICE_DIRECTION_ZA = "zToa";
     public static final String UNKNOWN_MODE = "Unknown Mode";
@@ -72,14 +73,54 @@ public final class StringConstants {
     public static final String XPDR_MCPROFILE = "XPDR-mcprofile";
     public static final String SWITCH = "switch";
 
-    public static final Map<String, Uint32> SERVICE_TYPE_RATE = Map.of(
-        SERVICE_TYPE_100GE_T, ServiceRateConstant.RATE_100,
-        SERVICE_TYPE_OTU4, ServiceRateConstant.RATE_100,
-        SERVICE_TYPE_ODUC2, ServiceRateConstant.RATE_200,
-        SERVICE_TYPE_ODUC3, ServiceRateConstant.RATE_300,
-        SERVICE_TYPE_ODUC4, ServiceRateConstant.RATE_400,
-        SERVICE_TYPE_400GE, ServiceRateConstant.RATE_400);
+    public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.of(
+        SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
+        SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
+        SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
+        SERVICE_TYPE_OTU4, Uint64.valueOf(100),
+        SERVICE_TYPE_OTUC4, Uint64.valueOf(400),
+        SERVICE_TYPE_OTUC3, Uint64.valueOf(300),
+        SERVICE_TYPE_OTUC2, Uint64.valueOf(200),
+        SERVICE_TYPE_400GE, Uint64.valueOf(400));
 
+    public static final Map<String, FiberType> FIBER_TYPES_TABLE = Map.ofEntries(
+        entry("SMF", FiberType.Smf),
+        entry("smf", FiberType.Smf),
+        entry("Smf", FiberType.Smf),
+        entry("G652", FiberType.Smf),
+        entry("G.652", FiberType.Smf),
+        entry("G-652", FiberType.Smf),
+        entry("Standard", FiberType.Smf),
+        entry("G.653", FiberType.Dsf),
+        entry("G653", FiberType.Dsf),
+        entry("G-653", FiberType.Dsf),
+        entry("dsf", FiberType.Dsf),
+        entry("Dsf", FiberType.Dsf),
+        entry("DSF", FiberType.Dsf),
+        entry("G655", FiberType.NzDsf),
+        entry("G.655", FiberType.NzDsf),
+        entry("G-655", FiberType.NzDsf),
+        entry("ELEAF", FiberType.Eleaf),
+        entry("Eleaf", FiberType.Eleaf),
+        entry("eleaf", FiberType.Eleaf),
+        entry("Oleaf", FiberType.Oleaf),
+        entry("oLeaf", FiberType.Oleaf),
+        entry("OLEAF", FiberType.Oleaf),
+        entry("TW", FiberType.Truewave),
+        entry("tw", FiberType.Truewave),
+        entry("TrueWave", FiberType.Truewave),
+        entry("Truewave", FiberType.Truewave),
+        entry("truewave", FiberType.Truewave),
+        entry("TrueWaveClassic", FiberType.Truewavec),
+        entry("Truewaveclassic", FiberType.Truewavec),
+        entry("truewaveclassic", FiberType.Truewavec),
+        entry("twc", FiberType.Truewavec),
+        entry("TWC", FiberType.Truewavec),
+        entry("G.654", FiberType.Ull),
+        entry("G654", FiberType.Ull),
+        entry("G-654", FiberType.Ull),
+        entry("ull", FiberType.Ull),
+        entry("Ull", FiberType.Ull));
 
     private StringConstants() {
         // hiding the default constructor
