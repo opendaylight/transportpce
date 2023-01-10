@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c98b6b75_b1b6f2a3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-10T09:07:05Z",
+      "side": 1,
+      "message": "still this one opened",
+      "parentUuid": "a20c5747_aa870d7a",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a5a372e_d30aeb93",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 10
