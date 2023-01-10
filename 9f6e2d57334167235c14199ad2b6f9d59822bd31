@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77662a10_637fcbe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-10T09:25:46Z",
+      "side": 1,
+      "message": "Addressed last comment on incorrect indentation in CatalogUtils. Thanks!",
+      "revId": "9f6e2d57334167235c14199ad2b6f9d59822bd31",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
