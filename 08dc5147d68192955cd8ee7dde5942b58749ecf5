@@ -16,6 +16,23 @@
       "message": "Thanks for last review. Addressed your comments",
       "revId": "08dc5147d68192955cd8ee7dde5942b58749ecf5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8446139d_4616ca40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-10T09:07:41Z",
+      "side": 1,
+      "message": "rebase on top of b88707dcd877cdab3d6e22a7c5e365c004ef4a19 needed",
+      "revId": "08dc5147d68192955cd8ee7dde5942b58749ecf5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
