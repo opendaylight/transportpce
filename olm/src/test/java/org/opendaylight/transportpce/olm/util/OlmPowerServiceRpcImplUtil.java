@@ -9,7 +9,9 @@
 package org.opendaylight.transportpce.olm.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossCurrentInput;
@@ -22,6 +24,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -40,6 +48,99 @@ public final class OlmPowerServiceRpcImplUtil {
             .setResourceIdentifier(new ResourceIdentifierBuilder().setCircuitPackName("circuit pack name")
                 .setResourceName("resource name").build()).setResourceType(ResourceTypeEnum.Device).build();
         return input;
+    }
+
+    public static ServicePowerSetupInput getServicePowerSetupInputForTransponder() {
+        return new ServicePowerSetupInputBuilder()
+                .setNodes(List.of(
+                        new NodesBuilder().setNodeId("xpdr-A").setSrcTp("client-A").setDestTp("network-A").build(),
+                        new NodesBuilder().setNodeId("roadm-A").setSrcTp("srg1-A").setDestTp("deg2-A").build()))
+                .setServiceName("service 1")
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+                .build();
+    }
+
+    public static ServicePowerSetupInput getServicePowerSetupInputForOneNode(String nodeId, String srcTp,
+            String destTp) {
+        return new ServicePowerSetupInputBuilder()
+                .setNodes(List.of(
+                        new NodesBuilder().setNodeId(nodeId).setSrcTp(srcTp).setDestTp(destTp).build()))
+                .setServiceName("service 1")
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+                .build();
+    }
+
+    public static ServicePowerSetupInput getServicePowerSetupInputWthoutNode() {
+        return new ServicePowerSetupInputBuilder()
+                .setNodes(List.of())
+                .setServiceName("service 1")
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+                .build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+            .Nodes getMappingNodeTpdr(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
+        Map<MappingKey, Mapping> mappings = new HashMap();
+        for (String lcp:lcps) {
+            Mapping mapping = new MappingBuilder()
+                    .setLogicalConnectionPoint(lcp)
+                    .setSupportingCircuitPackName("circuit pack")
+                    .setSupportingPort("port")
+                    .build();
+            mappings.put(mapping.key(), mapping);
+        }
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+                .NodesBuilder()
+            .setNodeId(nodeId)
+            .setNodeInfo(new NodeInfoBuilder()
+                .setNodeType(NodeTypes.Xpdr)
+                .setOpenroadmVersion(nodeVersion)
+                .build())
+            .setMapping(mappings)
+            .build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+            .Nodes getMappingNodeRdm(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
+        Map<MappingKey, Mapping> mappings = new HashMap();
+        for (String lcp:lcps) {
+            MappingBuilder mappingBldr = new MappingBuilder()
+                    .setLogicalConnectionPoint(lcp)
+                    .setSupportingCircuitPackName("circuit pack")
+                    .setSupportingPort("port");
+            if (lcp.contains("deg")) {
+                mappingBldr.setSupportingOts("interface ots")
+                        .setSupportingOms("interface oms");
+            }
+            mappings.put(mappingBldr.build().key(), mappingBldr.build());
+        }
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+                    .NodesBuilder()
+                .setNodeId(nodeId)
+                .setNodeInfo(new NodeInfoBuilder()
+                        .setNodeType(NodeTypes.Rdm)
+                        .setOpenroadmVersion(nodeVersion)
+                        .build())
+                .setMapping(mappings)
+                .build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+            .Nodes getMappingNodeIla() {
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network
+                    .NodesBuilder()
+                .setNodeId("ila node")
+                .setNodeInfo(new NodeInfoBuilder()
+                        .setNodeType(NodeTypes.Ila)
+                        .setOpenroadmVersion(OpenroadmNodeVersion._121)
+                        .build())
+                .build();
     }
 
     public static ServicePowerSetupInput getServicePowerSetupInput() {
@@ -85,34 +186,17 @@ public final class OlmPowerServiceRpcImplUtil {
         return input;
     }
 
-    public static ServicePowerSetupInput getServicePowerSetupInput4() {
-        Nodes node1 = new NodesBuilder().setDestTp("srg").setSrcTp("src").setNodeId("node 1").build();
-        Nodes node2 = new NodesBuilder().setDestTp("srg").setSrcTp("src").setNodeId("node 2").build();
-        List<Nodes> nodes = new ArrayList<>();
-        nodes.add(node1);
-        nodes.add(node2);
-        ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
-            .setServiceName("service 1")
-            .setWaveNumber(Uint32.valueOf("1"))
-            .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-            .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
-        return input;
-    }
-
     public static ServicePowerTurndownInput getServicePowerTurndownInput() {
-        Nodes node1 = new NodesBuilder().setDestTp("dest").setSrcTp("src").setNodeId("node 1").build();
-        Nodes node2 = new NodesBuilder().setDestTp("dest").setSrcTp("src").setNodeId("node 2").build();
-        List<Nodes> nodes = new ArrayList<>();
-        nodes.add(node1);
-        nodes.add(node2);
-        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
-                .setNodes(nodes)
+        return new ServicePowerTurndownInputBuilder()
+                .setNodes(List.of(
+                        new NodesBuilder().setNodeId("roadm-A").setSrcTp("srg1-A").setDestTp("deg2-A").build(),
+                        new NodesBuilder().setNodeId("roadm-C").setSrcTp("deg1-C").setDestTp("srg1-C").build())
+                        )
                 .setServiceName("service 1")
                 .setWaveNumber(Uint32.valueOf("1"))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
-
-        return input;
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+                .build();
     }
 
     public static ServicePowerTurndownInput getServicePowerTurndownInput2() {
@@ -131,37 +215,6 @@ public final class OlmPowerServiceRpcImplUtil {
         return input;
     }
 
-    public static ServicePowerTurndownInput getServicePowerTurndownInput3() {
-        Nodes node1 = new NodesBuilder().setDestTp("destsrg").setSrcTp("src").setNodeId("node 1").build();
-        Nodes node2 = new NodesBuilder().setDestTp("destsrg").setSrcTp("src").setNodeId("node 2").build();
-        List<Nodes> nodes = new ArrayList<>();
-        nodes.add(node1);
-        nodes.add(node2);
-        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
-                .setNodes(nodes)
-                .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1"))
-                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
-
-        return input;
-    }
-
-    public static ServicePowerTurndownInput getServicePowerTurndownInput4() {
-        Nodes node1 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 1").build();
-        Nodes node2 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 2").build();
-        List<Nodes> nodes = new ArrayList<>();
-        nodes.add(node1);
-        nodes.add(node2);
-        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
-                .setNodes(nodes)
-                .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1"))
-                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
-
-        return input;
-    }
 
     public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInputLink() {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
