@@ -101,6 +101,10 @@ public class PowerMgmtImpl implements PowerMgmt {
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 input.getLowerSpectralSlotNumber().toString(),
                 input.getHigherSpectralSlotNumber().toString());
+        if (input.getNodes() == null) {
+            LOG.error("No Nodes to configure");
+            return false;
+        }
         for (int i = 0; i < input.getNodes().size(); i++) {
             String nodeId = input.getNodes().get(i).getNodeId();
             String destTpId = input.getNodes().get(i).getDestTp();
