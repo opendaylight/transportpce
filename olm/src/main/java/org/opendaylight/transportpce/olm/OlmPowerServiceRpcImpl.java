@@ -23,13 +23,17 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class OlmPowerServiceRpcImpl.
  */
 public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
+    private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceRpcImpl.class);
     private final OlmPowerService olmPowerService;
 
     public OlmPowerServiceRpcImpl(OlmPowerService olmPowerService) {
@@ -55,6 +59,12 @@ public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
      */
     @Override
     public ListenableFuture<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
+        if (this.olmPowerService.getPm(input).getNodeId() == null) {
+            LOG.error("getPm: Error with input parameters");
+            return RpcResultBuilder.<GetPmOutput>failed()
+                    .withError(ErrorType.RPC, "Error with input parameters")
+                    .buildFuture();
+        }
         return RpcResultBuilder.success(this.olmPowerService.getPm(input)).buildFuture();
     }
 
