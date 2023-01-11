@@ -54,6 +54,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b63a56f_c7e0711e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-11T09:21:22Z",
+      "side": 1,
+      "message": "You are welcome.\nCan we rebase this new PS on top of https://git.opendaylight.org/gerrit/c/transportpce/+/103943 ?\n\nI can\u0027t do it from the web interface because of merge conflicts...",
+      "parentUuid": "97580522_8e9daf5f",
+      "revId": "18847e969274ecaf9cf9f01b2b575d91ba6c5360",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a5a372e_d30aeb93",
