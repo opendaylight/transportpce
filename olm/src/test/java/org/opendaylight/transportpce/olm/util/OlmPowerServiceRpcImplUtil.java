@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossCurrentInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossCurrentInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerResetInput;
@@ -30,12 +28,26 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlistBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.MeasurementsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.measurements.MeasurementBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.pm.measurement.PmParameterNameBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceTypeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class OlmPowerServiceRpcImplUtil {
@@ -44,10 +56,45 @@ public final class OlmPowerServiceRpcImplUtil {
     }
 
     public static GetPmInput  getGetPmInput() {
-        GetPmInput input = new GetPmInputBuilder().setGranularity(PmGranularity._15min).setNodeId("node1")
-            .setResourceIdentifier(new ResourceIdentifierBuilder().setCircuitPackName("circuit pack name")
-                .setResourceName("resource name").build()).setResourceType(ResourceTypeEnum.Device).build();
+        GetPmInput input = new GetPmInputBuilder()
+                .setNodeId("node1")
+                .setGranularity(PmGranularity._15min)
+                .setResourceIdentifier(new ResourceIdentifierBuilder()
+                        .setResourceName("ots-deg1").build())
+                .setResourceType(ResourceTypeEnum.Interface).build();
         return input;
+    }
+
+    public static CurrentPmlist getCurrentPmList121() {
+        CurrentPm currentPm = new CurrentPmBuilder()
+                .setId("id")
+                .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity._15min)
+                .setResource(new ResourceBuilder()
+                        .setResourceType(new ResourceTypeBuilder()
+                                .setType(ResourceTypeEnum.Interface)
+                                .build())
+                        .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource
+                                .ResourceBuilder()
+                                .setResource(new InterfaceBuilder()
+                                        .setInterfaceName("ots-deg1")
+                                        .build())
+                                .build())
+                        .build())
+                .setMeasurements(List.of(
+                        new MeasurementsBuilder()
+                                .setMeasurement(new MeasurementBuilder()
+                                        .setPmParameterName(new PmParameterNameBuilder()
+                                                .setType(PmNamesEnum.OpticalPowerInput)
+                                                .build())
+                                        .setPmParameterValue(new PmDataType(Decimal64.valueOf("3")))
+                                        .build())
+                                .build()))
+                .build();
+        Map<CurrentPmKey, CurrentPm> currentPmMap = new HashMap<>();
+        currentPmMap.put(currentPm.key(), currentPm);
+        return new CurrentPmlistBuilder()
+                .setCurrentPm(currentPmMap)
+                .build();
     }
 
     public static ServicePowerSetupInput getServicePowerSetupInputForTransponder() {
@@ -199,23 +246,6 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 
-    public static ServicePowerTurndownInput getServicePowerTurndownInput2() {
-        Nodes node1 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 1").build();
-        Nodes node2 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 2").build();
-        List<Nodes> nodes = new ArrayList<>();
-        nodes.add(node1);
-        nodes.add(node2);
-        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
-                .setNodes(nodes)
-                .setServiceName("service 1")
-                .setWaveNumber(Uint32.valueOf("1"))
-                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
-                .setHigherSpectralSlotNumber(Uint32.valueOf(768)).build();
-
-        return input;
-    }
-
-
     public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInputLink() {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
                 .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
@@ -228,19 +258,6 @@ public final class OlmPowerServiceRpcImplUtil {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
                 .setSrcType(CalculateSpanlossBaseInput.SrcType.All)
                 .build();
-        return input;
-    }
-
-    public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInput2() {
-        CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
-            .setLinkId(new LinkId("link 1"))
-            .setSrcType(CalculateSpanlossBaseInput.SrcType.All).build();
-        return input;
-    }
-
-    public static CalculateSpanlossCurrentInput getCalculateSpanlossCurrentInput() {
-        CalculateSpanlossCurrentInput input = new CalculateSpanlossCurrentInputBuilder()
-            .build();
         return input;
     }
 
