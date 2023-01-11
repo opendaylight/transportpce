@@ -126,17 +126,20 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
     @Override
     public GetPmOutput getPm(GetPmInput pmInput) {
-        OpenroadmNodeVersion openroadmVersion;
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
+        if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId()) == null) {
+            return pmOutputBuilder.build();
+        }
+        OpenroadmNodeVersion nodeVersion;
         switch (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                openroadmVersion = OpenroadmNodeVersion._121;
+                nodeVersion = OpenroadmNodeVersion._121;
                 break;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                openroadmVersion = OpenroadmNodeVersion._221;
+                nodeVersion = OpenroadmNodeVersion._221;
                 break;
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                openroadmVersion = OpenroadmNodeVersion._71;
+                nodeVersion = OpenroadmNodeVersion._71;
                 break;
             default:
                 LOG.error("Unknown device version");
@@ -144,7 +147,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
         LOG.info("Now calling get pm data");
         pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
-            openroadmVersion);
+            nodeVersion);
         return pmOutputBuilder.build();
     }
 
