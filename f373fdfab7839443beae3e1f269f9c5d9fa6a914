@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8d3e692_f017a5a4",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-12T21:00:03Z",
+      "side": 0,
+      "message": "is this protection really superfluous with portmapping call now?",
+      "revId": "f373fdfab7839443beae3e1f269f9c5d9fa6a914",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
