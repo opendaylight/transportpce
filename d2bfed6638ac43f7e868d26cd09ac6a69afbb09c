@@ -176,6 +176,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "767a9966_17a08cd1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-13T10:07:45Z",
+      "side": 1,
+      "message": "Please do as you wish here.\nI can propose another change if you are not confortable with this kind of optimization.\nOnce that done, this is to confirm but I have the feeling another variable can be spared since otsInterface seems only used in line 215.",
+      "parentUuid": "b1bb1755_6085f123",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1425078_9722e8de",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 5
