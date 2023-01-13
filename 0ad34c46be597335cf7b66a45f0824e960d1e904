@@ -50,6 +50,24 @@
       "message": "According to my comment I guess it should not be merged. Notably because of PceOticalNode",
       "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e3debb_86aadbba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-13T10:57:10Z",
+      "side": 1,
+      "message": "You are welcome.\nPlease can you be more precise on the modifications out of scope of the title ?\nI am fine to rework the commit message to better reflect them if you think it is worth to do it.\n\nAbout the fact that CatalogUtils may be unused in other branches,  most of the files modified here, if not all, are nonetheless present on the other branches.\nAs a result, their modifications can generate merge conflicts that will make stable branches maintenance more complex, whether they are used or not by a feature.\nHere is a pointer about how these merge conflicts happen https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts.\n\nThis is also true with indentation issues and any kind of modification.\nThe more the files differ, the more Git will have difficulties to automatically deals with merge conflicts resolution. And the more, we will have to deal manually with them.\nAs reminder, here is OpenStack official position on the topic.\nhttps://wiki.openstack.org/wiki/GitCommitMessages#Things_to_avoid_when_creating_commits\n\nHope this helps",
+      "parentUuid": "8d6af92a_dc213267",
+      "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
