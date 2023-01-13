@@ -33,6 +33,23 @@
       "message": "Thanks Guillaume for your proposal. \nThere are several things that I don’t really understand.\n1st I think the commit is not really well formatted because it does not really reflect the content of the change, Log messages being only one of some multiple other modifications.\nCatalogUtils : You propose to extract some changes that you feel will improve the code and can be backported. But I just would like to remind that CatalogUtils is until now absolutely not used. It is just preliminary work to reach the goal of having impairment awareness in PCE. So what is the point in backporting some improvement on code that is not used \nPceOpticalNode : most of what you propose to backport is associated with indentation and just add value for reviewing code. What is the benefit of backporting it on some code that won’t be reviewed anymore because it is already merged? The only real modification (line 274), IMHO shall not be backported. It is there because we need tp type in the case of impairment awareness path computation. Before I guess we were note absolutely needing it. So we will generate errors for something that we may not need.\nMapUtils : Cosmetic to me and not really needed…\nPceGraph: The only that really makes sense which I changed because you asked me to modify it whereas I did not write this part of the code ;-) \n",
       "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4322b3af_e579241b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-13T10:46:19Z",
+      "side": 1,
+      "message": "According to my comment I guess it should not be merged. Notably because of PceOticalNode",
+      "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
