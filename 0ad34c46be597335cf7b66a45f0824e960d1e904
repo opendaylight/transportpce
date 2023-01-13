@@ -68,6 +68,23 @@
       "parentUuid": "8d6af92a_dc213267",
       "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8192870d_4d21cfb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-13T13:09:44Z",
+      "side": 1,
+      "message": "Refactor log messages IMHO means you change a LOG level or LOG message content. Here we sometime generate LOG that were not existing (CatalogUtils), remove some duplicated conditions which results in LOG modifications (PceGraph), handle potential failure case and add corresponding LOG (MapUtils/PceOpticalNode). The only modification I see corresponding to the commit message is the one of line 95 of PceOpticalNode, where we just add the Id of the node to clarify the message.\n \nAt the end Impairment aware path computation is only for Argon, where all the change 103663 will be applied. It will not be applied to other branches. Indeed everything for Cl SR2 must be ready by the end of next week and 103663 will not be ready since its functional review may take more time. So I may miss something, but as soon as this change will be merged, all corresponding modifications will apply, and only on Argon. I don’t understand then why we should experience conflicts on other branches. \n",
+      "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
