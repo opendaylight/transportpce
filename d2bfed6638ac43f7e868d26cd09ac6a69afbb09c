@@ -158,6 +158,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b1bb1755_6085f123",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-13T08:20:43Z",
+      "side": 1,
+      "message": "You force me to combine all the styles of code that I dislike: ternary operators, excessive line wrapping, just to save one poor intermediate variable!",
+      "parentUuid": "ce052933_e8249573",
+      "revId": "d2bfed6638ac43f7e868d26cd09ac6a69afbb09c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1425078_9722e8de",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 5
