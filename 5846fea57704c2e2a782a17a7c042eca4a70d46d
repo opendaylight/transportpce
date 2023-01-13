@@ -16,6 +16,24 @@
       "message": "What about using a map here ?",
       "revId": "5846fea57704c2e2a782a17a7c042eca4a70d46d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30c47ae9_428dcfdb",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-13T07:54:40Z",
+      "side": 1,
+      "message": "There are of course several possible implementations. This work on the olm is not finished, and I plan to simplify this part in the near future. Using a map may be the chosen solution.",
+      "parentUuid": "4bebf9db_1790ccfc",
+      "revId": "5846fea57704c2e2a782a17a7c042eca4a70d46d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
