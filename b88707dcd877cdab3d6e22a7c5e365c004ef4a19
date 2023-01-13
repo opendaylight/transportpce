@@ -16,6 +16,23 @@
       "message": "These 2 logs level changes remained in Autonomous impairment aware path computation PS10. \nI don\u0027t think they are relevant.",
       "revId": "b88707dcd877cdab3d6e22a7c5e365c004ef4a19",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db024dd4_253d01b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-13T10:07:00Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your proposal. \nI made in change 103663 some log level changes that helped me in an intermediate phase to debug. But as you wisely highlighted, that was not appropriate. This is the reason why I stepped back to original code.\nHere you propose to extract the modification I made and for which I did not step back. I guess this is based on the assumption that we should not step back and apply my Change. My mistake. I guess we should make it other way round, because this is something I forgot to do. So I think I should better modify change 103663 to step back rather extracting the change to isolate it, because at the end, the log shall effectively be at the warn level.\n",
+      "revId": "b88707dcd877cdab3d6e22a7c5e365c004ef4a19",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
