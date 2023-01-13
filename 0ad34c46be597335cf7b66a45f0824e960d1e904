@@ -85,6 +85,24 @@
       "message": "Refactor log messages IMHO means you change a LOG level or LOG message content. Here we sometime generate LOG that were not existing (CatalogUtils), remove some duplicated conditions which results in LOG modifications (PceGraph), handle potential failure case and add corresponding LOG (MapUtils/PceOpticalNode). The only modification I see corresponding to the commit message is the one of line 95 of PceOpticalNode, where we just add the Id of the node to clarify the message.\n \nAt the end Impairment aware path computation is only for Argon, where all the change 103663 will be applied. It will not be applied to other branches. Indeed everything for Cl SR2 must be ready by the end of next week and 103663 will not be ready since its functional review may take more time. So I may miss something, but as soon as this change will be merged, all corresponding modifications will apply, and only on Argon. I don’t understand then why we should experience conflicts on other branches. \n",
       "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14f60b8_e1a9c43c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-13T14:14:35Z",
+      "side": 1,
+      "message": "I concour this is not related directly to the log message contents but their management. Would \"Refactor LOG message management\" be more appropiate as a title ?\n\nWith so many files spread on 4 bundles in 103663, I don\u0027t think it is possible to anticipate all cases where a merge conflict can occur. But you can already look at the merge conflicts already present on this change 103663 and see there are already potentially 8, with some changes related to completely different issues than CatalogsUtils.\nAs I state, merge conflicts are not related to a feature but to files modified.\nCan you guarantee all the files listed here won\u0027t be modified again in the stable branches ? Personnaly I won\u0027t.",
+      "parentUuid": "8192870d_4d21cfb6",
+      "revId": "0ad34c46be597335cf7b66a45f0824e960d1e904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
