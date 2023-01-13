@@ -16,6 +16,24 @@
       "message": "is this protection really superfluous with portmapping call now?",
       "revId": "f373fdfab7839443beae3e1f269f9c5d9fa6a914",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d4f5c5_8b0d8489",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-13T07:54:47Z",
+      "side": 0,
+      "message": "I considered that in practice this case should not occur, but you are right, as getNode can return null, it is better to keep this protection, especially since it allows to keep Jonas\u0027s change 103709.",
+      "parentUuid": "e8d3e692_f017a5a4",
+      "revId": "f373fdfab7839443beae3e1f269f9c5d9fa6a914",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
