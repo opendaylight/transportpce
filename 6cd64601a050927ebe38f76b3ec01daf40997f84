@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75e3bcea_7cb12bb9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2023-01-19T17:59:01Z",
+      "side": 1,
+      "message": "would a LOG.warn() here be too noisy?",
+      "range": {
+        "startLine": 429,
+        "startChar": 15,
+        "endLine": 429,
+        "endChar": 36
+      },
+      "revId": "6cd64601a050927ebe38f76b3ec01daf40997f84",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0efd55f8_f573f199",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2023-01-19T17:59:01Z",
+      "side": 1,
+      "message": "btw. if this is coming from binding, we would prefer if you wrote this like:\n\n  final var penaltyValue \u003d penalty.getPenaltyValue().getValue().doubleValue();\n  LOG.info(\"Penalty for {} is {} dB\", impairmentType, penaltyValue);\n  return penaltyValue;\n\nWhen penalty is from mdsal-binding-dom-codec, then getPenaltyValue() is a getAcquire() read, which JIT or CPU needs to optimize away. Not a biggie, but I also think the local value then lends itself to further processing, if it\u0027s more complex.",
+      "range": {
+        "startLine": 433,
+        "startChar": 60,
+        "endLine": 433,
+        "endChar": 110
+      },
+      "revId": "6cd64601a050927ebe38f76b3ec01daf40997f84",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
