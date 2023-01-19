@@ -222,17 +222,19 @@ public final class MapUtils {
     }
 
     public static LinkId extractOppositeLink(Link link) {
-        LinkId tmpoppositeLink = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1 linkOpposite
+        var linkOpposite
             = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1.class);
-        tmpoppositeLink = linkOpposite.getOppositeLink();
+        if (linkOpposite == null) {
+            LOG.error("No opposite link augmentation for network link {}", link);
+            return null;
+        }
         LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite);
+        LinkId tmpoppositeLink = linkOpposite.getOppositeLink();
         if (tmpoppositeLink == null) {
             LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
             return null;
         }
         return tmpoppositeLink;
     }
-
 
 }
