@@ -66,7 +66,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.Enumeration;
+import org.opendaylight.yangtools.yang.binding.EnumTypeObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +181,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 return;
             }
             ConnectivityContext connContext = optConnContext.get();
-            Map<Uuid, Enumeration[]> states = new HashMap<>();
+            Map<Uuid, EnumTypeObject[]> states = new HashMap<>();
             if (connContext.getConnectivityService() == null) {
                 return;
             }
@@ -226,12 +226,13 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
         }
     }
 
-    private Enumeration[] getStates(ConnectivityService connService) throws InterruptedException, ExecutionException {
+    private EnumTypeObject[] getStates(ConnectivityService connService)
+            throws InterruptedException, ExecutionException {
         OperationalState operState = OperationalState.ENABLED;
         AdministrativeState adminState = AdministrativeState.UNLOCKED;
         if (connService.getConnection() == null) {
             LOG.info("No connections on service = {}", connService);
-            return new Enumeration[]{null, null};
+            return new EnumTypeObject[]{null, null};
         }
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
                 .connectivity.service.Connection connection : connService.getConnection().values()) {
@@ -254,7 +255,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 operState = OperationalState.DISABLED;
             }
         }
-        return new Enumeration[]{adminState, operState};
+        return new EnumTypeObject[]{adminState, operState};
     }
 
     private void updateConnections(List<Uuid> changedOneps, List<String> onepStates) {
