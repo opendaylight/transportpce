@@ -36,14 +36,14 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.AvailableCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.AvailableCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.credentials.credentials.LoginPasswordBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.connection.oper.AvailableCapabilities;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.connection.oper.AvailableCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.connection.oper.available.capabilities.AvailableCapability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.connection.oper.available.capabilities.AvailableCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.credentials.credentials.LoginPasswordBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeBuilder;
@@ -74,7 +74,7 @@ public class NetConfTopologyListenerTest {
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(node);
 
-        final Node netconfNode = getNetconfNode("netconfNode1", NetconfNodeConnectionStatus.ConnectionStatus.Connecting,
+        final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
             OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(node.getDataBefore()).thenReturn(netconfNode);
@@ -98,9 +98,9 @@ public class NetConfTopologyListenerTest {
         when(ch.getRootNode()).thenReturn(node);
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
-            NetconfNodeConnectionStatus.ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
+            ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
-            NetconfNodeConnectionStatus.ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
+            ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
         when(node.getDataBefore()).thenReturn(netconfNodeBefore);
         when(node.getDataAfter()).thenReturn(netconfNodeAfter);
@@ -124,9 +124,9 @@ public class NetConfTopologyListenerTest {
         when(ch.getRootNode()).thenReturn(node);
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
-            NetconfNodeConnectionStatus.ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
+            ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
-            NetconfNodeConnectionStatus.ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
+            ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
         when(node.getDataBefore()).thenReturn(netconfNodeBefore);
         when(node.getDataAfter()).thenReturn(netconfNodeAfter);
@@ -151,7 +151,7 @@ public class NetConfTopologyListenerTest {
         when(ch.getRootNode()).thenReturn(node);
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
-            NetconfNodeConnectionStatus.ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
+            ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
         when(node.getDataBefore()).thenReturn(netconfNodeBefore);
 
@@ -166,7 +166,7 @@ public class NetConfTopologyListenerTest {
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
 
-    private Node getNetconfNode(final String nodeId, final NetconfNodeConnectionStatus.ConnectionStatus cs,
+    private Node getNetconfNode(final String nodeId, final ConnectionStatus cs,
         final String openRoadmVersion) {
         final List<AvailableCapability> avCapList = new ArrayList<>();
         avCapList.add(new AvailableCapabilityBuilder()
