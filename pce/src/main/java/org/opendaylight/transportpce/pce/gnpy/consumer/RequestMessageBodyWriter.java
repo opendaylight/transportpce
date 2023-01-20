@@ -35,10 +35,10 @@ public class RequestMessageBodyWriter implements MessageBodyWriter<Request> {
     @Override
     @SuppressWarnings("java:S1872")
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return "org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request$$$codecImpl"
-                .equals(type.getName())
-                || "org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.RequestBuilder$RequestImpl"
-                        .equals(type.getName());
+        return "org.opendaylight.yang.rt.v1.obj.gnpy.gnpy.api.rev220221.Request"
+                .equals(type.getName()) 
+            || "org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.RequestBuilder$RequestImpl"
+                .equals(type.getName());
     }
 
     @Override
