@@ -18,9 +18,8 @@ import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.inventory.DeviceInventory;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +55,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
             LOG.debug("nodeId {}", nodeId);
 
             NetconfNode netconfNode = rootNode.getDataAfter().augmentation(NetconfNode.class);
-            NetconfNodeConnectionStatus.ConnectionStatus connectionStatus =
+            ConnectionStatus connectionStatus =
                     netconfNode.getConnectionStatus();
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                     .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
@@ -89,7 +88,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      */
     private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion)
             throws InterruptedException, ExecutionException {
-        NetconfNodeConnectionStatus.ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
+        ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
         /*long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                 .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)).count();
         if (count < 1) {

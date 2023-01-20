@@ -11,7 +11,7 @@ import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
@@ -59,7 +59,7 @@ public interface NetworkModelService {
      * @param connectionStatus
      *     connection status of the node
      */
-    void setOpenRoadmNodeStatus(String nodeId, NetconfNodeConnectionStatus.ConnectionStatus connectionStatus);
+    void setOpenRoadmNodeStatus(String nodeId, ConnectionStatus connectionStatus);
 
     /**
      * create new otn link in otn-topology.
