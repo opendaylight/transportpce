@@ -29,7 +29,8 @@ import simulators
 SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
-KARAF_OK_START_MSG = "Blueprint container for bundle org.opendaylight.netconf.restconf.* was successfully created"
+KARAF_OK_START_MSG = "Blueprint container for bundle org.opendaylight.transportpce.servicehandler.+" \
+    "was successfully created"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
 ODL_LOGIN = 'admin'
@@ -163,7 +164,7 @@ def start_tpce():
     else:
         process = start_karaf()
         start_msg = KARAF_OK_START_MSG
-    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=300):
+    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=100):
         print('OpenDaylight started !')
     else:
         print('OpenDaylight failed to start !')
