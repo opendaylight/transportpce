@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a411025_d314999f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-20T12:48:34Z",
+      "side": 1,
+      "message": "should be removed",
+      "range": {
+        "startLine": 436,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 7
+      },
+      "revId": "7df42197c593f10aa1fc7dd48b21e25a1e5da0c5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
