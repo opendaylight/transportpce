@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aaab32e2_30089e44",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopologyTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "do we really need this ?",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0938a712_aa6572bc",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 16
@@ -48,6 +65,40 @@
       "writtenOn": "2023-01-21T11:29:38Z",
       "side": 1,
       "message": "IMO it would make more sense to put \"if (cu.isCatalogFilled())\" condition body block first since there is a guard clause to return the pceResult value early in it.",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a09def0e_d93cb60e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "indent +4 here, a LF before the previous \u0026\u0026 would help readability IMO",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2d963e4_ab4fdf95",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "same comments than line 512\nLF should avoid as much as possible breaking consistent block to ease readbility IMO",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -88,6 +139,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cee02823_e26e3fd5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "This is a classical guard clause.\nThe else block is not needed after a return.\n\nRemoving it would decrease the indentation level and ease readability IMO",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b813b5e4_10b10559",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "invermediate variable linkPmd not really needed here IMO\nReturn directly the value",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce9f5e6b_bf905e4d",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
         "patchSetId": 16
@@ -122,6 +207,74 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c91f483_d07f99d9",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "indent +4 or add a LF to separate body from method declaration",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cd731dd_b31abdda",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "setters could be cascaded by modifying the lines order here",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36c9a8cb_5835fe31",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "these setters can easily be cascaded.\n\nidem etc",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f3e044_7d04ed2d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "@Ignore more indicated IMO - see previous similar remark\nI suspect this is still in WIP. If so, please use the Gerrit Label or state it in the commit title\n\nidem etc",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f9c51b30_fda6a357",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
         "patchSetId": 16
@@ -150,6 +303,23 @@
       "writtenOn": "2023-01-21T11:29:38Z",
       "side": 1,
       "message": "indent +4 or add a LF to separate method declaration from its body\nidem etc below",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fb885cb_73d8283c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T13:39:06Z",
+      "side": 1,
+      "message": "many similar intermediate variables not needed here and below IMO",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
