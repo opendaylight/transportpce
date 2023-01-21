@@ -16,6 +16,108 @@
       "message": "recheck",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d29e7ce_970d229b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "useless intermediate variable IMO",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0938a712_aa6572bc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "IMO it would make more sense to put \"if (cu.isCatalogFilled())\" condition body block first since there is a guard clause to return the pceResult value early in it.",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dda26f67_d2366a05",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "the cognitive complexity and the length of this method are high.\nAn intermediate function would help",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5133c30e_14fb9a3b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "no real modification here.\nThis file would better stay untouched in this change IMO.",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9c51b30_fda6a357",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "useless intermediate variable IMO\nidem etc below",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47e6a878_0cd977f3",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-21T11:29:38Z",
+      "side": 1,
+      "message": "indent +4 or add a LF to separate method declaration from its body\nidem etc below",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
