@@ -69,10 +69,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-network-10.1.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-10.1.0</artifactId>
     </dependency>
     <dependency>
