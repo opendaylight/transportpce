@@ -41,10 +41,6 @@
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-10.1.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-10.1.0</artifactId>
     </dependency>
     <dependency>
@@ -104,6 +100,11 @@
     </dependency>
 
     <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-10.1.0</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
