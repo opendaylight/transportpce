@@ -34,7 +34,15 @@ if [ -z "$LAUNCHER" ]; then
     if [ -d "allure-report" ]; then
         LAUNCHER="python3 -m pytest --alluredir=allure-report/ -q"
     else
-        LAUNCHER="python3 -m pytest -q"
+        if [ `which nosetests3` ]; then
+            LAUNCHER="nosetests3 --with-xunit"
+        else
+            if [ `which nosetests` ]; then
+                LAUNCHER="nosetests --with-xunit"
+            else
+                LAUNCHER="python3 -m pytest -q"
+            fi
+        fi
     fi
 fi
 
