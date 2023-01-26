@@ -147,7 +147,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         os.environ['JAVA_MAX_MEM'] = '4096M'
         cls.processes = test_utils.start_tpce()
         # NBI notification feature is not installed by default in Karaf
-        if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
+        if  "NO_ODL_STARTUP" not in os.environ or "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
             print("installing NBI notification feature...")
             result = test_utils.install_karaf_feature("odl-transportpce-nbinotifications")
             if result.returncode != 0:
