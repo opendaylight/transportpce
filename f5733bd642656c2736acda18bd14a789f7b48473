@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "467b59ca_9662e291",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-26T15:04:11Z",
+      "side": 1,
+      "message": "LGTM\n@Gilles this follows your remak. Can you test this is the expcted behavior you want ?",
+      "revId": "f5733bd642656c2736acda18bd14a789f7b48473",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
