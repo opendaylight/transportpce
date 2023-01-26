@@ -153,6 +153,9 @@ def start_sims(sims_list):
 
 
 def start_tpce():
+    if 'NO_ODL_STARTUP' in os.environ:
+        print('No OpenDaylight instance to start!')
+        return list()
     print('starting OpenDaylight...')
     if 'USE_LIGHTY' in os.environ and os.environ['USE_LIGHTY'] == 'True':
         process = start_lighty()
