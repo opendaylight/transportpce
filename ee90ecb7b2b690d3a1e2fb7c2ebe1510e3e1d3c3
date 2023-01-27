@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "ee90ecb7b2b690d3a1e2fb7c2ebe1510e3e1d3c3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d01333a9_673acac2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1927
+      },
+      "writtenOn": "2023-01-27T03:22:47Z",
+      "side": 1,
+      "message": "Tests are passing with OpenDaylight karaf.",
+      "revId": "ee90ecb7b2b690d3a1e2fb7c2ebe1510e3e1d3c3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
