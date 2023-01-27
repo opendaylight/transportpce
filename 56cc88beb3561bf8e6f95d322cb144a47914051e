@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "56cc88beb3561bf8e6f95d322cb144a47914051e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b20321_813ea67d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-27T15:14:27Z",
+      "side": 1,
+      "message": "Thank you for your change.\nCould you explain in which context using this new environment variable?\nMaybe an update of the tox-guide should be necessary.",
+      "revId": "56cc88beb3561bf8e6f95d322cb144a47914051e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
