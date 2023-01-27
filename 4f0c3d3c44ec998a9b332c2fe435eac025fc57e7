@@ -16,6 +16,24 @@
       "message": "Is this change becoming superseded by change 104178?",
       "revId": "4f0c3d3c44ec998a9b332c2fe435eac025fc57e7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "373a2ea8_edb4237a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-27T15:39:37Z",
+      "side": 1,
+      "message": "I don\u0027t think so.\nFrom an atomicity standpoint, 104178 should not unenforce lighty IMO.\nIt should be done in a separate change like here.\n\nOnce lighty unenforcement removed from it, 104138 and 104178 should not be  mutually exclusive anymore.",
+      "parentUuid": "8d6bcff8_69edd391",
+      "revId": "4f0c3d3c44ec998a9b332c2fe435eac025fc57e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
