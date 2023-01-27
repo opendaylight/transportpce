@@ -50,6 +50,23 @@
       "message": "LGTM Thanks Sangwook",
       "revId": "ee90ecb7b2b690d3a1e2fb7c2ebe1510e3e1d3c3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "170de911_b1fa004a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-01-27T15:11:48Z",
+      "side": 1,
+      "message": "Thank you very much Sangwook.\nYour proposal is really excellent and get us out of a tricky situation with regards to karaf-client issue (https://jira.opendaylight.org/browse/TRNSPRTPCE-701).",
+      "revId": "ee90ecb7b2b690d3a1e2fb7c2ebe1510e3e1d3c3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
