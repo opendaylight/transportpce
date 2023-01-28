@@ -198,6 +198,8 @@ def install_karaf_feature(feature_name: str):
     executable = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         '..', '..', '..', KARAF_INSTALLDIR, 'target', 'assembly', 'bin', 'client')
+# FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-701
+# -b option needed below because of Karaf client bug reporte in the JIRA ticket mentioned above
     return subprocess.run([executable, '-b'],
                           input='feature:install ' + feature_name + '\n feature:list | grep '
                           + feature_name + ' \n logout \n',
