@@ -33,6 +33,24 @@
       "message": "Thank you for your change.\nCould you explain in which context using this new environment variable?\nMaybe an update of the tox-guide should be necessary.",
       "revId": "56cc88beb3561bf8e6f95d322cb144a47914051e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611bf47d_549f2ff4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-29T10:13:56Z",
+      "side": 1,
+      "message": "It is mainly for troubleshooting purpose outside CI, when using a controller launched separately on a different terminal.",
+      "parentUuid": "c8b20321_813ea67d",
+      "revId": "56cc88beb3561bf8e6f95d322cb144a47914051e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
