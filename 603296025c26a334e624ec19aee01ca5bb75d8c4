@@ -16,6 +16,24 @@
       "message": "sync needed w/ https://git.opendaylight.org/gerrit/c/transportpce/+/104179\nwhen the controller instance is not launched in tests.\nThe place where such adptations have to be made will depend on the order of the change will be merged.",
       "revId": "603296025c26a334e624ec19aee01ca5bb75d8c4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba2d523_9f0d39e0",
+        "filename": "tests/transportpce_tests/tapi/test01_abstracted_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-29T10:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "239ad0be_c200f7bc",
+      "revId": "603296025c26a334e624ec19aee01ca5bb75d8c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
