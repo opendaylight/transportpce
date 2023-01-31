@@ -76,43 +76,43 @@ public class CatalogUtilsTest extends AbstractTest {
         CatalogUtils catalogUtils = new CatalogUtils(netTransServ);
         assertEquals("Checking retrieval of Operational Mode from Node Type ADD",
             CatalogConstant.MWWRCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.ADD,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.ADD,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type DROP",
             CatalogConstant.MWWRCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.DROP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.DROP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type EXPRESS",
             CatalogConstant.MWMWCORE,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.EXPRESS,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.EXPRESS,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type AMP",
             CatalogConstant.MWISTANDARD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.AMP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.AMP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type 100GE",
             CatalogConstant.ORW100GSC,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_100GE_T));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTU4",
             CatalogConstant.ORW100GSC,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTU4));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC2",
             CatalogConstant.ORW200GOFEC316GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC2));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC3",
             CatalogConstant.ORW300GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC3));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type 400GE",
             CatalogConstant.ORW400GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_400GE));
         assertEquals("Checking retrieval of Operational Mode from Node Type and service Type OTUC4",
             CatalogConstant.ORW400GOFEC631GBD,
-            catalogUtils.getPceTxTspOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
+            catalogUtils.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP,
                 StringConstants.SERVICE_TYPE_OTUC4));
         assertEquals("Checking retrieval of channel spacing from Operational Mode 100G SC FEC",
             50.0,
@@ -164,9 +164,9 @@ public class CatalogUtilsTest extends AbstractTest {
         assertEquals("Checking 100GSCFEC RX margin OOR due to PMD",
             -9996.9, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GSC, 0.0, 30.1, 0.0, 20.0), 0.5);
         assertEquals("Checking 100GSCFEC RX margin OOR due to PDL",
-            -9996.9, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GSC, 0.0, 0.0, 6.1, 20.0), 0.5);
+            0.0, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GSC, 0.0, 0.0, 6.0, 20.0), 0.5);
         assertEquals("Checking 100GSCFEC RX margin in Range at max tolerated penalty",
-            3.0, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GSC, 17999.0, 29.9, 5.9, 20.0), 0.05);
+            0.0, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GSC, 17999.0, 29.9, 6.0, 20.0), 0.05);
         assertEquals("Checking 400G OFEC 63.1 Gbauds RX margin OOR due to CD",
             -9996.9, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 12001.0, 0.0, 0.0, 27.0),
             0.5);
@@ -174,67 +174,67 @@ public class CatalogUtilsTest extends AbstractTest {
             -9996.9, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 0.0, 20.1, 0.0, 27.0),
             0.5);
         assertEquals("Checking 400G OFEC 63.1 Gbauds RX margin OOR due to PDL",
-            -9996.9, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 0.0, 0.0, 4.1, 27.0),
+            0.0, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 0.0, 0.0, 6.0, 27.0),
             0.5);
         assertEquals("Checking 400G OFEC 63.1 Gbauds RX margin in Range at max tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 11999.0, 19.9, 3.9, 28.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 11999.0, 19.9, 5.0, 28.0),
             0.05);
         assertEquals("Checking 400G OFEC 63.1 Gbauds RX margin in Range at intermediate tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 3999.0, 9.9, 1.9, 25.5),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 3999.0, 9.9, 2.0, 25.5),
             0.05);
         assertEquals("Checking 400G OFEC 63.1 Gbauds RX margin in Range at min tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 3999.0, 9.9, 0.9, 25.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW400GOFEC631GBD, 3999.0, 9.9, 1.0, 25.0),
             0.05);
         assertEquals("Checking 300G OFEC 63.1 Gbauds RX margin in Range at max tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW300GOFEC631GBD, 17999.0, 24.9, 3.9, 25.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW300GOFEC631GBD, 17999.0, 24.9, 5.0, 25.0),
             0.05);
         assertEquals("Checking 300G OFEC 63.1 Gbauds RX margin in Range at min tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW300GOFEC631GBD, 3999.0, 9.9, 0.9, 22.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW300GOFEC631GBD, 3999.0, 9.9, 1.0, 22.0),
             0.05);
         assertEquals("Checking 200G OFEC 63.1 Gbauds RX margin in Range at max tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 23999.0, 24.9, 3.9, 21.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 23999.0, 24.9, 5.0, 21.0),
             0.05);
         assertEquals("Checking 200G OFEC 63.1 Gbauds RX margin in Range at min tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 3999.0, 9.9, 0.9, 18.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC631GBD, 3999.0, 9.9, 1.0, 18.0),
             0.05);
         assertEquals("Checking 200G OFEC 31.6 Gbauds RX margin in Range at max tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC316GBD, 23999.0, 29.9, 3.9, 24.5),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC316GBD, 23999.0, 29.9, 5.0, 24.5),
             0.05);
         assertEquals("Checking 200G OFEC 31.6 Gbauds RX margin in Range at min tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC316GBD, 3999.0, 9.9, 0.9, 21.5),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW200GOFEC316GBD, 3999.0, 9.9, 1.0, 21.5),
             0.05);
         assertEquals("Checking 100G OFEC 31.6 Gbauds RX margin in Range at max tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GOFEC316GBD, 47999.0, 29.9, 3.9, 16.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GOFEC316GBD, 47999.0, 29.9, 5.0, 16.0),
             0.05);
         assertEquals("Checking 100G OFEC 31.6 Gbauds RX margin in Range at min tolerated penalty",
-            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GOFEC316GBD, 3999.0, 9.9, 0.9, 13.0),
+            0.5, catalogUtils.getPceRxTspParameters(CatalogConstant.ORW100GOFEC316GBD, 3999.0, 9.9, 1.0, 13.0),
             0.05);
         assertEquals("Checking Margin negative for non valid OM",
             -9999.9, catalogUtils.getPceRxTspParameters("SPE-non-existing-mode", 0.0, 0.0, 0.0, 30.0), 0.05);
         outputImpairments.put("CD", 1025.0);
         outputImpairments.put("DGD2", 18.0);
-        outputImpairments.put("PDL2", 6.25);
+        outputImpairments.put("PDL2", 4.4);
         outputImpairments.put("ONSRLIN", 0.0016307685044580757);
         // check how to add Delta on an object<String, Double>
         assertEquals("Checking ROADM Express path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.EXPRESS,
             CatalogConstant.MWMWCORE,-15.0, 1000.0, 9.0, 4.0, 0.001000, 50.0));
-        outputImpairments.put("ONSRLIN", 0.0013604391454046147);
+        outputImpairments.put("ONSRLIN", 0.0014729700859390747);
         assertEquals("Checking ROADM Express path contribution to impairments with 87.5 GHz spacing ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.EXPRESS,
             CatalogConstant.MWMWCORE,-15.0, 1000.0, 9.0, 4.0, 0.001000, 87.5));
         outputImpairments.put("ONSRLIN", 0.0015011872336272727);
         assertEquals("Checking ROADM Add path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.ADD,
-            CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.0, 0.001, 50.0));
+            CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.2, 0.001, 50.0));
         outputImpairments.put("ONSRLIN", 0.0016307685044580757);
         assertEquals("Checking ROADM Drop path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.DROP,
-            CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.0, 0.001, 50.0));
+            CatalogConstant.MWWRCORE, -15.0, 1000.0, 9.0, 4.2, 0.001, 50.0));
         outputImpairments.put("ONSRLIN", 0.0015010372326658581);
         assertEquals("Checking Amp path contribution to impairments ",
             outputImpairments, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.AMP,
-            CatalogConstant.MWISTANDARD, -15.0, 1025.0, 9.0, 5.76, 0.001, 50.0));
+            CatalogConstant.MWISTANDARD, -15.0, 1025.0, 9.0, 4.36, 0.001, 50.0));
         assertEquals("Checking empty map returned in case wrong Operational mode provided  ",
             true, catalogUtils.getPceRoadmAmpParameters(CatalogConstant.CatalogNodeType.AMP,
                 "ThisIsNotAValidMode", -15.0,1000.0, 0.0, 0.0, 0.001, 50.0).isEmpty());
