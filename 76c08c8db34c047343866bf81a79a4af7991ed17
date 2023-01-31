@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b69c1f15_aefd93ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "102cc2dd_c234edbf",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fd8fe1db_8470bc6c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 16
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9fd7c66_4e84ca71",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d29e7ce_970d229b",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aaab32e2_30089e44",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "do we really need this ?",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90de28b7_610889d4",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopologyTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaab32e2_30089e44",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +140,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0f19de7_56173327",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0938a712_aa6572bc",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a09def0e_d93cb60e",
@@ -103,6 +175,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35196eb6_6f9a95f8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a09def0e_d93cb60e",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2d963e4_ab4fdf95",
@@ -116,6 +206,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "same comments than line 512\nLF should avoid as much as possible breaking consistent block to ease readbility IMO",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6854df75_7c3b5734",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2d963e4_ab4fdf95",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -139,6 +247,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdf33a29_2bb111f1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "I don\u0027t see myself simplifying this method. Maybe this could be done in a separate change with some help",
+      "parentUuid": "dda26f67_d2366a05",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5133c30e_14fb9a3b",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
         "patchSetId": 16
@@ -150,6 +276,24 @@
       "writtenOn": "2023-01-21T11:29:38Z",
       "side": 1,
       "message": "no real modification here.\nThis file would better stay untouched in this change IMO.",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb9458a_818965d1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "If you look at the base, you will see that a return null has been removed",
+      "parentUuid": "5133c30e_14fb9a3b",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -171,6 +315,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d01f5a0_37ba0f14",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cee02823_e26e3fd5",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b813b5e4_10b10559",
@@ -184,6 +346,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "invermediate variable linkPmd not really needed here IMO\nReturn directly the value",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b78a0fd_367691e6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b813b5e4_10b10559",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -205,6 +385,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7672290_758e0982",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce9f5e6b_bf905e4d",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf93dfc0_0a74fe3c",
@@ -218,6 +416,24 @@
       "writtenOn": "2023-01-21T13:25:59Z",
       "side": 1,
       "message": "@Ignore decorator , maybe with a TODO comment would be more indicated here.\nIf not, this must be simply removed",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f947f4_04328232",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf93dfc0_0a74fe3c",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -239,6 +455,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34661489_ff4b4bee",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c91f483_d07f99d9",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cd731dd_b31abdda",
@@ -256,6 +490,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa52066a_a1b74bff",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cd731dd_b31abdda",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36c9a8cb_5835fe31",
@@ -269,6 +521,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "these setters can easily be cascaded.\n\nidem etc",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18b3f72e_594210a4",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "forgot to save the file, will do it in patch 17",
+      "parentUuid": "36c9a8cb_5835fe31",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -307,6 +577,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a8ea2f2_11fbea27",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9c51b30_fda6a357",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47e6a878_0cd977f3",
@@ -324,6 +612,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12088d36_706d5b4b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47e6a878_0cd977f3",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fb885cb_73d8283c",
@@ -337,6 +643,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "many similar intermediate variables not needed here and below IMO",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5546ce09_13726fdd",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:36:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fb885cb_73d8283c",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
