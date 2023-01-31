@@ -33,6 +33,23 @@
       "message": "Thanks for adressing these comments. Here are my feedbacks to the other answered comments.",
       "revId": "5dd007b08b0484d10f48374ec70aa56e108ced0e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e69f4f_aad689a0",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-31T20:44:58Z",
+      "side": 1,
+      "message": "Jenkins failed because of the indentation on this line\n[ERROR] src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java:[138,8] (indentation) Indentation: \u0027method def\u0027 child has incorrect indentation level 7, expected level should be 8.",
+      "revId": "5dd007b08b0484d10f48374ec70aa56e108ced0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
