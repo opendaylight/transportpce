@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "476a82bc_5f8c5237",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/OlmPowerServiceRpcImplTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:51:30Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bcec6208_c536990f",
+      "revId": "51e23f1cebce13c971bbdfc1c470f7c97d8784c5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbaf49f7_aa31c25f",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 0,
       "message": "@Gilles I am not sure this is directly related to the commit title.\nAnd this would better be cherry-picked in other branches.\nCan this be in a separate change ?",
+      "revId": "51e23f1cebce13c971bbdfc1c470f7c97d8784c5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d031e2_fec8ac97",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/power/PowerMgmtPowerMockTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:51:30Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bbaf49f7_aa31c25f",
       "revId": "51e23f1cebce13c971bbdfc1c470f7c97d8784c5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

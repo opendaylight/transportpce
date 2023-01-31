@@ -543,6 +543,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "342317fa_9adc6cb2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:51:30Z",
+      "side": 1,
+      "message": "Done in PatchSet 18",
+      "parentUuid": "18b3f72e_594210a4",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52f3e044_7d04ed2d",
@@ -556,6 +574,24 @@
       "writtenOn": "2023-01-21T13:39:06Z",
       "side": 1,
       "message": "@Ignore more indicated IMO - see previous similar remark\nI suspect this is still in WIP. If so, please use the Gerrit Label or state it in the commit title\n\nidem etc",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32d6f1ae_c310f002",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-01-31T16:51:30Z",
+      "side": 1,
+      "message": "Removed all intermediate tests which are not needed (changed the approach in the meanwhile but forgot to cleanup)",
+      "parentUuid": "52f3e044_7d04ed2d",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
