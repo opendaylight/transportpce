@@ -33,7 +33,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.SrgAttributes;
@@ -562,27 +561,6 @@ public final class OpenRoadmTopology {
                     new TerminationPointKey(new TpId(tpId)))
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
                         .TerminationPoint1.class);
-    }
-
-    /**
-     * Get a builder for instance identifier related to network termination point.
-     * @param nodeId String
-     * @param tpId String
-     * @return InstanceIdentifierBuilder
-     */
-    public static InstanceIdentifierBuilder<TerminationPoint1> createNetworkTerminationPointIIDBuilder(String nodeId,
-                                                                                                       String tpId) {
-        return InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                        .networks.network.Node.class,
-                    new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .Node1.class)
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.node.TerminationPoint.class,
-                    new TerminationPointKey(new TpId(tpId)))
-                .augmentation(TerminationPoint1.class);
     }
 
     /**

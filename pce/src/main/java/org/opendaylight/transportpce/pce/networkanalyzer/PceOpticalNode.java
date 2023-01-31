@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
@@ -26,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
@@ -34,6 +36,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOC
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.mode.attributes.supported.operational.modes.OperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -364,6 +368,60 @@ public class PceOpticalNode implements PceNode {
         return client.get();
     }
 
+    @Override
+    public String getOperationalMode() {
+        Node1 node1 = this.node.augmentation(Node1.class);
+        if (node1 == null) {
+            LOG.warn("No openroadm node available for node {}", node);
+            return "";
+        }
+        switch (this.nodeType) {
+            case SRG :
+                if (node1.getSrgAttributes().getSupportedOperationalModes() == null
+                        || node1.getSrgAttributes().getSupportedOperationalModes().stream().findFirst().isEmpty()) {
+                    LOG.debug("getOperationalMode: SRG has no operational mode declared");
+                    return StringConstants.UNKNOWN_MODE;
+                } else {
+                    LOG.debug("getOperationalMode: SRG has operational mode declared {}",
+                        node1.getSrgAttributes().getSupportedOperationalModes().stream().findFirst().toString());
+                    return node1.getSrgAttributes().getSupportedOperationalModes().stream().findFirst().toString();
+                }
+            case DEGREE :
+                if (node1.getDegreeAttributes().getSupportedOperationalModes() == null
+                        || node1.getDegreeAttributes().getSupportedOperationalModes().stream().findFirst().isEmpty()) {
+                    LOG.debug("getOperationalMode: DEGREE has no operational mode declared");
+                    return StringConstants.UNKNOWN_MODE;
+                } else {
+                    LOG.debug("getOperationalMode: DEGREE has operational mode declared {}",
+                        node1.getDegreeAttributes().getSupportedOperationalModes().stream().findFirst().toString());
+                    return node1.getDegreeAttributes().getSupportedOperationalModes().stream().findFirst().toString();
+                }
+            default:
+                LOG.debug("getOperationalMode: Did not succeed retrieving Operational Mode for the node");
+                return "";
+        }
+    }
+
+    @Override
+    public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
+        if (tp.getSupportedOperationalModes() == null) {
+            LOG.warn("getOperationalMode: NetworkPort {} has no operational mode declared compatible with service type",
+                tp);
+            return StringConstants.UNKNOWN_MODE;
+        }
+        for (Map.Entry<OperationalModeKey, OperationalMode> mode : tp.getSupportedOperationalModes()
+                .getOperationalMode().entrySet()) {
+            if (mode.getKey().toString().contains(StringConstants.SERVICE_TYPE_RATE
+                    .get(this.serviceType).toCanonicalString())) {
+                LOG.info("getOperationalMode: NetworkPort {}  has {} operational mode declared", tp,
+                    mode.getKey().toString());
+                return mode.getKey().toString();
+            }
+        }
+        LOG.warn("getOperationalMode: NetworkPort {}  has no operational mode declared compatible with service type",
+            tp);
+        return StringConstants.UNKNOWN_MODE;
+    }
 
     public void validateAZxponder(String anodeId, String znodeId, ServiceFormat serviceFormat) {
         if (!isValid() || this.nodeType != OpenroadmNodeType.XPONDER) {
@@ -375,7 +433,8 @@ public class PceOpticalNode implements PceNode {
             initXndrTps(serviceFormat);
             return;
         }
-        LOG.debug("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
+        LOG.debug("validateAZxponder: XPONDER == {} is ignored, supported by {} for aNodeId {} ", nodeId.getValue(),
+            this.getSupNetworkNodeId(), anodeId);
         valid = false;
     }
 
@@ -447,6 +506,11 @@ public class PceOpticalNode implements PceNode {
     @Override
     public Map<String, List<Uint16>> getAvailableTribPorts() {
         return null;
+    }
+
+    @Override
+    public OpenroadmNodeType getORNodeType() {
+        return this.nodeType;
     }
 
     @Override
