@@ -1,0 +1,1228 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "node-id": "XPONDER-1",
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR-NW1-RX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR-NW1-TX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "Client-1",
+                        "port-qual": "xpdr-client",
+                        "port-direction": "bidirectional",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "XPDR1-NW1-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node1",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.4"
+                }
+            },
+            {
+                "node-id": "XPONDER-2",
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR-NW1-RX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR-NW1-TX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Cleint-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "Client-1",
+                        "port-qual": "xpdr-client",
+                        "port-direction": "bidirectional",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "XPDR1-NW1-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node2",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.5"
+                }
+           },
+           {
+                "node-id": "XPONDER-3",
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR-NW1-RX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR-NW1-TX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "Client-1",
+                        "port-qual": "xpdr-client",
+                        "port-direction": "bidirectional",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "XPDR1-NW1-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node3",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.6"
+                }
+            },
+            {
+                "node-id": "XPONDER-4",
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR-NW1-RX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR-NW1-TX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Cleint-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "Client-1",
+                        "port-qual": "xpdr-client",
+                        "port-direction": "bidirectional",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "XPDR1-NW1-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node4",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.7"
+                }
+           },
+           {
+                "node-id": "XPONDER-5",
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR-NW1-RX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Client-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR-NW1-TX",
+                        "port-qual": "xpdr-network",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "Cleint-1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "Client-1",
+                        "port-qual": "xpdr-client",
+                        "port-direction": "bidirectional",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "XPDR1-NW1-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node5",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.8"
+                }
+           },
+           {
+                "node-id": "OpenROADM-1",
+                "mapping": [
+                    {
+                        "logical-connection-point": "DEG1-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node1",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.9"
+                }
+            },
+            {
+                "node-id": "OpenROADM-2",
+                "mapping": [
+                    {
+                        "logical-connection-point": "DEG1-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node2",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.10"
+                }
+            },
+            {
+                "node-id": "OpenROADM-3",
+                "mapping": [
+                    {
+                        "logical-connection-point": "DEG1-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG4-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "4",
+                        "connection-map-lcp": "DEG4-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "4/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG4-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "4",
+                        "connection-map-lcp": "DEG4-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "4/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG4-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C4",
+                        "connection-map-lcp": "DEG4-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "4/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG4-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C4",
+                        "connection-map-lcp": "DEG4-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "4/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node3",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.11"
+                }
+            },
+            {
+                "node-id": "OpenROADM-4",
+                "mapping": [
+                    {
+                        "logical-connection-point": "DEG1-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node4",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.12"
+                }
+            },
+            {
+                "node-id": "OpenROADM-5",
+                "mapping": [
+                    {
+                        "logical-connection-point": "DEG1-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "1",
+                        "connection-map-lcp": "DEG1-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C1",
+                        "connection-map-lcp": "DEG1-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "2",
+                        "connection-map-lcp": "DEG2-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C2",
+                        "connection-map-lcp": "DEG2-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "2/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-CTP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "3",
+                        "connection-map-lcp": "DEG3-TTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "DEG3-TTP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "C3",
+                        "connection-map-lcp": "DEG3-CTP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "3/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-TX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "tx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRL",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-CP-RX",
+                        "port-qual": "roadm-internal",
+                        "port-direction": "rx",
+                        "supporting-port": "SC1",
+                        "connection-map-lcp": "SRG1-PP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AMkDwQ7xTmRI",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-TX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "tx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-RX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP-RX",
+                        "port-qual": "roadm-external",
+                        "port-direction": "rx",
+                        "supporting-port": "PP1",
+                        "connection-map-lcp": "SRG1-CP-TX",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "lcp-hash-val": "AJUUr6I5fALj",
+                        "supporting-circuit-pack-name": "5/0/1-PLUG-CLIENT"
+                    }
+                ],
+                "node-info": {
+                    "node-clli": "Node5",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.13"
+                }
+            }
+        ]
+    }
+}
