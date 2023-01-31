@@ -16,6 +16,23 @@
       "message": "Proceed with lastest comments I could solve. Thanks!",
       "revId": "5dd007b08b0484d10f48374ec70aa56e108ced0e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56d7dce_20c55222",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-31T20:43:47Z",
+      "side": 1,
+      "message": "Thanks for adressing these comments. Here are my feedbacks to the other answered comments.",
+      "revId": "5dd007b08b0484d10f48374ec70aa56e108ced0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

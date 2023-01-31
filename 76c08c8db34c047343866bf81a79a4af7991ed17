@@ -265,6 +265,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "699040f9_1998c9c0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-31T20:43:47Z",
+      "side": 1,
+      "message": "agreed\nLet\u0027s keep this comment opened at least till an appropriate JIRA ticket is created.",
+      "parentUuid": "bdf33a29_2bb111f1",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5133c30e_14fb9a3b",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
         "patchSetId": 16
@@ -294,6 +312,24 @@
       "side": 1,
       "message": "If you look at the base, you will see that a return null has been removed",
       "parentUuid": "5133c30e_14fb9a3b",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ddcb396_0b945225",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-01-31T20:43:47Z",
+      "side": 1,
+      "message": "agreed but that\u0027s when tmpoppositeLink \u003d\u003d null...\nThe interpretation of the code here will not change.\nAnd I am not convinced it will speed up code (indeed rather of the opposite)\nThis kind of refactoring can be proposed separately IMO since it is not directly related to the topic here nor to another modification in this file",
+      "parentUuid": "cbb9458a_818965d1",
       "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
