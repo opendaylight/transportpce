@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02b7fa3c_3a00be84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-02T09:09:04Z",
+      "side": 1,
+      "message": "Thanks. This looks much better and it is close to be merged.\nApart a couple of indentations and a file that would better stay untouched, I am fine with it.\n\nI noticed room for refactoring in PCE graph tests.\nAnd I let a comment to track it.\nBut as already agreed, this kind of refactoring can be proposed separately in another change.",
+      "revId": "a79ab481455cd00807498471faa291d16eea02c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dcbf1f3_53db04e1",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-02T09:09:04Z",
+      "side": 1,
+      "message": "new TpId(tpId) is used twice and probably deserves an intermediate variable here.\nAt the opposite, Intermediate variable tp1b is used once and is thus useless IMO\nI am fine to propose this in a separate change.\nThere\u0027s probably more optimization to do here, but w/o any functional impact and the code is clean and very readable.",
+      "revId": "a79ab481455cd00807498471faa291d16eea02c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b270f8b1_c238e0f8",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-02T09:09:04Z",
+      "side": 1,
+      "message": "indent +4 or add a LF here",
+      "revId": "a79ab481455cd00807498471faa291d16eea02c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d66890dd_55d76432",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLinkTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-02T09:09:04Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "a79ab481455cd00807498471faa291d16eea02c8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
