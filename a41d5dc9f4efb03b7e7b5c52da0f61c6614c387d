@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8fa446_d7694f32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-02T19:12:54Z",
+      "side": 1,
+      "message": "I noticed your relation chain got a jenkins verified -1 because of these issues that appeared in the new version of pylint",
+      "revId": "a41d5dc9f4efb03b7e7b5c52da0f61c6614c387d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
