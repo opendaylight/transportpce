@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7722937_eb84a519",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-03T16:52:58Z",
+      "side": 1,
+      "message": "Thanks for your latest feedback Guillaume. Apart from the cyclomatic aspect of the checkOSNR method on which we agreed to make it through a separate change (Issue created : TRNSPRTPCE-725), I have addressed all the comments of your review! Thanks",
+      "revId": "e9cd3c9f097c1f3781fbb1a1faf394f3b6749375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
