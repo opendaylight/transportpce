@@ -16,6 +16,24 @@
       "message": "LF not needed",
       "revId": "12d4004375c1042f6af742c1471baad0786e05a8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71aaabce_06d025a2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-03T10:43:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1cbdc8c_93a34a32",
+      "revId": "12d4004375c1042f6af742c1471baad0786e05a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
