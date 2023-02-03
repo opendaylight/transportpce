@@ -283,6 +283,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c877c965_cee3e79a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-03T19:11:46Z",
+      "side": 1,
+      "message": "please can we ass a JIRa ticket to close this comment ?",
+      "parentUuid": "699040f9_1998c9c0",
+      "revId": "76c08c8db34c047343866bf81a79a4af7991ed17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5133c30e_14fb9a3b",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
         "patchSetId": 16
