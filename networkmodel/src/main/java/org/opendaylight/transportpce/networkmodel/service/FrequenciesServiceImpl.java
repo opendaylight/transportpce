@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +58,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.a
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.port.connection.attributes.WavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
@@ -107,9 +104,12 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                         atoZDirection.getModulationFormat());
                 return;
             }
-            setFrequencies4Tps(atozMinFrequency, atozMaxFrequency, atoZDirection.getRate(), modulationFormat, atozTpIds,
+            setFrequencies4Tps(
+                    atozMinFrequency, atozMaxFrequency,
+                    atoZDirection.getRate(), modulationFormat, atozTpIds,
                     used);
-            setFrequencies4Nodes(atozMinFrequency, atozMaxFrequency,
+            setFrequencies4Nodes(
+                    atozMinFrequency, atozMaxFrequency,
                     atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                     used);
         }
@@ -124,10 +124,12 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                         ztoADirection.getModulationFormat());
                 return;
             }
-            setFrequencies4Tps(ztoaMinFrequency, ztoaMaxFrequency, ztoADirection.getRate(), modulationFormat, ztoaTpIds,
+            setFrequencies4Tps(
+                    ztoaMinFrequency, ztoaMaxFrequency,
+                    ztoADirection.getRate(), modulationFormat, ztoaTpIds,
                     used);
-            setFrequencies4Nodes(ztoaMinFrequency,
-                    ztoaMaxFrequency,
+            setFrequencies4Nodes(
+                    ztoaMinFrequency, ztoaMaxFrequency,
                     ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                     used);
         }
@@ -141,22 +143,22 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private Node1 getNetworkNodeFromDatastore(String nodeId) {
         InstanceIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Node1> optionalNode = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-            if (optionalNode.isPresent()) {
-                return optionalNode.get();
-            } else {
-                LOG.warn("Unable to get network node for node id {} from topology {}", nodeId,
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+            Optional<Node1> optionalNode = nodeReadTx
+                .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
+                .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            if (optionalNode.isEmpty()) {
+                LOG.warn("Unable to get network node for node id {} from topology {}",
+                     nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
+            return optionalNode.get();
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting network node for node id {} from {} topology", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Exception while getting network node for node id {} from {} topology",
+                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             return null;
         } catch (InterruptedException e) {
-            LOG.warn("Getting network node for node id {} from {} topology was interrupted", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Getting network node for node id {} from {} topology was interrupted",
+                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -168,28 +170,27 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return Node1, null otherwise.
      */
     private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1
-        getCommonNetworkNodeFromDatastore(String nodeId) {
+            getCommonNetworkNodeFromDatastore(String nodeId) {
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1> nodeIID =
-                OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
+            OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1> optionalNode =
-                    nodeReadTx
+                nodeReadTx
                     .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-            if (optionalNode.isPresent()) {
-                return optionalNode.get();
-            } else {
-                LOG.error("Unable to get common network node for node id {} from topology {}", nodeId,
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+            if (optionalNode.isEmpty()) {
+                LOG.error("Unable to get common network node for node id {} from topology {}",
+                        nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
+            return optionalNode.get();
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting common network node for node id {} from {} topology", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Exception while getting common network node for node id {} from {} topology",
+                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             return null;
         } catch (InterruptedException e) {
-            LOG.warn("Getting common network node for node id {} from {} topology was interrupted", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Getting common network node for node id {} from {} topology was interrupted",
+                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -215,24 +216,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
-                .createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
+        InstanceIdentifier<TerminationPoint1> tpIID =
+            InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-            if (optionalTerminationPoint.isPresent()) {
-                return optionalTerminationPoint.get();
-            } else {
+            if (optionalTerminationPoint.isEmpty()) {
                 return null;
             }
+            return optionalTerminationPoint.get();
         } catch (ExecutionException | TimeoutException e) {
-            LOG.warn("Exception while getting termination {} for node id {} point from {} topology", tpId, nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             return null;
         } catch (InterruptedException e) {
-            LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted", tpId, nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+            LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -245,7 +245,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return common network termination point, null otherwise
      */
     private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1
-        getCommonNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
+            getCommonNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1>
             tpIID = OpenRoadmTopology.createCommonNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
@@ -253,14 +253,12 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                 optionalTerminationPoint = readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-            if (optionalTerminationPoint.isPresent()) {
-                return optionalTerminationPoint.get();
-            } else {
-                LOG.error("Unable to get common-network termination point {} for node id {}from topology {}", tpId,
-                        nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+            if (optionalTerminationPoint.isEmpty()) {
+                LOG.error("Unable to get common-network termination point {} for node id {}from topology {}",
+                        tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
-
+            return optionalTerminationPoint.get();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting common-network termination {} for node id {} point from {} topology",
                     tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
@@ -285,27 +283,26 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private void setFrequencies4Tps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate,
             ModulationFormat modulationFormat, List<NodeIdPair> tpIds, boolean used) {
         String strTpIdsList = String.join(", ", tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList()));
-        LOG.debug("Update frequencies for termination points {}, rate {}, modulation format {},"
-                + "min frequency {}, max frequency {}, used {}", strTpIdsList, rate, modulationFormat,
-                atozMinFrequency, atozMaxFrequency, used);
+        LOG.debug(
+            "Update frequencies for termination points {}, rate {}, modulation format {},"
+                + " min frequency {}, max frequency {}, used {}",
+            strTpIdsList, rate, modulationFormat, atozMinFrequency, atozMaxFrequency, used);
         WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
         for (NodeIdPair idPair : tpIds) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1
-                commonNetworkTerminationPoint = getCommonNetworkTerminationPointFromDatastore(idPair.getNodeID(),
-                    idPair.getTpID());
+                    commonNetworkTerminationPoint =
+                getCommonNetworkTerminationPointFromDatastore(idPair.getNodeID(), idPair.getTpID());
             if (commonNetworkTerminationPoint == null) {
-                LOG.warn("Cannot update frequencies for termination point {}, node id {}", idPair.getTpID(),
-                        idPair.getNodeID());
+                LOG.warn("Cannot update frequencies for termination point {}, node id {}",
+                    idPair.getTpID(), idPair.getNodeID());
                 continue;
             }
             TerminationPoint1 networkTerminationPoint =
                     getNetworkTerminationPointFromDatastore(idPair.getNodeID(), idPair.getTpID());
-            TerminationPoint1Builder networkTerminationPointBuilder;
-            if (networkTerminationPoint != null) {
-                networkTerminationPointBuilder = new TerminationPoint1Builder(networkTerminationPoint);
-            } else {
-                networkTerminationPointBuilder = new TerminationPoint1Builder();
-            }
+            TerminationPoint1Builder networkTerminationPointBuilder =
+                networkTerminationPoint == null
+                    ? new TerminationPoint1Builder()
+                    : new TerminationPoint1Builder(networkTerminationPoint);
             switch (commonNetworkTerminationPoint.getTpType()) {
                 case DEGREETXTTP:
                 case DEGREETXRXTTP:
@@ -428,18 +425,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return List of NodeIdPair
      */
     private List<NodeIdPair> getAToZTpList(AToZDirection atoZDirection) {
-        Collection<AToZ> atozList = atoZDirection.nonnullAToZ().values();
-        return atozList.stream()
+        return atoZDirection.nonnullAToZ().values().stream()
                 .filter(aToZ -> {
-                    if ((aToZ.getResource() == null) || (aToZ.getResource().getResource() == null)) {
+                    if (aToZ.getResource() == null || aToZ.getResource().getResource() == null) {
                         LOG.warn("Resource of AToZ node {} is null! Skipping this node!", aToZ.getId());
                         return false;
                     }
                     return aToZ.getResource().getResource() instanceof TerminationPoint;
                 }).map(aToZ -> {
                     TerminationPoint tp = (TerminationPoint) aToZ.getResource().getResource();
-                    if ((tp == null) || (tp.getTpNodeId() == null) ||  (tp.getTpId() == null)
-                        || tp.getTpId().isEmpty()) {
+                    if (tp == null || tp.getTpNodeId() == null || tp.getTpId() == null || tp.getTpId().isEmpty()) {
                         LOG.warn("Termination point in AToZ node {} contains nulls! Skipping this node!", aToZ.getId());
                         return null;
                     }
@@ -454,18 +449,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return List of NodeIdPair
      */
     private List<NodeIdPair> getZToATpList(ZToADirection ztoADirection) {
-        Collection<ZToA> ztoaList = ztoADirection.nonnullZToA().values();
-        return ztoaList.stream()
+        return ztoADirection.nonnullZToA().values().stream()
                 .filter(zToA -> {
-                    if ((zToA.getResource() == null) || (zToA.getResource().getResource() == null)) {
+                    if (zToA.getResource() == null || zToA.getResource().getResource() == null) {
                         LOG.warn("Resource of ZToA node {} is null! Skipping this node!", zToA.getId());
                         return false;
                     }
                     return zToA.getResource().getResource() instanceof TerminationPoint;
                 }).map(zToA -> {
                     TerminationPoint tp = (TerminationPoint) zToA.getResource().getResource();
-                    if ((tp == null) || (tp.getTpNodeId() == null) ||  (tp.getTpId() == null)
-                        || tp.getTpId().isEmpty()) {
+                    if (tp == null || tp.getTpNodeId() == null || tp.getTpId() == null || tp.getTpId().isEmpty()) {
                         LOG.warn("Termination point in ZToA node {} contains nulls! Skipping this node!", zToA.getId());
                         return null;
                     }
@@ -489,19 +482,22 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             boolean used) {
         LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        XpdrPortAttributesBuilder xpdrPortAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder(networkTerminationPoint.getXpdrPortAttributes());
-        } else {
-            xpdrPortAttributesBuilder = new XpdrPortAttributesBuilder();
-        }
-        WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
-        if (used) {
-            waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
-                    .setFrequency(GridUtils
-                            .getCentralFrequency(atozMinFrequency.decimalValue(), atozMaxFrequency.decimalValue()));
-        }
-        return xpdrPortAttributesBuilder.setWavelength(waveLengthBuilder.build()).build();
+        XpdrPortAttributesBuilder xpdrPortAttributesBuilder =
+            networkTerminationPoint == null
+                ? new XpdrPortAttributesBuilder()
+                : new XpdrPortAttributesBuilder(networkTerminationPoint.getXpdrPortAttributes());
+        return xpdrPortAttributesBuilder
+            .setWavelength(
+                used
+                    ? new WavelengthBuilder()
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                        .setFrequency(
+                            GridUtils.getCentralFrequency(
+                                atozMinFrequency.decimalValue(),
+                                atozMaxFrequency.decimalValue()))
+                        .build()
+                    : new WavelengthBuilder().build())
+            .build();
     }
 
     /**
@@ -519,23 +515,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             boolean used) {
         LOG.debug("Update xpdr node attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        XpdrNetworkAttributesBuilder xpdrNetworkAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder(
-                    networkTerminationPoint.getXpdrNetworkAttributes());
-        } else {
-            xpdrNetworkAttributesBuilder = new XpdrNetworkAttributesBuilder();
-        }
-        WavelengthBuilder waveLengthBuilder = new WavelengthBuilder();
-        if (used) {
-            waveLengthBuilder.setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
-                    .setFrequency(GridUtils
-                            .getCentralFrequency(atozMinFrequency.decimalValue(), atozMaxFrequency.decimalValue()));
-            xpdrNetworkAttributesBuilder.setWavelength(waveLengthBuilder.build());
-        } else {
-            xpdrNetworkAttributesBuilder.setWavelength(null);
-        }
-        return xpdrNetworkAttributesBuilder.build();
+        XpdrNetworkAttributesBuilder xpdrNetworkAttributesBuilder =
+            networkTerminationPoint == null
+                ? new XpdrNetworkAttributesBuilder()
+                : new XpdrNetworkAttributesBuilder(networkTerminationPoint.getXpdrNetworkAttributes());
+        return xpdrNetworkAttributesBuilder
+            .setWavelength(
+                used
+                    ? new WavelengthBuilder()
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                        .setFrequency(
+                            GridUtils.getCentralFrequency(
+                                atozMinFrequency.decimalValue(),
+                                atozMaxFrequency.decimalValue()))
+                        .build()
+                    : null)
+            .build();
+
     }
 
     /**
@@ -550,15 +546,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update pp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        PpAttributesBuilder ppAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            ppAttributesBuilder = new PpAttributesBuilder(networkTerminationPoint.getPpAttributes());
-        } else {
-            ppAttributesBuilder = new PpAttributesBuilder();
-        }
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ppAttributesBuilder.getAvailFreqMaps();
+        PpAttributesBuilder ppAttributesBuilder =
+            networkTerminationPoint == null
+                ? new PpAttributesBuilder()
+                : new PpAttributesBuilder(networkTerminationPoint.getPpAttributes());
         return ppAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    ppAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -574,15 +571,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update cp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        CpAttributesBuilder cpAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            cpAttributesBuilder = new CpAttributesBuilder(networkTerminationPoint.getCpAttributes());
-        } else {
-            cpAttributesBuilder = new CpAttributesBuilder();
-        }
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = cpAttributesBuilder.getAvailFreqMaps();
+        CpAttributesBuilder cpAttributesBuilder =
+            networkTerminationPoint == null
+                ? new CpAttributesBuilder()
+                : new CpAttributesBuilder(networkTerminationPoint.getCpAttributes());
         return cpAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    cpAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -598,15 +596,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update ctp attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        CtpAttributesBuilder ctpAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            ctpAttributesBuilder = new CtpAttributesBuilder(networkTerminationPoint.getCtpAttributes());
-        } else {
-            ctpAttributesBuilder = new CtpAttributesBuilder();
-        }
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = ctpAttributesBuilder.getAvailFreqMaps();
+        CtpAttributesBuilder ctpAttributesBuilder =
+            networkTerminationPoint == null
+                ?  new CtpAttributesBuilder()
+                :  new CtpAttributesBuilder(networkTerminationPoint.getCtpAttributes());
         return ctpAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    ctpAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -622,15 +621,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update rx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        RxTtpAttributesBuilder rxTtpAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            rxTtpAttributesBuilder = new RxTtpAttributesBuilder(networkTerminationPoint.getRxTtpAttributes());
-        } else {
-            rxTtpAttributesBuilder = new RxTtpAttributesBuilder();
-        }
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = rxTtpAttributesBuilder.getAvailFreqMaps();
+        RxTtpAttributesBuilder rxTtpAttributesBuilder =
+            networkTerminationPoint == null
+                ? new RxTtpAttributesBuilder()
+                : new RxTtpAttributesBuilder(networkTerminationPoint.getRxTtpAttributes());
         return rxTtpAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    rxTtpAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -646,15 +646,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Decimal64 atozMaxFrequency, boolean used) {
         LOG.debug("Update tx attributes for termination point {}, min frequency {}, max frequency {}, used {}",
                 networkTerminationPoint, atozMinFrequency, atozMaxFrequency, used);
-        TxTtpAttributesBuilder txTtpAttributesBuilder;
-        if (networkTerminationPoint != null) {
-            txTtpAttributesBuilder = new TxTtpAttributesBuilder(networkTerminationPoint.getTxTtpAttributes());
-        } else {
-            txTtpAttributesBuilder = new TxTtpAttributesBuilder();
-        }
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap = txTtpAttributesBuilder.getAvailFreqMaps();
+        TxTtpAttributesBuilder txTtpAttributesBuilder =
+            networkTerminationPoint == null
+                ? new TxTtpAttributesBuilder()
+                : new TxTtpAttributesBuilder(networkTerminationPoint.getTxTtpAttributes());
         return txTtpAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    txTtpAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -668,16 +669,14 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      */
     private SrgAttributes updateSrgAttributes(SrgAttributes srgAttributes, Decimal64 atozMinFrequency,
             Decimal64 atozMaxFrequency, boolean used) {
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
-        SrgAttributesBuilder srgAttributesBuilder;
-        if (srgAttributes == null) {
-            srgAttributesBuilder = new SrgAttributesBuilder();
-        } else {
-            srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
-        }
-        availFreqMapsMap = srgAttributesBuilder.getAvailFreqMaps();
+        SrgAttributesBuilder srgAttributesBuilder = new SrgAttributesBuilder(
+            srgAttributes == null ? null : srgAttributes);
         return srgAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    srgAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -691,16 +690,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      */
     private DegreeAttributes updateDegreeAttributes(DegreeAttributes degreeAttributes, Decimal64 atozMinFrequency,
             Decimal64 atozMaxFrequency, boolean used) {
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMapsMap;
-        DegreeAttributesBuilder degreeAttributesBuilder;
-        if (degreeAttributes == null) {
-            degreeAttributesBuilder = new DegreeAttributesBuilder();
-        } else {
-            degreeAttributesBuilder = new DegreeAttributesBuilder(degreeAttributes);
-        }
-        availFreqMapsMap = degreeAttributesBuilder.getAvailFreqMaps();
+        DegreeAttributesBuilder degreeAttributesBuilder =
+            degreeAttributes == null
+                ? new DegreeAttributesBuilder()
+                : new DegreeAttributesBuilder(degreeAttributes);
         return degreeAttributesBuilder
-            .setAvailFreqMaps(updateFreqMaps(atozMinFrequency, atozMaxFrequency, availFreqMapsMap, used))
+            .setAvailFreqMaps(
+                updateFreqMaps(
+                    atozMinFrequency, atozMaxFrequency,
+                    degreeAttributesBuilder.getAvailFreqMaps(),
+                    used))
             .build();
     }
 
@@ -720,24 +719,23 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             availFreqMapsMap = GridUtils.initFreqMaps4FixedGrid2Available();
         }
         AvailFreqMaps availFreqMaps = availFreqMapsMap.get(availFreqMapKey);
-        if (availFreqMaps != null && availFreqMaps.getFreqMap() != null) {
-            BitSet bitSetFreq = BitSet.valueOf(availFreqMaps.getFreqMap());
-            LOG.debug(
-                 "Update frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
-                 beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
-            //if used = true then bit must be set to false to indicate the slot is no more available
-            bitSetFreq.set(beginIndex, endIndex, !used);
-            LOG.debug(
-                "Updated frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
-                beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
-            Map<AvailFreqMapsKey, AvailFreqMaps> updatedFreqMaps = new HashMap<>();
-            byte[] frequenciesByteArray = bitSetFreq.toByteArray();
-            AvailFreqMaps updatedAvailFreqMaps = new AvailFreqMapsBuilder(availFreqMaps)
-                    .setFreqMap(Arrays.copyOf(frequenciesByteArray,GridConstant.NB_OCTECTS))
-                    .build();
-            updatedFreqMaps.put(availFreqMaps.key(), updatedAvailFreqMaps);
-            return updatedFreqMaps;
+        if (availFreqMaps == null || availFreqMaps.getFreqMap() == null) {
+            return availFreqMapsMap;
         }
-        return availFreqMapsMap;
+        BitSet bitSetFreq = BitSet.valueOf(availFreqMaps.getFreqMap());
+        LOG.debug(
+             "Update frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
+             beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
+        //if used = true then bit must be set to false to indicate the slot is no more available
+        bitSetFreq.set(beginIndex, endIndex, !used);
+        LOG.debug(
+            "Updated frequency map from index {}, to index {}, min frequency {}, max frequency {}, available {} {}",
+            beginIndex, endIndex, atozMinFrequency, atozMaxFrequency, !used, bitSetFreq);
+        AvailFreqMaps updatedAvailFreqMaps = new AvailFreqMapsBuilder(availFreqMaps)
+                .setFreqMap(Arrays.copyOf(bitSetFreq.toByteArray(), GridConstant.NB_OCTECTS))
+                .build();
+        Map<AvailFreqMapsKey, AvailFreqMaps> updatedFreqMaps = new HashMap<>();
+        updatedFreqMaps.put(availFreqMaps.key(), updatedAvailFreqMaps);
+        return updatedFreqMaps;
     }
 }
