@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1b3df3_18a9c12b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T21:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6137ccc_3759f2fc",
+      "revId": "fa01a38cc3abdf07735b227293ded6e4857de8a6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db886fba_d792e0e4",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-02-06T20:04:10Z",
       "side": 1,
       "message": "link.augmentation(Link1.class).getLinkLength() might be more appropriate",
+      "revId": "fa01a38cc3abdf07735b227293ded6e4857de8a6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee186963_79f4f2a2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T21:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db886fba_d792e0e4",
       "revId": "fa01a38cc3abdf07735b227293ded6e4857de8a6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
