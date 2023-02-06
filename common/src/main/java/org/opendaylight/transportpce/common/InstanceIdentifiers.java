@@ -58,8 +58,8 @@ public final class InstanceIdentifiers {
      * @param tpId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<TerminationPoint1> createNetworkTerminationPoint1IIDBuilder(String nodeId,
-                                                                                                       String tpId) {
+    public static InstanceIdentifier<TerminationPoint1> createNetworkTerminationPoint1IIDBuilder(
+            String nodeId, String tpId) {
         return InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
@@ -74,9 +74,8 @@ public final class InstanceIdentifiers {
                 .build();
     }
 
-    public static InstanceIdentifier<TerminationPoint> createNetworkTerminationPointIIDBuilder(String nodeId,
-        String tpId) {
-
+    public static InstanceIdentifier<TerminationPoint> createNetworkTerminationPointIIDBuilder(
+            String nodeId, String tpId) {
         return InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
