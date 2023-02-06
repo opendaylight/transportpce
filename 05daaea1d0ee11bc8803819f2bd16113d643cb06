@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3e4748_5a8dccb2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T21:21:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f88e94b_379b70f0",
+      "revId": "05daaea1d0ee11bc8803819f2bd16113d643cb06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d860953b_3582f742",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-06T20:15:16Z",
       "side": 1,
       "message": "return new HashMap\u003c\u003e(\n    Map.of(availFreqMaps.key(), updatedAvailFreqMaps));",
+      "revId": "05daaea1d0ee11bc8803819f2bd16113d643cb06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae67bdb1_d60aa06d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T21:21:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d860953b_3582f742",
       "revId": "05daaea1d0ee11bc8803819f2bd16113d643cb06",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
