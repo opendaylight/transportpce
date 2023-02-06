@@ -149,10 +149,12 @@ public class PceGraphTest extends AbstractTest {
             .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(CATALOG_FILE, StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
-                .transformIntoNormalizedNode(reader).get();
+                .transformIntoNormalizedNode(reader)
+                .get();
             omCatalog = (OperationalModeCatalog) getDataStoreContextUtil()
-                .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
-                    .of(OperationalModeCatalog.QNAME), normalizedNode)
+                .getBindingDOMCodecServices()
+                .fromNormalizedNode(
+                    YangInstanceIdentifier.of(OperationalModeCatalog.QNAME), normalizedNode)
                 .getValue();
             @NonNull
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
@@ -167,12 +169,12 @@ public class PceGraphTest extends AbstractTest {
         }
         // The mapping corresponding to the topology is directly populated from a file in the Dta Store
         try (Reader reader = new FileReader(MAPPING_FILE, StandardCharsets.UTF_8)) {
-            NormalizedNode normalizedNode = dataObjectConverter
-                .transformIntoNormalizedNode(reader).get();
+            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).get();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.portmapping.rev220316.Network) getDataStoreContextUtil()
-                .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
-                    .of(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                    .transportpce.portmapping.rev220316.Network) getDataStoreContextUtil()
+                .getBindingDOMCodecServices()
+                .fromNormalizedNode(
+                    YangInstanceIdentifier.of(org.opendaylight.yang.gen.v1.http.org.opendaylight
                         .transportpce.portmapping.rev220316.Network.QNAME), normalizedNode)
                 .getValue();
             @NonNull
@@ -192,26 +194,26 @@ public class PceGraphTest extends AbstractTest {
         // The topology (openROADM-Network and openROADM-topology layers) is loaded from a file
         JsonReader networkReader = null;
         JsonReader topoReader = null;
-
         try {
             // load openroadm-network
-            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json",
-                    StandardCharsets.UTF_8);
+            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
             networkReader = new JsonReader(gnpyNetwork);
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
             // load openroadm-topology
-            Reader gnpyTopo = new FileReader("src/test/resources/topologyData/or-base-topology.json",
-                    StandardCharsets.UTF_8);
+            Reader gnpyTopo =
+                new FileReader("src/test/resources/topologyData/or-base-topology.json", StandardCharsets.UTF_8);
             topoReader = new JsonReader(gnpyTopo);
-            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
+            networks = (Networks) JsonUtil
+                .getInstance()
+                .getDataObjectFromJson(
+                    topoReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
         } catch (IOException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
-
         } finally {
             try {
                 if (networkReader != null) {
@@ -224,14 +226,11 @@ public class PceGraphTest extends AbstractTest {
                 LOG.warn("Cannot close reader ", e);
             }
         }
-
         // init PceHardContraints
         pceHardConstraints = new PceConstraints();
-
         this.rc = new PceResult();
         this.reqProc = new RequestProcessor(dataBroker);
         this.netTransServ = new NetworkTransactionImpl(reqProc);
-
         LOG.info("The value of the mapping is {}", portMapping);
 
     }
@@ -252,7 +251,6 @@ public class PceGraphTest extends AbstractTest {
 //
     @Test
     public void clacPath100GE() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -267,7 +265,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacPathOTUC2() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(200), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-4", "Node4", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -282,7 +279,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacPathOTUC3() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(300), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-3", "Node3", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -297,7 +293,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacUnfeasiblePath400GE() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -312,7 +307,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacPath400GE() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-5", "Node5", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -327,7 +321,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacPathOTUC4() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-5", "Node5", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -342,7 +335,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacOpticalTunnelOTUC4() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.OC,
             "OpenROADM-1", "Node1", "DEG1-PP-TX", "OpenROADM-5", "Node5", "DEG3-PP-TX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -357,7 +349,6 @@ public class PceGraphTest extends AbstractTest {
 
     @Test
     public void clacPath100GEnoPort() {
-
         PceCalculation pceCalc = new PceCalculation(getPCE2Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -434,15 +425,13 @@ public class PceGraphTest extends AbstractTest {
         // init PceHardContraints
         pceHardConstraints = new PceConstraints();
         // pceHardConstraints.setp
-        allPceNodes = Map.of(new NodeId("optical"), pceOtnNode,
+        allPceNodes = Map.of(
+            new NodeId("optical"), pceOtnNode,
             new NodeId("optical2"), pceOtnNode2);
-        rc = new PceResult();
-        PceGraph otnPceGraph = new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes,
+        return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes,
             allPceLinks, pceHardConstraints,
-            null, rc,
+            null, new PceResult(),
             type, null);
-
-        return otnPceGraph;
     }
 
     private void saveOpenRoadmNetwork(Network network, String networkId)
@@ -455,24 +444,21 @@ public class PceGraphTest extends AbstractTest {
     }
 
     public static Node createNetworkNode(String nodeId, OpenroadmNodeType nodeType) {
-
-        Node1Builder node1Bldr = new Node1Builder()
-            .setOpenroadmVersion(OpenroadmVersionType._221);
-        var node2Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
-            .setNodeType(nodeType);
         SupportingNode supportingNode = new SupportingNodeBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
             .setNodeRef(new NodeId("node1"))
             .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
                 new NodeId("node1")))
             .build();
-
         return new NodeBuilder()
             .setNodeId(new NodeId(nodeId))
             .withKey(new NodeKey(new NodeId(nodeId)))
             .setSupportingNode(ImmutableMap.of(supportingNode.key(), supportingNode))
-            .addAugmentation(node1Bldr.build())
-            .addAugmentation(node2Bldr.build())
+            .addAugmentation(
+                new Node1Builder().setOpenroadmVersion(OpenroadmVersionType._221).build())
+            .addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
+                    .setNodeType(nodeType).build())
             .build();
     }
 
@@ -488,30 +474,27 @@ public class PceGraphTest extends AbstractTest {
     }
 
     public static Node createTopologyNode(String nodeId, OpenroadmNodeType nodeType) {
-
-        var node1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder()
-            .setXpdrAttributes(null);
-        var node2Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
-            .setNodeType(nodeType);
         SupportingNode supportingNode = new SupportingNodeBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
             .setNodeRef(new NodeId("node1"))
             .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID),
                 new NodeId("node1")))
             .build();
-
         return new NodeBuilder()
             .setNodeId(new NodeId(nodeId))
             .withKey(new NodeKey(new NodeId(nodeId)))
             .setSupportingNode(ImmutableMap.of(supportingNode.key(), supportingNode))
-            .addAugmentation(node1Bldr.build())
-            .addAugmentation(node2Bldr.build())
+            .addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder()
+                    .setXpdrAttributes(null).build())
+            .addAugmentation(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
+                    .setNodeType(nodeType).build())
             .build();
     }
 
     public static PathComputationRequestInput getPCE1Request(Uint32 rate, ServiceFormat serviceFormat, String aaNodeId,
-                String aaClliId, String aaPortName, String zzNodeId, String zzClliId, String zzPortName) {
-
+            String aaClliId, String aaPortName, String zzNodeId, String zzClliId, String zzPortName) {
         return new PathComputationRequestInputBuilder()
             .setServiceName("service1")
             .setResourceReserve(true)
@@ -597,8 +580,7 @@ public class PceGraphTest extends AbstractTest {
     }
 
     public static PathComputationRequestInput getPCE2Request(Uint32 rate, ServiceFormat serviceFormat, String aaNodeId,
-        String aaClliId, String aaPortName, String zzNodeId, String zzClliId, String zzPortName) {
-
+            String aaClliId, String aaPortName, String zzNodeId, String zzClliId, String zzPortName) {
         return new PathComputationRequestInputBuilder()
             .setServiceName("service1")
             .setResourceReserve(true)
