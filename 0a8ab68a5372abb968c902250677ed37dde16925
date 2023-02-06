@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "926432f9_373b566a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T18:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80501488_84c44a40",
+      "revId": "0a8ab68a5372abb968c902250677ed37dde16925",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c4d9d1d_8ebf0b74",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3de08d3a_f598b986",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T18:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c4d9d1d_8ebf0b74",
+      "revId": "0a8ab68a5372abb968c902250677ed37dde16925",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9be151cb_1612d288",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-02-06T16:28:35Z",
       "side": 1,
       "message": "not worthy",
+      "revId": "0a8ab68a5372abb968c902250677ed37dde16925",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc00c68_01a07629",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-06T18:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9be151cb_1612d288",
       "revId": "0a8ab68a5372abb968c902250677ed37dde16925",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
