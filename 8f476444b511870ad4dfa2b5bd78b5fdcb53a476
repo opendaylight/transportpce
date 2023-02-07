@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "8f476444b511870ad4dfa2b5bd78b5fdcb53a476",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af919d1_056d29a8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-07T12:56:32Z",
+      "side": 1,
+      "message": "latency or length?",
+      "revId": "8f476444b511870ad4dfa2b5bd78b5fdcb53a476",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
