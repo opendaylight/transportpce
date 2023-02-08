@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3119fa0c_1303a64c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9073
+      },
+      "writtenOn": "2023-02-08T21:28:06Z",
+      "side": 1,
+      "message": "This patch has been tested working on the testbed in UTD.\nthe following tests have been done.\n1. fiber break on a single hop lightpath(primary), path restoration is triggered and the path is restored on the secondary path (two hops).\n2. if the secondary path is in service, connecting the primary fiber back, no restoration will be triggered. Lightpath remains working on the secondary path.\n3. if the secondary path is out of service, connecting the primary fiber back, restoration will be triggered. Lightpath will be restored to the primary path.\n4. following number 2, if break the fiber on the secondary path, the path is restored back to the primary path.",
+      "revId": "0c0565cf8043aeb9bf4fb43d483b90e52b7163f0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
