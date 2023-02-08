@@ -242,8 +242,7 @@ public class PostAlgoPathValidator {
     }
 
     private List<String> listOfElementsBuild(List<PceGraphEdge> pathEdges, PceConstraints.ResourceType type,
-        PceConstraints pceHardConstraints) {
-
+            PceConstraints pceHardConstraints) {
         List<String> listOfElements = new ArrayList<>();
         for (PceGraphEdge link : pathEdges) {
             switch (type) {
@@ -394,7 +393,7 @@ public class PostAlgoPathValidator {
     @SuppressWarnings("deprecation")
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("DLS_DEAD_LOCAL_STORE")
     private double checkOSNR(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-        Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
+            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
         double spacing = 50.0;
         double calcPdl2 = 0;
         double calcOsnrdB = 0;
@@ -404,11 +403,10 @@ public class PostAlgoPathValidator {
         double margin = 0;
         double pwrIn = -60.0;
         double pwrOut = -60.0;
-        int pathElement = 0;
         int increment = 1;
         int offsetLink = 0;
         boolean transponderPresent = false;
-        if ((StringConstants.SERVICE_DIRECTION_ZA).equals(direction)) {
+        if (direction.equals(StringConstants.SERVICE_DIRECTION_ZA)) {
             increment = - 1;
             offsetLink = -1;
         }
@@ -423,35 +421,30 @@ public class PostAlgoPathValidator {
         Map<String, Double> impairments = new HashMap<>();
         for (int n = 0; n < vertices.size(); n++) {
             InstanceIdentifier<TerminationPoint1> nwTpIid;
-            PceNode nextNode = null;
-            if ((StringConstants.SERVICE_DIRECTION_AZ).equals(direction)) {
-                pathElement = n ;
-            } else {
-                pathElement = vertices.size() - n - 1;
-            }
+            int pathElement = direction.equals(StringConstants.SERVICE_DIRECTION_AZ) ? n : vertices.size() - n - 1;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
-            if (((pathElement != vertices.size() - 1) && (StringConstants.SERVICE_DIRECTION_AZ).equals(direction))
-                    || ((pathElement != 0) && (StringConstants.SERVICE_DIRECTION_ZA).equals(direction))) {
-                nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement + increment)));
-            }
+            PceNode nextNode =
+                pathElement != vertices.size() - 1 && direction.equals(StringConstants.SERVICE_DIRECTION_AZ)
+                        || pathElement != 0 && direction.equals(StringConstants.SERVICE_DIRECTION_ZA)
+                    ? allPceNodes.get(new NodeId(vertices.get(pathElement + increment)))
+                    :  null;
             LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
             switch (currentNode.getORNodeType()) {
                 case XPONDER:
                     transponderPresent = true;
-                    String nwTpId = "";
-                    if (((pathElement == 0) && (StringConstants.SERVICE_DIRECTION_AZ).equals(direction))
-                            || ((pathElement == (vertices.size() - 1)) && (StringConstants.SERVICE_DIRECTION_ZA)
-                                .equals(direction))) {
-                        //First Xponder of the path TX side
-                        nwTpId = getAppropriatePceLink((pathElement + offsetLink), edges, allPceLinks, direction)
-                            .getSourceTP().getValue();
-                    } else {
+                    String nwTpId =
+                            pathElement == 0 && direction.equals(StringConstants.SERVICE_DIRECTION_AZ)
+                                    || pathElement == (vertices.size() - 1)
+                                        && direction.equals(StringConstants.SERVICE_DIRECTION_ZA)
+                                ? getAppropriatePceLink((pathElement + offsetLink), edges, allPceLinks, direction)
+                                    .getSourceTP()
+                                    .getValue()
                         // last Xponder of the path (RX side)
-                        nwTpId = getAppropriatePceLink((pathElement - offsetLink - 1), edges, allPceLinks, direction)
-                        .getDestTP().getValue();
-                    }
-                    nwTpIid = InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(
-                            vertices.get(pathElement), nwTpId);
+                                : getAppropriatePceLink((pathElement - offsetLink - 1), edges, allPceLinks, direction)
+                                    .getDestTP()
+                                    .getValue();
+                    nwTpIid =
+                        InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(vertices.get(pathElement), nwTpId);
                     LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
                     try {
                         if (networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwTpIid)
@@ -549,13 +542,13 @@ public class PostAlgoPathValidator {
                     }
                     cnt = CatalogConstant.CatalogNodeType.DROP;
                     LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
-                    if ((pathElement <= 1) && (StringConstants.SERVICE_DIRECTION_AZ).equals(direction)
-                            || (pathElement >= vertices.size() - 2)
-                            && (StringConstants.SERVICE_DIRECTION_ZA).equals(direction)) {
+                    if (pathElement <= 1 && direction.equals(StringConstants.SERVICE_DIRECTION_AZ)
+                            || pathElement >= vertices.size() - 2
+                                && direction.equals(StringConstants.SERVICE_DIRECTION_ZA)) {
                         // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
                         // Xponder to Xponder) node element of the path is the ADD SRG.
-                        if (!(getAppropriatePceLink((pathElement + offsetLink), edges, allPceLinks, direction)
-                                .getlinkType() == OpenroadmLinkType.ADDLINK)) {
+                        if (getAppropriatePceLink(pathElement + offsetLink, edges, allPceLinks, direction)
+                                .getlinkType() != OpenroadmLinkType.ADDLINK) {
                             LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
                                 currentNode.getNodeId().toString(), pathElement + offsetLink);
                         }
@@ -707,21 +700,19 @@ public class PostAlgoPathValidator {
                 + "that optical tunnel degradations are compatible with external transponder performances");
             return 0.0;
         }
+        double delta = margin - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode {} results in a residual margin of {} dB, according "
             + "to CD, PMD and DGD induced penalties and set System Margin of {} dB.",
-            opMode, margin - SYS_MARGIN, SYS_MARGIN);
-        String validationMessage = "INVALIDATED";
-        if ((margin - SYS_MARGIN) >= 0) {
-            validationMessage = "VALIDATED";
-        }
-        if ((StringConstants.SERVICE_DIRECTION_AZ).equals(direction)) {
-            LOG.info("- In checkOSNR: A to Z Path from {} to {} {}", vertices.get(0),
-                vertices.get(vertices.size() - 1), validationMessage);
+            opMode, delta, SYS_MARGIN);
+        String validationMessage = delta >= 0 ? "VALIDATED" : "INVALIDATED";
+        if (direction.equals(StringConstants.SERVICE_DIRECTION_AZ)) {
+            LOG.info("- In checkOSNR: A to Z Path from {} to {} {}",
+                vertices.get(0), vertices.get(vertices.size() - 1), validationMessage);
         } else {
-            LOG.info("- In checkOSNR: Z to A Path from {} to {} {}", vertices.get(vertices.size() - 1),
-                vertices.get(0), validationMessage);
+            LOG.info("- In checkOSNR: Z to A Path from {} to {} {}",
+                vertices.get(vertices.size() - 1), vertices.get(0), validationMessage);
         }
-        return (margin - SYS_MARGIN);
+        return delta;
     }
 
     // Method to provide either regular link (AtoZ) or Opposite link (ZtoA) in the list of PceGraphEdges
