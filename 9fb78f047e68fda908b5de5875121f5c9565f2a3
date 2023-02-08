@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f25d047_4992dd85",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "here",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "627462b0_dc67e2f9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0e1caf_8c83def6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42739a3a_fdef20ef",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a28f8c98_53ab8e5e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "and eventually here",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "989a2274_8bbeb120",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "there was a very similar check that could easily be put in a separate function",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90167ac_8cedd3df",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-08T20:24:22Z",
+      "side": 1,
+      "message": "Its purpose was to set a default operational Mode when the one proposed was unknown.\n\nNote the simple method proposed here decreases a lot the complexity of the code above.\nBut it also lets a lot of orphan comments.\nPlease can you have a look at them and tells if they still make sense ?\nThanks in advance",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
