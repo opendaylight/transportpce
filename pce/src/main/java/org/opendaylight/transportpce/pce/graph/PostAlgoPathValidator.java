@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,8 +77,8 @@ public class PostAlgoPathValidator {
             pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
             return pceResult;
         }
-        int spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
-            .getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
+        int spectralWidthSlotNumber =
+            GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP.getOrDefault(serviceType, GridConstant.NB_SLOTS_100G);
         SpectrumAssignment spectrumAssignment = null;
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
@@ -85,8 +86,8 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_400GE:
-                spectralWidthSlotNumber = GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP
-                    .getOrDefault(serviceType, GridConstant.NB_SLOTS_400G);
+                spectralWidthSlotNumber =
+                    GridConstant.SPECTRAL_WIDTH_SLOT_NUMBER_MAP.getOrDefault(serviceType, GridConstant.NB_SLOTS_400G);
             //fallthrough
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
@@ -104,8 +105,7 @@ public class PostAlgoPathValidator {
                 } else {
                     LOG.debug("Spectrum assignment fixedgrid mode");
                     pceResult.setResultWavelength(
-                            GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex()
-                                .toJava()));
+                        GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex().toJava()));
                 }
                 pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex().toJava()));
                 pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex().toJava()));
@@ -133,7 +133,6 @@ public class PostAlgoPathValidator {
                     LOG.info("In PostAlgoPathValidator: Operational mode Catalog not filled, delegate OSNR calculation"
                         + " to GNPy and margin set to 0");
                 }
-
                 // Check if MaxLatency is defined in the hard constraints
                 if ((pceHardConstraints.getMaxLatency() != -1)
                         && (!checkLatency(pceHardConstraints.getMaxLatency(), path))) {
@@ -141,41 +140,37 @@ public class PostAlgoPathValidator {
                     pceResult.setLocalCause(PceResult.LocalCause.TOO_HIGH_LATENCY);
                     return pceResult;
                 }
-
                 // Check if nodes are included in the hard constraints
                 if (!checkInclude(path, pceHardConstraints)) {
                     pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                     pceResult.setLocalCause(PceResult.LocalCause.HD_NODE_INCLUDE);
                     return pceResult;
                 }
-
                 // TODO here other post algo validations can be added
                 // more data can be sent to PceGraph module via PceResult structure if required
-
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 pceResult.setLocalCause(PceResult.LocalCause.NONE);
-                break;
+                return pceResult;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
-                Map<String, Integer> tribSlotNbMap = Map.of(
-                    StringConstants.SERVICE_TYPE_100GE_M, 20,
-                    StringConstants.SERVICE_TYPE_10GE, 8,
-                    StringConstants.SERVICE_TYPE_1GE, 1);
-                int tribSlotNb = tribSlotNbMap.get(serviceType);
+                int tribSlotNb = Map.of(
+                        StringConstants.SERVICE_TYPE_100GE_M, 20,
+                        StringConstants.SERVICE_TYPE_10GE, 8,
+                        StringConstants.SERVICE_TYPE_1GE, 1)
+                    .get(serviceType);
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
                 Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
                 Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot, tribSlotNb);
                 List<OpucnTribSlotDef> resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
-
                 if (resultTribPortTribSlot.get(0) != null && resultTribPortTribSlot.get(1) != null) {
                     pceResult.setResultTribPortTribSlot(resultTribPortTribSlot);
                     pceResult.setRC(ResponseCodes.RESPONSE_OK);
                     LOG.info("In PostAlgoPathValidator: found TribPort {} - tribSlot {} - tribSlotNb {}",
                         tribPort, tribSlot, tribSlotNb);
                 }
-                break;
+                return pceResult;
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_ODUC2:
             case StringConstants.SERVICE_TYPE_ODUC3:
@@ -184,20 +179,18 @@ public class PostAlgoPathValidator {
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 pceResult.setServiceType(serviceType);
                 LOG.info("In PostAlgoPathValidator: ODU4/ODUCn path found {}", path);
-                break;
+                return pceResult;
             default:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
                     serviceType, path);
-                break;
+                return pceResult;
         }
-        return pceResult;
     }
 
     // Check the latency
     private boolean checkLatency(Long maxLatency, GraphPath<String, PceGraphEdge> path) {
         double latency = 0;
-
         for (PceGraphEdge edge : path.getEdgeList()) {
             if (edge.link() == null || edge.link().getLatency() == null) {
                 LOG.warn("- In checkLatency: the link {} does not contain latency field",
@@ -218,40 +211,34 @@ public class PostAlgoPathValidator {
         if (listToInclude.isEmpty()) {
             return true;
         }
-
         List<PceGraphEdge> pathEdges = path.getEdgeList();
         LOG.debug(" in checkInclude vertex list: [{}]", path.getVertexList());
-
         List<String> listOfElementsSubNode = new ArrayList<>();
         listOfElementsSubNode.add(pathEdges.get(0).link().getsourceNetworkSupNodeId());
-        listOfElementsSubNode.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.NODE,
-            pceHardConstraintsInput));
-
+        listOfElementsSubNode.addAll(
+            listOfElementsBuild(pathEdges, PceConstraints.ResourceType.NODE, pceHardConstraintsInput));
         List<String> listOfElementsCLLI = new ArrayList<>();
         listOfElementsCLLI.add(pathEdges.get(0).link().getsourceCLLI());
-        listOfElementsCLLI.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.CLLI,
-            pceHardConstraintsInput));
-
+        listOfElementsCLLI.addAll(
+            listOfElementsBuild(pathEdges, PceConstraints.ResourceType.CLLI, pceHardConstraintsInput));
         List<String> listOfElementsSRLG = new ArrayList<>();
         // first link is XPONDEROUTPUT, no SRLG for it
         listOfElementsSRLG.add("NONE");
-        listOfElementsSRLG.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.SRLG,
-            pceHardConstraintsInput));
-
+        listOfElementsSRLG.addAll(
+            listOfElementsBuild(pathEdges, PceConstraints.ResourceType.SRLG, pceHardConstraintsInput));
         // validation: check each type for each element
-        List<String> listNodeToInclude = listToInclude
-                .stream().filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
-                .map(ResourcePair::getName).collect(Collectors.toList());
-        List<String> listSrlgToInclude = listToInclude
-                .stream().filter(rp -> PceConstraints.ResourceType.SRLG.equals(rp.getType()))
-                .map(ResourcePair::getName).collect(Collectors.toList());
-        List<String> listClliToInclude = listToInclude
-                .stream().filter(rp -> PceConstraints.ResourceType.CLLI.equals(rp.getType()))
-                .map(ResourcePair::getName).collect(Collectors.toList());
-
-        return listOfElementsSubNode.containsAll(listNodeToInclude)
-                && listOfElementsSRLG.containsAll(listSrlgToInclude)
-                && listOfElementsCLLI.containsAll(listClliToInclude);
+        return listOfElementsSubNode.containsAll(
+                listToInclude
+                    .stream().filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
+                    .map(ResourcePair::getName).collect(Collectors.toList()))
+            && listOfElementsSRLG.containsAll(
+                listToInclude
+                    .stream().filter(rp -> PceConstraints.ResourceType.SRLG.equals(rp.getType()))
+                    .map(ResourcePair::getName).collect(Collectors.toList()))
+            && listOfElementsCLLI.containsAll(
+                listToInclude
+                    .stream().filter(rp -> PceConstraints.ResourceType.CLLI.equals(rp.getType()))
+                    .map(ResourcePair::getName).collect(Collectors.toList()));
     }
 
     private List<String> listOfElementsBuild(List<PceGraphEdge> pathEdges, PceConstraints.ResourceType type,
@@ -297,33 +284,34 @@ public class PostAlgoPathValidator {
     }
 
     private Map<String, Uint16> chooseTribPort(GraphPath<String,
-        PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
+            PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, Map<String, List<Uint16>> tribSlotMap, int nbSlot) {
         LOG.debug("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
-
         for (PceGraphEdge edge : path.getEdgeList()) {
-            NodeId linkSrcNode = edge.link().getSourceId();
-            String linkSrcTp = edge.link().getSourceTP().getValue();
-            NodeId linkDestNode = edge.link().getDestId();
-            String linkDestTp = edge.link().getDestTP().getValue();
-            PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
-            PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
-            List<Uint16> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
+            List<Uint16> srcTpnPool =
+                allPceNodes
+                    .get(edge.link().getSourceId())
+                    .getAvailableTribPorts()
+                    .get(edge.link().getSourceTP().getValue());
+            List<Uint16> destTpnPool =
+                allPceNodes
+                    .get(edge.link().getDestId())
+                    .getAvailableTribPorts()
+                    .get(edge.link().getDestTP().getValue());
             List<Uint16> commonEdgeTpnPool = new ArrayList<>();
             for (Uint16 srcTpn : srcTpnPool) {
                 if (destTpnPool.contains(srcTpn)) {
                     commonEdgeTpnPool.add(srcTpn);
                 }
             }
-
-            if (!commonEdgeTpnPool.isEmpty()) {
-                Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
-                Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
-                for (Uint16 commonTribPort : commonEdgeTpnPool) {
-                    if (tribPort.equals(commonTribPort.toJava())) {
-                        tribPortMap.put(edge.link().getLinkId().getValue(), commonTribPort);
-                    }
+            if (commonEdgeTpnPool.isEmpty()) {
+                continue;
+            }
+            Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
+            Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
+            for (Uint16 commonTribPort : commonEdgeTpnPool) {
+                if (tribPort.equals(commonTribPort.toJava())) {
+                    tribPortMap.put(edge.link().getLinkId().getValue(), commonTribPort);
                 }
             }
         }
@@ -332,19 +320,20 @@ public class PostAlgoPathValidator {
     }
 
     private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
-        PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
+            PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
         LOG.debug("In choosetribSlot: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
-
         for (PceGraphEdge edge : path.getEdgeList()) {
-            NodeId linkSrcNode = edge.link().getSourceId();
-            String linkSrcTp = edge.link().getSourceTP().getValue();
-            NodeId linkDestNode = edge.link().getDestId();
-            String linkDestTp = edge.link().getDestTP().getValue();
-            PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
-            PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
-            List<Uint16> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
+            List<Uint16> srcTsPool =
+                allPceNodes
+                    .get(edge.link().getSourceId())
+                    .getAvailableTribSlots()
+                    .get(edge.link().getSourceTP().getValue());
+            List<Uint16> destTsPool =
+                allPceNodes
+                    .get(edge.link().getDestId())
+                    .getAvailableTribSlots()
+                    .get(edge.link().getDestTP().getValue());
             List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
             List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 integer : srcTsPool) {
@@ -385,16 +374,10 @@ public class PostAlgoPathValidator {
 
     private List<OpucnTribSlotDef> getMinMaxTpTs(Map<String, Uint16> tribPort, Map<String, List<Uint16>> tribSlot) {
         String tribport = tribPort.values().toArray()[0].toString();
-        @SuppressWarnings("unchecked")
         List<Uint16> tsList = (List<Uint16>) tribSlot.values().toArray()[0];
-        OpucnTribSlotDef minOpucnTs = OpucnTribSlotDef
-            .getDefaultInstance(String.join(".", tribport, tsList.get(0).toString()));
-        OpucnTribSlotDef maxOpucnTs = OpucnTribSlotDef
-            .getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()));
-        List<OpucnTribSlotDef> minmaxTpTsList = new ArrayList<>();
-        minmaxTpTsList.add(minOpucnTs);
-        minmaxTpTsList.add(maxOpucnTs);
-        return minmaxTpTsList;
+        return new ArrayList<>(List.of(
+            OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(0).toString())),
+            OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()))));
     }
 
     /**
@@ -749,8 +732,7 @@ public class PostAlgoPathValidator {
             return edges.get(pathEltNber).link();
         }
             //For Z to A direction, must return the opposite link
-        return allPceLinks.get(new LinkId(edges.get(pathEltNber).link()
-            .getOppositeLink()));
+        return allPceLinks.get(new LinkId(edges.get(pathEltNber).link().getOppositeLink()));
     }
 
     private double getOsnrDbfromOnsrLin(double onsrLu) {
@@ -774,28 +756,29 @@ public class PostAlgoPathValidator {
         BitSet result = BitSet.valueOf(freqMap);
         boolean isFlexGrid = true;
         LOG.debug("Processing path {} with length {}", path, path.getLength());
-        BitSet pceNodeFreqMap;
         for (PceGraphEdge edge : path.getEdgeList()) {
-            LOG.debug("Processing source {} ", edge.link().getSourceId());
-            if (allPceNodes.containsKey(edge.link().getSourceId())) {
-                PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
+            NodeId srcNodeId = edge.link().getSourceId();
+            LOG.debug("Processing source {} ", srcNodeId);
+            if (allPceNodes.containsKey(srcNodeId)) {
+                PceNode pceNode = allPceNodes.get(srcNodeId);
                 LOG.debug("Processing PCE node {}", pceNode);
-                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNode.getVersion())) {
+                String pceNodeVersion = pceNode.getVersion();
+                NodeId pceNodeId = pceNode.getNodeId();
+                BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
+                BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
+                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
                     LOG.debug("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
-                        pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity());
+                        pceNodeId, pceNodeVersion, sltWdthGran);
                     isFlexGrid = false;
                 }
-                if ((pceNode.getSlotWidthGranularity().setScale(0, RoundingMode.CEILING)
-                        .equals(GridConstant.SLOT_WIDTH_50))
-                        && (pceNode.getCentralFreqGranularity().setScale(0, RoundingMode.CEILING)
-                        .equals(GridConstant.SLOT_WIDTH_50))) {
-                    LOG.debug("Node {}: version is {} with slot width granularity  {} and central "
+                if (sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)
+                        && ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
+                    LOG.debug("Node {}: version is {} with slot width granularity {} and central "
                             + "frequency granularity is {} -> fixed grid mode",
-                        pceNode.getNodeId(), pceNode.getVersion(), pceNode.getSlotWidthGranularity(),
-                        pceNode.getCentralFreqGranularity());
+                        pceNodeId, pceNodeVersion, sltWdthGran, ctralFreqGran);
                     isFlexGrid = false;
                 }
-                pceNodeFreqMap = pceNode.getBitSetData();
+                BitSet pceNodeFreqMap = pceNode.getBitSetData();
                 LOG.debug("Pce node bitset {}", pceNodeFreqMap);
                 if (pceNodeFreqMap != null) {
                     result.and(pceNodeFreqMap);
@@ -824,11 +807,11 @@ public class PostAlgoPathValidator {
             .setFlexGrid(isFlexGrid);
         BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
         referenceBitSet.set(0, spectralWidthSlotNumber);
-        int nbSteps = isFlexGrid ? spectralWidthSlotNumber : 1;
         //higher is the frequency, smallest is the wavelength number
         //in operational, the allocation is done through wavelength starting from the smallest
         //so we have to loop from the last element of the spectrum occupation
-        for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber; i -= nbSteps) {
+        for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber;
+                i -= isFlexGrid ? spectralWidthSlotNumber : 1) {
             if (spectrumOccupation.get(i - spectralWidthSlotNumber, i).equals(referenceBitSet)) {
                 spectrumAssignmentBldr.setBeginIndex(Uint16.valueOf(i - spectralWidthSlotNumber));
                 spectrumAssignmentBldr.setStopIndex(Uint16.valueOf(i - 1));
