@@ -415,7 +415,6 @@ public class PostAlgoPathValidator {
         double pwrIn = -60.0;
         double pwrOut = -60.0;
         boolean transponderPresent = false;
-        CatalogNodeType cnt;
         List<String> vertices = path.getVertexList();
         List<PceGraphEdge> edges = path.getEdgeList();
         String opMode = "";
@@ -423,7 +422,6 @@ public class PostAlgoPathValidator {
         // associated degradations
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
-        Map<String, Double> impairments = new HashMap<>();
         for (int n = 0; n < vertices.size(); n++) {
             int pathElement = n;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
@@ -520,7 +518,7 @@ public class PostAlgoPathValidator {
                     srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
                         // Operational mode is set by default to standard opMode for ADD/DROP SRGs
                         // Operational mode is found in SRG attributes of the Node
-                    cnt = CatalogConstant.CatalogNodeType.DROP;
+                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.DROP;
                     LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
                     if (pathElement <= 1) {
                         // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
@@ -551,11 +549,10 @@ public class PostAlgoPathValidator {
                             pathElement, pathElement - 2, pceLink.getcd());
                         calcPmd2 += pceLink.getpmd2();
                         // This also includes Non Linear Contribution from the path
-                        calcOnsrLin +=
-                            cu.calculateNLonsrContribution(pwrOut, pceLink.getLength(), spacing);
+                        calcOnsrLin += cu.calculateNLonsrContribution(pwrOut, pceLink.getLength(), spacing);
                     }
                     //calculation of the SRG contribution either for Add and Drop
-                    impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
                         pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
                     calcCd = impairments.get("CD").doubleValue();
                     calcPmd2 = impairments.get("DGD2").doubleValue();
@@ -594,43 +591,16 @@ public class PostAlgoPathValidator {
                         break;
                     }
                     LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
-                    cnt = CatalogConstant.CatalogNodeType.EXPRESS;
-                    String degree1Mode = "";
-                    String degree2Mode = "";
-                    // If the operational mode of the Degree is not consistent or if the operational
-                    // mode is not declared in the topology
-                        // Operational mode is set by default to standard opMode for Degree
-                    degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-                        // Operational mode is found in degree-attributes of the Node
-                    // Same for next node which is the second degree of a ROADM node
-                    degree2Mode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-                    // At that time OpenROADM provides only one spec for the ROADM nodes
-                    if (!degree1Mode.equals(degree2Mode)) {
-                        LOG.info("Unsupported Hybrid ROADM configuration with Degree1 {} of {} operational mode"
-                            + "and Degree2 {} of {} operational mode. Will by default use operational mode"
-                            + "of Degree2", currentNode.getNodeId().toString(),
-                            degree1Mode, nextNode.getNodeId().toString(), degree2Mode);
-                    }
-                    PceLink pceLink = edges.get(pathElement - 1).link();
-                    pwrIn = pwrOut - pceLink.getspanLoss();
-                    // Calculate degradation accumulated across incoming Link and add them to
-                    // accumulated impairments
-                    calcCd += pceLink.getcd();
-                    calcPmd2 += pceLink.getpmd2();
-                    // This also includes Non Linear Contribution from the path
-                    calcOnsrLin += cu.calculateNLonsrContribution(pwrOut, pceLink.getLength(), spacing);
-                    // Calculate output power for next span (Output of degree 2)
-                    pceLink = edges.get(pathElement + 1).link();
-                    pwrOut = cu.getPceRoadmAmpOutputPower(
-                        cnt, degree2Mode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                    // Adds to accumulated impairments the degradation associated with the Express
-                    // path of ROADM : Degree1, express link, Degree2
-                    impairments = cu.getPceRoadmAmpParameters(
-                        cnt, degree2Mode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    Map<String, Double> impairments0 =  degreeCheckOSNR(
+                            cu, currentNode, nextNode,
+                            edges.get(pathElement - 1).link(), edges.get(pathElement + 1).link(),
+                            pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments0.get("CD").doubleValue();
+                    calcPmd2 = impairments0.get("DGD2").doubleValue();
+                    calcPdl2 = impairments0.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments0.get("ONSRLIN").doubleValue();
+                    pwrIn = impairments0.get("pwrIn").doubleValue();
+                    pwrOut = impairments0.get("pwrOut").doubleValue();
                     LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
@@ -689,7 +659,6 @@ public class PostAlgoPathValidator {
         double pwrIn = -60.0;
         double pwrOut = -60.0;
         boolean transponderPresent = false;
-        CatalogNodeType cnt;
         List<String> vertices = path.getVertexList();
         List<PceGraphEdge> edges = path.getEdgeList();
         String opMode = "";
@@ -697,7 +666,6 @@ public class PostAlgoPathValidator {
         // associated degradations
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
-        Map<String, Double> impairments = new HashMap<>();
         for (int n = 0; n < vertices.size(); n++) {
             int pathElement = vertices.size() - n - 1;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
@@ -787,14 +755,13 @@ public class PostAlgoPathValidator {
                     }
                     break;
                 case SRG:
-                    String srgMode = "";
                     // If the operational mode of the ADD/DROP MUX is not consistent or
                     // if the operational mode of the ADD/DROP MUX is not declared in the topology
                     // (Network TP)
-                    srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
                         // Operational mode is set by default to standard opMode for ADD/DROP SRGs
                         // Operational mode is found in SRG attributes of the Node
-                    cnt = CatalogConstant.CatalogNodeType.DROP;
+                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.DROP;
                     LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
                     if (pathElement >= vertices.size() - 2) {
                         // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
@@ -831,7 +798,7 @@ public class PostAlgoPathValidator {
                             pwrOut, pceLink.getLength(), spacing);
                     }
                     //calculation of the SRG contribution either for Add and Drop
-                    impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
                         pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
                     calcCd = impairments.get("CD").doubleValue();
                     calcPmd2 = impairments.get("DGD2").doubleValue();
@@ -870,44 +837,17 @@ public class PostAlgoPathValidator {
                         break;
                     }
                     LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
-                    cnt = CatalogConstant.CatalogNodeType.EXPRESS;
-                    String degree1Mode = "";
-                    String degree2Mode = "";
-                    // If the operational mode of the Degree is not consistent or if the operational
-                    // mode is not declared in the topology
-                        // Operational mode is set by default to standard opMode for Degree
-                    degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-                        // Operational mode is found in degree-attributes of the Node
-                    // Same for next node which is the second degree of a ROADM node
-                    degree2Mode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWMWCORE);
-                    // At that time OpenROADM provides only one spec for the ROADM nodes
-                    if (!degree1Mode.equals(degree2Mode)) {
-                        LOG.info("Unsupported Hybrid ROADM configuration with Degree1 {} of {} operational mode"
-                            + "and Degree2 {} of {} operational mode. Will by default use operational mode of Degree2",
-                            currentNode.getNodeId().toString(),
-                            degree1Mode, nextNode.getNodeId().toString(), degree2Mode);
-                    }
-                    PceLink pceLink = getOppPceLink(pathElement, edges, allPceLinks);
-                    pwrIn = pwrOut - pceLink.getspanLoss();
-                    // Calculate degradation accumulated across incoming Link and add them to
-                    // accumulated impairments
-                    calcCd += pceLink.getcd();
-                    calcPmd2 += pceLink.getpmd2();
-                    // This also includes Non Linear Contribution from the path
-                    calcOnsrLin += cu.calculateNLonsrContribution(
-                        pwrOut, pceLink.getLength(), spacing);
-                    // Calculate output power for next span (Output of degree 2)
-                    pceLink = getOppPceLink(pathElement - 2, edges, allPceLinks);
-                    pwrOut = cu.getPceRoadmAmpOutputPower(
-                        cnt, degree2Mode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                    // Adds to accumulated impairments the degradation associated with the Express
-                    // path of ROADM : Degree1, express link, Degree2
-                    impairments = cu.getPceRoadmAmpParameters(
-                        cnt, degree2Mode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    Map<String, Double> impairments0 =  degreeCheckOSNR(
+                        cu, currentNode, nextNode,
+                        getOppPceLink(pathElement, edges, allPceLinks),
+                        getOppPceLink(pathElement - 2, edges, allPceLinks),
+                        pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments0.get("CD").doubleValue();
+                    calcPmd2 = impairments0.get("DGD2").doubleValue();
+                    calcPdl2 = impairments0.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments0.get("ONSRLIN").doubleValue();
+                    pwrIn = impairments0.get("pwrIn").doubleValue();
+                    pwrOut = impairments0.get("pwrOut").doubleValue();
                     LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
@@ -954,8 +894,45 @@ public class PostAlgoPathValidator {
         return allPceLinks.get(new LinkId(edges.get(pathEltNber).link().getOppositeLink()));
     }
 
+
+    private Map<String, Double> degreeCheckOSNR(
+            CatalogUtils cu, PceNode currentNode, PceNode nextNode, PceLink pceLink0, PceLink pceLink1,
+            double pwrOut, double calcCd, double calcPmd2, double calcPdl2, double calcOnsrLin, double spacing) {
+        // If the operational mode of the Degree is not consistent or if the operational
+        // mode is not declared in the topology
+            // Operational mode is set by default to standard opMode for Degree
+        String degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
+            // Operational mode is found in degree-attributes of the Node
+        // Same for next node which is the second degree of a ROADM node
+        String degree2Mode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWMWCORE);
+        // At that time OpenROADM provides only one spec for the ROADM nodes
+        if (!degree1Mode.equals(degree2Mode)) {
+            LOG.warn("Unsupported Hybrid ROADM configuration with Degree1 {} of {} operational mode and Degree2 "
+                + "{} of {} operational mode. Will by default use operational mode of Degree2",
+                currentNode.getNodeId().toString(), degree1Mode, nextNode.getNodeId().toString(), degree2Mode);
+        }
+        // Calculate degradation accumulated across incoming Link and add them to
+        // accumulated impairments
+        calcCd += pceLink0.getcd();
+        calcPmd2 += pceLink0.getpmd2();
+        // This also includes Non Linear Contribution from the path
+        calcOnsrLin += cu.calculateNLonsrContribution(pwrOut, pceLink0.getLength(), spacing);
+        // Calculate output power for next span (Output of degree 2)
+        double pwrIn = pwrOut - pceLink0.getspanLoss();
+        CatalogNodeType cnt0 = CatalogConstant.CatalogNodeType.EXPRESS;
+        pwrOut = cu.getPceRoadmAmpOutputPower(
+            cnt0, degree2Mode, pceLink1.getspanLoss(), spacing, pceLink1.getpowerCorrection());
+        // Adds to accumulated impairments the degradation associated with the Express
+        // path of ROADM : Degree1, express link, Degree2
+        Map<String, Double> impairments = cu.getPceRoadmAmpParameters(
+            cnt0, degree2Mode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+        impairments.put("pwrIn", pwrIn);
+        impairments.put("pwrOut", pwrOut);
+        return impairments;
+    }
+
     private double getOsnrDbfromOnsrLin(double onsrLu) {
-        return (10 * Math.log10(1 / onsrLu));
+        return 10 * Math.log10(1 / onsrLu);
     }
 
     /**
