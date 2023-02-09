@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
@@ -30,7 +29,7 @@ import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class TpceNetworkTest extends AbstractTest {
-    TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
+    TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(getDataBroker()));
 
     @Test
     public void createLayerClliTest() throws InterruptedException, ExecutionException {

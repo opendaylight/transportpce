@@ -24,7 +24,6 @@ import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
 import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConstants;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
@@ -80,8 +79,7 @@ public class PublisherTest extends AbstractTest {
         publisherAlarm = new Publisher<>("test", mockAlarmProducer);
         publisherTapiService = new Publisher<>("test", mockTapiProducer);
         MockitoAnnotations.openMocks(this);
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         topicManager.setTapiConverter(converterTapiService);
         NotificationServiceDataUtils.createTapiContext(networkTransactionService);
         nbiNotificationsImpl = new NbiNotificationsImpl(converterService, converterAlarm, converterTapiService,

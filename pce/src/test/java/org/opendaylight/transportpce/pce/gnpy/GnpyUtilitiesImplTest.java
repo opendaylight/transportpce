@@ -32,7 +32,6 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
@@ -72,7 +71,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     private GnpyConsumer gnpyConsumer;
 
     public GnpyUtilitiesImplTest() throws IOException {
-        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(getDataBroker()));
+        networkTransaction = new NetworkTransactionImpl(getDataBroker());
         JsonReader networkReader = null;
         JsonReader topoReader = null;
 

@@ -41,7 +41,6 @@ import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
@@ -126,7 +125,6 @@ public class PceGraphTest extends AbstractTest {
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
-    private RequestProcessor reqProc;
     private NetworkTransactionService netTransServ;
 
     // Test of integration for PceGraph
@@ -229,8 +227,7 @@ public class PceGraphTest extends AbstractTest {
         pceHardConstraints = new PceConstraints();
 
         this.rc = new PceResult();
-        this.reqProc = new RequestProcessor(dataBroker);
-        this.netTransServ = new NetworkTransactionImpl(reqProc);
+        this.netTransServ = new NetworkTransactionImpl(dataBroker);
 
         LOG.info("The value of the mapping is {}", portMapping);
 

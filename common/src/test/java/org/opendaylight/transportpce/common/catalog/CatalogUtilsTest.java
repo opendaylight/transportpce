@@ -26,7 +26,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
@@ -71,8 +70,7 @@ public class CatalogUtilsTest extends AbstractTest {
 
     @Test
     public void catalogPrimitivesTest() {
-        RequestProcessor reqProc = new RequestProcessor(getDataBroker());
-        NetworkTransactionService netTransServ = new NetworkTransactionImpl(reqProc);
+        NetworkTransactionService netTransServ = new NetworkTransactionImpl(getDataBroker());
         CatalogUtils catalogUtils = new CatalogUtils(netTransServ);
         assertEquals("Checking retrieval of Operational Mode from Node Type ADD",
             CatalogConstant.MWWRCORE,

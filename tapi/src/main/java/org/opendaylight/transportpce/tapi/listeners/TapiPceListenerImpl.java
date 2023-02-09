@@ -22,7 +22,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
@@ -103,7 +102,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
     public TapiPceListenerImpl(DataBroker dataBroker) {
         this.connectionFullMap = new HashMap<>();
         this.dataBroker = dataBroker;
-        this.networkTransactionService = new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
+        this.networkTransactionService = new NetworkTransactionImpl(this.dataBroker);
         this.topConnRdmRdm = null;
         this.topConnXpdrXpdrPhtn = null;
         this.topConnXpdrXpdrOdu = null;

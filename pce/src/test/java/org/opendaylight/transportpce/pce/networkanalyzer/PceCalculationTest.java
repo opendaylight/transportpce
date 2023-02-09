@@ -20,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
@@ -54,7 +53,7 @@ public class PceCalculationTest extends AbstractTest {
         PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData.getPCERequest(),
-                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
+                new NetworkTransactionImpl(getDataBroker()));
         mapping = new MappingBuilder().setLogicalConnectionPoint("logicalConnectionPoint").setPortQual("xpdr-client")
             .build();
         NodeInfo info = new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).build();
@@ -67,7 +66,7 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues() {
         pceCalculation = new PceCalculation(
             PceTestData.getPCERequest(),
-            new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
+            new NetworkTransactionImpl(getDataBroker()),
             pceConstraintsCalc.getPceHardConstraints(),
             pceConstraintsCalc.getPceSoftConstraints(),
             pceResult,
@@ -84,7 +83,7 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues2() {
         pceCalculation = new PceCalculation(
                 PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral(),
-                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
+                new NetworkTransactionImpl(getDataBroker()),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult, portMapping);
@@ -100,10 +99,10 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues42() {
         PathComputationRequestInput input = PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2();
         pceConstraintsCalc = new PceConstraintsCalc(input,
-                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
+                new NetworkTransactionImpl(getDataBroker()));
         pceCalculation = new PceCalculation(
                 PceTestData.getPCE_test3_request_54(),
-                new NetworkTransactionImpl(new RequestProcessor(getDataBroker())),
+                new NetworkTransactionImpl(getDataBroker()),
                 pceConstraintsCalc.getPceHardConstraints(),
                 pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult, portMapping);

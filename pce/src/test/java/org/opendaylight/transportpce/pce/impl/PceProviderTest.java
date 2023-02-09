@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
@@ -31,7 +30,6 @@ public class PceProviderTest extends AbstractTest {
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
     private NetworkTransactionImpl networkTransaction;
-    private RequestProcessor requestProcessor;
     private ObjectRegistration<TransportpcePceService> rpcRegistration;
     private PceProvider pceProvider;
 
@@ -39,8 +37,7 @@ public class PceProviderTest extends AbstractTest {
     public void setUp() {
         rpcService = Mockito.mock(RpcProviderService.class);
         notificationPublishService = new NotificationPublishServiceMock();
-        requestProcessor = Mockito.mock(RequestProcessor.class);
-        networkTransaction = new NetworkTransactionImpl(requestProcessor);
+        networkTransaction = new NetworkTransactionImpl(getDataBroker());
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, null);
         pceProvider = new PceProvider(rpcService, pathComputationService);
