@@ -7,13 +7,14 @@
  */
 package org.opendaylight.transportpce.common.network;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -28,22 +29,20 @@ public class RequestProcessor {
 
     private final DataBroker dataBroker;
     private ReadWriteTransaction rwTx;
-    private ReadTransaction readTx;
     private ReentrantReadWriteLock lock;
 
 
 
     public RequestProcessor(DataBroker dataBroker) {
-        this.dataBroker = dataBroker;
+        this.dataBroker = requireNonNull(dataBroker);
         rwTx = dataBroker.newReadWriteTransaction();
-        readTx = dataBroker.newReadOnlyTransaction();
         lock = new ReentrantReadWriteLock();
         LOG.info("RequestProcessor instantiated");
 
     }
 
-    public <T extends DataObject> ListenableFuture<Optional<T>>
-         read(LogicalDatastoreType store,InstanceIdentifier<T> path) {
+    public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
+            InstanceIdentifier<T> path) {
 
         ListenableFuture<Optional<T>> result = null;
         acquireReadLock();
@@ -71,8 +70,7 @@ public class RequestProcessor {
     }
 
 
-    public <T extends DataObject> void merge(LogicalDatastoreType store,
-        InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
 
         acquireLock();
         LOG.debug("Number of merge requests waiting in queue :{}", lock.getQueueLength());
