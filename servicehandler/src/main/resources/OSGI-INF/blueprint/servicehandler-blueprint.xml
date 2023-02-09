@@ -9,9 +9,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
 Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 -->
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-  xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
-  odl:use-default-for-reference-types="true">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
     <reference id="rpcService"
           interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>

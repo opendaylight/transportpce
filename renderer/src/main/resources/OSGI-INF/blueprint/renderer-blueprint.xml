@@ -7,9 +7,7 @@ This program and the accompanying materials are made available under the
 terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-  xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
-  odl:use-default-for-reference-types="true">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
   <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
   <reference id="notificationPublishService"
@@ -106,6 +104,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <service ref="rendererServiceOperations"
            interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
   <service ref="otnDeviceRenderer"
-            interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService"/>
+           interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService"/>
 
 </blueprint>
