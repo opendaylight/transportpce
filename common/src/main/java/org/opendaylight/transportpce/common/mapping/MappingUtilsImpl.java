@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +35,16 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOC
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class MappingUtilsImpl implements MappingUtils {
+@Component
+public final class MappingUtilsImpl implements MappingUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(MappingUtilsImpl.class);
-
-    private final DataBroker dataBroker;
 
     private static final ImmutableMap<String, SupportedIfCapability> CAP_TYPE_MAP =
         ImmutableMap.<String, SupportedIfCapability>builder()
@@ -67,10 +70,11 @@ public class MappingUtilsImpl implements MappingUtils {
                 If100GEODU4.VALUE)
             .build();
 
-    public MappingUtilsImpl(DataBroker dataBroker) {
+    private final DataBroker dataBroker;
 
-        this.dataBroker = dataBroker;
-
+    @Activate
+    public MappingUtilsImpl(@Reference DataBroker dataBroker) {
+        this.dataBroker = requireNonNull(dataBroker);
     }
 
     public String getOpenRoadmVersion(String nodeId) {

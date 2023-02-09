@@ -11,15 +11,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <reference id="mountPointService" interface="org.opendaylight.mdsal.binding.api.MountPointService" />
     <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
+    <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
     <bean id="deviceTransactionManager" class="org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl"
           destroy-method="preDestroy" >
         <argument ref="mountPointService" />
         <argument value="15000" />
-    </bean>
-
-    <bean id="mappingUtils" class="org.opendaylight.transportpce.common.mapping.MappingUtilsImpl" >
-        <argument ref="dataBroker" />
     </bean>
 
     <bean id="openRoadmInterfaces121" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121" >
@@ -105,7 +102,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
 
     <service ref="crossConnectImpl" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
-
-    <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
 </blueprint>
