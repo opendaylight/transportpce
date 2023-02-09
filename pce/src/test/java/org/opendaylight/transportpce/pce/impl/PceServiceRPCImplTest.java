@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
@@ -42,7 +41,7 @@ public class PceServiceRPCImplTest extends AbstractTest {
         PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         notificationPublishService = new NotificationPublishServiceMock();
-        networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(getDataBroker()));
+        networkTransaction =  new NetworkTransactionImpl(getDataBroker());
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, portMapping);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);

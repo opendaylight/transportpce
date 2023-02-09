@@ -19,7 +19,6 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.networkanalyzer.MapUtils;
@@ -93,7 +92,7 @@ public class PcePathDescriptionTests extends AbstractTest {
     public void mapUtil() {
         PceConstraints pceConstraintsCalc = new PceConstraintsCalc(
                     PceTestData.getPCERequest(),
-                    new NetworkTransactionImpl(new RequestProcessor(getDataBroker())))
+                    new NetworkTransactionImpl(getDataBroker()))
                 .getPceHardConstraints();
         MapUtils.mapDiversityConstraints(List.of(node), List.of(link), pceConstraintsCalc);
         MapUtils.getSupLink(link);

@@ -134,8 +134,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Initializing transaction providers ...");
         deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(),
                 MAX_DURATION_TO_SUBMIT_TRANSACTION);
-        RequestProcessor requestProcessor = new RequestProcessor(lightyServices.getBindingDataBroker());
-        networkTransaction = new NetworkTransactionImpl(requestProcessor);
+        networkTransaction = new NetworkTransactionImpl(lightyServices.getBindingDataBroker());
 
         LOG.info("Creating network-model beans ...");
         R2RLinkDiscovery linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(),

@@ -20,7 +20,6 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
@@ -41,8 +40,7 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
 
     @Test
     public void initTest() {
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         NbiNotificationsProvider provider = new NbiNotificationsProvider(
                 Arrays.asList("topic1", "topic2"), Arrays.asList("topic1", "topic2"), "localhost:8080",
                 "localhost:8080", rpcProviderRegistry, notificationService,

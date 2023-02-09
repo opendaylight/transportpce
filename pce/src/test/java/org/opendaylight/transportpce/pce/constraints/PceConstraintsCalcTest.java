@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
@@ -29,7 +28,7 @@ public class PceConstraintsCalcTest extends AbstractTest {
         // networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         PceTestUtils.writeNetworkIntoDataStore(dataBroker, getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
-        networkTransactionService = new NetworkTransactionImpl(new RequestProcessor(dataBroker));
+        networkTransactionService = new NetworkTransactionImpl(dataBroker);
     }
 
     @Test

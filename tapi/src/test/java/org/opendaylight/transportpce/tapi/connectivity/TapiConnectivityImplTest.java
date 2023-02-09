@@ -27,7 +27,6 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
@@ -117,8 +116,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
         MockitoAnnotations.openMocks(this);
 
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapilink = new TapiLink(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);

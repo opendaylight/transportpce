@@ -37,7 +37,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
@@ -196,8 +195,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLink(networkTransactionService);
         LOG.info("TEST SETUP READY");
     }

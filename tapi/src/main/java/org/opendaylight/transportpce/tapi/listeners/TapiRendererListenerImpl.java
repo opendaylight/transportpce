@@ -22,7 +22,6 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
@@ -65,7 +64,7 @@ public class TapiRendererListenerImpl implements TransportpceRendererListener {
 
     public TapiRendererListenerImpl(DataBroker dataBroker, NotificationPublishService notificationPublishService) {
         this.dataBroker = dataBroker;
-        this.networkTransactionService = new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
+        this.networkTransactionService = new NetworkTransactionImpl(this.dataBroker);
         this.notificationPublishService = notificationPublishService;
     }
 
