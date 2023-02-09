@@ -9,15 +9,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <reference id="mountPointService" interface="org.opendaylight.mdsal.binding.api.MountPointService" />
     <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
+    <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
-
-    <bean id="deviceTransactionManager" class="org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl"
-          destroy-method="preDestroy" >
-        <argument ref="mountPointService" />
-        <argument value="15000" />
-    </bean>
 
     <bean id="openRoadmInterfaces121" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121" >
         <argument ref="deviceTransactionManager" />
@@ -92,8 +86,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="crossConnect221" />
         <argument ref="crossConnect710" />
     </bean>
-
-    <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
 
     <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
 
