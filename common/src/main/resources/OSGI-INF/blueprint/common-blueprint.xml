@@ -9,9 +9,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
     <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
+    <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
 
     <bean id="openRoadmInterfaces121" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121" >
         <argument ref="deviceTransactionManager" />
@@ -20,13 +20,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bean id="openRoadmInterfaces221" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221" >
         <argument ref="deviceTransactionManager" />
         <argument ref="portMapping" />
-        <argument ref="portMapping221" />
     </bean>
 
     <bean id="openRoadmInterfaces710" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710" >
         <argument ref="deviceTransactionManager" />
         <argument ref="portMapping" />
-        <argument ref="portMapping710" />
     </bean>
 
     <bean id="openRoadmInterfaces" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl" >
@@ -37,30 +35,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="openRoadmInterfaces710" />
     </bean>
 
-    <bean id="portMapping121" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion121" >
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="portMapping221" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion221" >
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="portMapping710" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion710" >
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
-        <argument ref="dataBroker" />
-        <argument ref="portMapping221" />
-        <argument ref="portMapping121" />
-        <argument ref="portMapping710" />
-    </bean>
-
     <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
-
-    <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
 
 </blueprint>
