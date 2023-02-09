@@ -20,7 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
@@ -86,8 +85,7 @@ public class TapiProviderTest extends AbstractTest {
 
     @BeforeClass
     public static void setUp() {
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
     }
 
     @Test

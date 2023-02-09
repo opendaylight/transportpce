@@ -52,14 +52,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="requestProcessor" class="org.opendaylight.transportpce.common.network.RequestProcessor" scope="singleton" >
-        <argument ref="dataBroker" />
-    </bean>
-
-    <bean id="networkTransactionImpl" class="org.opendaylight.transportpce.common.network.NetworkTransactionImpl">
-        <argument ref="requestProcessor" />
-    </bean>
-
     <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
         <argument ref="dataBroker" />
         <argument ref="portMapping221" />
@@ -86,8 +78,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="crossConnect221" />
         <argument ref="crossConnect710" />
     </bean>
-
-    <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
 
     <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
 

@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -43,8 +42,7 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Before
     public void setUp() throws ExecutionException, InterruptedException {
         topicManager = TopicManager.getInstance();
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         JsonStringConverter<NotificationProcessService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(

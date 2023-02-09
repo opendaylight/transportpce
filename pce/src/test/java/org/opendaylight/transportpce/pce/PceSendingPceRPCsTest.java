@@ -21,7 +21,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
@@ -55,7 +54,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     @Before
     public void setUp() {
         this.dataBroker = getNewDataBroker();
-        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
+        networkTransaction = new NetworkTransactionImpl(this.dataBroker);
         PceTestUtils.writeNetworkInDataStore(this.dataBroker);
         gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());

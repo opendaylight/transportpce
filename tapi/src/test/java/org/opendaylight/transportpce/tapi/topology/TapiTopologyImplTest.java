@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
@@ -105,8 +104,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.PORTMAPPING_FILE);
-        networkTransactionService = new NetworkTransactionImpl(
-            new RequestProcessor(getDataStoreContextUtil().getDataBroker()));
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLink(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
