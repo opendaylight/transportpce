@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57177015_e18e2a0f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-09T10:55:51Z",
+      "side": 1,
+      "message": "should be rethought with the new design",
+      "revId": "48dcf493200b6efc7a1dad5fe9873466910bef0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
