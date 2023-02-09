@@ -90,6 +90,28 @@
         <port-name>C1</port-name>
       </destination>
     </connection-map>
+    <connection-map>
+      <connection-map-number>5</connection-map-number>
+      <source>
+        <circuit-pack-name>1/1/6-PLUG-NET</circuit-pack-name>
+        <port-name>L1</port-name>
+      </source>
+      <destination>
+        <circuit-pack-name>1/1/5-PLUG-NET</circuit-pack-name>
+        <port-name>L1</port-name>
+      </destination>
+    </connection-map>
+    <connection-map>
+      <connection-map-number>6</connection-map-number>
+      <source>
+        <circuit-pack-name>1/1/5-PLUG-NET</circuit-pack-name>
+        <port-name>L1</port-name>
+      </source>
+      <destination>
+        <circuit-pack-name>1/1/6-PLUG-NET</circuit-pack-name>
+        <port-name>L1</port-name>
+      </destination>
+    </connection-map>
     <odu-switching-pools>
       <switching-pool-number>1</switching-pool-number>
       <switching-pool-type>blocking</switching-pool-type>
@@ -838,6 +860,126 @@
       <serial-id>serial-id</serial-id>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-name>1/1/5-PLUG-NET</circuit-pack-name>
+      <product-code>product-code</product-code>
+      <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
+      <is-physical>true</is-physical>
+      <clei>clei</clei>
+      <model>model</model>
+      <manufacture-date>2021-02-08T15:23:43Z</manufacture-date>
+      <shelf>1</shelf>
+      <ports>
+        <port-name>L1</port-name>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
+            <otsigroup-capability-profile-name>OTUC2-REGEN</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>OTUC4-REGEN</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>OTUC3-REGEN</otsigroup-capability-profile-name>
+            <optical-operational-mode-profile-name>OR-W-100G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+            <optical-operational-mode-profile-name>OR-W-200G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+          </supported-interface-capability>
+        </port-capabilities>
+        <is-physical>true</is-physical>
+        <port-direction>bidirectional</port-direction>
+        <port-wavelength-type>wavelength</port-wavelength-type>
+        <port-qual>xpdr-network</port-qual>
+        <administrative-state>inService</administrative-state>
+        <port-type>CFP2-DCO</port-type>
+        <faceplate-label>faceplate-label</faceplate-label>
+        <operational-state>inService</operational-state>
+        <transponder-port>
+          <port-power-capability-max-rx>13</port-power-capability-max-rx>
+          <port-power-capability-min-tx>-5</port-power-capability-min-tx>
+          <port-power-capability-min-rx>-22</port-power-capability-min-rx>
+          <port-power-capability-max-tx>0</port-power-capability-max-tx>
+        </transponder-port>
+        <lifecycle-state>deployed</lifecycle-state>
+        <mc-capability-profile-name>mc-capability-profile</mc-capability-profile-name>
+      </ports>
+      <type>Plug_Line_400G</type>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <slot>5</slot>
+      <administrative-state>inService</administrative-state>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/1</circuit-pack-name>
+        <cp-slot-name>slot-2</cp-slot-name>
+      </parent-circuit-pack>
+      <faceplate-label>faceplate-label</faceplate-label>
+      <vendor>vendor-A</vendor>
+      <is-passive>false</is-passive>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <operational-state>inService</operational-state>
+      <lifecycle-state>deployed</lifecycle-state>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-type>Plug_Line_400G</circuit-pack-type>
+      <hardware-version>hardware-version</hardware-version>
+      <serial-id>serial-id</serial-id>
+      <circuit-pack-mode>REGEN</circuit-pack-mode>
+    </circuit-packs>
+    <circuit-packs>
+      <circuit-pack-name>1/1/6-PLUG-NET</circuit-pack-name>
+      <product-code>product-code</product-code>
+      <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
+      <is-physical>true</is-physical>
+      <clei>clei</clei>
+      <model>model</model>
+      <manufacture-date>2021-02-08T15:23:43Z</manufacture-date>
+      <shelf>1</shelf>
+      <ports>
+        <port-name>L1</port-name>
+        <port-capabilities xmlns="http://org/openroadm/port-capability">
+          <supported-interface-capability>
+            <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-otsi-otsigroup</if-cap-type>
+            <otsigroup-capability-profile-name>OTUC2-REGEN</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>OTUC4-REGEN</otsigroup-capability-profile-name>
+            <otsigroup-capability-profile-name>OTUC3-REGEN</otsigroup-capability-profile-name>
+            <optical-operational-mode-profile-name>OR-W-100G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+            <optical-operational-mode-profile-name>OR-W-200G-oFEC-31.6Gbd</optical-operational-mode-profile-name>
+          </supported-interface-capability>
+        </port-capabilities>
+        <is-physical>true</is-physical>
+        <port-direction>bidirectional</port-direction>
+        <port-wavelength-type>wavelength</port-wavelength-type>
+        <port-qual>xpdr-network</port-qual>
+        <administrative-state>inService</administrative-state>
+        <port-type>CFP2-DCO</port-type>
+        <faceplate-label>faceplate-label</faceplate-label>
+        <operational-state>inService</operational-state>
+        <transponder-port>
+          <port-power-capability-max-rx>13</port-power-capability-max-rx>
+          <port-power-capability-min-tx>-5</port-power-capability-min-tx>
+          <port-power-capability-min-rx>-22</port-power-capability-min-rx>
+          <port-power-capability-max-tx>0</port-power-capability-max-tx>
+        </transponder-port>
+        <lifecycle-state>deployed</lifecycle-state>
+        <mc-capability-profile-name>mc-capability-profile</mc-capability-profile-name>
+      </ports>
+      <type>Plug_Line_400G</type>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <slot>6</slot>
+      <administrative-state>inService</administrative-state>
+      <parent-circuit-pack>
+        <circuit-pack-name>1/1</circuit-pack-name>
+        <cp-slot-name>slot-2</cp-slot-name>
+      </parent-circuit-pack>
+      <faceplate-label>faceplate-label</faceplate-label>
+      <vendor>vendor-A</vendor>
+      <is-passive>false</is-passive>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <operational-state>inService</operational-state>
+      <lifecycle-state>deployed</lifecycle-state>
+      <equipment-state>not-reserved-available</equipment-state>
+      <circuit-pack-type>Plug_Line_400G</circuit-pack-type>
+      <hardware-version>hardware-version</hardware-version>
+      <serial-id>serial-id</serial-id>
+      <circuit-pack-mode>REGEN</circuit-pack-mode>
+    </circuit-packs>
+    <circuit-packs>
       <circuit-pack-name>1/2</circuit-pack-name>
       <product-code>product-code</product-code>
       <circuit-pack-product-code>circuit-pack-product-code</circuit-pack-product-code>
@@ -887,6 +1029,18 @@
       <type>Base_Transponder_400G_circuit-pack</type>
       <is-pluggable-optics>false</is-pluggable-optics>
       <slot>1</slot>
+      <cp-slots>
+        <slot-name>slot-6</slot-name>
+        <slot-status>installed-prov-match</slot-status>
+        <provisioned-circuit-pack>1/1/6-PLUG-NETWORK</provisioned-circuit-pack>
+        <label>6</label>
+      </cp-slots>
+      <cp-slots>
+        <slot-name>slot-5</slot-name>
+        <slot-status>installed-prov-match</slot-status>
+        <provisioned-circuit-pack>1/1/5-PLUG-NETWORK</provisioned-circuit-pack>
+        <label>5</label>
+      </cp-slots>
       <cp-slots>
         <slot-name>slot-4</slot-name>
         <slot-status>installed-prov-match</slot-status>
@@ -984,6 +1138,22 @@
         <circuit-pack-name>1/1/3-PLUG-CLIENT</circuit-pack-name>
       </xpdr-port>
       <xpdr-type>tpdr</xpdr-type>
+      <lifecycle-state>deployed</lifecycle-state>
+    </xponder>
+    <xponder>
+      <xpdr-number>4</xpdr-number>
+      <xpdr-port>
+        <index>2</index>
+        <port-name>L1</port-name>
+        <circuit-pack-name>1/1/5-PLUG-NET</circuit-pack-name>
+      </xpdr-port>
+      <xpdr-port>
+        <index>1</index>
+        <port-name>L1</port-name>
+        <circuit-pack-name>1/1/6-PLUG-NET</circuit-pack-name>
+      </xpdr-port>
+      <xpdr-type>regen</xpdr-type>
+      <recolor>true</recolor>
       <lifecycle-state>deployed</lifecycle-state>
     </xponder>
   </org-openroadm-device>
