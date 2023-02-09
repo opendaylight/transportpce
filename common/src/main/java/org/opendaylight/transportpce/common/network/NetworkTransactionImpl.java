@@ -10,25 +10,29 @@ package org.opendaylight.transportpce.common.network;
 
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
+@Component
+public final class NetworkTransactionImpl implements NetworkTransactionService {
+    private final RequestProcessor requestProcessor;
 
-public class NetworkTransactionImpl implements NetworkTransactionService {
-
-    RequestProcessor requestProcessor;
-
-    public NetworkTransactionImpl(RequestProcessor requestProcessor) {
-        this.requestProcessor = requestProcessor;
-
+    @Activate
+    public NetworkTransactionImpl(@Reference DataBroker dataBroker) {
+        this.requestProcessor = new RequestProcessor(dataBroker);
     }
 
-    public <T extends DataObject> ListenableFuture<java.util.Optional<T>>
-        read(LogicalDatastoreType store, InstanceIdentifier<T> path) {
+    public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
+            InstanceIdentifier<T> path) {
         return requestProcessor.read(store, path);
     }
 
@@ -62,10 +66,10 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
     }
 
     /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.common.network.NetworkTransactionService#getDataBroker()
-    */
+     * (non-Javadoc)
+     *
+     * @see org.opendaylight.transportpce.common.network.NetworkTransactionService#getDataBroker()
+     */
     @Override
     public DataBroker getDataBroker() {
         return requestProcessor.getDataBroker();
