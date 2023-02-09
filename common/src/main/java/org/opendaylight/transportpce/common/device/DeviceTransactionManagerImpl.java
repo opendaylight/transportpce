@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.common.device;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -33,32 +35,43 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
+@Component
+public final class DeviceTransactionManagerImpl implements DeviceTransactionManager {
 
     // TODO cache device data brokers
     // TODO remove disconnected devices from maps
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceTransactionManagerImpl.class);
+    // TODO add an @ObjectClassDefinition to make these configurable at runtime
     private static final int NUMBER_OF_THREADS = 4;
     private static final long GET_DATA_SUBMIT_TIMEOUT = 3000;
     private static final TimeUnit GET_DATA_SUBMIT_TIME_UNIT = TimeUnit.MILLISECONDS;
+    // TODO set reasonable value here for maxDurationToSubmitTransaction
+    private static final long MAX_DURATION_TO_SUBMIT = 15000;
     private static final TimeUnit MAX_DURATION_TO_SUBMIT_TIMEUNIT = TimeUnit.MILLISECONDS;
 
     private final MountPointService mountPointService;
     private final ScheduledExecutorService checkingExecutor;
     private final ListeningExecutorService listeningExecutor;
-    private final ConcurrentMap<String, CountDownLatch> deviceLocks;
-    // TODO set reasonable value in blueprint for maxDurationToSubmitTransaction
+    private final ConcurrentMap<String, CountDownLatch> deviceLocks = new ConcurrentHashMap<>();
     private final long maxDurationToSubmitTransaction;
 
-    public DeviceTransactionManagerImpl(MountPointService mountPointService, long maxDurationToSubmitTransaction) {
-        this.mountPointService = mountPointService;
+    @Activate
+    public DeviceTransactionManagerImpl(@Reference MountPointService mountPointService) {
+        this(mountPointService, MAX_DURATION_TO_SUBMIT);
+    }
+
+    public DeviceTransactionManagerImpl(MountPointService mountPointService,
+            long maxDurationToSubmitTransaction) {
+        this.mountPointService = requireNonNull(mountPointService);
         this.maxDurationToSubmitTransaction = maxDurationToSubmitTransaction;
-        this.deviceLocks = new ConcurrentHashMap<>();
         this.checkingExecutor = Executors.newScheduledThreadPool(NUMBER_OF_THREADS);
         this.listeningExecutor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
     }
@@ -175,6 +188,7 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
         return getDeviceDataBroker(deviceId).isPresent();
     }
 
+    @Deactivate
     public void preDestroy() {
         checkingExecutor.shutdown();
         listeningExecutor.shutdown();
