@@ -21,9 +21,13 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.yang.common.Decimal64;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class CrossConnectImpl implements CrossConnect {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl.class);
@@ -34,6 +38,16 @@ public class CrossConnectImpl implements CrossConnect {
     private CrossConnectImpl221 crossConnectImpl221;
     private CrossConnectImpl710 crossConnectImpl710;
 
+    @Activate
+    public CrossConnectImpl(@Reference DeviceTransactionManager deviceTransactionManager,
+                            @Reference MappingUtils mappingUtils) {
+        this(deviceTransactionManager, mappingUtils,
+            new CrossConnectImpl121(deviceTransactionManager),
+            new CrossConnectImpl221(deviceTransactionManager),
+            new CrossConnectImpl710(deviceTransactionManager));
+    }
+
+    // TODO: DeviceTransactionManager is not used here
     public CrossConnectImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                             CrossConnectImpl121 crossConnectImpl121,
                             CrossConnectImpl221 crossConnectImpl221,
