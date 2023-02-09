@@ -59,30 +59,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="portMapping710" />
     </bean>
 
-    <bean id="crossConnect121" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121" >
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="crossConnect221" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221" >
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="crossConnect710" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710" >
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="crossConnectImpl" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
-        <argument ref="deviceTransactionManager" />
-        <argument ref="mappingUtils" />
-        <argument ref="crossConnect121" />
-        <argument ref="crossConnect221" />
-        <argument ref="crossConnect710" />
-    </bean>
-
     <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
 
     <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
-
-    <service ref="crossConnectImpl" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
 
 </blueprint>
