@@ -21,6 +21,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
@@ -34,10 +35,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.open
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Component
 public class PortMappingImpl implements PortMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl.class);
@@ -46,6 +50,15 @@ public class PortMappingImpl implements PortMapping {
     private final PortMappingVersion710 portMappingVersion710;
     private final PortMappingVersion221 portMappingVersion22;
     private final PortMappingVersion121 portMappingVersion121;
+
+    @Activate
+    public PortMappingImpl(@Reference DataBroker dataBroker,
+            @Reference DeviceTransactionManager deviceTransactionManager) {
+        this(dataBroker,
+            new PortMappingVersion710(dataBroker, deviceTransactionManager),
+            new PortMappingVersion221(dataBroker, deviceTransactionManager),
+            new PortMappingVersion121(dataBroker, deviceTransactionManager));
+    }
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
         PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121) {

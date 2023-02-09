@@ -47,11 +47,10 @@ public class OpenRoadmInterfacesImpl221 {
     private final PortMapping portMapping;
     private final PortMappingVersion221 portMapping221;
 
-    public OpenRoadmInterfacesImpl221(DeviceTransactionManager deviceTransactionManager,
-            PortMapping portMapping, PortMappingVersion221 portMapping221) {
+    public OpenRoadmInterfacesImpl221(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
-        this.portMapping221 = portMapping221;
+        this.portMapping221 = portMapping.getPortMappingVersion221();
     }
 
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
