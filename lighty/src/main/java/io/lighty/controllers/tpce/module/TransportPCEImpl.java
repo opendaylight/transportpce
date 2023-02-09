@@ -354,9 +354,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(
                 deviceTransactionManager);
         OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(
-                deviceTransactionManager, portMapping, portMapping.getPortMappingVersion221());
+                deviceTransactionManager, portMapping);
         OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(
-                deviceTransactionManager, portMapping, portMapping.getPortMappingVersion710());
+                deviceTransactionManager, portMapping);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
                 openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
     }
