@@ -15,11 +15,15 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Component
 public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
@@ -28,6 +32,15 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
     MappingUtils mappingUtils;
+
+    @Activate
+    public OpenRoadmInterfacesImpl(@Reference DeviceTransactionManager deviceTransactionManager,
+                                   @Reference MappingUtils mappingUtils, @Reference PortMapping portMapping) {
+        this(deviceTransactionManager, mappingUtils,
+            new OpenRoadmInterfacesImpl121(deviceTransactionManager),
+            new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping),
+            new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping));
+    }
 
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                                    OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,
