@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb38a111_2ab73034",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-10T15:15:28Z",
+      "side": 1,
+      "message": "idem check line 428",
+      "revId": "c713e59da158420b8e4b05bbd9c99807d0922fb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eb2d5b2_51041110",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-10T15:15:28Z",
+      "side": 1,
+      "message": "idem check line 638",
+      "revId": "c713e59da158420b8e4b05bbd9c99807d0922fb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
