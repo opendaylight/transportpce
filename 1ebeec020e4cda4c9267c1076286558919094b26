@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "535cea03_3e12f2ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-02-10T14:05:06Z",
+      "side": 1,
+      "message": "Hi Bala,\nAs I expected, the issue you raised yesterday comes from the honeynode xslt transform that extract initial config datastore from the operational one. I pushed a MR on honeynode gitlabl to fix it, to make \u0027recolor\u0027 not being in the config datastore. The fix will be available in the next honeynode release for device 7.1. So, we will need another change to upgrade honeynode before merging this current change.",
+      "revId": "1ebeec020e4cda4c9267c1076286558919094b26",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
