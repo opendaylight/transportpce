@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.nbinotifications.producer;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,10 +38,8 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProc
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.input.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.input.SubscriptionFilterBuilder;
-import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
@@ -122,8 +119,7 @@ public class PublisherTest extends AbstractTest {
             .setRequestedObjectIdentifier(new HashSet<>(List.of(new Uuid("76d8f07b-ead5-4132-8eb8-cf3fdef7e079"))))
             .build();
         builder.setSubscriptionFilter(subscriptionFilter);
-        ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-            nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
+        nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
         String json = Files.readString(Paths.get("src/test/resources/tapi_event.json"));
         NotificationTapiService notificationTapiService = converterTapiService
             .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationTapiService.QNAME),
