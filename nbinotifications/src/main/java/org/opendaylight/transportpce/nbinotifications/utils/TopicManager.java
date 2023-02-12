@@ -34,7 +34,6 @@ public final class TopicManager {
     private Map<String, Publisher<NotificationProcessService>> processPublisherMap = new HashMap<>();
     private JsonStringConverter<NotificationProcessService> processConverter;
     private JsonStringConverter<NotificationAlarmService> alarmConverter;
-    private int calledSetConverter = 0;
 
     private TopicManager() {
     }
@@ -57,7 +56,6 @@ public final class TopicManager {
 
     public void setTapiConverter(JsonStringConverter<NotificationTapiService> tapiConverter) {
         this.tapiConverter = tapiConverter;
-        this.calledSetConverter++;
     }
 
     public void setPublisherServer(String publisherServer) {
