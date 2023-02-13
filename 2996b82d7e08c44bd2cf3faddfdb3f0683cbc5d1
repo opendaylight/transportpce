@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3eb14c7_c484814a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-13T08:40:00Z",
+      "side": 1,
+      "message": "./lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java should be adapted accordingly\n\n$ tox -e buildcontroller\n[..]\n$ cd lighty\n$ ./build.sh\n[..]\n[INFO] ------------------------------------------------------------------------\n[INFO] BUILD FAILURE\n[INFO] ------------------------------------------------------------------------\n[INFO] Total time:  8.438 s\n[INFO] Finished at: 2023-02-13T09:37:38+01:00\n[INFO] ------------------------------------------------------------------------\n[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project tpce: Compilation failure: Compilation failure: \n[ERROR] transportpce/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[138,57] incompatible types: org.opendaylight.transportpce.common.network.RequestProcessor cannot be converted to org.opendaylight.mdsal.binding.api.DataBroker\n[ERROR] transportpce/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[357,65] constructor OpenRoadmInterfacesImpl221 in class org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221 cannot be applied to given types;\n[ERROR]   required: org.opendaylight.transportpce.common.device.DeviceTransactionManager,org.opendaylight.transportpce.common.mapping.PortMapping\n[ERROR]   found:    org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.transportpce.common.mapping.PortMappingVersion221\n[ERROR]   reason: actual and formal argument lists differ in length\n[ERROR] transportpce/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[359,65] constructor OpenRoadmInterfacesImpl710 in class org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710 cannot be applied to given types;\n[ERROR]   required: org.opendaylight.transportpce.common.device.DeviceTransactionManager,org.opendaylight.transportpce.common.mapping.PortMapping\n[ERROR]   found:    org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.transportpce.common.mapping.PortMappingVersion710\n[ERROR]   reason: actual and formal argument lists differ in length\n[..]",
+      "revId": "2996b82d7e08c44bd2cf3faddfdb3f0683cbc5d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
