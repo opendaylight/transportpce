@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "293e6df9_44fbd156",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-13T14:53:49Z",
+      "side": 1,
+      "message": "I assume the last element must be a XPDR. Is this correct ?\nThis way, I can remove the last iteration from the loop and disable a check on the n element.",
+      "revId": "84ecc8ff4b6414dd50a683374960335cb74d6cb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93ee6214_288f6602",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-13T14:53:49Z",
+      "side": 1,
+      "message": "same idea here.",
+      "revId": "84ecc8ff4b6414dd50a683374960335cb74d6cb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
