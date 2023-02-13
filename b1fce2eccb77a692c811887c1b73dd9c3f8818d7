@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77d063b_22da688a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-02-13T07:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae60548_c82b3ea7",
+      "range": {
+        "startLine": 66,
+        "startChar": 39,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "b1fce2eccb77a692c811887c1b73dd9c3f8818d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "217a8790_c4ea21eb",
