@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.jgrapht.GraphPath;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
@@ -404,15 +405,17 @@ public class PostAlgoPathValidator {
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("DLS_DEAD_LOCAL_STORE")
     private double checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
-        double spacing = 50.0;
-        double calcPdl2 = 0;
-        double calcOsnrdB = 0;
-        double calcCd = 0;
-        double calcPmd2 = 0;
-        double calcOnsrLin = 0.0001;
-        double margin = 0;
-        double pwrIn = -60.0;
-        double pwrOut = -60.0;
+        Map<String, MutableDouble> signal = new HashMap<>(
+            Map.of(
+                "spacing", new MutableDouble(50.0),
+                "calcPdl2", new MutableDouble(0),
+                "calcOsnrdB", new MutableDouble(0),
+                "calcCd", new MutableDouble(0),
+                "calcPmd2", new MutableDouble(0),
+                "calcOnsrLin", new MutableDouble(0.0001),
+                "margin", new MutableDouble(0),
+                "pwrIn", new MutableDouble(-60.0),
+                "pwrOut", new MutableDouble(-60.0)));
         boolean transponderPresent = false;
         List<String> vertices = path.getVertexList();
         List<PceGraphEdge> edges = path.getEdgeList();
@@ -448,9 +451,13 @@ public class PostAlgoPathValidator {
                         // margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2), Math.sqrt(calcPdl2),
                         //              getOsnrDbfromOnsrLin(calcOnsrLin));
                         // Calculation modified for pdl according to calculation in Julia's Tool
-                        margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2),
-                            Math.sqrt(calcPdl2), getOsnrDbfromOnsrLin(calcOnsrLin));
-                        LOG.info("Loop n = {}, XPDR, calcosnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                        signal.put("margin", new MutableDouble(
+                            cu.getPceRxTspParameters(opMode, signal.get("calcCd").toDouble(),
+                                Math.sqrt(signal.get("calcPmd2").toDouble()),
+                                Math.sqrt(signal.get("calcPdl2").toDouble()),
+                                getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()))));
+                        LOG.info("Loop n = {}, XPDR, calcosnrdB= {}",
+                            n, getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()));
                     } else {
                         // TSP is first element of the path . To correctly evaluate the TX OOB OSNR from
                         // its operational mode, we need to know the type of ADD/DROP Mux it is
@@ -466,12 +473,13 @@ public class PostAlgoPathValidator {
                             adnMode);
                         // Retrieve the Tx ONSR of the Xponder which results from IB and OOB OSNR
                         // contributions
-                        calcOnsrLin = cu.getPceTxTspParameters(opMode, adnMode);
+                        signal.put("calcOnsrLin", new MutableDouble(cu.getPceTxTspParameters(opMode, adnMode)));
                         // Retrieve the spacing associated with Xponder operational mode that is needed
                         // to calculate OSNR
-                        spacing = cu.getPceTxTspChannelSpacing(opMode);
+                        signal.put("spacing", new MutableDouble(cu.getPceTxTspChannelSpacing(opMode)));
                         LOG.info("Transponder {} corresponding to path Element {} in the path has a TX OSNR of {} dB",
-                            currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
+                            currentNode.getNodeId().getValue(), pathElement,
+                            getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()));
                     }
                     break;
                 case SRG:
@@ -492,12 +500,14 @@ public class PostAlgoPathValidator {
                                 currentNode.getNodeId().toString(), pathElement);
                         }
                         cnt = CatalogConstant.CatalogNodeType.ADD;
-                        pwrIn = 0.0;
+                        signal.put("pwrIn", new MutableDouble(0.0));
                         PceLink pceLink = edges.get(pathElement + 1).link();
-                        pwrOut = cu.getPceRoadmAmpOutputPower(
-                                cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
+                        signal.put("pwrOut", new MutableDouble(
+                            cu.getPceRoadmAmpOutputPower(
+                                cnt, srgMode, pceLink.getspanLoss(), signal.get("spacing").toDouble(),
+                                pceLink.getpowerCorrection())));
                         LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
-                            pathElement, pathElement + 1, pwrOut);
+                            pathElement, pathElement + 1, signal.get("pwrOut").toDouble());
                     } else {
                         // Other case is DROP, for which cnt is unchanged (.DROP)
                         if (edges.get(pathElement - 1).link().getlinkType() != OpenroadmLinkType.DROPLINK) {
@@ -507,22 +517,29 @@ public class PostAlgoPathValidator {
                         PceLink pceLink = edges.get(pathElement - 2).link();
                         LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
                             pathElement, pathElement - 2, pceLink.getcd());
-                        impairments = calcDegradationOSNR(
-                            cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("calcCd");
-                        calcPmd2 = impairments.get("calcPmd2");
-                        calcOnsrLin = impairments.get("calcOnsrLin");
-                        pwrIn = impairments.get("pwrIn");
+                        //TODO leverage references to avoid setting all these values in the signal Map
+                        // and passing all these parameters to calcDegradationOSNR
+                        impairments = calcDegradationOSNR(cu, pceLink,
+                            signal.get("pwrOut").toDouble(), signal.get("calcCd").toDouble(),
+                            signal.get("calcPmd2").toDouble(), signal.get("calcPdl2").toDouble(),
+                            signal.get("calcOnsrLin").toDouble(), signal.get("spacing").toDouble());
+                        signal.put("calcCd", new MutableDouble(impairments.get("calcCd")));
+                        signal.put("calcPmd2", new MutableDouble(impairments.get("calcPmd2")));
+                        signal.put("calcOnsrLin", new MutableDouble(impairments.get("calcOnsrLin")));
+                        signal.put("pwrIn", new MutableDouble(impairments.get("pwrIn")));
 
                     }
                     //calculation of the SRG contribution either for Add and Drop
                     impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
-                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        signal.get("pwrIn").toDouble(), signal.get("calcCd").toDouble(),
+                        signal.get("calcPmd2").toDouble(), signal.get("calcPdl2").toDouble(),
+                        signal.get("calcOnsrLin").toDouble(), signal.get("spacing").toDouble());
+                    signal.put("calcCd", new MutableDouble(impairments.get("CD").doubleValue()));
+                    signal.put("calcPmd2", new MutableDouble(impairments.get("DGD2").doubleValue()));
+                    signal.put("calcPdl2", new MutableDouble(impairments.get("PDL2").doubleValue()));
+                    signal.put("calcOnsrLin", new MutableDouble(impairments.get("ONSRLIN").doubleValue()));
+                    if (signal.get("calcOnsrLin").toDouble() == Double.NEGATIVE_INFINITY
+                            || signal.get("calcOnsrLin").toDouble() == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     if (pathElement > 1) {
@@ -532,9 +549,10 @@ public class PostAlgoPathValidator {
                         // resulting OSNR in dB to pass it to the method that verifies end Xponder
                         // performances are compatible with degradations experienced on the path
                         try {
-                            calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
-                            LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
-                            LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
+                            signal.put("calcOsnrdB",
+                                new MutableDouble(getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble())));
+                            LOG.info("checkOSNR loop, last SRG osnr is {} dB",signal.get("calcOnsrLin"));
+                            LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, signal.get("calcOnsrLin"));
                         } catch (ArithmeticException e) {
                             LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                                 path.getEdgeList().size());
@@ -558,24 +576,30 @@ public class PostAlgoPathValidator {
                     Map<String, Double> impairments0 =  degreeCheckOSNR(
                             cu, currentNode, nextNode,
                             edges.get(pathElement - 1).link(), edges.get(pathElement + 1).link(),
-                            pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments0.get("CD").doubleValue();
-                    calcPmd2 = impairments0.get("DGD2").doubleValue();
-                    calcPdl2 = impairments0.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments0.get("ONSRLIN").doubleValue();
+                            signal.get("pwrOut").toDouble(), signal.get("calcCd").toDouble(),
+                            signal.get("calcPmd2").toDouble(), signal.get("calcPdl2").toDouble(),
+                            signal.get("calcOnsrLin").toDouble(), signal.get("spacing").toDouble());
+                    signal.put("calcCd", new MutableDouble(impairments0.get("CD").doubleValue()));
+                    signal.put("calcPmd2", new MutableDouble(impairments0.get("DGD2").doubleValue()));
+                    signal.put("calcPdl2", new MutableDouble(impairments0.get("PDL2").doubleValue()));
+                    signal.put("calcOnsrLin", new MutableDouble(impairments0.get("ONSRLIN").doubleValue()));
                     //TODO rename impariments0 var and/or adapt catalog utils
-                    pwrIn = impairments0.get("pwrIn").doubleValue();
-                    pwrOut = impairments0.get("pwrOut").doubleValue();
-                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
-                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                    signal.put("pwrIn", new MutableDouble(impairments0.get("pwrIn").doubleValue()));
+                    signal.put("pwrOut", new MutableDouble(impairments0.get("pwrOut").doubleValue()));
+                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}",
+                            n, getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()));
+                    if (signal.get("calcOnsrLin").toDouble() == Double.NEGATIVE_INFINITY
+                            || signal.get("calcOnsrLin").toDouble() == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
                     n++;
                     LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
-                        + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
-                        nextNode.getNodeId().toString(), calcCd, calcPmd2, calcPdl2, getOsnrDbfromOnsrLin(calcOnsrLin));
+                        + "{}; Pdl2 : {}; ONSRdB : {}",
+                        currentNode.getNodeId().toString(), nextNode.getNodeId().toString(),
+                        signal.get("calcCd"), signal.get("calcPmd2"), signal.get("calcPdl2"),
+                        getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()));
                     break;
                 default:
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
@@ -584,13 +608,15 @@ public class PostAlgoPathValidator {
         LOG.info("- In checkOSNR: accumulated CD = {} ps, PMD = {} ps, PDL = {} dB, and resulting OSNR calcOsnrdB = {} "
             + "dB and ONSR dB exterapolated from calcosnrlin = {}"
             + " including non linear contributions",
-            calcCd, Math.sqrt(calcPmd2), Math.sqrt(calcPdl2), calcOsnrdB, getOsnrDbfromOnsrLin(calcOnsrLin));
+            signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").toDouble()),
+            Math.sqrt(signal.get("calcPdl2").toDouble()), signal.get("calcOnsrLin"),
+            getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").toDouble()));
         if (!transponderPresent) {
             LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
                 + "that optical tunnel degradations are compatible with external transponder performances");
             return 0.0;
         }
-        double delta = margin - SYS_MARGIN;
+        double delta = signal.get("margin").toDouble() - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode {} results in a residual margin of {} dB, according "
             + "to CD, PMD and DGD induced penalties and set System Margin of {} dB.",
             opMode, delta, SYS_MARGIN);
