@@ -117,7 +117,7 @@ public class PceGraphTest extends AbstractTest {
     private static final String MAPPING_FILE = "src/test/resources/topologyData/portMapping2.json";
     private static OperationalModeCatalog omCatalog;
     private static org.opendaylight.yang.gen.v1.http.org.opendaylight
-            .transportpce.portmapping.rev220316.Network networkNode;
+            .transportpce.portmapping.rev220922.Network networkNode;
     private DataBroker dataBroker;
     private MountPoint mountPoint;
     private MountPointService mountPointService;
@@ -171,18 +171,18 @@ public class PceGraphTest extends AbstractTest {
         try (Reader reader = new FileReader(MAPPING_FILE, StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).get();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.portmapping.rev220316.Network) getDataStoreContextUtil()
+                    .transportpce.portmapping.rev220922.Network) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()
                 .fromNormalizedNode(
                     YangInstanceIdentifier.of(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev220316.Network.QNAME), normalizedNode)
+                        .transportpce.portmapping.rev220922.Network.QNAME), normalizedNode)
                 .getValue();
             @NonNull
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
                     InstanceIdentifier.create(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev220316.Network.class),
+                        .transportpce.portmapping.rev220922.Network.class),
                     networkNode);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {
