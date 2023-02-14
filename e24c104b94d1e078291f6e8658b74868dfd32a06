@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c8ecc6_7e8ab8e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-14T10:38:34Z",
+      "side": 1,
+      "message": "Thanks for your feedback.",
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8e53dee_7e4a1612",
@@ -48,6 +65,30 @@
       "writtenOn": "2023-02-14T10:12:03Z",
       "side": 1,
       "message": "To me, this is a typical example of where a ternary operator shall not be used : \nOutside the fact that it matches your view of how it should be coded, it looks to me unreadable. Having the original code in front of me, I understand it, but at the end, I won\u0027t and I will be the one who will debug, when we make some code evolving. Then the question is does it bring value through any optimization. If so, isn\u0027t that the role of the compilator to make such things? So my feeling is that either you find a way to reintroduce the comment that was removed (//First Xponder of the path TX side), or we should go back to the initial code.",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 120
+      },
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b551ad_f934f0a3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-14T10:38:34Z",
+      "side": 1,
+      "message": "I agree this makes a long block of code and its reading requires a good practice.\nI consider it as an intermediate step since IMO the problem is more in the length of the conditions used.\nYou can look at the next steps (still WIP) and see how they alleviate a lot this statement and make it much more readable.\nLinks below\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/104340/3/pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java#432",
+      "parentUuid": "b8e53dee_7e4a1612",
       "range": {
         "startLine": 432,
         "startChar": 0,
@@ -94,6 +135,30 @@
       "writtenOn": "2023-02-14T10:36:07Z",
       "side": 1,
       "message": "see above to solve orphan comments issue",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 461,
+        "endChar": 49
+      },
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc177158_9df69427",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-14T10:38:34Z",
+      "side": 1,
+      "message": "thanks !",
+      "parentUuid": "0b79fa73_22db296f",
       "range": {
         "startLine": 460,
         "startChar": 0,
