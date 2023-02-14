@@ -147,7 +147,7 @@
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "Swfw02qXGyI=",
-                        "xponder-type": "mpdr",
+                        "xpdr-type": "mpdr",
                         "supporting-circuit-pack-name": "CP1-CFP0"
                     },
                     {
@@ -257,7 +257,7 @@
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOQ=",
-                        "xponder-type": "switch",
+                        "xpdr-type": "switch",
                         "supporting-circuit-pack-name": "CP6-CFP"
                     },
                     {
@@ -269,7 +269,7 @@
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOc=",
-                        "xponder-type": "switch",
+                        "xpdr-type": "switch",
                         "supporting-circuit-pack-name": "CP5-CFP"
                     },
                     {
@@ -281,7 +281,7 @@
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOI=",
-                        "xponder-type": "switch",
+                        "xpdr-type": "switch",
                         "supporting-circuit-pack-name": "CP8-CFP"
                     },
                     {
@@ -293,7 +293,7 @@
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOU=",
-                        "xponder-type": "switch",
+                        "xpdr-type": "switch",
                         "supporting-circuit-pack-name": "CP7-CFP"
                     }
                 ]
