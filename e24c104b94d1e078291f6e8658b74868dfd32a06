@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a528a794_e020ce3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-14T10:36:07Z",
+      "side": 1,
+      "message": "Forgot to address your last comment.. Done!",
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8e53dee_7e4a1612",
@@ -36,6 +53,52 @@
         "startChar": 0,
         "endLine": 444,
         "endChar": 120
+      },
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1fb3cb1_94e0bfc0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-14T10:36:07Z",
+      "side": 1,
+      "message": "Replying to you last comment :\nAs you introduce the setOpMode method to reduce complexity, I would suggest that to solve the issue of orphan comments, you just concatenate the different comments and put them before you call setOpMode, adding a few details about which parameter is passed to the method. Which translates here in the following :\n\n// If the operational mode of the Xponder (Arg1 of setOpMode) is not consistent or\n//  not declared in the topology (Network TP) \n// Operational mode is retrieved from the service Type assuming \n// it is supported by the Xponder (Arg2 of setOpMode)\n\n        opMode \u003d setOpMode(.......",
+      "range": {
+        "startLine": 449,
+        "startChar": 28,
+        "endLine": 451,
+        "endChar": 43
+      },
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b79fa73_22db296f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-14T10:36:07Z",
+      "side": 1,
+      "message": "see above to solve orphan comments issue",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 461,
+        "endChar": 49
       },
       "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
