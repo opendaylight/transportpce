@@ -33,7 +33,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            "port-direction": "bidirectional",
                            "port-qual": "switch-network",
                            "supporting-circuit-pack-name": "1/2/2-PLUG-NET",
-                           "xponder-type": "mpdr",
+                           "xpdr-type": "mpdr",
                            'lcp-hash-val': 'LY9PxYJqUbw=',
                            'port-admin-state': 'InService',
                            'port-oper-state': 'InService'}

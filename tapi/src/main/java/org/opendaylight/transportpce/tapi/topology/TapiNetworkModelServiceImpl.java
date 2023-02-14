@@ -28,8 +28,8 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
@@ -234,11 +234,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
                     // create switching pool
                     OduSwitchingPools oorOduSwitchingPool = createSwitchPoolForXpdr(
-                        mapping.getXponderType().getIntValue(), xpdrClMaps, xpdrNetMaps, xpdrNb);
+                        mapping.getXpdrType().getIntValue(), xpdrClMaps, xpdrNetMaps, xpdrNb);
 
                     // node transformation
                     Map<NodeKey, Node> nodeMap = new HashMap<>(transformXpdrToTapiNode(
-                        nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXponderType(), oorOduSwitchingPool));
+                        nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXpdrType(), oorOduSwitchingPool));
                     // add nodes and sips to tapi context
                     mergeNodeinTopology(nodeMap);
                     mergeSipsinContext(this.sipMap);

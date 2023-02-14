@@ -34,7 +34,7 @@ class TransportPCEtesting(unittest.TestCase):
                            "port-direction": "bidirectional",
                            "port-qual": "xpdr-network",
                            "supporting-circuit-pack-name": "CP1-CFP0",
-                           "xponder-type": "mpdr",
+                           "xpdr-type": "mpdr",
                            'lcp-hash-val': 'Swfw02qXGyI=',
                            'port-admin-state': 'InService',
                            'port-oper-state': 'InService'}
