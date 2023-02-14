@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e763edd_482c4002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-14T10:12:03Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your improvement proposal. I am OK with all your suggestions except one as you will see in my comments. The setOpmode function will really reduce the complexity.\n",
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e53dee_7e4a1612",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-14T10:12:03Z",
+      "side": 1,
+      "message": "To me, this is a typical example of where a ternary operator shall not be used : \nOutside the fact that it matches your view of how it should be coded, it looks to me unreadable. Having the original code in front of me, I understand it, but at the end, I won\u0027t and I will be the one who will debug, when we make some code evolving. Then the question is does it bring value through any optimization. If so, isn\u0027t that the role of the compilator to make such things? So my feeling is that either you find a way to reintroduce the comment that was removed (//First Xponder of the path TX side), or we should go back to the initial code.",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 120
+      },
+      "revId": "e24c104b94d1e078291f6e8658b74868dfd32a06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
