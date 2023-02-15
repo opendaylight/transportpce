@@ -118,6 +118,24 @@
       "message": "Its purpose was to set a default operational Mode when the one proposed was unknown.\n\nNote the simple method proposed here decreases a lot the complexity of the code above.\nBut it also lets a lot of orphan comments.\nPlease can you have a look at them and tells if they still make sense ?\nThanks in advance",
       "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "200b365f_81cedfc4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-15T14:16:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c90167ac_8cedd3df",
+      "revId": "9fb78f047e68fda908b5de5875121f5c9565f2a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
