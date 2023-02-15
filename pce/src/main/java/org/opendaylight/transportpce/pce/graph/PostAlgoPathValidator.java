@@ -421,8 +421,10 @@ public class PostAlgoPathValidator {
         // associated degradations
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
-        for (int n = 0; n < vertices.size() - 1; n++) {
+        int bypassDegree = 0;
+        for (int n = 0; n < 2; n++) {
             int pathElement = n;
+            bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement + 1)));
             LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
@@ -461,83 +463,153 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
+                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
+                    // Xponder to Xponder) node element of the path is the ADD SRG.
+                    if (edges.get(pathElement).link().getlinkType() != OpenroadmLinkType.ADDLINK) {
+                        LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
+                            currentNode.getNodeId().toString(), pathElement);
+                    }
+                    pwrIn = 0.0;
+                    PceLink pceLink = edges.get(pathElement + 1).link();
+// If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
+// Operational mode is set by default to standard opMode for ADD/DROP SRGs
+                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
+                    pwrOut = cu.getPceRoadmAmpOutputPower(
+                            cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
+                    LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
+                        pathElement, pathElement + 1, pwrOut);
+                    //calculation of the SRG contribution either for Add and Drop
+                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("CD").doubleValue();
+                    calcPmd2 = impairments.get("DGD2").doubleValue();
+                    calcPdl2 = impairments.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
+                    }
+                    impairments.clear();
+                    // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
+                    // The Degree is not considered. This means we must bypass the add-link (ADD)
+                    // and the next node (Degree) which are not considered in the impairments.
+                    n++;
+                    bypassDegree = 1;
+                    break;
+                case DEGREE:
+                    if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
+                        //This is the case of DROP, ROADM degree is not considered
+                        break;
+                    }
+                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    Map<String, Double> impairments0 =  degreeCheckOSNR(
+                            cu, currentNode, nextNode,
+                            edges.get(pathElement - 1).link(), edges.get(pathElement + 1).link(),
+                            pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments0.get("CD").doubleValue();
+                    calcPmd2 = impairments0.get("DGD2").doubleValue();
+                    calcPdl2 = impairments0.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments0.get("ONSRLIN").doubleValue();
+                    //TODO rename impariments0 var and/or adapt catalog utils
+                    pwrIn = impairments0.get("pwrIn").doubleValue();
+                    pwrOut = impairments0.get("pwrOut").doubleValue();
+                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
+                    }
+                    // increment pathElement so that in next step we will not point to Degree2 but
+                    // next node
+                    n++;
+                    bypassDegree = 1;
+                    LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
+                        + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
+                        nextNode.getNodeId().toString(), calcCd, calcPmd2, calcPdl2, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
+                default:
+                    LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
+            }
+        }
+        for (int n = 2 + bypassDegree; n < vertices.size() - 1; n++) {
+            int pathElement = n;
+            PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
+            PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement + 1)));
+            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            switch (currentNode.getORNodeType()) {
+                case XPONDER:
+                    transponderPresent = true;
+                    String nwTpId = edges.get(pathElement - 1).link().getDestTP().getValue();
+                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+// If the Xponder operational mode (setOpMode Arg1) is not consistent or not declared in the topology (Network TP)
+// Operational mode is retrieved from the service Type assuming it is supported by the Xponder (setOpMode Arg2)
+                    opMode =
+                        getXpdrOpMode(nwTpId, vertices.get(pathElement), pathElement, currentNode, serviceType, cu);
+                    // TSP is first element of the path . To correctly evaluate the TX OOB OSNR from
+                    // its operational mode, we need to know the type of ADD/DROP Mux it is
+                    // connected to
+                    // If the operational mode of the ADD/DROP MUX is not consistent or
+                    // if the operational mode of the ADD/DROP MUX is not declared in the topology
+                    // (Network TP)
+                        // Operational mode is set by default to standard opMode for ADD SRGs
+                    String adnMode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+                        // Operational mode is found in SRG attributes of the Node
+                    LOG.debug("Transponder {} corresponding to path Element {} in the path is connected to SRG "
+                        + "which has {} operational mode", currentNode.getNodeId().getValue(), pathElement,
+                        adnMode);
+                    // Retrieve the Tx ONSR of the Xponder which results from IB and OOB OSNR
+                    // contributions
+                    calcOnsrLin = cu.getPceTxTspParameters(opMode, adnMode);
+                    // Retrieve the spacing associated with Xponder operational mode that is needed
+                    // to calculate OSNR
+                    spacing = cu.getPceTxTspChannelSpacing(opMode);
+                    LOG.info("Transponder {} corresponding to path Element {} in the path has a TX OSNR of {} dB",
+                        currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
+                case SRG:
+                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    // Other case is DROP, for which cnt is unchanged (.DROP)
+                    if (edges.get(pathElement - 1).link().getlinkType() != OpenroadmLinkType.DROPLINK) {
+                        LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
+                            currentNode.getNodeId().toString(), pathElement - 1);
+                    }
+                    PceLink pceLink = edges.get(pathElement - 2).link();
+                    LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
+                        pathElement, pathElement - 2, pceLink.getcd());
+                    Map<String, Double> impairments = calcDegradationOSNR(
+                        cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("calcCd");
+                    calcPmd2 = impairments.get("calcPmd2");
+                    calcOnsrLin = impairments.get("calcOnsrLin");
+                    pwrIn = impairments.get("pwrIn");
 // If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
 // Operational mode is set by default to standard opMode for ADD/DROP SRGs
                     String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
                     CatalogNodeType cnt = CatalogConstant.CatalogNodeType.DROP;
-                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
-                    if (pathElement <= 1) {
-                        // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
-                        // Xponder to Xponder) node element of the path is the ADD SRG.
-                        if (edges.get(pathElement).link().getlinkType() != OpenroadmLinkType.ADDLINK) {
-                            LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
-                                currentNode.getNodeId().toString(), pathElement);
-                        }
-                        cnt = CatalogConstant.CatalogNodeType.ADD;
-                        pwrIn = 0.0;
-                        PceLink pceLink = edges.get(pathElement + 1).link();
-                        pwrOut = cu.getPceRoadmAmpOutputPower(
-                                cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                        LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
-                            pathElement, pathElement + 1, pwrOut);
-                        //calculation of the SRG contribution either for Add and Drop
-                        Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                            pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("CD").doubleValue();
-                        calcPmd2 = impairments.get("DGD2").doubleValue();
-                        calcPdl2 = impairments.get("PDL2").doubleValue();
-                        calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
-                        if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                            return -1.0;
-                        }
-                        impairments.clear();
-                    } else {
-                        // Other case is DROP, for which cnt is unchanged (.DROP)
-                        if (edges.get(pathElement - 1).link().getlinkType() != OpenroadmLinkType.DROPLINK) {
-                            LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
-                                currentNode.getNodeId().toString(), pathElement - 1);
-                        }
-                        PceLink pceLink = edges.get(pathElement - 2).link();
-                        LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
-                            pathElement, pathElement - 2, pceLink.getcd());
-                        Map<String, Double> impairments = calcDegradationOSNR(
-                            cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("calcCd");
-                        calcPmd2 = impairments.get("calcPmd2");
-                        calcOnsrLin = impairments.get("calcOnsrLin");
-                        pwrIn = impairments.get("pwrIn");
-                        //calculation of the SRG contribution either for Add and Drop
-                        impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                            pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("CD").doubleValue();
-                        calcPmd2 = impairments.get("DGD2").doubleValue();
-                        calcPdl2 = impairments.get("PDL2").doubleValue();
-                        calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
-                        if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                            return -1.0;
-                        }
-                        // If SRG is not the first or the second element of the Path, it is the DROP
-                        // side.
-                        // After accumulated degradations are calculated, we also need to calculate
-                        // resulting OSNR in dB to pass it to the method that verifies end Xponder
-                        // performances are compatible with degradations experienced on the path
-                        try {
-                            calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
-                            LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
-                            LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
-                        } catch (ArithmeticException e) {
-                            LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                                path.getEdgeList().size());
-                            return -1.0;
-                        }
-                        impairments.clear();
+                    //calculation of the SRG contribution either for Add and Drop
+                    impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("CD").doubleValue();
+                    calcPmd2 = impairments.get("DGD2").doubleValue();
+                    calcPdl2 = impairments.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
                     }
-                    if (cnt.equals(CatalogConstant.CatalogNodeType.ADD)) {
-                        // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
-                        // The Degree is not considered. This means we must bypass the add-link (ADD)
-                        // and the next node (Degree) which are not considered in the impairments.
-                        n++;
+                    // If SRG is not the first or the second element of the Path, it is the DROP
+                    // side.
+                    // After accumulated degradations are calculated, we also need to calculate
+                    // resulting OSNR in dB to pass it to the method that verifies end Xponder
+                    // performances are compatible with degradations experienced on the path
+                    try {
+                        calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
+                        LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
+                        LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
+                    } catch (ArithmeticException e) {
+                        LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
+                            path.getEdgeList().size());
+                        return -1.0;
                     }
+                    impairments.clear();
                     break;
                 case DEGREE:
                     if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
@@ -648,8 +720,10 @@ public class PostAlgoPathValidator {
         // associated degradations
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
-        for (int n = 0; n < vertices.size() - 1; n++) {
+        int bypassDegree = 0;
+        for (int n = 0; n < 2; n++) {
             int pathElement = vertices.size() - n - 1;
+            bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement - 1)));
             LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
@@ -686,92 +760,154 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
+                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
+                    // Xponder to Xponder) node element of the path is the ADD SRG.
+                    if (getOppPceLink(pathElement - 1, edges, allPceLinks).getlinkType()
+                            != OpenroadmLinkType.ADDLINK) {
+                        LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
+                            currentNode.getNodeId().toString(), pathElement - 1);
+                    }
+                    pwrIn = 0.0;
+                    PceLink pceLink = getOppPceLink(pathElement - 2, edges, allPceLinks);
+// If the operational mode of the ADD/DROP MUX is not consistent or not declared in the topology (Network TP)
+// Operational mode is set by default to standard opMode for ADD/DROP SRGs
+                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
+                    pwrOut = cu.getPceRoadmAmpOutputPower(
+                        cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
+                    LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
+                        pathElement, pathElement - 2, pwrOut);
+                    //calculation of the SRG contribution either for Add and Drop
+                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("CD").doubleValue();
+                    calcPmd2 = impairments.get("DGD2").doubleValue();
+                    calcPdl2 = impairments.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
+                    }
+                    impairments.clear();
+                    // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
+                    // The Degree is not considered. This means we must bypass the add-link (ADD)
+                    // and the next node (Degree) which are not considered in the impairments.
+                    n++;
+                    bypassDegree = 1;
+                    break;
+                case DEGREE:
+                    if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
+                        //This is the case of DROP, ROADM degree is not considered
+                        break;
+                    }
+                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    Map<String, Double> impairments0 =  degreeCheckOSNR(
+                        cu, currentNode, nextNode,
+                        getOppPceLink(pathElement, edges, allPceLinks),
+                        getOppPceLink(pathElement - 2, edges, allPceLinks),
+                        pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments0.get("CD").doubleValue();
+                    calcPmd2 = impairments0.get("DGD2").doubleValue();
+                    calcPdl2 = impairments0.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments0.get("ONSRLIN").doubleValue();
+                    //TODO rename impariments0 var and/or adapt catalog utils
+                    pwrIn = impairments0.get("pwrIn").doubleValue();
+                    pwrOut = impairments0.get("pwrOut").doubleValue();
+                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
+                    }
+                    // increment pathElement so that in next step we will not point to Degree2 but
+                    // next node
+                    n++;
+                    bypassDegree = 1;
+                    LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
+                        + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
+                        nextNode.getNodeId().toString(), calcCd, calcPmd2, calcPdl2, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
+                default:
+                    LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
+            }
+        }
+        for (int n = 2 + bypassDegree; n < vertices.size() - 1; n++) {
+            int pathElement = vertices.size() - n - 1;
+            PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
+            PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement - 1)));
+            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            switch (currentNode.getORNodeType()) {
+                case XPONDER:
+                    transponderPresent = true;
+                    String nwTpId = getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue();
+                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+                    opMode =
+                        getXpdrOpMode(nwTpId, vertices.get(pathElement), pathElement, currentNode, serviceType, cu);
+                    // TSP is first element of the path . To correctly evaluate the TX OOB OSNR from
+                    // its operational mode, we need to know the type of ADD/DROP Mux it is
+                    // connected to
                     // If the operational mode of the ADD/DROP MUX is not consistent or
                     // if the operational mode of the ADD/DROP MUX is not declared in the topology
                     // (Network TP)
-                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
-                        // Operational mode is set by default to standard opMode for ADD/DROP SRGs
+                        // Operational mode is set by default to standard opMode for ADD SRGs
+                    String adnMode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWWRCORE);
                         // Operational mode is found in SRG attributes of the Node
-                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.DROP;
+                    LOG.debug("Transponder {} corresponding to path Element {} in the path is connected to SRG "
+                        + "which has {} operational mode", currentNode.getNodeId().getValue(), pathElement,
+                        adnMode);
+                    // Retrieve the Tx ONSR of the Xponder which results from IB and OOB OSNR
+                    // contributions
+                    calcOnsrLin = cu.getPceTxTspParameters(opMode, adnMode);
+                    // Retrieve the spacing associated with Xponder operational mode that is needed
+                    // to calculate OSNR
+                    spacing = cu.getPceTxTspChannelSpacing(opMode);
+                    LOG.info("Transponder {} corresponding to path Element {} in the path has a TX OSNR of {} dB",
+                        currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    break;
+                case SRG:
                     LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
-                    if (pathElement >= vertices.size() - 2) {
-                        // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
-                        // Xponder to Xponder) node element of the path is the ADD SRG.
-                        if (getOppPceLink(pathElement - 1, edges, allPceLinks).getlinkType()
-                                != OpenroadmLinkType.ADDLINK) {
-                            LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
-                                currentNode.getNodeId().toString(), pathElement - 1);
-                        }
-                        cnt = CatalogConstant.CatalogNodeType.ADD;
-                        pwrIn = 0.0;
-                        PceLink pceLink = getOppPceLink(pathElement - 2, edges, allPceLinks);
-                        pwrOut = cu.getPceRoadmAmpOutputPower(
-                            cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                        LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
-                            pathElement, pathElement - 2, pwrOut);
-
-                        //calculation of the SRG contribution either for Add and Drop
-                        Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                            pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("CD").doubleValue();
-                        calcPmd2 = impairments.get("DGD2").doubleValue();
-                        calcPdl2 = impairments.get("PDL2").doubleValue();
-                        calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
-                        if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                            return -1.0;
-                        }
-                        impairments.clear();
-
-                    } else {
-                        // Other case is DROP, for which cnt is unchanged (.DROP)
-                        if (getOppPceLink(pathElement, edges, allPceLinks).getlinkType()
-                                != OpenroadmLinkType.DROPLINK) {
-                            LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
-                                currentNode.getNodeId().toString(), pathElement);
-                        }
-                        PceLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
-                        LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
-                            pathElement, pathElement + 1, pceLink.getcd());
-                        Map<String, Double> impairments = calcDegradationOSNR(
-                            cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("calcCd");
-                        calcPmd2 = impairments.get("calcPmd2");
-                        calcOnsrLin = impairments.get("calcOnsrLin");
-                        pwrIn = impairments.get("pwrIn");
-
-                        //calculation of the SRG contribution either for Add and Drop
-                        impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                            pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                        calcCd = impairments.get("CD").doubleValue();
-                        calcPmd2 = impairments.get("DGD2").doubleValue();
-                        calcPdl2 = impairments.get("PDL2").doubleValue();
-                        calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
-                        if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
-                            return -1.0;
-                        }
-
-                        // If SRG is not the first or the second element of the Path, it is the DROP
-                        // side.
-                        // After accumulated degradations are calculated, we also need to calculate
-                        // resulting OSNR in dB to pass it to the method that verifies end Xponder
-                        // performances are compatible with degradations experienced on the path
-                        try {
-                            calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
-                            LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
-                            LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
-                        } catch (ArithmeticException e) {
-                            LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                                path.getEdgeList().size());
-                            return -1.0;
-                        }
-                        impairments.clear();
+                    if (getOppPceLink(pathElement, edges, allPceLinks).getlinkType()
+                            != OpenroadmLinkType.DROPLINK) {
+                        LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
+                            currentNode.getNodeId().toString(), pathElement);
                     }
-                    if (cnt.equals(CatalogConstant.CatalogNodeType.ADD)) {
-                        // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
-                        // The Degree is not considered. This means we must bypass the add-link (ADD)
-                        // and the next node (Degree) which are not considered in the impairments.
-                        n++;
+                    PceLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
+                    LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
+                        pathElement, pathElement + 1, pceLink.getcd());
+                    Map<String, Double> impairments = calcDegradationOSNR(
+                        cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("calcCd");
+                    calcPmd2 = impairments.get("calcPmd2");
+                    calcOnsrLin = impairments.get("calcOnsrLin");
+                    pwrIn = impairments.get("pwrIn");
+// If the operational mode of the ADD/DROP MUX is not consistent or not declared in the topology (Network TP)
+// Operational mode is set by default to standard opMode for ADD/DROP SRGs
+                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.DROP;
+                    //calculation of the SRG contribution either for Add and Drop
+                    impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
+                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("CD").doubleValue();
+                    calcPmd2 = impairments.get("DGD2").doubleValue();
+                    calcPdl2 = impairments.get("PDL2").doubleValue();
+                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+                    if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
+                        return -1.0;
                     }
+
+                    // If SRG is not the first or the second element of the Path, it is the DROP
+                    // side.
+                    // After accumulated degradations are calculated, we also need to calculate
+                    // resulting OSNR in dB to pass it to the method that verifies end Xponder
+                    // performances are compatible with degradations experienced on the path
+                    try {
+                        calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
+                        LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
+                        LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
+                    } catch (ArithmeticException e) {
+                        LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
+                            path.getEdgeList().size());
+                        return -1.0;
+                    }
+                    impairments.clear();
                     break;
                 case DEGREE:
                     if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
