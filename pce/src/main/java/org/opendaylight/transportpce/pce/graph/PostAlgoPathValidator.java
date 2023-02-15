@@ -422,12 +422,11 @@ public class PostAlgoPathValidator {
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
         int bypassDegree = 0;
-        for (int n = 0; n < 2; n++) {
-            int pathElement = n;
+        for (int pathElement = 0; pathElement < 2; pathElement++) {
             bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement + 1)));
-            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            LOG.debug("loop of check OSNR direction AZ, Path Element = {}", pathElement);
             switch (currentNode.getORNodeType()) {
                 case XPONDER:
                     transponderPresent = true;
@@ -436,7 +435,7 @@ public class PostAlgoPathValidator {
                                 ? edges.get(pathElement).link().getSourceTP().getValue()
                         // last Xponder of the path (RX side)
                                 : edges.get(pathElement - 1).link().getDestTP().getValue();
-                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", pathElement);
 // If the Xponder operational mode (setOpMode Arg1) is not consistent or not declared in the topology (Network TP)
 // Operational mode is retrieved from the service Type assuming it is supported by the Xponder (setOpMode Arg2)
                     opMode =
@@ -463,7 +462,7 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
-                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction AZ: SRG, Path Element = {}", pathElement);
                     // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
                     // Xponder to Xponder) node element of the path is the ADD SRG.
                     if (edges.get(pathElement).link().getlinkType() != OpenroadmLinkType.ADDLINK) {
@@ -478,7 +477,7 @@ public class PostAlgoPathValidator {
                     CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
                     pwrOut = cu.getPceRoadmAmpOutputPower(
                             cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                    LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
+                    LOG.debug("loop of check OSNR direction AZ: SRG, pathElement = {} link {} Pout = {}",
                         pathElement, pathElement + 1, pwrOut);
                     //calculation of the SRG contribution either for Add and Drop
                     Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
@@ -494,7 +493,7 @@ public class PostAlgoPathValidator {
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
                     // and the next node (Degree) which are not considered in the impairments.
-                    n++;
+                    pathElement++;
                     bypassDegree = 1;
                     break;
                 case DEGREE:
@@ -502,7 +501,7 @@ public class PostAlgoPathValidator {
                         //This is the case of DROP, ROADM degree is not considered
                         break;
                     }
-                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", pathElement);
                     Map<String, Double> impairments0 =  degreeCheckOSNR(
                             cu, currentNode, nextNode,
                             edges.get(pathElement - 1).link(), edges.get(pathElement + 1).link(),
@@ -514,13 +513,14 @@ public class PostAlgoPathValidator {
                     //TODO rename impariments0 var and/or adapt catalog utils
                     pwrIn = impairments0.get("pwrIn").doubleValue();
                     pwrOut = impairments0.get("pwrOut").doubleValue();
-                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    LOG.debug(
+                        "Loop pathElement= {}, DEGREE, calcOsnrdB= {}", pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
-                    n++;
+                    pathElement++;
                     bypassDegree = 1;
                     LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
                         + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
@@ -530,16 +530,15 @@ public class PostAlgoPathValidator {
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
-        for (int n = 2 + bypassDegree; n < vertices.size() - 1; n++) {
-            int pathElement = n;
+        for (int pathElement = 2 + bypassDegree; pathElement < vertices.size() - 1; pathElement++) {
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement + 1)));
-            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            LOG.debug("loop of check OSNR direction AZ: Path Element = {}", pathElement);
             switch (currentNode.getORNodeType()) {
                 case XPONDER:
                     transponderPresent = true;
                     String nwTpId = edges.get(pathElement - 1).link().getDestTP().getValue();
-                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", pathElement);
 // If the Xponder operational mode (setOpMode Arg1) is not consistent or not declared in the topology (Network TP)
 // Operational mode is retrieved from the service Type assuming it is supported by the Xponder (setOpMode Arg2)
                     opMode =
@@ -566,14 +565,14 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
-                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction AZ: SRG, Path Element = {}", pathElement);
                     // Other case is DROP, for which cnt is unchanged (.DROP)
                     if (edges.get(pathElement - 1).link().getlinkType() != OpenroadmLinkType.DROPLINK) {
                         LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                             currentNode.getNodeId().toString(), pathElement - 1);
                     }
                     PceLink pceLink = edges.get(pathElement - 2).link();
-                    LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
+                    LOG.info("loop of check OSNR : SRG, pathElement = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement - 2, pceLink.getcd());
                     Map<String, Double> impairments = calcDegradationOSNR(
                         cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
@@ -603,7 +602,7 @@ public class PostAlgoPathValidator {
                     try {
                         calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
                         LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
-                        LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
+                        LOG.info("Loop pathElement = {}, DROP, calcOsnrdB= {}", pathElement, calcOsnrdB);
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                             path.getEdgeList().size());
@@ -616,7 +615,7 @@ public class PostAlgoPathValidator {
                         //This is the case of DROP, ROADM degree is not considered
                         break;
                     }
-                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    LOG.info("loop of check OSNR direction AZ: DEGREE, Path Element = {}", pathElement);
                     Map<String, Double> impairments0 =  degreeCheckOSNR(
                             cu, currentNode, nextNode,
                             edges.get(pathElement - 1).link(), edges.get(pathElement + 1).link(),
@@ -628,13 +627,14 @@ public class PostAlgoPathValidator {
                     //TODO rename impariments0 var and/or adapt catalog utils
                     pwrIn = impairments0.get("pwrIn").doubleValue();
                     pwrOut = impairments0.get("pwrOut").doubleValue();
-                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    LOG.debug(
+                        "Loop pathElement= {}, DEGREE, calcOsnrdB= {}", pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
-                    n++;
+                    pathElement++;
                     LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
                         + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
                         nextNode.getNodeId().toString(), calcCd, calcPmd2, calcPdl2, getOsnrDbfromOnsrLin(calcOnsrLin));
@@ -644,18 +644,17 @@ public class PostAlgoPathValidator {
             }
         }
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(vertices.size() - 1)));
-        LOG.debug("loop of check OSNR, n = {} Path Element = {}", vertices.size() - 1, vertices.size() - 1);
+        LOG.debug("loop of check OSNR, Path Element = {}", vertices.size() - 1);
         switch (currentNode.getORNodeType()) {
             case XPONDER:
                 transponderPresent = true;
                 String nwTpId = edges.get(vertices.size() - 2).link().getDestTP().getValue();
-                LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}",
-                        vertices.size() - 1, vertices.size() - 1);
+                LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", vertices.size() - 1);
                 opMode = getXpdrOpMode(nwTpId,
                         vertices.get(vertices.size() - 1), vertices.size() - 1, currentNode, serviceType, cu);
                 // TSP is the last of the path
-                LOG.debug(
-                    "Loop n = {}, Step5.1, XPDR, tries calculating Margin, just before call", vertices.size() - 1);
+                LOG.debug("Loop Path Element = {}, Step5.1, XPDR, tries calculating Margin, just before call",
+                    vertices.size() - 1);
                 // Check that accumulated degradations are compatible with TSP performances
                 // According to OpenROADM spec :
                 // margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2), Math.sqrt(calcPdl2),
@@ -663,7 +662,8 @@ public class PostAlgoPathValidator {
                 // Calculation modified for pdl according to calculation in Julia's Tool
                 margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2),
                     Math.sqrt(calcPdl2), getOsnrDbfromOnsrLin(calcOnsrLin));
-                LOG.info("Loop n = {}, XPDR, calcosnrdB= {}", vertices.size() - 1, getOsnrDbfromOnsrLin(calcOnsrLin));
+                LOG.info("Loop Path Element = {}, XPDR, calcosnrdB= {}",
+                        vertices.size() - 1, getOsnrDbfromOnsrLin(calcOnsrLin));
                 break;
             case SRG:
             case DEGREE:
@@ -721,12 +721,11 @@ public class PostAlgoPathValidator {
         // using CatalogUtils primitives to retrieve physical parameters and make a
         // first level calculation
         int bypassDegree = 0;
-        for (int n = 0; n < 2; n++) {
-            int pathElement = vertices.size() - n - 1;
+        for (int pathElement = vertices.size() - 1; pathElement > vertices.size() - 3; pathElement--) {
             bypassDegree = 0;
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement - 1)));
-            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            LOG.debug("loop of check OSNR direction ZA:  Path Element = {}", pathElement);
             switch (currentNode.getORNodeType()) {
                 case XPONDER:
                     transponderPresent = true;
@@ -735,7 +734,7 @@ public class PostAlgoPathValidator {
                             ? getOppPceLink(pathElement - 1, edges, allPceLinks).getSourceTP().getValue()
                         // last Xponder of the path (RX side)
                             : getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue();
-                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction ZA: XPDR, Path Element = {}", pathElement);
                     opMode =
                         getXpdrOpMode(nwTpId, vertices.get(pathElement), pathElement, currentNode, serviceType, cu);
                     // TSP is first element of the path . To correctly evaluate the TX OOB OSNR from
@@ -760,7 +759,7 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
-                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = {}", pathElement);
                     // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
                     // Xponder to Xponder) node element of the path is the ADD SRG.
                     if (getOppPceLink(pathElement - 1, edges, allPceLinks).getlinkType()
@@ -776,7 +775,7 @@ public class PostAlgoPathValidator {
                     CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
                     pwrOut = cu.getPceRoadmAmpOutputPower(
                         cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                    LOG.debug("loop of check OSNR : SRG, n = {} link {} Pout = {}",
+                    LOG.debug("loop of check OSNR direction ZA: SRG, pathElement = {} link {} Pout = {}",
                         pathElement, pathElement - 2, pwrOut);
                     //calculation of the SRG contribution either for Add and Drop
                     Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
@@ -792,7 +791,7 @@ public class PostAlgoPathValidator {
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
                     // and the next node (Degree) which are not considered in the impairments.
-                    n++;
+                    pathElement--;
                     bypassDegree = 1;
                     break;
                 case DEGREE:
@@ -800,7 +799,7 @@ public class PostAlgoPathValidator {
                         //This is the case of DROP, ROADM degree is not considered
                         break;
                     }
-                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    LOG.info("loop of check OSNR direction ZA: DEGREE, Path Element = {}", pathElement);
                     Map<String, Double> impairments0 =  degreeCheckOSNR(
                         cu, currentNode, nextNode,
                         getOppPceLink(pathElement, edges, allPceLinks),
@@ -813,13 +812,14 @@ public class PostAlgoPathValidator {
                     //TODO rename impariments0 var and/or adapt catalog utils
                     pwrIn = impairments0.get("pwrIn").doubleValue();
                     pwrOut = impairments0.get("pwrOut").doubleValue();
-                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    LOG.debug("Loop Path Element = {}, DEGREE, calcOsnrdB= {}",
+                            pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
-                    n++;
+                    pathElement--;
                     bypassDegree = 1;
                     LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
                         + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
@@ -829,16 +829,15 @@ public class PostAlgoPathValidator {
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
-        for (int n = 2 + bypassDegree; n < vertices.size() - 1; n++) {
-            int pathElement = vertices.size() - n - 1;
+        for (int pathElement = vertices.size() - 3 - bypassDegree; pathElement > 0; pathElement--) {
             PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(pathElement)));
             PceNode nextNode = allPceNodes.get(new NodeId(vertices.get(pathElement - 1)));
-            LOG.debug("loop of check OSNR, n = {} Path Element = {}", n, pathElement);
+            LOG.debug("loop of check OSNR direction ZA: Path Element = {}", pathElement);
             switch (currentNode.getORNodeType()) {
                 case XPONDER:
                     transponderPresent = true;
                     String nwTpId = getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue();
-                    LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction ZA: XPDR, Path Element = {}", pathElement);
                     opMode =
                         getXpdrOpMode(nwTpId, vertices.get(pathElement), pathElement, currentNode, serviceType, cu);
                     // TSP is first element of the path . To correctly evaluate the TX OOB OSNR from
@@ -863,14 +862,14 @@ public class PostAlgoPathValidator {
                         currentNode.getNodeId().getValue(), pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     break;
                 case SRG:
-                    LOG.debug("loop of check OSNR : SRG, n = {} Path Element = {}", n, pathElement);
+                    LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = {}", pathElement);
                     if (getOppPceLink(pathElement, edges, allPceLinks).getlinkType()
                             != OpenroadmLinkType.DROPLINK) {
                         LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                             currentNode.getNodeId().toString(), pathElement);
                     }
                     PceLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
-                    LOG.info("loop of check OSNR : SRG, n = {} CD on preceeding link {} = {} ps",
+                    LOG.info("loop of check OSNR direction ZA: SRG, path Element = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement + 1, pceLink.getcd());
                     Map<String, Double> impairments = calcDegradationOSNR(
                         cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
@@ -901,7 +900,7 @@ public class PostAlgoPathValidator {
                     try {
                         calcOsnrdB = getOsnrDbfromOnsrLin(calcOnsrLin);
                         LOG.info("checkOSNR loop, last SRG osnr is {} dB", calcOsnrdB);
-                        LOG.info("Loop n = {}, DROP, calcOsnrdB= {}", n, calcOsnrdB);
+                        LOG.info("Loop Path Element = {}, DROP, calcOsnrdB= {}", pathElement, calcOsnrdB);
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
                             path.getEdgeList().size());
@@ -914,7 +913,7 @@ public class PostAlgoPathValidator {
                         //This is the case of DROP, ROADM degree is not considered
                         break;
                     }
-                    LOG.info("loop of check OSNR : DEGREE, n = {} Path Element = {}", n, pathElement);
+                    LOG.info("loop of check OSNR direction ZA: DEGREE, Path Element = {}", pathElement);
                     Map<String, Double> impairments0 =  degreeCheckOSNR(
                         cu, currentNode, nextNode,
                         getOppPceLink(pathElement, edges, allPceLinks),
@@ -927,13 +926,14 @@ public class PostAlgoPathValidator {
                     //TODO rename impariments0 var and/or adapt catalog utils
                     pwrIn = impairments0.get("pwrIn").doubleValue();
                     pwrOut = impairments0.get("pwrOut").doubleValue();
-                    LOG.debug("Loop n = {}, DEGREE, calcOsnrdB= {}", n, getOsnrDbfromOnsrLin(calcOnsrLin));
+                    LOG.debug("Loop Path Element = {}, DEGREE, calcOsnrdB= {}",
+                            pathElement, getOsnrDbfromOnsrLin(calcOnsrLin));
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
                     // increment pathElement so that in next step we will not point to Degree2 but
                     // next node
-                    n++;
+                    pathElement--;
                     LOG.info("Accumulated degradations in the path including ROADM {} + {} are CD: {}; PMD2: "
                         + "{}; Pdl2 : {}; ONSRdB : {}", currentNode.getNodeId().toString(),
                         nextNode.getNodeId().toString(), calcCd, calcPmd2, calcPdl2, getOsnrDbfromOnsrLin(calcOnsrLin));
@@ -943,16 +943,16 @@ public class PostAlgoPathValidator {
             }
         }
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(0)));
-        LOG.debug("loop of check OSNR, n = {} Path Element = {}", vertices.size() - 1, 0);
+        LOG.debug("loop of check OSNR direction ZA: Path Element = {}", 0);
         switch (currentNode.getORNodeType()) {
             case XPONDER:
                 transponderPresent = true;
-                LOG.debug("loop of check OSNR : XPDR, n = {} Path Element = {}", vertices.size() - 1, 0);
+                LOG.debug("loop of check OSNR direction ZA: XPDR, Path Element = {}", 0);
                 String nwTpId = getOppPceLink(0, edges, allPceLinks).getDestTP().getValue();
                 opMode = getXpdrOpMode(nwTpId, vertices.get(0), 0, currentNode, serviceType, cu);
                 // If TSP is the last of the path
                 LOG.debug(
-                    "Loop n = {}, Step5.1, XPDR, tries calculating Margin, just before call", vertices.size() - 1);
+                    "Loop Path Element = {}, Step5.1, XPDR, tries calculating Margin, just before call", 0);
                 // Check that accumulated degradations are compatible with TSP performances
                 // According to OpenROADM spec :
                 // margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2), Math.sqrt(calcPdl2),
@@ -960,7 +960,7 @@ public class PostAlgoPathValidator {
                 // Calculation modified for pdl according to calculation in Julia's Tool
                 margin = cu.getPceRxTspParameters(opMode, calcCd, Math.sqrt(calcPmd2),
                     Math.sqrt(calcPdl2), getOsnrDbfromOnsrLin(calcOnsrLin));
-                LOG.info("Loop n = {}, XPDR, calcosnrdB= {}", vertices.size() - 1, getOsnrDbfromOnsrLin(calcOnsrLin));
+                LOG.info("Loop Path Element = {}, XPDR, calcosnrdB= {}", 0, getOsnrDbfromOnsrLin(calcOnsrLin));
                 break;
             case SRG:
             case DEGREE:
