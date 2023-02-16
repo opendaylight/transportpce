@@ -106,7 +106,7 @@ Some are even performed in the CI.
 Pre-commit profiles
 -------------------
 
-`Pre-commit <https://pre-commit.com/>`_ is another wrapper for linters that relies on `Git Hooks <https://githooks.com/>`_.
+`Pre-commit <https://pre-commit.com/>`_ is another wrapper for linters that relies on `Git Hooks <https://git-scm.com/docs/githooks>`_.
 It is particularly useful to address common programming issues such as
 triming trailing whitespaces or removing tabs.
 
