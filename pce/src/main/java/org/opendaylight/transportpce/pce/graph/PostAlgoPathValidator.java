@@ -448,26 +448,19 @@ public class PostAlgoPathValidator {
                             currentNode.getNodeId(), pathElement);
                     }
                     pwrIn = 0.0;
-                    PceLink pceLink = edges.get(pathElement + 1).link();
-// If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
-// Operational mode is set by default to standard opMode for ADD/DROP SRGs
-                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
-                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
-                    pwrOut = cu.getPceRoadmAmpOutputPower(
-                            cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
+                    Map<String, Double> impairments = addSrgCheckOSNR(
+                        cu, currentNode, edges.get(pathElement + 1).link(),
+                        calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("calcCd");
+                    calcPmd2 = impairments.get("calcPmd2");
+                    calcPdl2 = impairments.get("calcPdl2");
+                    calcOnsrLin = impairments.get("calcOnsrLin");
+                    pwrOut = impairments.get("pwrOut");
                     LOG.debug("loop of check OSNR direction AZ: SRG, pathElement = {} link {} Pout = {}",
                         pathElement, pathElement + 1, pwrOut);
-                    //calculation of the SRG contribution either for Add and Drop
-                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(
-                        cnt, srgMode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
-                    impairments.clear();
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
                     // and the next node (Degree) which are not considered in the impairments.
@@ -532,23 +525,13 @@ public class PostAlgoPathValidator {
                     PceLink pceLink = edges.get(pathElement - 2).link();
                     LOG.info("loop of check OSNR : SRG, pathElement = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement - 2, pceLink.getcd());
-                    Map<String, Double> impairments = calcDegradationOSNR(
-                        cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    Map<String, Double> impairments = srgCheckOSNR(
+                        cu, currentNode, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
                     calcCd = impairments.get("calcCd");
                     calcPmd2 = impairments.get("calcPmd2");
+                    calcPdl2 = impairments.get("calcPdl2");
                     calcOnsrLin = impairments.get("calcOnsrLin");
                     pwrIn = impairments.get("pwrIn");
-// If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
-// Operational mode is set by default to standard opMode for ADD/DROP SRGs
-                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
-                    //calculation of the SRG contribution either for Add and Drop
-                    impairments = cu.getPceRoadmAmpParameters(
-                        CatalogConstant.CatalogNodeType.DROP,
-                        srgMode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
@@ -566,7 +549,6 @@ public class PostAlgoPathValidator {
                             path.getEdgeList().size());
                         return -1.0;
                     }
-                    impairments.clear();
                     break;
                 case DEGREE:
                     if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
@@ -688,32 +670,23 @@ public class PostAlgoPathValidator {
                     LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = {}", pathElement);
                     // This is ADD case : First (optical-tunnel) or 2nd (Regular E2E service from
                     // Xponder to Xponder) node element of the path is the ADD SRG.
-                    if (getOppPceLink(pathElement - 1, edges, allPceLinks).getlinkType()
-                            != OpenroadmLinkType.ADDLINK) {
+                    if (getOppPceLink(pathElement - 1, edges, allPceLinks).getlinkType() != OpenroadmLinkType.ADDLINK) {
                         LOG.error("Error processing Node {} for which output link {} is not an ADDLINK Type",
                             currentNode.getNodeId(), pathElement - 1);
                     }
                     pwrIn = 0.0;
-                    PceLink pceLink = getOppPceLink(pathElement - 2, edges, allPceLinks);
-// If the operational mode of the ADD/DROP MUX is not consistent or not declared in the topology (Network TP)
-// Operational mode is set by default to standard opMode for ADD/DROP SRGs
-                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
-                    CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
-                    pwrOut = cu.getPceRoadmAmpOutputPower(
-                        cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
-                    LOG.debug("loop of check OSNR direction ZA: SRG, pathElement = {} link {} Pout = {}",
-                        pathElement, pathElement - 2, pwrOut);
-                    //calculation of the SRG contribution either for Add and Drop
-                    Map<String, Double> impairments = cu.getPceRoadmAmpParameters(cnt, srgMode,
-                        pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
+
+                    Map<String, Double> impairments = addSrgCheckOSNR(
+                        cu, currentNode, getOppPceLink(pathElement - 2, edges, allPceLinks),
+                        calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    calcCd = impairments.get("calcCd");
+                    calcPmd2 = impairments.get("calcPmd2");
+                    calcPdl2 = impairments.get("calcPdl2");
+                    calcOnsrLin = impairments.get("calcOnsrLin");
+                    pwrOut = impairments.get("pwrOut");
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
-                    impairments.clear();
                     // For the ADD, degradation brought by the node are calculated from the MW-WR spec.
                     // The Degree is not considered. This means we must bypass the add-link (ADD)
                     // and the next node (Degree) which are not considered in the impairments.
@@ -764,38 +737,27 @@ public class PostAlgoPathValidator {
                     LOG.debug("loop of check OSNR direction ZA: XPDR, Path Element = {}", pathElement);
                     transponderPresent = true;
                     Map<String, Double> results = xpdrCheckOSNR(
-                        cu, getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue(),
+                        cu, getOppPceLink(pathElement, edges, allPceLinks).getDestTP().getValue(),
                         serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement);
                     calcOnsrLin = results.get("calcOnsrLin");
                     spacing = results.get("spacing");
                     break;
                 case SRG:
                     LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = {}", pathElement);
-                    if (getOppPceLink(pathElement, edges, allPceLinks).getlinkType()
-                            != OpenroadmLinkType.DROPLINK) {
+                    if (getOppPceLink(pathElement, edges, allPceLinks).getlinkType() != OpenroadmLinkType.DROPLINK) {
                         LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                             currentNode.getNodeId(), pathElement);
                     }
                     PceLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
                     LOG.info("loop of check OSNR direction ZA: SRG, path Element = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement + 1, pceLink.getcd());
-                    Map<String, Double> impairments = calcDegradationOSNR(
-                        cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+                    Map<String, Double> impairments = srgCheckOSNR(
+                        cu, currentNode, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
                     calcCd = impairments.get("calcCd");
                     calcPmd2 = impairments.get("calcPmd2");
+                    calcPdl2 = impairments.get("calcPdl2");
                     calcOnsrLin = impairments.get("calcOnsrLin");
                     pwrIn = impairments.get("pwrIn");
-// If the operational mode of the ADD/DROP MUX is not consistent or not declared in the topology (Network TP)
-// Operational mode is set by default to standard opMode for ADD/DROP SRGs
-                    String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
-                    //calculation of the SRG contribution either for Add and Drop
-                    impairments = cu.getPceRoadmAmpParameters(
-                        CatalogConstant.CatalogNodeType.DROP,
-                        srgMode, pwrIn, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
-                    calcCd = impairments.get("CD").doubleValue();
-                    calcPmd2 = impairments.get("DGD2").doubleValue();
-                    calcPdl2 = impairments.get("PDL2").doubleValue();
-                    calcOnsrLin = impairments.get("ONSRLIN").doubleValue();
                     if (calcOnsrLin == Double.NEGATIVE_INFINITY || calcOnsrLin == Double.POSITIVE_INFINITY) {
                         return -1.0;
                     }
@@ -813,7 +775,6 @@ public class PostAlgoPathValidator {
                             path.getEdgeList().size());
                         return -1.0;
                     }
-                    impairments.clear();
                     break;
                 case DEGREE:
                     if (nextNode.getORNodeType() != OpenroadmNodeType.DEGREE) {
@@ -962,6 +923,53 @@ public class PostAlgoPathValidator {
         return Map.of(
             "spacing", cu.getPceTxTspChannelSpacing(opMode),
             "calcOnsrLin", calcOnsrLin);
+    }
+
+    private Map<String, Double> srgCheckOSNR(
+            CatalogUtils cu, PceNode currentNode, PceLink pceLink,
+            double pwrOut, double calcCd, double calcPmd2, double calcPdl2, double calcOnsrLin, double spacing) {
+        //calculation of the SRG contribution for Drop
+        Map<String, Double> impairments =
+            calcDegradationOSNR(cu, pceLink, pwrOut, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+        double pwrIn = impairments.get("pwrIn");
+        impairments = cu.getPceRoadmAmpParameters(
+            CatalogConstant.CatalogNodeType.DROP,
+            setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE),
+        // If the operational mode of the ADD/DROP MUX is not consistent or not declared in the topology (Network TP)
+        // Operational mode is set by default to standard opMode for ADD/DROP SRGs
+            pwrIn,
+            impairments.get("calcCd").doubleValue(),
+            impairments.get("calcPmd2").doubleValue(),
+            calcPdl2,
+            impairments.get("calcOnsrLin").doubleValue(),
+            spacing);
+        return Map.of(
+            "calcCd", impairments.get("CD"),
+            "calcPmd2", impairments.get("DGD2"),
+            "calcPdl2", impairments.get("PDL2"),
+            "calcOnsrLin", impairments.get("ONSRLIN"),
+            "pwrIn", pwrIn);
+    }
+
+    private Map<String, Double> addSrgCheckOSNR(
+            CatalogUtils cu, PceNode currentNode, PceLink pceLink,
+            double calcCd, double calcPmd2, double calcPdl2, double calcOnsrLin, double spacing) {
+        //calculation of the SRG contribution for Add
+        String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+        // If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
+        // Operational mode is set by default to standard opMode for ADD/DROP SRGs
+        CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;
+        double pwrOut = cu.getPceRoadmAmpOutputPower(
+                cnt, srgMode, pceLink.getspanLoss(), spacing, pceLink.getpowerCorrection());
+        //calculation of the SRG contribution either for Add and Drop
+        Map<String, Double> impairments = cu.getPceRoadmAmpParameters(
+            cnt, srgMode, 0, calcCd, calcPmd2, calcPdl2, calcOnsrLin, spacing);
+        return Map.of(
+            "calcCd", impairments.get("CD"),
+            "calcPmd2", impairments.get("DGD2"),
+            "calcPdl2", impairments.get("PDL2"),
+            "calcOnsrLin", impairments.get("ONSRLIN"),
+            "pwrOut", pwrOut);
     }
 
     private Map<String, Double> degreeCheckOSNR(
