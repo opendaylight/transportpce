@@ -314,10 +314,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
                                 .setOperationalState(transformOperState(mapping.getPortOperState())).build();
                         this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
+                        this.networkTransactionService.commit().get();
                     }
                 }
             }
-            this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Could not update TAPI links");
         }
