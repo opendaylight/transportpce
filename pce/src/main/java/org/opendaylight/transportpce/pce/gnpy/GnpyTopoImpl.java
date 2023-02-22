@@ -132,10 +132,8 @@ public class GnpyTopoImpl {
                     "In GnpyTopoImpl : openroadm topology network or openroadm network are not well mounted ...");
             }
         } catch (InterruptedException | ExecutionException e) {
-            this.networkTransactionService.close();
             throw new GnpyException("In gnpyTopoImpl: error in reading the topology", e);
         }
-        this.networkTransactionService.close();
     }
 
     private void extractElements(java.util.Optional<Network> openRoadmTopo,

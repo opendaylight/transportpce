@@ -275,11 +275,9 @@ public class PceCalculation {
             if (nwOptional.isPresent()) {
                 nw = nwOptional.get();
                 LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
-                networkTransactionService.close();
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
-            networkTransactionService.close();
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
         }
         return nw;
