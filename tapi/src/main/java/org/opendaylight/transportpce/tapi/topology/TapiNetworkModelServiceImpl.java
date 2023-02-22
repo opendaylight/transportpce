@@ -300,21 +300,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.error("Could not update TAPI links");
                 return;
             }
-            Map<LinkKey, Link> links = optTopology.get().getLink();
-            if (links != null) {
-                for (Link link : links.values()) {
-                    List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
-                            .map(NodeEdgePointRef::getNodeEdgePointUuid).collect(Collectors.toList());
-                    if (!Collections.disjoint(changedOneps, linkNeps)) {
-                        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
-                                .augmentation(Context1.class).child(TopologyContext.class)
-                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
-                                .child(Link.class, new LinkKey(link.getUuid())).build();
-                        Link linkblr = new LinkBuilder().setUuid(link.getUuid())
-                                .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
-                                .setOperationalState(transformOperState(mapping.getPortOperState())).build();
-                        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
-                    }
+            for (Link link : optTopology.get().nonnullLink().values()) {
+                List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
+                        .map(NodeEdgePointRef::getNodeEdgePointUuid).collect(Collectors.toList());
+                if (!Collections.disjoint(changedOneps, linkNeps)) {
+                    InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
+                            .augmentation(Context1.class).child(TopologyContext.class)
+                            .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                            .child(Link.class, new LinkKey(link.getUuid())).build();
+                    Link linkblr = new LinkBuilder().setUuid(link.getUuid())
+                            .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
+                            .setOperationalState(transformOperState(mapping.getPortOperState())).build();
+                    this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
                 }
             }
             this.networkTransactionService.commit().get();

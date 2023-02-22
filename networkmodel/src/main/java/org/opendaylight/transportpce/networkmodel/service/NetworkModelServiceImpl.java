@@ -787,7 +787,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private void deleteLinks(List<Link> links) {
         for (Link otnTopologyLink : links) {
             LOG.info("deleting link {} from {}", otnTopologyLink.getLinkId().getValue(),
-                NetworkUtils.OVERLAY_NETWORK_ID);
+                NetworkUtils.OTN_NETWORK_ID);
             InstanceIdentifier<Link> iiOtnTopologyLink = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
                 .augmentation(Network1.class)
