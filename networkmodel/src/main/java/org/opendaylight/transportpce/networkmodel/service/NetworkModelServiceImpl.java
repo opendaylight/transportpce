@@ -532,7 +532,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink, otnTopologyLink);
+                try {
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
+                        otnTopologyLink);
+                    networkTransactionService.commit().get();
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("Error deleting OTN links in otn-topology", e);
+                }
             }
         }
         if (otnTopologyShard.getTps() != null) {
@@ -546,13 +552,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(otnTopologyTp.getTpId()))
                     .build();
-                networkTransactionService.put(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyTp, otnTopologyTp);
+                try {
+                    networkTransactionService.put(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyTp, otnTopologyTp);
+                    networkTransactionService.commit().get();
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("Error deleting OTN links in otn-topology", e);
+                }
             }
-        }
-        try {
-            networkTransactionService.commit().get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error deleting OTN links in otn-topology", e);
         }
         LOG.info("OTN links deletion terminated");
     }
@@ -793,12 +799,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .augmentation(Network1.class)
                 .child(Link.class, otnTopologyLink.key())
                 .build();
-            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink);
-        }
-        try {
-            networkTransactionService.commit().get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error deleting OTN links from otn-topology", e);
+            try {
+                networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink);
+                networkTransactionService.commit().get();
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Error deleting OTN links from otn-topology", e);
+            }
         }
     }
 
