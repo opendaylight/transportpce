@@ -316,8 +316,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
                     }
                 }
+                this.networkTransactionService.commit().get();
             }
-            this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Could not update TAPI links");
         }
