@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t it be in test utils  ?",
       "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62846c38_ae5fd32c",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-02-23T11:34:45Z",
+      "side": 1,
+      "message": "No, this test is specific to what has been done just before.\nBut on the other hand, the last test could find its place in the testutils lib, because it is likely to be reused in other functional suites.",
+      "parentUuid": "b4df182c_e8490f07",
+      "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
