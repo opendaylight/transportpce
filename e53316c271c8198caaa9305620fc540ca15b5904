@@ -34,6 +34,24 @@
       "parentUuid": "b4df182c_e8490f07",
       "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735c159b_fe0091c7",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-23T12:48:08Z",
+      "side": 1,
+      "message": "I noticed it.\nThough, if I am not mistaken this is a way to communicate with honeynode specific REST API.\nIMO such specific code should be removed from tests content and put in libraries so that their design stay independant from the sims implementation.\n\nI think at least, the re shoud be a way to configure HTTP ports such as 8141 as netconf ports declared in simulators.py.",
+      "parentUuid": "62846c38_ae5fd32c",
+      "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
