@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03cac400_5bcc3dc7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/network/RequestProcessor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-23T08:58:47Z",
+      "side": 1,
+      "message": "Thread.currentThread().getName() is used a lot.\nIf its content remains intact during the treatment, a dedicated variable would be more appropriate IMO\n\nidem etc below",
+      "revId": "65b484281bcd7dc4fab53dd94e23f59c21b05a9e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f9a70aa_bc82c3b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-23T08:58:47Z",
+      "side": 1,
+      "message": "A guard clause would be more appropriate here IMO.\n            if (links \u003d\u003d null) {\n                return;\n            }",
+      "revId": "65b484281bcd7dc4fab53dd94e23f59c21b05a9e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
