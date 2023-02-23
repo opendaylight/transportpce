@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4df182c_e8490f07",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-23T10:41:00Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be in test utils  ?",
+      "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
