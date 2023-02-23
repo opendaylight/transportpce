@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -132,9 +131,8 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
             throws InterruptedException, ExecutionException {
         InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(networkId))).build();
-        WriteTransaction dataWriteTransaction = getDataBroker().newWriteOnlyTransaction();
-        dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
-        dataWriteTransaction.commit().get();
+        networkTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
+        networkTransaction.commit().get();
     }
 
     @Test
