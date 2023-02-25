@@ -7,13 +7,14 @@
  */
 package org.opendaylight.transportpce.nbinotifications.impl;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -39,8 +40,8 @@ public class NbiNotificationsImplTest extends AbstractTest {
     public static NetworkTransactionService networkTransactionService;
     private TopicManager topicManager;
 
-    @Before
-    public void setUp() throws ExecutionException, InterruptedException {
+    @BeforeEach
+    void setUp() throws ExecutionException, InterruptedException {
         topicManager = TopicManager.getInstance();
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         JsonStringConverter<NotificationProcessService> converter = new JsonStringConverter<>(
@@ -57,47 +58,47 @@ public class NbiNotificationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
+    void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
                 nbiNotificationsImpl.getNotificationsProcessService(
                         new GetNotificationsProcessServiceInputBuilder().build());
-        assertNull("Should be null", result.get().getResult().getNotificationsProcessService());
+        assertNull(result.get().getResult().getNotificationsProcessService(), "Should be null");
     }
 
     @Test
-    public void getNotificationsServiceTest() throws InterruptedException, ExecutionException {
+    void getNotificationsServiceTest() throws InterruptedException, ExecutionException {
         GetNotificationsProcessServiceInputBuilder builder = new GetNotificationsProcessServiceInputBuilder()
                 .setGroupId("groupId")
                 .setIdConsumer("consumerId")
                 .setConnectionType(ConnectionType.Service);
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
                 nbiNotificationsImpl.getNotificationsProcessService(builder.build());
-        assertNull("Should be null", result.get().getResult().getNotificationsProcessService());
+        assertNull(result.get().getResult().getNotificationsProcessService(), "Should be null");
     }
 
     @Test
-    public void getNotificationsAlarmServiceTest() throws InterruptedException, ExecutionException {
+    void getNotificationsAlarmServiceTest() throws InterruptedException, ExecutionException {
         GetNotificationsAlarmServiceInputBuilder builder = new GetNotificationsAlarmServiceInputBuilder()
                 .setGroupId("groupId")
                 .setIdConsumer("consumerId")
                 .setConnectionType(ConnectionType.Service);
         ListenableFuture<RpcResult<GetNotificationsAlarmServiceOutput>> result =
                 nbiNotificationsImpl.getNotificationsAlarmService(builder.build());
-        assertNull("Should be null", result.get().getResult().getNotificationsAlarmService());
+        assertNull(result.get().getResult().getNotificationsAlarmService(), "Should be null");
     }
 
     @Test
-    public void createTapiNotificationSubscriptionServiceTest() throws InterruptedException, ExecutionException {
+    void createTapiNotificationSubscriptionServiceTest() throws InterruptedException, ExecutionException {
         CreateNotificationSubscriptionServiceInputBuilder builder
             = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
             nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
-        assertNotNull("Should receive UUID for subscription service",
-            result.get().getResult().getSubscriptionService().getUuid().toString());
+        assertNotNull(result.get().getResult().getSubscriptionService().getUuid().toString(),
+            "Should receive UUID for subscription service");
     }
 
     @Test
-    public void getTapiNotificationsServiceTest() throws InterruptedException, ExecutionException {
+    void getTapiNotificationsServiceTest() throws InterruptedException, ExecutionException {
         CreateNotificationSubscriptionServiceInputBuilder builder
             = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
@@ -107,6 +108,6 @@ public class NbiNotificationsImplTest extends AbstractTest {
             .setSubscriptionIdOrName(result.get().getResult().getSubscriptionService().getUuid().getValue());
         ListenableFuture<RpcResult<GetNotificationListOutput>> result1 =
             nbiNotificationsImpl.getNotificationList(builder1.build());
-        assertNull("Should be null", result1.get().getResult().getNotification());
+        assertNull(result1.get().getResult().getNotification(), "Should be null");
     }
 }

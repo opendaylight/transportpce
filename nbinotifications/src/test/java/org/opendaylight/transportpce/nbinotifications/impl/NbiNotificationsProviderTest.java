@@ -12,8 +12,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.NotificationService;
@@ -32,14 +32,13 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
     @Mock
     private NotificationService notificationService;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         MockitoAnnotations.openMocks(this);
-
     }
 
     @Test
-    public void initTest() {
+    void initTest() {
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         NbiNotificationsProvider provider = new NbiNotificationsProvider(
                 Arrays.asList("topic1", "topic2"), Arrays.asList("topic1", "topic2"), "localhost:8080",
