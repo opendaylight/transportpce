@@ -33,8 +33,6 @@ public interface NetworkTransactionService {
 
     FluentFuture<? extends @NonNull CommitInfo> commit();
 
-    void close();
-
     /**
      * the Databroker related to NetworkTransactionService.
      * @return the Databroker related to NetworkTransactionService.

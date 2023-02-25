@@ -132,13 +132,6 @@ public class RequestProcessor {
         }
     }
 
-    public void close() {
-        LOG.info("closing RequestProcessor Locks by {}", Thread.currentThread().getName());
-        writeTrMap.remove(Thread.currentThread().getName());
-        readL.unlock();
-        writeL.unlock();
-    }
-
     /**
      * Return the dataBroker related to RequestProcessor.
      * @return the dataBroker

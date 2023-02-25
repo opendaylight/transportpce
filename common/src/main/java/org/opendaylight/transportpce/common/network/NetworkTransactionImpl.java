@@ -53,12 +53,6 @@ public final class NetworkTransactionImpl implements NetworkTransactionService {
         return requestProcessor.commit();
     }
 
-    @Override
-    public void close() {
-
-        requestProcessor.close();
-    }
-
     public <T extends DataObject> void merge(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data) {
         requestProcessor.merge(store, path, data);
