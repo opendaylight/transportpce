@@ -8,15 +8,20 @@
 
 package org.opendaylight.transportpce.common.crossconnect;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -32,6 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
@@ -47,9 +53,10 @@ public class CrossConnectImpl221Test {
     private MountPoint mountPointMock = mock(MountPoint.class);
     private DataBroker dataBrokerMock = mock(DataBroker.class);
     private ReadWriteTransaction rwTransactionMock = mock(ReadWriteTransaction.class);
+    private DeviceTransaction deviceTransaction = mock(DeviceTransaction.class);
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         deviceTransactionManager = mock(DeviceTransactionManager.class);
         crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
 
@@ -59,25 +66,25 @@ public class CrossConnectImpl221Test {
             .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
             .build();
 
-        Mockito.when(deviceTransactionManager.getDataFromDevice("deviceId",
+        when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.CONFIGURATION, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
             .thenReturn(Optional.of(mock(RoadmConnections.class)));
     }
 
     @Test
-    public void getCrossConnectTest() {
+    void getCrossConnectTest() {
         Optional<RoadmConnections> res =
                 crossConnectImpl221.getCrossConnect("deviceId", "1");
-        Assert.assertTrue("Optional object should have a value", res.isPresent());
+        assertTrue(res.isPresent(), "Optional object should have a value");
     }
 
     @Test
-    public void postCrossConnectTest() {
-        Mockito.when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
-        Mockito.when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
-        Mockito.when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
+    void postCrossConnectTest() {
+        when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
+        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
+        when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
         crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         SpectrumInformation spectrumInformation = new SpectrumInformation();
@@ -85,34 +92,35 @@ public class CrossConnectImpl221Test {
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         Optional<String> res = crossConnectImpl221.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
-        Assert.assertEquals(res.get(), "srcTp-destTp-761:768");
+        assertEquals(res.get(), "srcTp-destTp-761:768");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void setPowerLevelTest() {
+    @Test
+    void setPowerLevelTest() {
         InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
             .build();
-        Mockito.when(deviceTransactionManager.getDataFromDevice("deviceId",
-                LogicalDatastoreType.OPERATIONAL, deviceIID,
+        when(deviceTransactionManager.getDataFromDevice("deviceId",
+                LogicalDatastoreType.CONFIGURATION, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
-            .thenReturn(Optional.of(mock(RoadmConnections.class)));
+            .thenReturn(Optional.of(new RoadmConnectionsBuilder().setConnectionName("1").build()));
 
-        Mockito.when(deviceTransactionManager.getDeviceTransaction("deviceId"))
-            .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
+        when(deviceTransactionManager.getDeviceTransaction("deviceId"))
+            .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         crossConnectImpl221.setPowerLevel("deviceId", OpticalControlMode.GainLoss, Decimal64.valueOf("100"), "1");
-
-        Assert.assertTrue("set Level should be true", true);
+        assertTrue(true, "set Level should be true");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void postOtnCrossConnect() {
+    @Test
+    void postOtnCrossConnect() {
         Nodes nodes = Mockito.mock(Nodes.class);
-        Mockito.when(nodes.getNodeId()).thenReturn("nodeId");
-        Mockito.when(deviceTransactionManager.getDeviceTransaction(any()))
-            .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
+        when(nodes.getNodeId()).thenReturn("nodeId");
+        when(deviceTransactionManager.getDeviceTransaction(any()))
+            .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         Optional<String> res = crossConnectImpl221.postOtnCrossConnect(List.of("src1", "src2"), nodes);
-        Assert.assertTrue("Optional value should have a value", res.isPresent());
+        assertTrue(res.isPresent(), "Optional value should have a value");
     }
 }

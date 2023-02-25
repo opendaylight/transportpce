@@ -8,7 +8,12 @@
 
 package org.opendaylight.transportpce.common.device;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,15 +22,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -39,8 +42,7 @@ import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DeviceTransactionManagerTest {
 
     @Mock
@@ -62,28 +64,28 @@ public class DeviceTransactionManagerTest {
     private long defaultTimeout = 1000;
     private TimeUnit defaultTimeUnit = TimeUnit.MILLISECONDS;
 
-    @Before
-    public void before() {
-        Mockito.when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
-        Mockito.when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
-        Mockito.when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
+    @BeforeEach
+    void before() {
+        when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
+        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
+        lenient().when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         NetworkId networkId =  new NetworkId("NETWORK1");
         defaultData = new NetworkBuilder().setNetworkId(networkId).build();
         this.transactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
     }
 
-    @After
-    public void after() {
+    @AfterEach
+    void after() {
         transactionManager.preDestroy();
     }
 
     @Test
-    public void basicPositiveTransactionTest() {
+    void basicPositiveTransactionTest() {
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
             return;
         }
 
@@ -92,8 +94,7 @@ public class DeviceTransactionManagerTest {
     }
 
     @Test
-    @Ignore
-    public void advancedPositiveTransactionTest() {
+    void advancedPositiveTransactionTest() {
         try {
             Future<java.util.Optional<DeviceTransaction>> firstDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
@@ -101,36 +102,37 @@ public class DeviceTransactionManagerTest {
 
             Future<java.util.Optional<DeviceTransaction>> secondDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
-            Assert.assertFalse(secondDeviceTxFuture.isDone());
+            assertFalse(secondDeviceTxFuture.isDone());
 
             Future<java.util.Optional<DeviceTransaction>> thirdDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
-            Assert.assertFalse(thirdDeviceTxFuture.isDone());
+            assertFalse(thirdDeviceTxFuture.isDone());
 
             firstDeviceTx.put(defaultDatastore, defaultIid, defaultData);
-            Assert.assertFalse(secondDeviceTxFuture.isDone());
-            Assert.assertFalse(thirdDeviceTxFuture.isDone());
+            assertFalse(secondDeviceTxFuture.isDone());
+            assertFalse(thirdDeviceTxFuture.isDone());
             Thread.sleep(200);
-            Assert.assertFalse(secondDeviceTxFuture.isDone());
-            Assert.assertFalse(thirdDeviceTxFuture.isDone());
+            assertFalse(secondDeviceTxFuture.isDone());
+            assertFalse(thirdDeviceTxFuture.isDone());
 
             Future<java.util.Optional<DeviceTransaction>> anotherDeviceTxFuture =
                     transactionManager.getDeviceTransaction("another-id");
-            Assert.assertTrue(anotherDeviceTxFuture.isDone());
+            Thread.sleep(50);
+            assertTrue(anotherDeviceTxFuture.isDone());
             anotherDeviceTxFuture.get().get().commit(defaultTimeout, defaultTimeUnit);
 
             firstDeviceTx.commit(defaultTimeout, defaultTimeUnit);
             Thread.sleep(200);
-            Assert.assertTrue(secondDeviceTxFuture.isDone());
-            Assert.assertFalse(thirdDeviceTxFuture.isDone());
+            assertTrue(secondDeviceTxFuture.isDone());
+            assertFalse(thirdDeviceTxFuture.isDone());
 
             DeviceTransaction secondDeviceTx = secondDeviceTxFuture.get().get();
             secondDeviceTx.put(defaultDatastore, defaultIid, defaultData);
-            Assert.assertFalse(thirdDeviceTxFuture.isDone());
+            assertFalse(thirdDeviceTxFuture.isDone());
 
             secondDeviceTx.commit(defaultTimeout, defaultTimeUnit);
             Thread.sleep(200);
-            Assert.assertTrue(thirdDeviceTxFuture.isDone());
+            assertTrue(thirdDeviceTxFuture.isDone());
 
             DeviceTransaction thirdDeviceTx = thirdDeviceTxFuture.get().get();
             thirdDeviceTx.put(defaultDatastore, defaultIid, defaultData);
@@ -139,12 +141,12 @@ public class DeviceTransactionManagerTest {
             Mockito.verify(rwTransactionMock, Mockito.times(3)).put(defaultDatastore, defaultIid, defaultData);
             Mockito.verify(rwTransactionMock, Mockito.times(4)).commit();
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
     }
 
     @Test
-    public void bigAmountOfTransactionsOnSameDeviceTest() {
+    void bigAmountOfTransactionsOnSameDeviceTest() {
         int numberOfTxs = 100;
         List<Future<java.util.Optional<DeviceTransaction>>> deviceTransactionFutures = new LinkedList<>();
         List<DeviceTransaction> deviceTransactions = new LinkedList<>();
@@ -160,16 +162,16 @@ public class DeviceTransactionManagerTest {
                 deviceTransactions.add(deviceTx);
             }
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
 
         for (DeviceTransaction deviceTx : deviceTransactions) {
-            Assert.assertTrue(deviceTx.wasSubmittedOrCancelled().get());
+            assertTrue(deviceTx.wasSubmittedOrCancelled().get());
         }
     }
 
     @Test
-    public void bigAmountOfTransactionsOnDifferentDevicesTest() {
+    void bigAmountOfTransactionsOnDifferentDevicesTest() {
         int numberOfTxs = 1000;
         List<DeviceTransaction> deviceTransactions = new LinkedList<>();
 
@@ -178,18 +180,18 @@ public class DeviceTransactionManagerTest {
                 deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get().get());
             }
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
 
         deviceTransactions.parallelStream()
                 .forEach(deviceTransaction -> deviceTransaction.commit(defaultTimeout, defaultTimeUnit));
 
         deviceTransactions.parallelStream()
-                .forEach(deviceTransaction -> Assert.assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
+                .forEach(deviceTransaction -> assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
     }
 
     @Test
-    public void bigAmountOfTransactionsOnDifferentDevicesWithoutSubmitTest() {
+    void bigAmountOfTransactionsOnDifferentDevicesWithoutSubmitTest() {
         int numberOfTxs = 1000;
         List<DeviceTransaction> deviceTransactions = new LinkedList<>();
 
@@ -198,34 +200,34 @@ public class DeviceTransactionManagerTest {
                 deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get().get());
             }
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
 
         try {
             Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
         } catch (InterruptedException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
         deviceTransactions.parallelStream()
-                .forEach(deviceTransaction -> Assert.assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
+                .forEach(deviceTransaction -> assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
     }
 
     @Test
-    public void notSubmittedTransactionTest() {
+    void notSubmittedTransactionTest() {
         Future<java.util.Optional<DeviceTransaction>> deviceTxFuture =
                 transactionManager.getDeviceTransaction(defaultDeviceId);
         try {
             deviceTxFuture.get();
             Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
         Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
             return;
         }
 
@@ -235,7 +237,7 @@ public class DeviceTransactionManagerTest {
     }
 
     @Test
-    public void dataBrokerTimeoutTransactionTest() {
+    void dataBrokerTimeoutTransactionTest() {
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
             Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
             return rwTransactionMock;
@@ -244,7 +246,7 @@ public class DeviceTransactionManagerTest {
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         }
 
         Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
@@ -254,7 +256,7 @@ public class DeviceTransactionManagerTest {
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
             return;
         }
 
@@ -263,7 +265,7 @@ public class DeviceTransactionManagerTest {
     }
 
     @Test
-    public void getFutureTimeoutTransactionTest() {
+    void getFutureTimeoutTransactionTest() {
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
             Thread.sleep(3000);
             return rwTransactionMock;
@@ -276,13 +278,13 @@ public class DeviceTransactionManagerTest {
         try {
             deviceTxFuture.get(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
         } catch (TimeoutException e) {
             throwedException = e;
         }
 
         if (throwedException == null) {
-            Assert.fail("TimeoutException should be thrown!");
+            fail("TimeoutException should be thrown!");
             return;
         }
 
@@ -291,7 +293,7 @@ public class DeviceTransactionManagerTest {
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
         } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
+            fail("Exception catched! " + e);
             return;
         }
 
