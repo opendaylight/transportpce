@@ -41,7 +41,7 @@ class TransportPCEtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(10)
+        time.sleep(2)
 
     # Connect the ROADMA
     def test_01_connect_rdm(self):
