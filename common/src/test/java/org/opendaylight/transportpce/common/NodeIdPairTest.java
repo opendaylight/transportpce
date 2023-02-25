@@ -8,50 +8,37 @@
 
 package org.opendaylight.transportpce.common;
 
-import java.util.Arrays;
-import java.util.Collection;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class NodeIdPairTest {
 
-    private NodeIdPair firstPair;
-    private Object secondPair;
-    private boolean equality;
-
-    public NodeIdPairTest(NodeIdPair firstPair, Object secondPair, boolean equality) {
-        this.firstPair = firstPair;
-        this.secondPair = secondPair;
-        this.equality = equality;
-    }
-
-    @Parameterized.Parameters
-    public static Collection<?> nodes() {
+    private static Stream<Arguments> provideNodeSamples() {
         NodeIdPair same = new NodeIdPair("nodeS", "CLIENT");
-        return Arrays.asList(new Object[][] {
-                { new NodeIdPair("",""), null, false },
-                { new NodeIdPair("",""), "", false },
-                { new NodeIdPair("node1","PP"), new NodeIdPair("node2","PP"), false },
-                { new NodeIdPair("node1","PP"), new NodeIdPair("node1","TTP"), false },
-                { new NodeIdPair(null,"PP"), new NodeIdPair(null,"TTP"), false },
-                { new NodeIdPair(null,"PP"), new NodeIdPair("node2","TTP"), false },
-                { new NodeIdPair("node1",null), new NodeIdPair("node1","NETWORK"), false },
-                { new NodeIdPair("node1",null), new NodeIdPair("node1",null), true },
-                { new NodeIdPair("node1","TTP"), new NodeIdPair("node1","TTP"), true },
-                { new NodeIdPair(null,null), new NodeIdPair(null,null), true },
-                {same, same, true}
-        });
+        return Stream.of(
+            Arguments.of(new NodeIdPair("",""), null, false),
+            Arguments.of(new NodeIdPair("",""), "", false),
+            Arguments.of(new NodeIdPair("node1","PP"), new NodeIdPair("node2","PP"), false),
+            Arguments.of(new NodeIdPair("node1","PP"), new NodeIdPair("node1","TTP"), false),
+            Arguments.of(new NodeIdPair(null,"PP"), new NodeIdPair(null,"TTP"), false),
+            Arguments.of(new NodeIdPair(null,"PP"), new NodeIdPair("node2","TTP"), false),
+            Arguments.of(new NodeIdPair("node1",null), new NodeIdPair("node1","NETWORK"), false),
+            Arguments.of(new NodeIdPair("node1",null), new NodeIdPair("node1",null), true),
+            Arguments.of(new NodeIdPair("node1","TTP"), new NodeIdPair("node1","TTP"), true),
+            Arguments.of(new NodeIdPair(null,null), new NodeIdPair(null,null), true),
+            Arguments.of(same, same, true));
     }
 
-    @Test
-    public void equalityTest() {
-        Assert.assertEquals(this.equality, firstPair.equals(this.secondPair));
-        if ((this.secondPair != null) && this.firstPair.getClass().equals(this.secondPair.getClass())) {
-            Assert.assertEquals(this.equality, this.firstPair.hashCode() == this.secondPair.hashCode());
+    @ParameterizedTest
+    @MethodSource("provideNodeSamples")
+    void equalityTest(NodeIdPair firstPair, Object secondPair, boolean equality) {
+        assertEquals(equality, firstPair.equals(secondPair));
+        if ((secondPair != null) && firstPair.getClass().equals(secondPair.getClass())) {
+            assertEquals(equality, firstPair.hashCode() == secondPair.hashCode());
         }
     }
-
 }

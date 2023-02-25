@@ -8,10 +8,10 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -99,8 +99,8 @@ public class PortMappingVersion121Test {
     private static PortMappingVersion121 portMappingVersion121;
     private Random ran = new Random();
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         // test createMappingData for a xpdr node with 3 network + 1 client + bidirectional & unidirectional ports
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
@@ -109,7 +109,7 @@ public class PortMappingVersion121Test {
     }
 
     @Test
-    public void createMappingDataTestRdm() {
+    void createMappingDataTestRdm() {
         // mock node info
         final Info info = getInfo2();
 
@@ -449,8 +449,8 @@ public class PortMappingVersion121Test {
                         .thenReturn(Optional.of(ordmSrgObject6));
 
         // test createMappingData with a node with 3 dgree + 3 srg + bidirectional & unidirectional ports
-        assertTrue("creating mappingdata for existed node returns true",
-                portMappingVersion121.createMappingData("node"));
+        assertTrue(portMappingVersion121.createMappingData("node"),
+            "creating mappingdata for existed node returns true");
 
         // assert all portmappings have been created for the roadm node
         ReadTransaction rr = dataBroker.newReadOnlyTransaction();
@@ -465,7 +465,6 @@ public class PortMappingVersion121Test {
         } catch (ExecutionException | InterruptedException e) {
             LOG.error("Failed to read mapping.", e);
             fail();
-
         }
         List<String> testMappings = Arrays.asList("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
                 "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX");
@@ -477,23 +476,23 @@ public class PortMappingVersion121Test {
         }
         Collections.sort(testMappings);
         Collections.sort(mappings);
-        assertEquals("test mapping are equals to mapping", testMappings, mappings);
+        assertEquals(testMappings, mappings, "test mapping are equals to mapping");
 
         // test updateMapping
-        assertTrue("update mapping for node returns true",
-                portMappingVersion121.updateMapping("node", mappingValues.get(0)));
+        assertTrue(portMappingVersion121.updateMapping("node", mappingValues.get(0)),
+            "update mapping for node returns true");
 
         // test createMapping for non-existent roadm node
-        assertFalse("create non existed roadm node returns false", portMappingVersion121.createMappingData("node2"));
+        assertFalse(portMappingVersion121.createMappingData("node2"), "create non existed roadm node returns false");
 
         // test updateMapping for null roadm node
-        assertFalse("updating null roadm node returns false",
-                portMappingVersion121.updateMapping(null, mappingValues.get(0)));
+        assertFalse(portMappingVersion121.updateMapping(null, mappingValues.get(0)),
+            "updating null roadm node returns false");
 
     }
 
     @Test
-    public void createMappingDataTestXpdr() {
+    void createMappingDataTestXpdr() {
         // mock node info
         final Info info = getInfo();
 
@@ -619,7 +618,7 @@ public class PortMappingVersion121Test {
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(deviceObject));
 
         // test createMappingData for xpdr node with 2 network + 1 client + unidirectional & bidirectional ports
-        assertTrue("returns true when create mapping ", portMappingVersion121.createMappingData("node"));
+        assertTrue(portMappingVersion121.createMappingData("node"), "returns true when create mapping");
 
         // assert all portmappings have been created for the xpdr node
         ReadTransaction rr = dataBroker.newReadOnlyTransaction();
@@ -645,7 +644,7 @@ public class PortMappingVersion121Test {
         }
         Collections.sort(testMappings);
         Collections.sort(mappings);
-        assertEquals("test mapping are equals to mapping", testMappings, mappings);
+        assertEquals(testMappings, mappings, "test mapping are equals to mapping");
     }
 
     @NonNull
@@ -708,5 +707,4 @@ public class PortMappingVersion121Test {
     private Interfaces getInterfaces(String i1) {
         return new InterfacesBuilder().setInterfaceName(i1).build();
     }
-
 }

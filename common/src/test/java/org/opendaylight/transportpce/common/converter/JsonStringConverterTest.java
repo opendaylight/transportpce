@@ -7,9 +7,10 @@
  */
 package org.opendaylight.transportpce.common.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
@@ -28,10 +29,9 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 public class JsonStringConverterTest extends AbstractTest {
 
     @Test
-    public void createJsonStringFromDataObjectTest() {
+    void createJsonStringFromDataObjectTest() {
         try (Reader reader = new FileReader("src/test/resources/gnpy_request.json", StandardCharsets.UTF_8)) {
             assertEquals(
-                "Should be a valid request",
                 Files.readString(Paths.get("src/test/resources/expected_string.json")),
                 new JsonStringConverter<Request>(getDataStoreContextUtil().getBindingDOMCodecServices())
                     .createJsonStringFromDataObject(
@@ -46,20 +46,21 @@ public class JsonStringConverterTest extends AbstractTest {
                                     .transformIntoNormalizedNode(reader)
                                     .get())
                             .getValue(),
-                        JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02));
+                        JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02),
+                "Should be a valid request");
         } catch (IOException e) {
             fail("Cannot load path description ");
         }
     }
 
     @Test
-    public void createDataObjectFromJsonStringTest() throws IOException {
+    void createDataObjectFromJsonStringTest() throws IOException {
         assertNotNull(
-            "Should not be null",
             new JsonStringConverter<Request>(getDataStoreContextUtil().getBindingDOMCodecServices())
                 .createDataObjectFromJsonString(
                     YangInstanceIdentifier.of(Request.QNAME),
                     Files.readString(Paths.get("src/test/resources/expected_string.json")),
-                    JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02));
+                    JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02),
+            "Should not be null");
     }
 }

@@ -8,17 +8,17 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 
 public class SortPort121ByNameTest {
 
     @Test
-    public void compareTest() {
+    void compareTest() {
         Port port1 = mock(Port.class);
         Port port2 = mock(Port.class);
         when(port1.getPortName()).thenReturn("port1");
