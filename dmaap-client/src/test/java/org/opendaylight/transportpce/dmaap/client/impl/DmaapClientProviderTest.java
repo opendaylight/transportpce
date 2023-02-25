@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.dmaap.client.impl;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,15 +24,15 @@ public class DmaapClientProviderTest {
     @Mock
     private NotificationService notificationService;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         MockitoAnnotations.openMocks(this);
-
     }
 
     @Test
-    public void testInitRegisterNbiNotificationsToRpcRegistry() {
-        DmaapClientProvider provider =  new DmaapClientProvider(notificationService, "http://localhost", "username", "password");
+    void testInitRegisterNbiNotificationsToRpcRegistry() {
+        DmaapClientProvider provider =
+            new DmaapClientProvider(notificationService, "http://localhost", "username", "password");
         provider.init();
         (verify(notificationService, times(1)))
                 .registerNotificationListener(Mockito.any(NbiNotificationsListenerImpl.class));

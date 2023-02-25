@@ -7,7 +7,8 @@
  */
 package org.opendaylight.transportpce.dmaap.client.listener;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApiStub;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
@@ -46,7 +47,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
     }
 
     @Test
-    public void onPublishNotificationServiceTest() {
+    void onPublishNotificationServiceTest() {
         Logger logger = (Logger) LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
@@ -82,7 +83,6 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
         listener.onPublishNotificationProcessService(notification);
         // as onPublishNotificationService is a void method, we check log message to be sure everything went well
         List<ILoggingEvent> logsList = listAppender.list;
-        assertEquals("Response received CreatedEvent [serverTimeMs=1, count=1]", logsList.get(1).getFormattedMessage());
-
+        assertEquals(logsList.get(1).getFormattedMessage(), "Response received CreatedEvent [serverTimeMs=1, count=1]");
     }
 }
