@@ -8,16 +8,19 @@
 
 package org.opendaylight.transportpce.common.crossconnect;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -32,11 +35,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
+
 
 public class CrossConnectImpl121Test {
     private CrossConnectImpl121 crossConnectImpl121 = null;
@@ -46,9 +51,10 @@ public class CrossConnectImpl121Test {
     private MountPoint mountPointMock = mock(MountPoint.class);
     private DataBroker dataBrokerMock = mock(DataBroker.class);
     private ReadWriteTransaction rwTransactionMock = mock(ReadWriteTransaction.class);
+    private DeviceTransaction deviceTransaction = mock(DeviceTransaction.class);
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         deviceTransactionManager = mock(DeviceTransactionManager.class);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
 
@@ -64,18 +70,18 @@ public class CrossConnectImpl121Test {
     }
 
     @Test
-    public void getCrossConnectTest() {
+    void getCrossConnectTest() {
         Optional<RoadmConnections> res =
                 crossConnectImpl121.getCrossConnect("deviceId", "1");
-        Assert.assertTrue("Optional object should have a value", res.isPresent());
+        assertTrue(res.isPresent(), "Optional object should have a value");
     }
 
     @Test
-    public void postCrossConnectTest() {
-        Mockito.when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
-        Mockito.when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
-        Mockito.when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
+    void postCrossConnectTest() {
+        when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
+        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
+        when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         SpectrumInformation spectrumInformation = new SpectrumInformation();
@@ -83,12 +89,11 @@ public class CrossConnectImpl121Test {
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
-        Assert.assertEquals(res.get(), "srcTp-destTp-761:768");
+        assertEquals(res.get(), "srcTp-destTp-761:768");
     }
 
-    // TODO : fix commit
-    @Test(expected = NullPointerException.class)
-    public void setPowerLevelTest() {
+    @Test
+    void setPowerLevelTest() {
         InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
@@ -96,12 +101,11 @@ public class CrossConnectImpl121Test {
         when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
-            .thenReturn(Optional.of(mock(RoadmConnections.class)));
-
-        Mockito.when(deviceTransactionManager.getDeviceTransaction("deviceId"))
-            .thenReturn(CompletableFuture.completedFuture(Optional.of(mock(DeviceTransaction.class))));
+            .thenReturn(Optional.of(new RoadmConnectionsBuilder().setConnectionNumber("1").build()));
+        when(deviceTransactionManager.getDeviceTransaction("deviceId"))
+            .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
+        doReturn(emptyFluentFuture()).when(deviceTransaction).commit(anyLong(), any());
         crossConnectImpl121.setPowerLevel("deviceId", OpticalControlMode.Power, Decimal64.valueOf("100"), "1");
-
-        Assert.assertTrue("set Level should be true", true);
+        assertTrue(true, "set Level should be true");
     }
 }
