@@ -42,7 +42,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def setUp(self):
         # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
-        time.sleep(10)
+        time.sleep(2)
 
     def test_01_rdm_device_connection(self):
         response = test_utils.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION))

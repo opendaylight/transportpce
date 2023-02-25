@@ -151,7 +151,7 @@ class TransportPCEtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(5)
+        time.sleep(2)
 
     def test_01_connect_spdrA(self):
         response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))

@@ -110,7 +110,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(5)
+        time.sleep(2)
 
     def test_01_connect_ROADMA(self):
         response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))

@@ -42,7 +42,7 @@ class TransportPCEtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(5)
+        time.sleep(2)
 
     def test_01_connect_SPDR_SA1(self):
         response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
@@ -166,6 +166,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
                       response['output']['configuration-response-common']['response-message'])
+        time.sleep(2)
 
     # Test OCH-OTU interfaces on SPDR-A1
     def test_04_check_interface_och(self):
@@ -343,6 +344,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
                       response['output']['configuration-response-common']['response-message'])
+        time.sleep(2)
 
     # Test ODU4 interfaces on SPDR-A1 and SPDR-C1
     def test_09_check_interface_ODU4(self):
@@ -499,6 +501,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Operation Successful',
                       response['output']['configuration-response-common']['response-message'])
+        time.sleep(2)
 
     # Test the interfaces on SPDR-A1
     def test_12_check_interface_10GE_CLIENT(self):
