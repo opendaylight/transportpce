@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.nbinotifications.serialization;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
@@ -27,7 +27,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 public class NotificationServiceSerializerTest extends AbstractTest {
 
     @Test
-    public void serializeTest() throws IOException {
+    void serializeTest() throws IOException {
         JsonStringConverter<NotificationProcessService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         String json = Files.readString(Paths.get("src/test/resources/event.json"));
@@ -39,10 +39,10 @@ public class NotificationServiceSerializerTest extends AbstractTest {
         serializer.configure(configs, false);
         byte[] data = serializer.serialize("test", notificationService);
         serializer.close();
-        assertNotNull("Serialized data should not be null", data);
+        assertNotNull(data, "Serialized data should not be null");
         String expectedJson = Files.readString(Paths.get("src/test/resources/expected_event.json"));
         // Minify the json string
         expectedJson = new ObjectMapper().readValue(expectedJson, JsonNode.class).toString();
-        assertEquals("The event should be equals", expectedJson, new String(data, StandardCharsets.UTF_8));
+        assertEquals(expectedJson, new String(data, StandardCharsets.UTF_8), "The event should be equals");
     }
 }

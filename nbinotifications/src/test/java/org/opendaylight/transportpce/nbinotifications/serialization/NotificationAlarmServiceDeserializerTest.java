@@ -7,13 +7,14 @@
  */
 package org.opendaylight.transportpce.nbinotifications.serialization;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
@@ -22,7 +23,7 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notification
 public class NotificationAlarmServiceDeserializerTest extends AbstractTest {
 
     @Test
-    public void deserializeTest() throws IOException {
+    void deserializeTest() throws IOException {
         JsonStringConverter<NotificationAlarmService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         NotificationAlarmServiceDeserializer deserializer = new NotificationAlarmServiceDeserializer();
@@ -31,8 +32,8 @@ public class NotificationAlarmServiceDeserializerTest extends AbstractTest {
         NotificationsAlarmService readEvent = deserializer.deserialize("Test",
                 Files.readAllBytes(Paths.get("src/test/resources/event_alarm_service.json")));
         deserializer.close();
-        assertEquals("Service name should be service1", "service1", readEvent.getServiceName());
-        assertEquals("message should be The service is now inService", "The service is now inService",
-                readEvent.getMessage());
+        assertEquals("service1", readEvent.getServiceName(), "Service name should be service1");
+        assertEquals("The service is now inService", readEvent.getMessage(),
+            "message should be The service is now inService");
     }
 }

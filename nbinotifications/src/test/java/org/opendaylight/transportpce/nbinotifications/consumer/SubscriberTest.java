@@ -7,8 +7,9 @@
  */
 package org.opendaylight.transportpce.nbinotifications.consumer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.MockConsumer;
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import org.apache.kafka.common.TopicPartition;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
@@ -39,8 +40,8 @@ public class SubscriberTest extends AbstractTest {
     private Subscriber<NotificationAlarmService, NotificationsAlarmService> subscriberAlarmService;
     private Subscriber<NotificationTapiService, Notification> subscriberTapiService;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mockConsumer = new MockConsumer<>(OffsetResetStrategy.EARLIEST);
         mockConsumerAlarm = new MockConsumer<>(OffsetResetStrategy.EARLIEST);
         mockConsumerTapi = new MockConsumer<>(OffsetResetStrategy.EARLIEST);
@@ -50,7 +51,7 @@ public class SubscriberTest extends AbstractTest {
     }
 
     @Test
-    public void subscribeServiceShouldBeSuccessful() {
+    void subscribeServiceShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
         ConsumerRecord<String, NotificationsProcessService> record = new ConsumerRecord<>(
                 TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedEvent());
@@ -65,12 +66,12 @@ public class SubscriberTest extends AbstractTest {
         mockConsumer.updateBeginningOffsets(startOffsets);
         List<NotificationsProcessService> result = subscriberService.subscribe(TOPIC,
                 NotificationsProcessService.QNAME);
-        assertEquals("There should be 1 record", 1, result.size());
-        assertTrue("Consumer should be closed", mockConsumer.closed());
+        assertEquals(1, result.size(), "There should be 1 record");
+        assertTrue(mockConsumer.closed(), "Consumer should be closed");
     }
 
     @Test
-    public void subscribeAlarmShouldBeSuccessful() {
+    void subscribeAlarmShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
         ConsumerRecord<String, NotificationsAlarmService> record = new ConsumerRecord<>(
                 TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedAlarmEvent());
@@ -85,12 +86,12 @@ public class SubscriberTest extends AbstractTest {
         mockConsumerAlarm.updateBeginningOffsets(startOffsets);
         List<NotificationsAlarmService> result = subscriberAlarmService.subscribe(TOPIC,
                 NotificationsAlarmService.QNAME);
-        assertEquals("There should be 1 record", 1, result.size());
-        assertTrue("Consumer should be closed", mockConsumerAlarm.closed());
+        assertEquals(1, result.size(), "There should be 1 record");
+        assertTrue(mockConsumerAlarm.closed(), "Consumer should be closed");
     }
 
     @Test
-    public void subscribeTapiAlarmShouldBeSuccessful() {
+    void subscribeTapiAlarmShouldBeSuccessful() {
         // from https://www.baeldung.com/kafka-mockconsumer
         ConsumerRecord<String, Notification> record = new ConsumerRecord<>(
             TOPIC, PARTITION, 0L, "key", NotificationServiceDataUtils.buildReceivedTapiAlarmEvent());
@@ -105,7 +106,7 @@ public class SubscriberTest extends AbstractTest {
         mockConsumerTapi.updateBeginningOffsets(startOffsets);
         List<Notification> result = subscriberTapiService.subscribe(TOPIC,
             NotificationTapiService.QNAME);
-        assertEquals("There should be 1 record", 1, result.size());
-        assertTrue("Consumer should be closed", mockConsumerTapi.closed());
+        assertEquals(1, result.size(), "There should be 1 record");
+        assertTrue(mockConsumerTapi.closed(), "Consumer should be closed");
     }
 }

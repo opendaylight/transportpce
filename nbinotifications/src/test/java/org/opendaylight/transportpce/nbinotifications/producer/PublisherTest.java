@@ -7,7 +7,8 @@
  */
 package org.opendaylight.transportpce.nbinotifications.producer;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,8 +19,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -43,6 +44,8 @@ import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
 public class PublisherTest extends AbstractTest {
+    private static NetworkTransactionService networkTransactionService;
+
     private JsonStringConverter<NotificationProcessService> converterService;
     private JsonStringConverter<NotificationAlarmService> converterAlarm;
     private JsonStringConverter<NotificationTapiService> converterTapiService;
@@ -55,10 +58,9 @@ public class PublisherTest extends AbstractTest {
     private NbiNotificationsImpl nbiNotificationsImpl;
     private TopicManager topicManager;
 
-    public static NetworkTransactionService networkTransactionService;
 
-    @Before
-    public void setUp() throws ExecutionException, InterruptedException {
+    @BeforeEach
+    void setUp() throws ExecutionException, InterruptedException {
         topicManager = TopicManager.getInstance();
         converterService = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         converterAlarm = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
@@ -87,30 +89,30 @@ public class PublisherTest extends AbstractTest {
     }
 
     @Test
-    public void sendEventServiceShouldBeSuccessful() throws IOException {
+    void sendEventServiceShouldBeSuccessful() throws IOException {
         String json = Files.readString(Paths.get("src/test/resources/event.json"));
         NotificationProcessService notificationProcessService = converterService
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationProcessService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
         publisherService.sendEvent(notificationProcessService, notificationProcessService.getConnectionType().name());
-        assertEquals("We should have one message", 1, mockProducer.history().size());
-        assertEquals("Key should be test", "test", mockProducer.history().get(0).key());
+        assertEquals(1, mockProducer.history().size(), "We should have one message");
+        assertEquals("test", mockProducer.history().get(0).key(), "Key should be test");
     }
 
     @Test
-    public void sendEventAlarmShouldBeSuccessful() throws IOException {
+    void sendEventAlarmShouldBeSuccessful() throws IOException {
         String json = Files.readString(Paths.get("src/test/resources/event_alarm_service.json"));
         NotificationAlarmService notificationAlarmService = converterAlarm
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationAlarmService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
         publisherAlarm.sendEvent(notificationAlarmService, "alarm"
                 + notificationAlarmService.getConnectionType().getName());
-        assertEquals("We should have one message", 1, mockAlarmProducer.history().size());
-        assertEquals("Key should be test", "test", mockAlarmProducer.history().get(0).key());
+        assertEquals(1, mockAlarmProducer.history().size(), "We should have one message");
+        assertEquals("test", mockAlarmProducer.history().get(0).key(), "Key should be test");
     }
 
     @Test
-    public void sendTapiEventShouldBeSuccessful() throws IOException {
+    void sendTapiEventShouldBeSuccessful() throws IOException {
         CreateNotificationSubscriptionServiceInputBuilder builder
             = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         SubscriptionFilter subscriptionFilter = new SubscriptionFilterBuilder(builder.getSubscriptionFilter())
@@ -123,7 +125,7 @@ public class PublisherTest extends AbstractTest {
             .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationTapiService.QNAME),
                 json, JSONCodecFactorySupplier.RFC7951);
         publisherTapiService.sendEvent(notificationTapiService, "");
-        assertEquals("We should have one message", 1, mockTapiProducer.history().size());
-        assertEquals("Key should be test", "test", mockTapiProducer.history().get(0).key());
+        assertEquals(1, mockTapiProducer.history().size(), "We should have one message");
+        assertEquals("test", mockTapiProducer.history().get(0).key(), "Key should be test");
     }
 }

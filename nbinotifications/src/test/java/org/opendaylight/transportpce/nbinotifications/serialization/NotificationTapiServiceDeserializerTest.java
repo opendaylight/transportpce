@@ -7,13 +7,14 @@
  */
 package org.opendaylight.transportpce.nbinotifications.serialization;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
@@ -22,7 +23,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev18121
 public class NotificationTapiServiceDeserializerTest extends AbstractTest {
 
     @Test
-    public void deserializeTest() throws IOException {
+    void deserializeTest() throws IOException {
         JsonStringConverter<NotificationTapiService> converter = new JsonStringConverter<>(
                 getDataStoreContextUtil().getBindingDOMCodecServices());
         TapiNotificationDeserializer deserializer = new TapiNotificationDeserializer();
@@ -31,7 +32,7 @@ public class NotificationTapiServiceDeserializerTest extends AbstractTest {
         Notification readEvent = deserializer.deserialize("76d8f07b-ead5-4132-8eb8-cf3fdef7e079",
                 Files.readAllBytes(Paths.get("src/test/resources/tapi_event.json")));
         deserializer.close();
-        assertEquals("Service uuid should be 76d8f07b-ead5-4132-8eb8-cf3fdef7e079",
-            "76d8f07b-ead5-4132-8eb8-cf3fdef7e079", readEvent.getTargetObjectIdentifier().getValue());
+        assertEquals("76d8f07b-ead5-4132-8eb8-cf3fdef7e079", readEvent.getTargetObjectIdentifier().getValue(),
+            "Service uuid should be 76d8f07b-ead5-4132-8eb8-cf3fdef7e079");
     }
 }
