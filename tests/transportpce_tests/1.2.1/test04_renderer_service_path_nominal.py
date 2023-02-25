@@ -43,7 +43,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     def setUp(self):
         # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
-        time.sleep(10)
+        time.sleep(2)
 
     def test_01_rdm_device_connected(self):
         response = test_utils.mount_device("ROADMA01", ('roadma', self.NODE_VERSION))
