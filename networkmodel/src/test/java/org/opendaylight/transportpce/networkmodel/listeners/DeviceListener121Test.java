@@ -17,10 +17,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification;
@@ -35,13 +35,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.EditOperationType;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-@RunWith(MockitoJUnitRunner.StrictStubs.class)
+@ExtendWith(MockitoExtension.class)
 public class DeviceListener121Test {
     @Mock
     private PortMapping portMapping;
 
     @Test
-    public void testOnChangeNotificationWhenPortUpdated() throws InterruptedException {
+    void testOnChangeNotificationWhenPortUpdated() throws InterruptedException {
         ChangeNotification notification = mock(ChangeNotification.class);
         Mapping oldMapping = mock(Mapping.class);
         ImmutableList<Edit> editList = createEditList();
@@ -56,7 +56,7 @@ public class DeviceListener121Test {
     }
 
     @Test
-    public void testOnChangeNotificationWhenNoEditList() {
+    void testOnChangeNotificationWhenNoEditList() {
         ChangeNotification notification = mock(ChangeNotification.class);
         when(notification.getEdit()).thenReturn(null);
         DeviceListener121 listener = new DeviceListener121("node1", portMapping);
@@ -66,7 +66,7 @@ public class DeviceListener121Test {
     }
 
     @Test
-    public void testOnChangeNotificationWhenOtherthingUpdated() {
+    void testOnChangeNotificationWhenOtherthingUpdated() {
         ChangeNotification notification = mock(ChangeNotification.class);
         ImmutableList<Edit> editList = createBadEditList();
         when(notification.getEdit()).thenReturn(editList);
