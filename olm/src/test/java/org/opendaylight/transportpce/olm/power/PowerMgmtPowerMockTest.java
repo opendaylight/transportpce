@@ -9,13 +9,14 @@
 package org.opendaylight.transportpce.olm.power;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -63,7 +64,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
-@Ignore
+@Disabled
 public class PowerMgmtPowerMockTest extends AbstractTest {
 
     private MountPoint mountPoint;
@@ -84,8 +85,8 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.mountPoint = new MountPointStub(getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
@@ -115,18 +116,18 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
     }
 
     @Test
-    public void testSetPowerMockingUtil() {
+    void testSetPowerMockingUtil() {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
                 .thenReturn(getXpdrNodesFromNodesBuilderDeg());
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput2();
         boolean output = this.powerMgmt.setPower(input);
-        Assert.assertEquals(false, output);
+        assertEquals(false, output);
 
     }
 
     @Test
-    public void testSetPowerMockingUtilNetwokType() throws OpenRoadmInterfaceException {
+    void testSetPowerMockingUtilNetwokType() throws OpenRoadmInterfaceException {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.mockStatic(PowerMgmtVersion121.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
@@ -142,12 +143,12 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 .thenReturn(Optional.empty());
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,this.crossConnect);
         boolean output = powerMgmtImpl.setPower(input);
-        Assert.assertEquals(true, output);
+        assertEquals(true, output);
 
     }
 
     @Test
-    public void testSetPowerMockingUtilNetwokTypeMoreThanOneNode() throws OpenRoadmInterfaceException {
+    void testSetPowerMockingUtilNetwokTypeMoreThanOneNode() throws OpenRoadmInterfaceException {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.mockStatic(PowerMgmtVersion121.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
@@ -163,23 +164,23 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 .thenReturn(Optional.empty());
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,this.crossConnect);
         boolean output = powerMgmtImpl.setPower(input);
-        Assert.assertEquals(true, output);
+        assertEquals(true, output);
 
     }
 
     @Test
-    public void testSetPowerXpdrNodes() {
+    void testSetPowerXpdrNodes() {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
                 .thenReturn(getXpdrNodesFromNodesBuilderDeg());
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput3();
         boolean output = this.powerMgmt.setPower(input);
-        Assert.assertEquals(true, output);
+        assertEquals(true, output);
 
     }
 
     @Test
-    public void testSetPowerRdmNodesReturnInterfaceEmpty() throws OpenRoadmInterfaceException {
+    void testSetPowerRdmNodesReturnInterfaceEmpty() throws OpenRoadmInterfaceException {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
                 .thenReturn(getRdmNodesFromNodesBuilder());
@@ -189,11 +190,11 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 .thenReturn(Optional.empty());
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,this.crossConnect);
         boolean output = powerMgmtImpl.setPower(input);
-        Assert.assertEquals(false, output);
+        assertEquals(false, output);
     }
 
     @Test
-    public void testSetPowerRdmNodesThrowsException() throws OpenRoadmInterfaceException {
+    void testSetPowerRdmNodesThrowsException() throws OpenRoadmInterfaceException {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
                 .thenReturn(getRdmNodesFromNodesBuilder());
@@ -203,11 +204,11 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 .thenThrow(new OpenRoadmInterfaceException("error thrown by unit tests "));
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,this.crossConnect);
         boolean output = powerMgmtImpl.setPower(input);
-        Assert.assertEquals(false, output);
+        assertEquals(false, output);
     }
 
     @Test
-    public void testSetPowerRdmNodesReturnInterface() throws OpenRoadmInterfaceException {
+    void testSetPowerRdmNodesReturnInterface() throws OpenRoadmInterfaceException {
         Mockito.mockStatic(OlmUtils.class);
         Mockito.when(this.portMapping.getNode(Mockito.anyString()))
                 .thenReturn(getRdmNodesFromNodesBuilder());
@@ -225,7 +226,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                         Mockito.anyString())).thenReturn(true);
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,crossConnectMock);
         boolean output = powerMgmtImpl.setPower(input);
-        Assert.assertEquals(true, output);
+        assertEquals(true, output);
     }
 
     private PowerMgmtImpl getNewPowerMgmt(OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121Spy,

@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.olm;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -101,7 +103,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.mountPoint = new MountPointStub(getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
@@ -141,13 +143,13 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
         //TODO
 //        ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
-//        Assert.assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
-//        Assert.assertEquals(null, output.get().getResult().getResourceId());
-//        Assert.assertEquals(null, output.get().getResult().getMeasurements());
-//        Assert.assertEquals(null, output.get().getResult().getGranularity());
-//        Assert.assertEquals(null, output.get().getResult().getNodeId());
-//        Assert.assertEquals(null, output.get().getResult().getResourceIdentifier());
-//        Assert.assertEquals(null, output.get().getResult().getResourceType());
+//        assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
+//        assertEquals(null, output.get().getResult().getResourceId());
+//        assertEquals(null, output.get().getResult().getMeasurements());
+//        assertEquals(null, output.get().getResult().getGranularity());
+//        assertEquals(null, output.get().getResult().getNodeId());
+//        assertEquals(null, output.get().getResult().getResourceIdentifier());
+//        assertEquals(null, output.get().getResult().getResourceType());
     }
 
     @Test
@@ -208,8 +210,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
 
         ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
         //TODO
-//        Assert.assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
-//        Assert.assertEquals(null, output.get().getResult().getResourceId());
+//        assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
+//        assertEquals(null, output.get().getResult().getResourceId());
     }
 
 //    @Test
@@ -235,8 +237,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
 //
 //        Mockito.doReturn(pmOutputBuilder.build()).when(this.olmPowerService).getPm(Mockito.any());
 //        ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
-//        Assert.assertEquals(pmOutputBuilder.build(), output.get().getResult());
-//        Assert.assertEquals(true, output.get().isSuccessful());
+//        assertEquals(pmOutputBuilder.build(), output.get().getResult());
+//        assertEquals(true, output.get().isSuccessful());
 //    }
 
     @Test
@@ -244,13 +246,13 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
         ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
         //TODO
-//        Assert.assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
-//        Assert.assertEquals(null, output.get().getResult().getResourceId());
-//        Assert.assertEquals(null, output.get().getResult().getMeasurements());
-//        Assert.assertEquals(null, output.get().getResult().getGranularity());
-//        Assert.assertEquals(null, output.get().getResult().getNodeId());
-//        Assert.assertEquals(null, output.get().getResult().getResourceIdentifier());
-//        Assert.assertEquals(null, output.get().getResult().getResourceType());
+//        assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
+//        assertEquals(null, output.get().getResult().getResourceId());
+//        assertEquals(null, output.get().getResult().getMeasurements());
+//        assertEquals(null, output.get().getResult().getGranularity());
+//        assertEquals(null, output.get().getResult().getNodeId());
+//        assertEquals(null, output.get().getResult().getResourceIdentifier());
+//        assertEquals(null, output.get().getResult().getResourceType());
     }
 
     @Test
@@ -261,10 +263,10 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                 .thenReturn(RpcResultBuilder.success(new ServicePowerSetupOutputBuilder()
                         .setResult("Success").build()).buildFuture());
         ListenableFuture<RpcResult<ServicePowerSetupOutput>> output = this.olmPowerServiceRpc.servicePowerSetup(input);
-        Assert.assertEquals(new ServicePowerSetupOutputBuilder().setResult("Success").build(), output.get()
+        assertEquals(new ServicePowerSetupOutputBuilder().setResult("Success").build(), output.get()
                 .getResult());
-        Assert.assertEquals("Success", output.get().getResult().getResult());
-        Assert.assertEquals(true, output.get().isSuccessful());
+        assertEquals("Success", output.get().getResult().getResult());
+        assertEquals(true, output.get().isSuccessful());
     }
 
 
@@ -277,10 +279,10 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                         .setResult("Success").build()).buildFuture());
         ListenableFuture<RpcResult<ServicePowerTurndownOutput>> output = this.olmPowerServiceRpc
             .servicePowerTurndown(input);
-        Assert.assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Success").build(), output.get()
+        assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Success").build(), output.get()
             .getResult());
-        Assert.assertEquals("Success", output.get().getResult().getResult());
-        Assert.assertEquals(true, output.get().isSuccessful());
+        assertEquals("Success", output.get().getResult().getResult());
+        assertEquals(true, output.get().isSuccessful());
     }
 
     /*
@@ -293,10 +295,10 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                         .setResult("Failed").build()).buildFuture());
         ListenableFuture<RpcResult<CalculateSpanlossBaseOutput>> output = this.olmPowerServiceRpc
             .calculateSpanlossBase(input);
-        Assert.assertEquals(new CalculateSpanlossBaseOutputBuilder().setResult("Failed").build(),
+        assertEquals(new CalculateSpanlossBaseOutputBuilder().setResult("Failed").build(),
             output.get().getResult());
-        Assert.assertEquals("Failed", output.get().getResult().getResult());
-        Assert.assertEquals(true, output.get().isSuccessful());
+        assertEquals("Failed", output.get().getResult().getResult());
+        assertEquals(true, output.get().isSuccessful());
     }*/
 
     //TODO
@@ -309,8 +311,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                         .setResult("success").build()).buildFuture());
         ListenableFuture<RpcResult<CalculateSpanlossCurrentOutput>> output = this.olmPowerServiceRpc
             .calculateSpanlossCurrent(input);
-        Assert.assertEquals(null, output.get().getResult());
-        Assert.assertEquals(true, output.get().isSuccessful());
+        assertEquals(null, output.get().getResult());
+        assertEquals(true, output.get().isSuccessful());
     }
 
     @Test
@@ -322,8 +324,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                         .setResult(null).build()).buildFuture());
         ListenableFuture<RpcResult<ServicePowerResetOutput>> output = this.olmPowerServiceRpc
             .servicePowerReset(input);
-        Assert.assertEquals(null, output.get().getResult());
-        Assert.assertEquals(true, output.get().isSuccessful());
+        assertEquals(null, output.get().getResult());
+        assertEquals(true, output.get().isSuccessful());
     }
 **/
 }
