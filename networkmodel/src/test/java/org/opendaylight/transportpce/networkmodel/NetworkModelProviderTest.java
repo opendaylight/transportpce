@@ -13,11 +13,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.FluentFuture;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
@@ -28,7 +28,7 @@ import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 
-@RunWith(MockitoJUnitRunner.StrictStubs.class)
+@ExtendWith(MockitoExtension.class)
 public class NetworkModelProviderTest extends AbstractTest {
     @Mock
     NetworkTransactionService networkTransactionService;
@@ -47,7 +47,7 @@ public class NetworkModelProviderTest extends AbstractTest {
 
 
     @Test
-    public void networkmodelProviderInitTest() {
+    void networkmodelProviderInitTest() {
         NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
             rpcProviderService, networkutilsService, topologyListener, notificationService,
             frequenciesService, portMappingListener);
@@ -66,5 +66,4 @@ public class NetworkModelProviderTest extends AbstractTest {
         verify(rpcProviderService, times(1))
             .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
     }
-
 }

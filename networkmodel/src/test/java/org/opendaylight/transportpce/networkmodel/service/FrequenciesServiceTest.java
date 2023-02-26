@@ -8,9 +8,10 @@
 
 package org.opendaylight.transportpce.networkmodel.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,9 +23,9 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
@@ -46,7 +47,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Ignore
+@Disabled
 public class FrequenciesServiceTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceTest.class);
     private static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";
@@ -56,8 +57,8 @@ public class FrequenciesServiceTest extends AbstractTest {
     private final BitSet usedBits = new BitSet(8);
     private static BitSet availableBits = new BitSet(8);
 
-    @BeforeClass
-    public static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
+    @BeforeAll
+    static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
         availableBits.set(0, 8, true);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(), OPENROADM_TOPOLOGY_FILE,
                 InstanceIdentifiers.OVERLAY_NETWORK_II);
@@ -76,41 +77,53 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     @Test
-    public void allocateFrequenciesTest() throws IOException {
+    void allocateFrequenciesTest() throws IOException {
         FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
-        assertEquals("Lambda 1 should not be available for ctp-attributes",
-                BitSet.valueOf(terminationPoint.getCtpAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),usedBits);
-        assertNull("cp-attributes should be null", terminationPoint.getCpAttributes());
+        assertEquals(
+            BitSet.valueOf(terminationPoint.getCtpAttributes().getAvailFreqMaps().get(availFreqMapKey).getFreqMap())
+                .get(760, 768),
+            usedBits,
+            "Lambda 1 should not be available for ctp-attributes");
+        assertNull(terminationPoint.getCpAttributes(), "cp-attributes should be null");
         terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-SRG1", "SRG1-PP1-TXRX");
-        assertEquals("Lambda 1 should not be available for pp-attributes",
-                BitSet.valueOf(terminationPoint.getPpAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),usedBits);
+        assertEquals(
+            BitSet.valueOf(terminationPoint.getPpAttributes().getAvailFreqMaps().get(availFreqMapKey).getFreqMap())
+                .get(760, 768),
+            usedBits,
+            "Lambda 1 should not be available for pp-attributes");
         Node1 node = getNetworkNodeFromDatastore("ROADM-A1-SRG1");
-        assertEquals("Lambda 1 should not be available for srg-attributes",
-                BitSet.valueOf(node.getSrgAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),usedBits);
+        assertEquals(
+            BitSet.valueOf(node.getSrgAttributes().getAvailFreqMaps().get(availFreqMapKey).getFreqMap())
+                .get(760, 768),
+            usedBits,
+            "Lambda 1 should not be available for srg-attributes");
     }
 
     @Test
-    public void releaseFrequenciesTest() throws IOException {
+    void releaseFrequenciesTest() throws IOException {
         FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         service.releaseFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
-        assertEquals("Lambda 1 should be available for ctp-attributes",
-                BitSet.valueOf(terminationPoint.getCtpAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),availableBits);
+        assertEquals(
+            BitSet.valueOf(terminationPoint.getCtpAttributes().getAvailFreqMaps().get(availFreqMapKey)
+                .getFreqMap()).get(760, 768),
+            availableBits,
+            "Lambda 1 should be available for ctp-attributes");
         terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-SRG1", "SRG1-PP1-TXRX");
-        assertEquals("Lambda 1 should be available for pp-attributes",
-                BitSet.valueOf(terminationPoint.getPpAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),availableBits);
+        assertEquals(
+            BitSet.valueOf(terminationPoint.getPpAttributes().getAvailFreqMaps().get(availFreqMapKey)
+                .getFreqMap()).get(760, 768),
+            availableBits,
+            "Lambda 1 should be available for pp-attributes");
         Node1 node = getNetworkNodeFromDatastore("ROADM-A1-SRG1");
-        assertEquals("Lambda 1 should be available for srg-attributes",
-                BitSet.valueOf(node.getSrgAttributes().getAvailFreqMaps().get(availFreqMapKey)
-                .getFreqMap()).get(760, 768),availableBits);
+        assertEquals(
+            BitSet.valueOf(node.getSrgAttributes().getAvailFreqMaps().get(availFreqMapKey)
+                .getFreqMap()).get(760, 768),
+            availableBits,
+            "Lambda 1 should be available for srg-attributes");
     }
 
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
@@ -160,5 +173,4 @@ public class FrequenciesServiceTest extends AbstractTest {
             return null;
         }
     }
-
 }

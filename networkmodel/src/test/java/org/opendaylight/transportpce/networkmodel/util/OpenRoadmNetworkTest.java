@@ -8,13 +8,15 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfo;
@@ -32,7 +34,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 public class OpenRoadmNetworkTest {
 
     @Test
-    public void createXpdrNodeTest() {
+    void createXpdrNodeTest() {
         NodeInfo nodeInfo = computeNodeInfo(NodeTypes.Xpdr, "nodeA");
         Node createdNode = OpenRoadmNetwork.createNode("XPDRA01", nodeInfo);
         assertEquals("XPDRA01", createdNode.getNodeId().getValue());
@@ -42,7 +44,7 @@ public class OpenRoadmNetworkTest {
     }
 
     @Test
-    public void createRdmNodeTest() {
+    void createRdmNodeTest() {
         NodeInfo nodeInfo = computeNodeInfo(NodeTypes.Rdm, "nodeA");
         Node createdNode = OpenRoadmNetwork.createNode("XPDRA01", nodeInfo);
         assertEquals("XPDRA01", createdNode.getNodeId().getValue());
@@ -52,23 +54,22 @@ public class OpenRoadmNetworkTest {
     }
 
     @Test
-    public void createNodeWithBadNodeTypeTest() {
+    void createNodeWithBadNodeTypeTest() {
         NodeInfo nodeInfo = computeNodeInfo(NodeTypes.Ila, "nodeA");
         Node createdNode = OpenRoadmNetwork.createNode("XPDRA01", nodeInfo);
         assertEquals("XPDRA01", createdNode.getNodeId().getValue());
-        assertNull("NodeType should be ROADM or XPONDER", createdNode.augmentation(Node1.class).getNodeType());
+        assertNull(createdNode.augmentation(Node1.class).getNodeType(), "NodeType should be ROADM or XPONDER");
 
         supportingNodeTest(nodeInfo.getNodeClli(), createdNode);
     }
 
-    @Ignore
     @Test
-    public void createNodeWithoutClliTest() {
+    void createNodeWithoutClliTest() {
         NodeInfo nodeInfo = computeNodeInfo(NodeTypes.Xpdr, null);
-        Node createdNode = OpenRoadmNetwork.createNode("XPDRA01", nodeInfo);
-        assertEquals("XPDRA01", createdNode.getNodeId().getValue());
-        assertEquals("XPONDER", createdNode.augmentation(Node1.class).getNodeType().getName());
-        assertEquals(0, createdNode.getSupportingNode().size());
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            OpenRoadmNetwork.createNode("XPDRA01", nodeInfo);
+        });
+        assertTrue("Supplied value may not be null".contains(exception.getMessage()));
     }
 
     private NodeInfo computeNodeInfo(NodeTypes nodeType, String clli) {

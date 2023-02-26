@@ -21,10 +21,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
@@ -51,7 +51,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-@RunWith(MockitoJUnitRunner.StrictStubs.class)
+@ExtendWith(MockitoExtension.class)
 public class NetConfTopologyListenerTest {
 
     @Mock
@@ -66,7 +66,7 @@ public class NetConfTopologyListenerTest {
     private Map<String, NodeRegistration> registrations;
 
     @Test
-    public void testOnDataTreeChangedWhenDeleteNode() {
+    void testOnDataTreeChangedWhenDeleteNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
@@ -90,7 +90,7 @@ public class NetConfTopologyListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenAddNode() {
+    void testOnDataTreeChangedWhenAddNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
@@ -116,7 +116,7 @@ public class NetConfTopologyListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenDisconnectingNode() {
+    void testOnDataTreeChangedWhenDisconnectingNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
@@ -143,7 +143,7 @@ public class NetConfTopologyListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenShouldNeverHappen() {
+    void testOnDataTreeChangedWhenShouldNeverHappen() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
         final Collection<DataTreeModification<Node>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);

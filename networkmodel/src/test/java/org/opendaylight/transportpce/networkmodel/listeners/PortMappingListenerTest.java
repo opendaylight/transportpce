@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -18,33 +18,33 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 import java.util.HashSet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.mapping.Mapping;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PortMappingListenerTest {
 
     @Mock
     private NetworkModelService networkModelService;
     private PortMappingListener portMappingListenerSpy;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         portMappingListenerSpy = Mockito.spy(new PortMappingListener(networkModelService));
-        doReturn("NodeID").when(portMappingListenerSpy).getNodeIdFromMappingDataTreeIdentifier(any());
+        lenient().doReturn("NodeID").when(portMappingListenerSpy).getNodeIdFromMappingDataTreeIdentifier(any());
     }
 
     @Test
-    public void testOnDataTreeChangedWhenMappingOperAndAdminDidntChange() {
+    void testOnDataTreeChangedWhenMappingOperAndAdminDidntChange() {
         final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -66,7 +66,7 @@ public class PortMappingListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenMappingAdminChanged() {
+    void testOnDataTreeChangedWhenMappingAdminChanged() {
         final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -86,7 +86,7 @@ public class PortMappingListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenMappingOperChanged() {
+    void testOnDataTreeChangedWhenMappingOperChanged() {
         final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);

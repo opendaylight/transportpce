@@ -7,12 +7,13 @@
  */
 package org.opendaylight.transportpce.networkmodel.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.concurrent.ExecutionException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -32,81 +33,84 @@ public class TpceNetworkTest extends AbstractTest {
     TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(getDataBroker()));
 
     @Test
-    public void createLayerClliTest() throws InterruptedException, ExecutionException {
+    void createLayerClliTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("clli-network");
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("clli-network")));
         Network createdClli = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
-        assertNotNull("Clli layer should be created and not null", createdClli);
+        assertNotNull(createdClli, "Clli layer should be created and not null");
 
         Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
             .setClliNetwork(new ClliNetworkBuilder().build())
             .build();
-        assertNotNull("clli augmentation should not be null", createdClli.getNetworkTypes()
-            .augmentation(NetworkTypes1.class));
-        assertEquals("bad clli augmentation for network-types", ordClli,
-            createdClli.getNetworkTypes().augmentation(NetworkTypes1.class));
+        assertNotNull(createdClli.getNetworkTypes().augmentation(NetworkTypes1.class),
+            "clli augmentation should not be null");
+        assertEquals(ordClli, createdClli.getNetworkTypes().augmentation(NetworkTypes1.class),
+            "bad clli augmentation for network-types");
     }
 
     @Test
-    public void createLayerNetworkTest() throws InterruptedException, ExecutionException {
+    void createLayerNetworkTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("openroadm-network");
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("openroadm-network")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
-        assertNotNull("openroadm-network layer should be created and not null", createdOrdNetwork);
+        assertNotNull(createdOrdNetwork, "openroadm-network layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
 
     @Test
-    public void createLayerTopologyTest() throws InterruptedException, ExecutionException {
+    void createLayerTopologyTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("openroadm-topology");
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("openroadm-topology")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
-        assertNotNull("openroadm-logpology layer should be created and not null", createdOrdNetwork);
+        assertNotNull(createdOrdNetwork, "openroadm-logpology layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
 
     @Test
-    public void createLayerOtnTest() throws InterruptedException, ExecutionException {
+    void createLayerOtnTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("otn-topology");
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("otn-topology")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
-        assertNotNull("otn-logpology layer should be created and not null", createdOrdNetwork);
+        assertNotNull(createdOrdNetwork, "otn-logpology layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
 
     @Test
-    public void createBadLayerTest() throws InterruptedException, ExecutionException {
+    void createBadLayerTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("toto");
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("toto")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
-        assertNotNull("toto layer should be created and not null", createdOrdNetwork);
-        assertNull("toto layer should not have any network-type augmentation", createdOrdNetwork.getNetworkTypes()
-            .augmentation(NetworkTypes1.class));
-        assertNull("toto layer should not have any network-type augmentation", createdOrdNetwork.getNetworkTypes()
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
-            .NetworkTypes1.class));
+        assertNotNull(createdOrdNetwork, "toto layer should be created and not null");
+        assertNull(createdOrdNetwork.getNetworkTypes().augmentation(NetworkTypes1.class),
+            "toto layer should not have any network-type augmentation");
+        assertNull(
+            createdOrdNetwork.getNetworkTypes().augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1.class),
+            "toto layer should not have any network-type augmentation");
     }
 
     private void commonNetworkAugmentationTest(Network createdOrdNetwork) {
         Augmentation<NetworkTypes> ordComNet
             = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1Builder()
-            .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
-            .build();
-        assertNotNull("common-network augmentation should not be null", createdOrdNetwork.getNetworkTypes()
-            .augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1.class));
-        assertEquals("bad common-network augmentation for network-types", ordComNet, createdOrdNetwork.getNetworkTypes()
-            .augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1.class));
+                .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
+                .build();
+        assertNotNull(
+            createdOrdNetwork.getNetworkTypes().augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1.class),
+            "common-network augmentation should not be null");
+        assertEquals(
+            ordComNet, createdOrdNetwork.getNetworkTypes().augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.NetworkTypes1.class),
+            "bad common-network augmentation for network-types");
     }
 }
