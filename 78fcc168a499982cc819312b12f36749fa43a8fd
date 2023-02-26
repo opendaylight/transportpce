@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd94de9e_3ce18ac2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/consumer/RequestMessageBodyWriter.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-26T13:32:24Z",
+      "side": 1,
+      "message": "misleading indentations here",
+      "revId": "78fcc168a499982cc819312b12f36749fa43a8fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717a9ed9_a63e7456",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-26T13:32:24Z",
+      "side": 1,
+      "message": "I am not sure these concatenations are needed.\nWhy not simply \"Blueprint container for bundle org.opendaylight.transportpce.servicehandler.+was successfully created\" ?",
+      "revId": "78fcc168a499982cc819312b12f36749fa43a8fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
