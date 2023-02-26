@@ -76,11 +76,11 @@ public final class OpenRoadmNetwork {
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
         SupportingNode supportingNode = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
-            .setNodeRef(new NodeId(nodeInfo.getNodeClli()))
-            .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
-                new NodeId(nodeInfo.getNodeClli())))
-            .build();
+                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                .setNodeRef(new NodeId(nodeInfo.getNodeClli()))
+                .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
+                        new NodeId(nodeInfo.getNodeClli())))
+                .build();
 
         return new NodeBuilder()
             .setNodeId(new NodeId(nodeId))

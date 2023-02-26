@@ -7,10 +7,11 @@
  */
 package org.opendaylight.transportpce.networkmodel.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Test;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
@@ -26,7 +27,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 public class ClliNetworkTest {
 
     @Test
-    public void createNodeTest() {
+    void createNodeTest() {
         //prepare data test
         NodeInfo nodeInfo = computeNodeInfoBuilder().build();
         Node1 clliAugmentation = new Node1Builder()
@@ -35,18 +36,18 @@ public class ClliNetworkTest {
 
         //run test
         Node createdNode = ClliNetwork.createNode("XPDRA01", nodeInfo);
-        assertNull("SupportingNode should be null", createdNode.getSupportingNode());
-        assertEquals("Node key should be equals to NodeClliId ", new NodeKey(new NodeId("NodeClliId")),
-            createdNode.key());
-        assertEquals("Expect org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1 augmentation",
-            clliAugmentation, createdNode.augmentation(Node1.class));
+        assertNull(createdNode.getSupportingNode(), "SupportingNode should be null");
+        assertEquals(new NodeKey(new NodeId("NodeClliId")), createdNode.key(),
+            "Node key should be equals to NodeClliId");
+        assertEquals(clliAugmentation, createdNode.augmentation(Node1.class),
+            "Expect org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1 augmentation");
     }
 
     @Test
-    public void createNodeWithNullDeviceIdTest() {
+    void createNodeWithNullDeviceIdTest() {
         Node createdNode = ClliNetwork.createNode(null, computeNodeInfoBuilder().build());
-        assertNull("SupportingNode should be null", createdNode.getSupportingNode());
-        assertEquals("Node id should be equals to NodeClliId ", new NodeId("NodeClliId"), createdNode.getNodeId());
+        assertNull(createdNode.getSupportingNode(), "SupportingNode should be null");
+        assertEquals(new NodeId("NodeClliId"), createdNode.getNodeId(), "Node id should be equals to NodeClliId");
     }
 
     private NodeInfoBuilder computeNodeInfoBuilder() {
