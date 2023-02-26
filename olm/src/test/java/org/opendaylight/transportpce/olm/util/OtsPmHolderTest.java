@@ -8,25 +8,26 @@
 
 package org.opendaylight.transportpce.olm.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class OtsPmHolderTest {
 
     @Test
-    public void test() {
+    void test() {
         OtsPmHolder otspmholder0 = new OtsPmHolder("name", Double.valueOf(12), "interface");
 
-        Assert.assertEquals("name", otspmholder0.getOtsParameterName());
-        Assert.assertEquals(Double.valueOf(12), otspmholder0.getOtsParameterVal());
-        Assert.assertEquals("interface", otspmholder0.getOtsInterfaceName());
+        assertEquals("name", otspmholder0.getOtsParameterName());
+        assertEquals(Double.valueOf(12), otspmholder0.getOtsParameterVal());
+        assertEquals("interface", otspmholder0.getOtsInterfaceName());
 
         otspmholder0.setOtsParameterName("name 2");
         otspmholder0.setOtsParameterVal(Double.valueOf(120));
         otspmholder0.setOtsInterfaceName("interface 2");
 
-        Assert.assertEquals("name 2", otspmholder0.getOtsParameterName());
-        Assert.assertEquals(Double.valueOf(120), otspmholder0.getOtsParameterVal());
-        Assert.assertEquals("interface 2", otspmholder0.getOtsInterfaceName());
+        assertEquals("name 2", otspmholder0.getOtsParameterName());
+        assertEquals(Double.valueOf(120), otspmholder0.getOtsParameterVal());
+        assertEquals("interface 2", otspmholder0.getOtsInterfaceName());
     }
 }

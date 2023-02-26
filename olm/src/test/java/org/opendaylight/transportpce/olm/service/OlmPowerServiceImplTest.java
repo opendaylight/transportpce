@@ -8,11 +8,16 @@
 
 package org.opendaylight.transportpce.olm.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -45,85 +50,87 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     private OlmPowerService olmPowerService;
     private DataBroker dataBroker;
 
-    @Before
-    public void setUp() {
-        this.dataBroker = Mockito.mock(DataBroker.class);
-        this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
-        this.deviceTransactionManager = Mockito.mock(DeviceTransactionManager.class);
-        this.portMapping = Mockito.mock(PortMapping.class);
-        this.mappingUtils = Mockito.mock(MappingUtils.class);
-        this.openRoadmInterfaces = Mockito.mock(OpenRoadmInterfaces.class);
-        this.olmPowerService = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmt,
-                this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
+    @BeforeEach
+    void setUp() {
+        this.dataBroker = mock(DataBroker.class);
+        this.powerMgmt = mock(PowerMgmtImpl.class);
+        this.deviceTransactionManager = mock(DeviceTransactionManager.class);
+        this.portMapping = mock(PortMapping.class);
+        this.mappingUtils = mock(MappingUtils.class);
+        this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
+        this.olmPowerService = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmt, this.deviceTransactionManager,
+                this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
     }
 
     @Test
-    public void dummyTest() {
+    void dummyTest() {
         OlmPowerServiceImpl olmPowerServiceImpl = (OlmPowerServiceImpl) this.olmPowerService;
         olmPowerServiceImpl.init();
         olmPowerServiceImpl.close();
     }
 
     @Test
-    public void testGetPm() {
-        Mockito.when(this.mappingUtils.getOpenRoadmVersion(Mockito.anyString()))
-                .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice(Mockito.anyString(), Mockito.any(),
-                        Mockito.any(), Mockito.anyLong(), Mockito.any()))
+    void testGetPm() {
+        when(this.mappingUtils.getOpenRoadmVersion(anyString()))
+            .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
+        when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.of(OlmPowerServiceRpcImplUtil.getCurrentPmList121()));
 
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
         GetPmOutput result = this.olmPowerService.getPm(input);
-        Assert.assertEquals(
-                org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity._15min,
-                result.getGranularity());
-        Assert.assertEquals(PmNamesEnum.OpticalPowerInput.toString(),
-                result.getMeasurements().stream().findFirst().get().getPmparameterName());
-        Assert.assertEquals(String.valueOf(3.0),
-                result.getMeasurements().stream().findFirst().get().getPmparameterValue());
-        Assert.assertEquals("ots-deg1",
-                result.getResourceIdentifier().getResourceName());
+        assertEquals(
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity._15min,
+            result.getGranularity());
+        assertEquals(
+            PmNamesEnum.OpticalPowerInput.toString(),
+            result.getMeasurements().stream().findFirst().get().getPmparameterName());
+        assertEquals(
+            String.valueOf(3.0),
+            result.getMeasurements().stream().findFirst().get().getPmparameterValue());
+        assertEquals(
+            "ots-deg1",
+            result.getResourceIdentifier().getResourceName());
     }
 
     @Test
-    public void testServicePowerSetupSuccess() {
+    void testServicePowerSetupSuccess() {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
-        Mockito.when(this.powerMgmt.setPower(Mockito.any())).thenReturn(true);
+        when(this.powerMgmt.setPower(any())).thenReturn(true);
         ServicePowerSetupOutput result = this.olmPowerService.servicePowerSetup(input);
-        Assert.assertEquals(new ServicePowerSetupOutputBuilder().setResult("Success").build(), result);
-        Assert.assertEquals("Success", result.getResult());
+        assertEquals(new ServicePowerSetupOutputBuilder().setResult("Success").build(), result);
+        assertEquals("Success", result.getResult());
     }
 
     @Test
-    public void testServicePowerSetupFailed() {
+    void testServicePowerSetupFailed() {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
-        Mockito.when(this.powerMgmt.setPower(Mockito.any())).thenReturn(false);
+        when(this.powerMgmt.setPower(any())).thenReturn(false);
         ServicePowerSetupOutput output = this.olmPowerService.servicePowerSetup(input);
-        Assert.assertEquals("Failed", output.getResult());
+        assertEquals("Failed", output.getResult());
     }
 
     @Test
-    public void testServicePowerTurnDownSuccess() {
+    void testServicePowerTurnDownSuccess() {
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
-        Mockito.when(this.powerMgmt.powerTurnDown(Mockito.any())).thenReturn(true);
+        when(this.powerMgmt.powerTurnDown(any())).thenReturn(true);
         ServicePowerTurndownOutput output = this.olmPowerService.servicePowerTurndown(input);
-        Assert.assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Success").build(), output);
-        Assert.assertEquals("Success", output.getResult());
+        assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Success").build(), output);
+        assertEquals("Success", output.getResult());
     }
 
     @Test
-    public void testServicePowerTurnDownFailed() {
+    void testServicePowerTurnDownFailed() {
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
-        Mockito.when(this.powerMgmt.powerTurnDown(Mockito.any())).thenReturn(false);
+        when(this.powerMgmt.powerTurnDown(any())).thenReturn(false);
         ServicePowerTurndownOutput output = this.olmPowerService.servicePowerTurndown(input);
-        Assert.assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Failed").build(), output);
-        Assert.assertEquals("Failed", output.getResult());
+        assertEquals(new ServicePowerTurndownOutputBuilder().setResult("Failed").build(), output);
+        assertEquals("Failed", output.getResult());
     }
 
     @Test
-    public void testServicePowerReset() {
+    void testServicePowerReset() {
         ServicePowerResetInput input = OlmPowerServiceRpcImplUtil.getServicePowerResetInput();
         ServicePowerResetOutput output = this.olmPowerService.servicePowerReset(input);
-        Assert.assertEquals(null, output);
+        assertEquals(null, output);
     }
 }

@@ -8,12 +8,16 @@
 
 package org.opendaylight.transportpce.olm.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -73,35 +77,32 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     private OlmPowerService olmPowerService;
     private DataBroker dataBroker;
 
-    @Before
-    public void setUp() throws OpenRoadmInterfaceException {
-        this.openRoadmInterfacesImpl121 = Mockito.mock(OpenRoadmInterfacesImpl121.class);
-        this.openRoadmInterfacesImpl221 = Mockito.mock(OpenRoadmInterfacesImpl221.class);
-        this.mappingUtils = Mockito.mock(MappingUtilsImpl.class);
-        this.portMapping = Mockito.mock(PortMappingImpl.class);
-        this.deviceTransactionManager = Mockito.mock(DeviceTransactionManagerImpl.class);
-        this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
+    @BeforeEach
+    void setUp() throws OpenRoadmInterfaceException {
+        this.openRoadmInterfacesImpl121 = mock(OpenRoadmInterfacesImpl121.class);
+        this.openRoadmInterfacesImpl221 = mock(OpenRoadmInterfacesImpl221.class);
+        this.mappingUtils = mock(MappingUtilsImpl.class);
+        this.portMapping = mock(PortMappingImpl.class);
+        this.deviceTransactionManager = mock(DeviceTransactionManagerImpl.class);
+        this.powerMgmt = mock(PowerMgmtImpl.class);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
                 this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
         this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.dataBroker = getDataBroker();
-        MockitoAnnotations.openMocks(this);
-        Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1).when(this.mappingUtils)
-                .getOpenRoadmVersion(Mockito.anyString());
+        doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1)
+            .when(this.mappingUtils).getOpenRoadmVersion(anyString());
 
-        Mockito.when(this.portMapping.getMapping("ROADM-A1", "DEG2-TTP-TXRX"))
-                .thenReturn(OlmTransactionUtils.getMapping1());
-        Mockito.when(this.portMapping.getMapping("ROADM-C1", "DEG1-TTP-TXRX"))
-                .thenReturn(OlmTransactionUtils.getMapping2());
+        when(this.portMapping.getMapping("ROADM-A1", "DEG2-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping1());
+        when(this.portMapping.getMapping("ROADM-C1", "DEG1-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping2());
 
         InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.OPERATIONAL,
-                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListA());
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.OPERATIONAL,
-                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(OlmTransactionUtils.getCurrentPmListC());
+        when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.OPERATIONAL,
+                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            .thenReturn(OlmTransactionUtils.getCurrentPmListA());
+        when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.OPERATIONAL,
+                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            .thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
         InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
@@ -113,12 +114,12 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
             .build();
         Optional<Interface> interfaceA = Optional.of(new InterfaceBuilder().setName("OTS-DEG2-TTP-TXRX").build());
         Optional<Interface> interfaceC = Optional.of(new InterfaceBuilder().setName("OTS-DEG1-TTP-TXRX").build());
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.CONFIGURATION,
-                interfacesIIDA, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(interfaceA);
-        Mockito.when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.CONFIGURATION,
-                interfacesIIDC, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(interfaceC);
+        when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.CONFIGURATION,
+                interfacesIIDA, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            .thenReturn(interfaceA);
+        when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.CONFIGURATION,
+                interfacesIIDC, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            .thenReturn(interfaceC);
 
         Ots otsValue = new OtsBuilder()
             .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("25")))
@@ -131,19 +132,17 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
                 .addAugmentation(ots).build();
         Optional<Interface> interOptA = Optional.of(interA);
         Optional<Interface> interOptC = Optional.of(interC);
-        Mockito.when(this.openRoadmInterfacesImpl221.getInterface("ROADM-A1", "OTS-DEG2-TTP-TXRX"))
-                .thenReturn(interOptA);
-        Mockito.when(this.openRoadmInterfacesImpl221.getInterface("ROADM-C1", "OTS-DEG1-TTP-TXRX"))
-                .thenReturn(interOptC);
+        when(this.openRoadmInterfacesImpl221.getInterface("ROADM-A1", "OTS-DEG2-TTP-TXRX")).thenReturn(interOptA);
+        when(this.openRoadmInterfacesImpl221.getInterface("ROADM-C1", "OTS-DEG1-TTP-TXRX")).thenReturn(interOptC);
 
         InterfaceBuilder ifABldr = new InterfaceBuilder();
-        Mockito.doNothing().when(this.openRoadmInterfacesImpl221).postInterface("ROADM-A1", ifABldr);
-        Mockito.doNothing().when(this.openRoadmInterfacesImpl221).postInterface("ROADM-C1", ifABldr);
+        doNothing().when(this.openRoadmInterfacesImpl221).postInterface("ROADM-A1", ifABldr);
+        doNothing().when(this.openRoadmInterfacesImpl221).postInterface("ROADM-C1", ifABldr);
 
     }
 
     @Test
-    public void testCalculateSpanlossBaseLink() {
+    void testCalculateSpanlossBaseLink() {
         // initialise and store openroadm-topology in datastore
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
         InstanceIdentifier<Network> ietfNetworkIID = InstanceIdentifier.builder(Networks.class)
@@ -159,13 +158,13 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInputLink();
         CalculateSpanlossBaseOutput output = this.olmPowerService.calculateSpanlossBase(input);
 
-        Assert.assertEquals("Success", output.getResult());
-        Assert.assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
-        Assert.assertEquals("14.6", output.getSpans().get(0).getSpanloss());
+        assertEquals("Success", output.getResult());
+        assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
+        assertEquals("14.6", output.getSpans().get(0).getSpanloss());
     }
 
     @Test
-    public void testCalculateSpanlossBaseAll() {
+    void testCalculateSpanlossBaseAll() {
 
         // initialise and store openroadm-topology in datastore
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
@@ -182,8 +181,8 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInputAll();
         CalculateSpanlossBaseOutput output = this.olmPowerService.calculateSpanlossBase(input);
 
-        Assert.assertEquals("Success", output.getResult());
-        Assert.assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
-        Assert.assertEquals("14.6", output.getSpans().get(0).getSpanloss());
+        assertEquals("Success", output.getResult());
+        assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
+        assertEquals("14.6", output.getSpans().get(0).getSpanloss());
     }
 }
