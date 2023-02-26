@@ -16,6 +16,40 @@
       "message": "Thanks for the review. Done",
       "revId": "32d32f30e13b31629f14da19d1d088a2cc5006ea",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23e75e62_1c496a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-26T13:26:13Z",
+      "side": 1,
+      "message": "LGTM ",
+      "revId": "32d32f30e13b31629f14da19d1d088a2cc5006ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a95e08_b0f8df88",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-26T13:26:13Z",
+      "side": 1,
+      "message": "I like this refactoring.\nThough,I think it can go one step further by removing intermediate variables only used once.",
+      "revId": "32d32f30e13b31629f14da19d1d088a2cc5006ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
