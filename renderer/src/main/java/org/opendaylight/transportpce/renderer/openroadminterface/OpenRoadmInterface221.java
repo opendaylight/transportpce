@@ -92,6 +92,7 @@ public class OpenRoadmInterface221 {
             throws OpenRoadmInterfaceException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
         if (mapping == null) {
+            LOG.info("coucou - {} - {}", nodeId, logicalConnPoint);
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }

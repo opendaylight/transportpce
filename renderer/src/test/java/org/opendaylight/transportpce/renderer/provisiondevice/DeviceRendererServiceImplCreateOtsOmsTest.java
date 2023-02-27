@@ -8,11 +8,18 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -70,19 +77,18 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
     private CrossConnectImpl710 crossConnectImpl710;
-    private final PortMapping portMapping = Mockito.mock(PortMapping.class);
+    private final PortMapping portMapping = mock(PortMapping.class);
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
-        this.mappingUtils = Mockito.spy(MappingUtils.class);
+        this.mappingUtils = spy(MappingUtils.class);
 
-        Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
-                .getOpenRoadmVersion(Mockito.anyString());
+        doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils).getOpenRoadmVersion(anyString());
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
             openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
-        this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
+        this.openRoadmInterfaces = spy(this.openRoadmInterfaces);
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces);
         OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
@@ -97,32 +103,31 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.crossConnectImpl221 = new CrossConnectImpl221(this.deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(this.deviceTransactionManager, this.mappingUtils,
             this.crossConnectImpl121, this.crossConnectImpl221, this.crossConnectImpl710);
-        this.crossConnect = Mockito.spy(this.crossConnect);
+        this.crossConnect = spy(this.crossConnect);
         this.deviceRendererService = new DeviceRendererServiceImpl(getDataBroker(),
             this.deviceTransactionManager, this.openRoadmInterfaceFactory, this.openRoadmInterfaces,
             this.crossConnect, portMapping);
     }
 
     @Test
-    public void testCreateOtsOmsWhenDeviceIsNotMounted() throws OpenRoadmInterfaceException {
+    void testCreateOtsOmsWhenDeviceIsNotMounted() throws OpenRoadmInterfaceException {
         setMountPoint(null);
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertFalse(result.getSuccess());
-        Assert.assertEquals("node 1 is not mounted on the controller",
-            result.getResult());
+        assertFalse(result.getSuccess());
+        assertEquals("node 1 is not mounted on the controller", result.getResult());
     }
 
     @Test
-    public void testCreateOtsOmsWhenDeviceIsMountedWithNoMapping() throws OpenRoadmInterfaceException {
+    void testCreateOtsOmsWhenDeviceIsMountedWithNoMapping() throws OpenRoadmInterfaceException {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertFalse(result.getSuccess());
+        assertFalse(result.getSuccess());
     }
 
     @Test
-    public void testCreateOtsOmsWhenDeviceIsMountedWithMapping()
+    void testCreateOtsOmsWhenDeviceIsMountedWithMapping()
             throws OpenRoadmInterfaceException, InterruptedException, ExecutionException {
         InstanceIdentifier<NodeInfo> nodeInfoIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
                 new NodesKey("node 1")).child(NodeInfo.class).build();
@@ -137,9 +142,8 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         Mapping mapping = MountPointUtils.createMapping(input.getNodeId(), input.getLogicalConnectionPoint());
-        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString())).thenReturn(mapping);
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertTrue(result.getSuccess());
+        assertTrue(result.getSuccess());
     }
-
 }

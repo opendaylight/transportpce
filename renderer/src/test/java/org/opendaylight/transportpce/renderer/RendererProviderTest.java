@@ -11,20 +11,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-@RunWith(MockitoJUnitRunner.StrictStubs.class)
+@ExtendWith(MockitoExtension.class)
 public class RendererProviderTest extends AbstractTest {
 
     @Mock
@@ -33,27 +30,16 @@ public class RendererProviderTest extends AbstractTest {
     private RendererServiceOperations rendererServiceOperations;
     @Mock
     DeviceRendererRPCImpl deviceRendererRPC;
-    private AutoCloseable closeable;
-
-    @Before
-    public void openMocks() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
 
     @Test
-    public void testInitMethodRegistersRendererToRpcService() {
+    void testInitMethodRegistersRendererToRpcService() {
         RendererProvider provider =
             new RendererProvider(rpcProviderService, deviceRendererRPC, rendererServiceOperations);
         provider.init();
 
         verify(rpcProviderService, times(1))
-                .registerRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));
+            .registerRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));
         verify(rpcProviderService, times(1))
-                .registerRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
-    }
-
-    @After
-    public void releaseMocks() throws Exception {
-        closeable.close();
+            .registerRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
     }
 }
