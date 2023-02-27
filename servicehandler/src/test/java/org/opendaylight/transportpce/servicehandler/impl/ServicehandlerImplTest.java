@@ -7,8 +7,10 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl.LogMessages;
 
 import com.google.common.util.concurrent.Futures;
@@ -20,12 +22,11 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -79,23 +80,19 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
+@ExtendWith(MockitoExtension.class)
 public class ServicehandlerImplTest extends AbstractTest {
 
     @Mock
     private PathComputationService pathComputationService;
-
     @Mock
     private RendererServiceOperations rendererServiceOperations;
-
     @Mock
     private NotificationPublishService notificationPublishService;
-
     @Mock
     private PceListenerImpl pceListenerImpl;
-
     @Mock
     private RendererListenerImpl rendererListenerImpl;
-
     @Mock
     private NetworkModelListenerImpl networkModelListenerImpl;
 
@@ -109,11 +106,10 @@ public class ServicehandlerImplTest extends AbstractTest {
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
-        MockitoAnnotations.openMocks(this);
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getNewDataBroker());
         serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
@@ -123,26 +119,24 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    public void createServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
-        ServicehandlerImpl servicehandlerImpl =
-                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
-        ListenableFuture<RpcResult<ServiceCreateOutput>> result =
-                servicehandlerImpl.serviceCreate(new ServiceCreateInputBuilder().build());
+    void createServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+        ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
+                    rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
+                    networkModelListenerImpl, serviceDataStoreOperations);
+        ListenableFuture<RpcResult<ServiceCreateOutput>> result = servicehandlerImpl
+            .serviceCreate(new ServiceCreateInputBuilder().build());
         result.addListener(() -> endSignal.countDown(), executorService);
-
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void createServiceShouldBeFailedWithServiceAlreadyExist() throws ExecutionException,
+    void createServiceShouldBeFailedWithServiceAlreadyExist() throws ExecutionException,
             InterruptedException {
         final ServiceDataStoreOperations serviceDSOperations = mock(ServiceDataStoreOperations.class);
-        Mockito.when(serviceDSOperations.getService(serviceCreateInput.getServiceName()))
+        when(serviceDSOperations.getService(serviceCreateInput.getServiceName()))
                 .thenReturn(Optional.of(
                         new ServicesBuilder()
                                 .setServiceName(serviceCreateInput.getServiceName())
@@ -154,14 +148,15 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void createServiceShouldBeSuccessfulWhenPerformPCESuccessful()
+    void createServiceShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
-        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+        when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -169,12 +164,13 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void deleteServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void deleteServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -187,13 +183,13 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void deleteServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void deleteServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
@@ -202,14 +198,14 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void deleteServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+    void deleteServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -218,13 +214,14 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
 
     @Test
-    public void serviceFeasibilityCheckShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceFeasibilityCheckShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -233,14 +230,15 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceFeasibilityCheckShouldBeSuccessfulWhenPerformPCESuccessful()
+    void serviceFeasibilityCheckShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
-        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+        when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -249,12 +247,13 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceReconfigureShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -267,7 +266,7 @@ public class ServicehandlerImplTest extends AbstractTest {
 
 
     @Test
-    public void serviceReconfigureShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         //action -> service reconfigure
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -281,9 +280,9 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceReconfigureShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
         // serviceReconfigure is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to reconfigure
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -300,12 +299,12 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceReRestorationShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceReRestorationShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
-        ListenableFuture<RpcResult<ServiceRestorationOutput>> result =
-                servicehandlerImpl.serviceRestoration(new ServiceRestorationInputBuilder().setServiceName("").build());
+        ListenableFuture<RpcResult<ServiceRestorationOutput>> result = servicehandlerImpl
+            .serviceRestoration(new ServiceRestorationInputBuilder().setServiceName("").build());
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
@@ -313,7 +312,7 @@ public class ServicehandlerImplTest extends AbstractTest {
 
 
     @Test
-    public void serviceRestorationShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void serviceRestorationShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         //action -> service restore
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -327,9 +326,9 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceRestorationShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+    void serviceRestorationShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
         // serviceRestoration is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to restore
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -346,7 +345,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceRerouteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceRerouteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -356,35 +355,37 @@ public class ServicehandlerImplTest extends AbstractTest {
 
         endSignal.await();
 
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceRerouteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void serviceRerouteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         //action -> service reconfigure
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
-        ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(
-                serviceRerouteInput);
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl
+            .serviceReroute(serviceRerouteInput);
 
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
 
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceRerouteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        Mockito.when(pathComputationService.pathComputationRerouteRequest(any()))
-                .thenReturn(Futures.immediateFuture(new PathComputationRerouteRequestOutputBuilder()
-                        .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
-                                .setResponseCode(ResponseCodes.RESPONSE_OK)
-                                .build())
-                        .build()));
+    void serviceRerouteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        when(pathComputationService.pathComputationRerouteRequest(any()))
+            .thenReturn(Futures.immediateFuture(new PathComputationRerouteRequestOutputBuilder()
+                    .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
+                            .setResponseCode(ResponseCodes.RESPONSE_OK)
+                            .build())
+                    .build()));
         Map<AToZKey, AToZ> atoz = Map.of(
                 new AToZKey("0"),
                 new AToZBuilder()
@@ -444,12 +445,13 @@ public class ServicehandlerImplTest extends AbstractTest {
 
         endSignal.await();
 
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void tempServiceDeleteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void tempServiceDeleteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -460,16 +462,16 @@ public class ServicehandlerImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<TempServiceDeleteOutput> rpcResult = result.get();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_FAILED,
-                rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-                LogMessages.SERVICE_NON_COMPLIANT,
-                rpcResult.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            LogMessages.SERVICE_NON_COMPLIANT,
+            rpcResult.getResult().getConfigurationResponseCommon().getResponseMessage());
     }
 
     @Test
-    public void tempServiceDeleteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void tempServiceDeleteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -478,19 +480,19 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void tempServiceDeleteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+    void tempServiceDeleteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
 
         //create temp service to delete in the temp delete action
-        ServicehandlerImpl servicehandlerImpl =
-                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                        serviceDataStoreOperations);
+        ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
+                rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl, serviceDataStoreOperations);
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
         serviceDataStoreOperations.createTempService(createInput);
 
@@ -499,12 +501,13 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void tempServiceCreateShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void tempServiceCreateShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, serviceDataStoreOperations);
@@ -513,15 +516,15 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
-
     @Test
-    public void tempServiceCreateShouldBeSuccessfulWhenPerformPCESuccessful()
+    void tempServiceCreateShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
-        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+        when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
 
         ServicehandlerImpl servicehandlerImpl = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -532,8 +535,8 @@ public class ServicehandlerImplTest extends AbstractTest {
         result.addListener(() -> endSignal.countDown(), executorService);
 
         endSignal.await();
-        Assert.assertEquals(
-                ResponseCodes.RESPONSE_OK, result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            ResponseCodes.RESPONSE_OK,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
-
 }

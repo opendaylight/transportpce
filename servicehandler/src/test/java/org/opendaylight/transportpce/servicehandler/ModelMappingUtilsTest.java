@@ -7,6 +7,11 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -18,17 +23,15 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRoutingBuilder;
@@ -59,7 +62,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
@@ -75,26 +77,25 @@ public class ModelMappingUtilsTest extends AbstractTest {
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         executorService.shutdownNow();
     }
 
     private ServiceReconfigureInput buildServiceConfigurationInput() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-        OffsetDateTime offsetDateTime2 = offsetDateTime.plusDays(10);
-        return new ServiceReconfigureInputBuilder().setNewServiceName("service 1")
-            .setServiceName("service 1").setCommonId("common id").setConnectionType(ConnectionType.Service)
-            .setCustomer("customer").setCustomerContact("customer contact").setDueDate(new DateAndTime(
-                    dtf.format(offsetDateTime)))
-            .setEndDate(new DateAndTime(dtf.format(offsetDateTime2)))
+        return new ServiceReconfigureInputBuilder()
+            .setNewServiceName("service 1").setServiceName("service 1").setCommonId("common id")
+            .setConnectionType(ConnectionType.Service).setCustomer("customer").setCustomerContact("customer contact")
+            .setDueDate(new DateAndTime(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx")
+                .format(OffsetDateTime.now(ZoneOffset.UTC))))
+            .setEndDate(new DateAndTime(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx")
+                .format(OffsetDateTime.now(ZoneOffset.UTC).plusDays(10))))
             .setNcCode("nc node").setNciCode("nci node").setSecondaryNciCode("secondry").setOperatorContact("operator")
             .setServiceAEnd(ServiceDataUtils.getServiceAEndBuildReconfigure().build())
             .setServiceZEnd(ServiceDataUtils.getServiceZEndBuildReconfigure().build())
@@ -122,108 +123,114 @@ public class ModelMappingUtilsTest extends AbstractTest {
     }
 
     private PathComputationRequestOutput buildPathComputationOutput() {
-        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
-                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
-        ResponseParameters responseParameters = new ResponseParametersBuilder()
-            .setPathDescription(new PathDescriptionBuilder()
-                .setAToZDirection(new AToZDirectionBuilder().setAToZWavelengthNumber(Uint32.valueOf(1))
-                    .setRate(Uint32.valueOf(1)).build())
-                .setZToADirection(new ZToADirectionBuilder().setZToAWavelengthNumber(Uint32.valueOf(1))
-                    .setRate(Uint32.valueOf(1)).build()).build())
+        return new PathComputationRequestOutputBuilder()
+            .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1")
+                .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK)
+                .setResponseMessage("PCE calculation in progress")
+                .build())
+            .setResponseParameters(new ResponseParametersBuilder()
+                .setPathDescription(new PathDescriptionBuilder()
+                    .setAToZDirection(new AToZDirectionBuilder()
+                        .setAToZWavelengthNumber(Uint32.valueOf(1))
+                        .setRate(Uint32.valueOf(1))
+                        .build())
+                    .setZToADirection(new ZToADirectionBuilder()
+                        .setZToAWavelengthNumber(Uint32.valueOf(1))
+                        .setRate(Uint32.valueOf(1))
+                        .build())
+                    .build())
+                .build())
             .build();
-        return new PathComputationRequestOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon)
-            .setResponseParameters(responseParameters).build();
     }
 
     @Test
     //TODO : is this unit test relevant ?
-    public void mappingServicesNullServiceCreateInput() {
+    void mappingServicesNullServiceCreateInput() {
         Services services = ModelMappingUtils.mappingServices(null, null);
-        Assert.assertEquals(new ServicesBuilder().withKey(new ServicesKey("unknown")).build(), services);
+        assertEquals(new ServicesBuilder().withKey(new ServicesKey("unknown")).build(), services);
     }
 
     @Test
-    public void mappingServiceNotNullServiceReconfigureInput() {
+    void mappingServiceNotNullServiceReconfigureInput() {
         Services services = ModelMappingUtils.mappingServices(null, buildServiceConfigurationInput());
-        Assert.assertEquals("service 1", services.getServiceName());
+        assertEquals("service 1", services.getServiceName());
     }
 
     @Test
-    public void mappingServiceValid() {
-        Services services = ModelMappingUtils.mappingServices(ServiceDataUtils.buildServiceCreateInput(),
-                null);
-        Assert.assertEquals("service 1", services.getServiceName());
+    void mappingServiceValid() {
+        Services services = ModelMappingUtils.mappingServices(ServiceDataUtils.buildServiceCreateInput(), null);
+        assertEquals("service 1", services.getServiceName());
     }
 
     @Test
     //TODO : is this unit test relevant ?
-    public void mappingServicesPathNullServiceCreateInput() {
+    void mappingServicesPathNullServiceCreateInput() {
         ServicePaths services = ModelMappingUtils.mappingServicePaths(null, buildPathComputationOutput());
-        Assert.assertEquals(new ServicePathsBuilder().withKey(new ServicePathsKey("unknown")).build(), services);
+        assertEquals(new ServicePathsBuilder().withKey(new ServicePathsKey("unknown")).build(), services);
     }
 
     @Test
-    public void mappingServicePathWithServiceInputWithHardConstraints() {
+    void mappingServicePathWithServiceInputWithHardConstraints() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInputWithHardConstraints();
         ServiceInput serviceInput = new ServiceInput(createInput);
         ServicePaths services = ModelMappingUtils.mappingServicePaths(serviceInput, buildPathComputationOutput());
-        Assert.assertEquals(serviceInput.getServiceName(), services.getServicePathName());
-        Assert.assertNotNull(services.getHardConstraints());
+        assertEquals(serviceInput.getServiceName(), services.getServicePathName());
+        assertNotNull(services.getHardConstraints());
     }
 
     @Test
-    public void mappingServicePathWithServiceInputWithSoftConstraints() {
+    void mappingServicePathWithServiceInputWithSoftConstraints() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInputWithSoftConstraints();
         ServiceInput serviceInput = new ServiceInput(createInput);
         ServicePaths services = ModelMappingUtils.mappingServicePaths(serviceInput, buildPathComputationOutput());
-        Assert.assertEquals(serviceInput.getServiceName(), services.getServicePathName());
-        Assert.assertNotNull(services.getSoftConstraints());
+        assertEquals(serviceInput.getServiceName(), services.getServicePathName());
+        assertNotNull(services.getSoftConstraints());
     }
 
     @Test
-    public void createServiceDeleteInputWithServiceRerouteInput() {
+    void createServiceDeleteInputWithServiceRerouteInput() {
         ServiceRerouteInput serviceRerouteinput = new ServiceRerouteInputBuilder().setServiceName("reroute").build();
         Services services = new ServicesBuilder()
-                .withKey(new ServicesKey("reroute"))
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
-            serviceDeleteInput =
-                    ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, services);
-        Assert.assertEquals("reroute", serviceDeleteInput.getServiceName());
-        Assert.assertEquals("123", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
+                    .withKey(new ServicesKey("reroute"))
+                    .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build())
+                    .build();
+        var serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, services);
+        assertEquals("reroute", serviceDeleteInput.getServiceName());
+        assertEquals("123", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
     }
 
     @Test
-    public void  createServiceDeleteInputWithServiceReconfigureInput() {
-        ServiceReconfigureInput serviceReconfigureInput = new  ServiceReconfigureInputBuilder()
-                .setServiceName("reconf").build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
-            serviceDeleteInput =
-                    ModelMappingUtils.createServiceDeleteInput(serviceReconfigureInput);
-        Assert.assertEquals("reconf", serviceDeleteInput.getServiceName());
-        Assert.assertEquals("reconf-reconfigure", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
+    void  createServiceDeleteInputWithServiceReconfigureInput() {
+        ServiceReconfigureInput serviceReconfigureInput = new ServiceReconfigureInputBuilder()
+                .setServiceName("reconf")
+                .build();
+        var serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(serviceReconfigureInput);
+        assertEquals("reconf", serviceDeleteInput.getServiceName());
+        assertEquals("reconf-reconfigure", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
     }
 
     @Test
-    public void createServiceDeleteInputWithServiceRestorationInput() {
+    void createServiceDeleteInputWithServiceRestorationInput() {
         Services services = new ServicesBuilder()
                 .withKey(new ServicesKey("rest"))
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
-        ServiceRestorationInput serviceRestorationInput =
-            new ServiceRestorationInputBuilder().setServiceName("rest").build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
-            serviceDeleteInput =
-                    ModelMappingUtils.createServiceDeleteInput(serviceRestorationInput, services);
-        Assert.assertEquals("rest", serviceDeleteInput.getServiceName());
-        Assert.assertEquals("123", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build())
+                .build();
+        ServiceRestorationInput serviceRestorationInput = new ServiceRestorationInputBuilder()
+                .setServiceName("rest")
+                .build();
+        var serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(serviceRestorationInput, services);
+        assertEquals("rest", serviceDeleteInput.getServiceName());
+        assertEquals("123", serviceDeleteInput.getServiceHandlerHeader().getRequestId());
     }
 
     @Test
-    public void createDeleteServiceReplyWithServiceDeleteInputWithSdncHeader()
-        throws ExecutionException, InterruptedException  {
+    void createDeleteServiceReplyWithServiceDeleteInputWithSdncHeader()
+            throws ExecutionException, InterruptedException  {
         ServiceDeleteInput input = new ServiceDeleteInputBuilder()
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build()).build();
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build())
+                .build();
         ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDeleteOutputF =
             ModelMappingUtils.createDeleteServiceReply(input, "ack", "message", "200");
         serviceDeleteOutputF.addListener(new Runnable() {
@@ -235,16 +242,14 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceDeleteOutput> serviceDeleteOutput = serviceDeleteOutputF.get();
-        Assert.assertEquals("200", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertEquals("12", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertEquals("12", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createDeleteServiceReplyWithServiceDeleteInputWithoutSdncHeader()
+    void createDeleteServiceReplyWithServiceDeleteInputWithoutSdncHeader()
             throws ExecutionException, InterruptedException  {
         ServiceDeleteInput input = new ServiceDeleteInputBuilder().build();
         ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDeleteOutputF =
@@ -258,20 +263,18 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceDeleteOutput> serviceDeleteOutput = serviceDeleteOutputF.get();
-        Assert.assertEquals("200", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertNull(serviceDeleteOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceDeleteOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertNull(serviceDeleteOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithServiceCreatInputWithSdncRequestHeader()
+    void createCreateServiceReplyWithServiceCreatInputWithSdncRequestHeader()
             throws ExecutionException, InterruptedException {
-        ServiceCreateInput input =
-            new ServiceCreateInputBuilder()
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build()).build();
+        ServiceCreateInput input = new ServiceCreateInputBuilder()
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build())
+                .build();
         ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreatOutputF =
             ModelMappingUtils.createCreateServiceReply(input, "ack", "message", "200");
         serviceCreatOutputF.addListener(new Runnable() {
@@ -283,16 +286,14 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceCreateOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithServiceCreatInputWithoutSdncRequestHeader()
+    void createCreateServiceReplyWithServiceCreatInputWithoutSdncRequestHeader()
         throws ExecutionException, InterruptedException {
         ServiceCreateInput input = new ServiceCreateInputBuilder().build();
         ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreatOutputF =
@@ -306,20 +307,18 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceCreateOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithTempServiceCreatInputWithSdncRequestHeader()
+    void createCreateServiceReplyWithTempServiceCreatInputWithSdncRequestHeader()
         throws ExecutionException, InterruptedException {
-        TempServiceCreateInput input =
-            new TempServiceCreateInputBuilder()
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build()).build();
+        TempServiceCreateInput input = new TempServiceCreateInputBuilder()
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build())
+                .build();
         ListenableFuture<RpcResult<TempServiceCreateOutput>> serviceCreatOutputF =
             ModelMappingUtils.createCreateServiceReply(input, "ack", "message", "200");
         serviceCreatOutputF.addListener(new Runnable() {
@@ -331,16 +330,14 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<TempServiceCreateOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithTempServiceCreatInputWithoutSdncRequestHeader()
+    void createCreateServiceReplyWithTempServiceCreatInputWithoutSdncRequestHeader()
         throws ExecutionException, InterruptedException {
         TempServiceCreateInput input = new TempServiceCreateInputBuilder().build();
         ListenableFuture<RpcResult<TempServiceCreateOutput>> serviceCreatOutputF =
@@ -354,20 +351,18 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<TempServiceCreateOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithServiceFeasibilityCheckInputWithSdncRequestHeader()
+    void createCreateServiceReplyWithServiceFeasibilityCheckInputWithSdncRequestHeader()
         throws ExecutionException, InterruptedException {
-        ServiceFeasibilityCheckInput input =
-            new ServiceFeasibilityCheckInputBuilder()
-                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build()).build();
+        ServiceFeasibilityCheckInput input = new ServiceFeasibilityCheckInputBuilder()
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("12").build())
+                .build();
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceCreatOutputF =
             ModelMappingUtils.createCreateServiceReply(input, "ack", "message", "200");
         serviceCreatOutputF.addListener(new Runnable() {
@@ -379,16 +374,14 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceFeasibilityCheckOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertEquals("12", serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void createCreateServiceReplyWithServiceFeasibilityCheckInputWithoutSdncRequestHeader()
+    void createCreateServiceReplyWithServiceFeasibilityCheckInputWithoutSdncRequestHeader()
         throws ExecutionException, InterruptedException {
         ServiceFeasibilityCheckInput input = new ServiceFeasibilityCheckInputBuilder().build();
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceCreatOutputF =
@@ -402,16 +395,14 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
         endSignal.await();
         RpcResult<ServiceFeasibilityCheckOutput> serviceCreatOutput = serviceCreatOutputF.get();
-        Assert.assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals(
-            "ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
-            "message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
+        assertEquals("200", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals("ack", serviceCreatOutput.getResult().getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals("message", serviceCreatOutput.getResult().getConfigurationResponseCommon().getResponseMessage());
+        assertNull(serviceCreatOutput.getResult().getConfigurationResponseCommon().getRequestId());
     }
 
     @Test
-    public void testCreateRestoreServiceReply() throws ExecutionException, InterruptedException {
+    void testCreateRestoreServiceReply() throws ExecutionException, InterruptedException {
         ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestorationOutputF =
             ModelMappingUtils.createRestoreServiceReply("message");
         serviceRestorationOutputF.addListener(new Runnable() {

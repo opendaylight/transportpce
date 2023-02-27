@@ -7,10 +7,11 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Map;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
@@ -26,16 +27,16 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.Service
 public class ServiceCreateValidationTest {
 
     @Test
-    public void validateServiceCreateRequestIfCommonIdNull() {
+    void validateServiceCreateRequestIfCommonIdNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setCommonId(null).build();
-        OperationResult result =
-                ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        Assert.assertEquals(true, result.isSuccess());
+        OperationResult result = ServiceCreateValidation
+            .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
+        assertEquals(true, result.isSuccess());
     }
 
     @Test
-    public void validateServiceCreateRequestIfConstraintsNotNull() {
+    void validateServiceCreateRequestIfConstraintsNotNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setHardConstraints(new HardConstraintsBuilder()
                 .setCoRouting(new CoRoutingBuilder()
@@ -57,22 +58,22 @@ public class ServiceCreateValidationTest {
                     .build())
                 .setCustomerCode(Set.of("Some customer-code"))
                 .build()).build();
-        OperationResult result =
-                ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        Assert.assertEquals(false, result.isSuccess());
+        OperationResult result = ServiceCreateValidation
+            .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
+        assertEquals(false, result.isSuccess());
     }
 
     @Test
-    public void validateServiceCreateRequestIfConstraintsNull() {
+    void validateServiceCreateRequestIfConstraintsNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setSoftConstraints(null).setHardConstraints(null).build();
-        OperationResult result =
-                ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        Assert.assertEquals(true, result.isSuccess());
+        OperationResult result = ServiceCreateValidation
+            .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
+        assertEquals(true, result.isSuccess());
     }
 
     @Test
-    public void validateServiceCreateRequestIfHardConstraintsNull() {
+    void validateServiceCreateRequestIfHardConstraintsNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setSoftConstraints(new SoftConstraintsBuilder()
                 .setCoRouting(new CoRoutingBuilder()
@@ -84,13 +85,13 @@ public class ServiceCreateValidationTest {
                     .build())
                 .setCustomerCode(Set.of("Some customer-code"))
                 .build()).setHardConstraints(null).build();
-        OperationResult result =
-                ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        Assert.assertEquals(true, result.isSuccess());
+        OperationResult result = ServiceCreateValidation
+            .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
+        assertEquals(true, result.isSuccess());
     }
 
     @Test
-    public void validateServiceCreateRequestIfSoftConstraintsNull() {
+    void validateServiceCreateRequestIfSoftConstraintsNull() {
         ServiceCreateInput input = new ServiceCreateInputBuilder(ServiceDataUtils.buildServiceCreateInput())
             .setSoftConstraints(null).setHardConstraints(new HardConstraintsBuilder()
                 .setCoRouting(new CoRoutingBuilder()
@@ -102,8 +103,8 @@ public class ServiceCreateValidationTest {
                     .build())
                 .setCustomerCode(Set.of("Some customer-code"))
                 .build()).build();
-        OperationResult result =
-                ServiceCreateValidation.validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        Assert.assertEquals(true, result.isSuccess());
+        OperationResult result = ServiceCreateValidation
+            .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
+        assertEquals(true, result.isSuccess());
     }
 }

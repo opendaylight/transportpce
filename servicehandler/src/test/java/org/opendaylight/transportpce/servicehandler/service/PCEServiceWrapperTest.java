@@ -7,18 +7,19 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -38,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceCreateInputBuilder;
 
+@ExtendWith(MockitoExtension.class)
 public class PCEServiceWrapperTest extends AbstractTest {
 
     @Mock
@@ -47,124 +49,98 @@ public class PCEServiceWrapperTest extends AbstractTest {
     @InjectMocks
     private PCEServiceWrapper pceServiceWrapperMock;
 
-    private AutoCloseable closeable;
-
-    @Before
-    public void openMocks() throws NoSuchMethodException {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
 
     @Test
-    public void performPCENullSdncRequestHeader() {
+    void performPCENullSdncRequestHeader() {
         ServiceCreateInput input =  ServiceDataUtils.buildServiceCreateInput();
         input = new ServiceCreateInputBuilder(input).setSdncRequestHeader(null).build();
         PathComputationRequestOutput pceResponse = this.pceServiceWrapperMock.performPCE(input, true);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_YES,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
+        assertEquals(ResponseCodes.FINAL_ACK_YES, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_FAILED, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
-    public void performPCENullServiceName() {
+    void performPCENullServiceName() {
         ServiceCreateInput input = ServiceDataUtils.buildServiceCreateInput();
         input = new ServiceCreateInputBuilder(input).setServiceName(null).build();
         PathComputationRequestOutput pceResponse = this.pceServiceWrapperMock.performPCE(input, true);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_YES,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
+        assertEquals(ResponseCodes.FINAL_ACK_YES, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_FAILED, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
-    public void performPCENullCommonId() {
+    void performPCENullCommonId() {
         TempServiceCreateInput input = ServiceDataUtils.buildTempServiceCreateInput();
         input = new TempServiceCreateInputBuilder(input).setCommonId(null).build();
         PathComputationRequestOutput pceResponse = this.pceServiceWrapperMock.performPCE(input, true);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_YES,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
+        assertEquals(ResponseCodes.FINAL_ACK_YES, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_FAILED, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        verifyNoInteractions(this.pathComputationServiceMock);
     }
 
 
     @Test
-    public void cancelPCEResourceNullServiceName() {
+    void cancelPCEResourceNullServiceName() {
         CancelResourceReserveOutput pceResponse =
                 this.pceServiceWrapperMock.cancelPCEResource(null, ServiceNotificationTypes.ServiceDeleteResult);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_YES,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
+        assertEquals(ResponseCodes.FINAL_ACK_YES, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_FAILED, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
-    public void cancelPCEResourceValid() {
+    void cancelPCEResourceValid() {
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         CancelResourceReserveOutput output = new CancelResourceReserveOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         ListenableFuture<CancelResourceReserveOutput> response = ServiceDataUtils.returnFuture(output);
-        Mockito.when(this.pathComputationServiceMock.cancelResourceReserve(any(CancelResourceReserveInput.class)))
-                .thenReturn(response);
-        CancelResourceReserveOutput pceResponse =
-                this.pceServiceWrapperMock.cancelPCEResource("service 1", ServiceNotificationTypes.ServiceDeleteResult);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_NO,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals("PCE calculation in progress",
-                pceResponse.getConfigurationResponseCommon().getResponseMessage());
+        when(this.pathComputationServiceMock.cancelResourceReserve(any(CancelResourceReserveInput.class)))
+            .thenReturn(response);
+        CancelResourceReserveOutput pceResponse = this.pceServiceWrapperMock
+            .cancelPCEResource("service 1", ServiceNotificationTypes.ServiceDeleteResult);
+        assertEquals(ResponseCodes.FINAL_ACK_NO, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_OK, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        assertEquals("PCE calculation in progress", pceResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.pathComputationServiceMock).cancelResourceReserve(any(CancelResourceReserveInput.class));
     }
 
     @Test
-    public void performPCEValid() {
+    void performPCEValid() {
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         PathComputationRequestOutput output = new PathComputationRequestOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         ListenableFuture<PathComputationRequestOutput> response = ServiceDataUtils.returnFuture(output);
-        Mockito.when(this.pathComputationServiceMock.pathComputationRequest(any(PathComputationRequestInput.class)))
-                .thenReturn(response);
+        when(this.pathComputationServiceMock.pathComputationRequest(any(PathComputationRequestInput.class)))
+            .thenReturn(response);
         ServiceCreateInput input =  ServiceDataUtils.buildServiceCreateInput();
         PathComputationRequestOutput pceResponse = this.pceServiceWrapperMock.performPCE(input, true);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_NO,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK,
-                pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals("PCE calculation in progress",
-                pceResponse.getConfigurationResponseCommon().getResponseMessage());
+        assertEquals(ResponseCodes.FINAL_ACK_NO, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_OK, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        assertEquals("PCE calculation in progress", pceResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.pathComputationServiceMock).pathComputationRequest((any(PathComputationRequestInput.class)));
     }
 
     @Test
-    public void performPCETempValid() {
+    void performPCETempValid() {
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         PathComputationRequestOutput output = new PathComputationRequestOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         ListenableFuture<PathComputationRequestOutput> response = ServiceDataUtils.returnFuture(output);
-        Mockito.when(this.pathComputationServiceMock.pathComputationRequest(any(PathComputationRequestInput.class)))
-                .thenReturn(response);
+        when(this.pathComputationServiceMock.pathComputationRequest(any(PathComputationRequestInput.class)))
+            .thenReturn(response);
         TempServiceCreateInput input = ServiceDataUtils.buildTempServiceCreateInput();
         PathComputationRequestOutput pceResponse = this.pceServiceWrapperMock.performPCE(input, true);
-        Assert.assertEquals(ResponseCodes.FINAL_ACK_NO,
-                pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK, pceResponse.getConfigurationResponseCommon().getResponseCode());
-        Assert.assertEquals("PCE calculation in progress",
-                pceResponse.getConfigurationResponseCommon().getResponseMessage());
+        assertEquals(ResponseCodes.FINAL_ACK_NO, pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
+        assertEquals(ResponseCodes.RESPONSE_OK, pceResponse.getConfigurationResponseCommon().getResponseCode());
+        assertEquals("PCE calculation in progress", pceResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.pathComputationServiceMock).pathComputationRequest((any(PathComputationRequestInput.class)));
-    }
-
-    @After public void releaseMocks() throws Exception {
-        closeable.close();
     }
 }
