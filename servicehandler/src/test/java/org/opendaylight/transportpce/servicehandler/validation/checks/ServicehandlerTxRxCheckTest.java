@@ -8,10 +8,11 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck.LogMessages;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
@@ -20,47 +21,47 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 public class ServicehandlerTxRxCheckTest {
 
     @Test
-    public void checkForServiceEndNull() {
+    void checkForServiceEndNull() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(null, ServiceEndpointType.SERVICEAEND);
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.endpointTypeNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(LogMessages.endpointTypeNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
-    public void checkForServiceRateNull() {
-        ComplianceCheckResult result =
-            ServicehandlerTxRxCheck.check(new ServiceAEndBuilder().build(), ServiceEndpointType.SERVICEAEND);
+    void checkForServiceRateNull() {
+        ComplianceCheckResult result = ServicehandlerTxRxCheck
+            .check(new ServiceAEndBuilder().build(), ServiceEndpointType.SERVICEAEND);
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.rateNull(ServiceEndpointType.SERVICEAEND), result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(LogMessages.rateNull(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
-    public void checkForServiceRateEquals0() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck.check(
-            new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(0)).build(), ServiceEndpointType.SERVICEAEND);
+    void checkForServiceRateEquals0() {
+        ComplianceCheckResult result = ServicehandlerTxRxCheck
+            .check(new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(0)).build(), ServiceEndpointType.SERVICEAEND);
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
-    public void checkForServiceFormatNull() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck.check(
-            new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(3)).build(), ServiceEndpointType.SERVICEAEND);
+    void checkForServiceFormatNull() {
+        ComplianceCheckResult result = ServicehandlerTxRxCheck
+            .check(new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(3)).build(), ServiceEndpointType.SERVICEAEND);
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.formatNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(LogMessages.formatNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
-    public void checkForClliEmpty() {
+    void checkForClliEmpty() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(new ServiceAEndBuilder()
-            .setServiceRate(Uint32.valueOf(3)).setClli("").setServiceFormat(ServiceFormat.Ethernet).build(),
-            ServiceEndpointType.SERVICEAEND);
+                .setServiceRate(Uint32.valueOf(3)).setClli("").setServiceFormat(ServiceFormat.Ethernet).build(),
+                ServiceEndpointType.SERVICEAEND);
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(LogMessages.clliNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(LogMessages.clliNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 }
