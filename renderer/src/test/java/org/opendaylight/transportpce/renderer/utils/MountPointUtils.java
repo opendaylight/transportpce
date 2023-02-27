@@ -8,9 +8,13 @@
 
 package org.opendaylight.transportpce.renderer.utils;
 
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
-import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
@@ -28,15 +32,15 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 public final class MountPointUtils {
 
     public static MountPointStub getMountPoint(List<Ports> ports, DataBroker dataBroker) {
-        RpcConsumerRegistry rpcConsumerRegistry = Mockito.spy(RpcConsumerRegistry.class);
-        OrgOpenroadmDeviceService orgOpenroadmDeviceService = Mockito.spy(OrgOpenroadmDeviceService.class);
+        RpcConsumerRegistry rpcConsumerRegistry = spy(RpcConsumerRegistry.class);
+        OrgOpenroadmDeviceService orgOpenroadmDeviceService = spy(OrgOpenroadmDeviceService.class);
         GetConnectionPortTrailOutputBuilder getConnectionPortTrailOutputBldr
                 = new GetConnectionPortTrailOutputBuilder();
         getConnectionPortTrailOutputBldr.setPorts(ports);
         ListenableFuture<RpcResult<GetConnectionPortTrailOutput>> rpcResultFuture =
                 RpcResultBuilder.success(getConnectionPortTrailOutputBldr.build()).buildFuture();
-        Mockito.doReturn(rpcResultFuture).when(orgOpenroadmDeviceService).getConnectionPortTrail(Mockito.any());
-        Mockito.doReturn(orgOpenroadmDeviceService).when(rpcConsumerRegistry).getRpcService(Mockito.any());
+        doReturn(rpcResultFuture).when(orgOpenroadmDeviceService).getConnectionPortTrail(any());
+        doReturn(orgOpenroadmDeviceService).when(rpcConsumerRegistry).getRpcService(any());
         MountPointStub mountPoint = new MountPointStub(dataBroker);
         mountPoint.setRpcConsumerRegistry(rpcConsumerRegistry);
         return mountPoint;

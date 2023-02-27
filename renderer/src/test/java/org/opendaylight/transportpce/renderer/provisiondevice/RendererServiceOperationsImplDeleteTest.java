@@ -8,15 +8,25 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -63,10 +73,10 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     private DeviceTransactionManager deviceTransactionManager;
     private RendererServiceOperationsImpl rendererServiceOperations;
-    private final DeviceRendererService deviceRenderer = Mockito.mock(DeviceRendererService.class);
-    private final OtnDeviceRendererService otnDeviceRendererService = Mockito.mock(OtnDeviceRendererService.class);
-    private final PortMapping portMapping = Mockito.mock(PortMapping.class);
-    private final CrossConnect crossConnect = Mockito.mock(CrossConnect.class);
+    private final DeviceRendererService deviceRenderer = mock(DeviceRendererService.class);
+    private final OtnDeviceRendererService otnDeviceRendererService = mock(OtnDeviceRendererService.class);
+    private final PortMapping portMapping = mock(PortMapping.class);
+    private final CrossConnect crossConnect = mock(CrossConnect.class);
     private TransportpceOlmService olmService;
 
     private void setMountPoint(MountPoint mountPoint) {
@@ -74,11 +84,11 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         setMountPoint(new MountPointStub(getDataBroker()));
         this.olmService = new OlmServiceStub();
-        this.olmService = Mockito.spy(this.olmService);
+        this.olmService = spy(this.olmService);
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer,
             otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService, portMapping);
@@ -86,14 +96,14 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
 
     @Test
-    public void serviceDeleteOperationPp() throws ExecutionException, InterruptedException, TimeoutException {
+    void serviceDeleteOperationPp() throws ExecutionException, InterruptedException, TimeoutException {
         writePathDescription();
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
             .setRequestId("request1").build());
-        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString(), Mockito.eq(false));
+        doReturn(Collections.emptyList())
+            .when(this.crossConnect).deleteCrossConnect(anyString(), anyString(), eq(false));
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
             .setServiceFormat(ServiceFormat.Ethernet)
             .setServiceRate(Uint32.valueOf("100"))
@@ -107,18 +117,16 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             .setConnectionType(ConnectionType.Service)
             .setServiceAEnd(serviceAEnd)
             .build();
-        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString()))
-            .thenReturn(null);
-        Mockito.when(deviceRenderer.deleteServicePath(Mockito.any()))
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(null);
+        when(deviceRenderer.deleteServicePath(any()))
             .thenReturn(new ServicePathOutputBuilder().setSuccess(true).build());
-        ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), service).get();
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK,
-            serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
+        ServiceDeleteOutput serviceDeleteOutput = this.rendererServiceOperations
+            .serviceDelete(serviceDeleteInputBuilder.build(), service).get();
+        assertEquals(ResponseCodes.RESPONSE_OK, serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceDeleteOperationNoDescription() throws InterruptedException, ExecutionException {
+    void serviceDeleteOperationNoDescription() throws InterruptedException, ExecutionException {
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         Services service = new ServicesBuilder()
@@ -126,119 +134,119 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             .setServiceAEnd(new ServiceAEndBuilder()
                 .setServiceFormat(ServiceFormat.Ethernet)
                 .setServiceRate(Uint32.valueOf(100))
-                .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
-                    new TxDirectionBuilder().setIndex(Uint8.ZERO).setPort(new PortBuilder().setPortName("port-name")
-                        .build()).build()))
+                .setTxDirection(Map.of(
+                        new TxDirectionKey(Uint8.ZERO),
+                        new TxDirectionBuilder().setIndex(Uint8.ZERO).setPort(new PortBuilder()
+                            .setPortName("port-name").build()).build()))
                 .setNodeId(new NodeIdType("optical-node1"))
                 .build())
             .build();
-        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString()))
-            .thenReturn(null);
-        Mockito.doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
-            .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(Mockito.any());
+        when(portMapping.getMapping(anyString(), anyString())).thenReturn(null);
+        doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
+            .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(any());
         ServiceDeleteOutput serviceDeleteOutput
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), service).get();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(0))
-                .deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
+        verify(this.crossConnect, times(0)).deleteCrossConnect(any(), any(), eq(false));
     }
 
     @Test
-    public void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
-        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString(), Mockito.eq(false));
-        Mockito.doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
-            .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(Mockito.any());
+    void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
+        doReturn(Collections.emptyList())
+            .when(this.crossConnect).deleteCrossConnect(anyString(),anyString(), eq(false));
+        doReturn(RpcResultBuilder.success(new ServicePowerTurndownOutputBuilder().setResult("Failed").build())
+                .buildFuture())
+            .when(this.olmService).servicePowerTurndown(any());
 
         writePathDescription();
-        ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
-        serviceDeleteInputBuilder.setServiceName("service 1");
-        serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
-                .setRequestId("request1").build());
-        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-            .setServiceFormat(ServiceFormat.Ethernet)
-            .setServiceRate(Uint32.valueOf("100"))
-            .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
-                new TxDirectionBuilder().setIndex(Uint8.ZERO).setPort(new PortBuilder().setPortName("port-name")
-                    .build()).build()))
-            .setNodeId(new NodeIdType("optical-node1"))
-            .build();
         Services service = new ServicesBuilder()
             .setServiceName("service 1")
             .setConnectionType(ConnectionType.Service)
-            .setServiceAEnd(serviceAEnd)
+            .setServiceAEnd(new ServiceAEndBuilder()
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf("100"))
+                .setTxDirection(Map.of(
+                    new TxDirectionKey(Uint8.ZERO),
+                    new TxDirectionBuilder()
+                        .setIndex(Uint8.ZERO)
+                        .setPort(new PortBuilder().setPortName("port-name").build())
+                        .build()))
+                .setNodeId(new NodeIdType("optical-node1"))
+                .build())
             .build();
-        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString()))
+        when(portMapping.getMapping(anyString(), anyString()))
             .thenReturn(null);
-        ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), service);
+        ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput = this.rendererServiceOperations
+            .serviceDelete(
+                new ServiceDeleteInputBuilder()
+                    .setServiceName("service 1")
+                    .setServiceHandlerHeader((new ServiceHandlerHeaderBuilder()).setRequestId("request1").build())
+                    .build(),
+                service);
         ServiceDeleteOutput output = serviceDeleteOutput.get();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+        assertEquals(ResponseCodes.RESPONSE_FAILED,
                 output.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any(),
-            Mockito.eq(false));
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any(),
-            Mockito.eq(false));
+        verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node1"), any(), eq(false));
+        verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node2"), any(), eq(false));
     }
 
     @Test
-    public void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
-        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString(), Mockito.eq(false));
-        Mockito.when(this.olmService.servicePowerTurndown(Mockito.any()))
-            .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
-                .setResult("Success").build()).buildFuture())
-            .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
-                .setResult("Failed").build()).buildFuture());
+    void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
+        doReturn(Collections.emptyList())
+            .when(this.crossConnect).deleteCrossConnect(anyString(), anyString(), eq(false));
+        when(this.olmService.servicePowerTurndown(any()))
+            .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder()).setResult("Success").build())
+                .buildFuture())
+            .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder()).setResult("Failed").build())
+                .buildFuture());
 
         writePathDescription();
-        ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
-        serviceDeleteInputBuilder.setServiceName("service 1");
-        serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
-            .setRequestId("request1").build());
-        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
-            .setServiceFormat(ServiceFormat.Ethernet)
-            .setServiceRate(Uint32.valueOf("100"))
-            .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO),
-                new TxDirectionBuilder().setIndex(Uint8.ZERO).setPort(new PortBuilder().setPortName("port-name")
-                    .build()).build()))
-            .setNodeId(new NodeIdType("optical-node1"))
-            .build();
-        Services service = new ServicesBuilder()
-            .setServiceName("service 1")
-            .setConnectionType(ConnectionType.Service)
-            .setServiceAEnd(serviceAEnd)
-            .build();
-        Mockito.when(portMapping.getMapping(Mockito.anyString(), Mockito.anyString()))
+        when(portMapping.getMapping(anyString(), anyString()))
             .thenReturn(null);
-        ServiceDeleteOutput serviceDeleteOutput =
-                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), service).get();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+        ServiceDeleteOutput serviceDeleteOutput = this.rendererServiceOperations.serviceDelete(
+                new ServiceDeleteInputBuilder()
+                    .setServiceName("service 1")
+                    .setServiceHandlerHeader((new ServiceHandlerHeaderBuilder()).setRequestId("request1").build())
+                    .build(),
+                new ServicesBuilder()
+                    .setServiceName("service 1")
+                    .setConnectionType(ConnectionType.Service)
+                    .setServiceAEnd(new ServiceAEndBuilder()
+                        .setServiceFormat(ServiceFormat.Ethernet)
+                        .setServiceRate(Uint32.valueOf("100"))
+                        .setTxDirection(Map.of(
+                            new TxDirectionKey(Uint8.ZERO),
+                            new TxDirectionBuilder()
+                                .setIndex(Uint8.ZERO)
+                                .setPort(new PortBuilder().setPortName("port-name").build())
+                                .build()))
+                        .setNodeId(new NodeIdType("optical-node1"))
+                        .build())
+                    .build())
+            .get();
+        assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.olmService, Mockito.times(2)).servicePowerTurndown(Mockito.any());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any(),
-            Mockito.eq(false));
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any(),
-            Mockito.eq(false));
+        verify(this.olmService, times(2)).servicePowerTurndown(any());
+        verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node1"), any(),eq(false));
+        verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node2"), any(),eq(false));
     }
 
     private void writePathDescription() throws ExecutionException, InterruptedException {
-        ServicePathsBuilder servicePathsBuilder = new ServicePathsBuilder();
-        servicePathsBuilder.setPathDescription(ServiceDeleteDataUtils
-            .createTransactionPathDescription(StringConstants.PP_TOKEN));
-        servicePathsBuilder.setServiceAEnd(ServiceDeleteDataUtils.getServiceAEndBuild().build())
-            .setServiceZEnd(ServiceDeleteDataUtils.getServiceZEndBuild().build());
-        servicePathsBuilder.withKey(new ServicePathsKey("service 1"));
-        servicePathsBuilder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1")
-            .build());
-        InstanceIdentifier<ServicePaths> servicePathsInstanceIdentifier = InstanceIdentifier.create(
-            ServicePathList.class).child(ServicePaths.class, new ServicePathsKey("service 1"));
         TransactionUtils.writeTransaction(
-            this.deviceTransactionManager,
-            "node1" + StringConstants.PP_TOKEN,
-            LogicalDatastoreType.OPERATIONAL,
-            servicePathsInstanceIdentifier,
-            servicePathsBuilder.build());
+                this.deviceTransactionManager,
+                "node1" + StringConstants.PP_TOKEN,
+                LogicalDatastoreType.OPERATIONAL,
+                InstanceIdentifier.create(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey("service 1")),
+                new ServicePathsBuilder()
+                    .setPathDescription(ServiceDeleteDataUtils
+                        .createTransactionPathDescription(StringConstants.PP_TOKEN))
+                    .setServiceAEnd(ServiceDeleteDataUtils.getServiceAEndBuild().build())
+                    .setServiceZEnd(ServiceDeleteDataUtils.getServiceZEndBuild().build())
+                    .withKey(new ServicePathsKey("service 1"))
+                    .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
+                    .build());
     }
 }
