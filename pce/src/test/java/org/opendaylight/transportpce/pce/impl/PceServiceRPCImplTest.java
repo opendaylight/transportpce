@@ -8,11 +8,12 @@
 
 package org.opendaylight.transportpce.pce.impl;
 
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -36,8 +37,8 @@ public class PceServiceRPCImplTest extends AbstractTest {
     @Mock
     private PortMapping portMapping;
 
-    @Before
-    public void setUp() throws ExecutionException, InterruptedException {
+    @BeforeEach
+    void setUp() throws ExecutionException, InterruptedException {
         PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         notificationPublishService = new NotificationPublishServiceMock();
@@ -45,28 +46,27 @@ public class PceServiceRPCImplTest extends AbstractTest {
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, portMapping);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);
-
     }
 
     @Test
-    public void testCancelResourceReserve() {
+    void testCancelResourceReserve() {
         CancelResourceReserveInputBuilder cancelResourceReserveInput = new CancelResourceReserveInputBuilder();
         assertNotNull(pceServiceRPC.cancelResourceReserve(cancelResourceReserveInput.build()));
     }
 
     @Test
-    public void testPathComputationRequest() {
+    void testPathComputationRequest() {
         assertNotNull(pceServiceRPC.pathComputationRequest(PceTestData.getPCERequest()));
     }
 
     @Test
-    public void testPathComputationRerouteRequest() {
+    void testPathComputationRerouteRequest() {
         assertNotNull(pceServiceRPC.pathComputationRerouteRequest(PceTestData.getPCERerouteRequest()));
     }
 
     @Test
-    public void testPathComputationRequestCoRoutingOrGeneral2() {
-        assertNotNull(pceServiceRPC.pathComputationRequest(
-                PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
+    void testPathComputationRequestCoRoutingOrGeneral2() {
+        assertNotNull(
+            pceServiceRPC.pathComputationRequest(PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
     }
 }

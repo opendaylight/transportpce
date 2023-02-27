@@ -8,35 +8,27 @@
 
 package org.opendaylight.transportpce.pce;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 public class PceComplianceCheckTest extends AbstractTest {
 
-
-    @Before
-    public void setup() {
-
+    @Test
+    void testCheckFalse() {
+        assertFalse(PceComplianceCheck.check(PceTestData.getEmptyPCERequest()).hasPassed());
     }
 
     @Test
-    public void testCheckFalse() {
-        Assert.assertFalse(
-                PceComplianceCheck.check(PceTestData.getEmptyPCERequest()).hasPassed());
+    void testCheckTrue() {
+        assertTrue(PceComplianceCheck.check(PceTestData.getEmptyPCERequestServiceNameWithRequestId()).hasPassed());
     }
 
     @Test
-    public void testCheckTrue() {
-        Assert.assertTrue(
-                PceComplianceCheck.check(PceTestData.getEmptyPCERequestServiceNameWithRequestId()).hasPassed());
-    }
-
-    @Test
-    public void testCheckFalseWihtoutRequestID() {
-        Assert.assertFalse(
-                PceComplianceCheck.check(PceTestData.getEmptyPCERequestServiceNameWithOutRequestId()).hasPassed());
+    void testCheckFalseWihtoutRequestID() {
+        assertFalse(PceComplianceCheck.check(PceTestData.getEmptyPCERequestServiceNameWithOutRequestId()).hasPassed());
     }
 }

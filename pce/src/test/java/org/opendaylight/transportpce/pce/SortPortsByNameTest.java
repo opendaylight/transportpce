@@ -7,27 +7,26 @@
  */
 package org.opendaylight.transportpce.pce;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class SortPortsByNameTest {
 
     private SortPortsByName sortPortsByName = new SortPortsByName();
 
     @Test
-    public void compareTest() {
-        Assert.assertEquals(12, sortPortsByName.compare("value22", "valu10"));
+    void compareTest() {
+        assertEquals(12, sortPortsByName.compare("value22", "valu10"));
     }
 
     @Test
-    public void compareWithoutNUM() {
-        Assert.assertEquals(0, sortPortsByName.compare("value", "value"));
+    void compareWithoutNUM() {
+        assertEquals(0, sortPortsByName.compare("value", "value"));
     }
 
     @Test
-    public void compareLessThan() {
-        Assert.assertEquals(-11, sortPortsByName.compare("value1", "value12"));
+    void compareLessThan() {
+        assertEquals(-11, sortPortsByName.compare("value1", "value12"));
     }
-
-
 }

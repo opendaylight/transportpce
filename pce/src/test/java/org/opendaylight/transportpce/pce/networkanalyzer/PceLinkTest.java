@@ -8,14 +8,17 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -71,13 +74,13 @@ public class PceLinkTest extends AbstractTest {
     @Mock
     private PortMapping portMapping;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testBuildPceLinkRoadmToRoadm() {
+    void testBuildPceLinkRoadmToRoadm() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
             createRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build(),
@@ -90,7 +93,7 @@ public class PceLinkTest extends AbstractTest {
     }
 
     @Test
-    public void testBuildPceLinkRoadmToRoadmWithoutPMD() {
+    void testBuildPceLinkRoadmToRoadmWithoutPMD() {
         Link link = createRoadmToRoadmWithoutPMD("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
@@ -101,15 +104,15 @@ public class PceLinkTest extends AbstractTest {
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
-        Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
-        Assert.assertEquals(1, pceLink.getsrlgList().size());
-        assertEquals("Checking length loss", 20.0, pceLink.getspanLoss(), 0.005);
-        assertEquals("Checking length loss", 825.0, pceLink.getcd(), 0.005);
-        assertEquals("Checking PMDvalue of link", 4.0, pceLink.getpmd2(), 0.005);
+        assertNotNull(MapUtils.getOmsAttributesSpan(link));
+        assertEquals(1, pceLink.getsrlgList().size());
+        assertEquals(20.0, pceLink.getspanLoss(), 0.005, "Checking length loss");
+        assertEquals(825.0, pceLink.getcd(), 0.005, "Checking length loss");
+        assertEquals(4.0, pceLink.getpmd2(), 0.005, "Checking PMDvalue of link");
     }
 
     @Test
-    public void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
+    void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
             createRoadmToRoadmWithoutLinkLatency("srcNode", "destNode", "srcTp", "destTp").build(),
@@ -122,7 +125,7 @@ public class PceLinkTest extends AbstractTest {
     }
 
     @Test
-    public void testBuildPceLinkOTN() {
+    void testBuildPceLinkOTN() {
         // TODO: Modify with OTN node not PceOpticalNode
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
@@ -136,7 +139,7 @@ public class PceLinkTest extends AbstractTest {
     }
 
     @Test
-    public void testBuildPceLinkExponder() {
+    void testBuildPceLinkExponder() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
             createXponderLink("srcNode", "destNode", "srcTp", "destTp").build(),
@@ -149,7 +152,7 @@ public class PceLinkTest extends AbstractTest {
     }
 
     @Test
-    public void testCalcSpanOSNR() {
+    void testCalcSpanOSNR() {
         Link link = createRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
@@ -160,36 +163,36 @@ public class PceLinkTest extends AbstractTest {
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
-        Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
-        // Assert.assertNotNull(pceLink.getosnr());
-        Assert.assertEquals(1, pceLink.getsrlgList().size());
-        assertEquals("Checking PMDvalue of link", 0.25, pceLink.getpmd2(), 0.005);
-        assertEquals("Checking CDvalue of link", 825, pceLink.getcd(), 0.005);
-        // Assert.assertTrue(7.857119000000001 == pceLink.getosnr());
-        Assert.assertNull(pceLink.getOppositeLink());
-        Assert.assertNull(pceLink.getOppositeLink());
-        Assert.assertNotNull(pceLink.getDestTP());
-        Assert.assertNotNull(pceLink.getlinkType());
-        Assert.assertNotNull(pceLink.getLinkId());
-        Assert.assertNotNull(pceLink.getSourceId());
-        Assert.assertNotNull(pceLink.getDestId());
+        assertNotNull(MapUtils.getOmsAttributesSpan(link));
+        // assertNotNull(pceLink.getosnr());
+        assertEquals(1, pceLink.getsrlgList().size());
+        assertEquals(0.25, pceLink.getpmd2(), 0.005, "Checking PMDvalue of link");
+        assertEquals(825, pceLink.getcd(), 0.005, "Checking CDvalue of link");
+        // assertTrue(7.857119000000001 == pceLink.getosnr());
+        assertNull(pceLink.getOppositeLink());
+        assertNull(pceLink.getOppositeLink());
+        assertNotNull(pceLink.getDestTP());
+        assertNotNull(pceLink.getlinkType());
+        assertNotNull(pceLink.getLinkId());
+        assertNotNull(pceLink.getSourceId());
+        assertNotNull(pceLink.getDestId());
         pceLink.setClient("specific_client");
-        Assert.assertTrue(pceLink.getClient().equals("specific_client"));
-        Assert.assertNotNull(pceLink.getClient());
-        Assert.assertNotNull(pceLink.getLatency());
-        Assert.assertNotNull(pceLink.getAvailableBandwidth());
-        Assert.assertNotNull(pceLink.getUsedBandwidth());
-        Assert.assertNotNull(pceLink.getsourceNetworkSupNodeId());
-        Assert.assertNotNull(pceLink.getdestNetworkSupNodeId());
-        Assert.assertNotNull(pceLink.getSourceTP());
-        Assert.assertNotNull(pceLink.getsourceCLLI());
-        Assert.assertNotNull(pceLink.getdestCLLI());
-        Assert.assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
+        assertTrue(pceLink.getClient().equals("specific_client"));
+        assertNotNull(pceLink.getClient());
+        assertNotNull(pceLink.getLatency());
+        assertNotNull(pceLink.getAvailableBandwidth());
+        assertNotNull(pceLink.getUsedBandwidth());
+        assertNotNull(pceLink.getsourceNetworkSupNodeId());
+        assertNotNull(pceLink.getdestNetworkSupNodeId());
+        assertNotNull(pceLink.getSourceTP());
+        assertNotNull(pceLink.getsourceCLLI());
+        assertNotNull(pceLink.getdestCLLI());
+        assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
             + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
     }
 
     @Test
-    public void testWrongSpanLoss() {
+    void testWrongSpanLoss() {
         Link link = createInvalidRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
@@ -200,14 +203,14 @@ public class PceLinkTest extends AbstractTest {
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
-        Assert.assertNull(MapUtils.getOmsAttributesSpan(link));
-        Assert.assertNull(pceLink.getpmd2());
-        Assert.assertNull(pceLink.getpowerCorrection());
-        Assert.assertNull(pceLink.getcd());
+        assertNull(MapUtils.getOmsAttributesSpan(link));
+        assertNull(pceLink.getpmd2());
+        assertNull(pceLink.getpowerCorrection());
+        assertNull(pceLink.getcd());
     }
 
     @Test
-    public void testExtrapolatedPMD() {
+    void testExtrapolatedPMD() {
         Link link = createRoadmToRoadmWithoutPMD("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
         pceLink = new PceLink(
@@ -218,9 +221,9 @@ public class PceLinkTest extends AbstractTest {
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
-        Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
-        Assert.assertEquals(1, pceLink.getsrlgList().size());
-        assertEquals("Checking PMDvalue of link", 4.0, pceLink.getpmd2(), 0.005);
+        assertNotNull(MapUtils.getOmsAttributesSpan(link));
+        assertEquals(1, pceLink.getsrlgList().size());
+        assertEquals(4.0, pceLink.getpmd2(), 0.005, "Checking PMDvalue of link");
     }
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
@@ -344,5 +347,4 @@ public class PceLinkTest extends AbstractTest {
                     .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build())
             .setSupportingNode(supportingNodes1);
     }
-
 }

@@ -8,9 +8,10 @@
 
 package org.opendaylight.transportpce.pce.graph;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -35,24 +36,19 @@ public class PceGraphEdgeTest {
     private PortMapping portMapping;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         // Build Link
-        link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
-                "OpenROADM-3-1-DEG1",
-                "DEG1-TTP-TX", "DEG1-TTP-RX").build();
-
-        //  Link link=genereateLinkBuilder();
+        link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1", "OpenROADM-3-1-DEG1", "DEG1-TTP-TX", "DEG1-TTP-RX")
+                .build();
         node =  NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes()).build();
-
         PceOpticalNode pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClient("XPONDER-CLIENT");
 
@@ -60,8 +56,7 @@ public class PceGraphEdgeTest {
     }
 
     @Test
-    public void getLink() {
-        Assert.assertEquals(pceGraphEdge.link().getLinkId(),
-                pceLink.getLinkId());
+    void getLink() {
+        assertEquals(pceGraphEdge.link().getLinkId(), pceLink.getLinkId());
     }
 }

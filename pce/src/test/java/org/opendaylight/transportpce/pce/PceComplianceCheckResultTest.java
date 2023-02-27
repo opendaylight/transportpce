@@ -7,16 +7,18 @@
  */
 package org.opendaylight.transportpce.pce;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public class PceComplianceCheckResultTest {
 
     PceComplianceCheckResult pceComplianceCheckResult = new PceComplianceCheckResult(false, "message");
 
     @Test
-    public void checkGetter() {
-        Assert.assertEquals(false, pceComplianceCheckResult.hasPassed());
-        Assert.assertNotNull(pceComplianceCheckResult.getMessage());
+    void checkGetter() {
+        assertEquals(false, pceComplianceCheckResult.hasPassed());
+        assertNotNull(pceComplianceCheckResult.getMessage());
     }
 }

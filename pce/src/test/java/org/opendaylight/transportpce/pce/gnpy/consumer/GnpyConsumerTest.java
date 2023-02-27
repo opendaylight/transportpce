@@ -7,8 +7,9 @@
  */
 package org.opendaylight.transportpce.pce.gnpy.consumer;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +17,7 @@ import java.nio.file.Paths;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
@@ -39,16 +40,16 @@ public class GnpyConsumerTest extends JerseyTest {
     }
 
     @Test
-    public void isAvailableTest() {
+    void isAvailableTest() {
         GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin",
                 "mypassword",
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
-        assertTrue("Gnpy should be available", gnpyConsumer.isAvailable());
+        assertTrue(gnpyConsumer.isAvailable(), "Gnpy should be available");
     }
 
     @Test
-    public void computePathsTest() throws IOException {
+    void computePathsTest() throws IOException {
         GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin",
                 "mypassword",
@@ -61,6 +62,6 @@ public class GnpyConsumerTest extends JerseyTest {
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
         Result result = gnpyConsumer.computePaths(request);
         LOG.info("Response received {}", result);
-        assertNotNull("Result should not be null", result);
+        assertNotNull(result, "Result should not be null");
     }
 }

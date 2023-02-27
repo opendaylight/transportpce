@@ -8,121 +8,117 @@
 
 package org.opendaylight.transportpce.pce.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 public class PceConstraintsTest extends AbstractTest {
     private static PceConstraints pceConstraints = new PceConstraints();
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         pceConstraints = new PceConstraints();
     }
 
     @Test
-    public void setAndGetMaxLatencyTest() {
-        Assert.assertEquals(-1, pceConstraints.getMaxLatency().intValue());
+    void setAndGetMaxLatencyTest() {
+        assertEquals(-1, pceConstraints.getMaxLatency().intValue());
         pceConstraints.setMaxLatency(-2L);
-        Assert.assertEquals(-2, pceConstraints.getMaxLatency().intValue());
+        assertEquals(-2, pceConstraints.getMaxLatency().intValue());
     }
 
     @Test
-    public void setAndGetExcludeSupNodesTest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeSupNodes().size());
+    void setAndGetExcludeSupNodesTest() {
+        assertEquals(0, pceConstraints.getExcludeSupNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setExcludeSupNodes(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeSupNodes().size());
+        assertEquals(1, pceConstraints.getExcludeSupNodes().size());
     }
 
     @Test
-    public void setAndGetExcludeSRLGTest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeSRLG().size());
+    void setAndGetExcludeSRLGTest() {
+        assertEquals(0, pceConstraints.getExcludeSRLG().size());
         List<Long> nodes = new ArrayList<>();
         nodes.add(1L);
         pceConstraints.setExcludeSRLG(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeSRLG().size());
+        assertEquals(1, pceConstraints.getExcludeSRLG().size());
     }
 
     @Test
-    public void setAndGetExcludeCLLITest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeCLLI().size());
+    void setAndGetExcludeCLLITest() {
+        assertEquals(0, pceConstraints.getExcludeCLLI().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setExcludeCLLI(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeCLLI().size());
+        assertEquals(1, pceConstraints.getExcludeCLLI().size());
     }
 
     @Test
-    public void setAndGetExcludeClliNodesTest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeClliNodes().size());
+    void setAndGetExcludeClliNodesTest() {
+        assertEquals(0, pceConstraints.getExcludeClliNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setExcludeClliNodes(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeClliNodes().size());
+        assertEquals(1, pceConstraints.getExcludeClliNodes().size());
     }
 
     @Test
-    public void setAndGetExcludeSrlgLinksTest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeSrlgLinks().size());
+    void setAndGetExcludeSrlgLinksTest() {
+        assertEquals(0, pceConstraints.getExcludeSrlgLinks().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setExcludeSrlgLinks(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeSrlgLinks().size());
+        assertEquals(1, pceConstraints.getExcludeSrlgLinks().size());
     }
 
     @Test
-    public void setAndGetExcludeNodesTest() {
-        Assert.assertEquals(0, pceConstraints.getExcludeNodes().size());
+    void setAndGetExcludeNodesTest() {
+        assertEquals(0, pceConstraints.getExcludeNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setExcludeNodes(nodes);
-        Assert.assertEquals(1, pceConstraints.getExcludeNodes().size());
+        assertEquals(1, pceConstraints.getExcludeNodes().size());
     }
 
     @Test
-    public void setAndGetIncludeNodesTest() {
-        Assert.assertEquals(0, pceConstraints.getIncludeNodes().size());
+    void setAndGetIncludeNodesTest() {
+        assertEquals(0, pceConstraints.getIncludeNodes().size());
         List<String> nodes = new ArrayList<>();
         nodes.add("test");
         pceConstraints.setIncludeNodes(nodes);
-        Assert.assertEquals(1, pceConstraints.getIncludeNodes().size());
+        assertEquals(1, pceConstraints.getIncludeNodes().size());
     }
 
     @Test
-    public void getTypeAndNameOfResourcePairTest() {
+    void getTypeAndNameOfResourcePairTest() {
         PceConstraints.ResourcePair resourcePair = new PceConstraints
                 .ResourcePair(PceConstraints.ResourceType.CLLI, "test");
-        Assert.assertEquals(resourcePair.getType(), PceConstraints.ResourceType.CLLI);
-        Assert.assertEquals("test", resourcePair.getName());
-
+        assertEquals(resourcePair.getType(), PceConstraints.ResourceType.CLLI);
+        assertEquals("test", resourcePair.getName());
     }
 
 
     @Test
-    public void getIncludePceNodesTest() {
-        Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 0);
+    void getIncludePceNodesTest() {
+        assertTrue(pceConstraints.getIncludePceNodes().size() == 0);
         pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null, null, null, null));
-        Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 1);
-
+        assertTrue(pceConstraints.getIncludePceNodes().size() == 1);
     }
 
     @Test
-    public void getListToIncludeTest() {
-        Assert.assertTrue(pceConstraints.getListToInclude().size() == 0);
+    void getListToIncludeTest() {
+        assertTrue(pceConstraints.getListToInclude().size() == 0);
         PceConstraints.ResourcePair resourcePair = new PceConstraints
                 .ResourcePair(PceConstraints.ResourceType.SRLG, "test");
         pceConstraints.setListToInclude(resourcePair);
-        Assert.assertTrue(pceConstraints.getListToInclude().size() == 1);
-        Assert.assertTrue(pceConstraints.getSRLGnames().size() == 1);
-
+        assertTrue(pceConstraints.getListToInclude().size() == 1);
+        assertTrue(pceConstraints.getSRLGnames().size() == 1);
     }
-
 }
-
-

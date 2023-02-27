@@ -8,11 +8,14 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -65,58 +68,58 @@ public class PceOtnNodeTest extends AbstractTest {
     private PceOtnNode pceOtnNode;
     private Node node;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).build();
     }
 
     @Test
-    public void testInitXndrTpsODU4() {
+    void testInitXndrTpsODU4() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_ODU4, null);
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertTrue("valid otn service type " , pceOtnNode.isValid());
-        Assert.assertNotNull("tpAvailableTribPort isn't null !" , pceOtnNode.getAvailableTribPorts());
+        assertTrue(pceOtnNode.isValid(), "valid otn service type ");
+        assertNotNull(pceOtnNode.getAvailableTribPorts(), "tpAvailableTribPort isn't null !");
     }
 
     @Test
-    public void testInitXndrTps10GE() {
+    void testInitXndrTps10GE() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid otn service type" , pceOtnNode.isValid());
+        assertFalse(pceOtnNode.isValid(), "not valid otn service type");
     }
 
     @Test
-    public void testInitXndrTps10GXponderClient1() {
+    void testInitXndrTps10GXponderClient1() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.ROADM,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid otn service type", pceOtnNode.isValid());
-        Assert.assertTrue("this.nodeType isn'tOpenroadmNodeType.TPDR" ,
-                pceOtnNode.validateSwitchingPoolBandwidth(null,null,1L));
+        assertFalse(pceOtnNode.isValid(), "not valid otn service type");
+        assertTrue(pceOtnNode.validateSwitchingPoolBandwidth(null, null, 1L),
+            "this.nodeType isn'tOpenroadmNodeType.TPDR");
     }
 
     @Test
-    public void testInitXndrTps1GXponderClient() {
+    void testInitXndrTps1GXponderClient() {
         node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_1GE, null);
         pceOtnNode.initXndrTps("mode");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid otn service type" , pceOtnNode.isValid());
+        assertFalse(pceOtnNode.isValid(), "not valid otn service type");
     }
 
     @Test
-    public void testInitXndrTps10GXponderClient() {
+    void testInitXndrTps10GXponderClient() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), StringConstants.SERVICE_TYPE_10GE, null);
         pceOtnNode.validateXponder("optical", "sl");
@@ -124,8 +127,8 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.initXndrTps("AZ");
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
-        Assert.assertFalse("not valid otn service type" , pceOtnNode.isValid());
-        Assert.assertFalse("checkTp returns false by default " , pceOtnNode.checkTP("tp"));
+        assertFalse(pceOtnNode.isValid(), "not valid otn service type");
+        assertFalse(pceOtnNode.checkTP("tp"), "checkTp returns false by default");
     }
 
     private Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
@@ -171,7 +174,6 @@ public class PceOtnNodeTest extends AbstractTest {
                         .build();
         Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
                 .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
-
         return new NodeBuilder()
                 .setNodeId(new NodeId("node_test"))
                 .withKey(new NodeKey(new NodeId("node 1")))

@@ -7,9 +7,11 @@
  */
 package org.opendaylight.transportpce.pce.gnpy;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.gson.stream.JsonReader;
 import java.io.FileNotFoundException;
@@ -23,11 +25,10 @@ import java.util.concurrent.ExecutionException;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -109,21 +110,21 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     }
 
-    @Before
-    public void initConsumer() {
+    @BeforeEach
+    void initConsumer() {
         gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998", "mylogin", "mypassword",
                 getDataStoreContextUtil().getBindingDOMCodecServices());
     }
 
-    @BeforeClass
-    public static void init() {
+    @BeforeAll
+    static void init() {
         // here we cannot use JerseyTest as we already extends AbstractTest
         final ResourceConfig rc = new ResourceConfig(GnpyStub.class);
         httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:9998"), rc);
     }
 
-    @AfterClass
-    public static void tearDown() {
+    @AfterAll
+    static void tearDown() {
         httpServer.shutdownNow();
     }
 
@@ -136,29 +137,26 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     }
 
     @Test
-    public void askNewPathFromGnpyNullResultTest() throws Exception {
+    void askNewPathFromGnpyNullResultTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
                 gnpyConsumer);
-        assertNull("No hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(null));
-
+        assertNull(gnpyUtilitiesImpl.askNewPathFromGnpy(null), "No hard constraints should be available");
     }
 
     @Test
-    public void askNewPathFromGnpyTest() throws Exception {
+    void askNewPathFromGnpyTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
                 gnpyConsumer);
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
-        assertNotNull("Hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(pceHardConstraints));
-
-
+        assertNotNull(gnpyUtilitiesImpl.askNewPathFromGnpy(pceHardConstraints), "Hard constraints should be available");
     }
 
     @Test
-    public void verifyComputationByGnpyTest() throws Exception {
+    void verifyComputationByGnpyTest() throws Exception {
         // build AtoZ
         AToZDirectionBuilder atoZDirectionBldr = buildAtZ();
         // build ZtoA
@@ -173,7 +171,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
         boolean result = gnpyUtilitiesImpl.verifyComputationByGnpy(atoZDirectionBldr.build(),
                 ztoADirectionBldr.build(),
                 pceHardConstraints);
-        Assert.assertFalse("Gnpy Computation should be false",result);
+        assertFalse(result, "Gnpy Computation should be false");
     }
 
     private AToZDirectionBuilder buildAtZ() {
@@ -183,12 +181,10 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
                 .build();
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         AToZ firstResource = new AToZBuilder().setId("tpName").withKey(clientKey).setResource(clientResource).build();
-
         return new AToZDirectionBuilder()
                 .setRate(Uint32.valueOf(100))
                 .setAToZ(Map.of(firstResource.key(),firstResource))
                 .setAToZWavelengthNumber(Uint32.valueOf(0));
-
     }
 
     private ZToADirectionBuilder buildZtoA() {
@@ -202,6 +198,5 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
                 .setRate(Uint32.valueOf(100))
                 .setZToA(Map.of(firstResource.key(),firstResource))
                 .setZToAWavelengthNumber(Uint32.valueOf(0));
-
     }
 }
