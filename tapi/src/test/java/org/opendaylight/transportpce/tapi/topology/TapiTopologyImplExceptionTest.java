@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,7 +17,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -39,14 +39,14 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class TapiTopologyImplExceptionTest {
     @Mock
-    TapiContext tapiContext;
+    private TapiContext tapiContext;
     @Mock
-    TopologyUtils topologyUtils;
+    private TopologyUtils topologyUtils;
     @Mock
-    TapiLink tapiLink;
+    private TapiLink tapiLink;
 
     @Test
-    public void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
+    void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
         DataBroker dataBroker = mock(DataBroker.class);
         when(dataBroker.newReadOnlyTransaction())
                 .thenReturn(new ReadTransactionMock());
@@ -70,9 +70,9 @@ public class TapiTopologyImplExceptionTest {
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         if (rpcResult.isSuccessful()) {
             Topology topology = rpcResult.getResult().getTopology();
-            assertNull("Topology should be null", topology);
+            assertNull(topology, "Topology should be null");
         } else {
-            assertNull("Topology should be null", null);
+            assertNull(null, "Topology should be null");
         }
     }
 
@@ -102,5 +102,4 @@ public class TapiTopologyImplExceptionTest {
             // TODO Auto-generated method stub
         }
     }
-
 }
