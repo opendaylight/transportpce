@@ -29,42 +29,43 @@ public final class TapiTopologyDataUtils {
     public static final String PORTMAPPING_FILE = "src/test/resources/portmapping.xml";
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput(String topoName) {
-        GetTopologyDetailsInputBuilder builtInput = new GetTopologyDetailsInputBuilder();
-        builtInput.setTopologyIdOrName(topoName);
-        return builtInput.build();
+        return new GetTopologyDetailsInputBuilder()
+            .setTopologyIdOrName(topoName)
+            .build();
     }
 
     public static GetNodeDetailsInput buildGetNodeDetailsInput(String topoName, String nodeName) {
-        GetNodeDetailsInputBuilder builtInput = new GetNodeDetailsInputBuilder();
-        builtInput.setTopologyIdOrName(topoName);
-        builtInput.setNodeIdOrName(nodeName);
-        return builtInput.build();
+        return new GetNodeDetailsInputBuilder()
+            .setTopologyIdOrName(topoName)
+            .setNodeIdOrName(nodeName)
+            .build();
     }
 
     public static GetLinkDetailsInput buildGetLinkDetailsInput(String topoName, String linkName) {
-        GetLinkDetailsInputBuilder builtInput = new GetLinkDetailsInputBuilder();
-        builtInput.setTopologyIdOrName(topoName);
-        builtInput.setLinkIdOrName(linkName);
-        return builtInput.build();
+        return new GetLinkDetailsInputBuilder()
+            .setTopologyIdOrName(topoName)
+            .setLinkIdOrName(linkName)
+            .build();
     }
 
     public static GetServiceInterfacePointListInput buildServiceInterfacePointListInput() {
-        return new GetServiceInterfacePointListInputBuilder().build();
+        return new GetServiceInterfacePointListInputBuilder()
+            .build();
     }
 
     public static GetServiceInterfacePointDetailsInput buildGetServiceInterfacePointDetailsInput(Uuid sipUuid) {
-        GetServiceInterfacePointDetailsInputBuilder builtInput = new GetServiceInterfacePointDetailsInputBuilder();
-        builtInput.setSipIdOrName(sipUuid.getValue());
-        return builtInput.build();
+        return new GetServiceInterfacePointDetailsInputBuilder()
+            .setSipIdOrName(sipUuid.getValue())
+            .build();
     }
 
-    public static GetNodeEdgePointDetailsInput buildGetNodeEdgePointDetailsInput(String topoName,
-                                                                                 String nodeName, String onepName) {
-        GetNodeEdgePointDetailsInputBuilder builtInput = new GetNodeEdgePointDetailsInputBuilder();
-        builtInput.setTopologyIdOrName(topoName);
-        builtInput.setNodeIdOrName(nodeName);
-        builtInput.setEpIdOrName(onepName);
-        return builtInput.build();
+    public static GetNodeEdgePointDetailsInput buildGetNodeEdgePointDetailsInput(String topoName, String nodeName,
+            String onepName) {
+        return new GetNodeEdgePointDetailsInputBuilder()
+            .setTopologyIdOrName(topoName)
+            .setNodeIdOrName(nodeName)
+            .setEpIdOrName(onepName)
+            .build();
     }
 
     private TapiTopologyDataUtils() {

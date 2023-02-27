@@ -117,7 +117,6 @@ public final class TapiConnectivityDataUtils {
     }
 
     public static ServiceCreateInput buildServiceCreateInput() {
-
         return new ServiceCreateInputBuilder()
             .setCommonId("commonId")
             .setConnectionType(ConnectionType.Service)
