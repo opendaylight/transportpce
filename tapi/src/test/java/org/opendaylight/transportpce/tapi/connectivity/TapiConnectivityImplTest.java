@@ -7,7 +7,10 @@
  */
 package org.opendaylight.transportpce.tapi.connectivity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -17,12 +20,11 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -59,49 +61,42 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@ExtendWith(MockitoExtension.class)
 public class TapiConnectivityImplTest extends AbstractTest {
 
     @Mock
     private PathComputationService pathComputationService;
-
     @Mock
     private RendererServiceOperations rendererServiceOperations;
-
     @Mock
     private NotificationPublishService notificationPublishService;
-
     @Mock
     private TapiPceListenerImpl tapipceListenerImpl;
-
     @Mock
     private TapiRendererListenerImpl tapirendererListenerImpl;
-
     @Mock
     private TapiServiceHandlerListenerImpl tapiserviceHandlerListenerImpl;
-
     @Mock
     private PceListenerImpl pceListenerImpl;
-
     @Mock
     private RendererListenerImpl rendererListenerImpl;
-
     @Mock
     private NetworkModelListenerImpl networkModelListenerImpl;
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImplTest.class);
-    public static ServiceDataStoreOperations serviceDataStoreOperations;
-    public static TapiContext tapiContext;
-    public static TopologyUtils topologyUtils;
-    public static ConnectivityUtils connectivityUtils;
-    public static TapiInitialORMapping tapiInitialORMapping;
-    public static NetworkTransactionService networkTransactionService;
-    public static TapiLink tapilink;
+    private static ServiceDataStoreOperations serviceDataStoreOperations;
+    private static TapiContext tapiContext;
+    private static TopologyUtils topologyUtils;
+    private static ConnectivityUtils connectivityUtils;
+    private static TapiInitialORMapping tapiInitialORMapping;
+    private static NetworkTransactionService networkTransactionService;
+    private static TapiLink tapilink;
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
 
-    @Before
-    public void setUp() throws InterruptedException, ExecutionException {
+    @BeforeEach
+    void setUp() throws InterruptedException, ExecutionException {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
         // Need to have datastore populated to enable the mapping from TAPI to OR
@@ -113,8 +108,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
             TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.PORTMAPPING_FILE);
-
-        MockitoAnnotations.openMocks(this);
 
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapilink = new TapiLink(networkTransactionService);
@@ -131,7 +124,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     }
 
     @Test
-    public void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations);
@@ -151,18 +144,18 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
-    public void createConnServiceShouldBeSuccessfulWhenPerformPCESuccessful()
+    void createConnServiceShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations);
 
         CreateConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceCreateInput();
-        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+        when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl);
@@ -178,11 +171,11 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertTrue(rpcResult.isSuccessful());
+        assertTrue(rpcResult.isSuccessful());
     }
 
     @Test
-    public void deleteConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void deleteConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations);
@@ -202,11 +195,11 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
-    public void deleteConnServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void deleteConnServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput1();
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -226,12 +219,12 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
+        assertEquals(ErrorType.RPC, rpcResult.getErrors().get(0).getErrorType());
     }
 
     @Test
-    public void deleteConnServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+    void deleteConnServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
 
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -257,6 +250,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal.await();
 
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
-        Assert.assertTrue(rpcResult.isSuccessful());
+        assertTrue(rpcResult.isSuccessful());
     }
 }
