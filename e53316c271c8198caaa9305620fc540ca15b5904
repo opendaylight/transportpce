@@ -70,6 +70,24 @@
       "parentUuid": "735c159b_fe0091c7",
       "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84f33e1_bb856512",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-27T19:12:19Z",
+      "side": 1,
+      "message": "Ack\nfair enough",
+      "parentUuid": "0c5ee2f9_fd60f356",
+      "revId": "e53316c271c8198caaa9305620fc540ca15b5904",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
