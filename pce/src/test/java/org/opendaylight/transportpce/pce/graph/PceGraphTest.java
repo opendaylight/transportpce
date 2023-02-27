@@ -8,7 +8,10 @@
 
 package org.opendaylight.transportpce.pce.graph;
 
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonReader;
@@ -21,9 +24,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -45,7 +47,6 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
-//import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOtnNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.utils.JsonUtil;
@@ -129,8 +130,8 @@ public class PceGraphTest extends AbstractTest {
 
     // Test of integration for PceGraph
 
-    @Before
-    public void setUp() throws InterruptedException, ExecutionException {
+    @BeforeEach
+    void setUp() throws InterruptedException, ExecutionException {
         // PortMapping is instantiated to create the mapping of the different nodes in the topology
         this.dataBroker =  getNewDataBroker();
         this.mountPoint = new MountPointStub(dataBroker);
@@ -228,9 +229,7 @@ public class PceGraphTest extends AbstractTest {
         pceHardConstraints = new PceConstraints();
         this.rc = new PceResult();
         this.netTransServ = new NetworkTransactionImpl(dataBroker);
-
         LOG.info("The value of the mapping is {}", portMapping);
-
     }
 
 //                       TOPOLOGY ON WHICH TEST ARE BASED
@@ -248,7 +247,7 @@ public class PceGraphTest extends AbstractTest {
 //                                     |_____|                     |_____|
 //
     @Test
-    public void clacPath100GE() {
+    void clacPath100GE() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -256,13 +255,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(3.0919881995992924));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
 
     @Test
-    public void clacPathOTUC2() {
+    void clacPathOTUC2() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(200), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-4", "Node4", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -270,13 +268,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(1.1559963686478447));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.1559963686478447));
     }
 
     @Test
-    public void clacPathOTUC3() {
+    void clacPathOTUC3() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(300), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-3", "Node3", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -284,13 +281,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(0.3351048800367167));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.3351048800367167));
     }
 
     @Test
-    public void clacUnfeasiblePath400GE() {
+    void clacUnfeasiblePath400GE() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -298,13 +294,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_400GE, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), false);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(0.0));
+        assertEquals(pceGraph.calcPath(), false);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
 
     @Test
-    public void clacPath400GE() {
+    void clacPath400GE() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-5", "Node5", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -312,13 +307,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_400GE, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(1.4432381874659086));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
 
     @Test
-    public void clacPathOTUC4() {
+    void clacPathOTUC4() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "XPDR-NW1-TX", "XPONDER-5", "Node5", "XPDR-NW1-RX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -326,13 +320,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(1.4432381874659086));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
 
     @Test
-    public void clacOpticalTunnelOTUC4() {
+    void clacOpticalTunnelOTUC4() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(400), ServiceFormat.OC,
             "OpenROADM-1", "Node1", "DEG1-PP-TX", "OpenROADM-5", "Node5", "DEG3-PP-TX"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -340,13 +333,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(0.0));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
 
     @Test
-    public void clacPath100GEnoPort() {
+    void clacPath100GEnoPort() {
         PceCalculation pceCalc = new PceCalculation(getPCE2Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -354,13 +346,12 @@ public class PceGraphTest extends AbstractTest {
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
             null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ);
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getmargin()),
-            Optional.ofNullable(3.0919881995992924));
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
 
     @Test
-    public void clacPathPropagationDelay() {
+    void clacPathPropagationDelay() {
         PceCalculation pceCalc = new PceCalculation(getPCE1Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
@@ -371,29 +362,33 @@ public class PceGraphTest extends AbstractTest {
             null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ);
         pceGraph.setConstrains(pceHardConstraints, null);
 
-        Assert.assertEquals(pceGraph.calcPath(), true);
-        Assert.assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(2).getLatency()),
+        assertEquals(pceGraph.calcPath(), true);
+        assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(2).getLatency()),
             Optional.ofNullable(1.0));
-        Assert.assertEquals(pceGraph.getReturnStructure().getRate(), 100);
+        assertEquals(pceGraph.getReturnStructure().getRate(), 100);
     }
 
-    @Test(expected = Exception.class)
-    public void clacPath10GE2() {
-        pceGraph = getOtnPceGraph(StringConstants.SERVICE_TYPE_10GE);
-        Assert.assertEquals(pceGraph.calcPath(), false);
+    //FIXME: Review this test. Getting NPE is never normal!
+    @Test
+    void clacPath10GE2() {
+        assertThrows(NullPointerException.class, () -> {
+            getOtnPceGraph(StringConstants.SERVICE_TYPE_10GE);
+        });
+//        assertEquals(pceGraph.calcPath(), false);
     }
 
-    @Test(expected = Exception.class)
-    public void clacPath1GE() {
-        pceGraph = getOtnPceGraph(StringConstants.SERVICE_TYPE_1GE);
-        Assert.assertEquals(pceGraph.calcPath(), false);
+    //FIXME: Review this test. Getting NPE is never normal!
+    @Test
+    void clacPath1GE() {
+        assertThrows(NullPointerException.class, () -> {
+            getOtnPceGraph(StringConstants.SERVICE_TYPE_1GE);
+        });
+//        assertEquals(pceGraph.calcPath(), false);
     }
 
     private PceGraph getOtnPceGraph(String type) {
         // Build Link
-        link1 = NodeUtils.createRoadmToRoadm("optical",
-            "optical2",
-            "DEG1-TTP-TX", "DEG1-TTP-RX").build();
+        link1 = NodeUtils.createRoadmToRoadm("optical", "optical2", "DEG1-TTP-TX", "DEG1-TTP-RX").build();
 
         node = NodeUtils.getOTNNodeBuilder(NodeUtils.geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).build();
 
@@ -426,10 +421,8 @@ public class PceGraphTest extends AbstractTest {
         allPceNodes = Map.of(
             new NodeId("optical"), pceOtnNode,
             new NodeId("optical2"), pceOtnNode2);
-        return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes,
-            allPceLinks, pceHardConstraints,
-            null, new PceResult(),
-            type, null);
+        return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes, allPceLinks, pceHardConstraints, null,
+                new PceResult(), type, null);
     }
 
     private void saveOpenRoadmNetwork(Network network, String networkId)
@@ -626,5 +619,4 @@ public class PceGraphTest extends AbstractTest {
                 .build())
                     .build();
     }
-
 }
