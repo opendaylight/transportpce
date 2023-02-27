@@ -7,11 +7,12 @@
  */
 package org.opendaylight.transportpce.pce.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Map;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
@@ -33,8 +34,8 @@ public class PathComputationServiceImplTest extends AbstractTest {
     private PathComputationServiceImpl pathComputationServiceImpl;
     private static NetworkTransactionService networkTransactionService = null;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
@@ -43,27 +44,24 @@ public class PathComputationServiceImplTest extends AbstractTest {
     }
 
     @Test
-    public void pathComputationRequestTest() {
+    void pathComputationRequestTest() {
         pathComputationServiceImpl.generateGnpyResponse(null,"path");
-        Assert.assertNotNull(
-                pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_simpletopology_test1_request()));
-
+        assertNotNull(
+            pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_simpletopology_test1_request()));
     }
 
     @Test
-    public void testPathComputationRequestNoPath() {
+    void testPathComputationRequestNoPath() {
         Response response = new ResponseBuilder()
                 .withKey(new ResponseKey("responseId")).setResponseType(new NoPathCaseBuilder()
                 .setNoPath(new NoPathBuilder().setNoPath("no path").build()).build()).build();
 
         pathComputationServiceImpl.generateGnpyResponse(response,"path");
-        Assert.assertNotNull(
-                pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
-
+        assertNotNull(pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
     }
 
     @Test
-    public void testPathComputationRequestPathCase() {
+    void testPathComputationRequestPathCase() {
         PathMetric pathMetric = new PathMetricBuilder()
                 .setAccumulativeValue(Decimal64.valueOf("21"))
                 .setMetricType(PathBandwidth.VALUE).build();
@@ -73,21 +71,17 @@ public class PathComputationServiceImplTest extends AbstractTest {
                 .build()).build()).build();
 
         pathComputationServiceImpl.generateGnpyResponse(response,"path");
-        Assert.assertNotNull(
-                pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
-
+        assertNotNull(pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
     }
 
     @Test
-    public void pathComputationRerouteRequestTest() {
+    void pathComputationRerouteRequestTest() {
         pathComputationServiceImpl.generateGnpyResponse(null,"path");
-        Assert.assertNotNull(pathComputationServiceImpl
-                .pathComputationRerouteRequest(PceTestData.getPCEReroute()));
-
+        assertNotNull(pathComputationServiceImpl.pathComputationRerouteRequest(PceTestData.getPCEReroute()));
     }
 
-    @After
-    public void destroy() {
+    @AfterEach
+    void destroy() {
         pathComputationServiceImpl.close();
     }
 }

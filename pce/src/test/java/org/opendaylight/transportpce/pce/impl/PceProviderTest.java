@@ -8,12 +8,14 @@
 
 package org.opendaylight.transportpce.pce.impl;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -33,9 +35,9 @@ public class PceProviderTest extends AbstractTest {
     private ObjectRegistration<TransportpcePceService> rpcRegistration;
     private PceProvider pceProvider;
 
-    @Before
-    public void setUp() {
-        rpcService = Mockito.mock(RpcProviderService.class);
+    @BeforeEach
+    void setUp() {
+        rpcService = mock(RpcProviderService.class);
         notificationPublishService = new NotificationPublishServiceMock();
         networkTransaction = new NetworkTransactionImpl(getDataBroker());
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
@@ -44,7 +46,7 @@ public class PceProviderTest extends AbstractTest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         this.rpcRegistration = new ObjectRegistration<TransportpcePceService>() {
             @NonNull
             @Override
@@ -57,12 +59,8 @@ public class PceProviderTest extends AbstractTest {
 
             }
         };
-        Mockito
-                .when(rpcService
-                        .registerRpcImplementation(eq(TransportpcePceService.class), Mockito.any()))
-                .thenReturn(rpcRegistration);
+        when(rpcService.registerRpcImplementation(eq(TransportpcePceService.class), any())).thenReturn(rpcRegistration);
         pceProvider.init();
         pceProvider.close();
     }
-
 }

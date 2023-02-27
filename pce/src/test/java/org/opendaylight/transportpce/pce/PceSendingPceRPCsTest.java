@@ -8,15 +8,17 @@
 package org.opendaylight.transportpce.pce;
 
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -36,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220316.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
@@ -51,61 +53,59 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     private PortMapping portMapping;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.dataBroker = getNewDataBroker();
         networkTransaction = new NetworkTransactionImpl(this.dataBroker);
         PceTestUtils.writeNetworkInDataStore(this.dataBroker);
-        gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
-                "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
-        pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
-                        networkTransaction, gnpyConsumer, portMapping);
-        mapping = new MappingBuilder().setLogicalConnectionPoint("logicalConnectionPoint").setPortQual("xpdr-client")
+        gnpyConsumer = new GnpyConsumerImpl(
+            "http://localhost:9998", "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
+        pceSendingPceRPCs = new PceSendingPceRPCs(
+            PceTestData.getPCE_test1_request_54(), networkTransaction, gnpyConsumer, portMapping);
+        mapping = new MappingBuilder()
+            .setLogicalConnectionPoint("logicalConnectionPoint")
+            .setPortQual("xpdr-client")
             .build();
         NodeInfo info = new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).build();
         Nodes node = new NodesBuilder().withKey(new NodesKey("node")).setNodeId("node").setNodeInfo(info).build();
-        when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
-        when(portMapping.getNode(anyString())).thenReturn(node);
+        lenient().when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
+        lenient().when(portMapping.getNode(anyString())).thenReturn(node);
     }
 
     @Test
-    public void cancelResourceReserve() {
+    void cancelResourceReserve() {
         pceSendingPceRPCs.cancelResourceReserve();
-        Assert.assertTrue("Success should equal to true", pceSendingPceRPCs.getSuccess());
+        assertTrue(pceSendingPceRPCs.getSuccess(), "Success should equal to true");
     }
 
     @Test
-    public void pathComputationTest() throws Exception {
+    void pathComputationTest() throws Exception {
         jerseyServer.setUp();
-        pceSendingPceRPCs =
-                new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                        networkTransaction, gnpyConsumer, portMapping);
+        pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
+                networkTransaction, gnpyConsumer, portMapping);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
         pceSendingPceRPCs.pathComputation();
-        Assert.assertTrue(gnpyConsumer.isAvailable());
+        assertTrue(gnpyConsumer.isAvailable());
         jerseyServer.tearDown();
-
     }
 
     @Test
-    public void checkMessage() {
-        Assert.assertNull(pceSendingPceRPCs.getMessage());
+    void checkMessage() {
+        assertNull(pceSendingPceRPCs.getMessage());
     }
 
     @Test
-    public void responseCodeTest() {
-        Assert.assertNull(pceSendingPceRPCs.getResponseCode());
+    void responseCodeTest() {
+        assertNull(pceSendingPceRPCs.getResponseCode());
     }
 
     @Test
-    public void gnpyAtoZ() {
-        Assert.assertNull(pceSendingPceRPCs.getGnpyAtoZ());
+    void gnpyAtoZ() {
+        assertNull(pceSendingPceRPCs.getGnpyAtoZ());
     }
 
     @Test
-    public void getGnpyZtoA() {
-        Assert.assertNull(pceSendingPceRPCs.getGnpyZtoA());
+    void getGnpyZtoA() {
+        assertNull(pceSendingPceRPCs.getGnpyZtoA());
     }
-
-
 }

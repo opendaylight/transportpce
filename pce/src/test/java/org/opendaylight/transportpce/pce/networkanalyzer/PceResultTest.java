@@ -7,11 +7,12 @@
  */
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 
@@ -19,47 +20,47 @@ public class PceResultTest extends AbstractTest {
 
     private PceResult pceResult = null;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         pceResult = new PceResult();
     }
 
     @Test
-    public void serviceTypeTest() {
+    void serviceTypeTest() {
         String serviceType = "some-service";
         pceResult.setServiceType(serviceType);
-        Assert.assertEquals(pceResult.getServiceType(), serviceType);
+        assertEquals(pceResult.getServiceType(), serviceType);
     }
 
     @Test
-    public void setResultTribSlotNbTest() {
+    void setResultTribSlotNbTest() {
         OpucnTribSlotDef minOpucnTs = new OpucnTribSlotDef("1.1");
         OpucnTribSlotDef maxOpucnTs = new OpucnTribSlotDef("1.20");
         List<OpucnTribSlotDef> minmaxTpTsList = new ArrayList<>();
         minmaxTpTsList.add(minOpucnTs);
         minmaxTpTsList.add(maxOpucnTs);
         pceResult.setResultTribPortTribSlot(minmaxTpTsList);
-        Assert.assertEquals(pceResult.getResultTribPortTribSlot().get(0), new OpucnTribSlotDef("1.1"));
-        Assert.assertEquals(pceResult.getResultTribPortTribSlot().get(1), new OpucnTribSlotDef("1.20"));
+        assertEquals(pceResult.getResultTribPortTribSlot().get(0), new OpucnTribSlotDef("1.1"));
+        assertEquals(pceResult.getResultTribPortTribSlot().get(1), new OpucnTribSlotDef("1.20"));
     }
 
     @Test
-    public void calcMessageTest() {
+    void calcMessageTest() {
         pceResult.setCalcMessage("some-message");
         pceResult.setRC("200");
-        Assert.assertEquals(pceResult.getMessage(), "Path is calculated by PCE");
+        assertEquals(pceResult.getMessage(), "Path is calculated by PCE");
     }
 
     @Test
-    public void waveLengthTest() {
-        Assert.assertEquals(0, pceResult.getResultWavelength());
+    void waveLengthTest() {
+        assertEquals(0, pceResult.getResultWavelength());
         pceResult.setResultWavelength(12);
-        Assert.assertEquals(12, pceResult.getResultWavelength());
+        assertEquals(12, pceResult.getResultWavelength());
     }
 
     @Test
-    public void localCause() {
+    void localCause() {
         pceResult.setLocalCause(PceResult.LocalCause.INT_PROBLEM);
-        Assert.assertEquals(pceResult.getLocalCause(), PceResult.LocalCause.INT_PROBLEM);
+        assertEquals(pceResult.getLocalCause(), PceResult.LocalCause.INT_PROBLEM);
     }
 }

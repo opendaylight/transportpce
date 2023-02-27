@@ -8,8 +8,12 @@
 
 package org.opendaylight.transportpce.pce.constraints;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.NoSuchElementException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -23,8 +27,8 @@ public class PceConstraintsCalcTest extends AbstractTest {
     private DataBroker dataBroker = getDataBroker();
 
     //TODO: review this test class. May be miss few assert.
-    @Before
-    public void setup() throws Exception {
+    @BeforeEach
+    void setup() throws Exception {
         // networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         PceTestUtils.writeNetworkIntoDataStore(dataBroker, getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
@@ -32,45 +36,48 @@ public class PceConstraintsCalcTest extends AbstractTest {
     }
 
     @Test
-    public void testNoHardOrSoftConstrainsExists() {
+    void testNoHardOrSoftConstrainsExists() {
         PceTestData.getPCE_test2_request_54().getSoftConstraints();
         new PceConstraintsCalc(PceTestData.getEmptyPCERequest(), networkTransactionService);
     }
 
     @Test()
-    public void testHardConstrainsExists() {
+    void testHardConstrainsExists() {
         new PceConstraintsCalc(
             PceTestData.getPCE_simpletopology_test1_requestSetHardAndSoftConstrains(),
             networkTransactionService);
     }
 
     @Test()
-    public void testHardConstrainsExists1() {
+    void testHardConstrainsExists1() {
         new PceConstraintsCalc(
             PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral(),
             networkTransactionService);
     }
 
     @Test
-    public void testSoftConstrainsExists() {
+    void testSoftConstrainsExists() {
         new PceConstraintsCalc(PceTestData.getPCERequest(), networkTransactionService);
     }
 
-    @Test(expected = Exception.class)
-    public void testHardConstrainsExists2() {
-        new PceConstraintsCalc(
-            PceTestData.build_diversity_from_request(PceTestData.getPCERequest()),
-            networkTransactionService);
+    //TODO: See if this test is relevant.
+    @Test
+    void testHardConstrainsExists2() {
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            new PceConstraintsCalc(
+                    PceTestData.build_diversity_from_request(PceTestData.getPCERequest()),
+                    networkTransactionService);
+        });
+        assertTrue(exception.getMessage().contains("No value present"));
     }
 
     @Test()
-    public void testHardConstrainsExists3() {
+    void testHardConstrainsExists3() {
         new PceConstraintsCalc(PceTestData.getEmptyPCERequestServiceNameWithRequestId(), networkTransactionService);
     }
 
     @Test()
-    public void testHardConstrainsExists4() {
+    void testHardConstrainsExists4() {
         new PceConstraintsCalc(PceTestData.getPCE_test2_request_54(), networkTransactionService);
     }
-
 }
