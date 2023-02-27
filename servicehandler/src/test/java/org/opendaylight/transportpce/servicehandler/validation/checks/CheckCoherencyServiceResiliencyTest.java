@@ -8,10 +8,13 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Protected;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Restorable;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Unprotected;
@@ -21,106 +24,119 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CheckCoherencyServiceResiliencyTest {
 
     @Test
-    public void testCheckWhenResiliencyNull() {
-        ComplianceCheckResult result = ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder().setRevertive(true).build());
+    void testCheckWhenResiliencyNull() {
+        ComplianceCheckResult result = ServicehandlerServiceResiliencyCheck
+            .check(new ServiceResiliencyBuilder().setRevertive(true).build());
 
-        Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(ServicehandlerServiceResiliencyCheck.LOG_RESILIENCY_NULL, result.getMessage());
+        assertFalse(result.hasPassed());
+        assertEquals(ServicehandlerServiceResiliencyCheck.LOG_RESILIENCY_NULL, result.getMessage());
     }
 
     @Test
-    public void testCheckWhenUnprotectedResiliencyWithWrongAttributes() {
+    void testCheckWhenUnprotectedResiliencyWithWrongAttributes() {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Unprotected.VALUE);
 
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setWaitToRestore(Uint64.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setHoldoffTime(Uint64.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setCoupledService(new CoupledServiceBuilder().build()).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setWaitToRestore(Uint64.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setHoldoffTime(Uint64.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenUnprotectedResiliencyWithCorrectAttributes() {
-        Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder()
-                        .setResiliency(Unprotected.VALUE)
-                        .build())
-                .hasPassed());
+    void testCheckWhenUnprotectedResiliencyWithCorrectAttributes() {
+        assertTrue(ServicehandlerServiceResiliencyCheck
+            .check(new ServiceResiliencyBuilder().setResiliency(Unprotected.VALUE).build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithWrongAttributes() {
+    void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithWrongAttributes() {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.VALUE);
 
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setWaitToRestore(Uint64.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setHoldoffTime(Uint64.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setWaitToRestore(Uint64.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setHoldoffTime(Uint64.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithCorrectAttributes() {
-        Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder().setResiliency(UnprotectedDiverselyRouted.VALUE)
-                        .setCoupledService(new CoupledServiceBuilder().build()).build()).hasPassed());
+    void testCheckWhenUnprotectedDiverselyRoutedResiliencyWithCorrectAttributes() {
+        assertTrue(ServicehandlerServiceResiliencyCheck
+            .check(new ServiceResiliencyBuilder()
+                .setResiliency(UnprotectedDiverselyRouted.VALUE)
+                .setCoupledService(new CoupledServiceBuilder().build())
+                .build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenProtectedResiliencyWithWrongAttributes() {
+    void testCheckWhenProtectedResiliencyWithWrongAttributes() {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Protected.VALUE);
 
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setCoupledService(new CoupledServiceBuilder().build()).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenProtectedResiliencyWithCorrectAttributes() {
-        Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder()
-                        .setResiliency(Protected.VALUE)
-                        .setRevertive(true)
-                        .setWaitToRestore(Uint64.valueOf(1))
-                        .setHoldoffTime(Uint64.valueOf(1))
-                        .build())
-                .hasPassed());
+    void testCheckWhenProtectedResiliencyWithCorrectAttributes() {
+        assertTrue(ServicehandlerServiceResiliencyCheck
+            .check(new ServiceResiliencyBuilder()
+                .setResiliency(Protected.VALUE)
+                .setRevertive(true)
+                .setWaitToRestore(Uint64.valueOf(1))
+                .setHoldoffTime(Uint64.valueOf(1))
+                .build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithWrongAttributes() {
+    void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithWrongAttributes() {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Restorable.VALUE);
 
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build()).hasPassed());
-        Assert.assertFalse(ServicehandlerServiceResiliencyCheck.check(
-                input.setCoupledService(new CoupledServiceBuilder().build()).build()).hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build())
+            .hasPassed());
+        assertFalse(ServicehandlerServiceResiliencyCheck
+            .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
+            .hasPassed());
     }
 
     @Test
-    public void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithCorrectAttributes() {
-        Assert.assertTrue(ServicehandlerServiceResiliencyCheck.check(
-                new ServiceResiliencyBuilder()
-                        .setResiliency(Restorable.VALUE)
-                        .setRevertive(true)
-                        .setWaitToRestore(Uint64.valueOf(1))
-                        .setHoldoffTime(Uint64.valueOf(1))
-                        .setPreCalculatedBackupPathNumber(Uint8.valueOf(1))
-                        .build())
-                .hasPassed());
+    void testCheckWhenRestorableOrExternalTriggerRestorableResiliencyWithCorrectAttributes() {
+        assertTrue(ServicehandlerServiceResiliencyCheck
+            .check(new ServiceResiliencyBuilder()
+                .setResiliency(Restorable.VALUE)
+                .setRevertive(true)
+                .setWaitToRestore(Uint64.valueOf(1))
+                .setHoldoffTime(Uint64.valueOf(1))
+                .setPreCalculatedBackupPathNumber(Uint8.valueOf(1))
+                .build())
+            .hasPassed());
     }
 }

@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.servicehandler.listeners;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -21,10 +21,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -37,9 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Restorable;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.endpoint.RxDirectionBuilder;
@@ -65,7 +63,7 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ServiceListenerTest {
 
     @Mock
@@ -78,7 +76,7 @@ public class ServiceListenerTest {
     private PathComputationService pathComputationService;
 
     @Test
-    public void testOnDataTreeChangedWhenDeleteService() {
+    void testOnDataTreeChangedWhenDeleteService() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
         final Collection<DataTreeModification<Services>> changes = new HashSet<>();
@@ -103,7 +101,7 @@ public class ServiceListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenServiceBecomesOutOfService() {
+    void testOnDataTreeChangedWhenServiceBecomesOutOfService() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
         final Collection<DataTreeModification<Services>> changes = new HashSet<>();
@@ -131,7 +129,7 @@ public class ServiceListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenShouldNeverHappen() {
+    void testOnDataTreeChangedWhenShouldNeverHappen() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
         final Collection<DataTreeModification<Services>> changes = new HashSet<>();
@@ -156,7 +154,7 @@ public class ServiceListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenServiceDegradedShouldBeRerouted() {
+    void testOnDataTreeChangedWhenServiceDegradedShouldBeRerouted() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
         final Collection<DataTreeModification<Services>> changes = new HashSet<>();
@@ -169,35 +167,29 @@ public class ServiceListenerTest {
                 .setServiceResiliency(serviceResiliency)
                 .build();
         when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(service.getDataBefore()).thenReturn(
-                new ServicesBuilder(buildService(State.InService, AdminStates.InService))
+        when(service.getDataBefore())
+            .thenReturn(new ServicesBuilder(buildService(State.InService, AdminStates.InService))
                         .setServiceResiliency(serviceResiliency)
                         .build());
         when(service.getDataAfter()).thenReturn(serviceAfter);
         when(serviceDataStoreOperations.getService(anyString())).thenReturn(Optional.of(serviceAfter));
-        when(servicehandler.serviceDelete(any())).thenReturn(
-                RpcResultBuilder.success(
-                        new ServiceDeleteOutputBuilder()
-                                .setConfigurationResponseCommon(
-                                        new ConfigurationResponseCommonBuilder()
+        when(servicehandler.serviceDelete(any()))
+            .thenReturn(RpcResultBuilder.success(new ServiceDeleteOutputBuilder()
+                                .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
                         .buildFuture());
-        when(servicehandler.serviceReroute(any())).thenReturn(
-                RpcResultBuilder.success(
-                        new ServiceRerouteOutputBuilder()
-                                .setConfigurationResponseCommon(
-                                        new ConfigurationResponseCommonBuilder()
+        when(servicehandler.serviceReroute(any()))
+            .thenReturn(RpcResultBuilder.success(new ServiceRerouteOutputBuilder()
+                                .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
                         .buildFuture());
-        when(servicehandler.serviceCreate(any())).thenReturn(
-                RpcResultBuilder.success(
-                        new ServiceCreateOutputBuilder()
-                                .setConfigurationResponseCommon(
-                                        new ConfigurationResponseCommonBuilder()
+        when(servicehandler.serviceCreate(any()))
+            .thenReturn(RpcResultBuilder.success(new ServiceCreateOutputBuilder()
+                                .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
@@ -217,7 +209,7 @@ public class ServiceListenerTest {
     }
 
     @Test
-    public void testOnDataTreeChangedWhenServiceDegradedShouldNotBeRerouted() {
+    void testOnDataTreeChangedWhenServiceDegradedShouldNotBeRerouted() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
         final Collection<DataTreeModification<Services>> changes = new HashSet<>();
@@ -244,27 +236,24 @@ public class ServiceListenerTest {
     }
 
     private Services buildService(State state, AdminStates adminStates) {
-        ServiceAEnd serviceAEnd = getServiceAEndBuild().build();
-        ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
-                .setClli("clli")
-                .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(Uint32.valueOf(1))
-                .setNodeId(new NodeIdType("XPONDER-3-2"))
-                .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
-                .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
-                .build();
-        ServicesBuilder builtInput = new ServicesBuilder()
+        return new ServicesBuilder()
                 .setSdncRequestHeader(new SdncRequestHeaderBuilder().build())
                 .setCommonId("commonId")
                 .setConnectionType(ConnectionType.Service)
                 .setCustomer("Customer")
                 .setServiceName("service 1")
-                .setServiceAEnd(serviceAEnd)
-                .setServiceZEnd(serviceZEnd)
+                .setServiceAEnd(getServiceAEndBuild().build())
+                .setServiceZEnd(new ServiceZEndBuilder()
+                        .setClli("clli")
+                        .setServiceFormat(ServiceFormat.Ethernet)
+                        .setServiceRate(Uint32.valueOf(1))
+                        .setNodeId(new NodeIdType("XPONDER-3-2"))
+                        .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
+                        .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
+                        .build())
                 .setOperationalState(state)
-                .setAdministrativeState(adminStates);
-
-        return builtInput.build();
+                .setAdministrativeState(adminStates)
+                .build();
     }
 
     private ServiceAEndBuilder getServiceAEndBuild() {

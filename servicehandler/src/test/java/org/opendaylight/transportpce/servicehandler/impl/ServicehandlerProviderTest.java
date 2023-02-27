@@ -11,11 +11,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
@@ -24,39 +23,27 @@ import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
 
+@ExtendWith(MockitoExtension.class)
 public class ServicehandlerProviderTest  extends AbstractTest {
 
     @Mock
     RpcProviderService rpcProviderRegistry;
-
     @Mock
     ServiceDataStoreOperations serviceDataStoreOperations;
-
     @Mock
     PceListenerImpl pceListenerImpl;
-
     @Mock
     ServiceListener serviceListener;
-
     @Mock
     RendererListenerImpl rendererListenerImpl;
-
     @Mock
     NetworkModelListenerImpl networkModelListenerImpl;
-
     @Mock
     ServicehandlerImpl servicehandler;
 
 
-    private AutoCloseable closeable;
-
-    @Before
-    public void openMocks() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
     @Test
-    public void testInitRegisterServiceHandlerToRpcRegistry() {
+    void testInitRegisterServiceHandlerToRpcRegistry() {
         ServicehandlerProvider provider =  new ServicehandlerProvider(
                 getDataBroker(), rpcProviderRegistry,
                 getNotificationService() , serviceDataStoreOperations, pceListenerImpl, serviceListener,
@@ -64,12 +51,6 @@ public class ServicehandlerProviderTest  extends AbstractTest {
 
         provider.init();
 
-        verify(rpcProviderRegistry, times(1))
-                .registerRpcImplementation(any(), any(ServicehandlerImpl.class));
+        verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(ServicehandlerImpl.class));
     }
-
-    @After public void releaseMocks() throws Exception {
-        closeable.close();
-    }
-
 }
