@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2010e969_308f8a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "You\u0027re welcome Olivier. Thanks for your comments. Here are my feedbacks.\n- I was pretty sure these names were not valid from an optical standpoint 😊 Thanks for your proposals. I made some counter-proposal to shorten some of them so that they do not burden too much the code. Please let me know if it still makes sense.\n- So let\u0027s stick and restore to the initial behavior you propose. I think it is healthier to push the optimization you can see now in a separate change. We can work on that together if you want. Improving code readability/understanding was one of the main purpose of this refactoring. I am happy you can see a few new potential improvements now !\n- fair enough - let\u0027s restore this behavior\n- thx for the explanation. Actually it doesn\u0027t reset Pdl2 if I am not mistaken but the code is a bit misleading with all these arguments. You can have a look at the next change in the relation chain that better address this issue and is more readable for this part IMO.\n- correct - see also next change in the relation chain. It push the logic a bit further but the whole issue can only be addressed  by refactoring also CatalogUtils...",
+      "parentUuid": "8aeac402_f2f39f5f",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a5753cc_72650d19",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "Not that easy to figure it out from the gerrit view, but there might be some further optimization here. If you look at line 461 comment, you see that we don\u0027t care of the first degree on the path and only care of the Add. Now that you have split the loop in 2 separate loops, my feeling is that in the first loop you will never have to handle a degree case. \nCase 1 : Node(0) \u003d TSP, Node(1) \u003d Add --\u003e For loop completed\nCase 2 : Node(0) \u003d Add, Node(1) \u003d Degree, but degree shall not be considered just after the Add (Line 464 : pathElement++ which ends the for loop), --\u003e If CASE DEGREE is not there, it shall not change anything if I am correct. As we will always go through a add, the following Bypass Degree \u003d1 is also not needed.",
+      "range": {
+        "startLine": 467,
+        "startChar": 1,
+        "endLine": 485,
+        "endChar": 120
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f2b0c2_d8e0a0a6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "OK this is a benefit of the refactoring.\nSince this will change the current behavior of the implementation, I think we can do that in a separate change.",
+      "parentUuid": "0a5753cc_72650d19",
       "range": {
         "startLine": 467,
         "startChar": 1,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "578f11e0_81adb09a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "OK so concretely, if I understand well, we should also create another change and simply put here something like that instead\n                case XPONDER:\n                    LOG.warning/error?(\"unsupported configuration\");\n                    break; or return;?\n                    \nis this correct?",
+      "parentUuid": "eea8efc9_00b88531",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1718f7e6_79c3e754",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -77,6 +143,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "My feeling is that we are missing something. As the for loop is limited to the penultimate element of the path, in the case we have a tunnel from one SRG to another, the last element is a SRG. This means we miss the contribution of the latest drop. It is not tested right now, because we can not in the case of a tunnel calculate a margin, (because we have no RX OSNR reference), but the code shall be future proof, and we should consider the latest srg contribution, because when we will handle Alien wavelength use case, we need to have the exact calculation (not a margin, but a parameter passed to a method)",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27e82777_f19e06ef",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "OK I can reintroduce the functions above removed here in a new PS.\nThis way, we will stick to the behavior you propose initially.",
+      "parentUuid": "1718f7e6_79c3e754",
       "range": {
         "startLine": 594,
         "startChar": 0,
@@ -181,6 +271,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fede09eb_f067ea8c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "fair enough",
+      "parentUuid": "0e75a550_d71b1787",
+      "range": {
+        "startLine": 901,
+        "startChar": 32,
+        "endLine": 901,
+        "endChar": 46
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "84c46e8b_f533ecd1",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -198,6 +312,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ca5718e_c699259e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "this is a rather long function name.\nwhat about simply calcDropContrib ?",
+      "parentUuid": "84c46e8b_f533ecd1",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b321689d_452d6859",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -209,6 +341,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "The name of the method does not really reflect what it does. Propose to change the name to calcAddContribToPerfDegradation. It not just a question of OSNR.",
+      "range": {
+        "startLine": 949,
+        "startChar": 31,
+        "endLine": 949,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fdf7309_7ee26196",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "this is a rather long function name.\nwhat about simply calcAddContrib ?",
+      "parentUuid": "b321689d_452d6859",
       "range": {
         "startLine": 949,
         "startChar": 31,
@@ -244,6 +400,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa2ddd67_45d4f7cf",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "this is a rather long function name.\nwhat about simply calcBypassContrib ?",
+      "parentUuid": "ad98cc07_a292dd6c",
+      "range": {
+        "startLine": 970,
+        "startChar": 1,
+        "endLine": 970,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93592dfe_c571f9f9",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -267,6 +447,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b81c083_8d621908",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "calcPdl2 is eventually not reset here but it is needed by the function.\nOnly calcCd calcPmd2 \u0026 calcOnsrLin are modified in lines below.\nThis is classical referenced value modification compiter science issue.\nIt that burdens the code a lot at this stage.\nThough, I needed this intermediate state to be sure to understand the complete logic here.\nI agree the var name \"impairments\" is probably a bit misleading here from an optical standpoint. Next change in the relation chain better address this problem IMO.",
+      "parentUuid": "93592dfe_c571f9f9",
+      "range": {
+        "startLine": 984,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 84
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5210bac1_fe9df448",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -278,6 +482,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "The name of the method does not really reflect what it does. Propose to change the name to calcLineDegradation, as here we calculate the contribution of the link to the global performance degradation. It not just a question of OSNR",
+      "range": {
+        "startLine": 1003,
+        "startChar": 1,
+        "endLine": 1003,
+        "endChar": 52
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbdc391_9b9a1b85",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T17:34:49Z",
+      "side": 1,
+      "message": "fair enough",
+      "parentUuid": "5210bac1_fe9df448",
       "range": {
         "startLine": 1003,
         "startChar": 1,
