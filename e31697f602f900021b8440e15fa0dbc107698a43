@@ -293,6 +293,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db7c3c6_f96d424c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T21:48:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fede09eb_f067ea8c",
+      "range": {
+        "startLine": 901,
+        "startChar": 32,
+        "endLine": 901,
+        "endChar": 46
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84c46e8b_f533ecd1",
@@ -506,6 +530,30 @@
       "side": 1,
       "message": "fair enough",
       "parentUuid": "5210bac1_fe9df448",
+      "range": {
+        "startLine": 1003,
+        "startChar": 1,
+        "endLine": 1003,
+        "endChar": 52
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525210bc_f523cceb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T21:48:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbdc391_9b9a1b85",
       "range": {
         "startLine": 1003,
         "startChar": 1,
