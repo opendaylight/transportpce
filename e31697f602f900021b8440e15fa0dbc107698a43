@@ -1,0 +1,314 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aeac402_f2f39f5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Thanks Guillaume. Great work that will contribute in reducing the complexity.\n_I made some comments about the name you chose for the methods you added. Some names might be changed because from an optical view, the names you use do not reflect exactly what the methods do. \n_Some further optimisation may be done : my feeling is that in the switch cases, some of the case will not happen.\n_The SRG case must be carrefully handled. As you split the for loop into 2 different loops, and as the second stops at the penultimate node (from my understanding);, I guess the use case where we handle a tunnel from 2 SRGs is not perfectly handled (The last SRG-Drop contribution may not be included in your calculation, which does not appear in the results of the functional tests, because we don\u0027t calculate the margin in this case. However it must be considered because when we will handle Alien wavelength, we need to account for all node contributions.\n_My feeling is that the way you handle maps may reset the calculation of Pdl2, which is also only partially covered in the test because the way to handled it is not completely addressed today in OR MSA (we are waiting for some confirmation about the engineering rule). \n_Last but not least, about the way you handle impairment Maps, my feeling is that you are close to a real optimization but that you did push the approach to the end : if the way we pass parameters to Catalog utils methods may be optimized in a later step (seperate parameters passed independently without using a map), for the method of PostAlgoValidator, I do not understand why you use this complex way of passing each parameters independently, while each of them is included in the Impairment map. Can you elaborate on the problem you encoutered to proceed that way?\nThanks so much!\n",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a5753cc_72650d19",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Not that easy to figure it out from the gerrit view, but there might be some further optimization here. If you look at line 461 comment, you see that we don\u0027t care of the first degree on the path and only care of the Add. Now that you have split the loop in 2 separate loops, my feeling is that in the first loop you will never have to handle a degree case. \nCase 1 : Node(0) \u003d TSP, Node(1) \u003d Add --\u003e For loop completed\nCase 2 : Node(0) \u003d Add, Node(1) \u003d Degree, but degree shall not be considered just after the Add (Line 464 : pathElement++ which ends the for loop), --\u003e If CASE DEGREE is not there, it shall not change anything if I am correct. As we will always go through a add, the following Bypass Degree \u003d1 is also not needed.",
+      "range": {
+        "startLine": 467,
+        "startChar": 1,
+        "endLine": 485,
+        "endChar": 120
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea8efc9_00b88531",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Further optimization may be done there. As I understand it, You call getLast XPDRmargin out of the SWITCH case, and restrict the loop to the penultimate element. My understanding is that if we had at that stage a XPDR, it means we would have a regen (implemented in an old fashion, coupling to XPDR together). This could happen, but the code does not allow to handle that use case at that time : handling regen in the PCE is a long way ... and we are still far from it. It would also require (if it is implemented this way and not through a real regen) to handle before, a xpdr from which we calculate the margin, and then to consider a new xponder from which we calculate the TX OSNR, ect.... So should be removed. It will never happen, and if it happens, the code as it is there does not allow to make a proper calculation",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1718f7e6_79c3e754",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "My feeling is that we are missing something. As the for loop is limited to the penultimate element of the path, in the case we have a tunnel from one SRG to another, the last element is a SRG. This means we miss the contribution of the latest drop. It is not tested right now, because we can not in the case of a tunnel calculate a margin, (because we have no RX OSNR reference), but the code shall be future proof, and we should consider the latest srg contribution, because when we will handle Alien wavelength use case, we need to have the exact calculation (not a margin, but a parameter passed to a method)",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e18a6e_f760a483",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Same comment as for AZ direction",
+      "range": {
+        "startLine": 691,
+        "startChar": 0,
+        "endLine": 721,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88759e21_4882b65f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Same comment as per AZ direction",
+      "range": {
+        "startLine": 731,
+        "startChar": 15,
+        "endLine": 739,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63ac69a1_416888b2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "Same comment as per AZ direction",
+      "range": {
+        "startLine": 818,
+        "startChar": 1,
+        "endLine": 818,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e75a550_d71b1787",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "The name of the method does not really reflect what it does. Check OSNR suggest that we check OSNR at RX of transponder and verify it is compliant. Propose to change the name to calcXpdrOSNR.",
+      "range": {
+        "startLine": 901,
+        "startChar": 32,
+        "endLine": 901,
+        "endChar": 46
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84c46e8b_f533ecd1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "The name of the method does not really reflect what it does. Propose to change the name to calcDropContribToPerfDegradation. It not just a question of OSNR.",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b321689d_452d6859",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "The name of the method does not really reflect what it does. Propose to change the name to calcAddContribToPerfDegradation. It not just a question of OSNR.",
+      "range": {
+        "startLine": 949,
+        "startChar": 31,
+        "endLine": 949,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad98cc07_a292dd6c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "The name of the method does not really reflect what it does. Propose to change the name to calcBypassContribToPerfDegradation. It not just a question of OSNR.",
+      "range": {
+        "startLine": 970,
+        "startChar": 1,
+        "endLine": 970,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93592dfe_c571f9f9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "My feeling is that doing so, you reset the impairments map with new values calculated from the values you pass to calcDegradationOSNR. The problem is that in this last method, you do not use the value of calcPdl2. So you reset the value of calcPdl2. Not sure on my side I included the calculation of penalties associated with PDL, because I was waiting for a validation of the calculation method from OpenROADM MSA, which I didn\u0027t get : the person in charge of this was, I guess, waiting for a validation from Polito (working on GNPy), but this is something complex, which is still not solved....",
+      "range": {
+        "startLine": 984,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 84
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5210bac1_fe9df448",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "The name of the method does not really reflect what it does. Propose to change the name to calcLineDegradation, as here we calculate the contribution of the link to the global performance degradation. It not just a question of OSNR",
+      "range": {
+        "startLine": 1003,
+        "startChar": 1,
+        "endLine": 1003,
+        "endChar": 52
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b247e7c9_21a593e6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-02-28T09:22:15Z",
+      "side": 1,
+      "message": "See comment above. Even if calcPdl2 is not modified, it shall be IMHO returned unmodified",
+      "range": {
+        "startLine": 1009,
+        "startChar": 1,
+        "endLine": 1009,
+        "endChar": 22
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
