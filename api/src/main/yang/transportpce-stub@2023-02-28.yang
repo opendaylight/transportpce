@@ -1,0 +1,29 @@
+module transportpce-stub {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/stub";
+  prefix org-opendaylight-transportpce-stub;
+
+  import transportpce-pathDescription {
+    prefix transportpce-pathDescription;
+    revision-date 2021-07-05;
+  }
+
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions for defining port mapping in TransportPCE.
+     Copyright (c) 2023 Orange and others. All rights reserved.
+     authors: Gilles Thouenon Emmanuelle Delfour";
+
+  revision 2023-02-28 {
+    description
+      "Model to parse json input file for FrequenciesServiceTests";
+  }
+
+  container path-description {
+      uses transportpce-pathDescription:path-description;
+  }
+}

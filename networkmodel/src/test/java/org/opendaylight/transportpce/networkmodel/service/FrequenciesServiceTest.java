@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -37,7 +36,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stub.rev230228.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
@@ -47,7 +46,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Disabled
+
 public class FrequenciesServiceTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceTest.class);
     private static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";
@@ -65,8 +64,7 @@ public class FrequenciesServiceTest extends AbstractTest {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(PATH_DESCRIPTION_FILE, StandardCharsets.UTF_8)) {
-            NormalizedNode normalizedNode = dataObjectConverter
-                    .transformIntoNormalizedNode(reader).get();
+            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).get();
             pathDescription = (PathDescription) getDataStoreContextUtil()
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
                             .of(PathDescription.QNAME), normalizedNode).getValue();

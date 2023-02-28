@@ -1,5 +1,5 @@
  {
-    "pathdescription-stub:path-description": {
+    "transportpce-stub:path-description": {
         "zToA-direction": {
             "rate": 100,
             "zToA": [
@@ -107,119 +107,119 @@
             "zToA-max-frequency": 196.125,
             "modulation-format": "dp-qpsk"
         },
-            "aToZ-direction": {
-                "aToZ": [
-                    {
-                        "id": "0",
-                        "resource": {
-                            "tp-node-id": "ROADM-A1-SRG1",
-                            "tp-id": "SRG1-PP1-TXRX"
-                        }
-                    },
-                    {
-                        "id": "1",
-                        "resource": {
-                            "node-id": "ROADM-A1-SRG1"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "resource": {
-                            "tp-node-id": "ROADM-A1-SRG1",
-                            "tp-id": "SRG1-CP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "14",
-                        "resource": {
-                            "tp-node-id": "OpenROADM-2-2-SRG1",
-                            "tp-id": "SRG1-PP1-TX"
-                        }
-                    },
-                    {
-                        "id": "10",
-                        "resource": {
-                            "tp-node-id": "ROADM-C1-DEG1",
-                            "tp-id": "DEG1-CTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "11",
-                        "resource": {
-                            "link-id": "ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "12",
-                        "resource": {
-                            "tp-node-id": "ROADM-C1-SRG1",
-                            "tp-id": "SRG1-CP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "13",
-                        "resource": {
-                            "node-id": "ROADM-C1-SRG1"
-                        }
-                    },
-                    {
-                        "id": "14",
-                        "resource": {
-                            "tp-node-id": "ROADM-C1-SRG1",
-                            "tp-id": "SRG1-PP1-TXRX"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "resource": {
-                            "link-id": "ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "resource": {
-                            "tp-node-id": "ROADM-A1-DEG2",
-                            "tp-id": "DEG2-CTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "5",
-                        "resource": {
-                            "node-id": "ROADM-A1-DEG2"
-                        }
-                    },
-                    {
-                        "id": "6",
-                        "resource": {
-                            "tp-node-id": "ROADM-A1-DEG2",
-                            "tp-id": "DEG2-TTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "7",
-                        "resource": {
-                            "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "8",
-                        "resource": {
-                            "tp-node-id": "ROADM-C1-DEG1",
-                            "tp-id": "DEG1-TTP-TXRX"
-                        }
-                    },
-                    {
-                        "id": "9",
-                        "resource": {
-                            "node-id": "ROADM-C1-DEG1"
-                        }
+        "aToZ-direction": {
+            "aToZ": [
+                {
+                    "id": "0",
+                    "resource": {
+                        "tp-node-id": "ROADM-A1-SRG1",
+                        "tp-id": "SRG1-PP1-TXRX"
                     }
-                ],
-                "aToZ-min-frequency": 196.075,
-                "aToZ-max-frequency": 196.125,
-                "rate": 100,
-                "aToZ-wavelength-number": 1,
-                "modulation-format": "dp-qpsk"
-            }
+                },
+                {
+                    "id": "1",
+                    "resource": {
+                        "node-id": "ROADM-A1-SRG1"
+                    }
+                },
+                {
+                    "id": "2",
+                    "resource": {
+                        "tp-node-id": "ROADM-A1-SRG1",
+                        "tp-id": "SRG1-CP-TXRX"
+                    }
+                },
+                {
+                    "id": "14",
+                    "resource": {
+                        "tp-node-id": "OpenROADM-2-2-SRG1",
+                        "tp-id": "SRG1-PP1-TX"
+                    }
+                },
+                {
+                    "id": "10",
+                    "resource": {
+                        "tp-node-id": "ROADM-C1-DEG1",
+                        "tp-id": "DEG1-CTP-TXRX"
+                    }
+                },
+                {
+                    "id": "11",
+                    "resource": {
+                        "link-id": "ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX"
+                    }
+                },
+                {
+                    "id": "12",
+                    "resource": {
+                        "tp-node-id": "ROADM-C1-SRG1",
+                        "tp-id": "SRG1-CP-TXRX"
+                    }
+                },
+                {
+                    "id": "13",
+                    "resource": {
+                        "node-id": "ROADM-C1-SRG1"
+                    }
+                },
+                {
+                    "id": "14",
+                    "resource": {
+                        "tp-node-id": "ROADM-C1-SRG1",
+                        "tp-id": "SRG1-PP1-TXRX"
+                    }
+                },
+                {
+                    "id": "3",
+                    "resource": {
+                        "link-id": "ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX"
+                    }
+                },
+                {
+                    "id": "4",
+                    "resource": {
+                        "tp-node-id": "ROADM-A1-DEG2",
+                        "tp-id": "DEG2-CTP-TXRX"
+                    }
+                },
+                {
+                    "id": "5",
+                    "resource": {
+                        "node-id": "ROADM-A1-DEG2"
+                    }
+                },
+                {
+                    "id": "6",
+                    "resource": {
+                        "tp-node-id": "ROADM-A1-DEG2",
+                        "tp-id": "DEG2-TTP-TXRX"
+                    }
+                },
+                {
+                    "id": "7",
+                    "resource": {
+                        "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
+                    }
+                },
+                {
+                    "id": "8",
+                    "resource": {
+                        "tp-node-id": "ROADM-C1-DEG1",
+                        "tp-id": "DEG1-TTP-TXRX"
+                    }
+                },
+                {
+                    "id": "9",
+                    "resource": {
+                        "node-id": "ROADM-C1-DEG1"
+                    }
+                }
+            ],
+            "aToZ-min-frequency": 196.075,
+            "aToZ-max-frequency": 196.125,
+            "rate": 100,
+            "aToZ-wavelength-number": 1,
+            "modulation-format": "dp-qpsk"
+        }
         }
 }
