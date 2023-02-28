@@ -177,6 +177,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9932c09d_5a448d3c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T21:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27e82777_f19e06ef",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e18a6e_f760a483",
@@ -236,6 +260,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "Same comment as per AZ direction",
+      "range": {
+        "startLine": 818,
+        "startChar": 1,
+        "endLine": 818,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a86d4fe2_6053a0ef",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-02-28T21:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63ac69a1_416888b2",
       "range": {
         "startLine": 818,
         "startChar": 1,
