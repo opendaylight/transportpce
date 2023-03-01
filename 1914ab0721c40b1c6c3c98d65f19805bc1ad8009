@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d27296_165cf43e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "Hello,\nThought you would wait for my answers to your questions before pushing your last patch as you were asking for kind of aknowledgement... \nSo please see my comments that apply to your answers on patchset 9. Did not have time to review Patchset 10. For the last point of the general comment, I will look at your last change. ",
+      "revId": "1914ab0721c40b1c6c3c98d65f19805bc1ad8009",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

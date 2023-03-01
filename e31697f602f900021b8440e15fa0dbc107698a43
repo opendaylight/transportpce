@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53b2a92a_31b608c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "My feeling is that it won\u0027t change the current behavior of the implementation. As I see it, you will never enter in that part of the code. So why not removing it (or comment it) and check that it does not affect the results of the functional test?",
+      "parentUuid": "2010e969_308f8a90",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a5753cc_72650d19",
@@ -85,6 +103,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d28cb60_056c9ac7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "My feeling is that it won\u0027t change the current behavior of the implementation. As I see it, you will never enter in that part of the code. So why not removing it (or comment it) and check that it does not affect the results of the functional test?",
+      "parentUuid": "e6f2b0c2_d8e0a0a6",
+      "range": {
+        "startLine": 467,
+        "startChar": 1,
+        "endLine": 485,
+        "endChar": 120
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eea8efc9_00b88531",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -120,6 +162,30 @@
       "side": 1,
       "message": "OK so concretely, if I understand well, we should also create another change and simply put here something like that instead\n                case XPONDER:\n                    LOG.warning/error?(\"unsupported configuration\");\n                    break; or return;?\n                    \nis this correct?",
       "parentUuid": "eea8efc9_00b88531",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5733a9d_65e37087",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "Yes, this is a good proposal. The message could be complemented : \" unsupported back to back transponder configuration\"",
+      "parentUuid": "578f11e0_81adb09a",
       "range": {
         "startLine": 506,
         "startChar": 0,
@@ -402,6 +468,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de17aae3_060a58c3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "OK. Understand that the name proposed is a bit long and does not simplify the layout",
+      "parentUuid": "0ca5718e_c699259e",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b321689d_452d6859",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -437,6 +521,30 @@
       "side": 1,
       "message": "this is a rather long function name.\nwhat about simply calcAddContrib ?",
       "parentUuid": "b321689d_452d6859",
+      "range": {
+        "startLine": 949,
+        "startChar": 31,
+        "endLine": 949,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28933c24_76a5eb74",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "Yes. It fits.",
+      "parentUuid": "3fdf7309_7ee26196",
       "range": {
         "startLine": 949,
         "startChar": 31,
@@ -496,6 +604,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c1ae9b7_bd7102b8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "Same, I am fine with your proposal",
+      "parentUuid": "fa2ddd67_45d4f7cf",
+      "range": {
+        "startLine": 970,
+        "startChar": 1,
+        "endLine": 970,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93592dfe_c571f9f9",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 9
@@ -531,6 +663,30 @@
       "side": 1,
       "message": "calcPdl2 is eventually not reset here but it is needed by the function.\nOnly calcCd calcPmd2 \u0026 calcOnsrLin are modified in lines below.\nThis is classical referenced value modification compiter science issue.\nIt that burdens the code a lot at this stage.\nThough, I needed this intermediate state to be sure to understand the complete logic here.\nI agree the var name \"impairments\" is probably a bit misleading here from an optical standpoint. Next change in the relation chain better address this problem IMO.",
       "parentUuid": "93592dfe_c571f9f9",
+      "range": {
+        "startLine": 984,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 84
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da32210_98a3f116",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T08:19:53Z",
+      "side": 1,
+      "message": "You are right. My mistake. I was thinking one step further where the impairment map could be maintained and refreshed dynamically, as we go through the different elements of the path, updating the value of each of its parameters adding the contribution of degradation brought by each node. But as it is only an intermediate step and not an update of existing values, you do not crush an existing value!",
+      "parentUuid": "0b81c083_8d621908",
       "range": {
         "startLine": 984,
         "startChar": 7,
