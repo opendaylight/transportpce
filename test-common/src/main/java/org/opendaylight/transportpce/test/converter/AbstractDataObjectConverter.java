@@ -104,9 +104,8 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
                     normalizedNode.getClass().getSimpleName());
             return Optional.empty();
         }
-        T rpcDataObject = (T) codecRegistry.fromNormalizedNodeRpcData(
-                Absolute.of(QName.create(schemaContext.getClass().getSimpleName())),
-                (ContainerNode) normalizedNode);
+        T rpcDataObject = (T) codecRegistry
+            .fromNormalizedNodeRpcData(Absolute.of(EffectiveModelContext.NAME), (ContainerNode) normalizedNode);
         return Optional.ofNullable(rpcDataObject);
     }
 

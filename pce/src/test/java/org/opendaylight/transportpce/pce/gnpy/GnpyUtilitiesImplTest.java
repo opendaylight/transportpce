@@ -57,7 +57,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,15 +80,13 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
                     StandardCharsets.UTF_8);
 
             networkReader = new JsonReader(gnpyNetwork);
-            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader,
-                    QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
+            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
             // load openroadm-topology
             Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
                     StandardCharsets.UTF_8);
             topoReader = new JsonReader(gnpyTopo);
-            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
-                    QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
+            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
         } catch (FileNotFoundException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
