@@ -963,6 +963,31 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
+    def test_69_restore_status_port_roadma_srg(self):
+        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
+        body = {"ports": [{
+            "port-name": "C2",
+            "logical-connection-point": "SRG1-PP2",
+            "port-type": "client",
+            "circuit-id": "SRG1",
+            "administrative-state": "inService",
+            "port-qual": "roadm-external"}]}
+        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+                                    timeout=test_utils.REQUEST_TIMEOUT)
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(2)
+
+    def test_70_clean_openroadm_topology(self):
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        links = response['network'][0]['ietf-network-topology:link']
+        for link in links:
+            if link["org-openroadm-common-network:link-type"] in ('XPONDER-OUTPUT', 'XPONDER-INPUT', 'ROADM-TO-ROADM'):
+                response = test_utils.del_ietf_network_link_request('openroadm-topology', link['link-id'], 'config')
+                self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

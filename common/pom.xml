@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>10.0.6</version>
+    <version>11.0.6</version>
     <relativePath/>
   </parent>
 
@@ -20,7 +20,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>17.2.0</transportpce.models.version>
+    <transportpce.models.version>18.0.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -35,7 +35,7 @@
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>4.0.5</version>
+        <version>5.0.2</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -118,11 +118,11 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-inet-types</artifactId>
+      <artifactId>rfc8345-ietf-network</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc8345-ietf-network</artifactId>
+      <artifactId>rfc6991-ietf-inet-types</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
@@ -146,7 +146,7 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>sal-netconf-connector</artifactId>
+      <artifactId>netconf-topology</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

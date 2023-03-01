@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>10.0.6</version>
+    <version>11.0.6</version>
     <relativePath/>
   </parent>
 
@@ -24,7 +24,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>17.2.0</transportpce.models.version>
+    <transportpce.models.version>18.0.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -35,6 +35,13 @@
         <version>${transportpce.models.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>11.0.6</version>
+        <scope>import</scope>
+        <type>pom</type>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -51,10 +58,6 @@
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-10.1.0</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-device-2.2.1</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
@@ -88,15 +91,7 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
-      <artifactId>yang-model-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>yang-data-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.yangtools</groupId>
-      <artifactId>yang-data-impl</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
@@ -105,10 +100,6 @@
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-inet-types</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-yang-types</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
@@ -132,27 +123,11 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-dom-codec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
       <artifactId>mdsal-binding-dom-codec-spi</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-runtime-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-runtime-spi</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -161,10 +136,6 @@
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-server</artifactId>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
@@ -190,9 +161,29 @@
 
     <!-- Testing Dependencies -->
     <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-device-2.2.1</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>test-common</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-model-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-data-impl</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc6991-ietf-yang-types</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -201,8 +192,33 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-runtime-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-runtime-spi</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-dom-codec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-server</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

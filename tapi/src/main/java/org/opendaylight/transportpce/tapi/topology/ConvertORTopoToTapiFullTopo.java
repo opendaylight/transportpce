@@ -353,8 +353,8 @@ public class ConvertORTopoToTapiFullTopo {
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs", roadm.getNodeId().getValue(), numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs", roadm.getNodeId().getValue(),
-            roadmNode.getOwnedNodeEdgePoint().values().size(),
-            roadmNode.getOwnedNodeEdgePoint().values().stream()
+            roadmNode.nonnullOwnedNodeEdgePoint().values().size(),
+            roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getMappedServiceInterfacePoint() != null).count());
 
         tapiNodes.put(roadmNode.key(), roadmNode);

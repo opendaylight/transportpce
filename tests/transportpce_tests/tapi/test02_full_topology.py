@@ -132,7 +132,7 @@ class TransportPCEtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
-        time.sleep(5)
+        time.sleep(2)
 
     def test_01_connect_spdrA(self):
         print("Connecting SPDRA")

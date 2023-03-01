@@ -144,8 +144,6 @@ public class CatalogUtils {
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
-            } finally {
-                networkTransactionService.close();
             }
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
@@ -167,8 +165,6 @@ public class CatalogUtils {
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
                 throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
-            } finally {
-                networkTransactionService.close();
             }
         }
         if (maxRollOff == 0) {
@@ -236,8 +232,6 @@ public class CatalogUtils {
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                         + omCatalogIid + " :" + e);
-            } finally {
-                networkTransactionService.close();
             }
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
@@ -269,8 +263,6 @@ public class CatalogUtils {
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
                         + e);
-            } finally {
-                networkTransactionService.close();
             }
         }
         if (minOOBOsnrSingleChannelValue != null) {
@@ -334,8 +326,6 @@ public class CatalogUtils {
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
                         + e);
-            } finally {
-                networkTransactionService.close();
             }
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
@@ -361,8 +351,6 @@ public class CatalogUtils {
                 throw new RuntimeException(
                     "readMdSal: Error reading from operational store, Operational Mode Catalog : " + omCatalogIid + " :"
                         + e);
-            } finally {
-                networkTransactionService.close();
             }
         }
         if (penaltiesMap == null) {
@@ -502,7 +490,6 @@ public class CatalogUtils {
                     }
                     var orAddOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
-                    networkTransactionService.close();
                     maxIntroducedCd = orAddOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
                     //maxIntroducedPdl = orAddOM.getMaxIntroducedPdl().getValue().doubleValue();
@@ -517,8 +504,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
 
@@ -539,7 +524,6 @@ public class CatalogUtils {
                     }
                     var orDropOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orDropOM);
-                    networkTransactionService.close();
                     maxIntroducedCd = orDropOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
                     // maxIntroducedPdl = orDropOM.getMaxIntroducedPdl().getValue().doubleValue();
@@ -557,8 +541,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid1 + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
 
@@ -604,8 +586,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid2 + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
 
@@ -627,7 +607,6 @@ public class CatalogUtils {
                     }
                     var orAmpOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAmpOM);
-                    networkTransactionService.close();
                     maxIntroducedCd = orAmpOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
                     // maxIntroducedPdl = orAmpOM.getMaxIntroducedPdl().getValue().doubleValue();
@@ -645,8 +624,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid3 + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
             default:
@@ -739,7 +716,6 @@ public class CatalogUtils {
                     }
                     var orAddOM = omOptional.get();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
-                    networkTransactionService.close();
                     var mask = orAddOM.getMaskPowerVsPin();
                     for (Map.Entry<MaskPowerVsPinKey, MaskPowerVsPin> pw : mask.entrySet()) {
                         if (spanLoss >= pw.getKey().getLowerBoundary().doubleValue()
@@ -758,8 +734,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
 
@@ -806,8 +780,6 @@ public class CatalogUtils {
                     throw new RuntimeException(
                         "readMdSal: Error reading from operational store, Operational Mode Catalog : "
                             + omCatalogIid2 + " :" + e);
-                } finally {
-                    networkTransactionService.close();
                 }
                 break;
 
@@ -867,14 +839,11 @@ public class CatalogUtils {
                 LOG.error("Operational Mode catalog is not filled");
                 return false;
             }
-            networkTransactionService.close();
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading Operational Mode Catalog, catalog not filled");
             throw new RuntimeException(
                 "readMdSal: Error reading from operational store, Operational Mode Catalog not filled" + e);
-        } finally {
-            networkTransactionService.close();
         }
     }
 

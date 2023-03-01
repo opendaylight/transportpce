@@ -54,7 +54,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def setUp(self):
         # pylint: disable=consider-using-f-string
         print("execution of {}".format(self.id().split(".")[-1]))
-        time.sleep(10)
+        time.sleep(2)
 
     def test_01_xpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-A2",
