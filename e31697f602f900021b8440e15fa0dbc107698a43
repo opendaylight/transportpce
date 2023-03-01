@@ -267,6 +267,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae611d74_7eddcefc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "\u003e Done",
+      "parentUuid": "9932c09d_5a448d3c",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 21
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e18a6e_f760a483",
@@ -484,6 +508,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4b3b60d_d792bcad",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de17aae3_060a58c3",
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b321689d_452d6859",
@@ -545,6 +587,30 @@
       "side": 1,
       "message": "Yes. It fits.",
       "parentUuid": "3fdf7309_7ee26196",
+      "range": {
+        "startLine": 949,
+        "startChar": 31,
+        "endLine": 949,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c94be40_0dba0a8e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "28933c24_76a5eb74",
       "range": {
         "startLine": 949,
         "startChar": 31,
@@ -626,6 +692,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe9f8162_137d8aaa",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7c1ae9b7_bd7102b8",
+      "range": {
+        "startLine": 970,
+        "startChar": 1,
+        "endLine": 970,
+        "endChar": 48
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93592dfe_c571f9f9",
@@ -687,6 +777,30 @@
       "side": 1,
       "message": "You are right. My mistake. I was thinking one step further where the impairment map could be maintained and refreshed dynamically, as we go through the different elements of the path, updating the value of each of its parameters adding the contribution of degradation brought by each node. But as it is only an intermediate step and not an update of existing values, you do not crush an existing value!",
       "parentUuid": "0b81c083_8d621908",
+      "range": {
+        "startLine": 984,
+        "startChar": 7,
+        "endLine": 985,
+        "endChar": 84
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d08787d_122a892c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5da32210_98a3f116",
       "range": {
         "startLine": 984,
         "startChar": 7,
@@ -781,6 +895,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "See comment above. Even if calcPdl2 is not modified, it shall be IMHO returned unmodified",
+      "range": {
+        "startLine": 1009,
+        "startChar": 1,
+        "endLine": 1009,
+        "endChar": 22
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d38dec_a7563f99",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T09:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b247e7c9_21a593e6",
       "range": {
         "startLine": 1009,
         "startChar": 1,
