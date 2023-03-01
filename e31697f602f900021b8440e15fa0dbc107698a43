@@ -125,6 +125,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1ce454_7b9b0b49",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-01T11:46:21Z",
+      "side": 1,
+      "message": "Done though I would have preferred to stick with the original implementation behavior. It would have clearly underlined improvements on aberrant cases protection.\nThis is also an atomic commit best practice. cf Openstack wiki.",
+      "parentUuid": "5d28cb60_056c9ac7",
+      "range": {
+        "startLine": 467,
+        "startChar": 1,
+        "endLine": 485,
+        "endChar": 120
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eea8efc9_00b88531",
@@ -186,6 +210,30 @@
       "side": 1,
       "message": "Yes, this is a good proposal. The message could be complemented : \" unsupported back to back transponder configuration\"",
       "parentUuid": "578f11e0_81adb09a",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87dcb9b1_fee52aa9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-01T11:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5733a9d_65e37087",
       "range": {
         "startLine": 506,
         "startChar": 0,
@@ -314,6 +362,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b44c418_8fe6c9f0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-01T11:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e18a6e_f760a483",
+      "range": {
+        "startLine": 691,
+        "startChar": 0,
+        "endLine": 721,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88759e21_4882b65f",
@@ -327,6 +399,30 @@
       "writtenOn": "2023-02-28T09:22:15Z",
       "side": 1,
       "message": "Same comment as per AZ direction",
+      "range": {
+        "startLine": 731,
+        "startChar": 15,
+        "endLine": 739,
+        "endChar": 26
+      },
+      "revId": "e31697f602f900021b8440e15fa0dbc107698a43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb6708d_7068077c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-01T11:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88759e21_4882b65f",
       "range": {
         "startLine": 731,
         "startChar": 15,
