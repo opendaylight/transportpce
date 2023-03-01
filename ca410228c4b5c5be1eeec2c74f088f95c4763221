@@ -16,6 +16,132 @@
       "message": "recheck",
       "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "202f159c_bdccb5f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "Thanks Guillaume, this patch greatly simplifies what you have done on previous refactoring of PostAlgo Validator.\nOne important thing to note is that you renamed some of the keyes, variables and methods that deal with *Onsr* to *Osnr*. This was not a mistake. Onsr is basically 1/Osnr. So you should step back on this one, because it may confuse guys working on Optical aspects.\nAnother point is that you use MapOf, on the new HashMap you create. I was just wondering if a simple put would not be simpler avoiding to convert immutable to mutable objects...? ",
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f2ba5ba_b708b6ca",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "No! The name onsr is not the result of my native dyslexia! ;-) You should not modify the name of this key. Onsr is 1/Osnr : Optical noise to signal ratio \u003d 1/(Optical signal to noise ratio)",
+      "range": {
+        "startLine": 410,
+        "startChar": 16,
+        "endLine": 410,
+        "endChar": 54
+      },
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79922ccb_603454e2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "See previous comment : please use calOnsrLin",
+      "range": {
+        "startLine": 451,
+        "startChar": 20,
+        "endLine": 451,
+        "endChar": 78
+      },
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4fd2f52_457038ad",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "Same comment. Please apply the modification everywhere you made this correction.I do not continue making this comment, since it concerns a large number of modifications and I guess you will address it through a sed command... To be consistent, it shall not concern only the key or variables but also the name of the method you may call for intermediate calculation. So Will make the comment only once more for the corresponding method : getOsnrDbfromOsnrLin",
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4523e18d_174aa636",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 766,
+        "startChar": 20,
+        "endLine": 766,
+        "endChar": 81
+      },
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fdde408_d4ecf34b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-01T10:02:43Z",
+      "side": 1,
+      "message": "Please consider stepping back to the original name of the method for the reason mentioned above!",
+      "range": {
+        "startLine": 1025,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 43
+      },
+      "revId": "ca410228c4b5c5be1eeec2c74f088f95c4763221",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
