@@ -16,6 +16,23 @@
       "message": "gate OK, rebasing on current master to prepare merge",
       "revId": "f8af92b07402b1d0f7087024d0a6d07f06089935",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47949614_a0f68ff9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-01T15:09:56Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "f8af92b07402b1d0f7087024d0a6d07f06089935",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
