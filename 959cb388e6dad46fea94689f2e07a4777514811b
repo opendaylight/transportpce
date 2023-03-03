@@ -33,6 +33,24 @@
       "message": "shouldn\u0027t we report these modifications on 1.2.1 and/or 7.1 devices ?",
       "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "746b4b42_bebd774f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-03T09:59:38Z",
+      "side": 1,
+      "message": "Theoretically, yes. From a pragmatic point of view, not necessarily. The OpenROADM devices in version 1.2.1 no longer exists except in our functional tests...\nAnd performing functional tests on ROADMs in version 7.1 has never been considered necessary until now...",
+      "parentUuid": "50e70489_439cc6d1",
+      "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
