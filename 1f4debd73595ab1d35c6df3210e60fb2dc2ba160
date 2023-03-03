@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff41319_8f26a2ee",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheckTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-03T08:44:56Z",
+      "side": 1,
+      "message": "misleading indentations -\u003e vote -1",
+      "revId": "1f4debd73595ab1d35c6df3210e60fb2dc2ba160",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
