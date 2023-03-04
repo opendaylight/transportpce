@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "b25ff2d1e5f14639453df7ae0678fae667300254",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd758cab_d1f56891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-04T07:27:22Z",
+      "side": 1,
+      "message": "The last build (438) is positive.\nv-1 was the result of the just before build (437)",
+      "revId": "b25ff2d1e5f14639453df7ae0678fae667300254",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
