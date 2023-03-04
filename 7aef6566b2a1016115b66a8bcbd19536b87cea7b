@@ -34,6 +34,24 @@
       "parentUuid": "d908930b_55ae8071",
       "revId": "7aef6566b2a1016115b66a8bcbd19536b87cea7b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da2bd77_99b3d9d1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmNetwork.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-04T15:23:21Z",
+      "side": 1,
+      "message": "please can we let this comment open till there is an answer ?",
+      "parentUuid": "3734ea09_b3982e41",
+      "revId": "7aef6566b2a1016115b66a8bcbd19536b87cea7b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
