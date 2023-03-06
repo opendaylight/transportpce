@@ -51,6 +51,24 @@
       "parentUuid": "50e70489_439cc6d1",
       "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a4b12b9_03bc0cfc",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-06T09:17:35Z",
+      "side": 1,
+      "message": "I am not convinced by the absence of its necessity for 7.1 devices \u003d\u003e vote -2 to block +2. Can we at least reference this in a JIRA ticket before merging please ?",
+      "parentUuid": "746b4b42_bebd774f",
+      "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
