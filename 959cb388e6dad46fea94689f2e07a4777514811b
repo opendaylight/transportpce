@@ -69,6 +69,24 @@
       "parentUuid": "746b4b42_bebd774f",
       "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "954b16fc_92a4ed33",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-06T10:08:36Z",
+      "side": 1,
+      "message": "https://jira.opendaylight.org/browse/TRNSPRTPCE-731",
+      "parentUuid": "9a4b12b9_03bc0cfc",
+      "revId": "959cb388e6dad46fea94689f2e07a4777514811b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
