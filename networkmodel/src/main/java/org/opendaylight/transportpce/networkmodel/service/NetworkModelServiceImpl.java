@@ -19,10 +19,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
@@ -66,9 +68,13 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true)
 public class NetworkModelServiceImpl implements NetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelServiceImpl.class);
@@ -83,24 +89,21 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private Map<TopologyChangesKey, TopologyChanges> topologyChanges;
     private TopologyUpdateResult notification = null;
 
-    public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
-            final R2RLinkDiscovery linkDiscovery, PortMapping portMapping,
-            final NotificationPublishService notificationPublishService) {
+    @Activate
+    public NetworkModelServiceImpl(@Reference DataBroker dataBroker,
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference final NetworkTransactionService networkTransactionService,
+            @Reference PortMapping portMapping,
+            @Reference final NotificationPublishService notificationPublishService) {
 
         this.networkTransactionService = networkTransactionService;
-        this.linkDiscovery = linkDiscovery;
+        this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.notificationPublishService = notificationPublishService;
         this.topologyChanges = new HashMap<TopologyChangesKey, TopologyChanges>();
-    }
-
-    public void init() {
-        LOG.info("init ...");
-    }
-
-    public void close() {
+        LOG.debug("NetworkModelServiceImpl instantiated");
     }
 
     @Override

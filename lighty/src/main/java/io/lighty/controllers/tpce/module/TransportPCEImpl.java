@@ -141,8 +141,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         TransportpceNetworkutilsService networkutilsServiceImpl = new NetworkUtilsImpl(
                 lightyServices.getBindingDataBroker());
         PortMapping portMapping = initPortMapping(lightyServices);
-        NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
-                portMapping, lightyServices.getBindingNotificationPublishService());
+        NetworkModelService networkModelService = new NetworkModelServiceImpl(lightyServices.getBindingDataBroker(),
+                deviceTransactionManager, networkTransaction, portMapping,
+                lightyServices.getBindingNotificationPublishService());
         FrequenciesService networkModelWavelengthService =
                 new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
