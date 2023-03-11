@@ -91,7 +91,6 @@ import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
@@ -138,20 +137,18 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Creating network-model beans ...");
         R2RLinkDiscovery linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction);
-        TransportpceNetworkutilsService networkutilsServiceImpl = new NetworkUtilsImpl(
-                lightyServices.getBindingDataBroker());
         PortMapping portMapping = initPortMapping(lightyServices);
         NetworkModelService networkModelService = new NetworkModelServiceImpl(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction, portMapping,
                 lightyServices.getBindingNotificationPublishService());
-        FrequenciesService networkModelWavelengthService =
-                new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
-        NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
+        FrequenciesService networkModelWavelengthService = new FrequenciesServiceImpl(
+                lightyServices.getBindingDataBroker());
+        new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
-        PortMappingListener portMappingListener = new PortMappingListener(networkModelService);
+        new PortMappingListener(networkModelService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
-                lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
-                lightyServices.getNotificationService(), networkModelWavelengthService, portMappingListener);
+                lightyServices.getRpcProviderService(), networkModelService, deviceTransactionManager, portMapping,
+                lightyServices.getNotificationService(), networkModelWavelengthService);
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
@@ -250,8 +247,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     protected boolean initProcedure() {
         LOG.info("Initializing PCE provider ...");
         pceProvider.init();
-        LOG.info("Initializing network-model provider ...");
-        networkModelProvider.init();
         LOG.info("Initializing OLM provider ...");
         olmProvider.init();
         LOG.info("Initializing renderer provider ...");
