@@ -62,16 +62,21 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class FrequenciesServiceImpl implements FrequenciesService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceImpl.class);
     private final DataBroker dataBroker;
     private final AvailFreqMapsKey availFreqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-    public FrequenciesServiceImpl(DataBroker dataBroker) {
+    @Activate
+    public FrequenciesServiceImpl(@Reference DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 
