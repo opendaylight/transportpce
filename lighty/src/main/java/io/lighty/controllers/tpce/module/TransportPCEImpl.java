@@ -144,14 +144,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         NetworkModelService networkModelService = new NetworkModelServiceImpl(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction, portMapping,
                 lightyServices.getBindingNotificationPublishService());
-        FrequenciesService networkModelWavelengthService =
-                new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
-        NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
+        FrequenciesService networkModelWavelengthService = new FrequenciesServiceImpl(
+                lightyServices.getBindingDataBroker());
+        new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
-        PortMappingListener portMappingListener = new PortMappingListener(networkModelService);
+        new PortMappingListener(networkModelService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
-                lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
-                lightyServices.getNotificationService(), networkModelWavelengthService, portMappingListener);
+                lightyServices.getRpcProviderService(), networkModelService, deviceTransactionManager, portMapping,
+                lightyServices.getNotificationService(), networkModelWavelengthService);
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
@@ -250,8 +250,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     protected boolean initProcedure() {
         LOG.info("Initializing PCE provider ...");
         pceProvider.init();
-        LOG.info("Initializing network-model provider ...");
-        networkModelProvider.init();
         LOG.info("Initializing OLM provider ...");
         olmProvider.init();
         LOG.info("Initializing renderer provider ...");
