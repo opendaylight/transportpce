@@ -14,13 +14,7 @@
     <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
     <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
     <reference id="frequenciesService" interface="org.opendaylight.transportpce.networkmodel.service.FrequenciesService" />
-
-    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
-        <argument ref="networkTransactionImpl" />
-        <argument ref="linkDiscoveryImpl" />
-        <argument ref="portMapping" />
-        <argument ref="notificationPublishService" />
-    </bean>
+    <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
 
     <bean id="provider" class="org.opendaylight.transportpce.networkmodel.NetworkModelProvider"
         init-method="init" destroy-method="close">
@@ -49,11 +43,4 @@
         <argument ref="dataBroker" />
     </bean>
 
-    <bean id="linkDiscoveryImpl" class="org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery">
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-        <argument ref="networkTransactionImpl" />
-   </bean>
-
-    <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
 </blueprint>
