@@ -22,9 +22,11 @@ import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 
@@ -35,22 +37,21 @@ public class NetworkModelProviderTest extends AbstractTest {
     @Mock
     RpcProviderService rpcProviderService;
     @Mock
-    TransportpceNetworkutilsService networkutilsService;
+    NetworkModelService networkModelService;
+    @Mock
+    DeviceTransactionManager deviceTransactionManager;
+    @Mock
+    PortMapping portMapping;
     @Mock
     NetConfTopologyListener topologyListener;
     @Mock
-    private NotificationService notificationService;
+    NotificationService notificationService;
     @Mock
-    private FrequenciesService frequenciesService;
-    @Mock
-    private PortMappingListener portMappingListener;
+    FrequenciesService frequenciesService;
 
 
     @Test
     void networkmodelProviderInitTest() {
-        NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
-            rpcProviderService, networkutilsService, topologyListener, notificationService,
-            frequenciesService, portMappingListener);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
             @Override
@@ -61,7 +62,11 @@ public class NetworkModelProviderTest extends AbstractTest {
         };
         when(networkTransactionService.commit()).then(answer);
 
-        provider.init();
+        new NetworkModelProvider(networkTransactionService, getDataBroker(),
+            rpcProviderService, networkModelService, deviceTransactionManager, portMapping, notificationService,
+            frequenciesService);
+
+//        provider.init();
 
         verify(rpcProviderService, times(1))
             .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
