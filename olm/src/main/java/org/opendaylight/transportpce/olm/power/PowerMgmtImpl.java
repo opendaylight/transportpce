@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -32,12 +31,25 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
 import org.opendaylight.yangtools.yang.common.Decimal64;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(configurationPid = "org.opendaylight.transportpce")
 public class PowerMgmtImpl implements PowerMgmt {
+
+    @ObjectClassDefinition
+    public @interface Configuration {
+        @AttributeDefinition
+        long timer1() default 120000;
+        @AttributeDefinition
+        long timer2() default 20000;
+    }
     private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtImpl.class);
-    private final DataBroker db;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final CrossConnect crossConnect;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -52,37 +64,37 @@ public class PowerMgmtImpl implements PowerMgmt {
     private long timer2 = 20000;
     // openroadm spec value is 20000, functest value is 2000
 
-    public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces, CrossConnect crossConnect,
-            DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
-        this.db = db;
-        this.openRoadmInterfaces = openRoadmInterfaces;
-        this.crossConnect = crossConnect;
-        this.deviceTransactionManager = deviceTransactionManager;
-        this.portMapping = portMapping;
+    @Activate
+    public PowerMgmtImpl(@Reference OpenRoadmInterfaces openRoadmInterfaces,
+            @Reference CrossConnect crossConnect,
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference PortMapping portMapping, final Configuration configuration) {
+        this(openRoadmInterfaces, crossConnect, deviceTransactionManager, portMapping, configuration.timer1(),
+                configuration.timer2());
     }
 
-    public PowerMgmtImpl(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
+    public PowerMgmtImpl(OpenRoadmInterfaces openRoadmInterfaces,
                          CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager,
-            PortMapping portMapping, String timer1, String timer2) {
-        this.db = db;
+            PortMapping portMapping, long timer1, long timer2) {
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
         try {
-            this.timer1 = Long.parseLong(timer1);
+            this.timer1 = Long.valueOf(timer1);
         } catch (NumberFormatException e) {
             this.timer1 = 120000;
             LOG.warn("Failed to retrieve Olm timer1 value from configuration - using default value {}",
                 this.timer1, e);
         }
         try {
-            this.timer2 = Long.parseLong(timer2);
+            this.timer2 = Long.valueOf(timer2);
         } catch (NumberFormatException e) {
             this.timer2 = 20000;
             LOG.warn("Failed to retrieve Olm timer2 value from configuration - using default value {}",
                 this.timer2, e);
         }
+        LOG.debug("PowerMgmtImpl instantiated with olm timers = {} - {}", this.timer1, this.timer2);
     }
 
     /**

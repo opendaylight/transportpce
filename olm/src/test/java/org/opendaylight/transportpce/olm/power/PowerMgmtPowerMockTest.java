@@ -111,8 +111,8 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
             this.openRoadmInterfacesImpl710);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMapping = Mockito.spy(this.portMapping);
-        this.powerMgmt = new PowerMgmtImpl(getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
-                this.deviceTransactionManager, this.portMapping);
+        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
+                this.deviceTransactionManager, this.portMapping, 1000, 1000);
     }
 
     @Test
@@ -235,8 +235,8 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 this.mappingUtils, openRoadmInterfacesImpl121Spy, this.openRoadmInterfacesImpl22,
             this.openRoadmInterfacesImpl710);
         openRoadmInterfacesSpy = Mockito.spy(openRoadmInterfacesSpy);
-        return new PowerMgmtImpl(getDataBroker(), openRoadmInterfacesSpy, crossConnectMock,
-                this.deviceTransactionManager, this.portMapping);
+        return new PowerMgmtImpl(openRoadmInterfacesSpy, crossConnectMock,
+                this.deviceTransactionManager, this.portMapping, 0, 0);
     }
 
     private Nodes getXpdrNodesFromNodesBuilderDeg() {
