@@ -20,21 +20,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils"/>
   <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
   <reference id="olmService" interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
+  <reference id="deviceRenderer" interface="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService" />
 
   <bean id="openRoadmInterfaceFactory"
         class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory">
     <argument ref="mappingUtils"/>
     <argument ref="portMapping"/>
     <argument ref="openRoadmInterfaces"/>
-  </bean>
-
-  <bean id="deviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl" >
-    <argument ref="dataBroker" />
-    <argument ref="deviceTransactionManager" />
-    <argument ref="openRoadmInterfaceFactory" />
-    <argument ref="openRoadmInterfaces" />
-    <argument ref="crossConnect" />
-    <argument ref="portMapping" />
   </bean>
 
   <bean id="otnDeviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl" >
@@ -66,8 +58,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="rendererServiceOperations" />
   </bean>
 
-  <service ref="deviceRenderer"
-           interface="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService" />
   <service ref="rendererServiceOperations"
            interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
   <service ref="otnDeviceRenderer"
