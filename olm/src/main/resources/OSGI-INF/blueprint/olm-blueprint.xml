@@ -8,22 +8,8 @@ terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
-  <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
   <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
-  <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
-  <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
-  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
-  <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
-  <reference id="powerMgmt" interface="org.opendaylight.transportpce.olm.power.PowerMgmt" />
-
-  <bean id="olmPowerServiceImpl" class="org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl">
-    <argument ref="dataBroker" />
-    <argument ref="powerMgmt" />
-    <argument ref="deviceTransactionManager" />
-    <argument ref="portMapping" />
-    <argument ref="mappingUtils" />
-    <argument ref="openRoadmInterfaces" />
-  </bean>
+  <reference id="olmPowerServiceImpl" interface="org.opendaylight.transportpce.olm.service.OlmPowerService" />
 
   <bean id="olmPowerServiceRpcImpl" class="org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl">
     <argument ref="olmPowerServiceImpl" />
