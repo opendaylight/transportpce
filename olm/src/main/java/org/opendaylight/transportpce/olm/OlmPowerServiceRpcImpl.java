@@ -26,17 +26,22 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class OlmPowerServiceRpcImpl.
  */
+@Component
 public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceRpcImpl.class);
     private final OlmPowerService olmPowerService;
 
-    public OlmPowerServiceRpcImpl(OlmPowerService olmPowerService) {
+    @Activate
+    public OlmPowerServiceRpcImpl(@Reference OlmPowerService olmPowerService) {
         this.olmPowerService = olmPowerService;
     }
 
