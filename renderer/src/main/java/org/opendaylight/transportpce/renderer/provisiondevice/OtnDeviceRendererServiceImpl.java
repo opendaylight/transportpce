@@ -25,9 +25,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathOutput;
@@ -41,10 +42,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Component
 public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     private static final Logger LOG = LoggerFactory.getLogger(OtnDeviceRendererServiceImpl.class);
     private static final String PT_03 = "03";
@@ -54,14 +59,16 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final DeviceTransactionManager deviceTransactionManager;
 
-    public OtnDeviceRendererServiceImpl(OpenRoadmInterfaceFactory openRoadmInterfaceFactory, CrossConnect crossConnect,
-                                        OpenRoadmInterfaces openRoadmInterfaces,
-                                        DeviceTransactionManager deviceTransactionManager,
-                                        NetworkModelService networkModelService) {
-        this.openRoadmInterfaceFactory = openRoadmInterfaceFactory;
+    @Activate
+    public OtnDeviceRendererServiceImpl(@Reference CrossConnect crossConnect,
+            @Reference OpenRoadmInterfaces openRoadmInterfaces,
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference MappingUtils mappingUtils,
+            @Reference PortMapping portMapping) {
         this.crossConnect = crossConnect;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.deviceTransactionManager = deviceTransactionManager;
+        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
     }
 
 //TODO Align log messages and returned results messages
