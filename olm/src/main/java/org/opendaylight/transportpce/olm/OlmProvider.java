@@ -11,16 +11,19 @@ package org.opendaylight.transportpce.olm;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class OlmProvider.
  */
+@Component
 public class OlmProvider {
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
-    private final RpcProviderService rpcProviderService;
-    private final TransportpceOlmService olmPowerServiceRpc;
     private ObjectRegistration<TransportpceOlmService> olmRPCRegistration;
 
     /**
@@ -30,24 +33,18 @@ public class OlmProvider {
      * @param rpcProviderService
      *            the rpc provider service
      */
-    public OlmProvider(final RpcProviderService rpcProviderService, final TransportpceOlmService olmPowerServiceRpc) {
-        this.rpcProviderService = rpcProviderService;
-        this.olmPowerServiceRpc = olmPowerServiceRpc;
-    }
-
-    /**
-     * Method called when the blueprint container is created.
-     */
-    public void init() {
-        LOG.info("OlmProvider Session Initiated");
-        // Initializing Notification module
+    @Activate
+    public OlmProvider(@Reference final RpcProviderService rpcProviderService,
+            @Reference final TransportpceOlmService olmPowerServiceRpc) {
         olmRPCRegistration = rpcProviderService.registerRpcImplementation(TransportpceOlmService.class,
-                this.olmPowerServiceRpc);
+                olmPowerServiceRpc);
+        LOG.info("OlmProvider Session Initiated");
     }
 
     /**
      * Method called when the blueprint container is destroyed.
      */
+    @Deactivate
     public void close() {
         LOG.info("OlmProvider Closed");
         // Clean up the RPC service registration
