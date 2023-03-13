@@ -14,7 +14,9 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
@@ -36,15 +38,14 @@ public class OpenRoadmInterfaceFactory {
     private final OpenRoadmOtnInterface221 openRoadmOtnInterface221;
     private final OpenRoadmOtnInterface710 openRoadmOtnInterface710;
 
-    public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, OpenRoadmInterface121 openRoadmInterface121,
-            OpenRoadmInterface221 openRoadmInterface221, OpenRoadmInterface710 openRoadmInterface710,
-            OpenRoadmOtnInterface221 openRoadmOTNInterface221, OpenRoadmOtnInterface710 openRoadmOtnInterface710) {
+    public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, PortMapping portMapping,
+            OpenRoadmInterfaces openRoadmInterfaces) {
         this.mappingUtils = mappingUtils;
-        this.openRoadmInterface121 = openRoadmInterface121;
-        this.openRoadmInterface221 = openRoadmInterface221;
-        this.openRoadmInterface710 = openRoadmInterface710;
-        this.openRoadmOtnInterface221 = openRoadmOTNInterface221;
-        this.openRoadmOtnInterface710 = openRoadmOtnInterface710;
+        this.openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
+        this.openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
+        this.openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
+        this.openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
+        this.openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping, openRoadmInterfaces);
     }
 
     public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
