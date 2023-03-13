@@ -92,9 +92,13 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class OlmPowerServiceImpl implements OlmPowerService {
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceImpl.class);
     private final MappingUtils mappingUtils;
@@ -104,25 +108,21 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
 
-    public OlmPowerServiceImpl(DataBroker dataBroker, PowerMgmt powerMgmt,
-                               DeviceTransactionManager deviceTransactionManager, PortMapping portMapping,
-                               MappingUtils mappingUtils, OpenRoadmInterfaces openRoadmInterfaces) {
+    @Activate
+    public OlmPowerServiceImpl(@Reference DataBroker dataBroker,
+            @Reference PowerMgmt powerMgmt,
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference PortMapping portMapping,
+            @Reference MappingUtils mappingUtils,
+            @Reference OpenRoadmInterfaces openRoadmInterfaces) {
         this.dataBroker = dataBroker;
         this.powerMgmt = powerMgmt;
         this.portMapping = portMapping;
         this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfaces = openRoadmInterfaces;
+        LOG.debug("OlmPowerServiceImpl Instantiated");
     }
-
-    public void init() {
-        LOG.info("init ...");
-    }
-
-    public void close() {
-        LOG.info("close ...");
-    }
-
 
     @Override
     public GetPmOutput getPm(GetPmInput pmInput) {
