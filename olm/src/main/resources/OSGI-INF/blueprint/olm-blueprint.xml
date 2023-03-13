@@ -10,10 +10,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
   <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
   <reference id="olmPowerServiceImpl" interface="org.opendaylight.transportpce.olm.service.OlmPowerService" />
-
-  <bean id="olmPowerServiceRpcImpl" class="org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl">
-    <argument ref="olmPowerServiceImpl" />
-  </bean>
+  <reference id="olmPowerServiceRpcImpl" interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
 
   <bean id="provider" class="org.opendaylight.transportpce.olm.OlmProvider"
         init-method="init" destroy-method="close">
@@ -21,6 +18,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="olmPowerServiceRpcImpl" />
   </bean>
 
-  <service ref="olmPowerServiceRpcImpl"
-           interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
   </blueprint>
