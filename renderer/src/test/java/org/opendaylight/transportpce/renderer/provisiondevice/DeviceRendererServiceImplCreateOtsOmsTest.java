@@ -92,9 +92,8 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.crossConnect = new CrossConnectImpl(this.deviceTransactionManager, this.mappingUtils,
             this.crossConnectImpl121, this.crossConnectImpl221, this.crossConnectImpl710);
         this.crossConnect = spy(this.crossConnect);
-        this.deviceRendererService = new DeviceRendererServiceImpl(getDataBroker(),
-            this.deviceTransactionManager, this.openRoadmInterfaceFactory, this.openRoadmInterfaces,
-            this.crossConnect, portMapping);
+        this.deviceRendererService = new DeviceRendererServiceImpl(getDataBroker(), this.deviceTransactionManager,
+                this.openRoadmInterfaces, this.crossConnect, mappingUtils, portMapping);
     }
 
     @Test
