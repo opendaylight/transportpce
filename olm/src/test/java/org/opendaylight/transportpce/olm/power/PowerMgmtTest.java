@@ -44,7 +44,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
 public class PowerMgmtTest {
-    private DataBroker dataBroker;
     private OpenRoadmInterfaces openRoadmInterfaces;
     private CrossConnect crossConnect;
     private DeviceTransactionManager deviceTransactionManager;
@@ -53,13 +52,13 @@ public class PowerMgmtTest {
 
     @BeforeEach
     void setUp() {
-        this.dataBroker = Mockito.mock(DataBroker.class);
+        Mockito.mock(DataBroker.class);
         this.openRoadmInterfaces = Mockito.mock(OpenRoadmInterfaces.class);
         this.crossConnect = Mockito.mock((CrossConnectImpl.class));
         this.deviceTransactionManager = Mockito.mock(DeviceTransactionManager.class);
         this.portMapping = Mockito.mock(PortMapping.class);
-        this.powerMgmt = new PowerMgmtImpl(this.dataBroker, this.openRoadmInterfaces, this.crossConnect,
-                this.deviceTransactionManager, this.portMapping, "1000", "1000");
+        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
+                this.deviceTransactionManager, this.portMapping, 1000, 1000);
     }
 
     @Test
