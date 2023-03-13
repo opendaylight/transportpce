@@ -9,33 +9,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-  <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
-  <reference id="notificationPublishService"
-        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
   <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
-  <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
-  <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
-  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
-  <reference id="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
-  <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils"/>
-  <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
-  <reference id="olmService" interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService"/>
   <reference id="deviceRenderer" interface="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService" />
   <reference id="otnDeviceRenderer" interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService"/>
+  <reference id="rendererServiceOperations" interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
-
-    <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
+  <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
     <argument ref="deviceRenderer" />
     <argument ref="otnDeviceRenderer" />
-  </bean>
-
-  <bean id="rendererServiceOperations" class="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl" >
-    <argument ref="deviceRenderer" />
-    <argument ref="otnDeviceRenderer"/>
-    <argument ref="olmService" />
-    <argument ref="dataBroker" />
-    <argument ref="notificationPublishService" />
-    <argument ref="portMapping" />
   </bean>
 
   <bean id="rendererProvider" class="org.opendaylight.transportpce.renderer.RendererProvider"
@@ -44,8 +25,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="deviceRendererRPCImpl" />
     <argument ref="rendererServiceOperations" />
   </bean>
-
-  <service ref="rendererServiceOperations"
-           interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
 </blueprint>

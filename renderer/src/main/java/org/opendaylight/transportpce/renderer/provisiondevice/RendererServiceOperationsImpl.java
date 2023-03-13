@@ -76,10 +76,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Component(immediate = true)
 public class RendererServiceOperationsImpl implements RendererServiceOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererServiceOperationsImpl.class);
@@ -103,9 +107,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final PortMapping portMapping;
     private ListeningExecutorService executor;
 
-    public RendererServiceOperationsImpl(DeviceRendererService deviceRenderer,
-            OtnDeviceRendererService otnDeviceRenderer, TransportpceOlmService olmService,
-            DataBroker dataBroker, NotificationPublishService notificationPublishService, PortMapping portMapping) {
+    @Activate
+    public RendererServiceOperationsImpl(@Reference DeviceRendererService deviceRenderer,
+            @Reference OtnDeviceRendererService otnDeviceRenderer,
+            @Reference TransportpceOlmService olmService,
+            @Reference DataBroker dataBroker,
+            @Reference NotificationPublishService notificationPublishService,
+            @Reference PortMapping portMapping) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
         this.olmService = olmService;
@@ -113,6 +121,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         this.notificationPublishService = notificationPublishService;
         this.portMapping = portMapping;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
+        LOG.debug("RendererServiceOperationsImpl instantiated");
     }
 
     @Override
