@@ -244,8 +244,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     protected boolean initProcedure() {
         LOG.info("Initializing PCE provider ...");
         pceProvider.init();
-        LOG.info("Initializing OLM provider ...");
-        olmProvider.init();
         LOG.info("Initializing renderer provider ...");
         rendererProvider.init();
         LOG.info("Initializing service-handler provider ...");
