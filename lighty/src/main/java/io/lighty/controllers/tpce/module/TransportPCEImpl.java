@@ -54,13 +54,8 @@ import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.renderer.RendererProvider;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface710;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 // Adding OTN interface
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
@@ -177,8 +172,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerServiceRpc);
 
         LOG.info("Creating renderer beans ...");
-        OpenRoadmInterfaceFactory openRoadmInterfaceFactory = initOpenRoadmFactory(mappingUtils, openRoadmInterfaces,
-                portMapping);
+        OpenRoadmInterfaceFactory openRoadmInterfaceFactory = initOpenRoadmFactory(mappingUtils, openRoadmInterfaces, portMapping);
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaceFactory,
                 openRoadmInterfaces, crossConnect, portMapping);
@@ -325,15 +319,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
             OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
-        OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
-        OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
-        OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
-        OpenRoadmOtnInterface221 openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping,
-                openRoadmInterfaces);
-        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
-            openRoadmInterfaces);
-        return new OpenRoadmInterfaceFactory(mappingUtils, openRoadmInterface121, openRoadmInterface221,
-            openRoadmInterface710, openRoadmOtnInterface221, openRoadmOtnInterface710);
+        return new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
     }
 
     private PortMapping initPortMapping(LightyServices lightyServices) {
@@ -356,6 +342,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 deviceTransactionManager, portMapping);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
                 openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+
     }
 
     private CrossConnect initCrossConnect(MappingUtils mappingUtils) {
