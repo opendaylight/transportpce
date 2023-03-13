@@ -63,13 +63,6 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     }
 
     @Test
-    void dummyTest() {
-        OlmPowerServiceImpl olmPowerServiceImpl = (OlmPowerServiceImpl) this.olmPowerService;
-        olmPowerServiceImpl.init();
-        olmPowerServiceImpl.close();
-    }
-
-    @Test
     void testGetPm() {
         when(this.mappingUtils.getOpenRoadmVersion(anyString()))
             .thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
