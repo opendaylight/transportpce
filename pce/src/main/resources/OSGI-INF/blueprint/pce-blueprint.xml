@@ -11,20 +11,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-  <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
   <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
-  <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
-  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping"/>
-  <reference id="gnpyConsumer" interface="org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer"/>
-
-  <bean id="pceServiceImpl"
-        class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"
-        init-method="init" destroy-method="close">
-    <argument ref="networkTransactionImpl"/>
-    <argument ref="notificationPublishService" />
-    <argument ref="gnpyConsumer" />
-    <argument ref="portMapping" />
-  </bean>
+  <reference id="pceServiceImpl" interface="org.opendaylight.transportpce.pce.service.PathComputationService"/>
 
   <bean id="provider"
         class="org.opendaylight.transportpce.pce.impl.PceProvider"
@@ -32,8 +20,4 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <argument ref="rpcService" />
     <argument ref="pceServiceImpl" />
   </bean>
-
-  <service ref="pceServiceImpl"
-        interface="org.opendaylight.transportpce.pce.service.PathComputationService"/>
-
 </blueprint>
