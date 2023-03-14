@@ -55,9 +55,13 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true)
 public class PathComputationServiceImpl implements PathComputationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PathComputationServiceImpl.class);
@@ -68,22 +72,17 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
 
-    public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
-                                      NotificationPublishService notificationPublishService,
-                                      GnpyConsumer gnpyConsumer, PortMapping portMapping) {
+    @Activate
+    public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
+            @Reference NotificationPublishService notificationPublishService,
+            @Reference GnpyConsumer gnpyConsumer,
+            @Reference PortMapping portMapping) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
         this.portMapping = portMapping;
-    }
-
-    public void init() {
-        LOG.info("init ...");
-    }
-
-    public void close() {
-        LOG.info("close.");
+        LOG.debug("PathComputationServiceImpl instantiated");
     }
 
     @SuppressFBWarnings(
