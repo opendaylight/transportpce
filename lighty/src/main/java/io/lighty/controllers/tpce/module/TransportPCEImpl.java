@@ -88,6 +88,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
 import org.slf4j.Logger;
@@ -244,8 +245,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     protected boolean initProcedure() {
         LOG.info("Initializing PCE provider ...");
         pceProvider.init();
-        LOG.info("Initializing renderer provider ...");
-        rendererProvider.init();
         LOG.info("Initializing service-handler provider ...");
         servicehandlerProvider.init();
         if (tapiProvider != null) {
@@ -311,8 +310,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
                 lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
                 portMapping);
-        return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC,
-                rendererServiceOperations);
+        return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererService,
+                otnDeviceRendererService, rendererServiceOperations);
     }
 
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
