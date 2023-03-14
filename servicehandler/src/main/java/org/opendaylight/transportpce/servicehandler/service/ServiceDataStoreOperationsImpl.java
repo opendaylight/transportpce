@@ -41,9 +41,13 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true)
 public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperations {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDataStoreOperationsImpl.class);
     private static final String CREATE_MSG = "create";
@@ -73,7 +77,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
 
-    public ServiceDataStoreOperationsImpl(DataBroker dataBroker) {
+    @Activate
+    public ServiceDataStoreOperationsImpl(@Reference DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 
