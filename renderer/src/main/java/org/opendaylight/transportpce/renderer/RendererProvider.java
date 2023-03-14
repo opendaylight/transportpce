@@ -8,38 +8,40 @@
 package org.opendaylight.transportpce.renderer;
 
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.TransportpceDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class RendererProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererProvider.class);
     private final RpcProviderService rpcProviderService;
     private DeviceRendererRPCImpl deviceRendererRPCImpl;
+    private TransportPCEServicePathRPCImpl transportPCEServicePathRPCImpl;
     private ObjectRegistration<DeviceRendererRPCImpl> deviceRendererRegistration;
     private ObjectRegistration<TransportpceRendererService> tpceServiceRegistry;
-    private RendererServiceOperations rendererServiceOperations;
 
-    public RendererProvider(RpcProviderService rpcProviderService, DeviceRendererRPCImpl deviceRendererRPCImpl,
-            RendererServiceOperations rendererServiceOperations) {
+    @Activate
+    public RendererProvider(@Reference RpcProviderService rpcProviderService,
+            @Reference DeviceRendererService deviceRenderer,
+            @Reference OtnDeviceRendererService otnDeviceRendererService,
+            @Reference RendererServiceOperations rendererServiceOperations) {
         this.rpcProviderService = rpcProviderService;
-        this.deviceRendererRPCImpl = deviceRendererRPCImpl;
-        this.rendererServiceOperations = rendererServiceOperations;
-    }
-
-    /**
-     * Method called when the blueprint container is created.
-     */
-    public void init() {
+        this.deviceRendererRPCImpl = new DeviceRendererRPCImpl(deviceRenderer, otnDeviceRendererService);
+        this.transportPCEServicePathRPCImpl = new TransportPCEServicePathRPCImpl(rendererServiceOperations);
         LOG.info("RendererProvider Session Initiated");
-        TransportPCEServicePathRPCImpl transportPCEServicePathRPCImpl =
-            new TransportPCEServicePathRPCImpl(this.rendererServiceOperations);
         this.deviceRendererRegistration = this.rpcProviderService
                 .registerRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
         this.tpceServiceRegistry = this.rpcProviderService
@@ -49,6 +51,7 @@ public class RendererProvider {
     /**
      * Method called when the blueprint container is destroyed.
      */
+    @Deactivate
     public void close() {
         LOG.info("RendererProvider Closed");
         if (this.deviceRendererRegistration != null) {
@@ -58,5 +61,4 @@ public class RendererProvider {
             this.tpceServiceRegistry.close();
         }
     }
-
 }
