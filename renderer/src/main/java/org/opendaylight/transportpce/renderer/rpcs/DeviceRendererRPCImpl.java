@@ -39,6 +39,7 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
                                  OtnDeviceRendererService otnDeviceRendererService) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRendererService = otnDeviceRendererService;
+        LOG.debug("DeviceRendererRPCImpl instantiated");
     }
 
     /**
