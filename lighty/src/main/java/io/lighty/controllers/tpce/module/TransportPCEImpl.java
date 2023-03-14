@@ -243,8 +243,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
     @Override
     protected boolean initProcedure() {
-        LOG.info("Initializing PCE provider ...");
-        pceProvider.init();
         LOG.info("Initializing service-handler provider ...");
         servicehandlerProvider.init();
         if (tapiProvider != null) {
