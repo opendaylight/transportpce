@@ -11,6 +11,10 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,23 +22,18 @@ import org.slf4j.LoggerFactory;
  * Class to register
  * Pce Service & Notification.
  */
+@Component
 public class PceProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceProvider.class);
 
     private final RpcProviderService rpcService;
-    private final PathComputationService pathComputationService;
     private ObjectRegistration<PceServiceRPCImpl> rpcRegistration;
 
-    public PceProvider(RpcProviderService rpcProviderService, PathComputationService pathComputationService) {
+    @Activate
+    public PceProvider(@Reference RpcProviderService rpcProviderService,
+            @Reference PathComputationService pathComputationService) {
         this.rpcService = rpcProviderService;
-        this.pathComputationService = pathComputationService;
-    }
-
-    /*
-     * Method called when the blueprint container is created.
-     */
-    public void init() {
         LOG.info("PceProvider Session Initiated");
         final PceServiceRPCImpl consumer = new PceServiceRPCImpl(pathComputationService);
         rpcRegistration = rpcService.registerRpcImplementation(TransportpcePceService.class, consumer);
@@ -43,9 +42,9 @@ public class PceProvider {
     /*
      * Method called when the blueprint container is destroyed.
      */
+    @Deactivate
     public void close() {
         LOG.info("PceProvider Closed");
         rpcRegistration.close();
     }
-
 }
