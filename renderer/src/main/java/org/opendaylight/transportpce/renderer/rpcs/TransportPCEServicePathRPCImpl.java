@@ -17,16 +17,21 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true)
 public class TransportPCEServicePathRPCImpl implements TransportpceRendererService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransportPCEServicePathRPCImpl.class);
 
     private final RendererServiceOperations rendererServiceOperations;
 
-    public TransportPCEServicePathRPCImpl(RendererServiceOperations rendererServiceOperations) {
+    @Activate
+    public TransportPCEServicePathRPCImpl(@Reference RendererServiceOperations rendererServiceOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
         LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
