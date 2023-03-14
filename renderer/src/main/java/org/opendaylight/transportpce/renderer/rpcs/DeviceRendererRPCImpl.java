@@ -26,17 +26,22 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.TransportpceDeviceRendererService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true)
 public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererRPCImpl.class);
     private DeviceRendererService deviceRenderer;
     private OtnDeviceRendererService otnDeviceRendererService;
 
-    public DeviceRendererRPCImpl(DeviceRendererService deviceRenderer,
-                                 OtnDeviceRendererService otnDeviceRendererService) {
+    @Activate
+    public DeviceRendererRPCImpl(@Reference DeviceRendererService deviceRenderer,
+            @Reference OtnDeviceRendererService otnDeviceRendererService) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRendererService = otnDeviceRendererService;
         LOG.debug("DeviceRendererRPCImpl instantiated");
