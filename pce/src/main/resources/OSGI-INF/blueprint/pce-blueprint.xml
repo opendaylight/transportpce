@@ -9,22 +9,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
 Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 -->
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
-    <cm:property-placeholder persistent-id="org.opendaylight.transportpce.pce" update-strategy="reload">
-        <cm:default-properties>
-            <cm:property name="url" value="http://127.0.0.1:8008" />
-            <cm:property name="username" value="gnpy" />
-            <cm:property name="password" value="gnpy" />
-        </cm:default-properties>
-    </cm:property-placeholder>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
   <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
-  <reference id="bindingDOMCodecServices" interface="org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices" />
-  <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
   <reference id="rpcService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
   <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
   <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping"/>
+  <reference id="gnpyConsumer" interface="org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer"/>
 
   <bean id="pceServiceImpl"
         class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"
@@ -33,14 +24,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <argument ref="notificationPublishService" />
     <argument ref="gnpyConsumer" />
     <argument ref="portMapping" />
-  </bean>
-
-  <bean id="gnpyConsumer"
-        class="org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl">
-     <argument value="${url}"/>
-     <argument value="${username}"/>
-     <argument value="${password}"/>
-     <argument ref="bindingDOMCodecServices" />
   </bean>
 
   <bean id="provider"

@@ -19,13 +19,35 @@ import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(configurationPid = "org.opendaylight.transportpce.pce")
 public class GnpyConsumerImpl implements GnpyConsumer {
+    @ObjectClassDefinition
+    public @interface Configuration {
+        @AttributeDefinition
+        String url() default "http://127.0.0.1:8008";
+        @AttributeDefinition
+        String username() default "gnpy";
+        @AttributeDefinition
+        String password() default "gnpy";
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerImpl.class);
 
     private final GnpyResource api;
+
+    @Activate
+    public GnpyConsumerImpl(final Configuration configuration,
+            @Reference BindingDOMCodecServices bindingDOMCodecServices) {
+        this(configuration.url(), configuration.username(), configuration.password(), bindingDOMCodecServices);
+    }
 
     public GnpyConsumerImpl(String baseUrl, String username, String password,
             BindingDOMCodecServices bindingDOMCodecServices) {
