@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.service;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -40,7 +39,6 @@ public class PathComputationServiceImplTest extends AbstractTest {
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
                 this.getNotificationPublishService(), null, null);
-        pathComputationServiceImpl.init();
     }
 
     @Test
@@ -78,10 +76,5 @@ public class PathComputationServiceImplTest extends AbstractTest {
     void pathComputationRerouteRequestTest() {
         pathComputationServiceImpl.generateGnpyResponse(null,"path");
         assertNotNull(pathComputationServiceImpl.pathComputationRerouteRequest(PceTestData.getPCEReroute()));
-    }
-
-    @AfterEach
-    void destroy() {
-        pathComputationServiceImpl.close();
     }
 }
