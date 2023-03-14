@@ -9,58 +9,29 @@
 package org.opendaylight.transportpce.pce.impl;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceService;
-import org.opendaylight.yangtools.concepts.ObjectRegistration;
 
+@ExtendWith(MockitoExtension.class)
 public class PceProviderTest extends AbstractTest {
 
+    @Mock
     private RpcProviderService rpcService;
+    @Mock
     private PathComputationService pathComputationService;
-    private NotificationPublishService notificationPublishService;
-    private NetworkTransactionImpl networkTransaction;
-    private ObjectRegistration<TransportpcePceService> rpcRegistration;
-    private PceProvider pceProvider;
-
-    @BeforeEach
-    void setUp() {
-        rpcService = mock(RpcProviderService.class);
-        notificationPublishService = new NotificationPublishServiceMock();
-        networkTransaction = new NetworkTransactionImpl(getDataBroker());
-        pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
-                null, null);
-        pceProvider = new PceProvider(rpcService, pathComputationService);
-    }
 
     @Test
     void testInit() {
-        this.rpcRegistration = new ObjectRegistration<TransportpcePceService>() {
-            @NonNull
-            @Override
-            public TransportpcePceService getInstance() {
-                return new PceServiceRPCImpl(pathComputationService);
-            }
-
-            @Override
-            public void close() {
-
-            }
-        };
-        when(rpcService.registerRpcImplementation(eq(TransportpcePceService.class), any())).thenReturn(rpcRegistration);
-        pceProvider.init();
-        pceProvider.close();
+        new PceProvider(rpcService, pathComputationService);
+        verify(rpcService, times(1)).registerRpcImplementation(any(), any(TransportpcePceService.class));
     }
 }
