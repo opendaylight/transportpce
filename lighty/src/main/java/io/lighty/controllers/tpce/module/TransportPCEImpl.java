@@ -64,6 +64,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererS
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
+import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
@@ -307,7 +308,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
                 portMapping);
         return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererService,
-                otnDeviceRendererService, rendererServiceOperations);
+                otnDeviceRendererService, deviceRendererRPC,
+                new TransportPCEServicePathRPCImpl(rendererServiceOperations));
     }
 
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
