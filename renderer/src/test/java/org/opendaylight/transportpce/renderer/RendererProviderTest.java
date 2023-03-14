@@ -16,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
@@ -27,15 +29,15 @@ public class RendererProviderTest extends AbstractTest {
     @Mock
     RpcProviderService rpcProviderService;
     @Mock
-    private RendererServiceOperations rendererServiceOperations;
+    DeviceRendererService deviceRenderer;
     @Mock
-    DeviceRendererRPCImpl deviceRendererRPC;
+    OtnDeviceRendererService otnDeviceRendererService;
+    @Mock
+    RendererServiceOperations rendererServiceOperations;
 
     @Test
     void testInitMethodRegistersRendererToRpcService() {
-        RendererProvider provider =
-            new RendererProvider(rpcProviderService, deviceRendererRPC, rendererServiceOperations);
-        provider.init();
+        new RendererProvider(rpcProviderService, deviceRenderer, otnDeviceRendererService, rendererServiceOperations);
 
         verify(rpcProviderService, times(1))
             .registerRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));

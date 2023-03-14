@@ -28,6 +28,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
 
     public TransportPCEServicePathRPCImpl(RendererServiceOperations rendererServiceOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
+        LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
 
     @Override
@@ -56,6 +57,4 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
         }
         return ModelMappingUtils.createServiceImplementationRpcResponse(output);
     }
-
 }
-
