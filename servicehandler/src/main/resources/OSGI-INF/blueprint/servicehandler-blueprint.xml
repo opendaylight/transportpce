@@ -29,10 +29,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="rendererServiceOperations"
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
     <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
-
-    <bean id="serviceDatastoreOperation" class="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl">
-        <argument ref="dataBroker"/>
-      </bean>
+    <reference id="serviceDatastoreOperation" interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations"/>
 
     <bean id="pceListener" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
         <argument ref="rendererServiceOperations" />
@@ -85,6 +82,4 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 
     <service ref="serviceHandlerImpl"
         interface="org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService"/>
-    <service ref="serviceDatastoreOperation"
-        interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations"/>
 </blueprint>
