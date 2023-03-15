@@ -86,6 +86,7 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
@@ -206,7 +207,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), servicehandler, serviceListener);
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
-            TapiLink tapiLink = new TapiLink(networkTransaction);
+            TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
             R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
                     deviceTransactionManager, tapiLink);
             TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
