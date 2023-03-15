@@ -34,14 +34,10 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <reference id="serviceDatastoreOperation"
                interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations" />
+    <reference id="tapiLink" interface="org.opendaylight.transportpce.tapi.utils.TapiLink" />
 
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
-    </bean>
-
-    <bean id="tapiLink"
-          class="org.opendaylight.transportpce.tapi.utils.TapiLink">
-        <argument ref="networkTransactionImpl" />
     </bean>
 
     <bean id="tapiPceListener" class="org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl">
