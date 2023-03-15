@@ -30,10 +30,14 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PceListenerImpl implements TransportpcePceListener {
+@Component
+public class PceListenerImpl implements TransportpcePceListener, PceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
     private static final String PUBLISHER = "PceListener";
@@ -48,11 +52,12 @@ public class PceListenerImpl implements TransportpcePceListener {
     private Boolean serviceFeasiblity;
     private NotificationPublishService notificationPublishService;
 
+    @Activate
     public PceListenerImpl(
-            RendererServiceOperations rendererServiceOperations,
-            PathComputationService pathComputationService,
-            NotificationPublishService notificationPublishService,
-            ServiceDataStoreOperations serviceDataStoreOperations) {
+            @Reference RendererServiceOperations rendererServiceOperations,
+            @Reference PathComputationService pathComputationService,
+            @Reference NotificationPublishService notificationPublishService,
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
@@ -295,22 +300,27 @@ public class PceListenerImpl implements TransportpcePceListener {
         return true;
     }
 
+    @Override
     public void setInput(ServiceInput serviceInput) {
         this.input = serviceInput;
     }
 
+    @Override
     public void setServiceReconfigure(Boolean serv) {
         this.serviceReconfigure = serv;
     }
 
+    @Override
     public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
         this.serviceDataStoreOperations = serviceData;
     }
 
+    @Override
     public void setTempService(Boolean tempService) {
         this.tempService = tempService;
     }
 
+    @Override
     public void setServiceFeasiblity(Boolean serviceFeasiblity) {
         this.serviceFeasiblity = serviceFeasiblity;
     }

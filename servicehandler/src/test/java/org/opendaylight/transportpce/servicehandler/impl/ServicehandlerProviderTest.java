@@ -15,13 +15,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 
 @ExtendWith(MockitoExtension.class)
 public class ServicehandlerProviderTest  extends AbstractTest {
@@ -31,26 +34,24 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     @Mock
     ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
-    PceListenerImpl pceListenerImpl;
+    TransportpcePceListener pceListenerImpl;
     @Mock
-    ServiceListener serviceListener;
+    TransportpceRendererListener rendererListenerImpl;
     @Mock
-    RendererListenerImpl rendererListenerImpl;
+    TransportpceNetworkmodelListener networkModelListenerImpl;
     @Mock
-    NetworkModelListenerImpl networkModelListenerImpl;
+    NotificationPublishService notificationPublishService;
     @Mock
-    ServicehandlerImpl servicehandler;
-
+    OrgOpenroadmServiceService servicehandler;
+    @Mock
+    DataTreeChangeListener<Services> serviceListener;
 
     @Test
     void testInitRegisterServiceHandlerToRpcRegistry() {
-        ServicehandlerProvider provider =  new ServicehandlerProvider(
-                getDataBroker(), rpcProviderRegistry,
-                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, serviceListener,
-                rendererListenerImpl, networkModelListenerImpl, servicehandler);
+        ServicehandlerProvider provider =  new ServicehandlerProvider(getDataBroker(), rpcProviderRegistry,
+                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl, notificationPublishService, servicehandler, serviceListener);
 
-        provider.init();
-
-        verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(ServicehandlerImpl.class));
+        verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(OrgOpenroadmServiceService.class));
     }
 }

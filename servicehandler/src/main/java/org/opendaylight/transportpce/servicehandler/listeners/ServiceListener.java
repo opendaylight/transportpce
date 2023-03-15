@@ -22,9 +22,7 @@ import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.Restorable;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.RpcActions;
@@ -33,6 +31,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.resiliency.ServiceResiliency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceDeleteInputBuilder;
@@ -48,22 +47,27 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmServiceBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class ServiceListener implements DataTreeChangeListener<Services> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceListener.class);
     private static final String PUBLISHER = "ServiceListener";
-    private ServicehandlerImpl servicehandlerImpl;
+    private OrgOpenroadmServiceService servicehandlerImpl;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private NotificationPublishService notificationPublishService;
-    private PathComputationService pathComputationService;
     private Map<String, ServiceInput> mapServiceInputReroute;
     private final ScheduledExecutorService executor;
 
-    public ServiceListener(ServicehandlerImpl servicehandlerImpl, ServiceDataStoreOperations serviceDataStoreOperations,
-                           NotificationPublishService notificationPublishService) {
+    @Activate
+    public ServiceListener(@Reference OrgOpenroadmServiceService servicehandlerImpl,
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations,
+            @Reference NotificationPublishService notificationPublishService) {
         this.servicehandlerImpl = servicehandlerImpl;
         this.notificationPublishService = notificationPublishService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
