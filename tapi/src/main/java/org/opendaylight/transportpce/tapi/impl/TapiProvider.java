@@ -32,6 +32,7 @@ import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.Network;
@@ -131,7 +132,7 @@ public class TapiProvider {
         LOG.info("TapiProvider Session Initiated");
         TapiContext tapiContext = new TapiContext(this.networkTransactionService);
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
-        TapiLink tapiLink = new TapiLink(this.networkTransactionService);
+        TapiLink tapiLink = new TapiLinkImpl(this.networkTransactionService);
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
                 tapiContext, this.networkTransactionService);
