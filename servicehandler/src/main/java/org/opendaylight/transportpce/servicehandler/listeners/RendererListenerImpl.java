@@ -33,6 +33,9 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +45,8 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
-public class RendererListenerImpl implements TransportpceRendererListener {
+@Component
+public class RendererListenerImpl implements TransportpceRendererListener, RendererListener {
 
     private static final String PUBLISHER = "RendererListener";
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
@@ -55,8 +59,10 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private final NetworkModelService networkModelService;
 
 
-    public RendererListenerImpl(PathComputationService pathComputationService,
-            NotificationPublishService notificationPublishService, NetworkModelService networkModelService) {
+    @Activate
+    public RendererListenerImpl(@Reference PathComputationService pathComputationService,
+            @Reference NotificationPublishService notificationPublishService,
+            @Reference NetworkModelService networkModelService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         setServiceInput(null);
         setTempService(false);
@@ -274,14 +280,17 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         return true;
     }
 
+    @Override
     public void setServiceInput(ServiceInput serviceInput) {
         this.input = serviceInput;
     }
 
+    @Override
     public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
         this.serviceDataStoreOperations = serviceData;
     }
 
+    @Override
     public void setTempService(Boolean tempService) {
         this.tempService = tempService;
     }
