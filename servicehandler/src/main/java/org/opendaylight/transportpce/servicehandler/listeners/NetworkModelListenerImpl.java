@@ -42,19 +42,22 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.path.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NetworkModelListenerImpl implements TransportpceNetworkmodelListener {
+@Component
+public class NetworkModelListenerImpl implements TransportpceNetworkmodelListener, NetworkListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelListenerImpl.class);
-    private final NotificationPublishService notificationPublishService; // to be used for T-API notification
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private TopologyUpdateResult topologyUpdateResult;
 
-    public NetworkModelListenerImpl(NotificationPublishService notificationPublishService,
-                                    ServiceDataStoreOperations serviceDataStoreOperations) {
-        this.notificationPublishService = notificationPublishService;
+    @Activate
+    public NetworkModelListenerImpl(@Reference NotificationPublishService notificationPublishService,
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations) {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
     }
 
@@ -105,7 +108,6 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                 continue;
             }
             Services services = serviceOptional.get();
-            OperationResult operationResult1 = null;
             State newState;
             switch (services.getOperationalState()) {
                 case InService:
@@ -274,6 +276,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                 && topologyUpdateResult.getTopologyChanges().equals(notification.getTopologyChanges());
     }
 
+    @Override
     public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
         this.serviceDataStoreOperations = serviceData;
     }
