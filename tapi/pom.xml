@@ -162,6 +162,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>sal-netconf-connector</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.service.component.annotations</artifactId>
+    </dependency>
 
     <!-- Sodium bump: javax.annotation.Nullable and friends -->
     <dependency>
