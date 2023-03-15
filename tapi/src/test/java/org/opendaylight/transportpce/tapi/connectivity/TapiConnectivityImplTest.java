@@ -45,6 +45,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiConnectivityDataUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
@@ -110,7 +111,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             TapiTopologyDataUtils.PORTMAPPING_FILE);
 
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        tapilink = new TapiLink(networkTransactionService);
+        tapilink = new TapiLinkImpl(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
