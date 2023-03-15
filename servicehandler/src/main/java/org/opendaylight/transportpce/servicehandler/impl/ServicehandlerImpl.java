@@ -13,7 +13,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
-import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -22,9 +21,9 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkListener;
+import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.RendererServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -118,6 +117,9 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.pro
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,6 +127,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Top level service interface providing main OpenROADM controller services.
  */
+@Component
 public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerImpl.class);
     private static final String PUBLISHER = "ServiceHandler";
@@ -136,29 +139,30 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final String SERVICE_DELETE_MSG = "serviceDelete: {}";
     private static final String SERVICE_CREATE_MSG = "serviceCreate: {}";
 
-    private DataBroker db;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private PCEServiceWrapper pceServiceWrapper;
     private RendererServiceWrapper rendererServiceWrapper;
-    private PceListenerImpl pceListenerImpl;
-    private RendererListenerImpl rendererListenerImpl;
-    private NetworkModelListenerImpl networkModelListenerImpl;
+    private PceListener pceListenerImpl;
+    private RendererListener rendererListenerImpl;
+    private NetworkListener networkModelListenerImpl;
     private NotificationPublishService notificationPublishService;
 
-    //TODO: remove private request fields as they are in global scope
-
-    public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
-            RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
-            PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, ServiceDataStoreOperations serviceDataStoreOperations) {
-        this.db = databroker;
+    @Activate
+    public ServicehandlerImpl(@Reference PathComputationService pathComputationService,
+            @Reference RendererServiceOperations rendererServiceOperations,
+            @Reference NotificationPublishService notificationPublishService,
+            @Reference PceListener pceListenerImpl,
+            @Reference RendererListener rendererListenerImpl,
+            @Reference NetworkListener networkModelListenerImpl,
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations) {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
+        this.notificationPublishService =  notificationPublishService;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
-        this.notificationPublishService =  notificationPublishService;
+        LOG.info("ServicehandlerImpl Initiated");
     }
 
 
