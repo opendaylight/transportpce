@@ -194,15 +194,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
-        ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
-            pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+        ServicehandlerImpl servicehandler = new ServicehandlerImpl(pathComputationService, rendererServiceOperations,
+                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl, serviceDataStoreOperations);
         ServiceListener serviceListener = new ServiceListener(servicehandler, serviceDataStoreOperations,
                 lightyServices.getBindingNotificationPublishService());
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
-                serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
-                networkModelListenerImpl, servicehandler);
+                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                lightyServices.getBindingNotificationPublishService(), servicehandler, serviceListener);
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
             TapiLink tapiLink = new TapiLink(networkTransaction);
@@ -243,8 +243,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
     @Override
     protected boolean initProcedure() {
-        LOG.info("Initializing service-handler provider ...");
-        servicehandlerProvider.init();
         if (tapiProvider != null) {
             LOG.info("Initializing tapi provider ...");
             tapiProvider.init();
