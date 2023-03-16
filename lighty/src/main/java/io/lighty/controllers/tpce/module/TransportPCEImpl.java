@@ -217,9 +217,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                     lightyServices.getBindingDataBroker());
             TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
                     networkTransaction, tapiLink);
-            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
-                    tapilinkDiscoveryImpl, networkTransaction, tapiLink,
-                    lightyServices.getBindingNotificationPublishService());
+            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(networkTransaction,
+                    deviceTransactionManager, tapiLink, lightyServices.getBindingNotificationPublishService());
             TapiNetconfTopologyListener tapiNetConfTopologyListener =
                     new TapiNetconfTopologyListener(tapiNetworkModelService);
             TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransaction);
