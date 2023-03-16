@@ -68,25 +68,31 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.EnumTypeObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelListenerImpl.class);
     private final NetworkTransactionService networkTransactionService;
+    private final NotificationPublishService notificationPublishService;
     private final List<ConnectivityService> connectivityServiceChanges = new ArrayList<>();
     private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
     private final List<LayerProtocolName> orderedServiceLayerList;
-    private final NotificationPublishService notificationPublishService;
 
-    public TapiNetworkModelListenerImpl(NetworkTransactionService networkTransactionService,
-                                        NotificationPublishService notificationPublishService) {
+    @Activate
+    public TapiNetworkModelListenerImpl(@Reference NetworkTransactionService networkTransactionService,
+            @Reference NotificationPublishService notificationPublishService) {
         this.networkTransactionService = networkTransactionService;
+        this.notificationPublishService = notificationPublishService;
         this.orderedServiceLayerList = List.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
             LayerProtocolName.DSR, LayerProtocolName.ETH);
-        this.notificationPublishService = notificationPublishService;
+        LOG.debug("TapiNetworkModelListenerImpl instantiated");
     }
 
     @Override
