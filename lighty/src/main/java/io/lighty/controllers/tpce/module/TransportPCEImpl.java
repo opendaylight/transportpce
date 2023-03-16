@@ -9,10 +9,6 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -108,12 +104,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider tapiProvider;
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
-    /**
-     * List of publisher topics.
-     */
-    private final List<String> publisherServiceList = Arrays.asList("PceListener", "ServiceHandlerOperations",
-            "ServiceHandler", "RendererListener");
-    private final List<String> publisherAlarmList = Arrays.asList("ServiceListener");
 
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
                             String olmtimer1, String olmtimer2) {
@@ -207,7 +197,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
-                    publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
+                    null, null, lightyServices.getRpcProviderService(),
                     lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer(),
                     networkTransaction);
         }
@@ -220,7 +210,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         }
         if (nbiNotificationsProvider != null) {
             LOG.info("Initializing nbi-notifications provider ...");
-            nbiNotificationsProvider.init();
         }
         LOG.info("Init done.");
         return true;

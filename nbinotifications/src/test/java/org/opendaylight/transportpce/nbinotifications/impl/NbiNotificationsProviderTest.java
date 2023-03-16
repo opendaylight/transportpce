@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,7 +27,6 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
 
     @Mock
     RpcProviderService rpcProviderRegistry;
-
     @Mock
     private NotificationService notificationService;
 
@@ -40,11 +38,9 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
     @Test
     void initTest() {
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        NbiNotificationsProvider provider = new NbiNotificationsProvider(
-                Arrays.asList("topic1", "topic2"), Arrays.asList("topic1", "topic2"), "localhost:8080",
-                "localhost:8080", rpcProviderRegistry, notificationService,
-                getDataStoreContextUtil().getBindingDOMCodecServices(), networkTransactionService);
-        provider.init();
+        NbiNotificationsProvider provider = new NbiNotificationsProvider("localhost:8080", "localhost:8080",
+                rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
+                networkTransactionService);
         verify(rpcProviderRegistry, times(2))
                 .registerRpcImplementation(any(), any(NbiNotificationsImpl.class));
         verify(notificationService, times(1))
