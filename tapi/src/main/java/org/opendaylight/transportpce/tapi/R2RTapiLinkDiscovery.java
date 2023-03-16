@@ -51,7 +51,7 @@ public class R2RTapiLinkDiscovery {
     private final TapiLink tapiLink;
 
     public R2RTapiLinkDiscovery(NetworkTransactionService networkTransactionService,
-                                DeviceTransactionManager deviceTransactionManager, TapiLink tapiLink) {
+            DeviceTransactionManager deviceTransactionManager, TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
         this.deviceTransactionManager = deviceTransactionManager;
         this.tapiLink = tapiLink;
