@@ -36,6 +36,8 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
                interface="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations" />
     <reference id="tapiLink" interface="org.opendaylight.transportpce.tapi.utils.TapiLink" />
     <reference id="tapiNetworkModelService" interface="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService" />
+    <reference id="tapiNetworkUtilsImpl"
+        interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService" />
 
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
@@ -66,11 +68,6 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <bean id="tapiOrLinkListener" class="org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener">
         <argument ref="tapiLink" />
         <argument ref="networkTransactionImpl" />
-    </bean>
-
-    <bean id="tapiNetworkUtilsImpl" class="org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl">
-        <argument ref="networkTransactionImpl" />
-        <argument ref="tapiLink" />
     </bean>
 
     <bean id="tapiProvider"
