@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import javax.sql.DataSource;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +29,10 @@ public class DeviceInventory {
 
     private final DataSource dataSource;
     private final INode inode;
-    private final DeviceTransactionManager deviceTransactionManager;
 
-    public DeviceInventory(DataSource dataSource, INode inode,
-                           DeviceTransactionManager deviceTransactionManager) {
+    public DeviceInventory(DataSource dataSource, INode inode) {
         this.dataSource = dataSource;
         this.inode = inode;
-        this.deviceTransactionManager = deviceTransactionManager;
     }
 
     public void init() {

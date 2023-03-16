@@ -7,77 +7,70 @@
  */
 package org.opendaylight.transportpce.inventory;
 
+import javax.sql.DataSource;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.inventory.listener.ClliNetworkChangeListener;
 import org.opendaylight.transportpce.inventory.listener.DeviceConfigListener;
 import org.opendaylight.transportpce.inventory.listener.DeviceListener;
 import org.opendaylight.transportpce.inventory.listener.OverlayNetworkChangeListener;
 import org.opendaylight.transportpce.inventory.listener.UnderlayNetworkChangeListener;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * {@link ListenerProvider} registers {@link DataTreeChangeListener} for each network layer.
  */
+@Component
 public class ListenerProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListenerProvider.class);
-
-    private final DataBroker dataBroker;
-    private final OverlayNetworkChangeListener overlayNetworkListener;
-    private final UnderlayNetworkChangeListener underlayNetworkListener;
-    private final ClliNetworkChangeListener clliNetworkChangeListener;
-    private final DeviceListener deviceListener;
-    private final DeviceConfigListener deviceConfigListener;
 
     /**
      * Constructor invoked by blueprint injects all dependencies.
      *
      * @param dataBroker dataBroker
-     * @param overlayNetworkListener  overlay-network Listener
-     * @param underlayNetworkListener underlay-network Listener
-     * @param clliNetworkChangeListener clli Network change Listener
-     * @param deviceListener device listener
-     * @param deviceConfigListener device config listener
+     * @param dataSource dataSource
+     * @param deviceTransactionManager deviceTransactionManager
      */
-    public ListenerProvider(DataBroker dataBroker, OverlayNetworkChangeListener overlayNetworkListener,
-        UnderlayNetworkChangeListener underlayNetworkListener, ClliNetworkChangeListener clliNetworkChangeListener,
-        DeviceListener deviceListener, DeviceConfigListener deviceConfigListener) {
+    @Activate
+    public ListenerProvider(@Reference DataBroker dataBroker,
+            @Reference DataSource dataSource,
+            @Reference DeviceTransactionManager deviceTransactionManager) {
 
-        this.dataBroker = dataBroker;
-        this.overlayNetworkListener = overlayNetworkListener;
-        this.underlayNetworkListener = underlayNetworkListener;
-        this.clliNetworkChangeListener = clliNetworkChangeListener;
-        this.deviceListener = deviceListener;
-        this.deviceConfigListener = deviceConfigListener;
-    }
-
-    /**
-     * Invoked by blueprint, registers the listeners.
-     */
-    public void initialize() {
         LOG.debug("Registering listeners...");
+        OverlayNetworkChangeListener overlayNetworkListener = new OverlayNetworkChangeListener();
         dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OVERLAY_NETWORK_II),
                 overlayNetworkListener);
         LOG.info("Overlay network change listener was successfully registered");
+        UnderlayNetworkChangeListener underlayNetworkListener = new UnderlayNetworkChangeListener();
         dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.UNDERLAY_NETWORK_II),
                 underlayNetworkListener);
         LOG.info("Underlay network change listener was successfully registered");
+        ClliNetworkChangeListener clliNetworkChangeListener = new ClliNetworkChangeListener();
         dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.CLLI_NETWORK_II),
                 clliNetworkChangeListener);
         LOG.info("CLLI network change listener was successfully registered");
+        INode121 inode121 = new INode121(dataSource, deviceTransactionManager);
+        INode inode = new INode(dataSource, inode121);
+        DeviceInventory deviceInventory = new DeviceInventory(dataSource, inode);
+        DeviceListener deviceListener = new DeviceListener(deviceInventory);
         dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), deviceListener);
         LOG.info("Device change listener was successfully registered");
+        DeviceConfigListener deviceConfigListener = new DeviceConfigListener(deviceInventory);
         dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), deviceConfigListener);
