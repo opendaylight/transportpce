@@ -31,11 +31,9 @@ public class DmaapClientProviderTest {
 
     @Test
     void testInitRegisterNbiNotificationsToRpcRegistry() {
-        DmaapClientProvider provider =
-            new DmaapClientProvider(notificationService, "http://localhost", "username", "password");
-        provider.init();
-        (verify(notificationService, times(1)))
-                .registerNotificationListener(Mockito.any(NbiNotificationsListenerImpl.class));
+        new DmaapClientProvider(notificationService, "http://localhost", "username", "password");
+        verify(notificationService, times(1))
+            .registerNotificationListener(Mockito.any(NbiNotificationsListenerImpl.class));
     }
 
 }
