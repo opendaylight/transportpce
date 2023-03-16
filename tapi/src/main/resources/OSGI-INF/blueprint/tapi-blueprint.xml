@@ -38,6 +38,8 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
     <reference id="tapiNetworkModelService" interface="org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService" />
     <reference id="tapiNetworkUtilsImpl"
         interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService" />
+    <reference id="tapiNetworkModelListenerImpl"
+        interface="org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationListener" />
 
     <bean id="tapiListener"
           class="org.opendaylight.transportpce.tapi.utils.TapiListener">
@@ -54,11 +56,6 @@ Author: Gilles Thouenon <gilles.thouenon@orange.com>
 
     <bean id="tapiServiceHandlerListener" class="org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl">
         <argument ref="dataBroker" />
-    </bean>
-
-    <bean id="tapiNetworkModelListenerImpl" class="org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl">
-        <argument ref="networkTransactionImpl" />
-        <argument ref="notificationPublishService" />
     </bean>
 
     <bean id="tapiNetconfTopologyListener" class="org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener">
