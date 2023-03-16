@@ -9,9 +9,10 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
+
 import java.util.Arrays;
 import java.util.List;
-import org.opendaylight.mdsal.binding.api.NotificationService;
+
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -73,18 +74,11 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
-import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
-import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
-import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
-import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
@@ -199,28 +193,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
             TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
-            TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
-                    .getBindingDataBroker(), lightyServices.getBindingNotificationPublishService());
-            TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
-            TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(
-                    lightyServices.getBindingDataBroker());
-            TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
-                    networkTransaction, tapiLink);
+            new TapiNetworkUtilsImpl(networkTransaction, tapiLink);
             TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(networkTransaction,
                     deviceTransactionManager, tapiLink, lightyServices.getBindingNotificationPublishService());
-            TapiNetconfTopologyListener tapiNetConfTopologyListener =
-                    new TapiNetconfTopologyListener(tapiNetworkModelService);
-            TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransaction);
-            TapiPortMappingListener tapiPortMappingListener =
-                    new TapiPortMappingListener(tapiNetworkModelService);
             TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl =
                     new TapiNetworkModelListenerImpl(networkTransaction,
                             lightyServices.getBindingNotificationPublishService());
 
             tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-                    tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl,
-                    tapiPceListenerImpl, tapiRendererListenerImpl, tapiServiceHandlerListener,
-                    lightyServices.getNotificationService(), orLinkListener, tapiNetworkModelListenerImpl);
+                    tapiNetworkModelListenerImpl, tapiLink, tapiNetworkModelService);
+
         }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
@@ -235,7 +217,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     protected boolean initProcedure() {
         if (tapiProvider != null) {
             LOG.info("Initializing tapi provider ...");
-            tapiProvider.init();
         }
         if (nbiNotificationsProvider != null) {
             LOG.info("Initializing nbi-notifications provider ...");
@@ -273,18 +254,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
                                   NetworkTransactionService networkTransactionService,
                                   ServiceDataStoreOperations serviceDataStoreOperations,
-                                  TapiNetconfTopologyListener tapiNetConfTopologyListener,
-                                  TapiPortMappingListener tapiPortMappingListener,
-                                  TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl,
-                                  TapiPceListenerImpl pceListenerImpl, TapiRendererListenerImpl rendererListenerImpl,
-                                  TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
-                                  NotificationService notificationService, TapiOrLinkListener orLinkListener,
-                                  TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl) {
+                                  TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl,
+                                  TapiLink tapiLink, TapiNetworkModelService tapiNetworkModelService) {
+        TransportpceTapinetworkutilsService tapiNetworkUtils = new TapiNetworkUtilsImpl(networkTransactionService,
+            tapiLink);
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
-            servicehandler, serviceDataStoreOperations, new TapiListener(), networkTransactionService,
-            tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, pceListenerImpl,
-            rendererListenerImpl, serviceHandlerListenerImpl, notificationService, orLinkListener,
-            tapiNetworkModelListenerImpl);
+            lightyServices.getNotificationService(), lightyServices.getBindingNotificationPublishService(),
+            networkTransactionService, servicehandler, serviceDataStoreOperations, tapiNetworkUtils,
+            tapiNetworkModelListenerImpl, tapiNetworkModelService);
     }
 
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
