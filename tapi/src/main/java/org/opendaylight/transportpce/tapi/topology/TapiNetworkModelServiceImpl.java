@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
@@ -137,26 +138,32 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelServiceImpl.class);
+
     private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
     private final NetworkTransactionService networkTransactionService;
-    private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
     private final NotificationPublishService notificationPublishService;
+    private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
 
-    public TapiNetworkModelServiceImpl(final R2RTapiLinkDiscovery linkDiscovery,
-                                       NetworkTransactionService networkTransactionService, TapiLink tapiLink,
-                                       final NotificationPublishService notificationPublishService) {
+    @Activate
+    public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference TapiLink tapiLink,
+            @Reference final NotificationPublishService notificationPublishService) {
         this.networkTransactionService = networkTransactionService;
-        this.sipMap = new HashMap<>();
-        this.linkDiscovery = linkDiscovery;
+        this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink);
         this.tapiLink = tapiLink;
         this.notificationPublishService = notificationPublishService;
     }
