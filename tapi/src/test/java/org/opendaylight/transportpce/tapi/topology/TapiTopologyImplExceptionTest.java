@@ -29,7 +29,6 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
@@ -62,7 +61,6 @@ public class TapiTopologyImplExceptionTest {
         };
         when(networkTransactionService.commit()).then(answer);
         tapiContext = new TapiContext(networkTransactionService);
-        tapiLink = new TapiLinkImpl(networkTransactionService);
 
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(
             TapiStringConstants.T0_MULTILAYER);
