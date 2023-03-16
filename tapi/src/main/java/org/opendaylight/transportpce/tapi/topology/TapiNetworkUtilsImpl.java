@@ -41,9 +41,13 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkUtilsImpl.class);
@@ -52,7 +56,9 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
     private final NetworkTransactionService networkTransactionService;
     private final TapiLink tapiLink;
 
-    public TapiNetworkUtilsImpl(NetworkTransactionService networkTransactionService, TapiLink tapiLink) {
+    @Activate
+    public TapiNetworkUtilsImpl(@Reference NetworkTransactionService networkTransactionService,
+            @Reference TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
         this.tapiLink = tapiLink;
     }
