@@ -13,6 +13,7 @@ import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -51,6 +52,7 @@ public class ServicehandlerProvider {
     private ListenerRegistration<TransportpceNetworkmodelListener> networkmodellistenerRegistration;
     private ObjectRegistration<OrgOpenroadmServiceService> rpcRegistration;
     private ServiceDataStoreOperations serviceDataStoreOperations;
+    private CatalogDataStoreOperations catalogDataStoreOperations;
     private PceListenerImpl pceListenerImpl;
     private ServiceListener serviceListener;
     private RendererListenerImpl rendererListenerImpl;
@@ -60,7 +62,8 @@ public class ServicehandlerProvider {
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, ServiceDataStoreOperations serviceDataStoreOperations,
             PceListenerImpl pceListenerImpl, ServiceListener serviceListener, RendererListenerImpl rendererListenerImpl,
-            NetworkModelListenerImpl networkModelListenerImpl, ServicehandlerImpl servicehandler) {
+            NetworkModelListenerImpl networkModelListenerImpl, ServicehandlerImpl servicehandler,
+                                  CatalogDataStoreOperations catalogDataStoreOperations) {
         this.dataBroker = dataBroker;
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
@@ -71,6 +74,7 @@ public class ServicehandlerProvider {
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
         this.servicehandler = servicehandler;
+        this.catalogDataStoreOperations = catalogDataStoreOperations;
     }
 
     /**
