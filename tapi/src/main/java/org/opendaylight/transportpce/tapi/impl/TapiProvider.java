@@ -7,7 +7,9 @@
  */
 package org.opendaylight.transportpce.tapi.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -54,6 +56,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -90,9 +93,7 @@ public class TapiProvider {
     private TapiNotificationListener tapiNetworkModelListenerImpl;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
     private ObjectRegistration<TransportpceTapinetworkutilsService> tapiNetworkutilsServiceRpcRegistration;
-    private ListenerRegistration<TapiNetconfTopologyListener> dataTreeChangeListenerRegistration;
-    private ListenerRegistration<TapiOrLinkListener> dataTreeChangeListenerRegistration1;
-    private ListenerRegistration<TapiPortMappingListener> mappingListenerListenerRegistration;
+    private List<Registration> listeners;
     private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
     private ListenerRegistration<TransportpceServicehandlerListener> servicehandlerlistenerRegistration;
@@ -141,27 +142,27 @@ public class TapiProvider {
         rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
         rpcProviderService.registerRpcImplementation(TapiCommonService.class, topo);
 
+        this.listeners = new ArrayList<>();
         TapiNetconfTopologyListener topologyListener = new TapiNetconfTopologyListener(tapiNetworkModelServiceImpl);
         TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransactionService);
         TapiPortMappingListener tapiPortMappingListener = new TapiPortMappingListener(tapiNetworkModelServiceImpl);
-        dataTreeChangeListenerRegistration1 =
-            dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION,
-                LINK_II), orLinkListener);
-        dataTreeChangeListenerRegistration =
-            dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
-        mappingListenerListenerRegistration =
-            dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION,
-                MAPPING_II), tapiPortMappingListener);
+        listeners.add(dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, LINK_II), orLinkListener));
+        listeners.add(dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, InstanceIdentifiers.NETCONF_TOPOLOGY_II
+                    .child(Node.class)),
+                topologyListener));
+        listeners.add(dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), tapiPortMappingListener));
         tapiNetworkutilsServiceRpcRegistration =
                 rpcProviderService.registerRpcImplementation(TransportpceTapinetworkutilsService.class,
                         this.tapiNetworkUtils);
         TapiListener tapiListener = new TapiListener();
-        dataBroker.registerDataTreeChangeListener(
+        listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(
                         LogicalDatastoreType.CONFIGURATION,
                         InstanceIdentifier.create(ServiceInterfacePoints.class)),
-                tapiListener);
+                tapiListener));
         // Notification Listener
         pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
@@ -177,16 +178,8 @@ public class TapiProvider {
      */
     @Deactivate
     public void close() {
-        LOG.info("TapiProvider Session Closed");
-        if (dataTreeChangeListenerRegistration != null) {
-            dataTreeChangeListenerRegistration.close();
-        }
-        if (mappingListenerListenerRegistration != null) {
-            mappingListenerListenerRegistration.close();
-        }
-        if (dataTreeChangeListenerRegistration1 != null) {
-            dataTreeChangeListenerRegistration1.close();
-        }
+        listeners.forEach(lis -> lis.close());
+        listeners.clear();
         if (tapiNetworkutilsServiceRpcRegistration != null) {
             tapiNetworkutilsServiceRpcRegistration.close();
         }
@@ -195,5 +188,6 @@ public class TapiProvider {
         servicehandlerlistenerRegistration.close();
         rpcRegistration.close();
         tapinetworkmodellistenerRegistration.close();
+        LOG.info("TapiProvider Session Closed");
     }
 }
