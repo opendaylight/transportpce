@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
@@ -51,8 +53,7 @@ public class NetworkModelProvider {
     private final RpcProviderService rpcProviderService;
     private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
-    private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
-    private ListenerRegistration<PortMappingListener> mappingListenerRegistration;
+    private List<Registration> listeners;
     private @NonNull Registration networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
     private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
@@ -73,6 +74,7 @@ public class NetworkModelProvider {
         this.rpcProviderService = rpcProviderService;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
+        this.listeners = new ArrayList<>();
         this.networkutilsService = new NetworkUtilsImpl(dataBroker);
         this.topologyListener = new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager,
             portMapping);
@@ -90,11 +92,11 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
-        dataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
+        listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
-        mappingListenerRegistration = dataBroker.registerDataTreeChangeListener(
-                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener);
+                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener));
+        listeners.add(dataBroker.registerDataTreeChangeListener(
+                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
         networkutilsServiceRpcRegistration = rpcProviderService
             .registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
         TransportpceServicehandlerListener serviceHandlerListner = new ServiceHandlerListener(frequenciesService);
@@ -107,12 +109,8 @@ public class NetworkModelProvider {
     @Deactivate
     public void close() {
         LOG.info("NetworkModelProvider Closed");
-        if (dataTreeChangeListenerRegistration != null) {
-            dataTreeChangeListenerRegistration.close();
-        }
-        if (mappingListenerRegistration != null) {
-            mappingListenerRegistration.close();
-        }
+        listeners.forEach(lis -> lis.close());
+        listeners.clear();
         if (networkutilsServiceRpcRegistration != null) {
             networkutilsServiceRpcRegistration.close();
         }
