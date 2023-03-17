@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
@@ -29,6 +30,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
 @ExtendWith(MockitoExtension.class)
 public class ServicehandlerProviderTest  extends AbstractTest {
 
+    @Mock
+    DataBroker dataBroker;
     @Mock
     RpcProviderService rpcProviderRegistry;
     @Mock
@@ -48,10 +51,11 @@ public class ServicehandlerProviderTest  extends AbstractTest {
 
     @Test
     void testInitRegisterServiceHandlerToRpcRegistry() {
-        ServicehandlerProvider provider =  new ServicehandlerProvider(getDataBroker(), rpcProviderRegistry,
-                getNotificationService() , serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
-                networkModelListenerImpl, notificationPublishService, servicehandler, serviceListener);
+        new ServicehandlerProvider(dataBrocker, rpcProviderRegistry, getNotificationService() ,
+                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                notificationPublishService, servicehandler, serviceListener);
 
         verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(OrgOpenroadmServiceService.class));
+        verify(dataBroker, times(1)).registerDataTreeChangeListener(any(), any());
     }
 }

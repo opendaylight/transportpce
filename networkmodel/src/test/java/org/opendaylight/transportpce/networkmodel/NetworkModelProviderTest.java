@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
@@ -27,13 +28,14 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 
 @ExtendWith(MockitoExtension.class)
-public class NetworkModelProviderTest extends AbstractTest {
+public class NetworkModelProviderTest {
     @Mock
     NetworkTransactionService networkTransactionService;
+    @Mock
+    DataBroker dataBroker;
     @Mock
     RpcProviderService rpcProviderService;
     @Mock
@@ -62,13 +64,11 @@ public class NetworkModelProviderTest extends AbstractTest {
         };
         when(networkTransactionService.commit()).then(answer);
 
-        new NetworkModelProvider(networkTransactionService, getDataBroker(),
-            rpcProviderService, networkModelService, deviceTransactionManager, portMapping, notificationService,
-            frequenciesService);
-
-//        provider.init();
+        new NetworkModelProvider(networkTransactionService, dataBroker, rpcProviderService, networkModelService,
+                deviceTransactionManager, portMapping, notificationService, frequenciesService);
 
         verify(rpcProviderService, times(1))
             .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
+        verify(dataBroker, times(2)).registerDataTreeChangeListener(any(), any());
     }
 }
