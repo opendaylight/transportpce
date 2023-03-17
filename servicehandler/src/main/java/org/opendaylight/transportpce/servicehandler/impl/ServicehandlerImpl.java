@@ -18,15 +18,19 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.CatalogInput;
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogMapper;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkListener;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.RendererServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.validation.CatalogValidation;
 import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
@@ -38,6 +42,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210.operational.mode.catalog.SpecificOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogInput;
@@ -138,6 +144,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private static final String SERVICE_FEASIBILITY_CHECK_MSG = "serviceFeasibilityCheck: {}";
     private static final String SERVICE_DELETE_MSG = "serviceDelete: {}";
     private static final String SERVICE_CREATE_MSG = "serviceCreate: {}";
+    private static final String ADD_OR_TO_CATALOG_MSG = "addORToCatalog: {}";
+    private static final String ADD_SPECIFIC_TO_CATALOG_MSG = "addSpecificToCatalog: {}";
 
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private PCEServiceWrapper pceServiceWrapper;
@@ -146,6 +154,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererListener rendererListenerImpl;
     private NetworkListener networkModelListenerImpl;
     private NotificationPublishService notificationPublishService;
+    private CatalogDataStoreOperations catalogDataStoreOperations;
 
     @Activate
     public ServicehandlerImpl(@Reference PathComputationService pathComputationService,
@@ -154,7 +163,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             @Reference PceListener pceListenerImpl,
             @Reference RendererListener rendererListenerImpl,
             @Reference NetworkListener networkModelListenerImpl,
-            @Reference ServiceDataStoreOperations serviceDataStoreOperations) {
+            @Reference ServiceDataStoreOperations serviceDataStoreOperations,
+            @Reference CatalogDataStoreOperations catalogDataStoreOperations) {
+        this.catalogDataStoreOperations = catalogDataStoreOperations;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.notificationPublishService =  notificationPublishService;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
@@ -176,6 +187,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         public static final String SERVICE_NON_COMPLIANT;
         public static final String RENDERER_DELETE_FAILED;
         public static final String ABORT_VALID_FAILED;
+        public static final String ABORT_OR_TO_CATALOG_FAILED;
+        public static final String ABORT_SPECIFIC_TO_CATALOG_FAILED;
 
         // Static blocks are generated once and spare memory.
         static {
@@ -186,6 +199,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             SERVICE_NON_COMPLIANT = "non-compliant service";
             RENDERER_DELETE_FAILED = "Renderer service delete failed";
             ABORT_VALID_FAILED = "Aborting: validation of service create request failed";
+            ABORT_OR_TO_CATALOG_FAILED = "Aborting: validation of add OR to catalog request failed";
+            ABORT_SPECIFIC_TO_CATALOG_FAILED = "Aborting: validation of add Specific to catalog request failed";
         }
 
         public static String serviceInDS(String serviceName) {
@@ -791,17 +806,71 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
+    /**
+     * Implementation of the RPC to set OR  operational modes in the catalog of the controller.
+     * Semantics of the RPC is such that the information in the input replaces the full content
+     * of the OR operational modes catalog in the config data store. Incremental changes to the
+     * catalog, if required, must be done via individual PUT/POST/DELETE RESTconf APIs.
+     *
+     * @param input AddOpenroadmOperationalModesToCatalogInput to be added to Catalog
+     * @return Result of the request
+     */
     public ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>>
-            addOpenroadmOperationalModesToCatalog(AddOpenroadmOperationalModesToCatalogInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        addOpenroadmOperationalModesToCatalog(AddOpenroadmOperationalModesToCatalogInput input) {
+
+        LOG.info("RPC addOpenroadmOperationalModesToCatalog in progress");
+        LOG.debug(" Input openRoadm {}", input);
+        // Validation
+        OperationResult validationResult = CatalogValidation.validateORCatalogRequest(
+                new CatalogInput(input), RpcActions.FillCatalogWithOrOperationalModes);
+        if (! validationResult.isSuccess()) {
+            LOG.warn(ADD_OR_TO_CATALOG_MSG, LogMessages.ABORT_OR_TO_CATALOG_FAILED);
+            return ModelMappingUtils.addOpenroadmServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+        LOG.info(" Request System Id {} " ,input.getSdncRequestHeader().getRequestSystemId());
+        LOG.info(" Rpc Action {} " ,input.getSdncRequestHeader().getRpcAction());
+
+        OpenroadmOperationalModes objToSave = CatalogMapper.createORModesToSave(input);
+        catalogDataStoreOperations.addOpenroadmOperationalModesToCatalog(objToSave);
+        LOG.info("RPC addOpenroadmOperationalModesToCatalog Completed");
+        return ModelMappingUtils.addOpenroadmServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                validationResult.getResultMessage(), ResponseCodes.RESPONSE_OK);
     }
 
     @Override
+    /**
+     * Implementation of the RPC to set specific operational modes in the catalog of the controller.
+     * Semantics of the RPC is such that the information in the input replaces the full content
+     * of the specific operational modes catalog in the config data store. Incremental changes to the
+     * catalog, if required, must be done via individual PUT/POST/DELETE RESTconf APIs.
+     *
+     * @param input AddSpecificOperationalModesToCatalogInput to be added to Catalog
+     * @return Result of the request
+     */
     public ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>> addSpecificOperationalModesToCatalog(
             AddSpecificOperationalModesToCatalogInput input) {
-        // TODO Auto-generated method stub
-        return null;
+
+        LOG.info("RPC addSpecificOperationalModesToCatalog in progress");
+        LOG.debug(" Input openSpecificRoadm {}", input);
+        // Validation
+        OperationResult validationResult = CatalogValidation.validateSpecificCatalogRequest(
+                new CatalogInput(input), RpcActions.FillCatalogWithSpecificOperationalModes);
+        if (! validationResult.isSuccess()) {
+            LOG.warn(ADD_SPECIFIC_TO_CATALOG_MSG, LogMessages.ABORT_SPECIFIC_TO_CATALOG_FAILED);
+            return ModelMappingUtils.addSpecificOpenroadmServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+        LOG.info(" Request System Id {} " ,input.getSdncRequestHeader().getRequestSystemId());
+        LOG.info(" Rpc Action {} " ,input.getSdncRequestHeader().getRpcAction());
+
+        SpecificOperationalModes objToSave = CatalogMapper.createSpecificModesToSave(input);
+        catalogDataStoreOperations.addSpecificOperationalModesToCatalog(objToSave);
+        LOG.info("RPC addSpecificOperationalModesToCatalog Completed");
+        return ModelMappingUtils.addSpecificOpenroadmServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                validationResult.getResultMessage(), ResponseCodes.RESPONSE_OK);
     }
 
     @Override
@@ -810,3 +879,4 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         return null;
     }
 }
+

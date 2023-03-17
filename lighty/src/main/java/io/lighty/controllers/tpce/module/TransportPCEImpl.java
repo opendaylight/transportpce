@@ -9,6 +9,8 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -171,9 +173,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
-        ServicehandlerImpl servicehandler = new ServicehandlerImpl(pathComputationService, rendererServiceOperations,
-                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl,
-                networkModelListenerImpl, serviceDataStoreOperations);
+        CatalogDataStoreOperations catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(networkTransaction);
+        OrgOpenroadmServiceService servicehandler = new ServicehandlerImpl(pathComputationService,
+                rendererServiceOperations, lightyServices.getBindingNotificationPublishService(), pceListenerImpl,
+                rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
         ServiceListener serviceListener = new ServiceListener(servicehandler, serviceDataStoreOperations,
                 lightyServices.getBindingNotificationPublishService());
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
