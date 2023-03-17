@@ -31,6 +31,8 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
+import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
@@ -85,6 +87,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImplTest.class);
     private static ServiceDataStoreOperations serviceDataStoreOperations;
+    public static CatalogDataStoreOperations catalogDataStoreOperations;
     private static TapiContext tapiContext;
     private static TopologyUtils topologyUtils;
     private static ConnectivityUtils connectivityUtils;
@@ -112,6 +115,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapilink = new TapiLink(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
+        catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapilink);
@@ -127,7 +131,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations);
+            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl);
@@ -152,7 +156,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations);
+            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         CreateConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceCreateInput();
         when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
@@ -178,7 +182,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     void deleteConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations);
+            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl);
@@ -203,7 +207,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput1();
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations);
+            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl);
@@ -228,7 +232,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(getNewDataBroker(), pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations);
+            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl);
