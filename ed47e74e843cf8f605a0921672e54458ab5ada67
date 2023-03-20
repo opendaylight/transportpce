@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67169f1_29dfc6d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-03-20T16:41:57Z",
+      "side": 1,
+      "message": "Hi Roshan, Thanks for this contributions which greatly complements the work done on autonomous impairment aware path computation. Looks fine to me.  I see that you adjusted some of the tests to include CatalogDataStoreOperations as as an argument of ServiceHandlerImpl and ServiceHandlerProvider. \nWould it be possible  for you to add 2 tests checking that the RPCs are correctly handled? For addOpenroadmOperationalModesToCatalog, the Json files to be used for the RPC is available at  https://github.com/OpenROADM/OpenROADM_MSA_Public/blob/12.1.0/model/Specifications/body-rpc-add-operational-modes-to-catalog-10_1-optical-spec-5_1.json \nFor addSpecificOperationalModesToCatalog, I can work on building a Json file that does the same for a dummy Operational mode. \nMy feeling is that it should be rebased, but it may not be so easy since you had to modify the blueprint. Gilles made in the meanwhile a lot of changes to cope with the new approach pushed in odl by Robert, removing the blueprints. I have added him as a reviewer, so that he can provide his comments on the way to proceed.\nThanks so much!",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
