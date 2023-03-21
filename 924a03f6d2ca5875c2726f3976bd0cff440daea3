@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a2e130a_c2d50b46",
+        "filename": "servicehandler/src/main/resources/OSGI-INF/blueprint/servicehandler-blueprint.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 0,
+      "message": "I confirm this work is in conflict with Gilles\u0027one, especially\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/104946\n\nGerrit detects an incompatibility with the ongoing migration to OSGi component.",
+      "revId": "924a03f6d2ca5875c2726f3976bd0cff440daea3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

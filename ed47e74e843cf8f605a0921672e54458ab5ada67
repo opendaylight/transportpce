@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dc41799_96f67c60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "A JIRA ticket reference could be added IMO.\nIf I am not mistaken (@olivier) it must be\n\nJIRA: TRNSPRTPCE-714",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b67169f1_29dfc6d5",
@@ -14,6 +31,210 @@
       "writtenOn": "2023-03-20T16:41:57Z",
       "side": 1,
       "message": "Hi Roshan, Thanks for this contributions which greatly complements the work done on autonomous impairment aware path computation. Looks fine to me.  I see that you adjusted some of the tests to include CatalogDataStoreOperations as as an argument of ServiceHandlerImpl and ServiceHandlerProvider. \nWould it be possible  for you to add 2 tests checking that the RPCs are correctly handled? For addOpenroadmOperationalModesToCatalog, the Json files to be used for the RPC is available at  https://github.com/OpenROADM/OpenROADM_MSA_Public/blob/12.1.0/model/Specifications/body-rpc-add-operational-modes-to-catalog-10_1-optical-spec-5_1.json \nFor addSpecificOperationalModesToCatalog, I can work on building a Json file that does the same for a dummy Operational mode. \nMy feeling is that it should be rebased, but it may not be so easy since you had to modify the blueprint. Gilles made in the meanwhile a lot of changes to cope with the new approach pushed in odl by Robert, removing the blueprints. I have added him as a reviewer, so that he can provide his comments on the way to proceed.\nThanks so much!",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c423e8_4e1b97f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "Thanks a lot for this very nice contribution that really helps.\n\n@Olivier I let you comment tox why functional tests are failing.\nHere are my remarks about the commit itself.\nThey are mostly cosmetic and apart copyright year and the commit message missing JIRA ref, I am fine to address them later in a separate change.\n\nI confirm there is a conflict with Gilles ongoing migration to components.\nWe need to sync to agree on how we will integrate this.\n\nHope this helps\nGuillaume",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e42a24_b64237a4",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be 2023 instead of 2022 ?",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dcaf54f_29b6006e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d43be8e_bf404616",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "misleading indentation here. Lines 54 and 55 should be at different level.\nI propose to move the LF after \u003d at line 54\nand to indent -4 line 55.\n\n        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog\n                .input.operational.mode.info.SpecificOperationalModes specificModesFromInput \u003d\n            input.getOperationalModeInfo().getSpecificOperationalModes();",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73aa55ac_97aaf708",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "the intermediate variable objToSave is useless IMO.\nWhat about simply this ?\n\nreturn specificObjBuilder.build();",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d52f750_642e1395",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17790c94_1db0d46d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "Intermediates variable are useless here IMO.\n\nWhat about simply this ?\nobjBuilder.setAmplifiers(\n    new AmplifiersBuilder()\n        .setAmplifier(modesFromInput.getAmplifiers().getAmplifier())\n        .build());",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5a28f4c_2d1b923f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a9af72_22ef88f4",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "misleading indentations here because of comma and framework autogenerated long NS (though name spaces revision date are well kept and not split :) )\nWhat about this\n        Map\u003corg.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210\n                .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables\n                .XponderPluggableOpenroadmOperationalModeKey,\n            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210\n                .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables\n                .XponderPluggableOpenroadmOperationalMode\u003e mapFinal \u003d new HashMap\u003c\u003e();\n\nNB: sadly it doesn\u0027t render well in Gerrit comment, you may need to copy/paste it to your editor to see the correct rendering",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5a5322f_568b5aab",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "this is a common and perfectly correct style to declare function but it is not very adapted to ODL variables autogenerated long namespaces IMO.\nWhat about this ?\n\n    private static  void saveSpecificOperationalModes(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210\n                .add.specific.operational.modes.to.catalog.input.operational.mode.info.SpecificOperationalModes\n            specificModesFromInput) {\n        Map\u003cSpecificOperationalModeKey, SpecificOperationalMode\u003e map \u003d\n            specificModesFromInput.getSpecificOperationalMode();",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b83da2e_60f992a4",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "Thanks for this explanation.\n\"/**\" implies javadoc and in this case input and output should be described.",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a109888b_5527bbcb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T07:55:07Z",
+      "side": 1,
+      "message": "idem etc",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
