@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffc9a026_ce292826",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T21:19:36Z",
+      "side": 1,
+      "message": "do we still need to set a default value here with ObjectClassDefinition above line 45 ?",
+      "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
