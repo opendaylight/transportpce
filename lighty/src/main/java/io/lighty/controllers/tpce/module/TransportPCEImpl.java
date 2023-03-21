@@ -9,9 +9,6 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
-import java.util.Arrays;
-import java.util.List;
-import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -36,7 +33,6 @@ import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvi
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
-import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
 import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl;
@@ -54,13 +50,7 @@ import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.renderer.RendererProvider;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface710;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
-// Adding OTN interface
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface710;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
@@ -69,6 +59,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererS
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
+import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
@@ -90,9 +81,9 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
 import org.opendaylight.transportpce.tapi.topology.TapiPortMappingListener;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.transportpce.tapi.utils.TapiListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
+import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OrgOpenroadmServiceService;
 import org.slf4j.Logger;
@@ -121,12 +112,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider tapiProvider;
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
-    /**
-     * List of publisher topics.
-     */
-    private final List<String> publisherServiceList = Arrays.asList("PceListener", "ServiceHandlerOperations",
-            "ServiceHandler", "RendererListener");
-    private final List<String> publisherAlarmList = Arrays.asList("ServiceListener");
 
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
                             String olmtimer1, String olmtimer2) {
@@ -136,21 +121,20 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         networkTransaction = new NetworkTransactionImpl(lightyServices.getBindingDataBroker());
 
         LOG.info("Creating network-model beans ...");
-        R2RLinkDiscovery linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager, networkTransaction);
-        TransportpceNetworkutilsService networkutilsServiceImpl = new NetworkUtilsImpl(
+        new NetworkUtilsImpl(
                 lightyServices.getBindingDataBroker());
         PortMapping portMapping = initPortMapping(lightyServices);
-        NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
-                portMapping, lightyServices.getBindingNotificationPublishService());
-        FrequenciesService networkModelWavelengthService =
-                new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
-        NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
+        NetworkModelService networkModelService = new NetworkModelServiceImpl(lightyServices.getBindingDataBroker(),
+                deviceTransactionManager, networkTransaction, portMapping,
+                lightyServices.getBindingNotificationPublishService());
+        FrequenciesService networkModelWavelengthService = new FrequenciesServiceImpl(
+                lightyServices.getBindingDataBroker());
+        new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
-        PortMappingListener portMappingListener = new PortMappingListener(networkModelService);
+        new PortMappingListener(networkModelService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
-                lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
-                lightyServices.getNotificationService(), networkModelWavelengthService, portMappingListener);
+                lightyServices.getRpcProviderService(), networkModelService, deviceTransactionManager, portMapping,
+                lightyServices.getNotificationService(), networkModelWavelengthService);
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
@@ -168,21 +152,21 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         MappingUtils mappingUtils = new MappingUtilsImpl(lightyServices.getBindingDataBroker());
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
-        PowerMgmt powerMgmt = new PowerMgmtImpl(lightyServices.getBindingDataBroker(), openRoadmInterfaces,
-                crossConnect, deviceTransactionManager, portMapping, olmtimer1, olmtimer2);
+        PowerMgmt powerMgmt = new PowerMgmtImpl(openRoadmInterfaces, crossConnect, deviceTransactionManager,
+                portMapping, Long.valueOf(olmtimer1).longValue(), Long.valueOf(olmtimer2).longValue());
         OlmPowerService olmPowerService = new OlmPowerServiceImpl(lightyServices.getBindingDataBroker(), powerMgmt,
                 deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
         TransportpceOlmService olmPowerServiceRpc = new OlmPowerServiceRpcImpl(olmPowerService);
         olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerServiceRpc);
 
         LOG.info("Creating renderer beans ...");
-        OpenRoadmInterfaceFactory openRoadmInterfaceFactory = initOpenRoadmFactory(mappingUtils, openRoadmInterfaces,
+        initOpenRoadmFactory(mappingUtils, openRoadmInterfaces,
                 portMapping);
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
-                lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaceFactory,
-                openRoadmInterfaces, crossConnect, portMapping);
-        OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory,
-                crossConnect, openRoadmInterfaces, deviceTransactionManager, networkModelService);
+                lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaces, crossConnect,
+                mappingUtils, portMapping);
+        OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(crossConnect,
+                openRoadmInterfaces, deviceTransactionManager, mappingUtils, portMapping);
         rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService,
                 otnDeviceRendererService, portMapping);
 
@@ -198,48 +182,42 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
-        ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
-            pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+        ServicehandlerImpl servicehandler = new ServicehandlerImpl(pathComputationService, rendererServiceOperations,
+                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl, serviceDataStoreOperations);
         ServiceListener serviceListener = new ServiceListener(servicehandler, serviceDataStoreOperations,
                 lightyServices.getBindingNotificationPublishService());
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
-                serviceDataStoreOperations, pceListenerImpl, serviceListener, rendererListenerImpl,
-                networkModelListenerImpl, servicehandler);
+                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                lightyServices.getBindingNotificationPublishService(), servicehandler, serviceListener);
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
-            TapiLink tapiLink = new TapiLink(networkTransaction);
-            R2RTapiLinkDiscovery tapilinkDiscoveryImpl = new R2RTapiLinkDiscovery(networkTransaction,
+            TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
+            new R2RTapiLinkDiscovery(networkTransaction,
                     deviceTransactionManager, tapiLink);
-            TapiRendererListenerImpl tapiRendererListenerImpl = new TapiRendererListenerImpl(lightyServices
+            new TapiRendererListenerImpl(lightyServices
                     .getBindingDataBroker(), lightyServices.getBindingNotificationPublishService());
-            TapiPceListenerImpl tapiPceListenerImpl = new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
-            TapiServiceHandlerListenerImpl tapiServiceHandlerListener = new TapiServiceHandlerListenerImpl(
+            new TapiPceListenerImpl(lightyServices.getBindingDataBroker());
+            new TapiServiceHandlerListenerImpl(
                     lightyServices.getBindingDataBroker());
-            TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl = new TapiNetworkUtilsImpl(
+            new TapiNetworkUtilsImpl(
                     networkTransaction, tapiLink);
-            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(
-                    tapilinkDiscoveryImpl, networkTransaction, tapiLink,
-                    lightyServices.getBindingNotificationPublishService());
-            TapiNetconfTopologyListener tapiNetConfTopologyListener =
-                    new TapiNetconfTopologyListener(tapiNetworkModelService);
-            TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransaction);
-            TapiPortMappingListener tapiPortMappingListener =
-                    new TapiPortMappingListener(tapiNetworkModelService);
+            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(networkTransaction,
+                    deviceTransactionManager, tapiLink, lightyServices.getBindingNotificationPublishService());
+            new TapiNetconfTopologyListener(tapiNetworkModelService);
+            new TapiOrLinkListener(tapiLink, networkTransaction);
+            new TapiPortMappingListener(tapiNetworkModelService);
             TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl =
                     new TapiNetworkModelListenerImpl(networkTransaction,
                             lightyServices.getBindingNotificationPublishService());
 
             tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-                    tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl,
-                    tapiPceListenerImpl, tapiRendererListenerImpl, tapiServiceHandlerListener,
-                    lightyServices.getNotificationService(), orLinkListener, tapiNetworkModelListenerImpl);
+                    tapiNetworkModelListenerImpl, tapiLink, tapiNetworkModelService);
         }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
-            nbiNotificationsProvider = new NbiNotificationsProvider(
-                    publisherServiceList, publisherAlarmList, null, null, lightyServices.getRpcProviderService(),
+            nbiNotificationsProvider = new NbiNotificationsProvider(null, null, lightyServices.getRpcProviderService(),
                     lightyServices.getNotificationService(), lightyServices.getAdapterContext().currentSerializer(),
                     networkTransaction);
         }
@@ -248,22 +226,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     @Override
     protected boolean initProcedure() {
         LOG.info("Initializing PCE provider ...");
-        pceProvider.init();
         LOG.info("Initializing network-model provider ...");
-        networkModelProvider.init();
         LOG.info("Initializing OLM provider ...");
-        olmProvider.init();
         LOG.info("Initializing renderer provider ...");
-        rendererProvider.init();
         LOG.info("Initializing service-handler provider ...");
-        servicehandlerProvider.init();
         if (tapiProvider != null) {
             LOG.info("Initializing tapi provider ...");
-            tapiProvider.init();
         }
         if (nbiNotificationsProvider != null) {
             LOG.info("Initializing nbi-notifications provider ...");
-            nbiNotificationsProvider.init();
         }
         LOG.info("Init done.");
         return true;
@@ -297,18 +268,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
                                   NetworkTransactionService networkTransactionService,
                                   ServiceDataStoreOperations serviceDataStoreOperations,
-                                  TapiNetconfTopologyListener tapiNetConfTopologyListener,
-                                  TapiPortMappingListener tapiPortMappingListener,
-                                  TransportpceTapinetworkutilsService tapiNetworkutilsServiceImpl,
-                                  TapiPceListenerImpl pceListenerImpl, TapiRendererListenerImpl rendererListenerImpl,
-                                  TapiServiceHandlerListenerImpl serviceHandlerListenerImpl,
-                                  NotificationService notificationService, TapiOrLinkListener orLinkListener,
-                                  TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl) {
+                                  TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl,
+                                  TapiLink tapiLink, TapiNetworkModelService tapiNetworkModelService) {
+        TransportpceTapinetworkutilsService tapiNetworkUtils = new TapiNetworkUtilsImpl(networkTransactionService,
+            tapiLink);
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
-            servicehandler, serviceDataStoreOperations, new TapiListener(), networkTransactionService,
-            tapiNetConfTopologyListener, tapiPortMappingListener, tapiNetworkutilsServiceImpl, pceListenerImpl,
-            rendererListenerImpl, serviceHandlerListenerImpl, notificationService, orLinkListener,
-            tapiNetworkModelListenerImpl);
+            lightyServices.getNotificationService(), lightyServices.getBindingNotificationPublishService(),
+            networkTransactionService, servicehandler, serviceDataStoreOperations, tapiNetworkUtils,
+            tapiNetworkModelListenerImpl, tapiNetworkModelService);
     }
 
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
@@ -320,21 +287,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
                 lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
                 portMapping);
-        return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC,
+        TransportpceRendererService transportpceServicepathRpcImpl = new TransportPCEServicePathRPCImpl(
                 rendererServiceOperations);
+        return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererService,
+                otnDeviceRendererService, deviceRendererRPC, transportpceServicepathRpcImpl);
     }
 
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
             OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
-        OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
-        OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
-        OpenRoadmInterface710 openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
-        OpenRoadmOtnInterface221 openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping,
-                openRoadmInterfaces);
-        OpenRoadmOtnInterface710 openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping,
-            openRoadmInterfaces);
-        return new OpenRoadmInterfaceFactory(mappingUtils, openRoadmInterface121, openRoadmInterface221,
-            openRoadmInterface710, openRoadmOtnInterface221, openRoadmOtnInterface710);
+        return new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
     }
 
     private PortMapping initPortMapping(LightyServices lightyServices) {
