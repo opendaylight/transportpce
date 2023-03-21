@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "20d31593ce89a4db8776975c30a1a8fc8062ca61",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa019c85_13ebe2fa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T21:31:02Z",
+      "side": 1,
+      "message": "OK this is well described in the commit message.\nThis is not a new file contrary to what Gerrit says.",
+      "revId": "20d31593ce89a4db8776975c30a1a8fc8062ca61",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
