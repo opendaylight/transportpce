@@ -16,6 +16,24 @@
       "message": "I think this change is needed to evaluate component migration impact on lighty build.",
       "revId": "c2dfbb18e53da4d2ffcbcbc5e656d5f9f759378d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d25fe6db_f8da4e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-21T14:34:19Z",
+      "side": 1,
+      "message": "yes, indeed.",
+      "parentUuid": "f5e764c7_7aa12927",
+      "revId": "c2dfbb18e53da4d2ffcbcbc5e656d5f9f759378d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
