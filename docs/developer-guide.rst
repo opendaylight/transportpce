@@ -66,7 +66,7 @@ Bus of ONAP.
 
 Phosphorus consolidates end to end support for high rate services (ODUC4, OTUC4),
 allowing service creation and deletion from the NBI. The support of path
-computation for high rate services (OTUC4) will be added through the different P
+computation for high rate services (OTUC4) has been added through the different P
 releases, relying on GNPy for impairment aware path computation. An experimental
 support of T-API is provided allowing service-create/delete from a T-API version
 2.1.1 compliant NBI. A T-API network topology, with different levels of abstraction
@@ -74,14 +74,25 @@ and service context are maintained in the MDSAL. Service state is managed,
 monitoring device port state changes. Associated notifications are handled through
 Kafka and  DMaaP clients.
 
-The chlorine release brings structural changes to the project. indeed, all the official
+Sulfur is introducing OpenROADM service and network models 10.1, which include the
+operational-modes catalog, needed for future support of Alien Wavelength use cases.
+It also offers T-API notification support, handling the RPC associated with the
+notification subscription service.
+
+The Chlorine release brings structural changes to the project. indeed, all the official
 yang models of the OpenROADM and ONF-TAPI communities are no longer managed directly
 in the TransportPCE project but in a dedicated sub-project: transportpce/models.
 Also, the implementation of these models which is made in TransportPCE now imports
 the models already compiled by maven dependency.
 From a functional point of view, Chlorine supports the autonomous reroute of WDM services
 terminated on 100G or 400G Transponders, as well as the beginning of developments around
-the OpenROAM catalog management that will allow to support Alien Wavelength use cases.
+the OpenROAM catalog management.
+
+The Argon release provides autonomous impairment aware path computation, relying on
+OpenROADM operational-modes catalog. It is used in a first step of the path validation,
+to evaluate the Optical Signal to Noise Ratio as well as the penalty associated with the
+signal across the calculated pass. Validation of the optical path by GNPy is still
+triggered, in a second step, leveraging advanced calculation of non linear contribution.
 
 
 Module description
@@ -113,8 +124,8 @@ interfaces.
 In Silicon release, the management of TopologyUpdateNotification coming from the *Topology Management*
 module was implemented. This functionality enables the controller to update the information of existing
 services according to the online status of the network infrastructure. If any service is affected by
-the topology update and the *odl-transportpce-nbi* feature is installed, the Service Handler will send a
-notification to a Kafka server with the service update information.
+the topology update and the *odl-transportpce-nbi* feature is installed, the Service Handler will send
+a notification to a Kafka server with the service update information.
 
 PCE
 ^^^
@@ -130,39 +141,68 @@ allows keeping PCE aligned with the latest changes in the topology. Information
 about current and planned services is available in the MD-SAL data store.
 
 Current implementation of PCE allows finding the shortest path, minimizing either the hop
-count (default) or the propagation delay. Central wavelength is assigned considering a fixed
-grid of 96 wavelengths 50 GHz spaced. The assignment of wavelengths according to a flexible
-grid considering 768 subsequent slots of 6,25 GHz (total spectrum of 4.8 Thz), and their
-occupation by existing services is planned for later releases.
-In Neon SR0, the PCE calculates the OSNR, on the base of incremental noise specifications
-provided in Open ROADM MSA. The support of unidirectional ports is also added.
+count (default) or the propagation delay. The support of a flexible grid was introduced in Aluminium.
+The central wavelength assignment depends on the  capabilities of the different devices on the path.
+If one of the elements only supports a fixed grid, the wavelength is assigned considering a grid of
+96 wavelengths 50 GHz spaced. If  all the devices on the path support a flexible grid, the assignment
+of wavelengths is done according to a flexible grid considering 768 subsequent slots of 6,25 GHz
+(total spectrum of 4.8 Thz).
 
-PCE handles the following constraints as hard constraints:
+The PCE module handles the following constraints as hard constraints:
 
 -   **Node exclusion**
 -   **SRLG exclusion**
 -   **Maximum latency**
 
-In Magnesium SR0, the interconnection of the PCE with GNPY (Gaussian Noise Python), an
-open-source library developed in the scope of the Telecom Infra Project for building route
-planning and optimizing performance in optical mesh networks, is fully supported. Impairment
-aware path computation for service of higher rates (Beyond 100G) is planned across Phoshorus
-releases. It implies to make B100G OpenROADM specifications available in GNPy libraries.
+In Neon SR0, the PCE calculates the OSNR, on the base of incremental noise specifications provided
+in Open ROADM MSA. The support of unidirectional ports is also added. The interconnection of the PCE
+with GNPY (Gaussian Noise Python), an open-source library developed in the scope of the Telecom Infra
+Project for building route planning and optimizing performance in optical mesh networks, is supported
+since Magnesium SR0. This allowed introducing impairment aware path computation for (Beyond 100G)
+services across Phoshorus releases.
 
-If the OSNR calculated by the PCE is too close to the limit defined in OpenROADM
-specifications, the PCE forwards through a REST interface to GNPY external tool the topology
-and the pre-computed path translated in routing constraints. GNPy calculates a set of Quality of
-Transmission metrics for this path using its own library which includes models for OpenROADM.
-The result is sent back to the PCE. If the path is validated, the PCE sends back a response to
-the service handler. In case of invalidation of the path by GNPY, the PCE sends a new request to
-GNPY, including only the constraints expressed in the path-computation-request initiated by the
-Service Handler. GNPy then tries to calculate a path based on these relaxed constraints. The
-result of the path computation is provided to the PCE which translates the path according to the
-topology handled in transportPCE and forwards the results to the Service Handler.
+In Argon, we introduce autonomous impairment aware path computation, leveraging OpenROADM yang
+specification catalog (R10.1), which translates the optical specifications provided in the MSA into
+models understandable by the controller. To each disaggregated element crossed along the path
+(Transponders, ROADM add/drop modules and degrees), is associated an operational mode, for which each
+physical parameters is described in the catalog. This allows evaluating the degradations that each
+element, whether it is a device of fiber span, brings to the signal transmission. The resulting
+Optical Signal to Noise Ratio is calculated, as well as the penalties associated with the cumulated
+chromatic dispersion, Polarisation Mode Dispersion (PMD), Polarization Dependant Loss (PDL)… and the
+non-linear contribution is evaluated.
 
-GNPy relies on SNR and takes into account the linear and non-linear impairments
-to check feasibility. In the related tests, GNPy module runs externally in a
-docker and the communication with T-PCE is ensured via HTTPs.
+All of this is done in accordance with OpenROADM optical specifications. Handling OpenROADM specification
+catalogs improves the upgradability of the code, since the future evolution of the specifications only
+implies to add new operational modes to the catalog while the associated code remains unchanged.
+
+In Argon SR0, to benefit from this new functionality, the specification catalog must be manually loaded
+into the data store.  The catalog includes 2 different parts, the first being dedicated to the
+translation of OpenROADM specifications, the second (optional) being dedicated to specific operational
+modes for transponders used in “bookended” mode (same transponders on both ends of the path). The
+automatic filling of the first part of the catalog is planned in Ar SR1. In this release will also be
+supported the 2 RPCs used to fill the different parts of the catalog :
+-   **add-openroadm-operational-mode-to-catalog**
+-   **add-specific-operational-mode-to-catalog**
+
+Autonomous impairment aware path computation is triggered in Argon for any path at the WDM layer,
+whatever is the service rate. The transmission margin is evaluated in both direction and the result is
+provided in INFO Logs. GNPy is used in a second step to enforce path validation. Indeed, it gives
+complementary information to the calculation made from OpenROADM specifications, with a finer assessment
+of non-linear contribution, and potentially a consideration of the interaction with other channels
+already provisioned on the network. This last capability will be added across Argon releases.
+The PCE forwards through a REST interface to GNPY external tool the topology and the pre-computed path
+translated in routing constraints. GNPy calculates a set of Quality of Transmission metrics for this path
+using its own library which includes models for OpenROADM. The result is sent back to the PCE. If the
+path is validated, the PCE sends back a response to the service handler. In case of invalidation of the
+path by GNPY, the PCE sends a new request to GNPY, including only the constraints expressed in the
+path-computation-request initiated by the Service Handler. GNPy then tries to calculate a path based on
+these relaxed constraints. The result of the path computation is provided to the PCE which translates
+the path according to the topology handled in transportPCE and forwards the results to the Service
+Handler.
+
+GNPy relies on SNR and takes into account the linear and non-linear impairments to check feasibility.
+In the related tests, GNPy module runs externally in a docker and the communication with T-PCE is
+ensured via HTTPs.
 
 Topology Management
 ^^^^^^^^^^^^^^^^^^^
