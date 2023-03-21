@@ -16,6 +16,24 @@
       "message": "LGTM but lighty configuration fails and must be adapted accordingly \u003d\u003e verified -1\n\n[ERROR] /home/guillaume/git_ws/transportpce/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[144,51] constructor NetworkModelServiceImpl in class org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl cannot be applied to given types;\n[ERROR]   required: org.opendaylight.mdsal.binding.api.DataBroker,org.opendaylight.transportpce.common.device.DeviceTransactionManager,org.opendaylight.transportpce.common.network.NetworkTransactionService,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.mdsal.binding.api.NotificationPublishService\n[ERROR]   found:    org.opendaylight.transportpce.common.network.NetworkTransactionService,org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.mdsal.binding.api.NotificationPublishService\n",
       "revId": "5d381417f8be4dac47b78b3016fdc2378bc7e34c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b87b2f_3f627ff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-21T14:43:09Z",
+      "side": 1,
+      "message": "Yes indeed, lighty build needs a general adaptation to new constructors used after the OSGi DS refactoring.\nI had not forgotten lighty. I\u0027de planned to adapt lighty later when lighty artifacts would have been released for Argon.\nWith your change 104971 you anticipate this work.\nTherefore, I propose to fix lighty build in a separate change (104974) at the top of the relation chain in order to avoid rebasing this long relation chain once again.",
+      "parentUuid": "6f0341ad_5519fc8f",
+      "revId": "5d381417f8be4dac47b78b3016fdc2378bc7e34c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
