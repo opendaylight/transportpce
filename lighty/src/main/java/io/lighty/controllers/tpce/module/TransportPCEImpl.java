@@ -27,7 +27,6 @@ import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
@@ -290,7 +289,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         LOG.info("Shutting down PCE provider ...");
         pceProvider.close();
         LOG.info("Shutting down transaction providers ...");
-        networkTransaction.close();
         deviceTransactionManager.preDestroy();
         LOG.info("Shutdown done.");
         return true;
