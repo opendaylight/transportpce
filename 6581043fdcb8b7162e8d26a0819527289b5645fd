@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15a0be26_178f5d20",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkModelProviderTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T21:07:53Z",
+      "side": 1,
+      "message": "shouldn\u0027t this line be simply removed ?",
+      "revId": "6581043fdcb8b7162e8d26a0819527289b5645fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
