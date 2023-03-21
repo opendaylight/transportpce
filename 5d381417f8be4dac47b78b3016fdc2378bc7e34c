@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0341ad_5519fc8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T09:52:15Z",
+      "side": 1,
+      "message": "LGTM but lighty configuration fails and must be adapted accordingly \u003d\u003e verified -1\n\n[ERROR] /home/guillaume/git_ws/transportpce/lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java:[144,51] constructor NetworkModelServiceImpl in class org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl cannot be applied to given types;\n[ERROR]   required: org.opendaylight.mdsal.binding.api.DataBroker,org.opendaylight.transportpce.common.device.DeviceTransactionManager,org.opendaylight.transportpce.common.network.NetworkTransactionService,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.mdsal.binding.api.NotificationPublishService\n[ERROR]   found:    org.opendaylight.transportpce.common.network.NetworkTransactionService,org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery,org.opendaylight.transportpce.common.mapping.PortMapping,org.opendaylight.mdsal.binding.api.NotificationPublishService\n",
+      "revId": "5d381417f8be4dac47b78b3016fdc2378bc7e34c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
