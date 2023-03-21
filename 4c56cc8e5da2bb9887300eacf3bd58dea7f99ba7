@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc1c5d58_7d59cbaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-21T09:43:19Z",
+      "side": 1,
+      "message": "lighty build OK -\u003e verfied +1",
+      "revId": "4c56cc8e5da2bb9887300eacf3bd58dea7f99ba7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
