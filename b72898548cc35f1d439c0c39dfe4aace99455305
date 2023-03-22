@@ -33,6 +33,24 @@
       "message": "do we still need to set a default value here with ObjectClassDefinition above line 45 ?",
       "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84de42b_f8a4789b",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-22T08:15:21Z",
+      "side": 1,
+      "message": "We already had this redundancy with the blueprint version, but indeed, we should remove this useless affectation.",
+      "parentUuid": "ffc9a026_ce292826",
+      "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
