@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t this line be simply removed ?",
       "revId": "6581043fdcb8b7162e8d26a0819527289b5645fd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d14b034f_1e0a555f",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkModelProviderTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-22T08:07:29Z",
+      "side": 1,
+      "message": "yes, I forgot to remove it.",
+      "parentUuid": "15a0be26_178f5d20",
+      "revId": "6581043fdcb8b7162e8d26a0819527289b5645fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
