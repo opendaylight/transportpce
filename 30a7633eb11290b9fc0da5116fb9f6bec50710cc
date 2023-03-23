@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0886e4_62c32c73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Thank you very much for your review.\nWe have incorporated all comments except the one related to merge conflicts.\nAlso, the reason for functional test failure seems to be environment related - not sure.",
+      "revId": "30a7633eb11290b9fc0da5116fb9f6bec50710cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

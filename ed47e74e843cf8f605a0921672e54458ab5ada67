@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "45421039_02dec88c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dc41799_96f67c60",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b67169f1_29dfc6d5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ecf72e2_58be248b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95e42a24_b64237a4",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dcaf54f_29b6006e",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-03-21T07:55:07Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee50c3c4_d46bcb40",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dcaf54f_29b6006e",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -103,6 +157,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc4d016_4e3a7675",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d43be8e_bf404616",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73aa55ac_97aaf708",
@@ -116,6 +188,24 @@
       "writtenOn": "2023-03-21T07:55:07Z",
       "side": 1,
       "message": "the intermediate variable objToSave is useless IMO.\nWhat about simply this ?\n\nreturn specificObjBuilder.build();",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c588a95_4b4cf392",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73aa55ac_97aaf708",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -137,6 +227,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c707f40_82fd9629",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d52f750_642e1395",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17790c94_1db0d46d",
@@ -150,6 +258,24 @@
       "writtenOn": "2023-03-21T07:55:07Z",
       "side": 1,
       "message": "Intermediates variable are useless here IMO.\n\nWhat about simply this ?\nobjBuilder.setAmplifiers(\n    new AmplifiersBuilder()\n        .setAmplifier(modesFromInput.getAmplifiers().getAmplifier())\n        .build());",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d15619_6ecf7f4c",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17790c94_1db0d46d",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -171,6 +297,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d68f42d_1526fd36",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a28f4c_2d1b923f",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2a9af72_22ef88f4",
@@ -184,6 +328,24 @@
       "writtenOn": "2023-03-21T07:55:07Z",
       "side": 1,
       "message": "misleading indentations here because of comma and framework autogenerated long NS (though name spaces revision date are well kept and not split :) )\nWhat about this\n        Map\u003corg.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210\n                .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables\n                .XponderPluggableOpenroadmOperationalModeKey,\n            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev211210\n                .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables\n                .XponderPluggableOpenroadmOperationalMode\u003e mapFinal \u003d new HashMap\u003c\u003e();\n\nNB: sadly it doesn\u0027t render well in Gerrit comment, you may need to copy/paste it to your editor to see the correct rendering",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65337070_8078fe76",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2a9af72_22ef88f4",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -205,6 +367,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "302b24e4_e00b3eea",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a5322f_568b5aab",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b83da2e_60f992a4",
@@ -222,6 +402,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d53d5982_e8e22631",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b83da2e_60f992a4",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a109888b_5527bbcb",
@@ -235,6 +433,24 @@
       "writtenOn": "2023-03-21T07:55:07Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be5b4f23_cbaaa4b7",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a109888b_5527bbcb",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

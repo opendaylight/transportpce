@@ -16,6 +16,24 @@
       "message": "Kindly review the changes for implementing the RPCs to populate the catalog.",
       "revId": "2ce9102b9229fdd98b0466039212ce0db6882459",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fffd7494_18ad111c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2023-03-23T17:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a53d95c_f4c239fc",
+      "revId": "2ce9102b9229fdd98b0466039212ce0db6882459",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
