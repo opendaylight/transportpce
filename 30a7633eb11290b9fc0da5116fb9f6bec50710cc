@@ -16,6 +16,69 @@
       "message": "Thank you very much for your review.\nWe have incorporated all comments except the one related to merge conflicts.\nAlso, the reason for functional test failure seems to be environment related - not sure.",
       "revId": "30a7633eb11290b9fc0da5116fb9f6bec50710cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3628f13f_69f20ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-23T17:10:28Z",
+      "side": 1,
+      "message": "Thank you Roshan for this update of your change.\nPlease find bellow an additional comment from my side (sorry, I didn\u0027t have time to send it to you before).",
+      "revId": "30a7633eb11290b9fc0da5116fb9f6bec50710cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99f13a3_ac0cc778",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-23T17:10:28Z",
+      "side": 1,
+      "message": "Instead of using DataBroker to manage the transaction here, I would prefer you use the NetworkTransactionService, which propose the merge and commit method to do roughly the same thing, but with a concurrency access to the datastore whitch is better managed.",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 91
+      },
+      "revId": "30a7633eb11290b9fc0da5116fb9f6bec50710cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5227e8c_781fc04e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogDataStoreOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-23T17:10:28Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 91
+      },
+      "revId": "30a7633eb11290b9fc0da5116fb9f6bec50710cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
