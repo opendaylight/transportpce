@@ -51,6 +51,24 @@
       "parentUuid": "ffc9a026_ce292826",
       "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b375a2a_1a3f70db",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-24T08:22:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a84de42b_f8a4789b",
+      "revId": "b72898548cc35f1d439c0c39dfe4aace99455305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
