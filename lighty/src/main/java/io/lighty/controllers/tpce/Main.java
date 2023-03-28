@@ -27,6 +27,7 @@ import io.lighty.modules.southbound.netconf.impl.NetconfTopologyPluginBuilder;
 import io.lighty.modules.southbound.netconf.impl.config.NetconfConfiguration;
 import io.lighty.modules.southbound.netconf.impl.util.NetconfConfigUtils;
 import io.lighty.server.LightyServerBuilder;
+import io.lighty.swagger.SwaggerLighty;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
@@ -157,16 +158,21 @@ public class Main {
         LightyController lightyController = lightyControllerBuilder.from(controllerConfiguration).build();
         lightyController.start().get();
 
-        // 2. start RestConf server
+        // 2. Start swagger server
         LightyServerBuilder jettyServerBuilder = new LightyServerBuilder(
                 new InetSocketAddress(restConfConfiguration.getInetAddress(), restConfConfiguration.getHttpPort()));
         CommunityRestConfBuilder communityRestConfBuilder = CommunityRestConfBuilder.from(
                 RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()));
+        SwaggerLighty swagger = new SwaggerLighty(restConfConfiguration, jettyServerBuilder,
+                lightyController.getServices());
+        swagger.start().get();
+
+        // 3. start RestConf server
         CommunityRestConf communityRestConf = communityRestConfBuilder.withLightyServer(jettyServerBuilder).build();
         communityRestConf.start().get();
         communityRestConf.startServer();
 
-        // 3. start NetConf SBP
+        // 4. start NetConf SBP
         NetconfSBPlugin netconfSouthboundPlugin;
         netconfSBPConfiguration = NetconfConfigUtils.injectServicesToTopologyConfig(netconfSBPConfiguration,
                 lightyController.getServices());
@@ -176,12 +182,12 @@ public class Main {
                 .build();
         netconfSouthboundPlugin.start().get();
 
-        // 4. start TransportPCE beans
+        // 5. start TransportPCE beans
         TransportPCE transportPCE = new TransportPCEImpl(lightyController.getServices(), activateNbiNotification,
             activateTapi, olmtimer1, olmtimer2);
         transportPCE.start().get();
 
-        // 5. Register shutdown hook for graceful shutdown.
+        // 6. Register shutdown hook for graceful shutdown.
         shutdownHook = new ShutdownHook(lightyController, communityRestConf, netconfSouthboundPlugin, transportPCE);
         if (registerShutdownHook) {
             Runtime.getRuntime().addShutdownHook(shutdownHook);
