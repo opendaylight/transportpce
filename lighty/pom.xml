@@ -135,6 +135,10 @@
       <artifactId>lighty-restconf-nb-community</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.lighty.modules</groupId>
+      <artifactId>lighty-swagger</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
