@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8834333f_d4e9a698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-03-29T11:06:49Z",
+      "side": 1,
+      "message": "Thx Robert. It makes sense.\n@Gilles we should probably even bump to 7.1.0 or 8.0.0.",
+      "revId": "06179035e9d3d23381a3e89506615e8c5d96dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
