@@ -33,6 +33,24 @@
       "message": "+ Christophe if needed and in case Gilles is unavailable.\nI will be out of office the coming hours and tomorrow.",
       "revId": "06179035e9d3d23381a3e89506615e8c5d96dcf0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e36ac1_370cb231",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-03-29T11:39:22Z",
+      "side": 1,
+      "message": "Yes, Thank you Robert for this project version update.\nSince netconf version evolved, we need to release again artefacts for Ar GA. So, 7.0.1 is the correct version.",
+      "parentUuid": "8834333f_d4e9a698",
+      "revId": "06179035e9d3d23381a3e89506615e8c5d96dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
