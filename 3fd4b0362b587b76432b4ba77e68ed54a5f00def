@@ -50,6 +50,24 @@
       "message": "do we really need both LOG.info() ?",
       "revId": "3fd4b0362b587b76432b4ba77e68ed54a5f00def",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b2b4a6_2c6f071e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-01T06:24:01Z",
+      "side": 1,
+      "message": "For now, yes. The first one is intended to become later a debug level.",
+      "parentUuid": "5bb44d93_23bc56c7",
+      "revId": "3fd4b0362b587b76432b4ba77e68ed54a5f00def",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
