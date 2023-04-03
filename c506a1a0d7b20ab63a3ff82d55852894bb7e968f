@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3703be7d_85a372b7",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/CatalogInput.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "2023 \u003d\u003e verified -1",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03ee33f8_3b427d47",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/CatalogInput.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "prototype style i correct but not very adapted to ODL long NS",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc9d5da_5161d191",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/utils/CatalogDataUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "2023",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

@@ -177,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e76057d2_1aae5384",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "better in PS5 but it still misses indent -4 at line 55",
+      "parentUuid": "1fc4d016_4e3a7675",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73aa55ac_97aaf708",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
         "patchSetId": 2
@@ -352,6 +370,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c458988c_d3bede6e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "idem\nlines 106-108 should be indented -4",
+      "parentUuid": "65337070_8078fe76",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5a5322f_568b5aab",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
         "patchSetId": 2
@@ -381,6 +417,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "e5a5322f_568b5aab",
+      "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db8bb5f_1e1e70e9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/catalog/CatalogMapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:25:13Z",
+      "side": 1,
+      "message": "my mistake this comment should be at line 152",
+      "parentUuid": "302b24e4_e00b3eea",
       "revId": "ed47e74e843cf8f605a0921672e54458ab5ada67",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
