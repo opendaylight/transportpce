@@ -50,6 +50,57 @@
       "message": "2023",
       "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15a58230_aa8b039e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/utils/CatalogDataUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:29:01Z",
+      "side": 1,
+      "message": "intermediate var not needed",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50269db0_0fb63868",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/utils/CatalogDataUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:29:01Z",
+      "side": 1,
+      "message": "NS revision date split",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee9caf44_e6abb22e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/CatalogValidation.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-03T10:29:01Z",
+      "side": 1,
+      "message": "2023",
+      "revId": "c506a1a0d7b20ab63a3ff82d55852894bb7e968f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
