@@ -34,6 +34,24 @@
       "parentUuid": "46034d4e_a0f7d13e",
       "revId": "f09118caf224c2ac9f3d202eaa55dd83f698ef54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac41997c_73615c66",
+        "filename": "lighty/build_lighty_core.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-04T11:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab56dab5_91ebef79",
+      "revId": "f09118caf224c2ac9f3d202eaa55dd83f698ef54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
