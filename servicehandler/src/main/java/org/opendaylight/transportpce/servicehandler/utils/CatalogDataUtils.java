@@ -21,11 +21,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.ope
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.GridParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.RoadmsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.XpondersPluggablesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.xponders.pluggables.XponderPluggableOpenroadmOperationalMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.xponders.pluggables.XponderPluggableOpenroadmOperationalModeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.operational.mode.info.xponders.pluggables.XponderPluggableOpenroadmOperationalModeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog.input.operational.mode.info.SpecificOperationalModesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog.input.operational.mode.info.specific.operational.modes.SpecificOperationalMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog.input.operational.mode.info.specific.operational.modes.SpecificOperationalModeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog.input.operational.mode.info.specific.operational.modes.SpecificOperationalModeKey;
 
@@ -36,16 +34,8 @@ public final class CatalogDataUtils {
     }
 
     public static AddOpenroadmOperationalModesToCatalogInput buildAddORToCatalogInput() {
-        Map<XponderPluggableOpenroadmOperationalModeKey, XponderPluggableOpenroadmOperationalMode> map =
-            new HashMap<>();
-        XponderPluggableOpenroadmOperationalModeBuilder modeBuilder =
-            new XponderPluggableOpenroadmOperationalModeBuilder();
         XponderPluggableOpenroadmOperationalModeKey key =
             new XponderPluggableOpenroadmOperationalModeKey("testOROperationalMode");
-        modeBuilder.setOpenroadmOperationalModeId(key.toString());
-        map.put(key, modeBuilder.build());
-        XpondersPluggablesBuilder xpondersPluggablesBuilder =
-            new XpondersPluggablesBuilder().setXponderPluggableOpenroadmOperationalMode(map);
         return new AddOpenroadmOperationalModesToCatalogInputBuilder()
             .setSdncRequestHeader(new SdncRequestHeaderBuilder()
                 .setRequestId("load-OM-Catalog")
@@ -54,7 +44,14 @@ public final class CatalogDataUtils {
                 .build())
             .setOperationalModeInfo(new OperationalModeInfoBuilder()
                 .setGridParameters(new GridParametersBuilder().build())
-                .setXpondersPluggables(xpondersPluggablesBuilder.build())
+                .setXpondersPluggables(
+                    new XpondersPluggablesBuilder()
+                        .setXponderPluggableOpenroadmOperationalMode(new HashMap<>(Map.of(
+                            key,
+                            new XponderPluggableOpenroadmOperationalModeBuilder()
+                                .setOpenroadmOperationalModeId(key.toString())
+                                .build())))
+                        .build())
                 .setRoadms(new RoadmsBuilder().build())
                 .setAmplifiers(new AmplifiersBuilder().build())
                 .build())
@@ -62,13 +59,7 @@ public final class CatalogDataUtils {
     }
 
     public static AddSpecificOperationalModesToCatalogInput buildAddSpecificToCatalogInput() {
-        Map<SpecificOperationalModeKey, SpecificOperationalMode> map = new HashMap<>();
         SpecificOperationalModeKey key = new SpecificOperationalModeKey("testSpecificOperationalMode");
-        SpecificOperationalModeBuilder modeBuilder = new SpecificOperationalModeBuilder();
-        modeBuilder.setOperationalModeId(key.toString());
-        map.put(key, modeBuilder.build());
-        SpecificOperationalModesBuilder specificOperationalModesBuilder =
-            new SpecificOperationalModesBuilder().setSpecificOperationalMode(map);
         return new AddSpecificOperationalModesToCatalogInputBuilder()
             .setSdncRequestHeader(new SdncRequestHeaderBuilder()
                 .setRequestId("load-specific-OM-Catalog")
@@ -77,7 +68,16 @@ public final class CatalogDataUtils {
                 .build())
             .setOperationalModeInfo(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
                     .add.specific.operational.modes.to.catalog.input.OperationalModeInfoBuilder()
-                .setSpecificOperationalModes(specificOperationalModesBuilder.build())
+                .setSpecificOperationalModes(
+                    new SpecificOperationalModesBuilder()
+                        .setSpecificOperationalMode(
+                            new HashMap<>(Map.of(
+                                key,
+                                new SpecificOperationalModeBuilder()
+                                    .setOperationalModeId(key.toString())
+                                    .build()))
+                            )
+                        .build())
                 .build())
             .build();
     }
