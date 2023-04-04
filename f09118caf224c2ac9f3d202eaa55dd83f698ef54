@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46034d4e_a0f7d13e",
+        "filename": "lighty/build_lighty_core.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-04T08:58:31Z",
+      "side": 1,
+      "message": "IMO this file should stay untouched.\nthe call to this script just need to be commented out in lighty/build.sh",
+      "revId": "f09118caf224c2ac9f3d202eaa55dd83f698ef54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
