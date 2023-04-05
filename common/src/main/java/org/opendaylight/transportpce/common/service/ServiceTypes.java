@@ -30,6 +30,9 @@ public final class ServiceTypes {
                 if (Uint32.valueOf(100).equals(serviceRate)) {
                     return StringConstants.SERVICE_TYPE_100GE_T;
                 }
+                if (Uint32.valueOf(400).equals(serviceRate)) {
+                    return StringConstants.SERVICE_TYPE_400GE;
+                }
                 LOG.warn("Invalid service-rate {}", serviceRate);
                 return null;
 
