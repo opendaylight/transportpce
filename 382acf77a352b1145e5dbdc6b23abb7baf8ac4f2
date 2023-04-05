@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a915eca2_544f153f",
+        "filename": "tests/transportpce_tests/7.1/test04_renderer_regen_mode.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-05T17:56:36Z",
+      "side": 1,
+      "message": "2023?",
+      "revId": "382acf77a352b1145e5dbdc6b23abb7baf8ac4f2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
