@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc731941_5193179e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9113
+      },
+      "writtenOn": "2023-04-05T10:25:01Z",
+      "side": 1,
+      "message": "This patch can only be merged at the time of the next global-jjb update",
+      "revId": "fd131e4f925b5632049618257b5cd99e193bc4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
