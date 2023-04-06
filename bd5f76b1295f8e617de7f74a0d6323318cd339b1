@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc682335_2ace8361",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-06T16:08:13Z",
+      "side": 1,
+      "message": "missing sign-off footer",
+      "revId": "bd5f76b1295f8e617de7f74a0d6323318cd339b1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
