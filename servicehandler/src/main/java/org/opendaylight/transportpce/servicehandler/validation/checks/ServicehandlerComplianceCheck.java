@@ -58,8 +58,7 @@ public final class ServicehandlerComplianceCheck {
 
         public static String catalogRpcactionsDiffers(RpcActions action1, RpcActions action2) {
             return
-                    "Catalog sdnc-request-header rpc-action '" + action1.name() + "' not equal to '" + action2.name()
-                            + "'";
+                "Catalog sdnc-request-header rpc-action '" + action1.name() + "' not equal to '" + action2.name() + "'";
         }
 
         private LogMessages() {
@@ -74,7 +73,7 @@ public final class ServicehandlerComplianceCheck {
      * @return true if String ok false if not
      */
     public static boolean checkString(String value) {
-        return ((value != null) && (!value.isEmpty()));
+        return value != null && !value.isEmpty();
     }
 
     /**
@@ -108,11 +107,10 @@ public final class ServicehandlerComplianceCheck {
             if (sdncRequestHeader == null) {
                 return new ComplianceCheckResult(false, LogMessages.HEADER_NOT_SET);
             }
-            RpcActions serviceAction = sdncRequestHeader.getRpcAction();
-            String requestId = sdncRequestHeader.getRequestId();
-            if (!checkString(requestId)) {
+            if (!checkString(sdncRequestHeader.getRequestId())) {
                 return new ComplianceCheckResult(false, LogMessages.REQUESTID_NOT_SET);
             }
+            RpcActions serviceAction = sdncRequestHeader.getRpcAction();
             if (serviceAction == null) {
                 return new ComplianceCheckResult(false, LogMessages.RPCACTION_NOT_SET);
             }
@@ -126,25 +124,23 @@ public final class ServicehandlerComplianceCheck {
     public static ComplianceCheckResult checkORCatalog(SdncRequestHeader sdncRequestHeader,
                                                        OperationalModeInfo operationalModeInfo, RpcActions action,
                                                        Boolean sdncRequest) {
-
-        ComplianceCheckResult result = sdncRequestHeaderValidate(sdncRequest, sdncRequestHeader, action);
-        if (result.getMessage().contains("sdnc-request-header")) {
-            return new ComplianceCheckResult(false,result.getMessage());
+        String resultMsg = sdncRequestHeaderValidate(sdncRequest, sdncRequestHeader, action).getMessage();
+        if (resultMsg.contains("sdnc-request-header")) {
+            return new ComplianceCheckResult(false, resultMsg);
         }
         if (operationalModeInfo == null) {
             return new ComplianceCheckResult(false, LogMessages.CATALOG_OPERATIONAL_MODE_INFO_NOT_SET);
         }
-
         return new ComplianceCheckResult(true, "");
     }
 
-    public static ComplianceCheckResult checkSpecificCatalog(SdncRequestHeader sdncRequestHeader, org.opendaylight.yang
-            .gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes.to.catalog.input
-            .OperationalModeInfo operationalModeInfoSpecific, RpcActions action, Boolean sdncRequest) {
-
-        ComplianceCheckResult result = sdncRequestHeaderValidate(sdncRequest, sdncRequestHeader, action);
-        if (result.getMessage().contains("sdnc-request-header")) {
-            return new ComplianceCheckResult(false,result.getMessage());
+    public static ComplianceCheckResult checkSpecificCatalog(SdncRequestHeader sdncRequestHeader,
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
+                .add.specific.operational.modes.to.catalog.input.OperationalModeInfo operationalModeInfoSpecific,
+            RpcActions action, Boolean sdncRequest) {
+        String resultMsg = sdncRequestHeaderValidate(sdncRequest, sdncRequestHeader, action).getMessage();
+        if (resultMsg.contains("sdnc-request-header")) {
+            return new ComplianceCheckResult(false,resultMsg);
         }
         if (operationalModeInfoSpecific == null) {
             return new ComplianceCheckResult(false, LogMessages.CATALOG_OPERATIONAL_MODE_INFO_NOT_SET);
@@ -152,21 +148,19 @@ public final class ServicehandlerComplianceCheck {
         return new ComplianceCheckResult(true, "");
     }
 
-    public static ComplianceCheckResult sdncRequestHeaderValidate(Boolean sdncRequest, SdncRequestHeader
-            sdncRequestHeader, RpcActions action) {
+    public static ComplianceCheckResult sdncRequestHeaderValidate(Boolean sdncRequest,
+            SdncRequestHeader sdncRequestHeader, RpcActions action) {
         if (sdncRequest) {
             if (sdncRequestHeader == null) {
                 return new ComplianceCheckResult(false, LogMessages.CATALOG_HEADER_NOT_SET);
             }
-            RpcActions serviceAction = sdncRequestHeader.getRpcAction();
-            String requestId = sdncRequestHeader.getRequestId();
-            String requestSystemId = sdncRequestHeader.getRequestSystemId();
-            if (!checkString(requestId)) {
+            if (!checkString(sdncRequestHeader.getRequestId())) {
                 return new ComplianceCheckResult(false, LogMessages.CATALOG_REQUESTID_NOT_SET);
             }
-            if (!checkString(requestSystemId)) {
+            if (!checkString(sdncRequestHeader.getRequestSystemId())) {
                 return new ComplianceCheckResult(false, LogMessages.CATALOG_REQUESTSYSTEMID_NOT_SET);
             }
+            RpcActions serviceAction = sdncRequestHeader.getRpcAction();
             if (serviceAction == null) {
                 return new ComplianceCheckResult(false, LogMessages.CATALOG_RPCACTION_NOT_SET);
             }
@@ -176,7 +170,6 @@ public final class ServicehandlerComplianceCheck {
         }
         return new ComplianceCheckResult(true, "");
     }
-
 
     private ServicehandlerComplianceCheck() {
     }
