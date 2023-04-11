@@ -50,6 +50,23 @@
       "message": "Adding Gilles, Cedric",
       "revId": "fd131e4f925b5632049618257b5cd99e193bc4ea",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3feacfea_9b4e48cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9113
+      },
+      "writtenOn": "2023-04-11T17:38:45Z",
+      "side": 1,
+      "message": "Please can I request a review on this change, but NOT a merge? I have the global-jj update ready to roll; ideally these will get merged concurrently:\nhttps://git.opendaylight.org/gerrit/c/releng/builder/+/105254\nOnce this is reviewed I intend to push-out the global-jjb update and ask for this to be merged. Let me know if you want/need any changes to the sequencing of this?\nThanks!",
+      "revId": "fd131e4f925b5632049618257b5cd99e193bc4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
