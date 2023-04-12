@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cc87ac_b2893b27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-12T14:21:56Z",
+      "side": 1,
+      "message": "15:58:16   buildcontroller: OK (312.36\u003dsetup[7.23]+cmd[305.12] seconds)\n15:58:16   testsPCE: OK (364.93\u003dsetup[121.84]+cmd[243.08] seconds)\n15:58:16   sims121: OK (15.71\u003dsetup[13.83]+cmd[1.88] seconds)\n15:58:16   build_karaf_tests121: OK (100.23\u003dsetup[13.82]+cmd[86.40] seconds)\n15:58:16   tests121: OK (2342.72\u003dsetup[4.23]+cmd[2338.49] seconds)\n15:58:16   sims221: OK (15.17\u003dsetup[13.78]+cmd[1.39] seconds)\n15:58:16   build_karaf_tests221: OK (90.07\u003dsetup[11.41]+cmd[78.66] seconds)\n15:58:16   tests_tapi: OK (946.31\u003dsetup[4.68]+cmd[941.64] seconds)\n15:58:16   tests221: OK (3309.77\u003dsetup[4.12]+cmd[3305.65] seconds)\n15:58:16   sims71: OK (14.07\u003dsetup[12.11]+cmd[1.96] seconds)\n15:58:16   build_karaf_tests71: OK (141.41\u003dsetup[12.37]+cmd[129.04] seconds)\n15:58:16   tests71: OK (390.41\u003dsetup[4.26]+cmd[386.15] seconds)\n15:58:16   build_karaf_tests_hybrid: OK (89.52\u003dsetup[8.87]+cmd[80.65] seconds)\n15:58:16   tests_hybrid: OK (907.94\u003dsetup[4.53]+cmd[903.42] seconds)\n15:58:16   buildlighty: OK (63.01\u003dsetup[4.35]+cmd[58.66] seconds)\n15:58:16   docs: OK (49.21\u003dsetup[47.17]+cmd[2.05] seconds)\n15:58:16   docs-linkcheck: OK (50.80\u003dsetup[47.28]+cmd[3.52] seconds)\n15:58:16   checkbashisms: OK (50.15\u003dsetup[2.78]+cmd[46.69,0.68] seconds)\n15:58:16   pre-commit: OK (37.44\u003dsetup[4.09]+cmd[24.10,9.24] seconds)\n15:58:16   pylint: FAIL code 1 (33.82\u003dsetup[4.77]+cmd[29.04] seconds)\n15:58:16   evaluation failed :( (6035.24 seconds)\n\npylint job fixed in top commit",
+      "revId": "ea7fe799db60f54722e75d0fbd1a5d2138774a22",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
