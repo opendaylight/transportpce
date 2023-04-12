@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1e36076_2d8a1a56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-12T09:24:07Z",
+      "side": 1,
+      "message": "this syntax points to the wrong URL (jira.opendaylight.org)\nwe should put the full URL IMO\nhttps://jira.linuxfoundation.org/browse/RELENG-4539",
+      "revId": "fd131e4f925b5632049618257b5cd99e193bc4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cc731941_5193179e",
