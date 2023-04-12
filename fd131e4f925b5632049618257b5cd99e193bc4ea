@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b2e190_6ee257b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-12T08:14:10Z",
+      "side": 1,
+      "message": "We don\u0027t use conventional commit in tpce.\nBut I think something like \"ci\" or \"update\" might probably be  more indicated than just \"chore\" here.\n\nIt is probably worth mentioning the link below also.\nhttps://tox.wiki/en/latest/changelog.html#v4-0-0rc4-2022-12-06\n\notherwise LGTM",
+      "revId": "fd131e4f925b5632049618257b5cd99e193bc4ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cc731941_5193179e",
