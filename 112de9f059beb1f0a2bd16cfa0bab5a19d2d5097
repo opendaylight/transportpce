@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99853ebf_5d2edb05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-12T14:23:07Z",
+      "side": 1,
+      "message": "rebase should fix CI issues",
+      "revId": "112de9f059beb1f0a2bd16cfa0bab5a19d2d5097",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
