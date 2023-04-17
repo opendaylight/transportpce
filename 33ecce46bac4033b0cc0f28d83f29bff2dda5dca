@@ -206,6 +206,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "245b907c_8d5e58a0",
+        "filename": "tests/transportpce_tests/7.1/test04_renderer_regen_mode.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-17T07:56:31Z",
+      "side": 1,
+      "message": "well yes, of course...",
+      "parentUuid": "6b34f270_ea07738b",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 32
+      },
+      "revId": "33ecce46bac4033b0cc0f28d83f29bff2dda5dca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c33ebfa_edebc85d",
@@ -243,6 +267,30 @@
       "side": 1,
       "message": "Same comment as above",
       "parentUuid": "2c33ebfa_edebc85d",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 32
+      },
+      "revId": "33ecce46bac4033b0cc0f28d83f29bff2dda5dca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a89780_69b6a0d6",
+        "filename": "tests/transportpce_tests/7.1/test04_renderer_regen_mode.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-17T07:56:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "43c156ec_edde7da9",
       "range": {
         "startLine": 166,
         "startChar": 0,
