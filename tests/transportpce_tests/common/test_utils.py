@@ -59,8 +59,6 @@ else:
 
 RESTCONF_PATH_PREFIX = {'rfc8040': '/rests',
                         'draft-bierman02': '/restconf'}
-if 'USE_LIGHTY' in os.environ and os.environ['USE_LIGHTY'] == 'True':
-    RESTCONF_PATH_PREFIX['rfc8040'] = '/restconf'
 
 if 'USE_ODL_RESTCONF_VERSION' in os.environ:
     RESTCONF_VERSION = os.environ['USE_ODL_RESTCONF_VERSION']
