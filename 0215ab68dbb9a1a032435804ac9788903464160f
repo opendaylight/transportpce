@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d430b702_295139c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-20T16:21:18Z",
+      "side": 1,
+      "message": "I would have preferred to squash it with the change below (cherry-pick issue from master on the testenv main profile passenv line) but fair enough to keep it as it is if you do not want to relaunch the CI on the whole chain",
+      "revId": "0215ab68dbb9a1a032435804ac9788903464160f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
