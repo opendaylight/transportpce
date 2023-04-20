@@ -70,6 +70,24 @@
       "parentUuid": "606012e2_3eda424c",
       "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f1d6e55_bca7910e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-20T07:29:49Z",
+      "side": 1,
+      "message": "OK it makes more sense.\nYou reintroduced blanks (\"\\s\" regex) but not whitespaces.\nIf so, I proposed you simply removed any ref to whitespaces in the commit message.\nI tought 105515 fixed all issues and I understand here that we forgot something.\nPlease can you be precise on the issue you are trying to fix here ?",
+      "parentUuid": "2d21b055_4cb15f5b",
+      "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
