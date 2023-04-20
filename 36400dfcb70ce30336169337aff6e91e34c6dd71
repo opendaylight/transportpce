@@ -52,6 +52,24 @@
       "parentUuid": "d80e988d_bee86898",
       "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d21b055_4cb15f5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-20T07:10:09Z",
+      "side": 1,
+      "message": "Not exactly. I replace a comma + space by a LF",
+      "parentUuid": "606012e2_3eda424c",
+      "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
