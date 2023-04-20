@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b94f5bda_d46ceef9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-20T06:24:48Z",
+      "side": 1,
+      "message": "doesn\u0027t this change do the opposite ?\nI guess you meant a revert of https://git.opendaylight.org/gerrit/c/transportpce/+/105251 indeed",
+      "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
