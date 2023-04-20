@@ -16,6 +16,24 @@
       "message": "doesn\u0027t this change do the opposite ?\nI guess you meant a revert of https://git.opendaylight.org/gerrit/c/transportpce/+/105251 indeed",
       "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d80e988d_bee86898",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-20T06:56:16Z",
+      "side": 1,
+      "message": "Not sure it is really a revert of change 105251. That latter adds a comma, but a space is still present and seems to make the CI failing. See history log of change 105515 on chlorine branch (https://git.opendaylight.org/gerrit/c/transportpce/+/105515)",
+      "parentUuid": "b94f5bda_d46ceef9",
+      "revId": "36400dfcb70ce30336169337aff6e91e34c6dd71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
