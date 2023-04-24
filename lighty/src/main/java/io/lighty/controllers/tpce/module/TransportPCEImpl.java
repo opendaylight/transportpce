@@ -110,92 +110,96 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     public TransportPCEImpl(LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
                             String olmtimer1, String olmtimer2) {
         LOG.info("Initializing transaction providers ...");
-        deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(),
-                MAX_DURATION_TO_SUBMIT_TRANSACTION);
+        deviceTransactionManager = new DeviceTransactionManagerImpl(
+                lightyServices.getBindingMountPointService(), MAX_DURATION_TO_SUBMIT_TRANSACTION);
         networkTransaction = new NetworkTransactionImpl(lightyServices.getBindingDataBroker());
 
         LOG.info("Creating network-model beans ...");
         PortMapping portMapping = initPortMapping(lightyServices);
-        NetworkModelService networkModelService = new NetworkModelServiceImpl(lightyServices.getBindingDataBroker(),
+        NetworkModelService networkModelService = new NetworkModelServiceImpl(
+                lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction, portMapping,
                 lightyServices.getBindingNotificationPublishService());
-        FrequenciesService networkModelWavelengthService = new FrequenciesServiceImpl(
-                lightyServices.getBindingDataBroker());
-        new NetConfTopologyListener(networkModelService,
-                lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
+        new NetConfTopologyListener(
+                networkModelService, lightyServices.getBindingDataBroker(), deviceTransactionManager, portMapping);
         new PortMappingListener(networkModelService);
-        networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
+        networkModelProvider = new NetworkModelProvider(
+                networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkModelService, deviceTransactionManager, portMapping,
-                lightyServices.getNotificationService(), networkModelWavelengthService);
+                lightyServices.getNotificationService(),
+                new FrequenciesServiceImpl(lightyServices.getBindingDataBroker()));
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
-        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
-                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
         PathComputationService pathComputationService = new PathComputationServiceImpl(
                 networkTransaction,
                 lightyServices.getBindingNotificationPublishService(),
-                gnpyConsumer,
-                portMapping
-                );
+                new GnpyConsumerImpl(
+                    "http://127.0.0.1:8008", "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer()),
+                portMapping);
         pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
         LOG.info("Creating OLM beans ...");
         MappingUtils mappingUtils = new MappingUtilsImpl(lightyServices.getBindingDataBroker());
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
-        PowerMgmt powerMgmt = new PowerMgmtImpl(openRoadmInterfaces, crossConnect, deviceTransactionManager,
-                portMapping, Long.valueOf(olmtimer1).longValue(), Long.valueOf(olmtimer2).longValue());
-        OlmPowerService olmPowerService = new OlmPowerServiceImpl(lightyServices.getBindingDataBroker(), powerMgmt,
-                deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
-        TransportpceOlmService olmPowerServiceRpc = new OlmPowerServiceRpcImpl(olmPowerService);
+        TransportpceOlmService olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
+            new OlmPowerServiceImpl(
+                lightyServices.getBindingDataBroker(),
+                new PowerMgmtImpl(
+                    openRoadmInterfaces, crossConnect, deviceTransactionManager,
+                    portMapping, Long.valueOf(olmtimer1).longValue(), Long.valueOf(olmtimer2).longValue()),
+                deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces));
         olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerServiceRpc);
-
         LOG.info("Creating renderer beans ...");
         initOpenRoadmFactory(mappingUtils, openRoadmInterfaces, portMapping);
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
                 lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaces, crossConnect,
                 mappingUtils, portMapping);
-        OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(crossConnect,
-                openRoadmInterfaces, deviceTransactionManager, mappingUtils, portMapping);
-        rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService,
-                otnDeviceRendererService, portMapping);
+        OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(
+                crossConnect, openRoadmInterfaces, deviceTransactionManager, mappingUtils, portMapping);
+        rendererProvider = initRenderer(
+                lightyServices, olmPowerServiceRpc, deviceRendererService, otnDeviceRendererService, portMapping);
 
         LOG.info("Creating service-handler beans ...");
-        RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService,
-                otnDeviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(),
-                lightyServices.getBindingNotificationPublishService(), portMapping);
-        ServiceDataStoreOperations serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(
-                lightyServices.getBindingDataBroker());
-        RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(pathComputationService,
-            lightyServices.getBindingNotificationPublishService(), networkModelService);
-        PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
-            lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
+        RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
+                deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
+                lightyServices.getBindingDataBroker(),
+                lightyServices.getBindingNotificationPublishService(),
+                portMapping);
+        ServiceDataStoreOperations serviceDataStoreOperations =
+            new ServiceDataStoreOperationsImpl(lightyServices.getBindingDataBroker());
+        RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(
+                pathComputationService, lightyServices.getBindingNotificationPublishService(), networkModelService);
+        PceListenerImpl pceListenerImpl = new PceListenerImpl(
+                rendererServiceOperations, pathComputationService,
+                lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
-        CatalogDataStoreOperations catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(networkTransaction);
-        OrgOpenroadmServiceService servicehandler = new ServicehandlerImpl(pathComputationService,
-                rendererServiceOperations, lightyServices.getBindingNotificationPublishService(), pceListenerImpl,
-                rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-        ServiceListener serviceListener = new ServiceListener(servicehandler, serviceDataStoreOperations,
-                lightyServices.getBindingNotificationPublishService());
-        servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
-                lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
-                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                lightyServices.getBindingNotificationPublishService(), servicehandler, serviceListener);
+        OrgOpenroadmServiceService servicehandler = new ServicehandlerImpl(
+                pathComputationService, rendererServiceOperations,
+                lightyServices.getBindingNotificationPublishService(), pceListenerImpl,
+                rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations,
+                new CatalogDataStoreOperationsImpl(networkTransaction));
+        servicehandlerProvider = new ServicehandlerProvider(
+                lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
+                lightyServices.getNotificationService(), serviceDataStoreOperations, pceListenerImpl,
+                rendererListenerImpl, networkModelListenerImpl, lightyServices.getBindingNotificationPublishService(),
+                servicehandler,
+                new ServiceListener(
+                    servicehandler, serviceDataStoreOperations, lightyServices.getBindingNotificationPublishService()));
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
             TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
             new TapiNetworkUtilsImpl(networkTransaction, tapiLink);
-            TapiNetworkModelService tapiNetworkModelService = new TapiNetworkModelServiceImpl(networkTransaction,
-                    deviceTransactionManager, tapiLink, lightyServices.getBindingNotificationPublishService());
-            TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl =
-                    new TapiNetworkModelListenerImpl(networkTransaction,
-                            lightyServices.getBindingNotificationPublishService());
-
-            tapiProvider = initTapi(lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-                    tapiNetworkModelListenerImpl, tapiLink, tapiNetworkModelService);
-
+            tapiProvider = initTapi(
+                    lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
+                    new TapiNetworkModelListenerImpl(
+                        networkTransaction, lightyServices.getBindingNotificationPublishService()),
+                    tapiLink,
+                    new TapiNetworkModelServiceImpl(
+                        networkTransaction, deviceTransactionManager, tapiLink,
+                        lightyServices.getBindingNotificationPublishService()));
         }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
@@ -243,58 +247,60 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         return true;
     }
 
-    private TapiProvider initTapi(LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
-                                  NetworkTransactionService networkTransactionService,
-                                  ServiceDataStoreOperations serviceDataStoreOperations,
-                                  TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl,
-                                  TapiLink tapiLink, TapiNetworkModelService tapiNetworkModelService) {
-        TransportpceTapinetworkutilsService tapiNetworkUtils = new TapiNetworkUtilsImpl(networkTransactionService,
-            tapiLink);
-        return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
+    private TapiProvider initTapi(
+            LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
+            NetworkTransactionService networkTransactionService, ServiceDataStoreOperations serviceDataStoreOperations,
+            TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl, TapiLink tapiLink,
+            TapiNetworkModelService tapiNetworkModelService) {
+        return new TapiProvider(
+            lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
             lightyServices.getNotificationService(), lightyServices.getBindingNotificationPublishService(),
-            networkTransactionService, servicehandler, serviceDataStoreOperations, tapiNetworkUtils,
+            networkTransactionService, servicehandler, serviceDataStoreOperations,
+            new TapiNetworkUtilsImpl(networkTransactionService, tapiLink),
             tapiNetworkModelListenerImpl, tapiNetworkModelService);
     }
 
-    private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
+    private RendererProvider initRenderer(
+            LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
             DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService,
             PortMapping portMapping) {
-        DeviceRendererRPCImpl deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService,
-                otnDeviceRendererService);
-        RendererServiceOperationsImpl rendererServiceOperations = new RendererServiceOperationsImpl(
-                deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
-                lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
-                portMapping);
-        return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererService,
-                otnDeviceRendererService, deviceRendererRPC,
-                new TransportPCEServicePathRPCImpl(rendererServiceOperations));
+        return new RendererProvider(
+            lightyServices.getRpcProviderService(), deviceRendererService,
+            otnDeviceRendererService,
+            new DeviceRendererRPCImpl(deviceRendererService, otnDeviceRendererService),
+            new TransportPCEServicePathRPCImpl(
+                new RendererServiceOperationsImpl(
+                    deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
+                    lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
+                    portMapping)));
     }
 
-    private OpenRoadmInterfaceFactory initOpenRoadmFactory(MappingUtils mappingUtils,
-            OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
+    private OpenRoadmInterfaceFactory initOpenRoadmFactory(
+            MappingUtils mappingUtils, OpenRoadmInterfaces openRoadmInterfaces, PortMapping portMapping) {
         return new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
     }
 
     private PortMapping initPortMapping(LightyServices lightyServices) {
-        PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager);
-        PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager);
-        PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(lightyServices.getBindingDataBroker(),
-                deviceTransactionManager);
-        return new PortMappingImpl(lightyServices.getBindingDataBroker(), portMappingVersion710,
-            portMappingVersion221, portMappingVersion121);
+        PortMappingVersion710 portMappingVersion710 =
+            new PortMappingVersion710(lightyServices.getBindingDataBroker(), deviceTransactionManager);
+        PortMappingVersion221 portMappingVersion221 =
+            new PortMappingVersion221(lightyServices.getBindingDataBroker(), deviceTransactionManager);
+        PortMappingVersion121 portMappingVersion121 =
+            new PortMappingVersion121(lightyServices.getBindingDataBroker(), deviceTransactionManager);
+        return new PortMappingImpl(
+            lightyServices.getBindingDataBroker(), portMappingVersion710, portMappingVersion221, portMappingVersion121);
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {
-        OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(
-                deviceTransactionManager);
-        OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(
-                deviceTransactionManager, portMapping);
-        OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(
-                deviceTransactionManager, portMapping);
-        return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
-                openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+        OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121 =
+            new OpenRoadmInterfacesImpl121(deviceTransactionManager);
+        OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 =
+            new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping);
+        OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 =
+            new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping);
+        return new OpenRoadmInterfacesImpl(
+            deviceTransactionManager, mappingUtils,
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
 
     }
 
@@ -302,7 +308,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         CrossConnectImpl121 crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         CrossConnectImpl221 crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         CrossConnectImpl710 crossConnectImpl710 = new CrossConnectImpl710(deviceTransactionManager);
-        return new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl121, crossConnectImpl221,
-            crossConnectImpl710);
+        return new CrossConnectImpl(
+            deviceTransactionManager, mappingUtils,
+            crossConnectImpl121, crossConnectImpl221, crossConnectImpl710);
     }
 }
